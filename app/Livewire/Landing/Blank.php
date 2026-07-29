@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire\Admin;
+namespace App\Livewire\Landing;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Title('Admin Blank')]
+#[Title('Landing Blank')]
 #[Layout('components.layouts.topbar')]
 class Blank extends Component
 {
     public function render()
     {
-        return view('livewire.admin.blank');
+        return view('livewire.landing.blank');
     }
 }

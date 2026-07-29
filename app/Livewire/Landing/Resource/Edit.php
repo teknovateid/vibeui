@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Livewire\Admin\Resource;
+namespace App\Livewire\Landing\Resource;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Title('Admin Resource Create')]
+#[Title('Landing Resource Edit')]
 #[Layout('components.layouts.topbar')]
-class Create extends Component
+class Edit extends Component
 {
     public function render()
     {
-        return view('livewire.admin.resource.create');
+        return view('livewire.landing.resource.edit');
     }
 }

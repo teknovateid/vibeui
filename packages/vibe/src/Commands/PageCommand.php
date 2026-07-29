@@ -24,6 +24,12 @@ class PageCommand extends Command implements PromptsForMissingInput
     public function handle(): void
     {
         $layout = str()->slug($this->argument('layout'));
+
+        if (!File::exists(base_path("routes/{$layout}.php"))) {
+            $this->components->error("Layout group '{$layout}' does not exist! Please create a layout group first using `php artisan vibe:layout {$layout}`.");
+            return;
+        }
+
         $name = str()->slug($this->argument('name'));
         $isResource = $this->option('resource');
         $isBlank = $this->option('blank');
@@ -129,7 +135,8 @@ class PageCommand extends Command implements PromptsForMissingInput
                     $layoutGroups
                 );
             } else {
-                $layout = text('What is the layout name?', 'admin');
+                $this->components->error("No layout groups found! Please create a layout group first using `php artisan vibe:layout`.");
+                exit(1);
             }
             
             $input->setArgument('layout', $layout);
