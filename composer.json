@@ -1,0 +1,43 @@
+{
+    "name": "teknovate/vibe-ui",
+    "keywords": [
+        "teknovate",
+        "livewire",
+        "laravel",
+        "tailwind",
+        "ui",
+        "admin",
+        "dashboard",
+        "template",
+        "starter-kit",
+        "vibe-ui",
+        "vibe",
+        "ui"
+    ],
+    "homepage": "https://github.com/teknovateid/vibe-ui",
+    "license": "MIT",
+    "type": "library",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Teknovate\\VibeUi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Teknovate",
+            "email": "lab@teknovate.co.id"
+        }
+    ],
+    "require": {
+        "php": ">=8.3",
+        "livewire/livewire": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Teknovate\\VibeUi\\VibeServiceProvider"
+            ]
+        }
+    }
+}
