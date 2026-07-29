@@ -41,6 +41,7 @@ class VibeCommand extends Command
         $action = select(
             'What would you like to do?',
             [
+                'install' => 'Install Vibe UI (Publish config & inject assets)',
                 'component' => 'Publish a Vibe UI component',
                 'page' => 'Generate a new page inside a layout',
                 'layout' => 'Generate a layout panel',
@@ -54,7 +55,9 @@ class VibeCommand extends Command
             return;
         }
 
-        if ($action === 'component') {
+        if ($action === 'install') {
+            $this->call('vibe:install');
+        } elseif ($action === 'component') {
             $this->call('vibe:component');
         } elseif ($action === 'layout') {
             $this->call('vibe:layout');
