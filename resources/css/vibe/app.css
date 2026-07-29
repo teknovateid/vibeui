@@ -1,0 +1,15 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-vibe-50: #f9fafa;
+    --color-vibe-100: #f4f5f5;
+    --color-vibe-200: #e5e6e5;
+    --color-vibe-300: #d3d4d3;
+    --color-vibe-400: #a2a4a3;
+    --color-vibe-500: #717372;
+    --color-vibe-600: #606261;
+    --color-vibe-700: #3f4140;
+    --color-vibe-800: #262726;
+    --color-vibe-900: #191a19;
+    --color-vibe-950: #0a0b0a;
+}

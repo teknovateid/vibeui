@@ -5,12 +5,19 @@
     'name' => null,
     'description' => null,
     'size' => 'md',
+    'info' => null,
+    'error' => null,
+    'errorName' => null,
+    'wrapperClass' => null,
 ])
 
 @php
     $id = $id ?? ($name ?? uniqid('input-'));
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
-    $errorName = $attributes->whereStartsWith('wire:model')->first() ?? $name;
+    $errorKey = $errorName ?? $attributes->whereStartsWith('wire:model')->first() ?? $name;
+
+    $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
+    $errorMessage = $error ?: ($errorKey ? $errors->first($errorKey) : null);
 
     $sizeClasses = match ($size) {
         'sm' => 'px-3 py-1.5 text-xs sm:text-sm',
@@ -21,7 +28,7 @@
     };
 @endphp
 
-<div class="space-y-1.5">
+<div class="{{ $wrapperClass }}">
     @if ($label)
         <label for="{{ $id }}" class="block text-sm font-medium text-gray-700">
             {{ $label }}
@@ -32,27 +39,19 @@
         <p class="text-xs text-gray-500">{{ $description }}</p>
     @endif
 
-    <div class="relative">
-        <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}" {{ $attributes->class([
-            'block w-full rounded-lg shadow-sm transition duration-150 ease-in-out', 
+    <div class="relative mt-1.5 mb-1">
+        <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}" {{ $attributes->twMerge([
+            'block w-full rounded-lg shadow-xs transition duration-150 ease-in-out border border-gray-200', 
             $sizeClasses,
-            'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => !($errorName && $errors->has($errorName)), 
-            'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500 pr-10' => $errorName && $errors->has($errorName), 
+            'border-gray-300 focus:border-blue-500 focus:ring-blue-500' => !$hasError, 
+            'border-red-300 text-red-900 placeholder-red-300 focus:border-red-500 focus:ring-red-500' => $hasError, 
             'bg-gray-50 cursor-not-allowed text-gray-500' => $attributes->has('disabled') || $attributes->has('readonly')
         ]) }}>
-
-        @if ($errorName && $errors->has($errorName))
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <svg class="w-5 h-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
-                </svg>
-            </div>
-        @endif
     </div>
 
-    @if ($errorName)
-        @error($errorName)
-            <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-        @enderror
+    @if ($hasError)
+        <p class="text-xs font-medium ml-1 text-red-600">{{ $errorMessage }}</p>
+    @elseif ($info)
+        <p class="text-xs font-medium ml-1 text-gray-500">{{ $info }}</p>
     @endif
 </div>

@@ -25,4 +25,4 @@
     $compiledClasses = "{$baseClasses} {$sizeClasses} {$variantClasses}";
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->merge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
+<button type="{{ $type }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
