@@ -7,6 +7,7 @@
     <script>
         window.VIBE_PREFIX = '{{ config("vibe.prefix", "vibe") }}';
     </script>
+    <script src="{{ asset('vendor/vibe/theme-init.js') }}" data-navigate-track="reload"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>

@@ -30,6 +30,7 @@ class VibeServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/css/vibe' => resource_path('css/vibe'),
             __DIR__.'/../resources/js/vibe' => resource_path('js/vibe'),
+            __DIR__.'/../public' => public_path('vendor/vibe'),
         ], 'vibe-assets');
 
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
