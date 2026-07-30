@@ -1,0 +1,110 @@
+name: Deploy Development Laravel via Cloudflare Tunnel with SSH Key
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: TEKNOVATE
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Connection Environment
+        run: |
+          # Install cloudflared untuk proxy tunnel
+          echo "--- Setting up Cloudflare Tunnel ---"
+          wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
+          sudo mv cloudflared-linux-amd64 /usr/local/bin/cloudflared
+          sudo chmod +x /usr/local/bin/cloudflared
+
+          # Setup SSH Key
+          echo "--- Setting up SSH Key ---"
+          mkdir -p ~/.ssh
+          
+          # Memasukkan private key dari GitHub Secrets
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          
+          # Set izin yang ketat untuk private key (Wajib 600)
+          chmod 600 ~/.ssh/id_rsa
+
+          # Buat konfigurasi SSH untuk menggunakan proxy Cloudflare
+          echo "--- Setting up SSH Config for Proxy ---"
+          echo "Host ${{ secrets.SSH_HOST }}" >> ~/.ssh/config
+          echo "  ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h" >> ~/.ssh/config
+          echo "  User ${{ secrets.SSH_USER }}" >> ~/.ssh/config
+          echo "  IdentityFile ~/.ssh/id_rsa" >> ~/.ssh/config
+          echo "  StrictHostKeyChecking no" >> ~/.ssh/config
+
+      # 3. Jalankan Skrip Deployment di Server
+      - name: Run Deployment Script on Server
+        run: |
+          echo "Connecting to server via Cloudflare Tunnel to run deployment script..."
+
+          ssh ${{ secrets.SSH_HOST }} << 'EOF'
+            echo "--- Deployment script started on server ---"
+
+            cd ${{ secrets.DEV_SERVER_PATH }}
+
+            echo "Entering maintenance mode..."
+            ${{ secrets.PHP_84 }} artisan down
+
+            echo "Force pulling latest changes from git..."
+            git clean -fd
+            git fetch origin dev
+            git reset --hard origin/dev
+
+            echo "Installing composer dependencies..."
+            ${{ secrets.PHP_84 }} /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            echo "Installing npm dependencies..."
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -f ".nvmrc" ] && nvm use
+
+            echo "Installing npm dependencies..."
+            npm install
+
+            echo "Building assets..."
+            npm run build
+
+            echo "Fixing storage permissions..."
+            # Dihapus: echo "password" | sudo -S ...
+            # Karena user teknovate sekarang bisa NOPASSWD sudo.
+            sudo chown -R $USER:www-data storage bootstrap/cache
+            chmod -R 775 storage bootstrap/cache
+
+            echo "Creating storage symlink..."
+            if [ ! -L public/storage ]; then
+              ${{ secrets.PHP_84 }} artisan storage:link
+            else
+              echo "Storage symlink already exists."
+            fi
+
+            echo "Running database migrations..."
+            ${{ secrets.PHP_84 }} artisan migrate --force
+
+            echo "Clearing old cache..."
+            ${{ secrets.PHP_84 }} artisan optimize:clear
+
+            echo "Building production cache..."
+            ${{ secrets.PHP_84 }} artisan optimize
+            ${{ secrets.PHP_84 }} artisan view:cache
+            ${{ secrets.PHP_84 }} artisan event:cache
+
+            echo "Setting up cron job for scheduler..."
+            CRON_JOB="* * * * * cd ${{ secrets.SERVER_PATH }} && ${{ secrets.PHP_84 }} artisan schedule:run >> ${{ secrets.SERVER_PATH }}/storage/logs/sceduler.log 2>&1"
+            (crontab -l 2>/dev/null | grep -Fq "$CRON_JOB") || (crontab -l 2>/dev/null; echo "$CRON_JOB") | crontab -
+
+            echo "Restarting queue worker..."
+            ${{ secrets.PHP_84 }} artisan queue:restart
+
+            echo "Exiting maintenance mode..."
+            ${{ secrets.PHP_84 }} artisan up
+
+            echo "--- Deployment successful! ---"
+          EOF
