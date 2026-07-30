@@ -1,0 +1,34 @@
+# Vibe UI - AI Assistant Rules & Context
+
+You are an AI coding assistant helping a developer work on **Vibe UI**, a custom Laravel UI component library inspired by **Flux UI**. 
+Your goal is to ensure consistency, speed, and clean code by strictly following these guidelines.
+
+## 1. Project Architecture
+- This is a monorepo-style Laravel project. The core package is located in `packages/vibe/`.
+- The main Laravel `app/`, `resources/views/`, and `routes/` are ONLY used for testing, documentation, and previewing the package.
+- **ALL package development** (UI components, styling, logic) MUST happen inside the `packages/vibe/` directory.
+
+## 2. Tech Stack
+- **Backend:** Laravel 11+, PHP 8.3+
+- **Frontend Logic:** Laravel Livewire 3
+- **Styling:** Tailwind CSS (with `tailwind-merge-laravel` for class merging)
+- **Design Inspiration:** Flux UI (Sleek, modern, clean, accessible)
+
+## 3. Component Syntax (CRITICAL)
+- Vibe UI uses a custom Blade compiler. 
+- **NEVER** use the standard Laravel package prefix `<x-vibe::component>`.
+- **ALWAYS** use the custom shortcut tag: `<vibe:component>`.
+  - Example: `<vibe:button variant="primary">`, `<vibe:input wire:model="email">`.
+- Components are located in `packages/vibe/resources/views/vibe/` (for public components) and `packages/vibe/resources/views/components/` (for partials/layouts).
+
+## 4. Development Workflow
+- When the user asks to create a new component, layout, or page, ALWAYS recommend or use the built-in Artisan commands if applicable:
+  - `php artisan vibe:component <Name>`
+  - `php artisan vibe:page <Name>`
+  - `php artisan vibe:layout <Name>`
+- When modifying CSS, edit the files inside `packages/vibe/resources/css/` and remind the user to run `npm run dev` at the root.
+
+## 5. Design Philosophy
+- **Modular & Reusable:** Keep components small, focused, and configurable via props (`$attributes`).
+- **Tailwind Merge:** Always merge default component classes with user-provided `$attributes` using `twMerge()` or the `@twMerge` directive (if available) to prevent class conflicts.
+- **Beautiful by Default:** Ensure components have proper focus states, hover effects, transitions, and dark mode support if applicable.

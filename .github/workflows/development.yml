@@ -3,7 +3,7 @@ name: Deploy Development Laravel via Cloudflare Tunnel with SSH Key
 on:
   push:
     branches:
-      - dev
+      - development
 
 jobs:
   deploy:
