@@ -3,7 +3,11 @@ import persist from '@alpinejs/persist'
 const VIBE_PREFIX = window.VIBE_PREFIX || 'vibe';
 
 document.addEventListener('alpine:init', () => {
-    window.Alpine.plugin(persist)
+    try {
+        window.Alpine.plugin(persist);
+    } catch (e) {
+        // Abaikan jika plugin sudah diregister (misalnya oleh Livewire 3)
+    }
 
     // ==========================================
     // STORE: vibeForms (Auto-save form drafts)
