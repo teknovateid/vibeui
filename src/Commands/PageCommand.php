@@ -39,7 +39,7 @@ class PageCommand extends Command implements PromptsForMissingInput
         $indexFile = app_path("Livewire/" . str($layout)->studly() . "/Index.php");
         if (File::exists($indexFile)) {
             $indexContent = File::get($indexFile);
-            if (preg_match('/#\[Layout\([\'"]components\.layouts\.([a-zA-Z0-9_-]+)[\'"]\)\]/', $indexContent, $matches)) {
+            if (preg_match('/#\[Layout\([\'"]components\.(?:[a-zA-Z0-9_-]+\.)?layouts\.([a-zA-Z0-9_-]+)[\'"]\)\]/', $indexContent, $matches)) {
                 $style = $matches[1];
             }
         }
@@ -80,7 +80,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                     
                     $classContent = str_replace(
                         "use Livewire\Component;\n\nclass",
-                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('{$pageTitle}')]\n#[Layout('components.layouts.{$style}')]\nclass",
+                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('{$pageTitle}')]\n#[Layout('components.{$layout}.layouts.{$style}')]\nclass",
                         $classContent
                     );
                     File::put($classFile, $classContent);
@@ -112,7 +112,7 @@ class PageCommand extends Command implements PromptsForMissingInput
         }
 
         // Add to menu
-        $menuPath = resource_path('views/components/partials/menu.blade.php');
+        $menuPath = resource_path("views/components/{$layout}/partials/menu.blade.php");
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
             $stubName = $isResource ? 'menu-group.stub' : 'menu-item.stub';
@@ -129,7 +129,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                 // Inject right before </vibe:nav>
                 $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n" . $stub . "\n$1", $menuContent);
                 File::put($menuPath, $menuContent);
-                $list[] = "Updated resources/views/components/partials/menu.blade.php";
+                $list[] = "Updated resources/views/components/{$layout}/partials/menu.blade.php";
             }
         }
 
