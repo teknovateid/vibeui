@@ -115,6 +115,88 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             preventDefault: true,
         },
+        {
+            name: "Add Data (+)",
+            keys: ["Control", "+"],
+            action: function (event) {
+                const btn = document.querySelector('.btn-add');
+                if (btn) btn.click();
+            },
+            preventDefault: true,
+        },
+        {
+            name: "Add Data (=)",
+            keys: ["Control", "="],
+            action: function (event) {
+                const btn = document.querySelector('.btn-add');
+                if (btn) btn.click();
+            },
+            preventDefault: true,
+        },
+        {
+            name: "Close Modal/Sheet (Escape)",
+            keys: ["Escape"],
+            action: function (event) {
+                // Cari sheet atau modal yang terbuka dan diizinkan ditutup (data-dismissible="true")
+                const activeElements = Array.from(document.querySelectorAll('[data-state="expanded"], .vibe-modal-container')).filter(el => {
+                    const isDismissible = el.getAttribute('data-dismissible') === 'true';
+                    if (!isDismissible) return false;
+                    
+                    if (el.hasAttribute('data-state')) {
+                        return el.getAttribute('data-state') === 'expanded';
+                    }
+                    return window.getComputedStyle(el).display !== 'none';
+                });
+
+                if (activeElements.length > 0) {
+                    // Ambil elemen yang teratas/terakhir muncul
+                    const topmost = activeElements[activeElements.length - 1];
+                    const id = topmost.id;
+                    
+                    if (topmost.hasAttribute('data-state') || topmost.classList.contains('group/sheet')) {
+                        window.dispatchEvent(new CustomEvent('close-sheet', { detail: id }));
+                    } else {
+                        window.dispatchEvent(new CustomEvent('close-modal', { detail: id }));
+                    }
+                }
+            },
+            preventDefault: true,
+            triggerInInputs: true,
+        },
+        {
+            name: "Submit Form",
+            keys: ["Control", "s"],
+            action: function (event) {
+                let targetForm = document.activeElement ? document.activeElement.closest("form") : null;
+                
+                if (!targetForm) {
+                    const visibleForms = Array.from(document.querySelectorAll("form")).filter(f => {
+                        return f.offsetParent !== null && window.getComputedStyle(f).visibility !== 'hidden';
+                    });
+
+                    targetForm = visibleForms.find(f => f.closest('[data-state="expanded"]') || f.closest('[open]'));
+                    
+                    if (!targetForm && visibleForms.length > 0) {
+                        targetForm = visibleForms[visibleForms.length - 1];
+                    }
+                }
+
+                if (targetForm) {
+                    const submitButton = targetForm.querySelector('button[type="submit"], input[type="submit"]');
+                    if (submitButton) {
+                        submitButton.click();
+                    } else {
+                        if (typeof targetForm.requestSubmit === 'function') {
+                            targetForm.requestSubmit();
+                        } else {
+                            targetForm.submit();
+                        }
+                    }
+                }
+            },
+            preventDefault: true,
+            triggerInInputs: true,
+        },
         // --- Contoh Kombinasi Dinamis ---
         {
             name: "Satu Tombol: Huruf 's'",

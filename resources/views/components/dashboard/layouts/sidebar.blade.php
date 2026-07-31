@@ -17,7 +17,7 @@
             <vibe:header class="bg-transparent! border-none!">
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 text-vibe-600 dark:text-vibe-400 hover:text-black dark:hover:text-white transition-colors" 
-                        @click="$dispatch('toggle-sheet-sidebar-menu')"
+                        @click="$dispatch('toggle-sheet', 'sidebar-menu')"
                     >
                         <div x-data="{ 
                                 state: 'expanded',

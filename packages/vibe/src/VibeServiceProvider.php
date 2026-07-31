@@ -9,6 +9,7 @@ use Teknovate\VibeUi\Commands\ComponentCommand;
 use Teknovate\VibeUi\Commands\VibeCommand;
 use Teknovate\VibeUi\Commands\CleanCommand;
 use Teknovate\VibeUi\Commands\PageCommand;
+use Teknovate\VibeUi\Commands\CrudCommand;
 use Teknovate\VibeUi\Commands\InstallCommand;
 
 class VibeServiceProvider extends ServiceProvider
@@ -55,6 +56,7 @@ class VibeServiceProvider extends ServiceProvider
             VibeCommand::class,
             CleanCommand::class,
             PageCommand::class,
+            CrudCommand::class,
             InstallCommand::class,
         ]);
     }

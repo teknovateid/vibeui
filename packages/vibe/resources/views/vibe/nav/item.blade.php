@@ -24,7 +24,7 @@
     };
 @endphp
 
-<a href="{{ $href }}" 
+<a wire:navigate href="{{ $href }}" 
    @if($collapsed) data-collapsed="true" @endif 
    x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'"
    {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>

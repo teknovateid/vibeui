@@ -123,22 +123,32 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 File::put($destView, $content);
             }
 
-            // Inject Title attribute into the generated class
+            // Inject Title attribute using custom stub
             $classNamePath = collect(explode('.', $component))->map(fn($part) => ucfirst($part))->implode('/');
             $classFile = app_path("Livewire/" . str($path)->studly() . "/{$classNamePath}.php");
             
-            if (File::exists($classFile)) {
-                $classContent = File::get($classFile);
-                if (!str_contains($classContent, 'use Livewire\Attributes\Title;')) {
-                    $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
-                    
-                    $classContent = str_replace(
-                        "use Livewire\Component;\n\nclass",
-                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('" . $titleName . "')]\n#[Layout('components.{$path}.layouts.{$chosenLayout}')]\nclass",
-                        $classContent
-                    );
-                    File::put($classFile, $classContent);
+            $stubPath = __DIR__ . '/../../stubs/livewire/page.php';
+            if (File::exists($classFile) && File::exists($stubPath)) {
+                $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
+                
+                $className = collect(explode('.', $component))->map(fn($part) => ucfirst($part))->last();
+                $namespacePath = collect(explode('.', $component))->slice(0, -1)->map(fn($part) => ucfirst($part))->implode('\\');
+                
+                $namespace = "App\\Livewire\\" . str($path)->studly();
+                if ($namespacePath) {
+                    $namespace .= "\\" . $namespacePath;
                 }
+                
+                $viewPath = "livewire.{$path}." . str_replace('.', '.', $component);
+                
+                $classContent = File::get($stubPath);
+                $classContent = str_replace(
+                    ['[Namespace]', '[Title]', '[Layout]', '[ClassName]', '[ViewPath]'],
+                    [$namespace, $titleName, "components.{$path}.layouts.{$chosenLayout}", $className, $viewPath],
+                    $classContent
+                );
+                
+                File::put($classFile, $classContent);
             }
             
             // Add to menu

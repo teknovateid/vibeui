@@ -25,7 +25,7 @@
         <p class="text-gray-600 dark:text-gray-400 mb-6">
             Konten modal ada di sini. Modal ini sekarang mewarisi gaya langsung dari komponen Card, sehingga tampilan bayangan dan warna latarnya sudah terintegrasi secara mulus.
         </p>
-        
+
         <div class="flex justify-end gap-3 mt-6">
             <vibe:button variant="ghost" @click="$dispatch('close-modal', 'test-modal')">Batal</vibe:button>
             <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">Simpan Perubahan</vibe:button>

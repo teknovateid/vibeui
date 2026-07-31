@@ -66,25 +66,28 @@ class PageCommand extends Command implements PromptsForMissingInput
                 File::put($destView, $content);
             }
 
-            // Inject Title and Layout attribute into the generated class
+            // Inject Title and Layout attribute using the custom stub
             $className = ucfirst($action);
             $classFile = app_path("Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php");
             
-            if (File::exists($classFile)) {
-                $classContent = File::get($classFile);
-                if (!str_contains($classContent, 'use Livewire\Attributes\Title;')) {
-                    $pageTitle = str($layout)->headline() . ' ' . str($name)->headline();
-                    if ($action !== 'index') {
-                        $pageTitle .= ' ' . ucfirst($action);
-                    }
-                    
-                    $classContent = str_replace(
-                        "use Livewire\Component;\n\nclass",
-                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('{$pageTitle}')]\n#[Layout('components.{$layout}.layouts.{$style}')]\nclass",
-                        $classContent
-                    );
-                    File::put($classFile, $classContent);
+            $stubPath = __DIR__ . '/../../stubs/livewire/page.php';
+            if (File::exists($classFile) && File::exists($stubPath)) {
+                $pageTitle = str($layout)->headline() . ' ' . str($name)->headline();
+                if ($action !== 'index') {
+                    $pageTitle .= ' ' . ucfirst($action);
                 }
+                
+                $namespace = "App\\Livewire\\" . str($layout)->studly() . "\\" . str($name)->studly();
+                $viewPath = "livewire.{$layout}.{$name}.{$action}";
+                
+                $classContent = File::get($stubPath);
+                $classContent = str_replace(
+                    ['[Namespace]', '[Title]', '[Layout]', '[ClassName]', '[ViewPath]'],
+                    [$namespace, $pageTitle, "components.{$layout}.layouts.{$style}", $className, $viewPath],
+                    $classContent
+                );
+                
+                File::put($classFile, $classContent);
             }
             
             $list[] = "app/Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php";
@@ -185,11 +188,32 @@ class PageCommand extends Command implements PromptsForMissingInput
                 [
                     'index' => 'Index (1 page with grid)',
                     'blank' => 'Blank (1 empty page)',
-                    'resource' => 'Resource (Index, Create, Edit)'
+                    'resource' => 'Resource (Index, Create, Edit)',
+                    'crud-index' => 'CRUD Index (Auto-generate from DB Modal)',
+                    'crud-resource' => 'CRUD Resource (Auto-generate from DB Pages)'
                 ]
             );
 
-            if ($type === 'resource') {
+            if ($type === 'crud-index' || $type === 'crud-resource') {
+                $generateCrud = select('Do you want to auto-generate CRUD from Database Schema?', [
+                    'yes' => 'Yes (Auto-generate)',
+                    'no' => 'Skip (Generate empty templates)'
+                ], default: 'yes');
+
+                if ($generateCrud === 'yes') {
+                    $this->call('vibe:crud', [
+                        'layout' => $input->getArgument('layout'),
+                        'name' => $input->getArgument('name'),
+                        '--type' => $type
+                    ]);
+                    exit(0);
+                } else {
+                    // Fallback to normal generation
+                    if ($type === 'crud-resource') {
+                        $input->setOption('resource', true);
+                    }
+                }
+            } elseif ($type === 'resource') {
                 $input->setOption('resource', true);
             } elseif ($type === 'blank') {
                 $input->setOption('blank', true);

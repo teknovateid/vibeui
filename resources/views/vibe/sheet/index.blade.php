@@ -13,6 +13,8 @@
     'minifiedSize' => 80,
     'showToggle' => false,
     'persist' => false, // save to localstorage
+    'defaultState' => 'expanded',
+    'closeOnOutsideClick' => false,
 ])
 
 @php
@@ -51,6 +53,15 @@
         },
         default => 'relative',
     };
+
+    $initialSize = $defaultSize;
+    if ($behavior !== 'static') {
+        if ($defaultState === 'collapsed') {
+            $initialSize = 0;
+        } elseif ($defaultState === 'minified') {
+            $initialSize = $minifiedSize;
+        }
+    }
 @endphp
 
 <div id="{{ $id }}" x-data="{
@@ -66,7 +77,7 @@
     maxSize: {{ $maxSize }},
 
     size: {{ $defaultSize }},
-    state: 'expanded',
+    state: '{{ $defaultState }}',
 
     init() {
         @if ($persist) let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
@@ -238,7 +249,7 @@
 
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @toggle-sheet-{{ $id }}.window="toggle()" style="{{ $position === 'left' || $position === 'right' ? "width: {$defaultSize}px" : "height: {$defaultSize}px" }}" :style="(position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`" :data-state="state" :class="{
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="if ($event.detail === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="if ($event.detail === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="if ($event.detail === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" style="{{ $position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px" }}" :style="(position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     '': !isResizing && isInitialized
 }" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full"]) }}>
     @if ($persist)
@@ -255,7 +266,7 @@
                             let el = document.getElementById(id);
                             if (el) {
                                 let size = item.size !== undefined ? item.size : {{ $defaultSize }};
-                                let state = item.status !== undefined ? item.status : 'expanded';
+                                let state = item.status !== undefined ? item.status : '{{ $defaultState }}';
                                 let minSize = {{ $minSize }};
                                 let maxSize = {{ $maxSize }};
 
@@ -279,8 +290,8 @@
         </script>
     @endif
 
-    <div class="flex-1 overflow-y-auto overflow-x-hidden w-full h-full relative" x-show="state !== 'collapsed'" x-transition.opacity>
-        <div class="w-max min-w-full">
+    <div class="flex-1 overflow-y-auto overflow-x-hidden w-full h-full relative" style="{{ $defaultState === 'collapsed' ? 'display: none;' : '' }}" x-show="state !== 'collapsed'" x-transition.opacity>
+        <div class="w-max min-w-full h-full flex flex-col">
             {{ $slot }}
         </div>
     </div>

@@ -100,3 +100,8 @@ const ThemeManager = {
 
 ThemeManager.init();
 window.VibeTheme = ThemeManager;
+
+// Re-apply theme after Livewire SPA navigation
+document.addEventListener('livewire:navigated', () => {
+    ThemeManager.init();
+});

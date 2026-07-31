@@ -8,7 +8,7 @@
 ])
 
 @php
-    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg focus:outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
 
     $variantClasses = match ($variant) {
         'primary' => 'bg-vibe-900 dark:bg-vibe-100 text-white dark:text-black hover:bg-vibe-700 dark:hover:bg-vibe-300 focus:ring-2 focus:ring-offset-2 focus:ring-vibe-700',
@@ -30,7 +30,7 @@
 @endphp
 
 @if($href)
-    <a x-data href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</a>
+    <a wire:navigate x-data href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</a>
 @else
     <button x-data type="{{ $type }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
 @endif
