@@ -35,6 +35,20 @@ document.addEventListener("DOMContentLoaded", function () {
             preventDefault: true,
         },
         {
+            name: "Focus Data Search",
+            keys: ["Control", "f"],
+            action: function (event) {
+                const searchInputs = document.querySelectorAll('.search-data');
+                for (let input of searchInputs) {
+                    if (input.offsetParent !== null) { // Memastikan elemen tidak disembunyikan
+                        input.focus();
+                        break;
+                    }
+                }
+            },
+            preventDefault: true,
+        },
+        {
             name: "Clear Chart",
             keys: ["Control", "Delete"],
             action: function (event) {
@@ -137,6 +151,11 @@ document.addEventListener("DOMContentLoaded", function () {
             name: "Close Modal/Sheet (Escape)",
             keys: ["Escape"],
             action: function (event) {
+                // Hilangkan fokus dari input jika sedang aktif
+                if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
+                    document.activeElement.blur();
+                }
+
                 // Cari sheet atau modal yang terbuka dan diizinkan ditutup (data-dismissible="true")
                 const activeElements = Array.from(document.querySelectorAll('[data-state="expanded"], .vibe-modal-container')).filter(el => {
                     const isDismissible = el.getAttribute('data-dismissible') === 'true';

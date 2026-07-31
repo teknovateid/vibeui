@@ -58,8 +58,8 @@
         }
     }"
     x-show="open"
-    @open-modal.window="if ($event.detail === modalId) open = true"
-    @close-modal.window="if ($event.detail === modalId) close()"
+    @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true"
+    @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) close()"
     class="vibe-modal-container fixed inset-0 z-50 overflow-y-auto"
     aria-labelledby="modal-title" 
     role="dialog" 

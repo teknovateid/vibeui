@@ -249,7 +249,16 @@
 
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="if ($event.detail === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="if ($event.detail === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="if ($event.detail === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" style="{{ $position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px" }}" :style="(position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" 
+@open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" 
+@close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" 
+@toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" 
+@click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" 
+style="{{ $position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px" }}" 
+:style="(position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`" 
+:data-state="state" 
+data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" 
+:class="{
     '': !isResizing && isInitialized
 }" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full"]) }}>
     @if ($persist)

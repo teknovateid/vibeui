@@ -15,15 +15,12 @@ class Index extends Component
     use WithPagination;
 
     public $search = '';
-    public $isOpen = false;
     public $editId = null;
 
     public $name;
     public $username;
     public $phone;
     public $email;
-    public $password;
-    public $position;
     
 
     protected function rules()
@@ -33,9 +30,6 @@ class Index extends Component
             'username' => 'required',
             'phone' => 'required',
             'email' => 'required',
-            'password' => 'required',
-            'position' => 'required',
-            
         ];
     }
 
@@ -46,9 +40,9 @@ class Index extends Component
 
     public function create()
     {
-        $this->reset('name', 'username', 'phone', 'email', 'password', 'position');
+        $this->reset('name', 'username', 'phone', 'email');
         $this->editId = null;
-        $this->isOpen = true;
+        $this->dispatch('open-sheet', 'user-form');
     }
 
     public function edit($id)
@@ -60,12 +54,10 @@ class Index extends Component
         $this->username = $model->username;
         $this->phone = $model->phone;
         $this->email = $model->email;
-        $this->password = $model->password;
-        $this->position = $model->position;
-        
 
-        $this->isOpen = true;
+        $this->dispatch('open-sheet', 'user-form');
     }
+
 
     public function save()
     {
@@ -77,13 +69,15 @@ class Index extends Component
             User::create($data);
         }
 
-        $this->isOpen = false;
-        $this->reset('name', 'username', 'phone', 'email', 'password', 'position');
+        $this->reset('name', 'username', 'phone', 'email');
+        $this->dispatch('close-sheet', 'user-form');
+        $this->dispatch('alert', ['type' => 'success', 'message' => 'Data user berhasil disimpan!', 'position' => 'center']);
     }
 
     public function delete($id)
     {
         User::findOrFail($id)->delete();
+        $this->dispatch('alert', ['type' => 'success', 'message' => 'Data user berhasil dihapus!']);
     }
 
     public function render()
