@@ -1,18 +1,24 @@
 <div>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
-            <h3 class="text-sm font-medium text-gray-500">Total Pengguna</h3>
-            <p class="mt-2 text-3xl font-bold text-gray-900">1,204</p>
-        </div>
-        
-        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
-            <h3 class="text-sm font-medium text-gray-500">Pendapatan</h3>
-            <p class="mt-2 text-3xl font-bold text-gray-900">Rp 15.000.000</p>
-        </div>
-        
-        <div class="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
-            <h3 class="text-sm font-medium text-gray-500">Server Status</h3>
-            <p class="mt-2 text-3xl font-bold text-green-600">Online</p>
-        </div>
+    <vibe:card class="">a</vibe:card>
+
+    <div class="mt-6 flex gap-4">
+        <vibe:button type="button">Default</vibe:button>
+        <vibe:button variant="primary" type="button">Primary</vibe:button>
+        <vibe:button variant="accent" type="button">Accent</vibe:button>
+        <vibe:button variant="ghost" type="button">Ghost</vibe:button>
+        <vibe:button variant="outline" type="button">Outline</vibe:button>
+        <vibe:button variant="danger" type="button">Danger</vibe:button>
     </div>
+
+    <vibe:avatar.group limit="3" size="sm" class="mt-5">
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+        <vibe:avatar src="https://ui-avatars.com/api/?name=Fahril&size=24&rounded=true&background=random&color=fff" alt="Name" />
+    </vibe:avatar.group>
+
 </div>

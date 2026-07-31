@@ -32,6 +32,7 @@
     "require": {
         "php": ">=8.3",
         "livewire/livewire": "*",
+        "livewire/blaze": "*",
         "gehrisandro/tailwind-merge-laravel": "^1.4"
     },
     "extra": {

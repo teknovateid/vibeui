@@ -1,18 +1,22 @@
+@blaze(fold: true)
+
 @props([
-    'variant' => 'primary',
+    'variant' => 'default',
     'size' => 'md',
     'type' => 'button',
+    'href' => null,
 ])
 
 @php
-    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
+    $baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg focus:outline-none transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed';
 
     $variantClasses = match ($variant) {
-        'primary' => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-        'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
-        'outline' => 'bg-transparent border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500',
-        'ghost' => 'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
-        default => 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+        'primary' => 'bg-vibe-900 dark:bg-vibe-100 text-white dark:text-black hover:bg-vibe-700 dark:hover:bg-vibe-300 focus:ring-2 focus:ring-offset-2 focus:ring-vibe-700',
+        'danger' => 'bg-red-600 text-white hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500',
+        'outline' => 'border border-vibe-300 dark:border-vibe-700 text-gray-700 dark:text-gray-300 hover:bg-vibe-200 dark:hover:bg-vibe-800 focus:ring-2 focus:ring-offset-2 focus:ring-vibe-700',
+        'ghost' => 'text-vibe-900 dark:text-gray-100 hover:bg-vibe-200 dark:hover:bg-vibe-800 focus:outline-none',
+        'accent' => 'bg-accent-100 dark:bg-accent-900 text-accent-500 focus:ring-2 focus:ring-offset-2 focus:ring-accent-500',
+        default => 'border border-vibe-300 hover:bg-vibe-200 dark:hover:bg-vibe-800 dark:border-vibe-700 dark:bg-vibe-900 focus:ring-2 focus:ring-offset-2 focus:ring-vibe-700',
     };
 
     $sizeClasses = match ($size) {
@@ -22,7 +26,11 @@
         default => 'px-4 py-2 text-sm',
     };
 
-    $compiledClasses = "{$baseClasses} {$sizeClasses} {$variantClasses}";
+    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
 @endphp
 
-<button type="{{ $type }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
+@if($href)
+    <a x-data href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</a>
+@else
+    <button x-data type="{{ $type }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
+@endif

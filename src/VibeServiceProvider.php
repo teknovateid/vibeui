@@ -13,7 +13,6 @@ use Teknovate\VibeUi\Commands\InstallCommand;
 
 class VibeServiceProvider extends ServiceProvider
 {
-
     public function register(): void
     {
         $this->mergeConfigFrom(
@@ -33,13 +32,22 @@ class VibeServiceProvider extends ServiceProvider
             __DIR__.'/../public' => public_path('vendor/vibe'),
         ], 'vibe-assets');
 
+        // Register anonymous component path for the 'vibe' namespace.
+        // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
 
-        app('blade.compiler')->prepareStringsForCompilationUsing(function ($string) {
-            $string = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $string);
-            $string = preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $string);
-            return $string;
-        });
+        // Register the <vibe:> tag parser BEFORE Blaze hooks in.
+        // Using direct prepareStringsForCompilationUsing (no booted wrapper)
+        // ensures our callback is index-0 in the precompiler queue.
+        // When Blaze later registers via booted(), it appends at index-1 and
+        // thus runs AFTER our vibe: → x-vibe:: conversion.
+        app('blade.compiler')->prepareStringsForCompilationUsing([$this, 'parseVibeTags']);
+
+        // Register 'vibe:' as a native Blaze prefix via Reflection.
+        // This makes Blaze's Tokenizer understand <vibe:*> tags the same way
+        // it natively understands <flux:*> tags — critical for @blaze(fold: true)
+        // to work correctly when vibe components call other vibe components.
+        $this->registerVibeAsBlazePrefixAfterBoot();
 
         $this->commands([
             LayoutCommand::class,
@@ -49,5 +57,113 @@ class VibeServiceProvider extends ServiceProvider
             PageCommand::class,
             InstallCommand::class,
         ]);
+    }
+
+    /**
+     * Inject 'vibe:' as a native prefix in Livewire Blaze's Tokenizer.
+     *
+     * Flux UI works with @blaze(fold: true) because 'flux:' is hardcoded in
+     * Blaze's Tokenizer::$prefixes. We mirror that behaviour for 'vibe:' using
+     * Reflection so Blaze can parse and fold <vibe:*> components natively,
+     * without removing @blaze(fold: true) from any view.
+     */
+    protected function registerVibeAsBlazePrefixAfterBoot(): void
+    {
+        $this->app->booted(function () {
+            $this->injectVibePrefixIntoBlaze();
+        });
+    }
+
+    /**
+     * Use Reflection to add 'vibe:' to Blaze's Tokenizer $prefixes array.
+     */
+    protected function injectVibePrefixIntoBlaze(): void
+    {
+        // Silently skip if Blaze is not installed
+        if (! class_exists(\Livewire\Blaze\BlazeManager::class)) {
+            return;
+        }
+
+        try {
+            /** @var \Livewire\Blaze\BlazeManager $manager */
+            $manager = app(\Livewire\Blaze\BlazeManager::class);
+
+            // BlazeManager creates the parser as: new Parser(new Tokenizer, ...)
+            // We access the parser's tokenizer via Reflection.
+            $managerReflection = new \ReflectionClass($manager);
+
+            if (! $managerReflection->hasProperty('parser')) {
+                return;
+            }
+
+            $parserProp = $managerReflection->getProperty('parser');
+            $parserProp->setAccessible(true);
+            $parser = $parserProp->getValue($manager);
+
+            if (! $parser) {
+                return;
+            }
+
+            $parserReflection = new \ReflectionClass($parser);
+
+            if (! $parserReflection->hasProperty('tokenizer')) {
+                return;
+            }
+
+            $tokenizerProp = $parserReflection->getProperty('tokenizer');
+            $tokenizerProp->setAccessible(true);
+            $tokenizer = $tokenizerProp->getValue($parser);
+
+            if (! $tokenizer) {
+                return;
+            }
+
+            // Inject 'vibe:' just like 'flux:' is defined natively in Blaze.
+            $tokenizerReflection = new \ReflectionClass($tokenizer);
+
+            if (! $tokenizerReflection->hasProperty('prefixes')) {
+                return;
+            }
+
+            $prefixesProp = $tokenizerReflection->getProperty('prefixes');
+            $prefixesProp->setAccessible(true);
+            $prefixes = $prefixesProp->getValue($tokenizer);
+
+            // Only add if not already registered
+            if (! isset($prefixes['vibe:'])) {
+                $prefixes = array_merge(
+                    ['vibe:' => ['namespace' => 'vibe::', 'slot' => 'x-slot']],
+                    $prefixes
+                );
+                $prefixesProp->setValue($tokenizer, $prefixes);
+            }
+
+        } catch (\Throwable $e) {
+            // Fail silently — the parser fallback via prepareStringsForCompilationUsing
+            // already handles tag conversion for non-folded templates.
+            report($e);
+        }
+    }
+
+    /**
+     * Parse <vibe:*> tags into standard Laravel <x-vibe::*> tags.
+     *
+     * This fallback precompiler handles non-@blaze templates (or templates
+     * where Blaze is not installed). Blaze-folded templates are handled
+     * natively via the injected 'vibe:' prefix in Blaze's Tokenizer.
+     *
+     * Example conversions:
+     *   <vibe:card>    → <x-vibe::card>
+     *   </vibe:button> → </x-vibe::button>
+     */
+    public function parseVibeTags(string $string): string
+    {
+        // Convert opening <vibe:component> tags
+        $string = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $string);
+
+        // Convert closing </vibe:component> tags
+        $string = preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $string);
+
+        return $string;
     }
 }
