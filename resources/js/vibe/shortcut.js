@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
             action: function (event) {
                 if (window.VibeTheme) {
                     window.VibeTheme.toggle();
-                    console.log(window.VibeTheme);
                 } else {
                     console.log("Change Theme triggered (VibeTheme not loaded)");
                 }
