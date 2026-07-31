@@ -36,6 +36,7 @@
 @endphp
 
 <div 
+    id="{{ $modalId }}"
     x-data="{ 
         open: {{ $show ? 'true' : 'false' }},
         modalId: '{{ $modalId }}',
@@ -59,10 +60,11 @@
     x-show="open"
     @open-modal.window="if ($event.detail === modalId) open = true"
     @close-modal.window="if ($event.detail === modalId) close()"
-    class="fixed inset-0 z-50 overflow-y-auto"
+    class="vibe-modal-container fixed inset-0 z-50 overflow-y-auto"
     aria-labelledby="modal-title" 
     role="dialog" 
     aria-modal="true"
+    data-dismissible="{{ $dismissible ? 'true' : 'false' }}"
     style="display: none;"
 >
     <div class="flex justify-center min-h-screen p-4 text-center {{ $positionClasses }}">
