@@ -14,9 +14,9 @@
 ])
 
 @php
-    $id = $id ?? ($name ?? uniqid('input-'));
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
-    $errorKey = $errorName ?? $attributes->whereStartsWith('wire:model')->first() ?? $name;
+    $id = $id ?? ($name ?? uniqid('input-'));
+    $errorKey = $errorName ?? $name;
 
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
     $errorMessage = $error ?: ($errorKey ? $errors->first($errorKey) : null);
