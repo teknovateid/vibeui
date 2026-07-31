@@ -55,8 +55,8 @@ jobs:
 
             echo "Force pulling latest changes from git..."
             git clean -fd
-            git fetch origin dev
-            git reset --hard origin/dev
+            git fetch origin development
+            git reset --hard origin/development
 
             echo "Installing composer dependencies..."
             ${{ secrets.PHP_84 }} /usr/local/bin/composer install --no-interaction --prefer-dist --optimize-autoloader
