@@ -89,14 +89,16 @@ class LayoutCommand extends Command implements PromptsForMissingInput
     protected function generateLayouts(string $path, string $chosenLayout): bool
     {
         $componentsDir = __DIR__ . '/../../resources/views/components';
-        $destComponentsDir = resource_path('views/components');
+        $destComponentsDir = resource_path("views/components/{$path}");
 
-        if (File::exists($destComponentsDir . '/layouts/app.blade.php')) {
-            if ($this->confirm("Global layout components already exist. Overwrite them?", false)) {
+        if (File::exists($destComponentsDir)) {
+            if ($this->confirm("Layout components for {$path} already exist. Overwrite them?", false)) {
                 File::copyDirectory($componentsDir, $destComponentsDir);
+                $this->updateComponentReferences($destComponentsDir, $path);
             }
         } else {
             File::copyDirectory($componentsDir, $destComponentsDir);
+            $this->updateComponentReferences($destComponentsDir, $path);
         }
 
         $pages = [
@@ -132,15 +134,58 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                     
                     $classContent = str_replace(
                         "use Livewire\Component;\n\nclass",
-                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('" . $titleName . "')]\n#[Layout('components.layouts.{$chosenLayout}')]\nclass",
+                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('" . $titleName . "')]\n#[Layout('components.{$path}.layouts.{$chosenLayout}')]\nclass",
                         $classContent
                     );
                     File::put($classFile, $classContent);
                 }
             }
+            
+            // Add to menu
+            $menuPath = resource_path("views/components/{$path}/partials/menu.blade.php");
+            $stubPath = __DIR__ . "/../../stubs/partials/{$chosenLayout}/menu-item.stub";
+            
+            if (File::exists($menuPath) && File::exists($stubPath)) {
+                $menuContent = File::get($menuPath);
+                
+                if (str_contains($menuContent, '</vibe:nav>')) {
+                    $stub = File::get($stubPath);
+                    $humanTitle = (string) str($path)->headline();
+                    
+                    // The layout's index route is just {$path}.index
+                    // The active check should exactly match {$path}.index so it doesn't stay active on all child pages
+                    $stub = str_replace(
+                        ["route('[route].index')", "request()->routeIs('[route].*')", '[Title]'], 
+                        ["route('{$path}.index')", "request()->routeIs('{$path}.index')", $humanTitle], 
+                        $stub
+                    );
+                    
+                    $menuContent = str_replace('</vibe:nav>', $stub . "\n</vibe:nav>", $menuContent);
+                    File::put($menuPath, $menuContent);
+                }
+            }
         }
 
         return true;
+    }
+
+    protected function updateComponentReferences(string $dir, string $path): void
+    {
+        $files = File::allFiles($dir);
+        foreach ($files as $file) {
+            if ($file->getExtension() === 'php') {
+                $content = File::get($file->getPathname());
+                
+                // Replace opening and closing tags
+                $content = preg_replace('/<x-layouts\./', '<x-' . $path . '.layouts.', $content);
+                $content = preg_replace('/<\/x-layouts\./', '</x-' . $path . '.layouts.', $content);
+                
+                $content = preg_replace('/<x-partials\./', '<x-' . $path . '.partials.', $content);
+                $content = preg_replace('/<\/x-partials\./', '</x-' . $path . '.partials.', $content);
+                
+                File::put($file->getPathname(), $content);
+            }
+        }
     }
 
     protected function generateRoute(string $path): bool
