@@ -34,6 +34,16 @@ class PageCommand extends Command implements PromptsForMissingInput
         $isResource = $this->option('resource');
         $isBlank = $this->option('blank');
 
+        // Detect layout style from the group's Index component
+        $style = 'sidebar'; // Default fallback
+        $indexFile = app_path("Livewire/" . str($layout)->studly() . "/Index.php");
+        if (File::exists($indexFile)) {
+            $indexContent = File::get($indexFile);
+            if (preg_match('/#\[Layout\([\'"]components\.layouts\.([a-zA-Z0-9_-]+)[\'"]\)\]/', $indexContent, $matches)) {
+                $style = $matches[1];
+            }
+        }
+
         $actions = $isResource ? ['index', 'create', 'edit'] : ['index'];
         $list = [];
 
@@ -56,7 +66,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                 File::put($destView, $content);
             }
 
-            // Inject Title attribute into the generated class
+            // Inject Title and Layout attribute into the generated class
             $className = ucfirst($action);
             $classFile = app_path("Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php");
             
@@ -70,7 +80,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                     
                     $classContent = str_replace(
                         "use Livewire\Component;\n\nclass",
-                        "use Livewire\Component;\nuse Livewire\Attributes\Title;\n\n#[Title('{$pageTitle}')]\nclass",
+                        "use Livewire\Component;\nuse Livewire\Attributes\Layout;\nuse Livewire\Attributes\Title;\n\n#[Title('{$pageTitle}')]\n#[Layout('components.layouts.{$style}')]\nclass",
                         $classContent
                     );
                     File::put($classFile, $classContent);
@@ -99,6 +109,28 @@ class PageCommand extends Command implements PromptsForMissingInput
             }
             File::put($routePath, $routeContent);
             $list[] = "Updated routes/{$layout}.php";
+        }
+
+        // Add to menu
+        $menuPath = resource_path('views/components/partials/menu.blade.php');
+        if (File::exists($menuPath)) {
+            $menuContent = File::get($menuPath);
+            $stubName = $isResource ? 'menu-group.stub' : 'menu-item.stub';
+            $stubPath = __DIR__ . "/../../stubs/partials/{$style}/{$stubName}";
+            
+            if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
+                $stub = File::get($stubPath);
+                
+                $routePrefixName = "{$layout}.{$name}";
+                $humanTitle = (string) str($name)->headline();
+                
+                $stub = str_replace(['[route]', '[Title]'], [$routePrefixName, $humanTitle], $stub);
+                
+                // Inject right before </vibe:nav>
+                $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n" . $stub . "\n$1", $menuContent);
+                File::put($menuPath, $menuContent);
+                $list[] = "Updated resources/views/components/partials/menu.blade.php";
+            }
         }
 
         $this->newLine();

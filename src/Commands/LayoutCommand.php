@@ -101,10 +101,6 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
         $pages = [
             'index' => 'templates/index.blade.php',
-            'blank' => 'templates/blank.blade.php',
-            'resource.index' => 'templates/resource/index.blade.php',
-            'resource.create' => 'templates/resource/create.blade.php',
-            'resource.edit' => 'templates/resource/edit.blade.php',
         ];
 
         foreach ($pages as $component => $templatePath) {
