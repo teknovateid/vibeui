@@ -61,7 +61,7 @@
     }
 }" class="w-full mx-auto">
     <div class="flex items-center justify-between mb-6 gap-2">
-        <div class="w-full min-w-0 p-2">
+        <div class="w-full min-w-0">
             {{ $header  }}
         </div>
 

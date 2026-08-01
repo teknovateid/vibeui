@@ -71,13 +71,22 @@ class Index extends Component
 
         $this->reset('name', 'username', 'phone', 'email');
         $this->dispatch('close-sheet', 'user-form');
-        $this->dispatch('alert', ['type' => 'success', 'message' => 'Data user berhasil disimpan!', 'position' => 'center']);
+        $this->dispatch('alert', [
+            'type' => 'success', 
+            'message' => 'Data user berhasil disimpan!', 
+            'position' => 'center',
+            'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav')
+        ]);
     }
 
     public function delete($id)
     {
         User::findOrFail($id)->delete();
-        $this->dispatch('alert', ['type' => 'success', 'message' => 'Data user berhasil dihapus!']);
+        $this->dispatch('alert', [
+            'type' => 'success', 
+            'message' => 'Data user berhasil dihapus!',
+            'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav')
+        ]);
     }
 
     public function render()

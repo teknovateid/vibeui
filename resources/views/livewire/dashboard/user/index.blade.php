@@ -44,7 +44,7 @@
 
                 <div class="mt-6 flex items-center justify-end gap-2 border-t border-vibe-200 dark:border-vibe-800 pt-4">
                     <vibe:button size="sm" variant="ghost" wire:click="edit({{ $item->id }})">Edit</vibe:button>
-                    <vibe:button size="sm" variant="danger" type="button" @click="$dispatch('alert', { type: 'confirm', title: 'Konfirmasi Hapus', message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.', primaryAction: 'Ya, Hapus', secondaryAction: 'Batal', primaryCallback: () => $wire.delete({{ $item->id }}) })">Hapus</vibe:button>
+                    <vibe:button size="sm" variant="danger" type="button" @click="$dispatch('alert', { type: 'confirm', title: 'Konfirmasi Hapus', message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.', confirmButton: { text: 'Ya, Hapus', action: () => $wire.delete({{ $item->id }}) }, closeButton: 'Batal', sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}' })">Hapus</vibe:button>
                 </div>
             </vibe:card>
         @empty
@@ -92,5 +92,40 @@
             </div>
         </form>
     </vibe:sheet>
+
+
+    {{-- @alert([
+    'type' => 'success',
+    'message' => 'Data user berhasil dihapus!',
+    'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav'),
+]) --}}
+    @push('body')
+        <script>
+            vibeAlert({
+                type: 'success',
+                title: 'Konfirmasi Hapus',
+                message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.',
+                confirmButton: {
+                    text: 'Ya, Hapus',
+                    class: 'inline-flex justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors',
+                    action: () => vibeAlert({
+                        type: 'success',
+                        timeout: false,
+                        message: 'Data user berhasil dihapus!'
+                    })
+                },
+                closeButton: {
+                    text: 'Batal',
+                    action: () => vibeAlert({
+                        type: 'info',
+                        message: 'Dibatalkan!'
+                    })
+                },
+                position:'top-center',
+                sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            });
+        </script>
+    @endpush
+
 
 </section>
