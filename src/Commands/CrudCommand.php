@@ -28,8 +28,9 @@ class CrudCommand extends Command implements PromptsForMissingInput
         $layout = str()->slug($this->argument('layout'));
         $name = str()->slug($this->argument('name'));
         $type = $this->option('type') ?: select('What type of CRUD do you want to generate?', [
-            'crud-index' => 'CRUD Index (Modal for Create/Edit)',
-            'crud-resource' => 'CRUD Resource (Separate pages for Index/Create/Edit)',
+            'crud-index'    => 'CRUD 1 Halaman — Modal (form di dalam modal)',
+            'crud-sheet'    => 'CRUD 1 Halaman — Sheet (form di slide-over kanan)',
+            'crud-resource' => 'CRUD Terpisah — Resource (Index, Create, Edit pages)',
         ]);
 
         $modelName = $this->option('model');
@@ -115,11 +116,51 @@ class CrudCommand extends Command implements PromptsForMissingInput
             }
         }
 
+        // Scan lists folder
+        $listsPath = __DIR__ . '/../../stubs/Organisms/crud/lists';
+        $listOptions = [];
+        if (File::exists($listsPath)) {
+            $files = File::files($listsPath);
+            foreach ($files as $file) {
+                if (Str::endsWith($file->getFilename(), '.blade.php')) {
+                    $nameWithoutExt = str_replace('.blade.php', '', $file->getFilename());
+                    $listOptions[$nameWithoutExt] = Str::headline($nameWithoutExt);
+                }
+            }
+        }
+        
+        $listStyle = 'datatable';
+        if (count($listOptions) > 0) {
+            $listStyle = select('Pilih komponen list yang ingin digunakan (datatable, dll):', $listOptions);
+        }
+
+        // Scan forms folder
+        $formsPath = __DIR__ . '/../../stubs/Organisms/crud/forms';
+        $formOptions = [];
+        if (File::exists($formsPath)) {
+            $files = File::files($formsPath);
+            foreach ($files as $file) {
+                if (Str::endsWith($file->getFilename(), '.blade.php')) {
+                    $nameWithoutExt = str_replace('.blade.php', '', $file->getFilename());
+                    $formOptions[$nameWithoutExt] = Str::headline($nameWithoutExt);
+                }
+            }
+        }
+        
+        $formCreateStyle = 'form';
+        $formEditStyle = 'form';
+        if (count($formOptions) > 0) {
+            $formCreateStyle = select('Pilih komponen form untuk form Create (Tambah Data):', $formOptions);
+            $formEditStyle = select('Pilih komponen form untuk form Edit (Ubah Data):', $formOptions);
+        }
+
         // Generate files
         if ($type === 'crud-index') {
-            $this->generateCrudIndex($layout, $name, $modelClass, $modelName, $schemaMapping, $style);
+            $this->generateCrudIndex($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle, $formCreateStyle, $formEditStyle);
+        } elseif ($type === 'crud-sheet') {
+            $this->generateCrudSheet($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle, $formCreateStyle, $formEditStyle);
         } else {
-            $this->generateCrudResource($layout, $name, $modelClass, $modelName, $schemaMapping, $style);
+            $this->generateCrudResource($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle, $formCreateStyle, $formEditStyle);
         }
 
         // Add to routes
@@ -133,23 +174,28 @@ class CrudCommand extends Command implements PromptsForMissingInput
         $this->newLine();
     }
 
-    protected function generateCrudIndex($layout, $name, $modelClass, $modelName, $schemaMapping, $style)
+    protected function generateCrudIndex($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle = 'datatable', $formCreateStyle = 'form', $formEditStyle = 'form')
     {
         $componentName = "{$layout}.{$name}.index";
         $this->call('make:livewire', ['name' => $componentName, '--class' => true]);
 
         // Build View
         $destView = resource_path("views/livewire/{$layout}/{$name}/index.blade.php");
-        $datatableStub = __DIR__ . '/../../stubs/Organisms/crud/datatable.blade.php';
-        $formStub = __DIR__ . '/../../stubs/Organisms/crud/form-create.blade.php';
+        $datatableStub = __DIR__ . '/../../stubs/Organisms/crud/lists/' . $listStyle . '.blade.php';
+        $formCreateStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formCreateStyle . '.blade.php';
+        $formEditStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formEditStyle . '.blade.php';
+        $templateStub = __DIR__ . '/../../stubs/Templates/crud/modal/index.blade.php';
 
-        $viewContent = File::exists($datatableStub) ? File::get($datatableStub) : '';
-        $formContent = File::exists($formStub) ? File::get($formStub) : '';
+        $viewContent = File::exists($templateStub) ? File::get($templateStub) : '<div>[DataTable][ModalCreate][ModalEdit]</div>';
+        $datatableContent = File::exists($datatableStub) ? File::get($datatableStub) : '';
+        $formCreateContent = File::exists($formCreateStub) ? File::get($formCreateStub) : '';
+        $formEditContent = File::exists($formEditStub) ? File::get($formEditStub) : '';
 
         $title = Str::headline($layout) . ' ' . Str::headline($name);
         
         $tableHeaders = '';
         $tableData = '';
+        $listGridData = '';
         $formFields = '';
         $firstColumn = 'id';
         $isFirst = true;
@@ -163,6 +209,15 @@ class CrudCommand extends Command implements PromptsForMissingInput
             $tableHeaders .= "<th class=\"px-6 py-3\">{$label}</th>\n                    ";
             $tableData .= "<td class=\"px-6 py-4\">{{ \$item->{$col} }}</td>\n                    ";
             
+            // Generate list grid data layout
+            if ($isFirst) { // Actually, $isFirst is already false, we can use a counter
+                // First column might be handled outside, but let's just dump it
+            }
+            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-vibe-100 dark:border-vibe-800 last:border-0\">\n";
+            $listGridData .= "    <span class=\"text-sm text-vibe-500 dark:text-vibe-400\">{$label}</span>\n";
+            $listGridData .= "    <span class=\"text-sm font-medium text-vibe-900 dark:text-vibe-100\">{{ \$item->{$col} }}</span>\n";
+            $listGridData .= "</div>\n                            ";
+            
             $formFields .= $this->buildFormField($col, $label, $map);
         }
 
@@ -170,13 +225,18 @@ class CrudCommand extends Command implements PromptsForMissingInput
         $viewContent = str_replace('[CreateAction]', '<vibe:button variant="primary" wire:click="create">Tambah Data</vibe:button>', $viewContent);
         $viewContent = str_replace('[TableHeaders]', $tableHeaders, $viewContent);
         $viewContent = str_replace('[TableData]', $tableData, $viewContent);
+        $viewContent = str_replace('[ListGridData]', $listGridData, $viewContent);
         $viewContent = str_replace('[EditAction]', '<vibe:button variant="ghost" size="sm" wire:click="edit({{ $item->id }})">Edit</vibe:button>', $viewContent);
 
-        $formContent = str_replace('[Title]', '{{ $editId ? \'Edit Data\' : \'Tambah Data\' }}', $formContent);
-        $formContent = str_replace('[FormFields]', $formFields, $formContent);
-        $formContent = str_replace('[CancelAction]', '<vibe:button variant="ghost" type="button" wire:click="$set(\'isOpen\', false)">Batal</vibe:button>', $formContent);
+        $formCreateContent = str_replace('[Title]', 'Tambah Data', $formCreateContent);
+        $formCreateContent = str_replace('[FormFields]', $formFields, $formCreateContent);
+        $formCreateContent = str_replace('[CancelAction]', '<vibe:button variant="ghost" type="button" wire:click="$set(\'isOpen\', false)">Batal</vibe:button>', $formCreateContent);
+        
+        $formEditContent = str_replace('[Title]', 'Edit Data', $formEditContent);
+        $formEditContent = str_replace('[FormFields]', $formFields, $formEditContent);
+        $formEditContent = str_replace('[CancelAction]', '<vibe:button variant="ghost" type="button" wire:click="$set(\'isOpen\', false)">Batal</vibe:button>', $formEditContent);
 
-        $modalContent = "<vibe:modal wire:model=\"isOpen\">\n    {$formContent}\n</vibe:modal>";
+        $modalContent = "<vibe:modal wire:model=\"isOpen\">\n    @if(\$editId)\n        {$formEditContent}\n    @else\n        {$formCreateContent}\n    @endif\n</vibe:modal>";
         $viewContent = str_replace('[Modals]', $modalContent, $viewContent);
 
         File::put($destView, $viewContent);
@@ -220,7 +280,111 @@ class CrudCommand extends Command implements PromptsForMissingInput
         }
     }
 
-    protected function generateCrudResource($layout, $name, $modelClass, $modelName, $schemaMapping, $style)
+    protected function generateCrudSheet($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle = 'datatable', $formCreateStyle = 'form', $formEditStyle = 'form')
+    {
+        $componentName = "{$layout}.{$name}.index";
+        $this->call('make:livewire', ['name' => $componentName, '--class' => true]);
+
+        // Build View
+        $destView = resource_path("views/livewire/{$layout}/{$name}/index.blade.php");
+        $datatableStub = __DIR__ . '/../../stubs/Organisms/crud/lists/' . $listStyle . '.blade.php';
+        $formCreateStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formCreateStyle . '.blade.php';
+        $formEditStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formEditStyle . '.blade.php';
+        $templateStub  = __DIR__ . '/../../stubs/Templates/crud/sheet/index.blade.php';
+
+        $viewContent  = File::exists($templateStub) ? File::get($templateStub) : '<div>[DataTable][SheetCreate][SheetEdit]</div>';
+        $datatableContent = File::exists($datatableStub) ? File::get($datatableStub) : '';
+        $formCreateContent = File::exists($formCreateStub) ? File::get($formCreateStub) : '';
+        $formEditContent = File::exists($formEditStub) ? File::get($formEditStub) : '';
+
+        $title = Str::headline($layout) . ' ' . Str::headline($name);
+        $tableHeaders = '';
+        $tableData    = '';
+        $listGridData = '';
+        $formFields   = '';
+        $firstColumn  = 'id';
+        $isFirst      = true;
+
+        foreach ($schemaMapping as $col => $map) {
+            if ($isFirst) { $firstColumn = $col; $isFirst = false; }
+            $label = Str::headline($col);
+            $tableHeaders .= "<th class=\"px-6 py-3\">{$label}</th>\n                    ";
+            $tableData    .= "<td class=\"px-6 py-4\">{{ \$item->{$col} }}</td>\n                    ";
+            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-vibe-100 dark:border-vibe-800 last:border-0\">\n";
+            $listGridData .= "    <span class=\"text-sm text-vibe-500 dark:text-vibe-400\">{$label}</span>\n";
+            $listGridData .= "    <span class=\"text-sm font-medium text-vibe-900 dark:text-vibe-100\">{{ \$item->{$col} }}</span>\n";
+            $listGridData .= "</div>\n                            ";
+            $formFields   .= $this->buildFormField($col, $label, $map);
+        }
+
+        // Build datatable block
+        $datatableContent = str_replace('[Title]', $title, $datatableContent);
+        $datatableContent = str_replace('[CreateAction]', '<vibe:button variant="primary" wire:click="create">Tambah Data</vibe:button>', $datatableContent);
+        $datatableContent = str_replace('[TableHeaders]', $tableHeaders, $datatableContent);
+        $datatableContent = str_replace('[TableData]', $tableData, $datatableContent);
+        $datatableContent = str_replace('[ListGridData]', $listGridData, $datatableContent);
+        $datatableContent = str_replace('[EditAction]', '<vibe:button variant="ghost" size="sm" wire:click="edit({{ $item->id }})">Edit</vibe:button>', $datatableContent);
+        $datatableContent = str_replace('[Modals]', '', $datatableContent);
+
+        // Build forms block
+        $formCreateContent = str_replace('[Title]', 'Tambah Data', $formCreateContent);
+        $formCreateContent = str_replace('[FormId]', 'create-form', $formCreateContent);
+        $formCreateContent = str_replace('[FormFields]', $formFields, $formCreateContent);
+        $formCreateContent = str_replace('[CancelAction]', '<vibe:button variant="ghost" type="button" @click="close()">Batal</vibe:button>', $formCreateContent);
+
+        $formEditContent = str_replace('[Title]', 'Edit Data', $formEditContent);
+        $formEditContent = str_replace('[FormId]', 'edit-form', $formEditContent);
+        $formEditContent = str_replace('[FormFields]', $formFields, $formEditContent);
+        $formEditContent = str_replace('[CancelAction]', '<vibe:button variant="ghost" type="button" @click="close()">Batal</vibe:button>', $formEditContent);
+
+        // Inject into template
+        $viewContent = str_replace('[DataTable]', $datatableContent, $viewContent);
+        $viewContent = str_replace('[SheetCreate]', $formCreateContent, $viewContent);
+        $viewContent = str_replace('[SheetEdit]', $formEditContent, $viewContent);
+
+        File::put($destView, $viewContent);
+
+        // Build Class (reuse modal stub — same logic, only view differs)
+        $classNamePath = "Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/Index.php";
+        $classFile = app_path($classNamePath);
+
+        $classStub = __DIR__ . '/../../stubs/Pages/crud/sheet/index.php';
+        if (File::exists($classStub)) {
+            $classContent = File::get($classStub);
+
+            $namespace  = "App\\Livewire\\" . str($layout)->studly() . "\\" . str($name)->studly();
+            $properties = '';
+            $rules      = '';
+            $resetFields = '';
+            $setProperties = '';
+
+            foreach ($schemaMapping as $col => $map) {
+                $properties    .= "public \${$col};\n    ";
+                $rules         .= "'{$col}' => 'required',\n            ";
+                $resetFields   .= "'{$col}', ";
+                $setProperties .= "\$this->{$col} = \$model->{$col};\n        ";
+            }
+            $resetFields = rtrim($resetFields, ', ');
+
+            $classContent = str_replace('[Namespace]',      $namespace, $classContent);
+            $classContent = str_replace('[ModelNamespace]', $modelClass, $classContent);
+            $classContent = str_replace('[Title]',          $title, $classContent);
+            $classContent = str_replace('[Layout]',         "components.{$layout}.layouts.{$style}", $classContent);
+            $classContent = str_replace('[ClassName]',      'Index', $classContent);
+            $classContent = str_replace('[Properties]',     $properties, $classContent);
+            $classContent = str_replace('[Rules]',          $rules, $classContent);
+            $classContent = str_replace('[ResetFields]',    $resetFields, $classContent);
+            $classContent = str_replace('[SetProperties]',  $setProperties, $classContent);
+            $classContent = str_replace('[ModelName]',      $modelName, $classContent);
+            $classContent = str_replace('[FirstColumn]',    $firstColumn, $classContent);
+            $classContent = str_replace('[ViewPath]',       "livewire.{$layout}.{$name}.index", $classContent);
+
+            File::put($classFile, $classContent);
+        }
+    }
+
+    protected function generateCrudResource($layout, $name, $modelClass, $modelName, $schemaMapping, $style, $listStyle = 'datatable', $formCreateStyle = 'form', $formEditStyle = 'form')
+
     {
         $actions = ['index', 'create', 'edit'];
         $firstColumn = 'id';
@@ -228,6 +392,7 @@ class CrudCommand extends Command implements PromptsForMissingInput
         // Prepare common strings
         $tableHeaders = '';
         $tableData = '';
+        $listGridData = '';
         $formFields = '';
         $properties = '';
         $rules = '';
@@ -242,6 +407,10 @@ class CrudCommand extends Command implements PromptsForMissingInput
             $label = Str::headline($col);
             $tableHeaders .= "<th class=\"px-6 py-3\">{$label}</th>\n                    ";
             $tableData .= "<td class=\"px-6 py-4\">{{ \$item->{$col} }}</td>\n                    ";
+            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-vibe-100 dark:border-vibe-800 last:border-0\">\n";
+            $listGridData .= "    <span class=\"text-sm text-vibe-500 dark:text-vibe-400\">{$label}</span>\n";
+            $listGridData .= "    <span class=\"text-sm font-medium text-vibe-900 dark:text-vibe-100\">{{ \$item->{$col} }}</span>\n";
+            $listGridData .= "</div>\n                            ";
             $formFields .= $this->buildFormField($col, $label, $map);
             
             $properties .= "public \${$col};\n    ";
@@ -261,12 +430,13 @@ class CrudCommand extends Command implements PromptsForMissingInput
             if ($action === 'index') {
                 $stub = __DIR__ . '/../../stubs/Templates/crud/resource/index.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/datatable.blade.php';
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/lists/' . $listStyle . '.blade.php';
                 $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
                 $orgContent = str_replace('[Title]', $title, $orgContent);
                 $orgContent = str_replace('[CreateAction]', "<vibe:button variant=\"primary\" href=\"{{ route('{$layout}.{$name}.create') }}\" wire:navigate>Tambah Data</vibe:button>", $orgContent);
                 $orgContent = str_replace('[TableHeaders]', $tableHeaders, $orgContent);
                 $orgContent = str_replace('[TableData]', $tableData, $orgContent);
+                $orgContent = str_replace('[ListGridData]', $listGridData, $orgContent);
                 $orgContent = str_replace('[EditAction]', "<vibe:button variant=\"ghost\" size=\"sm\" href=\"{{ route('{$layout}.{$name}.edit', \$item->id) }}\" wire:navigate>Edit</vibe:button>", $orgContent);
                 $orgContent = str_replace('[Modals]', '', $orgContent);
                 $content = str_replace('[DataTable]', $orgContent, $content);
@@ -274,9 +444,10 @@ class CrudCommand extends Command implements PromptsForMissingInput
             } elseif ($action === 'create') {
                 $stub = __DIR__ . '/../../stubs/Templates/crud/resource/create.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/form-create.blade.php';
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formCreateStyle . '.blade.php';
                 $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
                 $orgContent = str_replace('[Title]', $title, $orgContent);
+                $orgContent = str_replace('[FormId]', 'create-form', $orgContent);
                 $orgContent = str_replace('[FormFields]', $formFields, $orgContent);
                 $orgContent = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $orgContent);
                 $content = str_replace('[FormContent]', $orgContent, $content);
@@ -284,9 +455,10 @@ class CrudCommand extends Command implements PromptsForMissingInput
             } elseif ($action === 'edit') {
                 $stub = __DIR__ . '/../../stubs/Templates/crud/resource/edit.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/form-edit.blade.php';
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/forms/' . $formEditStyle . '.blade.php';
                 $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
                 $orgContent = str_replace('[Title]', $title, $orgContent);
+                $orgContent = str_replace('[FormId]', 'edit-form', $orgContent);
                 $orgContent = str_replace('[FormFields]', $formFields, $orgContent);
                 $orgContent = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $orgContent);
                 $content = str_replace('[FormContent]', $orgContent, $content);

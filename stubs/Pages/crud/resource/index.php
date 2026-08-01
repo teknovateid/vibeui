@@ -14,6 +14,8 @@ class Index extends Component
 {
     use WithPagination;
 
+    public $title = '[Title]';
+
     public $search = '';
 
     public function updatingSearch()
@@ -24,6 +26,10 @@ class Index extends Component
     public function delete($id)
     {
         [ModelName]::findOrFail($id)->delete();
+        $this->dispatch('toast', [
+            'type' => 'success', 
+            'message' => 'Data berhasil dihapus!',
+        ]);
     }
 
     public function render()

@@ -14,8 +14,8 @@ class [ClassName] extends Component
 {
     use WithPagination;
 
+
     public $search = '';
-    public $isOpen = false;
     public $editId = null;
 
     [Properties]
@@ -36,7 +36,7 @@ class [ClassName] extends Component
     {
         $this->reset([ResetFields]);
         $this->editId = null;
-        $this->isOpen = true;
+        $this->dispatch('open-sheet', 'create-sheet');
     }
 
     public function edit($id)
@@ -46,7 +46,7 @@ class [ClassName] extends Component
 
         [SetProperties]
 
-        $this->isOpen = true;
+        $this->dispatch('open-sheet', 'edit-sheet');
     }
 
     public function save()
@@ -55,17 +55,27 @@ class [ClassName] extends Component
 
         if ($this->editId) {
             [ModelName]::findOrFail($this->editId)->update($data);
+            $this->dispatch('close-sheet', 'edit-sheet');
         } else {
             [ModelName]::create($data);
+            $this->dispatch('close-sheet', 'create-sheet');
         }
 
-        $this->isOpen = false;
         $this->reset([ResetFields]);
+
+        $this->dispatch('toast', [
+            'type' => 'success', 
+            'message' => 'Data berhasil disimpan!',
+        ]);
     }
 
     public function delete($id)
     {
         [ModelName]::findOrFail($id)->delete();
+        $this->dispatch('toast', [
+            'type' => 'success', 
+            'message' => 'Data berhasil dihapus!',
+        ]);
     }
 
     public function render()
