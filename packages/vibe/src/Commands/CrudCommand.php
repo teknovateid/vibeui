@@ -140,8 +140,8 @@ class CrudCommand extends Command implements PromptsForMissingInput
 
         // Build View
         $destView = resource_path("views/livewire/{$layout}/{$name}/index.blade.php");
-        $datatableStub = __DIR__ . '/../../stubs/views/index/datatable.blade.php';
-        $formStub = __DIR__ . '/../../stubs/views/create/form.blade.php'; // We use create form as base for modal
+        $datatableStub = __DIR__ . '/../../stubs/Organisms/crud/datatable.blade.php';
+        $formStub = __DIR__ . '/../../stubs/Organisms/crud/form-create.blade.php';
 
         $viewContent = File::exists($datatableStub) ? File::get($datatableStub) : '';
         $formContent = File::exists($formStub) ? File::get($formStub) : '';
@@ -185,7 +185,7 @@ class CrudCommand extends Command implements PromptsForMissingInput
         $classNamePath = "Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/Index.php";
         $classFile = app_path($classNamePath);
         
-        $classStub = __DIR__ . '/../../stubs/livewire/crud-index.php';
+        $classStub = __DIR__ . '/../../stubs/Pages/crud/modal/index.php';
         if (File::exists($classStub)) {
             $classContent = File::get($classStub);
             
@@ -259,35 +259,44 @@ class CrudCommand extends Command implements PromptsForMissingInput
 
             // Generate Views
             if ($action === 'index') {
-                $stub = __DIR__ . '/../../stubs/views/index/datatable.blade.php';
+                $stub = __DIR__ . '/../../stubs/Templates/crud/resource/index.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $content = str_replace('[Title]', $title, $content);
-                $content = str_replace('[CreateAction]', "<vibe:button variant=\"primary\" href=\"{{ route('{$layout}.{$name}.create') }}\" wire:navigate>Tambah Data</vibe:button>", $content);
-                $content = str_replace('[TableHeaders]', $tableHeaders, $content);
-                $content = str_replace('[TableData]', $tableData, $content);
-                $content = str_replace('[EditAction]', "<vibe:button variant=\"ghost\" size=\"sm\" href=\"{{ route('{$layout}.{$name}.edit', \$item->id) }}\" wire:navigate>Edit</vibe:button>", $content);
-                $content = str_replace('[Modals]', '', $content);
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/datatable.blade.php';
+                $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
+                $orgContent = str_replace('[Title]', $title, $orgContent);
+                $orgContent = str_replace('[CreateAction]', "<vibe:button variant=\"primary\" href=\"{{ route('{$layout}.{$name}.create') }}\" wire:navigate>Tambah Data</vibe:button>", $orgContent);
+                $orgContent = str_replace('[TableHeaders]', $tableHeaders, $orgContent);
+                $orgContent = str_replace('[TableData]', $tableData, $orgContent);
+                $orgContent = str_replace('[EditAction]', "<vibe:button variant=\"ghost\" size=\"sm\" href=\"{{ route('{$layout}.{$name}.edit', \$item->id) }}\" wire:navigate>Edit</vibe:button>", $orgContent);
+                $orgContent = str_replace('[Modals]', '', $orgContent);
+                $content = str_replace('[DataTable]', $orgContent, $content);
                 File::put($destView, $content);
             } elseif ($action === 'create') {
-                $stub = __DIR__ . '/../../stubs/views/create/form.blade.php';
+                $stub = __DIR__ . '/../../stubs/Templates/crud/resource/create.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $content = str_replace('[Title]', $title, $content);
-                $content = str_replace('[FormFields]', $formFields, $content);
-                $content = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $content);
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/form-create.blade.php';
+                $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
+                $orgContent = str_replace('[Title]', $title, $orgContent);
+                $orgContent = str_replace('[FormFields]', $formFields, $orgContent);
+                $orgContent = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $orgContent);
+                $content = str_replace('[FormContent]', $orgContent, $content);
                 File::put($destView, $content);
             } elseif ($action === 'edit') {
-                $stub = __DIR__ . '/../../stubs/views/edit/form.blade.php';
+                $stub = __DIR__ . '/../../stubs/Templates/crud/resource/edit.blade.php';
                 $content = File::exists($stub) ? File::get($stub) : '';
-                $content = str_replace('[Title]', $title, $content);
-                $content = str_replace('[FormFields]', $formFields, $content);
-                $content = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $content);
+                $orgStub = __DIR__ . '/../../stubs/Organisms/crud/form-edit.blade.php';
+                $orgContent = File::exists($orgStub) ? File::get($orgStub) : '';
+                $orgContent = str_replace('[Title]', $title, $orgContent);
+                $orgContent = str_replace('[FormFields]', $formFields, $orgContent);
+                $orgContent = str_replace('[CancelAction]', "<vibe:button variant=\"ghost\" type=\"button\" href=\"{{ route('{$layout}.{$name}.index') }}\" wire:navigate>Batal</vibe:button>", $orgContent);
+                $content = str_replace('[FormContent]', $orgContent, $content);
                 File::put($destView, $content);
             }
 
             // Generate Classes
             $classNamePath = "Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/" . ucfirst($action) . ".php";
             $classFile = app_path($classNamePath);
-            $classStub = __DIR__ . "/../../stubs/livewire/crud-resource-{$action}.php";
+            $classStub = __DIR__ . "/../../stubs/Pages/crud/resource/{$action}.php";
             
             if (File::exists($classStub) && File::exists($classFile)) {
                 $classContent = File::get($classStub);
@@ -352,8 +361,8 @@ class CrudCommand extends Command implements PromptsForMissingInput
         $menuPath = resource_path("views/components/{$layout}/partials/menu.blade.php");
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
-            $stubName = ($type === 'crud-resource') ? 'menu-group.stub' : 'menu-item.stub';
-            $stubPath = __DIR__ . "/../../stubs/partials/{$style}/{$stubName}";
+            $stubName = ($type === 'crud-resource') ? 'group.blade.php' : 'item.blade.php';
+            $stubPath = __DIR__ . "/../../stubs/Partials/{$style}/{$stubName}";
             
             if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
                 $stub = File::get($stubPath);

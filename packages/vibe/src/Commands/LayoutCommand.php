@@ -35,7 +35,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
     {
         $path = str()->slug($this->argument('path'));
 
-        $layoutsDir = __DIR__ . '/../../resources/views/components/layouts';
+        $layoutsDir = __DIR__ . '/../../stubs/Layouts/layouts';
         $layoutFiles = glob($layoutsDir . '/*.blade.php');
         $layoutOptions = [];
         
@@ -88,7 +88,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
     protected function generateLayouts(string $path, string $chosenLayout): bool
     {
-        $componentsDir = __DIR__ . '/../../resources/views/components';
+        $componentsDir = __DIR__ . '/../../stubs/Layouts';
         $destComponentsDir = resource_path("views/components/{$path}");
 
         if (File::exists($destComponentsDir)) {
@@ -102,13 +102,13 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         $pages = [
-            'index' => 'templates/index.blade.php',
+            'index' => 'pages/index.blade.php',
         ];
 
         foreach ($pages as $component => $templatePath) {
             $this->call('make:livewire', ['name' => "{$path}.{$component}", '--class' => true]);
 
-            $templateFile = __DIR__ . "/../../resources/views/{$templatePath}";
+            $templateFile = __DIR__ . "/../../stubs/Templates/{$templatePath}";
             $destView = resource_path("views/livewire/{$path}/" . str_replace('.', '/', $component) . ".blade.php");
 
             if (File::exists($templateFile)) {
@@ -127,7 +127,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             $classNamePath = collect(explode('.', $component))->map(fn($part) => ucfirst($part))->implode('/');
             $classFile = app_path("Livewire/" . str($path)->studly() . "/{$classNamePath}.php");
             
-            $stubPath = __DIR__ . '/../../stubs/livewire/page.php';
+            $stubPath = __DIR__ . '/../../stubs/Pages/page.php';
             if (File::exists($classFile) && File::exists($stubPath)) {
                 $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
                 
@@ -153,7 +153,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             
             // Add to menu
             $menuPath = resource_path("views/components/{$path}/partials/menu.blade.php");
-            $stubPath = __DIR__ . "/../../stubs/partials/{$chosenLayout}/menu-item.stub";
+            $stubPath = __DIR__ . "/../../stubs/Partials/{$chosenLayout}/item.blade.php";
             
             if (File::exists($menuPath) && File::exists($stubPath)) {
                 $menuContent = File::get($menuPath);

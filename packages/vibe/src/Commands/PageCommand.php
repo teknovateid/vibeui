@@ -52,11 +52,11 @@ class PageCommand extends Command implements PromptsForMissingInput
             $this->call('make:livewire', ['name' => $componentName, '--class' => true]);
 
             if ($isResource) {
-                $templateFile = __DIR__ . "/../../resources/views/templates/resource/{$action}.blade.php";
+                $templateFile = __DIR__ . "/../../stubs/Templates/crud/resource/{$action}.blade.php";
             } elseif ($isBlank) {
-                $templateFile = __DIR__ . "/../../resources/views/templates/blank.blade.php";
+                $templateFile = __DIR__ . "/../../stubs/Templates/pages/blank.blade.php";
             } else {
-                $templateFile = __DIR__ . "/../../resources/views/templates/index.blade.php";
+                $templateFile = __DIR__ . "/../../stubs/Templates/pages/index.blade.php";
             }
 
             $destView = resource_path("views/livewire/{$layout}/{$name}/{$action}.blade.php");
@@ -70,7 +70,7 @@ class PageCommand extends Command implements PromptsForMissingInput
             $className = ucfirst($action);
             $classFile = app_path("Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php");
             
-            $stubPath = __DIR__ . '/../../stubs/livewire/page.php';
+            $stubPath = __DIR__ . '/../../stubs/Pages/page.php';
             if (File::exists($classFile) && File::exists($stubPath)) {
                 $pageTitle = str($layout)->headline() . ' ' . str($name)->headline();
                 if ($action !== 'index') {
@@ -118,8 +118,8 @@ class PageCommand extends Command implements PromptsForMissingInput
         $menuPath = resource_path("views/components/{$layout}/partials/menu.blade.php");
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
-            $stubName = $isResource ? 'menu-group.stub' : 'menu-item.stub';
-            $stubPath = __DIR__ . "/../../stubs/partials/{$style}/{$stubName}";
+            $stubName = $isResource ? 'group.blade.php' : 'item.blade.php';
+            $stubPath = __DIR__ . "/../../stubs/Partials/{$style}/{$stubName}";
             
             if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
                 $stub = File::get($stubPath);

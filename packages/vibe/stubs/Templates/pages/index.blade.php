@@ -27,7 +27,7 @@
         </p>
         
         <div class="flex justify-end gap-3 mt-6">
-            <vibe:button variant="ghost" @click="$dispatch('close-modal', 'test-modal')">Batal</vibe:button>
+            <vibe:button variant="ghost" @click="close">Batal</vibe:button>
             <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">Simpan Perubahan</vibe:button>
         </div>
     </vibe:modal>
