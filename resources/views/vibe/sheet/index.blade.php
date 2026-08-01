@@ -103,6 +103,15 @@
                 this.isInitialized = true;
             }, 50);
         });
+
+        this.$watch('state', value => {
+            if (value === 'expanded' || value === 'minified') {
+                setTimeout(() => {
+                    let input = this.$el.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])');
+                    if (input) input.focus();
+                }, 100);
+            }
+        });
     },
 
     saveToStorage() {
@@ -247,6 +256,18 @@
             this.size = {{ $defaultSize }};
         }
 
+        this.saveToStorage();
+    },
+    
+    close() {
+        if (this.behavior === 'static') return;
+        this.state = 'collapsed';
+        this.saveToStorage();
+    },
+
+    open() {
+        if (this.behavior === 'static') return;
+        this.state = 'expanded';
         this.saveToStorage();
     }
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" 
