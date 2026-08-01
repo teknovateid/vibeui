@@ -4,6 +4,7 @@
     'position' => 'center',
     'align' => 'center',
     'timeout' => 3000,
+    'sound' => false,
 ])
 
 @php
@@ -15,6 +16,7 @@
         alerts: [],
         globalPosition: '{{ $position }}',
         globalAlign: '{{ $align }}',
+        globalSound: '{{ $sound }}',
         
         getPositionClasses() {
             let pos = this.alerts.length > 0 ? (this.alerts[this.alerts.length - 1].position || this.globalPosition) : this.globalPosition;
@@ -65,10 +67,48 @@
                 alert.position = alert.position || 'center';
             }
             
-            let item = { ...alert, id, timer: null, hover: false };
-            this.alerts.push(item);
+            let s = alert.sound !== undefined ? alert.sound : this.globalSound;
+            if (s === 'true' || s === '1') s = true;
+            if (s === 'false' || s === '0' || s === '') s = false;
             
-            this.startTimer(item);
+            let item = { ...alert, id, timer: null, hover: false, sound: s };
+            setTimeout(() => {
+                this.alerts.push(item);
+                this.startTimer(item);
+                this.playSound(item);
+            }, 50);
+        },
+        
+        playSound(alert) {
+            if (!alert.sound) return;
+
+            if (typeof alert.sound === 'string' && alert.sound.length > 5) {
+                // Play from URL
+                let audio = new Audio(alert.sound);
+                audio.play().catch(e => console.warn('Audio play failed:', e));
+            } else {
+                // Play a simple soft pop using Web Audio API
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+                    
+                    gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    
+                    osc.start(ctx.currentTime);
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch (e) {
+                    console.warn('Web Audio API not supported', e);
+                }
+            }
         },
         startTimer(alert) {
             if (alert.timeout !== false && (alert.timeout || {{ $timeout }})) {
@@ -97,7 +137,7 @@
             });
         }
     }"
-    @alert.window="
+    x-on:alert.window="
         let d = $event.detail;
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
@@ -121,19 +161,27 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-gray-900/40 dark:bg-gray-900/80 pointer-events-auto"></div>
+         class="fixed inset-0 pointer-events-auto"></div>
 
+    <style>
+        .vibe-alert-start { opacity: 0; transform: scale(0.95); }
+        .vibe-alert-start.pos-top-center { transform: translateY(-2rem) scale(0.95); }
+        .vibe-alert-start.pos-bottom-center { transform: translateY(2rem) scale(0.95); }
+        .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
+        .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
+    </style>
     <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 shadow-lg rounded-2xl pointer-events-auto">
         <template x-for="alert in alerts" :key="alert.id">
             <div 
+                :class="'pos-' + (alert.position || globalPosition)"
                 @mouseenter="pauseTimer(alert)"
                 @mouseleave="resumeTimer(alert)"
                 x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-8 scale-95"
-                x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+                x-transition:enter-start="vibe-alert-start"
+                x-transition:enter-end="opacity-100 transform-none"
                 x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-                x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-8 scale-95"
+                x-transition:leave-start="opacity-100 transform-none"
+                x-transition:leave-end="vibe-alert-start"
                 class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10"
             >
                 <div class="p-4 sm:p-5 flex flex-col" :class="getAlignClasses(alert)">
