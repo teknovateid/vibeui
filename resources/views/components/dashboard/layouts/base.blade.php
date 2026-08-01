@@ -15,8 +15,8 @@
 <body class="font-medium font-inter antialiased bg-vibe-50 dark:bg-vibe-950 text-black dark:text-white">
     {{ $slot }}
     
-    <vibe:alert position="top-right" />
-    <vibe:toast position="top-right" />
+        <vibe:alert position="top-right" />
+        <vibe:toast position="top-right" />
     
     @livewireScripts
     @stack('body')

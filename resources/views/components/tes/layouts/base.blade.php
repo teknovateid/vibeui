@@ -10,9 +10,15 @@
     <script src="{{ asset('vibe/theme-init.js') }}" data-navigate-track="reload"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    @stack('head')
 </head>
 <body class="font-medium font-inter antialiased bg-vibe-50 dark:bg-vibe-950 text-black dark:text-white">
     {{ $slot }}
+    
+    <vibe:alert position="top-right" />
+    <vibe:toast position="top-right" />
+    
     @livewireScripts
+    @stack('body')
 </body>
 </html>

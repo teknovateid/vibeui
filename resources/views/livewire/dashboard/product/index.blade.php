@@ -35,7 +35,7 @@
 
                         <td class="px-6 py-4 text-right space-x-2">
                             <vibe:button variant="ghost" size="sm" wire:click="edit({{ $item->id }})">Edit</vibe:button>
-                            <vibe:button variant="danger" size="sm" wire:click="delete({{ $item->id }})" wire:confirm="Yakin ingin menghapus data ini?">Hapus</vibe:button>
+                            <vibe:button variant="danger" size="sm" type="button" @click="confirmDelete({{ $item->id }})">Hapus</vibe:button>
                         </td>
                     </tr>
                 @empty

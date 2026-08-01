@@ -183,41 +183,57 @@ class PageCommand extends Command implements PromptsForMissingInput
         }
 
         if (! $input->getOption('resource') && ! $input->getOption('blank')) {
-            $type = select(
-                'What type of page do you want to generate?',
+            $baseType = select(
+                'Apakah menggunakan template static atau crud?',
                 [
-                    'index' => 'Index (1 page with grid)',
-                    'blank' => 'Blank (1 empty page)',
-                    'resource' => 'Resource (Index, Create, Edit)',
-                    'crud-index' => 'CRUD Index (Auto-generate from DB Modal)',
-                    'crud-resource' => 'CRUD Resource (Auto-generate from DB Pages)'
+                    'static' => 'Template Static (Kosong / Index Biasa)',
+                    'crud'   => 'Template CRUD (Auto-generate dari Database)',
                 ]
             );
 
-            if ($type === 'crud-index' || $type === 'crud-resource') {
-                $generateCrud = select('Do you want to auto-generate CRUD from Database Schema?', [
-                    'yes' => 'Yes (Auto-generate)',
-                    'no' => 'Skip (Generate empty templates)'
+            if ($baseType === 'crud') {
+                $type = select(
+                    'Pilih jenis template CRUD yang ingin digunakan:',
+                    [
+                        'crud-sheet'    => 'CRUD 1 Halaman — Sheet (form di slide-over kanan)',
+                        'crud-index'    => 'CRUD 1 Halaman — Modal (form di dalam modal)',
+                        'crud-resource' => 'CRUD Terpisah — Resource (Index, Create, Edit pages)',
+                    ]
+                );
+
+                $generateCrud = select('Lanjutkan auto-generate dari Database Schema?', [
+                    'yes' => 'Ya, Generate sekarang',
+                    'no'  => 'Lewati (Hanya buat file kosong)'
                 ], default: 'yes');
 
                 if ($generateCrud === 'yes') {
                     $this->call('vibe:crud', [
                         'layout' => $input->getArgument('layout'),
-                        'name' => $input->getArgument('name'),
+                        'name'   => $input->getArgument('name'),
                         '--type' => $type
                     ]);
                     exit(0);
                 } else {
-                    // Fallback to normal generation
                     if ($type === 'crud-resource') {
                         $input->setOption('resource', true);
                     }
                 }
-            } elseif ($type === 'resource') {
-                $input->setOption('resource', true);
-            } elseif ($type === 'blank') {
-                $input->setOption('blank', true);
+            } else {
+                $type = select(
+                    'Pilih jenis template Static:',
+                    [
+                        'index'    => 'Index (1 halaman dengan grid / layout standar)',
+                        'blank'    => 'Blank (1 halaman kosong)',
+                        'resource' => 'Resource (Index, Create, Edit kosong)',
+                    ]
+                );
+
+                if ($type === 'resource') {
+                    $input->setOption('resource', true);
+                } elseif ($type === 'blank') {
+                    $input->setOption('blank', true);
+                }
+            }
             }
         }
     }
-}

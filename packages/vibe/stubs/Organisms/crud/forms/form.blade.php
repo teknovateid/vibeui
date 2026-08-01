@@ -1,7 +1,7 @@
-<vibe:form id="{{ isset($editId) ? 'edit-form' : 'create-form' }}" saveToStorage="{{ isset($editId) ? false : true }}" wire:submit="save" class="flex flex-1 flex-col h-full">
+<vibe:form id="[FormId]" wire:submit="save" class="flex flex-1 flex-col h-full">
     <div class="px-6 py-4 flex justify-between gap-4 w-full items-start">
         <div class="flex flex-col">
-            <h3 class="text-lg font-bold text-vibe-900 dark:text-vibe-100">{{ $editId ? 'Edit' : 'Tambah' }}</h3>
+            <h3 class="text-lg font-bold text-vibe-900 dark:text-vibe-100">[Title]</h3>
             <p class="text-sm text-vibe-500 dark:text-vibe-400 mt-1">
                 Silakan lengkapi data pada formulir di bawah ini.
             </p>

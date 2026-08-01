@@ -60,10 +60,15 @@
             return pos === 'center';
         },
         
+        isAddingConfirm: false,
         add(alert) {
             // Prevent multiple confirm dialogs
-            if (alert.type === 'confirm' && this.alerts.some(a => a.type === 'confirm')) {
-                return;
+            if (alert.type === 'confirm') {
+                if (this.isAddingConfirm || this.alerts.some(a => a.type === 'confirm')) {
+                    return;
+                }
+                this.isAddingConfirm = true;
+                setTimeout(() => this.isAddingConfirm = false, 500);
             }
             
             // Prevent exact duplicate alerts
@@ -105,8 +110,9 @@
             
             let item = { ...alert, id, timer: null, hover: false, sound: s };
             
+            this.alerts.push(item);
+            
             setTimeout(() => {
-                this.alerts.push(item);
                 this.startTimer(item);
                 this.playSound(item);
             }, 50);
@@ -219,6 +225,7 @@
          class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
          style="display: none; z-index: -1;"></div>
 
+    @pushOnce('head')
     <style>
         .vibe-alert-start { opacity: 0; transform: scale(0.95); }
         .vibe-alert-start.pos-top-center { transform: translateY(-2rem) scale(0.95); }
@@ -226,6 +233,8 @@
         .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
         .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
     </style>
+    @endPushOnce
+    
     <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
             <div 
@@ -278,6 +287,7 @@
     </div>
 </div>
 
+@pushOnce('body')
 <script>
     if (typeof window.vibeAlert === 'undefined') {
         window.vibeAlert = function(payload) {
@@ -307,3 +317,4 @@
         };
     }
 </script>
+@endPushOnce

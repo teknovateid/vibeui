@@ -14,6 +14,7 @@ class [ClassName] extends Component
 {
     use WithPagination;
 
+
     public $search = '';
     public $isOpen = false;
     public $editId = null;
@@ -61,11 +62,20 @@ class [ClassName] extends Component
 
         $this->isOpen = false;
         $this->reset([ResetFields]);
+
+        $this->dispatch('toast', [
+            'type' => 'success', 
+            'message' => 'Data berhasil disimpan!',
+        ]);
     }
 
     public function delete($id)
     {
         [ModelName]::findOrFail($id)->delete();
+        $this->dispatch('toast', [
+            'type' => 'success', 
+            'message' => 'Data berhasil dihapus!',
+        ]);
     }
 
     public function render()

@@ -17,6 +17,7 @@
     {{ $slot }}
 
     @if($saveToStorage && $id)
+        @pushOnce('body')
         <script>
             document.addEventListener('alpine:init', () => {
                 if (!window.Alpine.data('vibeForm')) {
@@ -44,82 +45,90 @@
                             }
                         },
                         
-                        setStorageData(data) {
-                            localStorage.setItem(this.storageKey, JSON.stringify(data));
-                        },
-                        
-                        saveToStorage(formEl) {
-                            // Extract form data
-                            const formData = new FormData(formEl);
-                            const dataObj = {};
+                        saveToStorage(el) {
+                            if (!formId) return;
                             
-                            // Don't save livewire internal fields
-                            for (let [key, value] of formData.entries()) {
-                                // Skip files, livewire internals, csrf
-                                if (value instanceof File || key.startsWith('_') || key === 'components') continue;
-                                dataObj[key] = value;
+                            const formData = new FormData(el);
+                            const data = Object.fromEntries(formData.entries());
+                            
+                            // Remove empty or specific Livewire payload fields
+                            delete data['_token'];
+                            for (let key in data) {
+                                if (key.startsWith('components.') || key.startsWith('serverMemo.')) {
+                                    delete data[key];
+                                }
                             }
                             
-                            if (Object.keys(dataObj).length === 0) return;
+                            const now = new Date().getTime();
+                            const expireMs = expireHours * 60 * 60 * 1000;
                             
-                            let storageArray = this.getStorageData();
-                            const existingIndex = storageArray.findIndex(item => item.id === formId);
+                            let storageData = this.getStorageData();
+                            if (!Array.isArray(storageData)) storageData = [];
                             
-                            const expirationDate = new Date();
-                            expirationDate.setHours(expirationDate.getHours() + expireHours);
-                            
+                            const index = storageData.findIndex(item => item.id === formId);
                             const newItem = {
                                 id: formId,
-                                data: dataObj,
-                                expiredAt: expirationDate.getTime()
+                                data: data,
+                                expiry: now + expireMs
                             };
                             
-                            if (existingIndex > -1) {
-                                storageArray[existingIndex] = newItem;
+                            if (index !== -1) {
+                                storageData[index] = newItem;
                             } else {
-                                storageArray.push(newItem);
+                                storageData.push(newItem);
                             }
                             
-                            this.setStorageData(storageArray);
+                            // Cleanup expired items
+                            storageData = storageData.filter(item => item.expiry > now);
+                            
+                            localStorage.setItem(this.storageKey, JSON.stringify(storageData));
                         },
                         
                         restoreFromStorage() {
-                            let storageArray = this.getStorageData();
-                            const now = new Date().getTime();
+                            if (!formId) return;
                             
-                            // Clean up expired items globally while we are at it
-                            let cleanedArray = storageArray.filter(item => item.expiredAt && item.expiredAt > now);
-                            if (cleanedArray.length !== storageArray.length) {
-                                this.setStorageData(cleanedArray);
-                                storageArray = cleanedArray;
-                            }
+                            const storageData = this.getStorageData();
+                            if (!Array.isArray(storageData)) return;
                             
-                            const myData = storageArray.find(item => item.id === formId);
+                            const item = storageData.find(item => item.id === formId);
                             
-                            if (myData && myData.data) {
-                                setTimeout(() => {
-                                    Object.entries(myData.data).forEach(([key, value]) => {
-                                        // Handle input arrays e.g. name="hobbies[]"
-                                        const inputName = key.endsWith('[]') ? key : key;
-                                        const input = this.$el.querySelector(`[name="${inputName}"]`);
-                                        
-                                        if (input && input.value !== value) {
-                                            input.value = value;
-                                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                            if (item && item.expiry > new Date().getTime()) {
+                                const data = item.data;
+                                // Loop through elements and dispatch input event so Livewire picks it up
+                                for (let key in data) {
+                                    let el = document.querySelector(`form#${formId} [name="${key}"]`);
+                                    if (!el) {
+                                        el = document.querySelector(`form#${formId} [wire\\:model="${key}"]`);
+                                    }
+                                    if (el) {
+                                        if (el.type === 'checkbox' || el.type === 'radio') {
+                                            el.checked = data[key] === 'on' || data[key] === el.value;
+                                            el.dispatchEvent(new Event('change', { bubbles: true }));
+                                        } else {
+                                            el.value = data[key];
+                                            el.dispatchEvent(new Event('input', { bubbles: true }));
                                         }
-                                    });
-                                }, 50);
+                                    }
+                                }
+                            } else if (item) {
+                                // Item expired, clean it up
+                                this.clearStorage();
                             }
                         },
                         
                         clearStorage() {
-                            let storageArray = this.getStorageData();
-                            storageArray = storageArray.filter(item => item.id !== formId);
-                            this.setStorageData(storageArray);
+                            if (!formId) return;
+                            
+                            let storageData = this.getStorageData();
+                            if (Array.isArray(storageData)) {
+                                storageData = storageData.filter(item => item.id !== formId);
+                                localStorage.setItem(this.storageKey, JSON.stringify(storageData));
+                            }
                         }
                     }));
                 }
             });
         </script>
+        @endPushOnce
     @endif
 </form>

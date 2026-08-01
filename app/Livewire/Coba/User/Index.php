@@ -1,16 +1,16 @@
 <?php
 
-namespace [Namespace];
+namespace App\Livewire\Coba\User;
 
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
-use [ModelNamespace];
+use App\Models\User;
 
-#[Title('[Title]')]
-#[Layout('[Layout]')]
-class [ClassName] extends Component
+#[Title('Coba User')]
+#[Layout('components.coba.layouts.sidebar')]
+class Index extends Component
 {
     use WithPagination;
 
@@ -18,12 +18,22 @@ class [ClassName] extends Component
     public $search = '';
     public $editId = null;
 
-    [Properties]
+    public $name;
+    public $email;
+    public $phone;
+    public $username;
+    public $position;
+    
 
     protected function rules()
     {
         return [
-            [Rules]
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'username' => 'required',
+            'position' => 'required',
+            
         ];
     }
 
@@ -34,17 +44,22 @@ class [ClassName] extends Component
 
     public function create()
     {
-        $this->reset([ResetFields]);
+        $this->reset('name', 'email', 'phone', 'username', 'position');
         $this->editId = null;
         $this->dispatch('open-sheet', 'create-sheet');
     }
 
     public function edit($id)
     {
-        $model = [ModelName]::findOrFail($id);
+        $model = User::findOrFail($id);
         $this->editId = $id;
 
-        [SetProperties]
+        $this->name = $model->name;
+        $this->email = $model->email;
+        $this->phone = $model->phone;
+        $this->username = $model->username;
+        $this->position = $model->position;
+        
 
         $this->dispatch('open-sheet', 'edit-sheet');
     }
@@ -54,14 +69,14 @@ class [ClassName] extends Component
         $data = $this->validate();
 
         if ($this->editId) {
-            [ModelName]::findOrFail($this->editId)->update($data);
+            User::findOrFail($this->editId)->update($data);
             $this->dispatch('close-sheet', 'edit-sheet');
         } else {
-            [ModelName]::create($data);
+            User::create($data);
             $this->dispatch('close-sheet', 'create-sheet');
         }
 
-        $this->reset([ResetFields]);
+        $this->reset('name', 'email', 'phone', 'username', 'position');
 
         $this->dispatch('toast', [
             'type' => 'success', 
@@ -71,7 +86,7 @@ class [ClassName] extends Component
 
     public function delete($id)
     {
-        [ModelName]::findOrFail($id)->delete();
+        User::findOrFail($id)->delete();
         $this->dispatch('toast', [
             'type' => 'success', 
             'message' => 'Data berhasil dihapus!',
@@ -80,10 +95,10 @@ class [ClassName] extends Component
 
     public function render()
     {
-        $items = [ModelName]::where('[FirstColumn]', 'like', '%' . $this->search . '%')
+        $items = User::where('name', 'like', '%' . $this->search . '%')
             ->latest()
             ->paginate(10);
 
-        return view('[ViewPath]', compact('items'));
+        return view('livewire.coba.user.index', compact('items'));
     }
 }
