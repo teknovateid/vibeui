@@ -1,4 +1,28 @@
-<section>
+<section x-data="{
+    confirmDelete(id) {
+        $dispatch('alert', {
+            type: 'confirm',
+            title: 'Konfirmasi Hapus',
+            message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.',
+            confirmButton: {
+                text: 'Ya, Hapus',
+                class: 'inline-flex justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors',
+                action: () => {
+                    $wire.delete(id);
+                }
+            },
+            closeButton: {
+                text: 'Batal',
+                action: () => vibeToast({
+                    type: 'info',
+                    message: 'Dibatalkan!'
+                })
+            },
+            position: 'top-center',
+            sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}'
+        });
+    }
+}">
     <vibe:breadcrumb title="Data User" class="mb-6">
         <vibe:breadcrumb.item href="{{ route('dashboard.index') }}">Dashboard</vibe:breadcrumb.item>
         <vibe:breadcrumb.item active>Data User</vibe:breadcrumb.item>
@@ -6,6 +30,10 @@
             <vibe:button class="btn-add" variant="primary" wire:click="create">Tambah Data</vibe:button>
         </x-slot:button>
     </vibe:breadcrumb>
+
+    <vibe:button class="mb-2" @click="$dispatch('toast', { type: 'info', title:'Tes', message: 'Ini adalah toast tumpuk!',sound:'{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}' })">
+        Tes Toast
+    </vibe:button>
 
     <vibe:grid-list id="user-list">
         <x-slot:header>
@@ -44,7 +72,7 @@
 
                 <div class="mt-6 flex items-center justify-end gap-2 border-t border-vibe-200 dark:border-vibe-800 pt-4">
                     <vibe:button size="sm" variant="ghost" wire:click="edit({{ $item->id }})">Edit</vibe:button>
-                    <vibe:button size="sm" variant="danger" type="button" @click="$dispatch('alert', { type: 'confirm', title: 'Konfirmasi Hapus', message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.', confirmButton: { text: 'Ya, Hapus', action: () => $wire.delete({{ $item->id }}) }, closeButton: 'Batal', sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}' })">Hapus</vibe:button>
+                    <vibe:button size="sm" variant="danger" type="button" @click="confirmDelete({{ $item->id }})">Hapus</vibe:button>
                 </div>
             </vibe:card>
         @empty
@@ -55,11 +83,11 @@
 
     </vibe:grid-list>
     <div class="mt-4">
-        {{ $items->links(data: ['scrollTo' => false]) }}
+        {{ $items->links('vibe.pagination.index', data: ['scrollTo' => false]) }}
     </div>
 
-    <vibe:sheet id="user-form" class="bg-vibe-50 dark:bg-vibe-950" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" defaultSize="500" closeOnOutsideClick="true">
-        <form wire:submit="save" class="flex flex-1 flex-col h-full">
+    <vibe:sheet id="{{ isset($editId) ? 'edit-user-sheet' : 'create-user-sheet' }}" class="bg-vibe-50 dark:bg-vibe-950" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" defaultSize="500" closeOnOutsideClick="true">
+        <vibe:form id="{{ isset($editId) ? 'edit-user-form' : 'create-user-form' }}" saveToStorage="{{ isset($editId) ? false : true }}" wire:submit="save" class="flex flex-1 flex-col h-full">
             <div class="px-6 py-4 flex justify-between gap-4 w-full items-start">
                 <div class="flex flex-col">
                     <h3 class="text-lg font-bold text-vibe-900 dark:text-vibe-100">{{ $editId ? 'Edit User' : 'Tambah User' }}</h3>
@@ -67,7 +95,7 @@
                         Silakan lengkapi data pada formulir di bawah ini.
                     </p>
                 </div>
-                <vibe:button type="button" class="p-2 shrink-0 text-vibe-400 hover:text-vibe-600 dark:hover:text-vibe-200" variant="ghost" @click="$dispatch('close-sheet', 'user-form')">
+                <vibe:button type="button" class="p-2 shrink-0 text-vibe-400 hover:text-vibe-600 dark:hover:text-vibe-200" variant="ghost" @click="close()">
                     <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -84,14 +112,15 @@
 
             <!-- Footer -->
             <div class="sticky bottom-0 z-10 px-6 py-4 flex justify-end gap-3 bg-vibe-100 dark:bg-vibe-900  mt-auto">
-                <vibe:button variant="ghost" type="button" @click="$dispatch('close-sheet', 'user-form')">Batal</vibe:button>
-                <vibe:button variant="primary" type="submit">
+                <vibe:button variant="ghost" type="button" @click="close">Batal</vibe:button>
+                <vibe:button variant="primary" type="submit" wire:loading.attr="disabled">
                     <span wire:loading.remove wire:target="save">Simpan Data</span>
                     <span wire:loading wire:target="save">Menyimpan...</span>
                 </vibe:button>
             </div>
-        </form>
+        </vibe:form>
     </vibe:sheet>
+
 
 
     {{-- @alert([
@@ -101,29 +130,70 @@
 ]) --}}
     @push('body')
         <script>
-            vibeAlert({
-                type: 'success',
-                title: 'Konfirmasi Hapus',
-                message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.',
-                confirmButton: {
-                    text: 'Ya, Hapus',
-                    class: 'inline-flex justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors',
-                    action: () => vibeAlert({
-                        type: 'success',
-                        timeout: false,
-                        message: 'Data user berhasil dihapus!'
-                    })
-                },
-                closeButton: {
-                    text: 'Batal',
-                    action: () => vibeAlert({
-                        type: 'info',
-                        message: 'Dibatalkan!'
-                    })
-                },
-                position:'top-center',
-                sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
-            });
+            // vibeAlert({
+            //     type: 'success',
+            //     title: 'Konfirmasi Hapus',
+            //     message: 'Apakah Anda yakin ingin menghapus data user ini? Tindakan ini tidak dapat dibatalkan.',
+            //     confirmButton: {
+            //         text: 'Ya, Hapus',
+            //         class: 'inline-flex justify-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 transition-colors',
+            //         action: () => vibeToast({
+            //             type: 'success',
+            //             timeout: false,
+            //             message: 'Data user berhasil dihapus!'
+            //         })
+            //     },
+            //     closeButton: {
+            //         text: 'Batal',
+            //         action: () => vibeToast({
+            //             type: 'info',
+            //             message: 'Dibatalkan!'
+            //         })
+            //     },
+            //     position:'top-center',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
+            // vibeToast({
+            //     type:'error',
+            //     message:'Ini adalah pesan error',
+            //     sound: "{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}",
+            // });
         </script>
     @endpush
 

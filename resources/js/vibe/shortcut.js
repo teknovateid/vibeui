@@ -148,9 +148,47 @@ document.addEventListener("DOMContentLoaded", function () {
             preventDefault: true,
         },
         {
-            name: "Close Modal/Sheet (Escape)",
+            name: "Confirm Alert (Enter)",
+            keys: ["Enter"],
+            triggerInInputs: true,
+            preventDefault: false, // Will only prevent default if an alert is active and confirmed
+            action: function (event) {
+                const alertContainer = document.getElementById('vibe-alert-container');
+                if (alertContainer && window.Alpine) {
+                    const alpineData = window.Alpine.$data(alertContainer);
+                    if (alpineData && alpineData.alerts) {
+                        const confirmAlert = alpineData.alerts.find(a => a.blocking && a.confirmButton);
+                        if (confirmAlert) {
+                            alpineData.executeCallback(confirmAlert.confirmButton.action);
+                            alpineData.remove(confirmAlert.id);
+                            event.preventDefault();
+                            return;
+                        }
+                    }
+                }
+            }
+        },
+        {
+            name: "Close Modal/Sheet/Alert (Escape)",
             keys: ["Escape"],
             action: function (event) {
+                // Check alerts first
+                const alertContainer = document.getElementById('vibe-alert-container');
+                if (alertContainer && window.Alpine) {
+                    const alpineData = window.Alpine.$data(alertContainer);
+                    if (alpineData && alpineData.alerts) {
+                        const activeAlert = alpineData.alerts.find(a => a.blocking);
+                        if (activeAlert) {
+                            if (activeAlert.closeButton && activeAlert.closeButton.action) {
+                                alpineData.executeCallback(activeAlert.closeButton.action);
+                            }
+                            alpineData.remove(activeAlert.id);
+                            event.preventDefault();
+                            return; // Stop here, don't close modals
+                        }
+                    }
+                }
+
                 // Hilangkan fokus dari input jika sedang aktif
                 if (document.activeElement && ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) {
                     document.activeElement.blur();
@@ -257,6 +295,12 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!event.key) {
             return;
         }
+        
+        // Mencegah eksekusi berulang jika tombol ditahan (held down)
+        if (event.repeat) {
+            return;
+        }
+
         const activeElement = event.target;
         const isInputFocused =
             activeElement &&

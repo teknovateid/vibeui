@@ -1,69 +1,125 @@
+@blaze
 @props([
     'id' => null,
-    'persist' => false,
-    'expireInHours' => 24,
+    'saveToStorage' => false,
+    'expireHours' => 24,
 ])
 
 <form 
-    {{ $attributes->merge(['class' => 'space-y-4']) }}
-    @if($persist && $id)
-        x-data="{
-            formId: '{{ $id }}',
-            expireHours: {{ $expireInHours }},
-            
-            init() {
-                // 1. Restore data
-                let saved = Alpine.store('vibeForms').get(this.formId);
-                if (saved) {
-                    // Timeout allows DOM (and Livewire) to be fully ready before dispatching events
-                    setTimeout(() => {
-                        Object.keys(saved).forEach(name => {
-                            let el = this.$el.querySelector(`[name='${name}']`);
-                            if (el && el.value !== saved[name]) {
-                                el.value = saved[name];
-                                // Trigger Alpine/Livewire models
-                                el.dispatchEvent(new Event('input', { bubbles: true }));
-                                el.dispatchEvent(new Event('change', { bubbles: true }));
-                            }
-                        });
-                    }, 100);
-                }
-                
-                // 2. Watch for changes
-                this.$el.addEventListener('input', this.debounce(() => {
-                    this.saveData();
-                }, 500));
-            },
-            
-            saveData() {
-                let data = {};
-                let formData = new FormData(this.$el);
-                for (let [key, value] of formData.entries()) {
-                    if (key !== '_token' && key !== '_method') {
-                        data[key] = value;
-                    }
-                }
-                Alpine.store('vibeForms').save(this.formId, data, this.expireHours);
-            },
-
-            clearData() {
-                Alpine.store('vibeForms').clear(this.formId);
-            },
-
-            debounce(func, wait) {
-                let timeout;
-                return function executedFunction(...args) {
-                    const later = () => {
-                        clearTimeout(timeout);
-                        func(...args);
-                    };
-                    clearTimeout(timeout);
-                    timeout = setTimeout(later, wait);
-                };
-            }
-        }"
-        @submit="clearData"
+    id="{{ $id }}"
+    {{ $attributes->merge(['class' => '']) }}
+    @if($saveToStorage && $id)
+        x-data="vibeForm('{{ $id }}', {{ $expireHours }})"
+        @input.debounce.500ms="saveToStorage($el)"
+        @submit="clearStorage()"
     @endif
 >
     {{ $slot }}
+
+    @if($saveToStorage && $id)
+        <script>
+            document.addEventListener('alpine:init', () => {
+                if (!window.Alpine.data('vibeForm')) {
+                    window.Alpine.data('vibeForm', (formId, expireHours) => ({
+                        storageKey: (window.VIBE_PREFIX || 'vibe') + '-form',
+                        
+                        init() {
+                            this.restoreFromStorage();
+                            
+                            // Re-restore data when a sheet or modal opens, 
+                            // to override Livewire's $this->reset() if the form is inside them
+                            window.addEventListener('open-sheet', () => {
+                                setTimeout(() => this.restoreFromStorage(), 100);
+                            });
+                            window.addEventListener('open-modal', () => {
+                                setTimeout(() => this.restoreFromStorage(), 100);
+                            });
+                        },
+                        
+                        getStorageData() {
+                            try {
+                                return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+                            } catch (e) {
+                                return [];
+                            }
+                        },
+                        
+                        setStorageData(data) {
+                            localStorage.setItem(this.storageKey, JSON.stringify(data));
+                        },
+                        
+                        saveToStorage(formEl) {
+                            // Extract form data
+                            const formData = new FormData(formEl);
+                            const dataObj = {};
+                            
+                            // Don't save livewire internal fields
+                            for (let [key, value] of formData.entries()) {
+                                // Skip files, livewire internals, csrf
+                                if (value instanceof File || key.startsWith('_') || key === 'components') continue;
+                                dataObj[key] = value;
+                            }
+                            
+                            if (Object.keys(dataObj).length === 0) return;
+                            
+                            let storageArray = this.getStorageData();
+                            const existingIndex = storageArray.findIndex(item => item.id === formId);
+                            
+                            const expirationDate = new Date();
+                            expirationDate.setHours(expirationDate.getHours() + expireHours);
+                            
+                            const newItem = {
+                                id: formId,
+                                data: dataObj,
+                                expiredAt: expirationDate.getTime()
+                            };
+                            
+                            if (existingIndex > -1) {
+                                storageArray[existingIndex] = newItem;
+                            } else {
+                                storageArray.push(newItem);
+                            }
+                            
+                            this.setStorageData(storageArray);
+                        },
+                        
+                        restoreFromStorage() {
+                            let storageArray = this.getStorageData();
+                            const now = new Date().getTime();
+                            
+                            // Clean up expired items globally while we are at it
+                            let cleanedArray = storageArray.filter(item => item.expiredAt && item.expiredAt > now);
+                            if (cleanedArray.length !== storageArray.length) {
+                                this.setStorageData(cleanedArray);
+                                storageArray = cleanedArray;
+                            }
+                            
+                            const myData = storageArray.find(item => item.id === formId);
+                            
+                            if (myData && myData.data) {
+                                setTimeout(() => {
+                                    Object.entries(myData.data).forEach(([key, value]) => {
+                                        // Handle input arrays e.g. name="hobbies[]"
+                                        const inputName = key.endsWith('[]') ? key : key;
+                                        const input = this.$el.querySelector(`[name="${inputName}"]`);
+                                        
+                                        if (input && input.value !== value) {
+                                            input.value = value;
+                                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                                        }
+                                    });
+                                }, 50);
+                            }
+                        },
+                        
+                        clearStorage() {
+                            let storageArray = this.getStorageData();
+                            storageArray = storageArray.filter(item => item.id !== formId);
+                            this.setStorageData(storageArray);
+                        }
+                    }));
+                }
+            });
+        </script>
+    @endif
 </form>

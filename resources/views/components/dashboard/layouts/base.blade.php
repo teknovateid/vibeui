@@ -16,6 +16,7 @@
     {{ $slot }}
     
     <vibe:alert position="top-right" />
+    <vibe:toast position="top-right" />
     
     @livewireScripts
     @stack('body')

@@ -7,9 +7,6 @@
     'sound' => false,
 ])
 
-@php
-    // We move the class mappings to Alpine for dynamic overriding
-@endphp
 
 <div 
     x-data="{
@@ -200,6 +197,7 @@
         add(payload);
     "
     class="fixed inset-0 z-[100] flex pointer-events-none"
+    id="vibe-alert-container"
     :class="getPositionClasses()"
 >
     <!-- Handle Session Flash Messages -->
@@ -218,8 +216,8 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-gray-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
-         style="z-index: -1;"></div>
+         class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
+         style="display: none; z-index: -1;"></div>
 
     <style>
         .vibe-alert-start { opacity: 0; transform: scale(0.95); }
@@ -228,7 +226,7 @@
         .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
         .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
     </style>
-    <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 shadow-lg rounded-2xl pointer-events-auto">
+    <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
             <div 
                 :class="'pos-' + (alert.position || globalPosition)"
@@ -240,7 +238,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 transform-none"
                 x-transition:leave-end="vibe-alert-start"
-                class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10"
+                class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto"
             >
                 <div class="p-4 sm:p-5 flex flex-col" :class="getAlignClasses(alert)">
                     <!-- Icon container -->
@@ -250,11 +248,11 @@
                     ></div>
                     
                     <!-- Title -->
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight" 
+                    <h3 class="text-lg font-bold text-vibe-900 dark:text-white tracking-tight" 
                         x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
                     
                     <!-- Message -->
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 leading-relaxed" x-text="alert.message"></p>
+                    <p class="mt-2 text-sm text-vibe-500 dark:text-vibe-400 leading-relaxed" x-text="alert.message"></p>
                 </div>
                 
                 <!-- Footer -->
@@ -266,12 +264,12 @@
                      }">
                     
                     <button x-show="alert.closeButton" @click="if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); remove(alert.id)" 
-                        :class="[(alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : 'inline-flex justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 hover:bg-gray-100 dark:bg-vibe-800 dark:hover:bg-vibe-700 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm transition-colors',
+                        :class="[(alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : 'inline-flex justify-center rounded-lg border border-vibe-200 dark:border-vibe-700 bg-vibe-50 hover:bg-vibe-100 dark:bg-vibe-800 dark:hover:bg-vibe-700 px-4 py-2 text-sm font-semibold text-vibe-700 dark:text-vibe-200 shadow-sm',
                                 (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
                         x-text="alert.closeButton ? alert.closeButton.text : ''"></button>
                     
                     <button x-show="alert.confirmButton" @click="if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); remove(alert.id)" 
-                        :class="[(alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : 'inline-flex justify-center rounded-lg bg-vibe-950 dark:bg-vibe-100 px-4 py-2 text-sm font-semibold text-white dark:text-vibe-950 shadow-sm hover:bg-vibe-800 dark:hover:bg-vibe-200 transition-colors',
+                        :class="[(alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : 'inline-flex justify-center rounded-lg bg-vibe-950 dark:bg-vibe-100 px-4 py-2 text-sm font-semibold text-white dark:text-vibe-950 shadow-sm hover:bg-vibe-800 dark:hover:bg-vibe-200',
                                 (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
                         x-text="alert.confirmButton ? alert.confirmButton.text : ''"></button>
                 </div>
