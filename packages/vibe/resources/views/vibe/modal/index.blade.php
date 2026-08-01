@@ -48,6 +48,15 @@
                     this.open = false;
                 }
             }
+
+            this.$watch('open', value => {
+                if (value) {
+                    setTimeout(() => {
+                        let input = this.$el.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])');
+                        if (input) input.focus();
+                    }, 100);
+                }
+            });
         },
         
         close() {

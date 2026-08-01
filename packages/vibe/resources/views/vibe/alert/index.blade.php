@@ -7,9 +7,6 @@
     'sound' => false,
 ])
 
-@php
-    // We move the class mappings to Alpine for dynamic overriding
-@endphp
 
 <div 
     x-data="{
@@ -17,6 +14,22 @@
         globalPosition: '{{ $position }}',
         globalAlign: '{{ $align }}',
         globalSound: '{{ $sound }}',
+        
+        typeClasses: {
+            success: 'bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 ring-8 ring-green-50 dark:ring-green-900/20',
+            error: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-50 dark:ring-red-900/20',
+            confirm: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-50 dark:ring-red-900/20',
+            warning: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400 ring-8 ring-yellow-50 dark:ring-yellow-900/20',
+            info: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 ring-8 ring-blue-50 dark:ring-blue-900/20'
+        },
+        
+        icons: {
+            success: `<svg class='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z' clip-rule='evenodd' style='display: none;' /><path fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z' clip-rule='evenodd' /></svg>`,
+            error: `<svg class='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z' clip-rule='evenodd' /></svg>`,
+            confirm: `<svg class='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z' clip-rule='evenodd' /></svg>`,
+            warning: `<svg class='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z' clip-rule='evenodd' /></svg>`,
+            info: `<svg class='h-6 w-6' fill='currentColor' viewBox='0 0 24 24'><path fill-rule='evenodd' d='M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 011.08.732l-2.15 8.6a1.5 1.5 0 01-2.884-.712l.71-2.837-.042.02a.75.75 0 01-1.08-.732l2.15-8.6a1.5 1.5 0 011.757-1.003zM12 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z' clip-rule='evenodd' /></svg>`
+        },
         
         getPositionClasses() {
             let pos = this.alerts.length > 0 ? (this.alerts[this.alerts.length - 1].position || this.globalPosition) : this.globalPosition;
@@ -62,9 +75,28 @@
             
             if (alert.type === 'confirm') {
                 alert.timeout = false;
-                alert.primaryAction = alert.primaryAction || 'Ya, Lanjutkan';
-                alert.secondaryAction = alert.secondaryAction || 'Batal';
                 alert.position = alert.position || 'center';
+                alert.blocking = alert.blocking !== undefined ? alert.blocking : true;
+            }
+            
+            // Normalize confirmButton
+            if (alert.confirmButton !== undefined) {
+                if (typeof alert.confirmButton === 'string') alert.confirmButton = { text: alert.confirmButton };
+            } else if (alert.primaryAction !== undefined || alert.primaryCallback !== undefined) {
+                alert.confirmButton = { text: alert.primaryAction, action: alert.primaryCallback };
+            } else if (alert.type === 'confirm') {
+                alert.confirmButton = { text: 'Ya, Lanjutkan' };
+            } else {
+                alert.confirmButton = { text: 'Tutup' };
+            }
+
+            // Normalize closeButton
+            if (alert.closeButton !== undefined) {
+                if (typeof alert.closeButton === 'string') alert.closeButton = { text: alert.closeButton };
+            } else if (alert.secondaryAction !== undefined || alert.secondaryCallback !== undefined) {
+                alert.closeButton = { text: alert.secondaryAction, action: alert.secondaryCallback };
+            } else if (alert.type === 'confirm') {
+                alert.closeButton = { text: 'Batal' };
             }
             
             let s = alert.sound !== undefined ? alert.sound : this.globalSound;
@@ -72,6 +104,7 @@
             if (s === 'false' || s === '0' || s === '') s = false;
             
             let item = { ...alert, id, timer: null, hover: false, sound: s };
+            
             setTimeout(() => {
                 this.alerts.push(item);
                 this.startTimer(item);
@@ -83,8 +116,14 @@
             if (!alert.sound) return;
 
             if (typeof alert.sound === 'string' && alert.sound.length > 5) {
-                // Play from URL
-                let audio = new Audio(alert.sound);
+                // Play from URL with caching
+                window.vibeAudioCache = window.vibeAudioCache || {};
+                let audio = window.vibeAudioCache[alert.sound];
+                if (!audio) {
+                    audio = new Audio(alert.sound);
+                    window.vibeAudioCache[alert.sound] = audio;
+                }
+                audio.currentTime = 0;
                 audio.play().catch(e => console.warn('Audio play failed:', e));
             } else {
                 // Play a simple soft pop using Web Audio API
@@ -135,6 +174,21 @@
                 if (a.id === id && a.timer) clearTimeout(a.timer);
                 return a.id !== id;
             });
+        },
+        executeCallback(cb) {
+            if (typeof cb === 'function') {
+                cb();
+            } else if (typeof cb === 'string') {
+                try {
+                    if (cb.trim().startsWith('function') || cb.includes('=>')) {
+                        (new Function('return ' + cb))()();
+                    } else {
+                        (new Function(cb))();
+                    }
+                } catch (e) {
+                    console.error('Error executing alert callback:', e);
+                }
+            }
         }
     }"
     x-on:alert.window="
@@ -143,6 +197,7 @@
         add(payload);
     "
     class="fixed inset-0 z-[100] flex pointer-events-none"
+    id="vibe-alert-container"
     :class="getPositionClasses()"
 >
     <!-- Handle Session Flash Messages -->
@@ -154,14 +209,15 @@
     "></div>
 
     <!-- Backdrop -->
-    <div x-show="alerts.length > 0 && isCenter()" 
+    <div x-show="alerts.some(a => a.blocking)" 
          x-transition:enter="transition ease-out duration-300"
          x-transition:enter-start="opacity-0"
          x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 pointer-events-auto"></div>
+         class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
+         style="display: none; z-index: -1;"></div>
 
     <style>
         .vibe-alert-start { opacity: 0; transform: scale(0.95); }
@@ -170,7 +226,7 @@
         .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
         .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
     </style>
-    <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 shadow-lg rounded-2xl pointer-events-auto">
+    <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
             <div 
                 :class="'pos-' + (alert.position || globalPosition)"
@@ -182,62 +238,72 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 transform-none"
                 x-transition:leave-end="vibe-alert-start"
-                class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10"
+                class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto"
             >
                 <div class="p-4 sm:p-5 flex flex-col" :class="getAlignClasses(alert)">
                     <!-- Icon container -->
-                    <div class="flex h-12 w-12 items-center justify-center rounded-xl mb-4"
-                        :class="{
-                            'bg-green-50 dark:bg-green-900/30': alert.type === 'success',
-                            'bg-red-50 dark:bg-red-900/30': alert.type === 'error',
-                            'bg-yellow-50 dark:bg-yellow-900/30': alert.type === 'warning' || alert.type === 'confirm',
-                            'bg-blue-50 dark:bg-blue-900/30': !alert.type || alert.type === 'info',
-                        }"
-                    >
-                        <!-- Success Icon -->
-                        <svg x-show="alert.type === 'success'" class="h-6 w-6 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clip-rule="evenodd" style="display: none;" />
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd" />
-                        </svg>
-                        <!-- Error Icon -->
-                        <svg x-show="alert.type === 'error'" class="h-6 w-6 text-red-500 dark:text-red-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
-                        </svg>
-                        <!-- Warning/Confirm Icon -->
-                        <svg x-show="alert.type === 'warning' || alert.type === 'confirm'" class="h-6 w-6 text-yellow-500 dark:text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.4 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
-                        </svg>
-                        <!-- Info Icon -->
-                        <svg x-show="!alert.type || alert.type === 'info'" class="h-6 w-6 text-blue-500 dark:text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                            <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 011.08.732l-2.15 8.6a1.5 1.5 0 01-2.884-.712l.71-2.837-.042.02a.75.75 0 01-1.08-.732l2.15-8.6a1.5 1.5 0 011.757-1.003zM12 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
-                        </svg>
-                    </div>
+                    <div class="flex h-12 w-12 items-center justify-center rounded-full mb-4 mt-2"
+                        :class="typeClasses[alert.type] || typeClasses.info"
+                        x-html="alert.icon || icons[alert.type] || icons.info"
+                    ></div>
                     
                     <!-- Title -->
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight" 
+                    <h3 class="text-lg font-bold text-vibe-900 dark:text-white tracking-tight" 
                         x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
                     
                     <!-- Message -->
-                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 leading-relaxed" x-text="alert.message"></p>
+                    <p class="mt-2 text-sm text-vibe-500 dark:text-vibe-400 leading-relaxed" x-text="alert.message"></p>
                 </div>
                 
                 <!-- Footer -->
-                <div class="px-5 py-3 sm:px-6 sm:py-4 flex items-center border-t border-gray-100 dark:border-white/10 bg-white dark:bg-vibe-950"
+                <div class="px-4 pb-4 sm:px-5 sm:pb-5 pt-1 flex w-full"
                      :class="{
-                         'justify-between': (alert.align || globalAlign) === 'center' || (alert.align || globalAlign) === 'start',
-                         'justify-end': (alert.align || globalAlign) === 'end',
+                         'flex-col space-y-2': alert.buttonLayout === 'col',
+                         'flex-row space-x-2 sm:space-x-3': alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center'),
+                         'justify-end space-x-2 sm:space-x-3': !alert.buttonLayout && (alert.align || globalAlign) !== 'center',
                      }">
-                    <!-- Left action -->
-                    <button x-show="(alert.align || globalAlign) !== 'end'" @click="remove(alert.id)" class="text-sm font-semibold text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline decoration-gray-300 dark:decoration-gray-600 underline-offset-4">Cancel</button>
                     
-                    <!-- Right actions -->
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <button x-show="alert.secondaryAction" @click="if(alert.secondaryCallback) alert.secondaryCallback(); remove(alert.id)" class="inline-flex justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-vibe-900 px-3 py-1.5 sm:px-4 sm:py-2 text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-sm hover:bg-gray-50 dark:hover:bg-vibe-800 transition-colors" x-text="alert.secondaryAction"></button>
-                        
-                        <button @click="if(alert.primaryCallback) alert.primaryCallback(); remove(alert.id)" class="inline-flex justify-center rounded-lg bg-vibe-950 dark:bg-vibe-100 px-3 py-1.5 sm:px-4 sm:py-2 text-sm font-semibold text-white dark:text-vibe-950 shadow-sm hover:bg-vibe-800 dark:hover:bg-vibe-200 transition-colors" x-text="alert.primaryAction || 'Tutup'"></button>
-                    </div>
+                    <button x-show="alert.closeButton" @click="if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); remove(alert.id)" 
+                        :class="[(alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : 'inline-flex justify-center rounded-lg border border-vibe-200 dark:border-vibe-700 bg-vibe-50 hover:bg-vibe-100 dark:bg-vibe-800 dark:hover:bg-vibe-700 px-4 py-2 text-sm font-semibold text-vibe-700 dark:text-vibe-200 shadow-sm',
+                                (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
+                        x-text="alert.closeButton ? alert.closeButton.text : ''"></button>
+                    
+                    <button x-show="alert.confirmButton" @click="if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); remove(alert.id)" 
+                        :class="[(alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : 'inline-flex justify-center rounded-lg bg-vibe-950 dark:bg-vibe-100 px-4 py-2 text-sm font-semibold text-white dark:text-vibe-950 shadow-sm hover:bg-vibe-800 dark:hover:bg-vibe-200',
+                                (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
+                        x-text="alert.confirmButton ? alert.confirmButton.text : ''"></button>
                 </div>
             </div>
         </template>
     </div>
 </div>
+
+<script>
+    if (typeof window.vibeAlert === 'undefined') {
+        window.vibeAlert = function(payload) {
+            if (typeof payload === 'string') {
+                payload = { message: payload, type: 'info' };
+            }
+            
+            let fired = false;
+            let dispatchEvent = () => {
+                if (fired) return;
+                fired = true;
+                window.dispatchEvent(new CustomEvent('alert', { detail: payload }));
+            };
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('alpine:initialized', () => {
+                    setTimeout(dispatchEvent, 50);
+                });
+                // Fallback for non-Alpine/late-Alpine loads
+                document.addEventListener('DOMContentLoaded', () => {
+                    setTimeout(dispatchEvent, 150);
+                });
+            } else {
+                // If DOM is ready, wait a tiny bit to ensure Alpine has mounted
+                setTimeout(dispatchEvent, 50);
+            }
+        };
+    }
+</script>

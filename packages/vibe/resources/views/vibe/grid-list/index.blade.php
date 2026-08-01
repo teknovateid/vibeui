@@ -7,7 +7,7 @@
 ])
 
 @php
-    $gridClasses = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
+    $gridClasses = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
     $listClasses = 'flex flex-col gap-4';
     
     $activeBtnClass = 'bg-white dark:bg-vibe-800 text-vibe-900 dark:text-vibe-100 shadow-sm';
