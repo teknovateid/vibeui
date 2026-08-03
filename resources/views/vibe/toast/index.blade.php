@@ -235,7 +235,6 @@
     </div>
 </div>
 
-@pushOnce('body')
 <script>
     if (typeof window.vibeToast === 'undefined') {
         window.vibeToast = function(payload) {
@@ -251,16 +250,11 @@
             };
             
             if (document.readyState === 'loading') {
-                document.addEventListener('alpine:initialized', () => {
-                    setTimeout(dispatchEvent, 50);
-                });
-                document.addEventListener('DOMContentLoaded', () => {
-                    setTimeout(dispatchEvent, 150);
-                });
+                document.addEventListener('alpine:initialized', () => setTimeout(dispatchEvent, 50));
+                document.addEventListener('DOMContentLoaded', () => setTimeout(dispatchEvent, 150));
             } else {
                 setTimeout(dispatchEvent, 50);
             }
         };
     }
 </script>
-@endPushOnce

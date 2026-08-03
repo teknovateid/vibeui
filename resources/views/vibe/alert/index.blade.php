@@ -1,8 +1,8 @@
 @blaze
 
 @props([
-    'position' => 'center',
-    'align' => 'center',
+    'position' => 'center', // center, top-right, top-left, bottom-right, bottom-left, top-center, bottom-center
+    'align' => 'center', // start, center, end
     'timeout' => 3000,
     'sound' => false,
 ])
@@ -16,11 +16,11 @@
         globalSound: '{{ $sound }}',
         
         typeClasses: {
-            success: 'bg-green-100 dark:bg-green-900/40 text-green-600 dark:text-green-400 ring-8 ring-green-50 dark:ring-green-900/20',
-            error: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-50 dark:ring-red-900/20',
-            confirm: 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-50 dark:ring-red-900/20',
-            warning: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400 ring-8 ring-yellow-50 dark:ring-yellow-900/20',
-            info: 'bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 ring-8 ring-blue-50 dark:ring-blue-900/20'
+            success: 'bg-green-500/15 dark:bg-green-900/40 text-green-600 dark:text-green-400 ring-8 ring-green-100/80 dark:ring-green-900/20',
+            error: 'bg-red-500/15 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-100/80 dark:ring-red-900/20',
+            confirm: 'bg-red-500/15 dark:bg-red-900/40 text-red-600 dark:text-red-400 ring-8 ring-red-100/80 dark:ring-red-900/20',
+            warning: 'bg-yellow-500/15 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400 ring-8 ring-yellow-100/80 dark:ring-yellow-900/20',
+            info: 'bg-blue-500/15 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 ring-8 ring-blue-100/80 dark:ring-blue-900/20'
         },
         
         icons: {
@@ -60,18 +60,11 @@
             return pos === 'center';
         },
         
-        isAddingConfirm: false,
         add(alert) {
-            // Prevent multiple confirm dialogs
-            if (alert.type === 'confirm') {
-                if (this.isAddingConfirm || this.alerts.some(a => a.type === 'confirm')) {
-                    return;
-                }
-                this.isAddingConfirm = true;
-                setTimeout(() => this.isAddingConfirm = false, 500);
+            if (alert.type === 'confirm' && this.alerts.some(a => a.type === 'confirm')) {
+                return;
             }
             
-            // Prevent exact duplicate alerts
             if (this.alerts.some(a => a.title === alert.title && a.message === alert.message && a.type === alert.type)) {
                 return;
             }
@@ -84,7 +77,6 @@
                 alert.blocking = alert.blocking !== undefined ? alert.blocking : true;
             }
             
-            // Normalize confirmButton
             if (alert.confirmButton !== undefined) {
                 if (typeof alert.confirmButton === 'string') alert.confirmButton = { text: alert.confirmButton };
             } else if (alert.primaryAction !== undefined || alert.primaryCallback !== undefined) {
@@ -95,7 +87,6 @@
                 alert.confirmButton = { text: 'Tutup' };
             }
 
-            // Normalize closeButton
             if (alert.closeButton !== undefined) {
                 if (typeof alert.closeButton === 'string') alert.closeButton = { text: alert.closeButton };
             } else if (alert.secondaryAction !== undefined || alert.secondaryCallback !== undefined) {
@@ -110,9 +101,8 @@
             
             let item = { ...alert, id, timer: null, hover: false, sound: s };
             
-            this.alerts.push(item);
-            
             setTimeout(() => {
+                this.alerts.push(item);
                 this.startTimer(item);
                 this.playSound(item);
             }, 50);
@@ -122,7 +112,6 @@
             if (!alert.sound) return;
 
             if (typeof alert.sound === 'string' && alert.sound.length > 5) {
-                // Play from URL with caching
                 window.vibeAudioCache = window.vibeAudioCache || {};
                 let audio = window.vibeAudioCache[alert.sound];
                 if (!audio) {
@@ -132,7 +121,6 @@
                 audio.currentTime = 0;
                 audio.play().catch(e => console.warn('Audio play failed:', e));
             } else {
-                // Play a simple soft pop using Web Audio API
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
                     const osc = ctx.createOscillator();
@@ -206,7 +194,6 @@
     id="vibe-alert-container"
     :class="getPositionClasses()"
 >
-    <!-- Handle Session Flash Messages -->
     <div class="hidden" x-init="
         @if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: 'Berhasil' }); @endif
         @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: 'Error' }); @endif
@@ -225,7 +212,6 @@
          class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
          style="display: none; z-index: -1;"></div>
 
-    @pushOnce('head')
     <style>
         .vibe-alert-start { opacity: 0; transform: scale(0.95); }
         .vibe-alert-start.pos-top-center { transform: translateY(-2rem) scale(0.95); }
@@ -233,8 +219,6 @@
         .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
         .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
     </style>
-    @endPushOnce
-    
     <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
             <div 
@@ -247,11 +231,11 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 transform-none"
                 x-transition:leave-end="vibe-alert-start"
-                class="relative w-full bg-vibe-100 dark:bg-vibe-900 rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto"
+                class="relative w-full bg-vibe-100 dark:bg-vibe-900 select-none rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto"
             >
                 <div class="p-4 sm:p-5 flex flex-col" :class="getAlignClasses(alert)">
                     <!-- Icon container -->
-                    <div class="flex h-12 w-12 items-center justify-center rounded-full mb-4 mt-2"
+                    <div class="flex size-12 items-center justify-center rounded-full mb-6"
                         :class="typeClasses[alert.type] || typeClasses.info"
                         x-html="alert.icon || icons[alert.type] || icons.info"
                     ></div>
@@ -261,7 +245,7 @@
                         x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
                     
                     <!-- Message -->
-                    <p class="mt-2 text-sm text-vibe-500 dark:text-vibe-400 leading-relaxed" x-text="alert.message"></p>
+                    <p class="mt-1 text-sm text-vibe-700 dark:text-vibe-300 leading-relaxed" x-text="alert.message"></p>
                 </div>
                 
                 <!-- Footer -->
@@ -287,7 +271,6 @@
     </div>
 </div>
 
-@pushOnce('body')
 <script>
     if (typeof window.vibeAlert === 'undefined') {
         window.vibeAlert = function(payload) {
@@ -317,4 +300,3 @@
         };
     }
 </script>
-@endPushOnce
