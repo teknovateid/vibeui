@@ -1,7 +1,7 @@
 <x-docs.layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
-            <div class="w-full">
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true" class="max-sm:fixed max-sm:h-screen">
+            <div class="w-full relative">
                 <x-docs.partials.menu />
             </div>
         </vibe:sheet>
