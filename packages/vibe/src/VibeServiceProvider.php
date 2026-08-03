@@ -30,7 +30,7 @@ class VibeServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../resources/css/vibe' => resource_path('css/vibe'),
             __DIR__.'/../resources/js/vibe' => resource_path('js/vibe'),
-            __DIR__.'/../public' => public_path('vibe'),
+            __DIR__.'/../public' => public_path(),
         ], 'vibe-assets');
 
         // Register anonymous component path for the 'vibe' namespace.
@@ -38,10 +38,39 @@ class VibeServiceProvider extends ServiceProvider
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
 
         // Register custom @alert directive
-        Blade::directive('alert', function ($expression) {
+        Blade::directive('vibeAlert', function ($expression) {
             return "<?php
                 \$args = [{$expression}];
                 \$eventName = count(\$args) > 1 ? \$args[0] : 'alert';
+                \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
+                echo '<script>
+                    (function() {
+                        var fired = false;
+                        var trigger = function() {
+                            if (fired) return;
+                            fired = true;
+                            window.dispatchEvent(new CustomEvent(\'' . \$eventName . '\', { detail: ' . json_encode(\$payload) . ' }));
+                        };
+                        if (document.readyState === \"loading\") {
+                            document.addEventListener(\"alpine:initialized\", function() {
+                                setTimeout(trigger, 10);
+                            });
+                            window.addEventListener(\"DOMContentLoaded\", function() {
+                                setTimeout(trigger, 150);
+                            });
+                        } else {
+                            setTimeout(trigger, 50);
+                        }
+                    })();
+                </script>';
+            ?>";
+        });
+
+        // Register custom @toast directive
+        Blade::directive('vibeToast', function ($expression) {
+            return "<?php
+                \$args = [{$expression}];
+                \$eventName = count(\$args) > 1 ? \$args[0] : 'toast';
                 \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
                 echo '<script>
                     (function() {

@@ -123,11 +123,20 @@
 
 
 
-    {{-- @alert([
-    'type' => 'success',
-    'message' => 'Data user berhasil dihapus!',
-    'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav'),
-]) --}}
+    {{-- @vibeAlert([
+        'type' => 'success',
+        'message' => 'Data user berhasil dihapus!',
+        'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav'),
+    ]) --}}
+
+    @vibeToast([
+        'type' => 'info', 
+        'title' => 'Tes', 
+        'message' => 'Ini adalah toast tumpuk!', 
+        'sound' => asset('vibe/sounds/mixkit-software-interface-remove-2576.wav')
+    ])
+
+
     @push('body')
         <script>
             // vibeAlert({

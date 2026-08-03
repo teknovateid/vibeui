@@ -24,11 +24,3 @@
         document.documentElement.classList.remove('dark');
     }
 })();
-
-(function () {
-    let s = document.getElementById('sidebar-menu');
-    if (s && s.getAttribute('data-state') && s.getAttribute('data-state') !== 'expanded') {
-        document.getElementById('sidebar-icon-expanded').style.display = 'none';
-        document.getElementById('sidebar-icon-minified').style.display = 'block';
-    }
-})();

@@ -2,6 +2,7 @@
 @props([
     'id' => null,
     'saveToStorage' => false,
+    'storageType' => 'session', // local, session
     'expireHours' => 24,
 ])
 
@@ -9,7 +10,7 @@
     id="{{ $id }}"
     {{ $attributes->merge(['class' => '']) }}
     @if($saveToStorage && $id)
-        x-data="vibeForm('{{ $id }}', {{ $expireHours }})"
+        x-data="vibeForm('{{ $id }}', {{ $expireHours }}, '{{ $storageType }}')"
         @input.debounce.500ms="saveToStorage($el)"
         @submit="clearStorage()"
     @endif
@@ -20,9 +21,13 @@
         <script>
             document.addEventListener('alpine:init', () => {
                 if (!window.Alpine.data('vibeForm')) {
-                    window.Alpine.data('vibeForm', (formId, expireHours) => ({
+                    window.Alpine.data('vibeForm', (formId, expireHours, storageType) => ({
                         storageKey: (window.VIBE_PREFIX || 'vibe') + '-form',
                         
+                        getStorageEngine() {
+                            return storageType === 'session' ? window.sessionStorage : window.localStorage;
+                        },
+
                         init() {
                             this.restoreFromStorage();
                             
@@ -38,14 +43,14 @@
                         
                         getStorageData() {
                             try {
-                                return JSON.parse(localStorage.getItem(this.storageKey)) || [];
+                                return JSON.parse(this.getStorageEngine().getItem(this.storageKey)) || [];
                             } catch (e) {
                                 return [];
                             }
                         },
                         
                         setStorageData(data) {
-                            localStorage.setItem(this.storageKey, JSON.stringify(data));
+                            this.getStorageEngine().setItem(this.storageKey, JSON.stringify(data));
                         },
                         
                         saveToStorage(formEl) {
