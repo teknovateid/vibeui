@@ -1,4 +1,4 @@
-<x-dashboard.layouts.base :title="$title">
+<x-docs.layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
         <div class="flex flex-col flex-1 w-full">
             <section class="bg-white dark:bg-vibe-900 border-b border-vibe-200 dark:border-vibe-800">
@@ -20,7 +20,7 @@
                 </vibe:header>
 
                 <div class="w-full max-w-7xl mx-auto">
-                    <x-dashboard.partials.menu class="flex gap-2 flex-row" />
+                    <x-docs.partials.menu class="flex gap-2 flex-row" />
                 </div>
             </section>
 
@@ -29,4 +29,4 @@
             </main>
         </div>
     </div>
-</x-dashboard.layouts.base>
+</x-docs.layouts.base>
