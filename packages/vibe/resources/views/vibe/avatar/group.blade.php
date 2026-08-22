@@ -20,8 +20,9 @@
         ? $computedTotal - $limitInt
         : 0;
 
+    $limitClass = $limitInt ? "[&>[data-avatar]:nth-child(n+" . ($limitInt + 1) . ")]:hidden!" : "";
     $overlapClass = $overlap ? '-space-x-3' : 'gap-2';
-    $baseClasses  = "flex items-center {$overlapClass} [&>[data-avatar]]:ring-2 [&>[data-avatar]]:ring-white dark:[&>[data-avatar]]:ring-vibe-900";
+    $baseClasses  = "vibe-avatar-group flex items-center {$overlapClass} [&>[data-avatar]]:ring-2 [&>[data-avatar]]:ring-white dark:[&>[data-avatar]]:ring-vibe-900 {$limitClass}";
 
     $badgeSizeClasses = match ($size) {
         'xs'    => 'w-6 h-6 text-xs',
@@ -47,23 +48,10 @@
     };
 @endphp
 
-<style>
-    /* Force all avatars inside this group to the same size (set via size prop on group) */
-    #{{ $groupId }} > [data-avatar] {
-        width:  {{ $avatarSize['dim'] }} !important;
-        height: {{ $avatarSize['dim'] }} !important;
-        font-size: {{ $avatarSize['font'] }} !important;
-    }
-    @if($limitInt)
-    #{{ $groupId }} > [data-avatar]:nth-child(n+{{ $limitInt + 1 }}) {
-        display: none !important;
-    }
-    @endif
-</style>
-
 <div
     id="{{ $groupId }}"
     {{ $attributes->twMerge(['class' => $baseClasses]) }}
+    style="--avatar-dim: {{ $avatarSize['dim'] }}; --avatar-font: {{ $avatarSize['font'] }};"
 >
     {{ $slot }}
 

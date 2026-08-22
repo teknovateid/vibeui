@@ -1,5 +1,3 @@
-@layer components {
-    .vibe-breadcrumb>li:first-child>.breadcrumb-separator {
-        display: none;
-    }
-}
+@import './alert.css';
+@import './avatar.css';
+@import './breadcrumb.css';

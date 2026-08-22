@@ -530,7 +530,7 @@ class CrudCommand extends Command implements PromptsForMissingInput
 
     protected function updateMenu($layout, $name, $style, $type)
     {
-        $menuPath = resource_path("views/components/{$layout}/partials/menu.blade.php");
+        $menuPath = resource_path("views/components/{$layout}/partials/{$style}-menu.blade.php");
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
             $stubName = ($type === 'crud-resource') ? 'group.blade.php' : 'item.blade.php';
