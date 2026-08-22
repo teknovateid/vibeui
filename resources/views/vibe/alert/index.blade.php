@@ -212,13 +212,7 @@
          class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
          style="display: none; z-index: -1;"></div>
 
-    <style>
-        .vibe-alert-start { opacity: 0; transform: scale(0.95); }
-        .vibe-alert-start.pos-top-center { transform: translateY(-2rem) scale(0.95); }
-        .vibe-alert-start.pos-bottom-center { transform: translateY(2rem) scale(0.95); }
-        .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
-        .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
-    </style>
+
     <div class="w-full max-w-[20rem] sm:max-w-sm flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
             <div 

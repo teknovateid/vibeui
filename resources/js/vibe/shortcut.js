@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const button = document.querySelector("#print-button");
 
                 if (!button) {
-                    toast({
+                    vibeToast({
                         type: "error",
                         message: "Print not available on this page.",
                     });
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // get button data-url attribute
                 const url = button.dataset.url;
                 if (!url) {
-                    toast({
+                    vibeToast({
                         type: "error",
                         message: "Print URL not found.",
                     });

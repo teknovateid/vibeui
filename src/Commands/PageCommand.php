@@ -115,7 +115,7 @@ class PageCommand extends Command implements PromptsForMissingInput
         }
 
         // Add to menu
-        $menuPath = resource_path("views/components/{$layout}/partials/menu.blade.php");
+        $menuPath = resource_path("views/components/{$layout}/partials/{$style}-menu.blade.php");
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
             $stubName = $isResource ? 'group.blade.php' : 'item.blade.php';
@@ -132,7 +132,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                 // Inject right before </vibe:nav>
                 $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n" . $stub . "\n$1", $menuContent);
                 File::put($menuPath, $menuContent);
-                $list[] = "Updated resources/views/components/{$layout}/partials/menu.blade.php";
+                $list[] = "Updated resources/views/components/{$layout}/partials/{$style}-menu.blade.php";
             }
         }
 
