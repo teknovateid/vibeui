@@ -190,7 +190,7 @@
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
     "
-    class="fixed inset-0 z-[100] flex pointer-events-none"
+    class="fixed inset-0 z-100 flex pointer-events-none"
     id="vibe-alert-container"
     :class="getPositionClasses()"
 >
