@@ -9,11 +9,15 @@
 
                     <vibe:header.actions>
                         <vibe:dropdown>
-                            <x-slot:trigger>
+                            <vibe:dropdown.trigger>
                                 <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Name" />
-                            </x-slot:trigger>
+                            </vibe:dropdown.trigger>
 
-                            <vibe:dropdown.item href="#">Menu 1</vibe:dropdown.item>
+                            <vibe:dropdown.items>
+                                <vibe:dropdown.item href="#">Profile</vibe:dropdown.item>
+                                <vibe:dropdown.item href="#">Settings</vibe:dropdown.item>
+                                <vibe:dropdown.item href="#">Logout</vibe:dropdown.item>
+                            </vibe:dropdown.items>
                         </vibe:dropdown>
 
                     </vibe:header.actions>
