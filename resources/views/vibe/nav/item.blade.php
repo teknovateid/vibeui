@@ -49,8 +49,8 @@
                 </span>
             @endif
 
-            {{-- Pin button: visible when parent nav has pinnable OR this item has pinnable prop --}}
-            <div x-show="(typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }}" @click.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150" :class="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ?
+            {{-- Pin button: visible when parent nav has pinnable OR this item has pinnable prop, but NEVER when inside a group --}}
+            <div x-show="(! (typeof isGroupChild !== 'undefined' && isGroupChild)) && ((typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }})" @click.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150" :class="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ?
                 'text-vibe-900 dark:text-vibe-100 opacity-100' :
                 'text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400'" style="display:none" title="Pin">
                 <!-- Pinned Icon: hidden by default, shown by Alpine when pinned -->

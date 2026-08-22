@@ -47,7 +47,7 @@
         </div>
     </vibe:button>
 
-    <vibe:nav.label title="PINNED" pinned-container class="border-b border-vibe-200 dark:border-vibe-800" />
+    <vibe:nav.label title="PINNED" pinned-container persist class="border-b border-vibe-200 dark:border-vibe-800" />
 
     <vibe:nav.label title="GETTING STARTED" persist>
         <!-- Instalation Group -->
