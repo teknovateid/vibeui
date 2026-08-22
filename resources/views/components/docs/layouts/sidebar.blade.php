@@ -1,8 +1,8 @@
 <x-docs.layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true" class="max-sm:fixed max-sm:h-screen">
-            <div class="w-full relative">
-                <x-docs.partials.menu />
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
+            <div class="w-full">
+                <x-docs.partials.sidebar-menu />
             </div>
         </vibe:sheet>
         <div class="flex flex-col flex-1 w-full">
@@ -42,24 +42,22 @@
                 </vibe:header.heading>
 
                 <vibe:header.actions>
-
                     <vibe:dropdown keyboard>
                         <x-slot:trigger>
                             <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Name" class="cursor-pointer" />
                         </x-slot:trigger>
 
                         <vibe:dropdown.item href="#">Profile</vibe:dropdown.item>
-                        
+
                         <vibe:dropdown.sub label="Settings">
                             <vibe:dropdown.item href="#">Account</vibe:dropdown.item>
                             <vibe:dropdown.item href="#">Privacy</vibe:dropdown.item>
                             <vibe:dropdown.item href="#">Notifications</vibe:dropdown.item>
                         </vibe:dropdown.sub>
-                        
+
                         <vibe:dropdown.divider />
                         <vibe:dropdown.item href="#" class="hover:bg-red-100 focus:bg-red-100 dark:hover:bg-red-900/30 dark:focus:bg-red-900/30 hover:text-red-500! focus:text-red-500!">Logout</vibe:dropdown.item>
                     </vibe:dropdown>
-                    
                 </vibe:header.actions>
             </vibe:header>
             <main class="flex-1 p-6 overflow-y-auto">

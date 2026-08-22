@@ -94,10 +94,12 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         if (File::exists($destComponentsDir)) {
             if ($this->confirm("Layout components for {$path} already exist. Overwrite them?", false)) {
                 File::copyDirectory($componentsDir, $destComponentsDir);
+                $this->cleanupUnusedLayouts($destComponentsDir, $chosenLayout);
                 $this->updateComponentReferences($destComponentsDir, $path);
             }
         } else {
             File::copyDirectory($componentsDir, $destComponentsDir);
+            $this->cleanupUnusedLayouts($destComponentsDir, $chosenLayout);
             $this->updateComponentReferences($destComponentsDir, $path);
         }
 
@@ -152,7 +154,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             }
             
             // Add to menu
-            $menuPath = resource_path("views/components/{$path}/partials/menu.blade.php");
+            $menuPath = resource_path("views/components/{$path}/partials/{$chosenLayout}-menu.blade.php");
             $stubPath = __DIR__ . "/../../stubs/Partials/{$chosenLayout}/item.blade.php";
             
             if (File::exists($menuPath) && File::exists($stubPath)) {
@@ -177,6 +179,33 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         return true;
+    }
+
+    protected function cleanupUnusedLayouts(string $destDir, string $chosenLayout): void
+    {
+        $layoutsPath = $destDir . '/layouts';
+        if (File::isDirectory($layoutsPath)) {
+            $files = File::files($layoutsPath);
+            foreach ($files as $file) {
+                $filename = $file->getFilename();
+                // We want to keep base.blade.php and the chosen layout.
+                if ($filename !== 'base.blade.php' && $filename !== "{$chosenLayout}.blade.php") {
+                    File::delete($file->getPathname());
+                }
+            }
+        }
+
+        $partialsPath = $destDir . '/partials';
+        if (File::isDirectory($partialsPath)) {
+            $files = File::files($partialsPath);
+            foreach ($files as $file) {
+                $filename = $file->getFilename();
+                // We want to keep the chosen layout's menu
+                if ($filename !== "{$chosenLayout}-menu.blade.php") {
+                    File::delete($file->getPathname());
+                }
+            }
+        }
     }
 
     protected function updateComponentReferences(string $dir, string $path): void

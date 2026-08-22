@@ -1,8 +1,8 @@
-<x-layouts.base :title="$title">
+<x-tes.layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <div class="w-full">
-                <x-partials.sidebar-menu />
+                <x-tes.partials.sidebar-menu />
             </div>
         </vibe:sheet>
         <div class="flex flex-col flex-1 w-full">
@@ -56,4 +56,4 @@
             </main>
         </div>
     </div>
-</x-layouts.base>
+</x-tes.layouts.base>
