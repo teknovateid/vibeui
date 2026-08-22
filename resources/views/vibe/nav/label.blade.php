@@ -11,18 +11,26 @@
 <div {{ $attributes->twMerge(['class' => 'w-full flex flex-col gap-1']) }} @if ($pinnedContainer) data-pinned-container style="display: none;" @endif x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var _key = (window.VIBE_PREFIX || 'vibe') + '_nav_label_{{ $labelId }}';
-             var _saved = localStorage.getItem(_key);
-             if (_saved !== null && !{{ $active ? 'true' : 'false' }}) {
-                 defaultOpen = JSON.parse(_saved);
+             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
+             var labels = state.labels || {};
+             if (labels['{{ $labelId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
+                 defaultOpen = labels['{{ $labelId }}'];
              }
          } catch(e) {} @endif
     return {
         open: defaultOpen,
         ready: false,
         init() {
-            @if ($persist) let key = (window.VIBE_PREFIX || 'vibe') + '_nav_label_{{ $labelId }}';
-                 this.$watch('open', val => localStorage.setItem(key, val)); @endif
+            @if ($persist) 
+                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                 this.$watch('open', val => {
+                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
+                     if (!state.labels) state.labels = {};
+                     state.labels['{{ $labelId }}'] = val;
+                     localStorage.setItem(navKey, JSON.stringify(state));
+                 }); 
+            @endif
             this.$nextTick(() => { this.ready = true; });
         }
     };
@@ -63,5 +71,27 @@
             </div>
         </div>
     </div>
-
 </div>
+
+@if ($persist)
+<script>
+    (function() {
+        try {
+            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var state = JSON.parse(localStorage.getItem(navKey) || '{}');
+            var labels = state.labels || {};
+            var saved = labels['{{ $labelId }}'];
+            
+            if (saved === false && !{{ $active ? 'true' : 'false' }}) {
+                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
+                var chevron = document.getElementById('{{ $chevronId }}');
+                if (chevron) chevron.style.transform = 'rotate(-90deg)';
+            } else if (saved === true) {
+                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
+                var chevron = document.getElementById('{{ $chevronId }}');
+                if (chevron) chevron.style.transform = 'none';
+            }
+        } catch(e) {}
+    })();
+</script>
+@endif

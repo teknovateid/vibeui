@@ -14,22 +14,33 @@
 <div x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var _key = (window.VIBE_PREFIX || 'vibe') + '_nav_group_{{ $groupId }}';
-             var _saved = localStorage.getItem(_key);
-             if (_saved !== null && !{{ $active ? 'true' : 'false' }}) {
-                 defaultOpen = JSON.parse(_saved);
+             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
+             var groups = state.groups || {};
+             if (groups['{{ $groupId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
+                 defaultOpen = groups['{{ $groupId }}'];
              }
          } catch(e) {} @endif
     return {
         open: defaultOpen,
         ready: false,
+        isGroupChild: true,
         init() {
-            @if ($persist) if ({{ $active ? 'true' : 'false' }}) {
-                     let key = (window.VIBE_PREFIX || 'vibe') + '_nav_group_{{ $groupId }}';
-                     localStorage.setItem(key, true);
+            @if ($persist) 
+                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                 if ({{ $active ? 'true' : 'false' }}) {
+                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
+                     if (!state.groups) state.groups = {};
+                     state.groups['{{ $groupId }}'] = true;
+                     localStorage.setItem(navKey, JSON.stringify(state));
                  }
-                 let key = (window.VIBE_PREFIX || 'vibe') + '_nav_group_{{ $groupId }}';
-                 this.$watch('open', val => localStorage.setItem(key, val)); @endif
+                 this.$watch('open', val => {
+                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
+                     if (!state.groups) state.groups = {};
+                     state.groups['{{ $groupId }}'] = val;
+                     localStorage.setItem(navKey, JSON.stringify(state));
+                 }); 
+            @endif
             this.$nextTick(() => { this.ready = true; });
         }
     };
@@ -88,5 +99,27 @@
         </div>
     </div>
 
-
 </div>
+
+@if ($persist)
+<script>
+    (function() {
+        try {
+            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var state = JSON.parse(localStorage.getItem(navKey) || '{}');
+            var groups = state.groups || {};
+            var saved = groups['{{ $groupId }}'];
+            
+            if (saved === false && !{{ $active ? 'true' : 'false' }}) {
+                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
+                var chevron = document.getElementById('{{ $chevronId }}');
+                if (chevron) chevron.style.transform = 'none';
+            } else if (saved === true) {
+                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
+                var chevron = document.getElementById('{{ $chevronId }}');
+                if (chevron) chevron.style.transform = 'rotate(90deg)';
+            }
+        } catch(e) {}
+    })();
+</script>
+@endif
