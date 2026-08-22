@@ -57,7 +57,7 @@
                         </vibe:dropdown.sub>
                         
                         <vibe:dropdown.divider />
-                        <vibe:dropdown.item href="#" class="hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-500!">Logout</vibe:dropdown.item>
+                        <vibe:dropdown.item href="#" class="hover:bg-red-100 focus:bg-red-100 dark:hover:bg-red-900/30 dark:focus:bg-red-900/30 hover:text-red-500! focus:text-red-500!">Logout</vibe:dropdown.item>
                     </vibe:dropdown>
                     
                 </vibe:header.actions>
