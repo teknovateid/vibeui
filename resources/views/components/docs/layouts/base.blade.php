@@ -8,12 +8,13 @@
     <script>
         window.VIBE_PREFIX = '{{ config("vibe.prefix", "vibe") }}';
     </script>
+    
     <script src="{{ asset('vibe/theme-init.js') }}" data-navigate-track="reload"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @stack('head')
 </head>
-<body class="font-medium font-inter antialiased bg-vibe-50 dark:bg-vibe-950 text-black dark:text-white">
+<body class="font-medium font-inter antialiased bg-vibe-50 dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50">
     {{ $slot }}
     <vibe:alert position="top-right" />
     <vibe:toast position="top-right" />

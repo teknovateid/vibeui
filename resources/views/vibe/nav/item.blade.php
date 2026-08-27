@@ -12,9 +12,9 @@
 
 @php
     $itemId = $id ?? Str::slug(strip_tags($slot));
-    $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:px-0 data-[collapsed=true]:justify-center data-[collapsed=true]:mx-auto group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto';
-    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative overflow-hidden group/nav-item $minifiedClasses";
-    $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-black dark:hover:text-white';
+    $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:px-0 data-[collapsed=true]:justify-center data-[collapsed=true]:mx-auto group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible';
+    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item $minifiedClasses";
+    $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50';
 
     $badgeClasses = match ($badgeColor) {
         'green' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
@@ -50,7 +50,7 @@
             @endif
 
             {{-- Pin button: visible when parent nav has pinnable OR this item has pinnable prop, but NEVER when inside a group --}}
-            <div x-show="(! (typeof isGroupChild !== 'undefined' && isGroupChild)) && ((typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }})" @click.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150" :class="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ?
+            <div x-show="(! (typeof isGroupChild !== 'undefined' && isGroupChild)) && ((typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }})" @click.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" class="p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-all duration-150" :class="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ?
                 'text-vibe-900 dark:text-vibe-100 opacity-100' :
                 'text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400'" style="display:none" title="Pin">
                 <!-- Pinned Icon: hidden by default, shown by Alpine when pinned -->
@@ -67,5 +67,15 @@
 
             </div>
         </div>
+    </div>
+
+    <!-- Floating Tooltip when Minified (shown on hover only when minified) -->
+    <div class="hidden group-data-[state=minified]/sheet:flex opacity-0 group-hover/nav-item:opacity-100 pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap items-center gap-1.5 transition-opacity duration-150">
+        <span>{{ strip_tags($slot) }}</span>
+        @if ($badge)
+            <span class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-semibold rounded {{ $badgeClasses }}">
+                {{ $badge }}
+            </span>
+        @endif
     </div>
 </a>
