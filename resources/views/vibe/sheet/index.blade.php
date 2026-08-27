@@ -52,10 +52,10 @@
             default => 'sticky top-0 h-screen',
         },
         default => match ($position) {
-            'right' => 'relative order-last h-full self-stretch min-h-screen',
+            'right' => 'relative order-last h-full self-stretch',
             'bottom' => 'relative order-last w-full',
             'top' => 'relative w-full',
-            default => 'relative h-full self-stretch min-h-screen',
+            default => 'relative h-full self-stretch',
         },
     };
 
@@ -290,8 +290,8 @@
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     (position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
-].filter(Boolean).join('; ')" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
-    'transition-all duration-300 ease-in-out': !isResizing && isInitialized
+].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
+    'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
 }" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full $overflowClasses"]) }}>
     @if ($persist)
         <script>
@@ -335,8 +335,12 @@
 
     @if ($layout === 'relative')
         {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0 --}}
-        <div data-sheet-content class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col w-full h-full min-w-0">
-            <div class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col min-w-0 w-full h-full"
+        <div data-sheet-content class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col w-full h-full min-w-0 max-h-full min-h-0">
+            <div class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col h-full min-h-0"
+                 style="{{ $innerStyle }}"
+                 :style="behavior !== 'minify'
+                     ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
+                     : ''"
                  :class="{ 'w-max min-w-full': behavior === 'minify' && state === 'minified' }">
                 {{ $slot }}
             </div>
@@ -402,7 +406,7 @@
             'left-0 right-0 -bottom-2 h-4 cursor-row-resize': position === 'top',
             'left-0 right-0 -top-2 h-4 cursor-row-resize': position === 'bottom'
         }">
-            <div class="transition-colors duration-300 rounded-full" :class="{
+            <div class="transition-colors rounded-full" :class="{
                 'h-full w-0.5 group-hover/resizer:bg-vibe-500/30': position === 'left' || position === 'right',
                 'w-full h-0.5 group-hover/resizer:bg-vibe-500/30': position === 'top' || position === 'bottom'
             }">

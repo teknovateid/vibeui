@@ -1,3 +1,7 @@
 @custom-variant minified (&:where([data-state="minified"], [data-state="minified"] *));
 @custom-variant expanded (&:where([data-state="expanded"], [data-state="expanded"] *));
 @custom-variant collapsed (&:where([data-state="collapsed"], [data-state="collapsed"] *));
+
+@custom-variant sidebar-minified (:where(:has(#sidebar-menu[data-state="minified"])) &);
+@custom-variant sidebar-collapsed (:where(:has(#sidebar-menu[data-state="collapsed"])) &);
+@custom-variant sidebar-expanded (:where(:has(#sidebar-menu[data-state="expanded"])) &);
