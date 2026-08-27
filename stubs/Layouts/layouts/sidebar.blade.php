@@ -1,3 +1,4 @@
+@props(['title' => config('app.name', 'Vibe UI')])
 <x-layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">

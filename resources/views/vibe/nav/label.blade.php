@@ -11,7 +11,8 @@
 <div {{ $attributes->twMerge(['class' => 'w-full flex flex-col gap-1']) }} @if ($pinnedContainer) data-pinned-container style="display: none;" @endif x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
              var state = JSON.parse(localStorage.getItem(navKey) || '{}');
              var labels = state.labels || {};
              if (labels['{{ $labelId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
@@ -23,7 +24,8 @@
         ready: false,
         init() {
             @if ($persist) 
-                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                 let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
                  this.$watch('open', val => {
                      let state = JSON.parse(localStorage.getItem(navKey) || '{}');
                      if (!state.labels) state.labels = {};
@@ -77,7 +79,8 @@
 <script>
     (function() {
         try {
-            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
             var labels = state.labels || {};
             var saved = labels['{{ $labelId }}'];
