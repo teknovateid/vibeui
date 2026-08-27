@@ -11,12 +11,18 @@
 <div {{ $attributes->twMerge(['class' => 'w-full flex flex-col gap-1']) }} @if ($pinnedContainer) data-pinned-container style="display: none;" @endif x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
-             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
-             var labels = state.labels || {};
-             if (labels['{{ $labelId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
-                 defaultOpen = labels['{{ $labelId }}'];
+             var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var stored = localStorage.getItem(key);
+             if (stored) {
+                 var data = JSON.parse(stored);
+                 if (Array.isArray(data)) {
+                     var navEl = document.getElementById('{{ $gridId }}')?.closest('nav');
+                     var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                     var navItem = data.find(i => i.id === navId);
+                     if (navItem && navItem.labels && navItem.labels['{{ $labelId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
+                         defaultOpen = navItem.labels['{{ $labelId }}'];
+                     }
+                 }
              }
          } catch(e) {} @endif
     return {
@@ -24,13 +30,28 @@
         ready: false,
         init() {
             @if ($persist) 
-                 let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
+                 let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
                  this.$watch('open', val => {
-                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
-                     if (!state.labels) state.labels = {};
-                     state.labels['{{ $labelId }}'] = val;
-                     localStorage.setItem(navKey, JSON.stringify(state));
+                     let stored = localStorage.getItem(key);
+                     let data = [];
+                     if (stored) {
+                         try {
+                             let parsed = JSON.parse(stored);
+                             if (Array.isArray(parsed)) data = parsed;
+                         } catch (e) {}
+                     }
+                     let navEl = this.$el.closest('nav');
+                     let navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                     let index = data.findIndex(i => i.id === navId);
+                     let existing = index !== -1 ? data[index] : { id: navId, pinned: [], groups: {}, labels: {} };
+                     if (!existing.labels) existing.labels = {};
+                     existing.labels['{{ $labelId }}'] = val;
+                     if (index !== -1) {
+                         data[index] = existing;
+                     } else {
+                         data.push(existing);
+                     }
+                     localStorage.setItem(key, JSON.stringify(data));
                  }); 
             @endif
             this.$nextTick(() => { this.ready = true; });
@@ -79,20 +100,27 @@
 <script>
     (function() {
         try {
-            var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
-            var state = JSON.parse(localStorage.getItem(navKey) || '{}');
-            var labels = state.labels || {};
-            var saved = labels['{{ $labelId }}'];
-            
-            if (saved === false && !{{ $active ? 'true' : 'false' }}) {
-                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
-                var chevron = document.getElementById('{{ $chevronId }}');
-                if (chevron) chevron.style.transform = 'rotate(-90deg)';
-            } else if (saved === true) {
-                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
-                var chevron = document.getElementById('{{ $chevronId }}');
-                if (chevron) chevron.style.transform = 'none';
+            var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var stored = localStorage.getItem(key);
+            if (stored) {
+                var data = JSON.parse(stored);
+                if (Array.isArray(data)) {
+                    var navEl = document.getElementById('{{ $gridId }}')?.closest('nav');
+                    var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                    var navItem = data.find(i => i.id === navId);
+                    if (navItem && navItem.labels && navItem.labels['{{ $labelId }}'] !== undefined) {
+                        var saved = navItem.labels['{{ $labelId }}'];
+                        if (saved === false && !{{ $active ? 'true' : 'false' }}) {
+                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
+                            var chevron = document.getElementById('{{ $chevronId }}');
+                            if (chevron) chevron.style.transform = 'rotate(-90deg)';
+                        } else if (saved === true) {
+                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
+                            var chevron = document.getElementById('{{ $chevronId }}');
+                            if (chevron) chevron.style.transform = 'none';
+                        }
+                    }
+                }
             }
         } catch(e) {}
     })();
