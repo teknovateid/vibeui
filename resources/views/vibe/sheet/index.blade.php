@@ -7,7 +7,7 @@
     'position' => 'left', // left, right, top, bottom
     'behavior' => 'static', // static, collapsible, minify
     'resizable' => false,
-    'defaultSize' => 256,
+    'defaultSize' => 350,
     'minSize' => 0,
     'maxSize' => 600,
     'minifiedSize' => 80,
@@ -51,7 +51,12 @@
             'top', 'bottom' => 'sticky left-0 w-full',
             default => 'sticky top-0 h-screen',
         },
-        default => 'relative',
+        default => match ($position) {
+            'right' => 'relative order-last h-full self-stretch min-h-screen',
+            'bottom' => 'relative order-last w-full',
+            'top' => 'relative w-full',
+            default => 'relative h-full self-stretch min-h-screen',
+        },
     };
 
     $initialSize = $defaultSize;
@@ -62,6 +67,17 @@
             $initialSize = $minifiedSize;
         }
     }
+
+    $overflowClasses = 'group-data-[state=minified]/sheet:overflow-visible';
+
+    $innerStyle = $behavior !== 'minify'
+        ? match ($position) {
+            'right' => "top: 0; right: 0; bottom: 0; width: {$defaultSize}px",
+            'bottom' => "left: 0; right: 0; bottom: 0; height: {$defaultSize}px",
+            'top' => "left: 0; right: 0; top: 0; height: {$defaultSize}px",
+            default => "top: 0; left: 0; bottom: 0; width: {$defaultSize}px",
+        }
+        : 'top: 0; left: 0; right: 0; bottom: 0';
 @endphp
 
 <div id="{{ $id }}" x-data="{
@@ -146,6 +162,7 @@
     },
 
     get currentSize() {
+        if (this.isResizing) return this.size;
         if (this.behavior === 'static') return this.size;
         if (this.state === 'collapsed') return 0;
         if (this.state === 'minified') return this.minifiedSize;
@@ -258,7 +275,7 @@
 
         this.saveToStorage();
     },
-    
+
     close() {
         if (this.behavior === 'static') return;
         this.state = 'collapsed';
@@ -270,18 +287,12 @@
         this.state = 'expanded';
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" 
-@open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" 
-@close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" 
-@toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" 
-@click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" 
-style="{{ $position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px" }}" 
-:style="(position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`" 
-:data-state="state" 
-data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" 
-:class="{
-    '': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full"]) }}>
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+    (position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`,
+    currentSize === 0 ? 'border-width: 0' : ''
+].filter(Boolean).join('; ')" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
+    'transition-all duration-300 ease-in-out': !isResizing && isInitialized
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full $overflowClasses"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -310,6 +321,7 @@ data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}"
                                 }
                                 let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
                                 el.style[isHorizontal ? 'width' : 'height'] = currentSize + 'px';
+                                if (currentSize === 0) el.style.borderWidth = '0px';
                                 el.setAttribute('data-state', state);
                                 el.classList.add('group/sheet');
                             }
@@ -320,11 +332,39 @@ data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}"
         </script>
     @endif
 
-    <div class="flex-1 overflow-y-auto overflow-x-hidden w-full h-full relative" style="{{ $defaultState === 'collapsed' ? 'display: none;' : '' }}" x-show="state !== 'collapsed'" x-transition.opacity>
-        <div class="w-max min-w-full h-full flex flex-col">
-            {{ $slot }}
+
+    @if ($layout === 'relative')
+        {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0 --}}
+        <div data-sheet-content class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col w-full h-full min-w-0">
+            <div class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col min-w-0 w-full h-full"
+                 :class="{ 'w-max min-w-full': behavior === 'minify' && state === 'minified' }">
+                {{ $slot }}
+            </div>
         </div>
-    </div>
+    @else
+        {{-- Fixed/absolute/sticky layout: use absolute clip-wrapper so resize handle/toggle isn't clipped --}}
+        {{-- and content anchors to the correct edge for proper slide animation --}}
+        <div data-sheet-content class="absolute inset-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible pointer-events-none">
+            <div class="absolute overflow-hidden flex flex-col pointer-events-auto group-data-[state=minified]/sheet:overflow-visible"
+                 style="{{ $innerStyle }}"
+                 :class="{ 'w-max min-w-full': behavior === 'minify' && state === 'minified' }"
+                 :style="behavior !== 'minify'
+                     ? (position === 'right'
+                         ? `top: 0; right: 0; bottom: 0; width: ${size}px`
+                         : position === 'bottom'
+                         ? `left: 0; right: 0; bottom: 0; height: ${size}px`
+                         : position === 'top'
+                         ? `left: 0; right: 0; top: 0; height: ${size}px`
+                         : `top: 0; left: 0; bottom: 0; width: ${size}px`)
+                     : 'top: 0; left: 0; right: 0; bottom: 0'">
+                {{ $slot }}
+            </div>
+        </div>
+    @endif
+
+
+
+
 
 
     @if ($showToggle && $behavior !== 'static')

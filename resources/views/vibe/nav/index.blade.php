@@ -126,6 +126,20 @@
                 buildShortcut: function(el) {
                     let clone = el.cloneNode(true);
                     clone.dataset.pinnedShortcutFor = el.dataset.navPinId;
+
+                    // Reset active state on shortcut clones
+                    let targets = [clone, ...clone.querySelectorAll('a, button')];
+                    targets.forEach(t => {
+                        t.classList.remove('bg-vibe-200', 'dark:bg-vibe-800', 'text-vibe-950', 'dark:text-vibe-50');
+                        t.classList.add('text-vibe-600', 'dark:text-vibe-400');
+                    });
+
+                    let icons = clone.querySelectorAll('[data-pin-icon]');
+                    icons.forEach(icon => {
+                        icon.classList.remove('text-vibe-900', 'dark:text-vibe-100');
+                        icon.classList.add('text-vibe-500', 'group-hover/nav-item:text-vibe-900', 'dark:text-vibe-400', 'dark:group-hover/nav-item:text-vibe-200');
+                    });
+
                     return clone;
                 }
             };
@@ -178,11 +192,11 @@
                             let isPinned = validPinned.includes(el.dataset.navPinId);
                             let svgs = btn.querySelectorAll('svg');
                             if (isPinned) {
-                                btn.className = "p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150 text-vibe-900 dark:text-vibe-100 opacity-100";
+                                btn.className = "p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-all duration-150 text-vibe-900 dark:text-vibe-100 opacity-100";
                                 if(svgs[0]) svgs[0].style.display = '';
                                 if(svgs[1]) svgs[1].style.display = 'none';
                             } else {
-                                btn.className = "p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150 text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400";
+                                btn.className = "p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-all duration-150 text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400";
                                 if(svgs[0]) svgs[0].style.display = 'none';
                                 if(svgs[1]) svgs[1].style.display = '';
                             }

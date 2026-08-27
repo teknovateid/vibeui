@@ -14,9 +14,3 @@
     --color-vibe-900: #191a19;
     --color-vibe-950: #0a0b0a;
 }
-
-@layer base{
-    html {
-        scrollbar-gutter: stable;
-    }
-}

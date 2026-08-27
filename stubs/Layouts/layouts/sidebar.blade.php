@@ -9,7 +9,7 @@
         <div class="flex flex-col flex-1 w-full">
             <vibe:header class="bg-transparent! border-none!">
                 <vibe:header.heading class="gap-2 flex items-center">
-                    <vibe:button variant="ghost" class="p-2 text-vibe-600 dark:text-vibe-400 hover:text-black dark:hover:text-white transition-colors" @click="$dispatch('toggle-sheet', 'sidebar-menu')">
+                    <vibe:button variant="ghost" class="p-2 text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 transition-colors" @click="$dispatch('toggle-sheet', 'sidebar-menu')">
                         <div x-data="{
                             state: 'expanded',
                             init() {
@@ -33,7 +33,42 @@
                     </vibe:button>
                 </vibe:header.heading>
 
-                <vibe:header.actions>
+                <vibe:header.actions class="items-center h-full">
+                    <vibe:dropdown width="80" keyboard>
+                        <x-slot:trigger>
+                            <vibe:button variant="ghost" class="p-2 rounded-full relative">
+                                <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" class="solar solar-bell-outline"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C7.71983 1.25 4.25004 4.71979 4.25004 9V9.7041C4.25004 10.401 4.04375 11.0824 3.65717 11.6622L2.50856 13.3851C1.17547 15.3848 2.19318 18.1028 4.51177 18.7351C5.26738 18.9412 6.02937 19.1155 6.79578 19.2581L6.79768 19.2632C7.56667 21.3151 9.62198 22.75 12 22.75C14.378 22.75 16.4333 21.3151 17.2023 19.2632L17.2042 19.2581C17.9706 19.1155 18.7327 18.9412 19.4883 18.7351C21.8069 18.1028 22.8246 15.3848 21.4915 13.3851L20.3429 11.6622C19.9563 11.0824 19.75 10.401 19.75 9.7041V9C19.75 4.71979 16.2802 1.25 12 1.25ZM15.3764 19.537C13.1335 19.805 10.8664 19.8049 8.62349 19.5369C9.33444 20.5585 10.571 21.25 12 21.25C13.4289 21.25 14.6655 20.5585 15.3764 19.537ZM5.75004 9C5.75004 5.54822 8.54826 2.75 12 2.75C15.4518 2.75 18.25 5.54822 18.25 9V9.7041C18.25 10.6972 18.544 11.668 19.0948 12.4943L20.2434 14.2172C21.0086 15.3649 20.4245 16.925 19.0936 17.288C14.4494 18.5546 9.5507 18.5546 4.90644 17.288C3.57561 16.925 2.99147 15.3649 3.75664 14.2172L4.90524 12.4943C5.45609 11.668 5.75004 10.6972 5.75004 9.7041V9Z" fill="currentColor"/></svg>
+                                <span class="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-vibe-950"></span>
+                            </vibe:button>
+                        </x-slot:trigger>
+
+                        <div class="px-3 py-2 border-b border-vibe-200 dark:border-vibe-800 flex items-center justify-between">
+                            <span class="text-xs font-semibold uppercase tracking-wider text-vibe-700 dark:text-vibe-300">Notifikasi</span>
+                            <span class="text-[10px] font-medium bg-vibe-200 dark:bg-vibe-800 text-vibe-700 dark:text-vibe-300 px-1.5 py-0.5 rounded-full">2 Baru</span>
+                        </div>
+
+                        <div class="max-h-64 overflow-y-auto divide-y divide-vibe-100 dark:divide-vibe-900 py-1">
+                            <vibe:dropdown.item href="#" class="flex flex-col items-start gap-0.5 py-2 px-3">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="font-semibold text-xs text-vibe-900 dark:text-vibe-100">Pembaruan Sistem</span>
+                                    <span class="text-[10px] text-vibe-400">2m lalu</span>
+                                </div>
+                                <span class="text-[11px] text-vibe-500 dark:text-vibe-400">Vibe UI versi terbaru telah aktif.</span>
+                            </vibe:dropdown.item>
+                            <vibe:dropdown.item href="#" class="flex flex-col items-start gap-0.5 py-2 px-3">
+                                <div class="flex items-center justify-between w-full">
+                                    <span class="font-semibold text-xs text-vibe-900 dark:text-vibe-100">Pengguna Baru</span>
+                                    <span class="text-[10px] text-vibe-400">1j lalu</span>
+                                </div>
+                                <span class="text-[11px] text-vibe-500 dark:text-vibe-400">User baru saja mendaftar di sistem.</span>
+                            </vibe:dropdown.item>
+                        </div>
+
+                        <vibe:dropdown.divider />
+                        <vibe:dropdown.item href="#" class="text-center justify-center text-xs text-vibe-600 dark:text-vibe-400 font-medium py-1.5">
+                            Lihat Semua Notifikasi
+                        </vibe:dropdown.item>
+                    </vibe:dropdown>
                     <vibe:dropdown keyboard>
                         <x-slot:trigger>
                             <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Name" class="cursor-pointer" />
