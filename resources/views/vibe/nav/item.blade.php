@@ -13,7 +13,7 @@
 @php
     $itemId = $id ?? Str::slug(strip_tags($slot));
     $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:px-0 data-[collapsed=true]:justify-center data-[collapsed=true]:mx-auto group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto';
-    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-[width,height,padding,margin] duration-300 w-full relative overflow-hidden group/nav-item $minifiedClasses";
+    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative overflow-hidden group/nav-item $minifiedClasses";
     $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-black dark:hover:text-white';
 
     $badgeClasses = match ($badgeColor) {
@@ -25,7 +25,7 @@
     };
 @endphp
 
-<a wire:navigate href="{{ $href }}" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ strip_tags($slot) }}" data-pin-href="{{ $href }}" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
+<a wire:navigate href="{{ $href }}" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ strip_tags($slot) }}" data-pin-href="{{ $href }}" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
 
     <!-- Icon -->
     @if (isset($icon))
@@ -35,7 +35,7 @@
     @endif
 
     <!-- Animated Wrapper for Label & Badge -->
-    <div class="flex flex-1 w-full items-center justify-between overflow-hidden transition-[max-width,opacity,margin] duration-300 ease-in-out {{ $collapsed ? 'max-w-0 opacity-0 ml-0' : 'max-w-[100vw] opacity-100 ml-3' }} group-data-[collapsed=true]/nav-item:max-w-0 group-data-[collapsed=true]/nav-item:opacity-0 group-data-[collapsed=true]/nav-item:ml-0 group-data-[state=minified]/sheet:max-w-0 group-data-[state=minified]/sheet:opacity-0 group-data-[state=minified]/sheet:ml-0">
+    <div :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[max-width,opacity,margin] duration-300 ease-in-out'" class="flex flex-1 w-full items-center justify-between overflow-hidden {{ $collapsed ? 'max-w-0 opacity-0 ml-0' : 'max-w-[100vw] opacity-100 ml-3' }} group-data-[collapsed=true]/nav-item:max-w-0 group-data-[collapsed=true]/nav-item:opacity-0 group-data-[collapsed=true]/nav-item:ml-0 group-data-[state=minified]/sheet:max-w-0 group-data-[state=minified]/sheet:opacity-0 group-data-[state=minified]/sheet:ml-0">
         <!-- Label -->
         <span class="whitespace-nowrap">
             {{ $slot }}

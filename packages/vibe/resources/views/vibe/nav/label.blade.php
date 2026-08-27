@@ -35,7 +35,7 @@
         }
     };
 })()">
-    <button type="button" @click="open = !open" x-show="typeof state === 'undefined' || state !== 'minified'" class="flex items-center gap-2 w-full py-1.5 text-xs font-semibold text-vibe-500 uppercase tracking-wider hover:text-vibe-800 dark:text-vibe-400 dark:hover:text-vibe-200 transition-colors group/nav-label cursor-pointer select-none">
+    <button type="button" @click="open = !open" class="group-data-[state=minified]/sheet:hidden! flex items-center gap-2 w-full py-1.5 text-xs font-semibold text-vibe-500 uppercase tracking-wider hover:text-vibe-800 dark:text-vibe-400 dark:hover:text-vibe-200 transition-colors group/nav-label cursor-pointer select-none">
         <div>
             @if ($pinnable ?? false)
                 <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-vibe-900 dark:text-vibe-100' : 'text-vibe-400 group-hover/nav-label:text-vibe-600 dark:group-hover/nav-label:text-vibe-400'" title="Pin">

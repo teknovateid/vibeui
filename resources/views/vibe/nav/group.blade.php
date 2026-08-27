@@ -7,7 +7,7 @@
     $gridId = 'nav-group-grid-' . Str::random(6);
     $chevronId = 'nav-group-chevron-' . Str::random(6);
     $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:mx-auto data-[collapsed=true]:justify-center data-[collapsed=true]:px-0 group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto';
-    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-[width,height,padding,margin] duration-300 w-full relative overflow-hidden group/nav-item cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-vibe-500 $minifiedClasses";
+    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative overflow-hidden group/nav-item cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-vibe-500 $minifiedClasses";
     $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-black dark:hover:text-white';
 @endphp
 
@@ -45,7 +45,7 @@
         }
     };
 })()" data-nav-pin-id="{{ $groupId }}" data-pin-type="group" data-pin-title="{{ $title }}" class="w-full flex flex-col gap-1">
-    <button @click="open = !open" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" type="button" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
+    <button @click="open = !open" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" type="button" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
 
         <!-- Icon -->
         @if (isset($icon))
@@ -55,7 +55,7 @@
         @endif
 
 
-        <div class="flex flex-1 gap-2 w-full items-center justify-between overflow-hidden transition-[max-width,opacity,margin] duration-300 ease-in-out max-w-[100vw] opacity-100 ml-3 group-data-[collapsed=true]/nav-item:max-w-0 group-data-[collapsed=true]/nav-item:opacity-0 group-data-[collapsed=true]/nav-item:ml-0 group-data-[state=minified]/sheet:max-w-0 group-data-[state=minified]/sheet:opacity-0 group-data-[state=minified]/sheet:ml-0">
+        <div :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[max-width,opacity,margin] duration-300 ease-in-out'" class="flex flex-1 gap-2 w-full items-center justify-between overflow-hidden max-w-[100vw] opacity-100 ml-3 group-data-[collapsed=true]/nav-item:max-w-0 group-data-[collapsed=true]/nav-item:opacity-0 group-data-[collapsed=true]/nav-item:ml-0 group-data-[state=minified]/sheet:max-w-0 group-data-[state=minified]/sheet:opacity-0 group-data-[state=minified]/sheet:ml-0">
             <span class="whitespace-nowrap">
                 {{ $title }}
             </span>
