@@ -1,6 +1,10 @@
 <x-docs.layouts.sidebar title="Docs - Instalation">
-    <div class="space-y-4">
-        <h1 class="text-2xl font-bold">Instalation</h1>
-        <p class="text-gray-600 dark:text-gray-400">Instalation guide and setup instructions.</p>
-    </div>
+<div>
+    <vibe:card>
+        <h1>Halo</h1>
+        <p>
+            Vibe Ui siap membantu 
+        </p>
+    </vibe:card>
+</div>
 </x-docs.layouts.sidebar>

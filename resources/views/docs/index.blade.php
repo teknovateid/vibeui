@@ -1,4 +1,5 @@
-<x-docs.layouts.sidebar title="Docs - Intro">
+<x-docs.layouts.sidebar title="Docs Index">
+<div>
     <div class="mb-6 flex justify-end">
         <vibe:button @click="$dispatch('open-modal', 'test-modal')">
             Buka Modal
@@ -31,4 +32,5 @@
             <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">Simpan Perubahan</vibe:button>
         </div>
     </vibe:modal>
+</div>
 </x-docs.layouts.sidebar>

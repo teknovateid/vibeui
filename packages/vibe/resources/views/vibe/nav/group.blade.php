@@ -14,12 +14,18 @@
 <div x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
-             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
-             var groups = state.groups || {};
-             if (groups['{{ $groupId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
-                 defaultOpen = groups['{{ $groupId }}'];
+             var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var stored = localStorage.getItem(key);
+             if (stored) {
+                 var data = JSON.parse(stored);
+                 if (Array.isArray(data)) {
+                     var navEl = document.getElementById('{{ $gridId }}')?.closest('nav');
+                     var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                     var navItem = data.find(i => i.id === navId);
+                     if (navItem && navItem.groups && navItem.groups['{{ $groupId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
+                         defaultOpen = navItem.groups['{{ $groupId }}'];
+                     }
+                 }
              }
          } catch(e) {} @endif
     return {
@@ -28,19 +34,34 @@
         isGroupChild: true,
         init() {
             @if ($persist) 
-                 let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
+                 let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                 let saveGroup = (val) => {
+                     let stored = localStorage.getItem(key);
+                     let data = [];
+                     if (stored) {
+                         try {
+                             let parsed = JSON.parse(stored);
+                             if (Array.isArray(parsed)) data = parsed;
+                         } catch (e) {}
+                     }
+                     let navEl = this.$el.closest('nav');
+                     let navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                     let index = data.findIndex(i => i.id === navId);
+                     let existing = index !== -1 ? data[index] : { id: navId, pinned: [], groups: {}, labels: {} };
+                     if (!existing.groups) existing.groups = {};
+                     existing.groups['{{ $groupId }}'] = val;
+                     if (index !== -1) {
+                         data[index] = existing;
+                     } else {
+                         data.push(existing);
+                     }
+                     localStorage.setItem(key, JSON.stringify(data));
+                 };
                  if ({{ $active ? 'true' : 'false' }}) {
-                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
-                     if (!state.groups) state.groups = {};
-                     state.groups['{{ $groupId }}'] = true;
-                     localStorage.setItem(navKey, JSON.stringify(state));
+                     saveGroup(true);
                  }
                  this.$watch('open', val => {
-                     let state = JSON.parse(localStorage.getItem(navKey) || '{}');
-                     if (!state.groups) state.groups = {};
-                     state.groups['{{ $groupId }}'] = val;
-                     localStorage.setItem(navKey, JSON.stringify(state));
+                     saveGroup(val);
                  }); 
             @endif
             this.$nextTick(() => { this.ready = true; });
@@ -107,20 +128,27 @@
 <script>
     (function() {
         try {
-            var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
-            var state = JSON.parse(localStorage.getItem(navKey) || '{}');
-            var groups = state.groups || {};
-            var saved = groups['{{ $groupId }}'];
-            
-            if (saved === false && !{{ $active ? 'true' : 'false' }}) {
-                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
-                var chevron = document.getElementById('{{ $chevronId }}');
-                if (chevron) chevron.style.transform = 'none';
-            } else if (saved === true) {
-                document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
-                var chevron = document.getElementById('{{ $chevronId }}');
-                if (chevron) chevron.style.transform = 'rotate(90deg)';
+            var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var stored = localStorage.getItem(key);
+            if (stored) {
+                var data = JSON.parse(stored);
+                if (Array.isArray(data)) {
+                    var navEl = document.getElementById('{{ $gridId }}')?.closest('nav');
+                    var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
+                    var navItem = data.find(i => i.id === navId);
+                    if (navItem && navItem.groups && navItem.groups['{{ $groupId }}'] !== undefined) {
+                        var saved = navItem.groups['{{ $groupId }}'];
+                        if (saved === false && !{{ $active ? 'true' : 'false' }}) {
+                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
+                            var chevron = document.getElementById('{{ $chevronId }}');
+                            if (chevron) chevron.style.transform = 'none';
+                        } else if (saved === true) {
+                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
+                            var chevron = document.getElementById('{{ $chevronId }}');
+                            if (chevron) chevron.style.transform = 'rotate(90deg)';
+                        }
+                    }
+                }
             }
         } catch(e) {}
     })();

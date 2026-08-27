@@ -6,45 +6,71 @@ import fs from 'fs';
 import path from 'path';
 
 function vibeSyncPlugin() {
+    const syncRules = [
+        {
+            srcPattern: '/resources/views/vibe/',
+            destDir: 'packages/vibe/resources/views/vibe',
+            label: 'Views',
+        },
+        {
+            srcPattern: '/resources/css/vibe/',
+            destDir: 'packages/vibe/resources/css/vibe',
+            label: 'CSS',
+        },
+        {
+            srcPattern: '/resources/js/vibe/',
+            destDir: 'packages/vibe/resources/js/vibe',
+            label: 'JS',
+        },
+        {
+            srcPattern: '/public/vibe/',
+            destDir: 'packages/vibe/public/vibe',
+            label: 'Public',
+        },
+    ];
+
     return {
         name: 'vibe-sync',
         configureServer(server) {
             server.watcher.on('all', (event, file) => {
                 const normalizedFile = file.replace(/\\/g, '/');
-                const vibePath = '/resources/views/vibe/';
-                if (normalizedFile.includes(vibePath)) {
-                    const relativePath = normalizedFile.split(vibePath)[1];
-                    const dest = path.resolve(process.cwd(), 'packages/vibe/resources/views/vibe', relativePath);
-                    
-                    if (event === 'add' || event === 'change') {
-                        const destDir = path.dirname(dest);
-                        if (!fs.existsSync(destDir)) {
-                            fs.mkdirSync(destDir, { recursive: true });
-                        }
-                        try {
-                            fs.copyFileSync(file, dest);
-                            console.log(`\n[Vibe Sync] Disinkronkan ke packages: ${relativePath}`);
-                        } catch (e) {
-                            console.error(`\n[Vibe Sync] Gagal mengcopy:`, e);
-                        }
-                    } else if (event === 'unlink') {
-                        try {
-                            if (fs.existsSync(dest)) {
-                                fs.unlinkSync(dest);
-                                console.log(`\n[Vibe Sync] Dihapus dari packages: ${relativePath}`);
+
+                for (const rule of syncRules) {
+                    if (normalizedFile.includes(rule.srcPattern)) {
+                        const relativePath = normalizedFile.split(rule.srcPattern)[1];
+                        const dest = path.resolve(process.cwd(), rule.destDir, relativePath);
+                        
+                        if (event === 'add' || event === 'change') {
+                            const destDir = path.dirname(dest);
+                            if (!fs.existsSync(destDir)) {
+                                fs.mkdirSync(destDir, { recursive: true });
                             }
-                        } catch (e) {
-                            console.error(`\n[Vibe Sync] Gagal menghapus:`, e);
-                        }
-                    } else if (event === 'unlinkDir') {
-                        try {
-                            if (fs.existsSync(dest)) {
-                                fs.rmSync(dest, { recursive: true, force: true });
-                                console.log(`\n[Vibe Sync] Folder dihapus dari packages: ${relativePath}`);
+                            try {
+                                fs.copyFileSync(file, dest);
+                                console.log(`\n[Vibe Sync - ${rule.label}] Disinkronkan ke packages: ${relativePath}`);
+                            } catch (e) {
+                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal mengcopy:`, e);
                             }
-                        } catch (e) {
-                            console.error(`\n[Vibe Sync] Gagal menghapus folder:`, e);
+                        } else if (event === 'unlink') {
+                            try {
+                                if (fs.existsSync(dest)) {
+                                    fs.unlinkSync(dest);
+                                    console.log(`\n[Vibe Sync - ${rule.label}] Dihapus dari packages: ${relativePath}`);
+                                }
+                            } catch (e) {
+                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus:`, e);
+                            }
+                        } else if (event === 'unlinkDir') {
+                            try {
+                                if (fs.existsSync(dest)) {
+                                    fs.rmSync(dest, { recursive: true, force: true });
+                                    console.log(`\n[Vibe Sync - ${rule.label}] Folder dihapus dari packages: ${relativePath}`);
+                                }
+                            } catch (e) {
+                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus folder:`, e);
+                            }
                         }
+                        break;
                     }
                 }
             });

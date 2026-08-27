@@ -4,30 +4,33 @@
     'collapsed' => false,
     'pinnable' => false,
     'maxpin' => null, // optional max number of pinned items
-    'key' => null,
     'id' => null,
 ])
 
 @php
-    $navId = $id ?? ('vibe-nav-' . Str::random(8));
+    $navId = $id ?? $attributes->get('id') ?? 'sidebar-menu';
     $pinnedContainerId = 'vibe-nav-pinned-' . Str::random(6);
 @endphp
 
-<nav id="{{ $navId }}" x-data="(function() {
-    var prefix = window.VIBE_PREFIX || 'vibe';
-    var customKey = '{{ $key ?? $id ?? '' }}';
-    var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-    var navKey = prefix + '-nav-' + (customKey || pathScope);
+<nav id="{{ $navId }}" data-nav-id="{{ $navId }}" x-data="(function() {
+    var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+    var navId = '{{ $navId }}';
     var pinned = [];
     try { 
-        var state = JSON.parse(localStorage.getItem(navKey) || '{}');
-        pinned = state.pinned || [];
+        var stored = localStorage.getItem(key);
+        if (stored) {
+            var data = JSON.parse(stored);
+            if (Array.isArray(data)) {
+                var item = data.find(i => i.id === navId);
+                if (item) pinned = item.pinned || [];
+            }
+        }
     } catch (e) {}
     return {
+        id: navId,
         pinnable: {{ $pinnable ? 'true' : 'false' }},
         maxpin: {{ $maxpin ?? 'null' }},
         pinned: pinned,
-        navKey: navKey,
         init() {
             this.$nextTick(() => {
                 this.syncValidPinned();
@@ -46,10 +49,28 @@
             }
         },
         saveToStorage() {
-            let state = { pinned: [], groups: {}, labels: {} };
-            try { state = Object.assign(state, JSON.parse(localStorage.getItem(this.navKey) || '{}')); } catch(e) {}
-            state.pinned = this.pinned;
-            localStorage.setItem(this.navKey, JSON.stringify(state));
+            let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            let stored = localStorage.getItem(key);
+            let data = [];
+            if (stored) {
+                try {
+                    let parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) data = parsed;
+                } catch (e) {}
+            }
+            let index = data.findIndex(i => i.id === this.id);
+            let existing = index !== -1 ? data[index] : { id: this.id, pinned: [], groups: {}, labels: {} };
+            existing.id = this.id;
+            existing.pinned = this.pinned;
+            if (!existing.groups) existing.groups = {};
+            if (!existing.labels) existing.labels = {};
+
+            if (index !== -1) {
+                data[index] = existing;
+            } else {
+                data.push(existing);
+            }
+            localStorage.setItem(key, JSON.stringify(data));
         },
         togglePin(id) {
             this.syncValidPinned();
@@ -112,12 +133,16 @@
 
         (function() {
             try {
-                let prefix = window.VIBE_PREFIX || 'vibe';
-                let customKey = '{{ $key ?? $id ?? '' }}';
-                let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
-                let navKey = prefix + '-nav-' + (customKey || pathScope);
-                let state = JSON.parse(localStorage.getItem(navKey) || '{}');
-                let pinned = state.pinned || [];
+                let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                let stored = localStorage.getItem(key);
+                let pinned = [];
+                if (stored) {
+                    let data = JSON.parse(stored);
+                    if (Array.isArray(data)) {
+                        let item = data.find(i => i.id === '{{ $navId }}');
+                        if (item) pinned = item.pinned || [];
+                    }
+                }
                 let nav = document.getElementById('{{ $navId }}');
                 if (!nav) return;
                 
