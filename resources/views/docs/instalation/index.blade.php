@@ -1,6 +1,6 @@
 <x-docs.layouts.sidebar title="Docs - Instalation">
 <div>
-    <vibe:card class="">
+    <vibe:card class="min-h-screen">
         <h1>Halo</h1>
         <p>
             Vibe Ui siap membantu 

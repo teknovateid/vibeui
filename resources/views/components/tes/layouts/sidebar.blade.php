@@ -1,5 +1,5 @@
-@props(['title' => config('app.name')])
-<x-docs.layouts.base :title="$title">
+@props(['title' => config('app.name', 'Vibe UI')])
+<x-tes.layouts.base :title="$title">
     <div class="flex h-screen overflow-hidden">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center px-3 py-2.5 border-none">
@@ -18,7 +18,7 @@
             </vibe:sheet.header>
 
             <vibe:sheet.body class="px-3">
-                <x-docs.partials.sidebar-menu />
+                <x-tes.partials.sidebar-menu />
             </vibe:sheet.body>
 
             <vibe:sheet.footer class="p-3 minified:p-2 flex justify-center">

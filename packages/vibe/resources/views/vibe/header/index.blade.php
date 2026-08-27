@@ -6,7 +6,7 @@
 ])
 
 @php
-    $baseClasses = 'flex items-center justify-between shrink-0 bg-white dark:bg-vibe-900 border-b border-gray-200 dark:border-vibe-800';
+    $baseClasses = 'flex items-center justify-between shrink-0 bg-vibe-50 dark:bg-vibe-900 border-b border-gray-200 dark:border-vibe-800';
 
     $variantClasses = match ($variant) {
         'sticky' => 'sticky top-0 z-50',
@@ -14,7 +14,7 @@
     };
 
     $sizeClasses = match ($size) {
-        'sm' => 'py-2 px-4',
+        'sm' => 'py-2.5 px-4',
         'default' => 'py-4 px-6',
         'lg' => 'py-6 px-8',
         default => 'py-4 px-6',
