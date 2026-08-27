@@ -1,3 +1,4 @@
+@props(['title' => config('app.name', 'Vibe UI')])
 <x-layouts.base :title="$title">
     <div class="flex min-h-screen overflow-hidden">
         <div class="flex flex-col flex-1 w-full">

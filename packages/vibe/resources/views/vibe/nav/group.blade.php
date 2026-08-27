@@ -14,7 +14,8 @@
 <div x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
-             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+             var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+             var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
              var state = JSON.parse(localStorage.getItem(navKey) || '{}');
              var groups = state.groups || {};
              if (groups['{{ $groupId }}'] !== undefined && !{{ $active ? 'true' : 'false' }}) {
@@ -27,7 +28,8 @@
         isGroupChild: true,
         init() {
             @if ($persist) 
-                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+                 let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+                 let navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
                  if ({{ $active ? 'true' : 'false' }}) {
                      let state = JSON.parse(localStorage.getItem(navKey) || '{}');
                      if (!state.groups) state.groups = {};
@@ -105,7 +107,8 @@
 <script>
     (function() {
         try {
-            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav';
+            var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+            var navKey = (window.VIBE_PREFIX || 'vibe') + '-nav-' + pathScope;
             var state = JSON.parse(localStorage.getItem(navKey) || '{}');
             var groups = state.groups || {};
             var saved = groups['{{ $groupId }}'];

@@ -4,16 +4,20 @@
     'collapsed' => false,
     'pinnable' => false,
     'maxpin' => null, // optional max number of pinned items
+    'key' => null,
+    'id' => null,
 ])
 
 @php
-    $navId = 'vibe-nav-' . Str::random(8);
+    $navId = $id ?? ('vibe-nav-' . Str::random(8));
     $pinnedContainerId = 'vibe-nav-pinned-' . Str::random(6);
 @endphp
 
 <nav id="{{ $navId }}" x-data="(function() {
     var prefix = window.VIBE_PREFIX || 'vibe';
-    var navKey = prefix + '-nav';
+    var customKey = '{{ $key ?? $id ?? '' }}';
+    var pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+    var navKey = prefix + '-nav-' + (customKey || pathScope);
     var pinned = [];
     try { 
         var state = JSON.parse(localStorage.getItem(navKey) || '{}');
@@ -23,8 +27,32 @@
         pinnable: {{ $pinnable ? 'true' : 'false' }},
         maxpin: {{ $maxpin ?? 'null' }},
         pinned: pinned,
-        init() {},
+        navKey: navKey,
+        init() {
+            this.$nextTick(() => {
+                this.syncValidPinned();
+                this._movePinnedItems();
+            });
+        },
+        syncValidPinned() {
+            let nav = document.getElementById('{{ $navId }}');
+            if (!nav) return;
+            let allPinnable = Array.from(nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])'));
+            let validIds = allPinnable.map(e => e.dataset.navPinId);
+            let filtered = this.pinned.filter(id => validIds.includes(id));
+            if (filtered.length !== this.pinned.length) {
+                this.pinned = filtered;
+                this.saveToStorage();
+            }
+        },
+        saveToStorage() {
+            let state = { pinned: [], groups: {}, labels: {} };
+            try { state = Object.assign(state, JSON.parse(localStorage.getItem(this.navKey) || '{}')); } catch(e) {}
+            state.pinned = this.pinned;
+            localStorage.setItem(this.navKey, JSON.stringify(state));
+        },
         togglePin(id) {
+            this.syncValidPinned();
             if (this.pinned.includes(id)) {
                 this.pinned = this.pinned.filter(p => p !== id);
                 this._movePinnedItems();
@@ -33,12 +61,7 @@
                 this.pinned.push(id);
                 this._movePinnedItems();
             }
-            let prefix = window.VIBE_PREFIX || 'vibe';
-            let navKey = prefix + '-nav';
-            let state = { pinned: [], groups: {}, labels: {} };
-            try { state = Object.assign(state, JSON.parse(localStorage.getItem(navKey) || '{}')); } catch(e) {}
-            state.pinned = this.pinned;
-            localStorage.setItem(navKey, JSON.stringify(state));
+            this.saveToStorage();
         },
         isPinned(id) {
             return this.pinned.includes(id);
@@ -56,16 +79,18 @@
             // Remove all existing shortcuts
             pinnedWrapper.querySelectorAll('[data-pinned-shortcut-for]').forEach(el => el.remove());
 
-            // Build shortcuts for currently pinned items
+            // Build shortcuts for currently pinned items that exist in DOM
+            let allPinnable = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
+            let actualCount = 0;
             this.pinned.forEach(id => {
-                let allPinnable = nav.querySelectorAll('[data-nav-pin-id]');
                 let el = Array.from(allPinnable).find(e => e.dataset.navPinId === id);
                 if (el && window.VibeNavBuilder) {
                     pinnedWrapper.appendChild(window.VibeNavBuilder.buildShortcut(el));
+                    actualCount++;
                 }
             });
 
-            container.style.display = this.pinned.length > 0 ? '' : 'none';
+            container.style.display = actualCount > 0 ? '' : 'none';
         }
     };
 })()" {{ $attributes->twMerge(['class' => 'flex flex-col gap-1 w-full']) }} @if ($collapsed)
@@ -88,26 +113,30 @@
         (function() {
             try {
                 let prefix = window.VIBE_PREFIX || 'vibe';
-                let navKey = prefix + '-nav';
+                let customKey = '{{ $key ?? $id ?? '' }}';
+                let pathScope = window.location.pathname.replace(/^\/+/, '').split('/')[0] || 'main';
+                let navKey = prefix + '-nav-' + (customKey || pathScope);
                 let state = JSON.parse(localStorage.getItem(navKey) || '{}');
                 let pinned = state.pinned || [];
                 let nav = document.getElementById('{{ $navId }}');
                 if (!nav) return;
                 
                 let container = nav.querySelector('[data-pinned-container]');
+                let allPinnables = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
+                let validIds = Array.from(allPinnables).map(e => e.dataset.navPinId);
+                let validPinned = pinned.filter(id => validIds.includes(id));
                 
                 // 1. Fix FOUC for pinned count
                 if (container) {
                     let maxpin = {{ $maxpin ?? 'null' }};
                     if (maxpin) {
                         let countEl = container.querySelector('[x-text*="pinned.length"]');
-                        if (countEl) countEl.textContent = pinned.length + ' / ' + maxpin;
+                        if (countEl) countEl.textContent = validPinned.length + ' / ' + maxpin;
                     }
                 }
 
                 // 2. Fix FOUC for pin buttons
                 let pinnableNav = {{ $pinnable ? 'true' : 'false' }};
-                let allPinnables = nav.querySelectorAll('[data-nav-pin-id]');
                 allPinnables.forEach(el => {
                     let isGroup = el.dataset.pinType === 'group';
                     let parentGroup = el.parentElement.closest('[data-pin-type="group"]');
@@ -121,7 +150,7 @@
                             btn.style.display = 'none';
                         } else {
                             btn.style.display = '';
-                            let isPinned = pinned.includes(el.dataset.navPinId);
+                            let isPinned = validPinned.includes(el.dataset.navPinId);
                             let svgs = btn.querySelectorAll('svg');
                             if (isPinned) {
                                 btn.className = "p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 transition-all duration-150 text-vibe-900 dark:text-vibe-100 opacity-100";
@@ -136,14 +165,13 @@
                     }
                 });
 
-                if (!container || !pinned.length) return;
+                if (!container || !validPinned.length) return;
 
                 let pinnedWrapper = container.querySelector('[data-pinned-items]');
                 if (!pinnedWrapper) return;
 
-                pinned.forEach(id => {
-                    let allPinnable = nav.querySelectorAll('[data-nav-pin-id]');
-                    let el = Array.from(allPinnable).find(e => e.dataset.navPinId === id);
+                validPinned.forEach(id => {
+                    let el = Array.from(allPinnables).find(e => e.dataset.navPinId === id);
                     if (el && window.VibeNavBuilder) {
                         pinnedWrapper.appendChild(window.VibeNavBuilder.buildShortcut(el));
                     }

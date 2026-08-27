@@ -34,13 +34,17 @@ class PageCommand extends Command implements PromptsForMissingInput
         $isResource = $this->option('resource');
         $isBlank = $this->option('blank');
 
-        // Detect layout style from the group's Index component
+        // Detect layout style from the layout components directory
         $style = 'sidebar'; // Default fallback
-        $indexFile = app_path("Livewire/" . str($layout)->studly() . "/Index.php");
-        if (File::exists($indexFile)) {
-            $indexContent = File::get($indexFile);
-            if (preg_match('/#\[Layout\([\'"]components\.(?:[a-zA-Z0-9_-]+\.)?layouts\.([a-zA-Z0-9_-]+)[\'"]\)\]/', $indexContent, $matches)) {
-                $style = $matches[1];
+        $layoutDir = resource_path("views/components/{$layout}/layouts");
+        if (File::isDirectory($layoutDir)) {
+            $files = File::files($layoutDir);
+            foreach ($files as $file) {
+                $filename = basename($file->getFilename(), '.blade.php');
+                if ($filename !== 'base') {
+                    $style = $filename;
+                    break;
+                }
             }
         }
 
@@ -48,9 +52,6 @@ class PageCommand extends Command implements PromptsForMissingInput
         $list = [];
 
         foreach ($actions as $action) {
-            $componentName = "{$layout}.{$name}.{$action}";
-            $this->call('make:livewire', ['name' => $componentName, '--class' => true]);
-
             if ($isResource) {
                 $templateFile = __DIR__ . "/../../stubs/Templates/crud/resource/{$action}.blade.php";
             } elseif ($isBlank) {
@@ -59,38 +60,27 @@ class PageCommand extends Command implements PromptsForMissingInput
                 $templateFile = __DIR__ . "/../../stubs/Templates/pages/index.blade.php";
             }
 
-            $destView = resource_path("views/livewire/{$layout}/{$name}/{$action}.blade.php");
+            $destView = resource_path("views/{$layout}/{$name}/{$action}.blade.php");
 
             if (File::exists($templateFile)) {
                 $content = str_replace('[path]', $layout, File::get($templateFile));
-                File::put($destView, $content);
-            }
-
-            // Inject Title and Layout attribute using the custom stub
-            $className = ucfirst($action);
-            $classFile = app_path("Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php");
-            
-            $stubPath = __DIR__ . '/../../stubs/Pages/page.php';
-            if (File::exists($classFile) && File::exists($stubPath)) {
-                $pageTitle = str($layout)->headline() . ' ' . str($name)->headline();
+                
+                $pageTitle = str($layout)->headline() . ' - ' . str($name)->headline();
                 if ($action !== 'index') {
                     $pageTitle .= ' ' . ucfirst($action);
                 }
-                
-                $namespace = "App\\Livewire\\" . str($layout)->studly() . "\\" . str($name)->studly();
-                $viewPath = "livewire.{$layout}.{$name}.{$action}";
-                
-                $classContent = File::get($stubPath);
-                $classContent = str_replace(
-                    ['[Namespace]', '[Title]', '[Layout]', '[ClassName]', '[ViewPath]'],
-                    [$namespace, $pageTitle, "components.{$layout}.layouts.{$style}", $className, $viewPath],
-                    $classContent
-                );
-                
-                File::put($classFile, $classContent);
+
+                $wrappedContent = "<x-{$layout}.layouts.{$style} title=\"{$pageTitle}\">\n" . $content . "\n</x-{$layout}.layouts.{$style}>\n";
+
+                $dir = dirname($destView);
+                if (!File::isDirectory($dir)) {
+                    File::makeDirectory($dir, 0755, true);
+                }
+
+                File::put($destView, $wrappedContent);
             }
-            
-            $list[] = "app/Livewire/" . str($layout)->studly() . "/" . str($name)->studly() . "/{$className}.php";
+
+            $list[] = "resources/views/{$layout}/{$name}/{$action}.blade.php";
         }
 
         // Add to routes
@@ -98,10 +88,10 @@ class PageCommand extends Command implements PromptsForMissingInput
         if (File::exists($routePath)) {
             $routeContent = File::get($routePath);
             $routePrefix = "\n    Route::prefix('{$name}')->name('{$name}.')->group(function () {\n";
-            $routePrefix .= "        Route::livewire('/', '{$layout}.{$name}.index')->name('index');\n";
+            $routePrefix .= "        Route::view('/', '{$layout}.{$name}.index')->name('index');\n";
             if ($isResource) {
-                $routePrefix .= "        Route::livewire('/create', '{$layout}.{$name}.create')->name('create');\n";
-                $routePrefix .= "        Route::livewire('/{id}/edit', '{$layout}.{$name}.edit')->name('edit');\n";
+                $routePrefix .= "        Route::view('/create', '{$layout}.{$name}.create')->name('create');\n";
+                $routePrefix .= "        Route::view('/{id}/edit', '{$layout}.{$name}.edit')->name('edit');\n";
             }
             $routePrefix .= "    });\n";
             
@@ -151,11 +141,11 @@ class PageCommand extends Command implements PromptsForMissingInput
         }
 
         if (! $input->getArgument('layout')) {
-            $livewireDir = resource_path('views/livewire');
+            $componentsDir = resource_path('views/components');
             $layoutGroups = [];
             
-            if (File::isDirectory($livewireDir)) {
-                $directories = File::directories($livewireDir);
+            if (File::isDirectory($componentsDir)) {
+                $directories = File::directories($componentsDir);
                 foreach ($directories as $dir) {
                     $dirName = basename($dir);
                     if (File::exists(base_path("routes/{$dirName}.php"))) {

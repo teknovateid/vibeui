@@ -52,18 +52,19 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
         $chosenLayout = select(
             'Which layout style do you want to use?',
-            $layoutOptions
+            $layoutOptions,
+            default: array_key_first($layoutOptions) ?? 'sidebar'
         );
 
         $layout = $this->generateLayouts($path, $chosenLayout);
         $route = $this->generateRoute($path);
-        $livewire = $this->configureLivewire($path);
 
         $this->newLine();
         $list = [];
         if ($layout) {
             $this->components->success("Layout created");
             $list[] = "resources/views/{$path}";
+            $list[] = "resources/views/components/{$path}";
         } else {
             $this->components->info("Layout skipped.");
         }
@@ -73,11 +74,6 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             $list[] = "routes/{$path}.php";
         } else {
             $this->components->info("Route skipped.");
-        }
-        
-        if ($livewire) {
-            $this->components->success("Livewire config updated");
-            $list[] = "config/livewire.php";
         }
 
         if(count($list) > 0) {
@@ -108,51 +104,24 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         ];
 
         foreach ($pages as $component => $templatePath) {
-            $this->call('make:livewire', ['name' => "{$path}.{$component}", '--class' => true]);
-
             $templateFile = __DIR__ . "/../../stubs/Templates/{$templatePath}";
-            $destView = resource_path("views/livewire/{$path}/" . str_replace('.', '/', $component) . ".blade.php");
+            $destView = resource_path("views/{$path}/" . str_replace('.', '/', $component) . ".blade.php");
 
             if (File::exists($templateFile)) {
                 $content = str_replace('[path]', $path, File::get($templateFile));
+                $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
                 
+                $wrappedContent = "<x-{$path}.layouts.{$chosenLayout} title=\"{$titleName}\">\n" . $content . "\n</x-{$path}.layouts.{$chosenLayout}>\n";
+
                 // Ensure directory exists
                 $dir = dirname($destView);
                 if (!File::isDirectory($dir)) {
                     File::makeDirectory($dir, 0755, true);
                 }
                 
-                File::put($destView, $content);
+                File::put($destView, $wrappedContent);
             }
 
-            // Inject Title attribute using custom stub
-            $classNamePath = collect(explode('.', $component))->map(fn($part) => ucfirst($part))->implode('/');
-            $classFile = app_path("Livewire/" . str($path)->studly() . "/{$classNamePath}.php");
-            
-            $stubPath = __DIR__ . '/../../stubs/Pages/page.php';
-            if (File::exists($classFile) && File::exists($stubPath)) {
-                $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
-                
-                $className = collect(explode('.', $component))->map(fn($part) => ucfirst($part))->last();
-                $namespacePath = collect(explode('.', $component))->slice(0, -1)->map(fn($part) => ucfirst($part))->implode('\\');
-                
-                $namespace = "App\\Livewire\\" . str($path)->studly();
-                if ($namespacePath) {
-                    $namespace .= "\\" . $namespacePath;
-                }
-                
-                $viewPath = "livewire.{$path}." . str_replace('.', '.', $component);
-                
-                $classContent = File::get($stubPath);
-                $classContent = str_replace(
-                    ['[Namespace]', '[Title]', '[Layout]', '[ClassName]', '[ViewPath]'],
-                    [$namespace, $titleName, "components.{$path}.layouts.{$chosenLayout}", $className, $viewPath],
-                    $classContent
-                );
-                
-                File::put($classFile, $classContent);
-            }
-            
             // Add to menu
             $menuPath = resource_path("views/components/{$path}/partials/{$chosenLayout}-menu.blade.php");
             $stubPath = __DIR__ . "/../../stubs/Partials/{$chosenLayout}/item.blade.php";
@@ -229,7 +198,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
     protected function generateRoute(string $path): bool
     {
-        if (! $this->confirm("Create a new route file for '{$path}'? (routes/{$path}.php)", false)) {
+        if (! $this->confirm("Create a new route file for '{$path}'? (routes/{$path}.php)", true)) {
             return false;
         }
 

@@ -1,3 +1,4 @@
+<x-tes.layouts.sidebar title="Tes Index">
 <div>
     <div class="mb-6 flex justify-end">
         <vibe:button @click="$dispatch('open-modal', 'test-modal')">
@@ -32,3 +33,4 @@
         </div>
     </vibe:modal>
 </div>
+</x-tes.layouts.sidebar>
