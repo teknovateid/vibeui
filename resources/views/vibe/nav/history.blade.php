@@ -137,7 +137,7 @@
                 </svg>
             </button>
             <!-- Counter (hidden on hover) -->
-            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="group-hover/nav-label:hidden font-normal normal-case tracking-normal text-vibe-400 text-[10px]"></span>
+            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="group-hover/nav-label:hidden font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 text-[10px]"></span>
         </div>
     </div>
 

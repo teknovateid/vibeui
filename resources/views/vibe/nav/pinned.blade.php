@@ -101,7 +101,7 @@
             <span
                 x-show="typeof maxpin !== 'undefined' && maxpin"
                 x-text="(typeof pinned !== 'undefined' ? pinned.length : 0) + ' / ' + maxpin"
-                class="font-normal normal-case tracking-normal text-vibe-400 mr-2"
+                class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"
             ></span>
         </div>
     </button>
