@@ -305,7 +305,7 @@
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full $overflowClasses"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -352,11 +352,13 @@
 
 
     @if ($layout === 'relative')
-        {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0 --}}
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0"
-             :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full"
-                 :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }"
+        {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0.
+             group-data-[state=collapsed]/sheet:overflow-hidden bereaksi ke data-state attribute
+             yang di-set oleh PHP & anti-FOUC script — zero flash tanpa perlu Alpine aktif. --}}
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 group-data-[state=collapsed]/sheet:overflow-hidden"
+             :class="{ 'overflow-visible': state !== 'collapsed' }">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full group-data-[state=collapsed]/sheet:overflow-hidden"
+                 :class="{ 'overflow-visible': state !== 'collapsed' }"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
@@ -365,12 +367,11 @@
             </div>
         </div>
     @else
-        {{-- Fixed/absolute/sticky layout: use absolute clip-wrapper so resize handle/toggle isn't clipped --}}
-        {{-- and content anchors to the correct edge for proper slide animation --}}
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col"
-             :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full"
-                 :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }"
+        {{-- Fixed/absolute/sticky layout: clip-wrapper untuk content, tidak mempengaruhi resize handle. --}}
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col group-data-[state=collapsed]/sheet:overflow-hidden"
+             :class="{ 'overflow-visible': state !== 'collapsed' }">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full group-data-[state=collapsed]/sheet:overflow-hidden"
+                 :class="{ 'overflow-visible': state !== 'collapsed' }"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
@@ -420,17 +421,30 @@
 
     <!-- Resize Handle -->
     @if ($resizable)
-        <div @mousedown.prevent="startResize($event)" @touchstart.prevent="startResize($event)" class="absolute z-10 group/resizer hidden md:flex items-center justify-center" :class="{
-            'top-0 bottom-0 -right-2 w-4 cursor-col-resize': position === 'left',
-            'top-0 bottom-0 -left-2 w-4 cursor-col-resize': position === 'right',
-            'left-0 right-0 -bottom-2 h-4 cursor-row-resize': position === 'top',
-            'left-0 right-0 -top-2 h-4 cursor-row-resize': position === 'bottom'
-        }">
-            <div class="transition-colors rounded-full" :class="{
-                'h-full w-0.5 group-hover/resizer:bg-vibe-500/30': position === 'left' || position === 'right',
-                'w-full h-0.5 group-hover/resizer:bg-vibe-500/30': position === 'top' || position === 'bottom'
-            }">
-            </div>
+        {{--
+            Hit area dibuat lebih lebar (w-5/h-5) agar mudah diklik bahkan saat sheet size=0.
+            overflow-visible pada parent sheet sudah memastikan handle tidak terclip.
+            Garis visual (inner div) hanya tampil saat hover via opacity transition.
+        --}}
+        <div
+            @mousedown.prevent="startResize($event)"
+            @touchstart.prevent="startResize($event)"
+            class="absolute z-50 hidden md:flex items-center justify-center group/resizer"
+            :class="{
+                'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
+                'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',
+                'left-0 right-0 -bottom-2.5 h-5 cursor-row-resize': position === 'top',
+                'left-0 right-0 -top-2.5 h-5 cursor-row-resize': position === 'bottom'
+            }"
+        >
+            {{-- Garis visual: transparan by default, muncul saat hover --}}
+            <div
+                class="transition-all duration-200 rounded-full opacity-0 group-hover/resizer:opacity-100"
+                :class="{
+                    'h-full w-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60': position === 'left' || position === 'right',
+                    'w-full h-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60': position === 'top' || position === 'bottom'
+                }"
+            ></div>
         </div>
     @endif
 </div>
