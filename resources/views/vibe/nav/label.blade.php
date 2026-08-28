@@ -8,7 +8,7 @@
     $chevronId = 'nav-label-chevron-' . Str::random(6);
 @endphp
 
-<div {{ $attributes->twMerge(['class' => 'w-full flex flex-col gap-1']) }} @if ($pinnedContainer) data-pinned-container style="display: none;" @endif x-data="(function() {
+<div {{ $attributes->twMerge(['class' => 'w-full flex flex-col gap-1 group-data-[state=minified]/sheet:border-none']) }} @if ($pinnedContainer) data-pinned-container style="display: none;" @endif x-data="(function() {
     var defaultOpen = {{ $active || $open ? 'true' : 'false' }};
     @if ($persist) try {
              var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
@@ -87,8 +87,8 @@
     </button>
 
     <!-- Animated Container -->
-    <div id="{{ $gridId }}" class="grid" :class="ready ? 'transition-[grid-template-rows] duration-300 ease-in-out' : ''" style="grid-template-rows: {{ $active || $open ? '1fr' : '0fr' }};" x-bind:style="`grid-template-rows: ${open ? '1fr' : '0fr'}`">
-        <div class="overflow-hidden min-h-0">
+    <div id="{{ $gridId }}" class="grid group-data-[state=minified]/sheet:grid-rows-[1fr]!" :class="ready ? 'transition-[grid-template-rows] duration-300 ease-in-out' : ''" style="grid-template-rows: {{ $active || $open ? '1fr' : '0fr' }};" x-bind:style="`grid-template-rows: ${open ? '1fr' : '0fr'}`">
+        <div class="overflow-hidden group-data-[state=minified]/sheet:overflow-visible min-h-0">
             <div @if ($pinnedContainer) data-pinned-items @endif class="flex flex-col gap-1 pb-1">
                 {{ $slot }}
             </div>

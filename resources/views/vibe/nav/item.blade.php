@@ -35,9 +35,9 @@
     @endif
 
     <!-- Animated Wrapper for Label & Badge -->
-    <div :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[max-width,opacity,margin] duration-300 ease-in-out'" class="flex flex-1 w-full items-center justify-between overflow-hidden {{ $collapsed ? 'max-w-0 opacity-0 ml-0' : 'max-w-[100vw] opacity-100 ml-3' }} group-data-[collapsed=true]/nav-item:max-w-0 group-data-[collapsed=true]/nav-item:opacity-0 group-data-[collapsed=true]/nav-item:ml-0 group-data-[state=minified]/sheet:max-w-0 group-data-[state=minified]/sheet:opacity-0 group-data-[state=minified]/sheet:ml-0">
+    <div :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[max-width,opacity,margin] duration-300 ease-in-out'" class="flex flex-1 min-w-0 w-full items-center justify-between overflow-hidden {{ $collapsed ? 'max-w-0 opacity-0 ml-0 hidden' : 'max-w-[100vw] opacity-100 ml-3' }} group-data-[collapsed=true]/nav-item:hidden group-data-[state=minified]/sheet:hidden">
         <!-- Label -->
-        <span class="whitespace-nowrap">
+        <span class="whitespace-nowrap truncate">
             {{ $slot }}
         </span>
 

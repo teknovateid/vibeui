@@ -7,9 +7,12 @@
 
 @php
     $alignmentClasses = match ($align) {
-        'left' => 'origin-top-left left-0',
-        'top' => 'origin-top',
-        'right', 'default' => 'origin-top-right right-0',
+        'top', 'top-left' => 'bottom-full mb-2 left-0 origin-bottom-left',
+        'top-right' => 'bottom-full mb-2 right-0 origin-bottom-right',
+        'top-center' => 'bottom-full mb-2 left-1/2 -translate-x-1/2 origin-bottom',
+        'left', 'bottom-left' => 'top-full mt-2 left-0 origin-top-left',
+        'bottom-center' => 'top-full mt-2 left-1/2 -translate-x-1/2 origin-top',
+        'bottom', 'bottom-right', 'right', 'default' => 'top-full mt-2 right-0 origin-top-right',
     };
 
     $widthClasses = match ((string) $width) {
@@ -34,10 +37,10 @@
     x-transition:leave="transition ease-in duration-75"
     x-transition:leave-start="transform opacity-100 scale-100"
     x-transition:leave-end="transform opacity-0 scale-95"
-    class="absolute z-50 mt-2 {{ $widthClasses }} rounded-md shadow-lg {{ $alignmentClasses }}"
+    class="absolute z-50 {{ $widthClasses }} {{ $alignmentClasses }}"
     style="display: none;"
     @click="close()">
-    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-md shadow-sm p-1 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100']) }} role="menu" aria-orientation="vertical" tabindex="-1">
+    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-xl shadow-xl p-1.5 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100 flex flex-col gap-0.5']) }} role="menu" aria-orientation="vertical" tabindex="-1">
         {{ $slot }}
     </div>
 </div>
