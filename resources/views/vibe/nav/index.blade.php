@@ -160,16 +160,11 @@
                     });
 
                     // Pre-set pin button state on clone — item in pinned section is ALWAYS pinned.
-                    // Uses class-based toggle (hidden) to match :class binding in item.blade.php.
-                    // No inline display manipulation → no FOUC flash on SVG icon.
-                    let pinBtn = clone.querySelector('[title="Pin"]');
+                    // Uses data-pinned attribute for 100% pure CSS icon and opacity management.
+                    let pinBtn = clone.querySelector('[data-nav-pin-btn]');
                     if (pinBtn) {
-                        pinBtn.style.display = ''; // show pin button container
-                        let svgs = pinBtn.querySelectorAll('svg');
-                        // svgs[0] = filled/pinned icon: remove 'hidden' to show
-                        if (svgs[0]) svgs[0].classList.remove('hidden');
-                        // svgs[1] = outline/unpinned icon: add 'hidden' to hide
-                        if (svgs[1]) svgs[1].classList.add('hidden');
+                        pinBtn.setAttribute('data-pinned', 'true');
+                        pinBtn.style.display = '';
                     }
 
                     return clone;
@@ -206,24 +201,15 @@
                     }
                 }
 
-                // 2. Pre-set pin button SVG state (pinned/unpinned icon) using class toggle
-                // SVGs now use :class="{ hidden: ... }" in item.blade.php — so we manage
-                // the 'hidden' class here instead of inline display styles.
-                // We do NOT touch btn.style.display — Alpine x-show still controls that.
+                // 2. Pre-set pin button state using data-pinned attribute
                 let pinnableNav = {{ $pinnable ? 'true' : 'false' }};
                 allPinnables.forEach(el => {
-                    let btn = el.querySelector('[title="Pin"]');
+                    let btn = el.querySelector('[data-nav-pin-btn]');
                     if (btn) {
                         let isPinned = validPinned.includes(el.dataset.navPinId);
-                        let svgs = btn.querySelectorAll('svg');
-                        if (isPinned) {
-                            // Pinned: show filled icon, hide outline
-                            if (svgs[0]) svgs[0].classList.remove('hidden');
-                            if (svgs[1]) svgs[1].classList.add('hidden');
-                        } else {
-                            // Not pinned: hide filled icon, show outline (remove hidden)
-                            if (svgs[0]) svgs[0].classList.add('hidden');
-                            if (svgs[1]) svgs[1].classList.remove('hidden');
+                        btn.setAttribute('data-pinned', isPinned ? 'true' : 'false');
+                        if (pinnableNav) {
+                            btn.style.display = '';
                         }
                     }
                 });
