@@ -99,9 +99,11 @@ class VibeServiceProvider extends ServiceProvider
         Blade::directive('vibeStyles', function () {
             return "<?php
                 \$prefix = config('vibe.prefix', 'vibe');
+                \$historyConfig = json_encode(config('vibe.history'));
                 echo '<script>
                     (function() {
                         window.VIBE_PREFIX = \'' . \$prefix . '\';
+                        window.VIBE_HISTORY_CONFIG = ' . \$historyConfig . ';
                         try {
                             var k = window.VIBE_PREFIX + \'-theme\';
                             var s = localStorage.getItem(k);
