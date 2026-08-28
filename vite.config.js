@@ -39,18 +39,6 @@ function vibeSyncPlugin() {
                     .replace(/<\/x-docs\.partials\./g, '</x-partials.');
             },
         },
-        {
-            srcPattern: '/resources/views/components/docs/partials/',
-            destDir: 'packages/vibe/stubs/Layouts/partials',
-            label: 'Docs Partials',
-            transform: (content) => {
-                return content
-                    .replace(/<x-docs\.layouts\./g, '<x-layouts.')
-                    .replace(/<\/x-docs\.layouts\./g, '</x-layouts.')
-                    .replace(/<x-docs\.partials\./g, '<x-partials.')
-                    .replace(/<\/x-docs\.partials\./g, '</x-partials.');
-            },
-        },
     ];
 
     return {

@@ -1,5 +1,3 @@
-@blaze(fold: true)
-
 @props([
     'enabled' => config('vibe.seo.enabled', true),
     'title' => null,
