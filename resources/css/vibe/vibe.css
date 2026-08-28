@@ -28,4 +28,9 @@
     .vibe-breadcrumb>li:first-child>.breadcrumb-separator {
         display: none;
     }
+
+    .hide-scroll::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+    }
 }

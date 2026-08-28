@@ -74,7 +74,8 @@ return [
         | - 'keep_position'    : Update waktu akses di tempat tanpa mengubah urutan list.
         | - 'record_all'       : Selalu catat sebagai entri baru (full activity stream).
         */
-        'method' => env('VIBE_HISTORY_METHOD', 'update_timestamp'),
+        // 'method' => env('VIBE_HISTORY_METHOD', 'update_timestamp'),
+        'method' => env('VIBE_HISTORY_METHOD', 'record_all'),
 
         'ignore_paths' => [
             '/login',

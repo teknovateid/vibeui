@@ -128,6 +128,9 @@
         try {
             var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
             var stored = localStorage.getItem(key);
+            var defaultOpen = {{ $open ? 'true' : 'false' }};
+            var savedOpen = defaultOpen;
+
             if (stored) {
                 var data = JSON.parse(stored);
                 if (Array.isArray(data)) {
@@ -135,20 +138,30 @@
                     var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
                     var navItem = data.find(i => i.id === navId);
                     if (navItem && navItem.labels && navItem.labels['{{ $labelId }}'] !== undefined) {
-                        var saved = navItem.labels['{{ $labelId }}'];
-                        if (saved === false) {
-                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
-                            var chevron = document.getElementById('{{ $chevronId }}');
-                            if (chevron) chevron.style.transform = 'rotate(-90deg)';
-                        } else if (saved === true) {
-                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
-                            var chevron = document.getElementById('{{ $chevronId }}');
-                            if (chevron) chevron.style.transform = 'none';
-                        }
+                        savedOpen = navItem.labels['{{ $labelId }}'];
                     }
                 }
             }
+
+            // Apply correct state immediately — BEFORE container becomes visible
+            // This ensures Alpine finds DOM already in correct state → no FOUC on expand
+            var grid = document.getElementById('{{ $gridId }}');
+            var chevron = document.getElementById('{{ $chevronId }}');
+            if (grid) grid.style.gridTemplateRows = savedOpen ? '1fr' : '0fr';
+            if (chevron) chevron.style.transform = savedOpen ? 'none' : 'rotate(-90deg)';
         } catch(e) {}
     })();
 </script>
+@else
+<script>
+    (function() {
+        // No persist: apply default open state immediately to prevent FOUC
+        var grid = document.getElementById('{{ $gridId }}');
+        var chevron = document.getElementById('{{ $chevronId }}');
+        var open = {{ $open ? 'true' : 'false' }};
+        if (grid) grid.style.gridTemplateRows = open ? '1fr' : '0fr';
+        if (chevron) chevron.style.transform = open ? 'none' : 'rotate(-90deg)';
+    })();
+</script>
 @endif
+

@@ -33,10 +33,29 @@
         pinned: pinned,
         init() {
             this.$nextTick(() => {
+                // syncValidPinned may prune stale IDs — run it first
+                let prevCount = this.pinned.length;
                 this.syncValidPinned();
-                this._movePinnedItems();
+                let wasPruned = this.pinned.length !== prevCount;
+
+                let nav = document.getElementById('{{ $navId }}');
+                let container = nav?.querySelector('[data-pinned-container]');
+
+                // If anti-FOUC script already populated items correctly AND no IDs were pruned,
+                // skip _movePinnedItems() to avoid the remove+re-add FOUC flash.
+                // The anti-FOUC script sets data-fouc-populated with the count it inserted.
+                let foucCount = container ? parseInt(container.dataset.foucPopulated ?? '-1') : -1;
+                let alreadyCorrect = !wasPruned && foucCount === this.pinned.length;
+
+                if (alreadyCorrect) {
+                    // Items already correct — just ensure visibility
+                    if (container) container.style.display = this.pinned.length > 0 ? '' : 'none';
+                } else {
+                    this._movePinnedItems();
+                }
             });
         },
+
         syncValidPinned() {
             let nav = document.getElementById('{{ $navId }}');
             if (!nav) return;
@@ -140,6 +159,19 @@
                         icon.classList.add('text-vibe-500', 'group-hover/nav-item:text-vibe-900', 'dark:text-vibe-400', 'dark:group-hover/nav-item:text-vibe-200');
                     });
 
+                    // Pre-set pin button state on clone — item in pinned section is ALWAYS pinned.
+                    // Uses class-based toggle (hidden) to match :class binding in item.blade.php.
+                    // No inline display manipulation → no FOUC flash on SVG icon.
+                    let pinBtn = clone.querySelector('[title="Pin"]');
+                    if (pinBtn) {
+                        pinBtn.style.display = ''; // show pin button container
+                        let svgs = pinBtn.querySelectorAll('svg');
+                        // svgs[0] = filled/pinned icon: remove 'hidden' to show
+                        if (svgs[0]) svgs[0].classList.remove('hidden');
+                        // svgs[1] = outline/unpinned icon: add 'hidden' to hide
+                        if (svgs[1]) svgs[1].classList.add('hidden');
+                    }
+
                     return clone;
                 }
             };
@@ -174,49 +206,51 @@
                     }
                 }
 
-                // 2. Fix FOUC for pin buttons
+                // 2. Pre-set pin button SVG state (pinned/unpinned icon) using class toggle
+                // SVGs now use :class="{ hidden: ... }" in item.blade.php — so we manage
+                // the 'hidden' class here instead of inline display styles.
+                // We do NOT touch btn.style.display — Alpine x-show still controls that.
                 let pinnableNav = {{ $pinnable ? 'true' : 'false' }};
                 allPinnables.forEach(el => {
-                    let isGroup = el.dataset.pinType === 'group';
-                    let parentGroup = el.parentElement.closest('[data-pin-type="group"]');
-                    let isChildOfGroup = !isGroup && parentGroup !== null;
-                    
                     let btn = el.querySelector('[title="Pin"]');
                     if (btn) {
-                        let isPinnableItem = btn.getAttribute('x-show').includes('true'); // from $pinnable prop if explicitly set
-                        let pinnable = pinnableNav || isPinnableItem;
-                        if (isChildOfGroup || !pinnable) {
-                            btn.style.display = 'none';
+                        let isPinned = validPinned.includes(el.dataset.navPinId);
+                        let svgs = btn.querySelectorAll('svg');
+                        if (isPinned) {
+                            // Pinned: show filled icon, hide outline
+                            if (svgs[0]) svgs[0].classList.remove('hidden');
+                            if (svgs[1]) svgs[1].classList.add('hidden');
                         } else {
-                            btn.style.display = '';
-                            let isPinned = validPinned.includes(el.dataset.navPinId);
-                            let svgs = btn.querySelectorAll('svg');
-                            if (isPinned) {
-                                btn.className = "p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-all duration-150 text-vibe-900 dark:text-vibe-100 opacity-100";
-                                if(svgs[0]) svgs[0].style.display = '';
-                                if(svgs[1]) svgs[1].style.display = 'none';
-                            } else {
-                                btn.className = "p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-all duration-150 text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400";
-                                if(svgs[0]) svgs[0].style.display = 'none';
-                                if(svgs[1]) svgs[1].style.display = '';
-                            }
+                            // Not pinned: hide filled icon, show outline (remove hidden)
+                            if (svgs[0]) svgs[0].classList.add('hidden');
+                            if (svgs[1]) svgs[1].classList.remove('hidden');
                         }
                     }
                 });
 
-                if (!container || !validPinned.length) return;
+                if (!container) return;
+
+                // Mark with count=0 so Alpine init() knows script ran with 0 items
+                container.dataset.foucPopulated = '0';
+
+                if (!validPinned.length) return;
 
                 let pinnedWrapper = container.querySelector('[data-pinned-items]');
                 if (!pinnedWrapper) return;
 
+                let insertedCount = 0;
                 validPinned.forEach(id => {
                     let el = Array.from(allPinnables).find(e => e.dataset.navPinId === id);
                     if (el && window.VibeNavBuilder) {
                         pinnedWrapper.appendChild(window.VibeNavBuilder.buildShortcut(el));
+                        insertedCount++;
                     }
                 });
 
-                container.style.display = '';
+                // Tell Alpine how many items were inserted — used to skip _movePinnedItems() on init
+                container.dataset.foucPopulated = String(insertedCount);
+                container.style.display = insertedCount > 0 ? '' : 'none';
+
             } catch (e) {}
         })();
     </script>
