@@ -94,8 +94,16 @@
 
     size: {{ $defaultSize }},
     state: '{{ $defaultState }}',
+    isMobile: window.innerWidth < 768,
 
     init() {
+        window.addEventListener('resize', () => {
+            this.isMobile = window.innerWidth < 768;
+            if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
+                this.state = 'collapsed';
+            }
+        });
+
         @if ($persist) let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
                 let stored = localStorage.getItem(key);
                 if (stored) {
@@ -113,6 +121,10 @@
                         }
                     } catch (e) {}
                 } @endif
+
+        if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
+            this.state = 'collapsed';
+        }
 
         this.$nextTick(() => {
             setTimeout(() => {
@@ -165,11 +177,12 @@
         if (this.isResizing) return this.size;
         if (this.behavior === 'static') return this.size;
         if (this.state === 'collapsed') return 0;
-        if (this.state === 'minified') return this.minifiedSize;
+        if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize;
         return this.size;
     },
 
     startResize(e) {
+        if (this.isMobile) return;
         if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
         this.isResizing = true;
 
@@ -190,7 +203,7 @@
     },
 
     doResize(e) {
-        if (!this.isResizing) return;
+        if (!this.isResizing || this.isMobile) return;
 
         let clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
         let clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
@@ -263,7 +276,7 @@
     toggle() {
         if (this.behavior === 'static') return;
 
-        if (this.behavior === 'collapsible') {
+        if (this.behavior === 'collapsible' || (this.behavior === 'minify' && this.isMobile)) {
             this.state = this.state === 'expanded' ? 'collapsed' : 'expanded';
         } else if (this.behavior === 'minify') {
             this.state = this.state === 'expanded' ? 'minified' : 'expanded';
@@ -287,7 +300,7 @@
         this.state = 'expanded';
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && behavior === 'collapsible') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     (position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
@@ -310,6 +323,11 @@
                                 let state = item.status !== undefined ? item.status : '{{ $defaultState }}';
                                 let minSize = {{ $minSize }};
                                 let maxSize = {{ $maxSize }};
+                                let isMobile = window.innerWidth < 768;
+
+                                if (isMobile && '{{ $behavior }}' === 'minify' && state === 'minified') {
+                                    state = 'collapsed';
+                                }
 
                                 if (size > maxSize) size = maxSize;
                                 if (state === 'expanded' && size < minSize) size = minSize;
@@ -317,7 +335,7 @@
                                 let currentSize = size;
                                 if ('{{ $behavior }}' !== 'static') {
                                     if (state === 'collapsed') currentSize = 0;
-                                    else if (state === 'minified') currentSize = {{ $minifiedSize }};
+                                    else if (state === 'minified') currentSize = isMobile ? 0 : {{ $minifiedSize }};
                                 }
                                 let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
                                 el.style[isHorizontal ? 'width' : 'height'] = currentSize + 'px';
@@ -400,7 +418,7 @@
 
     <!-- Resize Handle -->
     @if ($resizable)
-        <div @mousedown.prevent="startResize($event)" @touchstart.prevent="startResize($event)" class="absolute z-10 group/resizer flex items-center justify-center" :class="{
+        <div @mousedown.prevent="startResize($event)" @touchstart.prevent="startResize($event)" class="absolute z-10 group/resizer hidden md:flex items-center justify-center" :class="{
             'top-0 bottom-0 -right-2 w-4 cursor-col-resize': position === 'left',
             'top-0 bottom-0 -left-2 w-4 cursor-col-resize': position === 'right',
             'left-0 right-0 -bottom-2 h-4 cursor-row-resize': position === 'top',
