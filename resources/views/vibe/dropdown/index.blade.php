@@ -1,41 +1,12 @@
 @blaze(fold: true)
 
 @props([
-    'label' => '',
-    'align' => 'right',
-    'width' => '48',
-    'contentClasses' => 'p-1 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100',
-    'variant' => 'outline',
-    'size' => 'md',
-    'icon' => true,
     'keyboard' => false,
 ])
 
-@php
-    $alignmentClasses = match ($align) {
-        'left' => 'origin-top-left left-0',
-        'top' => 'origin-top',
-        'right', 'default' => 'origin-top-right right-0',
-    };
-
-    $widthClasses = match ((string) $width) {
-        '48', 'xs' => 'w-48',
-        '56' => 'w-56',
-        '64', 'sm' => 'w-64',
-        '72' => 'w-72',
-        '80', 'md' => 'w-80',
-        '96', 'lg' => 'w-96',
-        'xl' => 'w-[28rem]',
-        '2xl' => 'w-[32rem]',
-        'min' => 'min-w-min',
-        'full' => 'w-full',
-        default => str_starts_with((string) $width, 'w-') || str_starts_with((string) $width, 'max-w-') ? (string) $width : "w-{$width}",
-    };
-@endphp
-
-<div class="relative inline-block text-left" x-data="{ 
+<div {{ $attributes->twMerge(['class' => 'relative inline-block text-left']) }} x-data="{
     open: false,
-    align: @js($align),
+    align: 'right',
     init() {
         this.$watch('open', value => {
             if (value) {
@@ -50,19 +21,19 @@
     adjustPosition() {
         if (!this.$refs.menuContainer) return;
         let menu = this.$refs.menuContainer.parentElement; // The absolute wrapper
-        
+
         // Remove dynamic classes
         menu.classList.remove('left-0', 'right-0', 'origin-top-left', 'origin-top-right');
-        
+
         // Set default based on align prop
         if (this.align === 'left') {
             menu.classList.add('left-0', 'origin-top-left');
         } else {
             menu.classList.add('right-0', 'origin-top-right');
         }
-        
+
         let rect = menu.getBoundingClientRect();
-        
+
         if (this.align === 'left') {
             if (rect.right > window.innerWidth) {
                 menu.classList.remove('left-0', 'origin-top-left');
@@ -95,48 +66,21 @@
         if (currentIndex === -1) currentIndex = items.length;
         let nextIndex = Math.max(currentIndex - 1, 0);
         if (items[nextIndex]) items[nextIndex].focus();
-}
-}" 
-@if($keyboard) 
-    @keydown.escape.window="close()" 
+    }
+}" @if ($keyboard)
+    @keydown.escape.window="close()"
     @keydown.up.window="focusPrevious($event)"
     @keydown.down.window="focusNext($event)"
-@endif 
-@click.outside="close()" 
-@resize.window="open ? adjustPosition() : null"
-{{ $attributes }}>
-    
-    @if ($label || isset($trigger))
-        <div @click="toggle()">
-            @if (isset($trigger))
-                {{ $trigger }}
-            @else
-                <vibe:button :variant="$variant" :size="$size" type="button" class="w-full justify-between gap-1.5" aria-haspopup="true" x-bind:aria-expanded="open">
-                    {{ $label }}
-                    @if($icon)
-                        <svg class="-mr-1 h-5 w-5 opacity-70" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-                        </svg>
-                    @endif
-                </vibe:button>
-            @endif
+    @endif
+    @click.outside="close()"
+    @resize.window="open ? adjustPosition() : null">
+
+    @if (isset($trigger))
+        <div @click="toggle()" class="cursor-pointer inline-block">
+            {{ $trigger }}
         </div>
 
-        <div x-show="open"
-                x-transition:enter="transition ease-out duration-100"
-                x-transition:enter-start="transform opacity-0 scale-95"
-                x-transition:enter-end="transform opacity-100 scale-100"
-                x-transition:leave="transition ease-in duration-75"
-                x-transition:leave-start="transform opacity-100 scale-100"
-                x-transition:leave-end="transform opacity-0 scale-95"
-                class="absolute z-50 mt-2 {{ $widthClasses }} rounded-md shadow-lg {{ $alignmentClasses }}"
-                style="display: none;"
-                @click="close()"
-                >
-            <div x-ref="menuContainer" class="rounded-md shadow-sm {{ $contentClasses }}" role="menu" aria-orientation="vertical" tabindex="-1">
-                {{ $slot }}
-            </div>
-        </div>
+        {{ $slot }}
     @else
         {{ $slot }}
     @endif
