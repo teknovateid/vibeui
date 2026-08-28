@@ -102,27 +102,29 @@
         try {
             var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
             var stored = localStorage.getItem(key);
-            if (stored) {
+            var isActive = {{ $active ? 'true' : 'false' }};
+            var defaultOpen = {{ ($active || $open) ? 'true' : 'false' }};
+            var savedOpen = defaultOpen;
+
+            if (stored && !isActive) {
                 var data = JSON.parse(stored);
                 if (Array.isArray(data)) {
                     var navEl = document.getElementById('{{ $gridId }}')?.closest('nav');
                     var navId = navEl ? (navEl.dataset.navId || navEl.id) : 'sidebar-menu';
                     var navItem = data.find(i => i.id === navId);
                     if (navItem && navItem.labels && navItem.labels['{{ $labelId }}'] !== undefined) {
-                        var saved = navItem.labels['{{ $labelId }}'];
-                        if (saved === false && !{{ $active ? 'true' : 'false' }}) {
-                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '0fr';
-                            var chevron = document.getElementById('{{ $chevronId }}');
-                            if (chevron) chevron.style.transform = 'rotate(-90deg)';
-                        } else if (saved === true) {
-                            document.getElementById('{{ $gridId }}').style.gridTemplateRows = '1fr';
-                            var chevron = document.getElementById('{{ $chevronId }}');
-                            if (chevron) chevron.style.transform = 'none';
-                        }
+                        savedOpen = navItem.labels['{{ $labelId }}'];
                     }
                 }
             }
+
+            // Always apply correct state immediately — prevents FOUC for both open AND closed
+            var grid = document.getElementById('{{ $gridId }}');
+            var chevron = document.getElementById('{{ $chevronId }}');
+            if (grid) grid.style.gridTemplateRows = savedOpen ? '1fr' : '0fr';
+            if (chevron) chevron.style.transform = savedOpen ? 'none' : 'rotate(-90deg)';
         } catch(e) {}
     })();
 </script>
 @endif
+

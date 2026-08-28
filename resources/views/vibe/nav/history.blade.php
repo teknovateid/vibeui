@@ -116,7 +116,7 @@
                     <a :href="item.url"
                        @click.prevent="if(window.Livewire && window.Livewire.navigate) { window.Livewire.navigate(item.url) } else { window.location.href = item.url }"
                        x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'"
-                       class="flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item transition-colors duration-150 cursor-pointer group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible"
+                       class="flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item cursor-pointer group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible"
                        :class="isCurrentPage(item.url) ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50'">
                         {{-- x-html tunggal dengan fallback — tidak ada x-if flicker --}}
                         <span class="shrink-0 flex items-center justify-center size-5 text-vibe-500 group-hover/nav-item:text-vibe-900 dark:text-vibe-400 dark:group-hover/nav-item:text-vibe-200"

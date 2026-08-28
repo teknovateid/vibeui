@@ -20,7 +20,12 @@
                 <x-partials.sidebar-menu />
             </vibe:sheet.body>
 
-            <vibe:sheet.footer class="items-center flex justify-center px-3 border-none">
+            <vibe:sheet.footer>
+
+                <vibe:nav id="sidebar-footer-nav" {{ $attributes->twMerge(['class' => 'gap-1 space-y-4']) }}>
+                    <vibe:nav.history title="RECENTLY VISITED" persist class="border-b max-h-30 overflow-y-auto hide-scroll border-vibe-200 dark:border-vibe-800" />
+                </vibe:nav>
+
                 <vibe:dropdown keyboard class="w-full">
                     <x-slot:trigger>
                         <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-vibe-200 dark:bg-vibe-800 border border-vibe-300 dark:border-vibe-700 hover:bg-vibe-300/60 dark:hover:bg-vibe-700/60 group cursor-pointer minified:p-0 minified:border-none">
@@ -98,7 +103,7 @@
                             Site settings
                         </vibe:dropdown.item>
 
-                        
+
                         <vibe:dropdown.item class="gap-3 flex w-full justify-between items-center" x-data="{
                             isDark: document.documentElement.classList.contains('dark'),
                             toggleTheme() {
