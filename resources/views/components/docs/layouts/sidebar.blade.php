@@ -1,7 +1,7 @@
 @props(['title' => config('app.name')])
 <x-docs.layouts.base :title="$title">
-    <div class="flex h-screen overflow-hidden">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
+    <div class="flex h-screen overflow-hidden relative">
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center px-3 py-2.5 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-vibe-200 dark:bg-vibe-800 font-bold text-xl">
