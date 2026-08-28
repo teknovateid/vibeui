@@ -33,22 +33,20 @@
         pinned: pinned,
         init() {
             this.$nextTick(() => {
+                let container = this.$el.querySelector('[data-pinned-container]');
+                if (!container && !this.pinnable) return;
+
                 // syncValidPinned may prune stale IDs — run it first
                 let prevCount = this.pinned.length;
                 this.syncValidPinned();
                 let wasPruned = this.pinned.length !== prevCount;
 
-                let nav = document.getElementById('{{ $navId }}');
-                let container = nav?.querySelector('[data-pinned-container]');
-
                 // If anti-FOUC script already populated items correctly AND no IDs were pruned,
                 // skip _movePinnedItems() to avoid the remove+re-add FOUC flash.
-                // The anti-FOUC script sets data-fouc-populated with the count it inserted.
                 let foucCount = container ? parseInt(container.dataset.foucPopulated ?? '-1') : -1;
                 let alreadyCorrect = !wasPruned && foucCount === this.pinned.length;
 
                 if (alreadyCorrect) {
-                    // Items already correct — just ensure visibility
                     if (container) container.style.display = this.pinned.length > 0 ? '' : 'none';
                 } else {
                     this._movePinnedItems();
@@ -57,9 +55,7 @@
         },
 
         syncValidPinned() {
-            let nav = document.getElementById('{{ $navId }}');
-            if (!nav) return;
-            let allPinnable = Array.from(nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])'));
+            let allPinnable = Array.from(this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])'));
             let validIds = allPinnable.map(e => e.dataset.navPinId);
             let filtered = this.pinned.filter(id => validIds.includes(id));
             if (filtered.length !== this.pinned.length) {
@@ -107,10 +103,7 @@
             return this.pinned.includes(id);
         },
         _movePinnedItems() {
-            let nav = document.getElementById('{{ $navId }}');
-            if (!nav) return;
-            
-            let container = nav.querySelector('[data-pinned-container]');
+            let container = this.$el.querySelector('[data-pinned-container]');
             if (!container) return;
 
             let pinnedWrapper = container.querySelector('[data-pinned-items]');
@@ -120,7 +113,7 @@
             pinnedWrapper.querySelectorAll('[data-pinned-shortcut-for]').forEach(el => el.remove());
 
             // Build shortcuts for currently pinned items that exist in DOM
-            let allPinnable = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
+            let allPinnable = this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
             let actualCount = 0;
             this.pinned.forEach(id => {
                 let el = Array.from(allPinnable).find(e => e.dataset.navPinId === id);
@@ -174,20 +167,26 @@
 
         (function() {
             try {
+                let scriptEl = document.currentScript;
+                let nav = scriptEl ? scriptEl.closest('nav') : document.getElementById('{{ $navId }}');
+                if (!nav) return;
+
+                let container = nav.querySelector('[data-pinned-container]');
+                let pinnableNav = {{ $pinnable ? 'true' : 'false' }};
+                if (!container && !pinnableNav) return;
+
                 let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
                 let stored = localStorage.getItem(key);
                 let pinned = [];
+                let navId = nav.dataset.navId || nav.id || '{{ $navId }}';
                 if (stored) {
                     let data = JSON.parse(stored);
                     if (Array.isArray(data)) {
-                        let item = data.find(i => i.id === '{{ $navId }}');
+                        let item = data.find(i => i.id === navId);
                         if (item) pinned = item.pinned || [];
                     }
                 }
-                let nav = document.getElementById('{{ $navId }}');
-                if (!nav) return;
                 
-                let container = nav.querySelector('[data-pinned-container]');
                 let allPinnables = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
                 let validIds = Array.from(allPinnables).map(e => e.dataset.navPinId);
                 let validPinned = pinned.filter(id => validIds.includes(id));
@@ -202,7 +201,6 @@
                 }
 
                 // 2. Pre-set pin button state using data-pinned attribute
-                let pinnableNav = {{ $pinnable ? 'true' : 'false' }};
                 allPinnables.forEach(el => {
                     let btn = el.querySelector('[data-nav-pin-btn]');
                     if (btn) {
@@ -223,6 +221,9 @@
 
                 let pinnedWrapper = container.querySelector('[data-pinned-items]');
                 if (!pinnedWrapper) return;
+
+                // Clear any existing shortcuts first to guarantee no duplicate
+                pinnedWrapper.querySelectorAll('[data-pinned-shortcut-for]').forEach(el => el.remove());
 
                 let insertedCount = 0;
                 validPinned.forEach(id => {

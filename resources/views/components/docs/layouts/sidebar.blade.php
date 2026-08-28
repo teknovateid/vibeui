@@ -16,15 +16,14 @@
                 </vibe:button>
             </vibe:sheet.header>
 
-            <vibe:sheet.body class="px-3 overflow-hidden">
+            <vibe:sheet.body class="px-3 overflow-x-hidden">
                 <x-docs.partials.sidebar-menu />
             </vibe:sheet.body>
 
             <vibe:sheet.footer class="border-none">
 
-                <vibe:nav {{ $attributes->twMerge(['class' => 'gap-1 mb-4']) }} pinnable maxpin="5">
-                    <vibe:nav.pinned title="PINNED" persist class="border-b border-vibe-200 dark:border-vibe-800" />
-                    <vibe:nav.history title="RECENTLY VISITED" persist class="border-b max-h-30 overflow-y-auto hide-scroll border-vibe-200 dark:border-vibe-800" />
+                <vibe:nav id="sidebar-footer-nav" {{ $attributes->twMerge(['class' => 'gap-1 mb-4']) }}>
+                    <vibe:nav.history title="RECENTLY VISITED" persist class="max-h-30 overflow-y-auto hide-scroll" />
                 </vibe:nav>
 
                 <vibe:dropdown keyboard class="w-full">
