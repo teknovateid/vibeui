@@ -9,3 +9,23 @@
 @custom-variant select (&:where(:hover, :focus, :focus-visible));
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+[data-nav-pin-btn][data-pinned="true"] {
+    opacity: 1 !important;
+}
+
+[data-nav-pin-btn][data-pinned="true"] .pin-icon-pinned {
+    display: block !important;
+}
+
+[data-nav-pin-btn][data-pinned="true"] .pin-icon-unpinned {
+    display: none !important;
+}
+
+[data-nav-pin-btn]:not([data-pinned="true"]) .pin-icon-pinned {
+    display: none !important;
+}
+
+[data-nav-pin-btn]:not([data-pinned="true"]) .pin-icon-unpinned {
+    display: block !important;
+}
