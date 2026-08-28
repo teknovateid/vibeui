@@ -1,11 +1,11 @@
-@props(['title' => config('app.name', 'Vibe UI')])
-<x-layouts.base :title="$title">
+@props(['heading' => config('app.name', 'Vibe UI')])
+<x-layouts.base>
     <div class="flex min-h-screen overflow-hidden">
         <div class="flex flex-col flex-1 w-full">
             <section class="bg-white dark:bg-vibe-900 border-b border-vibe-200 dark:border-vibe-800">
                 <vibe:header class="border-none max-w-400 mx-auto">
                     <vibe:header.heading>
-                        {{ $title }}
+                        {{ $heading }}
                     </vibe:header.heading>
 
                     <vibe:header.actions>

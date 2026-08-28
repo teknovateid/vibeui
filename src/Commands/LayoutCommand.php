@@ -111,7 +111,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 $content = str_replace('[path]', $path, File::get($templateFile));
                 $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
                 
-                $wrappedContent = "<x-{$path}.layouts.{$chosenLayout} title=\"{$titleName}\">\n" . $content . "\n</x-{$path}.layouts.{$chosenLayout}>\n";
+                $wrappedContent = "<x-{$path}.layouts.{$chosenLayout}>\n    <vibe:seo title=\"{$titleName}\" />\n" . $content . "\n</x-{$path}.layouts.{$chosenLayout}>\n";
 
                 // Ensure directory exists
                 $dir = dirname($destView);
