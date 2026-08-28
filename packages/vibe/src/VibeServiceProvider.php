@@ -95,6 +95,38 @@ class VibeServiceProvider extends ServiceProvider
             ?>";
         });
 
+        // Register custom @vibeStyles directive for theme init (Anti-FOUC) and global configuration in <head>
+        Blade::directive('vibeStyles', function () {
+            return "<?php
+                \$prefix = config('vibe.prefix', 'vibe');
+                echo '<script>
+                    (function() {
+                        window.VIBE_PREFIX = \'' . \$prefix . '\';
+                        try {
+                            var k = window.VIBE_PREFIX + \'-theme\';
+                            var s = localStorage.getItem(k);
+                            var d = false;
+                            if (s) {
+                                if (s === \'dark\') d = true;
+                                else if (s === \'system\') d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
+                                else {
+                                    var c = JSON.parse(s);
+                                    d = c.mode === \'dark\' || (c.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
+                                }
+                            } else {
+                                d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
+                            }
+                            if (d) {
+                                document.documentElement.classList.add(\'dark\');
+                            } else {
+                                document.documentElement.classList.remove(\'dark\');
+                            }
+                        } catch (e) {}
+                    })();
+                </script>';
+            ?>";
+        });
+
         // Register the <vibe:> tag parser BEFORE Blaze hooks in.
         // Using direct prepareStringsForCompilationUsing (no booted wrapper)
         // ensures our callback is index-0 in the precompiler queue.

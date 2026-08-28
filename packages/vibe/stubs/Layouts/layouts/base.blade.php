@@ -5,11 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $title }}</title>
-    <script>
-        window.VIBE_PREFIX = '{{ config("vibe.prefix", "vibe") }}';
-    </script>
-    <script src="{{ asset('vibe/theme-init.js') }}" data-navigate-track="reload"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vibeStyles
     @livewireStyles
     @stack('head')
 </head>
