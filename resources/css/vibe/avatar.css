@@ -1,7 +1,0 @@
-@layer components {
-    .vibe-avatar-group > [data-avatar] {
-        width: var(--avatar-dim) !important;
-        height: var(--avatar-dim) !important;
-        font-size: var(--avatar-font) !important;
-    }
-}

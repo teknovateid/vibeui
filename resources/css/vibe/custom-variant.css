@@ -5,3 +5,7 @@
 @custom-variant sidebar-minified (:where(:has(#sidebar-menu[data-state="minified"])) &);
 @custom-variant sidebar-collapsed (:where(:has(#sidebar-menu[data-state="collapsed"])) &);
 @custom-variant sidebar-expanded (:where(:has(#sidebar-menu[data-state="expanded"])) &);
+
+@custom-variant select (&:where(:hover, :focus, :focus-visible));
+
+@custom-variant dark (&:where(.dark, .dark *));
