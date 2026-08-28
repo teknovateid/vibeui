@@ -27,10 +27,11 @@
     };
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
+    $hasCustomXData = $attributes->has('x-data');
 @endphp
 
 @if($href)
-    <a wire:navigate x-data href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</a>
+    <a wire:navigate href="{{ $href }}" @if(!$hasCustomXData) x-data @endif {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</a>
 @else
-    <button x-data type="{{ $type }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
+    <button type="{{ $type }}" @if(!$hasCustomXData) x-data @endif {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</button>
 @endif

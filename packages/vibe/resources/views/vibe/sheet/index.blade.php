@@ -68,7 +68,7 @@
         }
     }
 
-    $overflowClasses = 'group-data-[state=minified]/sheet:overflow-visible';
+    $overflowClasses = 'overflow-visible data-[state=collapsed]:overflow-hidden';
 
     $innerStyle = $behavior !== 'minify'
         ? match ($position) {
@@ -353,23 +353,25 @@
 
     @if ($layout === 'relative')
         {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0 --}}
-        <div data-sheet-content class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col w-full h-full min-w-0 max-h-full min-h-0">
-            <div class="flex-1 overflow-hidden group-data-[state=minified]/sheet:overflow-visible flex flex-col h-full min-h-0"
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0"
+             :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full"
+                 :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
-                     : ''"
-                 :class="{ 'w-max min-w-full': behavior === 'minify' && state === 'minified' }">
+                     : ''">
                 {{ $slot }}
             </div>
         </div>
     @else
         {{-- Fixed/absolute/sticky layout: use absolute clip-wrapper so resize handle/toggle isn't clipped --}}
         {{-- and content anchors to the correct edge for proper slide animation --}}
-        <div data-sheet-content class="absolute inset-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible pointer-events-none">
-            <div class="absolute overflow-hidden flex flex-col pointer-events-auto group-data-[state=minified]/sheet:overflow-visible"
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col"
+             :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full"
+                 :class="{ 'overflow-hidden': state === 'collapsed', 'overflow-visible': state !== 'collapsed' }"
                  style="{{ $innerStyle }}"
-                 :class="{ 'w-max min-w-full': behavior === 'minify' && state === 'minified' }"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
                          ? `top: 0; right: 0; bottom: 0; width: ${size}px`

@@ -6,7 +6,6 @@
 
 <div {{ $attributes->twMerge(['class' => 'relative inline-block text-left']) }} x-data="{
     open: false,
-    align: 'right',
     init() {
         this.$watch('open', value => {
             if (value) {
@@ -20,30 +19,16 @@
     close() { this.open = false },
     adjustPosition() {
         if (!this.$refs.menuContainer) return;
-        let menu = this.$refs.menuContainer.parentElement; // The absolute wrapper
-
-        // Remove dynamic classes
-        menu.classList.remove('left-0', 'right-0', 'origin-top-left', 'origin-top-right');
-
-        // Set default based on align prop
-        if (this.align === 'left') {
-            menu.classList.add('left-0', 'origin-top-left');
-        } else {
-            menu.classList.add('right-0', 'origin-top-right');
-        }
-
+        let menu = this.$refs.menuContainer.parentElement;
         let rect = menu.getBoundingClientRect();
+        let isBottomFull = menu.classList.contains('bottom-full');
 
-        if (this.align === 'left') {
-            if (rect.right > window.innerWidth) {
-                menu.classList.remove('left-0', 'origin-top-left');
-                menu.classList.add('right-0', 'origin-top-right');
-            }
-        } else {
-            if (rect.left < 0) {
-                menu.classList.remove('right-0', 'origin-top-right');
-                menu.classList.add('left-0', 'origin-top-left');
-            }
+        if (rect.right > window.innerWidth) {
+            menu.classList.remove('left-0', 'origin-top-left', 'origin-bottom-left');
+            menu.classList.add('right-0', isBottomFull ? 'origin-bottom-right' : 'origin-top-right');
+        } else if (rect.left < 0) {
+            menu.classList.remove('right-0', 'origin-top-right', 'origin-bottom-right');
+            menu.classList.add('left-0', isBottomFull ? 'origin-bottom-left' : 'origin-top-left');
         }
     },
     getVisibleItems() {
@@ -76,7 +61,7 @@
     @resize.window="open ? adjustPosition() : null">
 
     @if (isset($trigger))
-        <div @click="toggle()" class="cursor-pointer inline-block">
+        <div @click="toggle()" class="cursor-pointer inline-block w-full">
             {{ $trigger }}
         </div>
 
