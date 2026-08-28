@@ -23,13 +23,13 @@
             <vibe:sheet.footer class="items-center flex justify-center px-3 border-none">
                 <vibe:dropdown keyboard class="w-full">
                     <x-slot:trigger>
-                        <div class="w-full flex items-center justify-between p-2 rounded-lg border border-vibe-300/60 dark:border-vibe-800 hover:bg-vibe-300/60 dark:hover:bg-vibe-800/80 transition-all duration-200 group cursor-pointer minified:p-0 minified:rounded-full minified:size-full minified:justify-center minified:border-none">
+                        <div class="w-full flex items-center justify-between p-3 rounded-lg bg-vibe-200 dark:bg-vibe-800 border border-vibe-300 dark:border-vibe-700 hover:bg-vibe-300/60 dark:hover:bg-vibe-700/60 group cursor-pointer minified:p-0 minified:rounded-full minified:size-full minified:justify-center minified:border-none">
                             <div class="flex items-center gap-2 min-w-0">
                                 <div class="relative flex shrink-0">
                                     <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" alt="Masum Parvej" class="rounded-full" />
                                     <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-vibe-50 dark:ring-vibe-950"></span>
                                 </div>
-                                
+
                                 <div class="flex flex-col text-left min-w-0 minified:hidden ">
                                     <span class="text-xs font-semibold text-vibe-900 dark:text-vibe-100 truncate leading-tight">Masum Parvej</span>
                                     <span class="text-[10px] text-vibe-700 dark:text-vibe-300 truncate leading-tight mt-0.5">masum@hugeicons.com</span>
@@ -39,7 +39,7 @@
                             <div class="shrink-0 minified:hidden ml-1">
                                 <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-500/30">
                                     <svg class="size-2.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                                     </svg>
                                     PRO
                                 </span>
@@ -47,117 +47,108 @@
                         </div>
                     </x-slot:trigger>
 
-                    <vibe:dropdown.body align="top" width="64" class="border border-vibe-200 dark:border-vibe-800 flex flex-col gap-1">
-                        <!-- Navigation Links -->
+                    <vibe:dropdown.body align="top" width="64">
                         <div class="flex flex-col gap-0.5">
-                            <!-- Home -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
+                            <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                    <polyline points="9 22 9 12 15 12 15 22" />
                                 </svg>
                                 Home
                             </vibe:dropdown.item>
 
                             <!-- Pages -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
+                            <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
-                                    <polyline points="14 2 14 8 20 8"/>
+                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                                    <polyline points="14 2 14 8 20 8" />
                                 </svg>
                                 Pages
                             </vibe:dropdown.item>
 
                             <!-- Active stream -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-900 dark:text-vibe-100 bg-vibe-200/50 dark:bg-vibe-800/50 hover:bg-vibe-200/70 dark:hover:bg-vibe-800/70 transition-colors">
+                            <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-vibe-500 dark:text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m22 8-6 4 6 4V8Z"/>
-                                    <rect width="14" height="12" x="2" y="6" rx="2" ry="2"/>
+                                    <path d="m22 8-6 4 6 4V8Z" />
+                                    <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
                                 </svg>
                                 Active stream
                             </vibe:dropdown.item>
 
                             <!-- People -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
+                            <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                                    <circle cx="9" cy="7" r="4"/>
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                    <circle cx="9" cy="7" r="4" />
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                 </svg>
                                 People
                             </vibe:dropdown.item>
                         </div>
 
-                        <vibe:dropdown.divider class="my-1.5 opacity-60" />
+                        <vibe:dropdown.divider />
 
-                        <!-- Preferences & Settings -->
-                        <div class="flex flex-col gap-0.5">
-                            <!-- Site settings -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
+                        <!-- Site settings -->
+                        <vibe:dropdown.item href="#" class="gap-3">
+                            <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            Site settings
+                        </vibe:dropdown.item>
+
+                        
+                        <vibe:dropdown.item class="gap-3 flex w-full justify-between items-center" x-data="{
+                            isDark: document.documentElement.classList.contains('dark'),
+                            toggleTheme() {
+                                window.VibeTheme ? window.VibeTheme.toggle() : document.documentElement.classList.toggle('dark');
+                                this.isDark = document.documentElement.classList.contains('dark');
+                            }
+                        }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')" @click.stop="toggleTheme()">
+                            <div class="flex items-center gap-3">
                                 <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                                 </svg>
-                                Site settings
-                            </vibe:dropdown.item>
-
-                            <!-- Dark mode with interactive toggle switch -->
-                            <div class="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 transition-colors cursor-pointer select-none"
-                                x-data="{ 
-                                    isDark: document.documentElement.classList.contains('dark'),
-                                    toggleTheme() {
-                                        window.VibeTheme ? window.VibeTheme.toggle() : document.documentElement.classList.toggle('dark');
-                                        this.isDark = document.documentElement.classList.contains('dark');
-                                    }
-                                }"
-                                @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')"
-                                @click.stop="toggleTheme()">
-                                <div class="flex items-center gap-3">
-                                    <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-                                    </svg>
-                                    <span>Dark mode</span>
-                                </div>
-                                
-                                <!-- Toggle Switch UI -->
-                                <div class="w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 ease-in-out relative flex items-center"
-                                    :class="isDark ? 'bg-vibe-950 dark:bg-vibe-700' : 'bg-vibe-300 dark:bg-vibe-700'">
-                                    <div class="size-3.5 rounded-full bg-white dark:bg-vibe-100 shadow-sm transition-transform duration-200 ease-in-out"
-                                        :class="isDark ? 'translate-x-3.5' : 'translate-x-0'"></div>
-                                </div>
+                                <span>Dark mode</span>
                             </div>
 
-                            <!-- My profile & preferences -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
-                                <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <circle cx="12" cy="10" r="3"/>
-                                    <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
-                                </svg>
-                                My profile & preferences
-                            </vibe:dropdown.item>
+                            <!-- Toggle Switch UI -->
+                            <div class="w-8 h-4.5 rounded-full p-0.5 transition-colors duration-200 ease-in-out relative flex items-center" :class="isDark ? 'bg-vibe-950 dark:bg-vibe-700' : 'bg-vibe-300 dark:bg-vibe-700'">
+                                <div class="size-3.5 rounded-full bg-white dark:bg-vibe-100 shadow-sm transition-transform duration-200 ease-in-out" :class="isDark ? 'translate-x-3.5' : 'translate-x-0'"></div>
+                            </div>
+                        </vibe:dropdown.item>
 
-                            <!-- Help center -->
-                            <vibe:dropdown.item href="#" class="flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-medium text-vibe-700 dark:text-vibe-300 hover:bg-vibe-200/60 dark:hover:bg-vibe-800/60 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors">
-                                <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                                    <path d="M12 8v3"/>
-                                    <circle cx="12" cy="14" r="0.5" fill="currentColor"/>
-                                </svg>
-                                Help center
-                            </vibe:dropdown.item>
-                        </div>
+                        <!-- My profile & preferences -->
+                        <vibe:dropdown.item href="#" class="gap-3">
+                            <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <circle cx="12" cy="10" r="3" />
+                                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                            </svg>
+                            My profile & preferences
+                        </vibe:dropdown.item>
 
-                        <!-- Footer Section: Feedback & Logout -->
+                        <!-- Help center -->
+                        <vibe:dropdown.item href="#" class="gap-3">
+                            <svg class="size-4 text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                <path d="M12 8v3" />
+                                <circle cx="12" cy="14" r="0.5" fill="currentColor" />
+                            </svg>
+                            Help center
+                        </vibe:dropdown.item>
+
+
+
                         <div class="pt-2 mt-1 border-t border-vibe-200 dark:border-vibe-800 flex items-center justify-between px-2">
-                            <button type="button" class="text-xs text-vibe-500 hover:text-vibe-900 dark:hover:text-vibe-100 transition-colors cursor-pointer font-medium">
+                            <vibe:button type="button" variant="ghost" size="sm">
                                 Feedback
-                            </button>
+                            </vibe:button>
 
-                            <button type="button" class="px-3 py-1.5 rounded-xl bg-vibe-200 dark:bg-vibe-800 text-xs font-semibold text-vibe-900 dark:text-vibe-100 hover:bg-red-500 hover:text-white dark:hover:bg-red-600 transition-all duration-150 cursor-pointer shadow-xs">
+                            <vibe:button type="button" class="rounded-full select:bg-red-100 dark:select:bg-red-900/30 select:text-red-500!" variant="ghost" size="sm">
                                 Logout
-                            </button>
+                            </vibe:button>
                         </div>
                     </vibe:dropdown.body>
                 </vibe:dropdown>
@@ -180,23 +171,18 @@
 
                 <vibe:header.actions class="items-center h-full relative">
 
-                    <vibe:button variant="ghost" class="p-2 relative rounded-full" 
-                        x-data="{ 
-                            isFullscreen: false, 
-                            toggleFullscreen() { 
-                                if (!document.fullscreenElement) { 
-                                    document.documentElement.requestFullscreen().catch(err => console.error(err)); 
-                                } else { 
-                                    if (document.exitFullscreen) { 
-                                        document.exitFullscreen().catch(err => console.error(err)); 
-                                    } 
-                                } 
-                            } 
-                        }" 
-                        @fullscreenchange.window="isFullscreen = !!document.fullscreenElement"
-                        @click="toggleFullscreen()"
-                        aria-label="Toggle fullscreen"
-                        title="Toggle Fullscreen">
+                    <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
+                        isFullscreen: false,
+                        toggleFullscreen() {
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(err => console.error(err));
+                            } else {
+                                if (document.exitFullscreen) {
+                                    document.exitFullscreen().catch(err => console.error(err));
+                                }
+                            }
+                        }
+                    }" @fullscreenchange.window="isFullscreen = !!document.fullscreenElement" @click="toggleFullscreen()" aria-label="Toggle fullscreen" title="Toggle Fullscreen">
                         <svg x-show="!isFullscreen" class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 3h6v6" />
                             <path d="M9 21H3v-6" />

@@ -1,4 +1,31 @@
-@import './alert.css';
-@import './avatar.css';
-@import './breadcrumb.css';
-@import './sheet.css';
+@layer components {
+    .vibe-alert-start {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    .vibe-alert-start.pos-top-center {
+        transform: translateY(-2rem) scale(0.95);
+    }
+    .vibe-alert-start.pos-bottom-center {
+        transform: translateY(2rem) scale(0.95);
+    }
+    .vibe-alert-start.pos-top-left,
+    .vibe-alert-start.pos-bottom-left {
+        transform: translateX(-2rem) scale(0.95);
+    }
+    .vibe-alert-start.pos-top-right,
+    .vibe-alert-start.pos-bottom-right {
+        transform: translateX(2rem) scale(0.95);
+    }
+
+    .vibe-avatar-group>[data-avatar] {
+        width: var(--avatar-dim) !important;
+        height: var(--avatar-dim) !important;
+        font-size: var(--avatar-font) !important;
+    }
+
+
+    .vibe-breadcrumb>li:first-child>.breadcrumb-separator {
+        display: none;
+    }
+}

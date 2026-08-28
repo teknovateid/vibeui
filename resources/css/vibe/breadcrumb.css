@@ -1,5 +1,0 @@
-@layer components {
-    .vibe-breadcrumb>li:first-child>.breadcrumb-separator {
-        display: none;
-    }
-}

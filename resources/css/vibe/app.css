@@ -1,5 +1,5 @@
 @import './vibe.css';
-@custom-variant dark (&:where(.dark, .dark *));
+@import './custom-variant.css';
 
 @theme {
     --color-vibe-50: #f9fafa;

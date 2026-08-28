@@ -1,7 +1,0 @@
-@layer components {
-    .vibe-alert-start { opacity: 0; transform: scale(0.95); }
-    .vibe-alert-start.pos-top-center { transform: translateY(-2rem) scale(0.95); }
-    .vibe-alert-start.pos-bottom-center { transform: translateY(2rem) scale(0.95); }
-    .vibe-alert-start.pos-top-left, .vibe-alert-start.pos-bottom-left { transform: translateX(-2rem) scale(0.95); }
-    .vibe-alert-start.pos-top-right, .vibe-alert-start.pos-bottom-right { transform: translateX(2rem) scale(0.95); }
-}
