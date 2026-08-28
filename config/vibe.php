@@ -52,4 +52,36 @@ return [
             'ms_tile_color' => '#0a0b0a',
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vibe Page History Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Pengaturan untuk pencatatan riwayat halaman yang diakses (Local Storage).
+    | Riwayat disimpan secara penuh di LocalStorage, dan `display_limit`
+    | digunakan sebagai batas default saat ditampilkan ke komponen UI.
+    |
+    */
+    'history' => [
+        'enabled' => env('VIBE_HISTORY_ENABLED', true),
+        'auto_track' => true,
+        'display_limit' => 10,
+        
+        /*
+        | Metode / Strategi saat halaman yang sama dikunjungi kembali:
+        | - 'update_timestamp' : Update waktu akses & geser ke posisi paling atas (LIFO / MRU).
+        | - 'keep_position'    : Update waktu akses di tempat tanpa mengubah urutan list.
+        | - 'record_all'       : Selalu catat sebagai entri baru (full activity stream).
+        */
+        'method' => env('VIBE_HISTORY_METHOD', 'update_timestamp'),
+
+        'ignore_paths' => [
+            '/login',
+            '/logout',
+            '/register',
+            '/password/*',
+        ],
+    ],
 ];
+
