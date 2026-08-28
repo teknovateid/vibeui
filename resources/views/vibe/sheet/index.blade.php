@@ -401,7 +401,7 @@
                 default => '-right-3 top-4',
             };
         @endphp
-        <vibe:button @click="toggle()" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-vibe-400 hover:text-vibe-600 shadow-sm z-50 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
+        <vibe:button @click="toggle()" aria-label="Toggle sheet" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-vibe-400 hover:text-vibe-600 shadow-sm z-50 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
             '-right-3 top-4': position === 'left',
             '-left-3 top-4': position === 'right',
             '-bottom-3 left-1/2 -translate-x-1/2': position === 'top',

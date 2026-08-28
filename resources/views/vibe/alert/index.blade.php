@@ -6,8 +6,7 @@
     'timeout' => 3000,
     'sound' => false,
 ])
-
-
+    
 <div 
     x-data="{
         alerts: [],
