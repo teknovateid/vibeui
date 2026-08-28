@@ -25,7 +25,7 @@
     };
 @endphp
 
-<a wire:navigate href="{{ $href }}" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ strip_tags($slot) }}" data-pin-href="{{ $href }}" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
+<a wire:navigate href="{{ $href }}" @click="if ($event.target.closest('[data-nav-pin-btn]')) { $event.preventDefault(); $event.stopPropagation(); return false; }" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ strip_tags($slot) }}" data-pin-href="{{ $href }}" x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}>
 
     <!-- Icon -->
     @if (isset($icon))
@@ -55,33 +55,23 @@
                 data-pinned="false"
                 :data-pinned="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ? 'true' : 'false'"
                 x-show="(! (typeof isGroupChild !== 'undefined' && isGroupChild)) && ((typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }})" 
-                @click.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" 
+                @click.stop.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" 
                 class="p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors cursor-pointer text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400 data-[pinned=true]:text-vibe-900 dark:data-[pinned=true]:text-vibe-100 data-[pinned=true]:opacity-100" 
                 style="display:none" 
                 title="Pin"
             >
                 <!-- Pinned Icon -->
-                <svg class="size-3 pin-icon-pinned" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
+                <svg class="size-3 pin-icon-pinned pointer-events-none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
                     <path d="M0 0h16v16H0z" fill="none" />
                     <path fill="currentColor" d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479c-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A6 6 0 0 1 5 6.708V2.277a3 3 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354" />
                 </svg>
 
                 <!-- Unpinned Icon -->
-                <svg class="size-3 pin-icon-unpinned" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
+                <svg class="size-3 pin-icon-unpinned pointer-events-none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
                     <path d="M0 0h16v16H0z" fill="none" />
                     <path fill="currentColor" d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479c-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A6 6 0 0 1 5 6.708V2.277a3 3 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354m1.58 1.408l-.002-.001zm-.002-.001l.002.001A.5.5 0 0 1 6 2v5a.5.5 0 0 1-.276.447h-.002l-.012.007l-.054.03a5 5 0 0 0-.827.58c-.318.278-.585.596-.725.936h7.792c-.14-.34-.407-.658-.725-.936a5 5 0 0 0-.881-.61l-.012-.006h-.002A.5.5 0 0 1 10 7V2a.5.5 0 0 1 .295-.458a1.8 1.8 0 0 0 .351-.271c.08-.08.155-.17.214-.271H5.14q.091.15.214.271a1.8 1.8 0 0 0 .37.282" />
                 </svg>
             </div>
         </div>
-    </div>
-
-    <!-- Floating Tooltip when Minified (shown on hover only when minified) -->
-    <div class="hidden group-data-[state=minified]/sheet:flex opacity-0 group-hover/nav-item:opacity-100 pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap items-center gap-1.5 transition-opacity duration-150">
-        <span>{{ strip_tags($slot) }}</span>
-        @if ($badge)
-            <span class="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-semibold rounded {{ $badgeClasses }}">
-                {{ $badge }}
-            </span>
-        @endif
     </div>
 </a>
