@@ -32,12 +32,12 @@
                                 
                                 <div class="flex flex-col text-left min-w-0 minified:hidden ">
                                     <span class="text-xs font-semibold text-vibe-900 dark:text-vibe-100 truncate leading-tight">Masum Parvej</span>
-                                    <span class="text-[10px] text-vibe-500 dark:text-vibe-400 truncate leading-tight mt-0.5">masum@hugeicons.com</span>
+                                    <span class="text-[10px] text-vibe-700 dark:text-vibe-300 truncate leading-tight mt-0.5">masum@hugeicons.com</span>
                                 </div>
                             </div>
 
                             <div class="shrink-0 minified:hidden ml-1">
-                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-300/60 dark:border-emerald-500/30">
+                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-500/30">
                                     <svg class="size-2.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                         <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
                                     </svg>
