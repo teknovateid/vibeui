@@ -1,7 +1,7 @@
 <x-layouts.base>
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
-            <vibe:sheet.header class="flex items-center justify-between minified:justify-center px-3 py-2.5 border-none">
+            <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-vibe-200 dark:bg-vibe-800 font-bold text-xl shrink-0">
                     {{ substr(config('app.name'), 0, 1) }}
@@ -16,17 +16,17 @@
                 </vibe:button>
             </vibe:sheet.header>
 
-            <vibe:sheet.body class="px-3 overflow-x-hidden">
+            <vibe:sheet.body class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
                 <x-partials.sidebar-menu />
             </vibe:sheet.body>
 
-            <vibe:sheet.footer class="border-none">
+            <vibe:sheet.footer class="px-0 py-3">
 
-                <vibe:nav id="sidebar-footer-nav" {{ $attributes->twMerge(['class' => 'gap-1 mb-4']) }}>
-                    <vibe:nav.history title="RECENTLY VISITED" persist class="max-h-30 overflow-y-auto hide-scroll" />
+                <vibe:nav id="sidebar-footer-nav" {{ $attributes->twMerge(['class' => 'mb-1']) }}>
+                    <vibe:nav.history title="RECENTLY VISITED" persist class="max-h-30 pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar" />
                 </vibe:nav>
 
-                <vibe:dropdown keyboard class="w-full">
+                <vibe:dropdown keyboard class="w-full px-3 minified:px-0">
                     <x-slot:trigger>
                         <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-vibe-200 dark:bg-vibe-800 border border-vibe-300 dark:border-vibe-700 hover:bg-vibe-300/60 dark:hover:bg-vibe-700/60 group cursor-pointer minified:p-0 minified:border-none">
                             <div class="flex items-center gap-2 min-w-0">
@@ -162,8 +162,8 @@
         </vibe:sheet>
 
 
-        <div class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto">
-            <vibe:header class="bg-transparent! border-none!" size="sm" x-data>
+        <div class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar">
+            <vibe:header class="bg-transparent! border-none" size="sm" x-data>
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">

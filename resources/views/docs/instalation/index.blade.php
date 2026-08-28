@@ -6,7 +6,7 @@
     ]" />
 
     <div>
-        <vibe:card>
+        <vibe:card class="min-h-screen">
             <h1>Halo</h1>
             <p>
                 Vibe Ui siap membantu

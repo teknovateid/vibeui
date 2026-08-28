@@ -43,7 +43,6 @@
             var container = document.getElementById('{{ $historyId }}');
             var foucPopulated = container ? parseInt(container.dataset.foucPopulated ?? '-1') : -1;
 
-            // If anti-FOUC script already rendered the items, do NOT re-render on init → zero flicker!
             if (foucPopulated >= 0) {
                 this.itemCount = foucPopulated;
             } else {
@@ -74,18 +73,41 @@
                 try { return window.Alpine.store('vibeHistory')?.items?.length; } catch(e) { return 0; }
             }, () => { this.renderHistory(); });
         },
+        clearAllHistory() {
+            try {
+                var prefix = window.VIBE_PREFIX || 'vibe';
+                localStorage.removeItem(prefix + '-page-history');
+                if (window.Alpine && window.Alpine.store('vibeHistory')) {
+                    window.Alpine.store('vibeHistory').items = [];
+                }
+                this.renderHistory();
+            } catch(e) {}
+        },
         renderHistory() {
             try {
                 var prefix = window.VIBE_PREFIX || 'vibe';
                 var raw = localStorage.getItem(prefix + '-page-history');
                 var items = [];
                 if (raw) { var p = JSON.parse(raw); if (Array.isArray(p)) items = p; }
+
+                // Deduplicate items by URL
+                var seen = new Set();
+                items = items.filter(function(item) {
+                    if (!item || !item.url) return false;
+                    if (seen.has(item.url)) return false;
+                    seen.add(item.url);
+                    return true;
+                });
+
                 items = items.slice(0, this.maxHistory);
                 var wrapper = document.getElementById('{{ $itemsId }}');
                 var container = document.getElementById('{{ $historyId }}');
                 var currentUrl = window.location.pathname + window.location.search;
+                var self = this;
                 if (window.VibeHistoryBuilder && wrapper) {
-                    window.VibeHistoryBuilder.render(wrapper, items, currentUrl);
+                    window.VibeHistoryBuilder.render(wrapper, items, currentUrl, function() {
+                        self.renderHistory();
+                    });
                 }
                 this.itemCount = items.length;
                 if (container) {
@@ -99,20 +121,30 @@
     };
 })()">
     {{-- Label / Toggle Header --}}
-    <button type="button" @click="open = !open" class="minified:hidden! flex items-center gap-2 w-full py-1.5 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider hover:text-vibe-950 dark:text-vibe-300 dark:hover:text-vibe-100 transition-colors group/nav-label cursor-pointer select-none">
-        <svg id="{{ $chevronId }}" class="size-3" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5695 8.51192C19.839 8.82641 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.161 19.2999 8.19743 19.5695 8.51192Z" fill="currentColor" />
-        </svg>
-        <div class="flex items-center gap-1 justify-between w-full">
-            <span class="whitespace-nowrap">{{ $title }}</span>
-            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="font-normal normal-case tracking-normal text-vibe-400 mr-2"></span>
+    <div class="minified:hidden! flex items-center justify-between w-full py-1 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider dark:text-vibe-300 group/nav-label select-none">
+        <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-vibe-950 dark:hover:text-vibe-100 transition-colors cursor-pointer flex-1 min-w-0">
+            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5695 8.51192C19.839 8.82641 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.161 19.2999 8.19743 19.5695 8.51192Z" fill="currentColor" />
+            </svg>
+            <span class="whitespace-nowrap truncate">{{ $title }}</span>
+        </button>
+
+        <div class="flex items-center justify-end shrink-0 pr-2">
+            <!-- Trash icon (shown on hover) -->
+            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:flex items-center justify-center hover:text-red-500 p-0.5 rounded transition-colors cursor-pointer">
+                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                </svg>
+            </button>
+            <!-- Counter (hidden on hover) -->
+            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="group-hover/nav-label:hidden font-normal normal-case tracking-normal text-vibe-400 text-[10px]"></span>
         </div>
-    </button>
+    </div>
 
     {{-- Animated Grid Container --}}
     <div id="{{ $gridId }}" class="grid group-data-[state=minified]/sheet:grid-rows-[1fr]!" :class="ready ? 'transition-[grid-template-rows] duration-300 ease-in-out' : ''" style="grid-template-rows: {{ $open ? '1fr' : '0fr' }};" x-bind:style="`grid-template-rows: ${open ? '1fr' : '0fr'}`">
         <div class="overflow-hidden group-data-[state=minified]/sheet:overflow-visible min-h-0">
-            <div id="{{ $itemsId }}" class="flex flex-col gap-1 pb-1"></div>
+            <div id="{{ $itemsId }}" class="flex flex-col gap-0.5 pb-1"></div>
         </div>
     </div>
 </div>
@@ -120,21 +152,25 @@
 <script>
     if (!window.VibeHistoryBuilder) {
         window.VibeHistoryBuilder = {
-            clockSvg: '<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
-            render: function(wrapper, items, currentUrl) {
+            clockSvg: '<svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+            render: function(wrapper, items, currentUrl, onDeleted) {
                 if (!wrapper) return;
                 wrapper.innerHTML = '';
-                var minCls = 'group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible';
+                var minCls = 'group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:rounded-lg group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto';
                 items.forEach(function(item) {
                     var isActive = currentUrl === item.url;
                     var a = document.createElement('a');
                     a.href = item.url;
-                    a.setAttribute('wire:navigate', '');
-                    a.className = 'flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item cursor-pointer ' + minCls + ' ' +
+                    a.dataset.pinTitle = item.title || item.url;
+                    a.dataset.navTooltip = item.title || item.url;
+                    a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer transition-colors ' + minCls + ' ' +
                         (isActive ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50'
-                                  : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50');
+                                  : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200/70 dark:hover:bg-vibe-800/70 hover:text-vibe-950 dark:hover:text-vibe-50');
 
                     a.addEventListener('click', function(e) {
+                        if (e.target.closest('[data-history-delete]')) {
+                            return;
+                        }
                         e.preventDefault();
                         if (window.Livewire && window.Livewire.navigate) {
                             window.Livewire.navigate(item.url);
@@ -144,24 +180,50 @@
                     });
 
                     var iconSpan = document.createElement('span');
-                    iconSpan.className = 'shrink-0 flex items-center justify-center size-5 text-vibe-500 group-hover/nav-item:text-vibe-900 dark:text-vibe-400 dark:group-hover/nav-item:text-vibe-200';
+                    iconSpan.className = 'shrink-0 flex items-center justify-center size-4 text-vibe-400 group-hover/nav-item:text-vibe-700 dark:text-vibe-500 dark:group-hover/nav-item:text-vibe-300';
                     iconSpan.innerHTML = item.icon || window.VibeHistoryBuilder.clockSvg;
                     a.appendChild(iconSpan);
 
                     var labelDiv = document.createElement('div');
-                    labelDiv.className = 'flex flex-1 min-w-0 w-full items-center overflow-hidden max-w-[100vw] opacity-100 ml-3 group-data-[state=minified]/sheet:hidden';
+                    labelDiv.className = 'flex flex-1 min-w-0 w-full items-center overflow-hidden max-w-[100vw] opacity-100 ml-2.5 group-data-[state=minified]/sheet:hidden';
                     var labelSpan = document.createElement('span');
-                    labelSpan.className = 'whitespace-nowrap truncate text-sm';
+                    labelSpan.className = 'whitespace-nowrap truncate text-xs';
                     labelSpan.textContent = item.title || item.url;
                     labelDiv.appendChild(labelSpan);
                     a.appendChild(labelDiv);
 
-                    var tooltip = document.createElement('div');
-                    tooltip.className = 'hidden group-data-[state=minified]/sheet:flex opacity-0 group-hover/nav-item:opacity-100 pointer-events-none absolute left-full top-1/2 -translate-y-1/2 ml-3 z-50 px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap items-center gap-1.5 transition-opacity duration-150';
-                    var tooltipSpan = document.createElement('span');
-                    tooltipSpan.textContent = item.title || item.url;
-                    tooltip.appendChild(tooltipSpan);
-                    a.appendChild(tooltip);
+                    // Delete single item button (visible on hover)
+                    var delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.setAttribute('data-history-delete', 'true');
+                    delBtn.title = 'Remove from history';
+                    delBtn.className = 'opacity-0 group-hover/nav-item:opacity-100 p-0.5 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 transition-all shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
+                    delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+                    
+                    var handleDelete = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        try {
+                            var prefix = window.VIBE_PREFIX || 'vibe';
+                            var raw = localStorage.getItem(prefix + '-page-history');
+                            if (raw) {
+                                var all = JSON.parse(raw);
+                                if (Array.isArray(all)) {
+                                    all = all.filter(function(h) { return h.url !== item.url; });
+                                    localStorage.setItem(prefix + '-page-history', JSON.stringify(all));
+                                    if (window.Alpine && window.Alpine.store('vibeHistory')) {
+                                        window.Alpine.store('vibeHistory').items = all;
+                                    }
+                                }
+                            }
+                            if (typeof onDeleted === 'function') onDeleted();
+                        } catch(err) {}
+                    };
+
+                    delBtn.addEventListener('click', handleDelete, true);
+                    delBtn.addEventListener('mousedown', function(e) { e.stopPropagation(); }, true);
+                    a.appendChild(delBtn);
 
                     wrapper.appendChild(a);
                 });
@@ -179,6 +241,16 @@
             if (!raw) return;
             var items = JSON.parse(raw);
             if (!Array.isArray(items) || items.length === 0) return;
+
+            // Deduplicate items by URL
+            var seen = new Set();
+            items = items.filter(function(item) {
+                if (!item || !item.url) return false;
+                if (seen.has(item.url)) return false;
+                seen.add(item.url);
+                return true;
+            });
+
             items = items.slice(0, maxHistory);
 
             var container = document.getElementById('{{ $historyId }}');

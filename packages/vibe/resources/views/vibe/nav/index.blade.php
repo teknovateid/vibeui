@@ -32,6 +32,20 @@
         maxpin: {{ $maxpin ?? 'null' }},
         pinned: pinned,
         init() {
+            // Intercept pin clicks in CAPTURE phase so wire:navigate / anchor navigation NEVER triggers
+            this.$el.addEventListener('click', (e) => {
+                let pinBtn = e.target.closest('[data-nav-pin-btn]');
+                if (pinBtn) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                    let target = pinBtn.closest('[data-nav-pin-id]');
+                    if (target && target.dataset.navPinId) {
+                        this.togglePin(target.dataset.navPinId);
+                    }
+                }
+            }, true);
+
             this.$nextTick(() => {
                 let container = this.$el.querySelector('[data-pinned-container]');
                 if (!container && !this.pinnable) return;
@@ -91,12 +105,11 @@
             this.syncValidPinned();
             if (this.pinned.includes(id)) {
                 this.pinned = this.pinned.filter(p => p !== id);
-                this._movePinnedItems();
             } else {
                 if (this.maxpin !== null && this.pinned.length >= this.maxpin) return;
-                this.pinned.push(id);
-                this._movePinnedItems();
+                this.pinned = [...this.pinned, id];
             }
+            this._movePinnedItems();
             this.saveToStorage();
         },
         isPinned(id) {
@@ -112,8 +125,17 @@
             // Remove all existing shortcuts
             pinnedWrapper.querySelectorAll('[data-pinned-shortcut-for]').forEach(el => el.remove());
 
-            // Build shortcuts for currently pinned items that exist in DOM
+            // Update data-pinned attribute on all source pinnable items immediately
             let allPinnable = this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
+            allPinnable.forEach(el => {
+                let btn = el.querySelector('[data-nav-pin-btn]');
+                if (btn) {
+                    let isPinned = this.pinned.includes(el.dataset.navPinId);
+                    btn.setAttribute('data-pinned', isPinned ? 'true' : 'false');
+                }
+            });
+
+            // Build shortcuts for currently pinned items that exist in DOM
             let actualCount = 0;
             this.pinned.forEach(id => {
                 let el = Array.from(allPinnable).find(e => e.dataset.navPinId === id);
@@ -158,6 +180,14 @@
                     if (pinBtn) {
                         pinBtn.setAttribute('data-pinned', 'true');
                         pinBtn.style.display = '';
+                        pinBtn.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            let nav = clone.closest('nav');
+                            if (nav && nav._x_dataStack && nav._x_dataStack[0]) {
+                                nav._x_dataStack[0].togglePin(el.dataset.navPinId);
+                            }
+                        }, true);
                     }
 
                     return clone;
@@ -240,5 +270,73 @@
 
             } catch (e) {}
         })();
+
+        if (!window.__vibeNavFloatingTooltipInit) {
+            window.__vibeNavFloatingTooltipInit = true;
+
+            let tooltip = document.createElement('div');
+            tooltip.id = 'vibe-nav-floating-tooltip';
+            tooltip.className = 'fixed pointer-events-none z-[99999] px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap flex items-center gap-1.5 transition-opacity duration-150 opacity-0';
+            tooltip.style.display = 'none';
+            tooltip.style.top = '0px';
+            tooltip.style.left = '0px';
+            document.body.appendChild(tooltip);
+
+            let currentHovered = null;
+
+            document.addEventListener('mouseover', function(e) {
+                let target = e.target.closest('[data-pin-title], [data-nav-tooltip]');
+                if (!target) return;
+
+                let sheet = target.closest('[data-state="minified"]');
+                if (!sheet) return;
+
+                // Don't show floating tooltip if inside a flyout menu or if hovering pin delete button
+                if (target.closest('[data-nav-flyout]') || e.target.closest('[data-nav-pin-btn]')) {
+                    if (currentHovered) {
+                        currentHovered = null;
+                        tooltip.style.opacity = '0';
+                        tooltip.style.display = 'none';
+                    }
+                    return;
+                }
+
+                let title = target.dataset.navTooltip || target.dataset.pinTitle;
+                if (!title || !title.trim()) return;
+
+                currentHovered = target;
+                tooltip.textContent = title.trim();
+                let rect = target.getBoundingClientRect();
+                tooltip.style.display = 'flex';
+                tooltip.style.top = (rect.top + rect.height / 2) + 'px';
+                tooltip.style.left = (rect.right + 10) + 'px';
+                tooltip.style.transform = 'translateY(-50%)';
+                
+                requestAnimationFrame(() => {
+                    if (currentHovered === target) {
+                        tooltip.style.opacity = '1';
+                    }
+                });
+            });
+
+            document.addEventListener('mouseout', function(e) {
+                let target = e.target.closest('[data-pin-title], [data-nav-tooltip]');
+                if (target && target === currentHovered) {
+                    currentHovered = null;
+                    tooltip.style.opacity = '0';
+                    setTimeout(() => {
+                        if (!currentHovered) tooltip.style.display = 'none';
+                    }, 150);
+                }
+            });
+
+            window.addEventListener('scroll', function() {
+                if (currentHovered) {
+                    currentHovered = null;
+                    tooltip.style.opacity = '0';
+                    tooltip.style.display = 'none';
+                }
+            }, true);
+        }
     </script>
 </nav>

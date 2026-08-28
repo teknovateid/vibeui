@@ -1,8 +1,9 @@
-<vibe:nav {{ $attributes->twMerge(['class' => 'gap-1 space-y-4']) }} pinnable maxpin="5">
-    <vibe:nav.pinned title="PINNED" persist class="border-b border-vibe-200 dark:border-vibe-800" />
+<vibe:nav {{ $attributes->twMerge(['class' => 'gap-2']) }} pinnable maxpin="5">
+    <vibe:nav.pinned title="PINNED" persist />
     
+    <div class=" divide-x h-px bg-vibe-200 dark:bg-vibe-800"></div>
     
-    <vibe:nav.label title="GET STARTED" persist class="border-b border-vibe-200 dark:border-vibe-800">
+    <vibe:nav.label title="GET STARTED" persist>
         <!-- Docs -->
         <vibe:nav.item href="{{ route('docs.index') }}" :active="request()->routeIs('docs.index')">
             <x-slot:icon>
@@ -26,5 +27,7 @@
             </x-slot:icon>
             Instalation
         </vibe:nav.item>
+       
+       
     </vibe:nav.label>
 </vibe:nav>
