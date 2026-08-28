@@ -1,5 +1,3 @@
-@blaze(fold: true)
-
 @props([
     'enabled' => config('vibe.seo.favicon.enabled', true),
     'dir' => config('vibe.seo.favicon.dir', '/vibe/favicon'),
