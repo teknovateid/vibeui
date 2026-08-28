@@ -4,7 +4,6 @@
     'position' => 'absolute',
     'align' => 'right',
     'width' => '48',
-    'contentClasses' => 'p-1 bg-white dark:bg-vibe-950 border border-vibe-200 dark:border-vibe-800',
 ])
 
 <div x-data="{ 
@@ -81,14 +80,21 @@
                 'left' => 'absolute top-0 right-full mr-1 z-50',
                 'right', 'default' => 'absolute top-0 left-full ml-1 z-50',
             };
-            $widthClasses = match ($width) {
-                '48' => 'w-48',
-                '64' => 'w-64',
+            $widthClasses = match ((string) $width) {
+                '48', 'xs' => 'w-48',
+                '56' => 'w-56',
+                '64', 'sm' => 'w-64',
+                '72' => 'w-72',
+                '80', 'md' => 'w-80',
+                '96', 'lg' => 'w-96',
+                'xl' => 'w-[28rem]',
+                '2xl' => 'w-[32rem]',
                 'min' => 'min-w-min',
-                default => $width,
+                'full' => 'w-full',
+                default => str_starts_with((string) $width, 'w-') || str_starts_with((string) $width, 'max-w-') ? (string) $width : "w-{$width}",
             };
             $wrapperClasses = "$positionClasses $widthClasses rounded-md shadow-lg";
-            $innerClasses = "rounded-md shadow-sm $contentClasses";
+            $innerClasses = "rounded-md shadow-sm p-1 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100";
         } else {
             $wrapperClasses = "relative w-full mt-1";
             $treeStyles = 

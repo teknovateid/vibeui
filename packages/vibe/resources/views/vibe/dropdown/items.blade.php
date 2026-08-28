@@ -3,8 +3,6 @@
 @props([
     'align' => 'right',
     'width' => '48',
-    'contentClasses' => 'p-1 bg-white dark:bg-vibe-950 border border-vibe-200 dark:border-vibe-800',
-    'keyboard' => false,
 ])
 
 @php
@@ -14,11 +12,18 @@
         'right', 'default' => 'origin-top-right right-0',
     };
 
-    $widthClasses = match ($width) {
-        '48' => 'w-48',
-        '64' => 'w-64',
+    $widthClasses = match ((string) $width) {
+        '48', 'xs' => 'w-48',
+        '56' => 'w-56',
+        '64', 'sm' => 'w-64',
+        '72' => 'w-72',
+        '80', 'md' => 'w-80',
+        '96', 'lg' => 'w-96',
+        'xl' => 'w-[28rem]',
+        '2xl' => 'w-[32rem]',
         'min' => 'min-w-min',
-        default => $width,
+        'full' => 'w-full',
+        default => str_starts_with((string) $width, 'w-') || str_starts_with((string) $width, 'max-w-') ? (string) $width : "w-{$width}",
     };
 @endphp
 
@@ -31,10 +36,8 @@
     x-transition:leave-end="transform opacity-0 scale-95"
     class="absolute z-50 mt-2 {{ $widthClasses }} rounded-md shadow-lg {{ $alignmentClasses }}"
     style="display: none;"
-    @click="close()"
-    {{ $attributes }}
->
-    <div x-ref="menuContainer" class="rounded-lg shadow-sm {{ $contentClasses }}" role="menu" aria-orientation="vertical" tabindex="-1">
+    @click="close()">
+    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-md shadow-sm p-1 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100']) }} role="menu" aria-orientation="vertical" tabindex="-1">
         {{ $slot }}
     </div>
 </div>

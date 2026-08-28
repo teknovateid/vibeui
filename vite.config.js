@@ -27,6 +27,30 @@ function vibeSyncPlugin() {
             destDir: 'packages/vibe/public/vibe',
             label: 'Public',
         },
+        {
+            srcPattern: '/resources/views/components/docs/layouts/',
+            destDir: 'packages/vibe/stubs/Layouts/layouts',
+            label: 'Docs Layouts',
+            transform: (content) => {
+                return content
+                    .replace(/<x-docs\.layouts\./g, '<x-layouts.')
+                    .replace(/<\/x-docs\.layouts\./g, '</x-layouts.')
+                    .replace(/<x-docs\.partials\./g, '<x-partials.')
+                    .replace(/<\/x-docs\.partials\./g, '</x-partials.');
+            },
+        },
+        {
+            srcPattern: '/resources/views/components/docs/partials/',
+            destDir: 'packages/vibe/stubs/Layouts/partials',
+            label: 'Docs Partials',
+            transform: (content) => {
+                return content
+                    .replace(/<x-docs\.layouts\./g, '<x-layouts.')
+                    .replace(/<\/x-docs\.layouts\./g, '</x-layouts.')
+                    .replace(/<x-docs\.partials\./g, '<x-partials.')
+                    .replace(/<\/x-docs\.partials\./g, '</x-partials.');
+            },
+        },
     ];
 
     return {
@@ -46,7 +70,13 @@ function vibeSyncPlugin() {
                                 fs.mkdirSync(destDir, { recursive: true });
                             }
                             try {
-                                fs.copyFileSync(file, dest);
+                                if (rule.transform) {
+                                    const content = fs.readFileSync(file, 'utf-8');
+                                    const transformed = rule.transform(content);
+                                    fs.writeFileSync(dest, transformed, 'utf-8');
+                                } else {
+                                    fs.copyFileSync(file, dest);
+                                }
                                 console.log(`\n[Vibe Sync - ${rule.label}] Disinkronkan ke packages: ${relativePath}`);
                             } catch (e) {
                                 console.error(`\n[Vibe Sync - ${rule.label}] Gagal mengcopy:`, e);
