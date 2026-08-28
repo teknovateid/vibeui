@@ -1,5 +1,4 @@
-@props(['title' => config('app.name')])
-<x-docs.layouts.base :title="$title">
+<x-docs.layouts.base>
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center px-3 py-2.5 border-none">

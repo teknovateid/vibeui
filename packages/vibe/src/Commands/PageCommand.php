@@ -70,7 +70,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                     $pageTitle .= ' ' . ucfirst($action);
                 }
 
-                $wrappedContent = "<x-{$layout}.layouts.{$style} title=\"{$pageTitle}\">\n" . $content . "\n</x-{$layout}.layouts.{$style}>\n";
+                $wrappedContent = "<x-{$layout}.layouts.{$style}>\n    <vibe:seo title=\"{$pageTitle}\" />\n" . $content . "\n</x-{$layout}.layouts.{$style}>\n";
 
                 $dir = dirname($destView);
                 if (!File::isDirectory($dir)) {
