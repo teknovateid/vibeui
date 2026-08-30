@@ -214,6 +214,7 @@
             <main class="flex-1 p-4">
                 {{ $slot }}
             </main>
+            
         </div>
 
         <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
