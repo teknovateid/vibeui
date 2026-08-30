@@ -37,7 +37,7 @@
 
                                 <div class="flex flex-col text-left min-w-0 minified:hidden ">
                                     <span class="text-xs font-semibold text-vibe-900 dark:text-vibe-100 truncate leading-tight">Masum Parvej</span>
-                                    <span class="text-[10px] text-vibe-700 dark:text-vibe-300 truncate leading-tight mt-0.5">masum@hugeicons.com</span>
+                                    <span class="text-[10px] text-vibe-700 dark:text-vibe-300 truncate leading-tight mt-0.5"><!--email_off-->masum@hugeicons.com<!--/email_off--></span>
                                 </div>
                             </div>
 

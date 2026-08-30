@@ -131,7 +131,11 @@
         runHighlight() {
             let el = this.$refs.codeBlock;
             if (el && window.hljs && el.dataset.highlighted !== 'yes') {
-                window.hljs.highlightElement(el);
+                if (typeof requestAnimationFrame !== 'undefined') {
+                    requestAnimationFrame(() => window.hljs.highlightElement(el));
+                } else {
+                    window.hljs.highlightElement(el);
+                }
             }
         },
         init() {
