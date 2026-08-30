@@ -102,6 +102,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
+                
                 'resources/css/vibe/highlightjs.css',
                 'resources/js/vibe/highlightjs.js',
             ],
