@@ -103,7 +103,7 @@
                     :data-pinned="typeof isPinned !== 'undefined' && isPinned('{{ $groupId }}') ? 'true' : 'false'"
                     x-show="(typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }}" 
                     @click.stop.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $groupId }}')" 
-                    class="p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors cursor-pointer text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400 data-[pinned=true]:text-vibe-900 dark:data-[pinned=true]:text-vibe-100 data-[pinned=true]:opacity-100" 
+                    class="inline-flex items-center justify-center size-6 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors cursor-pointer text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400 data-[pinned=true]:text-vibe-900 dark:data-[pinned=true]:text-vibe-100 data-[pinned=true]:opacity-100" 
                     style="display:none" 
                     title="Pin"
                 >
