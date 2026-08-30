@@ -304,19 +304,20 @@
     <div
         id="{{ $canvasId }}"
         x-show="tab === 'preview'"
-        class="relative w-full overflow-hidden transition-all duration-300 {{ $canvasTheme === 'dark' ? 'dark bg-vibe-950 text-vibe-50' : ($canvasTheme === 'light' ? 'light bg-white text-vibe-950' : 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50') }}"
+        data-canvas-theme="{{ $canvasTheme }}"
+        :data-canvas-theme="canvasTheme"
+        class="relative w-full overflow-hidden transition-colors duration-300 {{ $canvasTheme === 'dark' ? 'dark' : ($canvasTheme === 'light' ? 'light' : '') }}"
         :class="{
-            'dark bg-vibe-950 text-vibe-50': canvasTheme === 'dark',
-            'light bg-white text-vibe-950': canvasTheme === 'light',
-            'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50': canvasTheme === 'auto'
+            'dark': canvasTheme === 'dark',
+            'light': canvasTheme === 'light'
         }"
         style="{{ $tab === 'code' ? 'display: none;' : '' }}"
     >
         {{-- Background Pattern Decoration --}}
         @if ($pattern === 'dots')
-            <div class="pointer-events-none absolute inset-0 opacity-[0.25] dark:opacity-[0.15] bg-[radial-gradient(#737373_1px,transparent_1px)] bg-size-[16px_16px]"></div>
+            <div class="pointer-events-none absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#737373_1px,transparent_1px)] dark:bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] bg-size-[16px_16px]"></div>
         @elseif ($pattern === 'grid')
-            <div class="pointer-events-none absolute inset-0 opacity-[0.2] dark:opacity-[0.12] bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+            <div class="pointer-events-none absolute inset-0 opacity-25 dark:opacity-20 bg-[linear-gradient(to_right,#8080801a_1px,transparent_1px),linear-gradient(to_bottom,#8080801a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff1a_1px,transparent_1px)] bg-size-[24px_24px]"></div>
         @endif
 
         {{-- Resizable Inner Wrapper --}}
@@ -420,13 +421,12 @@
                 // 3. Canvas Theme & theme buttons anti-FOUC
                 if (item.canvasTheme) {
                     if (canvas) {
-                        canvas.classList.remove('dark', 'light', 'bg-white', 'bg-vibe-950', 'text-vibe-50', 'text-vibe-950');
+                        canvas.setAttribute('data-canvas-theme', item.canvasTheme);
+                        canvas.classList.remove('dark', 'light');
                         if (item.canvasTheme === 'dark') {
-                            canvas.classList.add('dark', 'bg-vibe-950', 'text-vibe-50');
+                            canvas.classList.add('dark');
                         } else if (item.canvasTheme === 'light') {
-                            canvas.classList.add('light', 'bg-white', 'text-vibe-950');
-                        } else {
-                            canvas.classList.add('bg-white', 'dark:bg-vibe-950', 'text-vibe-950', 'dark:text-vibe-50');
+                            canvas.classList.add('light');
                         }
                     }
 

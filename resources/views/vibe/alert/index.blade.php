@@ -224,7 +224,7 @@
                 x-transition:leave="transition ease-in duration-200"
                 x-transition:leave-start="opacity-100 transform-none"
                 x-transition:leave-end="vibe-alert-start"
-                class="relative w-full bg-vibe-100 dark:bg-vibe-900 select-none rounded-2xl shadow-xl flex flex-col overflow-hidden ring-1 ring-black/5 dark:ring-white/10 pointer-events-auto"
+                class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto"
             >
                 <div class="p-4 sm:p-5 flex flex-col" :class="getAlignClasses(alert)">
                     <!-- Icon container -->
@@ -234,11 +234,11 @@
                     ></div>
                     
                     <!-- Title -->
-                    <h3 class="text-lg font-bold text-vibe-900 dark:text-white tracking-tight" 
+                    <h3 class="text-lg font-bold text-foreground tracking-tight" 
                         x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
                     
                     <!-- Message -->
-                    <p class="mt-1 text-sm text-vibe-700 dark:text-vibe-300 leading-relaxed" x-text="alert.message"></p>
+                    <p class="mt-1 text-sm text-muted-foreground leading-relaxed" x-text="alert.message"></p>
                 </div>
                 
                 <!-- Footer -->
@@ -250,12 +250,12 @@
                      }">
                     
                     <button x-show="alert.closeButton" @click="if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); remove(alert.id)" 
-                        :class="[(alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : 'inline-flex justify-center rounded-lg border border-vibe-200 dark:border-vibe-700 bg-vibe-50 hover:bg-vibe-100 dark:bg-vibe-800 dark:hover:bg-vibe-700 px-4 py-2 text-sm font-semibold text-vibe-700 dark:text-vibe-200 shadow-sm',
+                        :class="[(alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : 'inline-flex justify-center rounded-lg border border-border bg-secondary hover:bg-accent px-4 py-2 text-sm font-semibold text-secondary-foreground shadow-2xs transition-colors cursor-pointer',
                                 (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
                         x-text="alert.closeButton ? alert.closeButton.text : ''"></button>
                     
                     <button x-show="alert.confirmButton" @click="if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); remove(alert.id)" 
-                        :class="[(alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : 'inline-flex justify-center rounded-lg bg-vibe-950 dark:bg-vibe-100 px-4 py-2 text-sm font-semibold text-white dark:text-vibe-950 shadow-sm hover:bg-vibe-800 dark:hover:bg-vibe-200',
+                        :class="[(alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : 'inline-flex justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-semibold shadow-xs hover:bg-primary/90 transition-colors cursor-pointer',
                                 (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1 w-full' : '']" 
                         x-text="alert.confirmButton ? alert.confirmButton.text : ''"></button>
                 </div>

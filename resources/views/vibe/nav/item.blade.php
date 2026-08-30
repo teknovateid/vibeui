@@ -17,11 +17,12 @@
     $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50';
 
     $badgeClasses = match ($badgeColor) {
-        'green' => 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-        'blue' => 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
-        'red' => 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-        'yellow' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-        default => 'bg-vibe-100 text-vibe-700 dark:bg-vibe-800 dark:text-vibe-300',
+        'green', 'success' => 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
+        'blue', 'info' => 'bg-sky-500/15 text-sky-700 dark:text-sky-400 border border-sky-500/20',
+        'red', 'danger', 'destructive' => 'bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/20',
+        'yellow', 'warning' => 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20',
+        'accent' => 'bg-accent text-accent-foreground border border-accent-foreground/20 font-semibold',
+        default => 'bg-secondary text-secondary-foreground',
     };
 @endphp
 
