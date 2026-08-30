@@ -62,7 +62,7 @@
     >
         <div class="flex items-center">
             @if ($pinnable ?? false)
-                <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="p-1 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-vibe-900 dark:text-vibe-100' : 'text-vibe-400 group-hover/nav-label:text-vibe-600 dark:group-hover/nav-label:text-vibe-400'" title="Pin">
+                <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="inline-flex items-center justify-center size-6 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-vibe-900 dark:text-vibe-100' : 'text-vibe-400 group-hover/nav-label:text-vibe-600 dark:group-hover/nav-label:text-vibe-400'" title="Pin">
                     <!-- Pinned Icon -->
                     <svg x-show="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}')" class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14 4h-4v2h4v-2zm2 2h2c1.1 0 2 .9 2 2v2h-8v-2h4v-2zm-6 4v5h3v7l1 2 1-2v-7h3v-5h-8z" />

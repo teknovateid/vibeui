@@ -131,7 +131,7 @@
 
         <div class="flex items-center justify-end shrink-0 pr-2">
             <!-- Trash icon (shown on hover) -->
-            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:flex items-center justify-center hover:text-red-500 p-0.5 rounded cursor-pointer">
+            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:inline-flex items-center justify-center size-6 hover:text-red-500 rounded cursor-pointer">
                 <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
                 </svg>
@@ -197,7 +197,7 @@
                     delBtn.type = 'button';
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = 'Remove from history';
-                    delBtn.className = 'opacity-0 group-hover/nav-item:opacity-100 p-0.5 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
+                    delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
                     delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
                     
                     var handleDelete = function(e) {
