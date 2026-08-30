@@ -205,8 +205,8 @@
                         aria-label="Tampilan tablet 768px"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="16" height="20" x="4" y="2" rx="2" ry="2" />
-                            <line x1="12" x2="12.01" y1="18" y2="18" />
+                            <rect width="18" height="14" x="3" y="5" rx="2" ry="2" />
+                            <line x1="12" x2="12.01" y1="16" y2="16" />
                         </svg>
                     </button>
 
