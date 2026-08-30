@@ -372,10 +372,7 @@ const initScrollRestoration = () => {
     } else {
         restoreAllScrolls();
     }
-    document.addEventListener('livewire:navigated', () => {
-        restoreAllScrolls();
-        document.documentElement.classList.remove('vibe-restoring-main', 'vibe-restoring-side');
-    });
+    document.addEventListener('livewire:navigated', restoreAllScrolls);
     document.addEventListener('alpine:initialized', () => {
         setTimeout(restoreAllScrolls, 10);
     });
