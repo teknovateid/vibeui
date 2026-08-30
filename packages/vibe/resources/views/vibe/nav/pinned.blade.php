@@ -105,8 +105,8 @@
             <span class="whitespace-nowrap">{{ $title }}</span>
             {{-- Counter pinned count / maxpin — diisi oleh anti-FOUC script di index.blade.php --}}
             <span
-                x-show="typeof maxpin !== 'undefined' && maxpin"
-                x-text="(typeof pinned !== 'undefined' ? pinned.length : 0) + ' / ' + maxpin"
+                x-show="$data.maxpin"
+                x-text="($data.maxpin ? (($data.pinned ? $data.pinned.length : 0) + ' / ' + $data.maxpin) : '')"
                 class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"
             ></span>
         </div>

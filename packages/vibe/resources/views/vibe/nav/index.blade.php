@@ -69,8 +69,8 @@
         },
 
         syncValidPinned() {
-            let allPinnable = Array.from(this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])'));
-            let validIds = allPinnable.map(e => e.dataset.navPinId);
+            let allPinnable = Array.from(this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for]):not([data-nav-group-flyout-content] *)'));
+            let validIds = allPinnable.filter(e => !(e.closest('[data-pin-type=group]') && e.dataset.pinType !== 'group')).map(e => e.dataset.navPinId);
             let filtered = this.pinned.filter(id => validIds.includes(id));
             if (filtered.length !== this.pinned.length) {
                 this.pinned = filtered;
@@ -126,8 +126,9 @@
             pinnedWrapper.querySelectorAll('[data-pinned-shortcut-for]').forEach(el => el.remove());
 
             // Update data-pinned attribute on all source pinnable items immediately
-            let allPinnable = this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
+            let allPinnable = this.$el.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for]):not([data-nav-group-flyout-content] *)');
             allPinnable.forEach(el => {
+                if (el.closest('[data-pin-type=group]') && el.dataset.pinType !== 'group') return;
                 let btn = el.querySelector('[data-nav-pin-btn]');
                 if (btn) {
                     let isPinned = this.pinned.includes(el.dataset.navPinId);
@@ -225,8 +226,9 @@
                     }
                 }
                 
-                let allPinnables = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for])');
-                let validIds = Array.from(allPinnables).map(e => e.dataset.navPinId);
+                let allPinnables = nav.querySelectorAll('[data-nav-pin-id]:not([data-pinned-shortcut-for]):not([data-nav-group-flyout-content] *)');
+                let validPinnables = Array.from(allPinnables).filter(e => !(e.closest('[data-pin-type=group]') && e.dataset.pinType !== 'group'));
+                let validIds = validPinnables.map(e => e.dataset.navPinId);
                 let validPinned = pinned.filter(id => validIds.includes(id));
                 
                 // 1. Fix FOUC for pinned count
@@ -239,7 +241,7 @@
                 }
 
                 // 2. Pre-set pin button state using data-pinned attribute
-                allPinnables.forEach(el => {
+                validPinnables.forEach(el => {
                     let btn = el.querySelector('[data-nav-pin-btn]');
                     if (btn) {
                         let isPinned = validPinned.includes(el.dataset.navPinId);
