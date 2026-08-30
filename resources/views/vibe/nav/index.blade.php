@@ -282,44 +282,138 @@
         if (!window.__vibeNavFloatingTooltipInit) {
             window.__vibeNavFloatingTooltipInit = true;
 
-            let tooltip = document.createElement('div');
-            tooltip.id = 'vibe-nav-floating-tooltip';
-            tooltip.className = 'fixed pointer-events-none z-[99999] px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap flex items-center gap-1.5 transition-opacity duration-150 opacity-0';
-            tooltip.style.display = 'none';
-            tooltip.style.top = '0px';
-            tooltip.style.left = '0px';
-            document.body.appendChild(tooltip);
+            function getFloatingTooltip() {
+                let el = document.getElementById('vibe-nav-floating-tooltip');
+                if (!el || !document.body.contains(el)) {
+                    if (el) el.remove();
+                    el = document.createElement('div');
+                    el.id = 'vibe-nav-floating-tooltip';
+                    el.className = 'fixed pointer-events-none z-[99999] px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap flex items-center gap-1.5 transition-opacity duration-150 opacity-0';
+                    el.style.display = 'none';
+                    el.style.top = '0px';
+                    el.style.left = '0px';
+                    document.body.appendChild(el);
+                }
+                return el;
+            }
+
+            function getFloatingFlyout() {
+                let el = document.getElementById('vibe-nav-floating-flyout');
+                if (!el || !document.body.contains(el)) {
+                    if (el) el.remove();
+                    el = document.createElement('div');
+                    el.id = 'vibe-nav-floating-flyout';
+                    el.className = 'fixed z-[99999] min-w-[120px] w-max max-w-[180px] p-1 rounded-lg bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 shadow-xl transition-all duration-150 opacity-0 pointer-events-auto flex flex-col [&_a]:w-full! [&_a]:h-auto! [&_a]:px-2.5! [&_a]:py-1.5! [&_a]:text-xs! [&_a]:font-medium! [&_a]:rounded-md! [&_a]:justify-start! [&_a]:mx-0! [&_a>div]:max-w-[100vw]! [&_a>div]:opacity-100! [&_a>div]:ml-0! [&_a>div]:flex! [&_a>div]:block!';
+                    el.style.display = 'none';
+                    el.style.top = '0px';
+                    el.style.left = '0px';
+                    document.body.appendChild(el);
+
+                    el.addEventListener('mouseenter', function() {
+                        clearTimeout(flyoutHideTimeout);
+                    });
+
+                    el.addEventListener('mouseleave', function() {
+                        hideFlyout();
+                    });
+                }
+                return el;
+            }
 
             let currentHovered = null;
+            let currentFlyoutTarget = null;
+            let flyoutHideTimeout = null;
+
+            function hideTooltip() {
+                currentHovered = null;
+                let tooltip = getFloatingTooltip();
+                tooltip.style.opacity = '0';
+                tooltip.style.display = 'none';
+            }
+
+            function hideFlyout() {
+                clearTimeout(flyoutHideTimeout);
+                flyoutHideTimeout = setTimeout(() => {
+                    currentFlyoutTarget = null;
+                    let flyout = getFloatingFlyout();
+                    flyout.style.opacity = '0';
+                    setTimeout(() => {
+                        if (!currentFlyoutTarget) flyout.style.display = 'none';
+                    }, 150);
+                }, 150);
+            }
 
             document.addEventListener('mouseover', function(e) {
-                let target = e.target.closest('[data-pin-title], [data-nav-tooltip]');
-                if (!target) return;
+                let flyoutPanel = e.target.closest('#vibe-nav-floating-flyout');
+                if (flyoutPanel) {
+                    clearTimeout(flyoutHideTimeout);
+                    hideTooltip();
+                    return;
+                }
 
-                let sheet = target.closest('[data-state="minified"]');
-                if (!sheet) return;
+                let sheet = e.target.closest('[data-state="minified"]');
+                if (!sheet) {
+                    hideTooltip();
+                    hideFlyout();
+                    return;
+                }
 
-                // Don't show floating tooltip if inside a flyout menu or if hovering pin delete button
-                if (target.closest('[data-nav-flyout]') || e.target.closest('[data-nav-pin-btn]')) {
-                    if (currentHovered) {
-                        currentHovered = null;
-                        tooltip.style.opacity = '0';
-                        tooltip.style.display = 'none';
+                // 1. Check if hovering a group trigger in minified mode
+                let groupWrapper = e.target.closest('.group\\/group-wrapper, [data-pin-type="group"]');
+                let groupTrigger = e.target.closest('[data-nav-group-trigger]');
+
+                if (groupWrapper && (groupTrigger || groupWrapper.contains(e.target))) {
+                    let groupContent = groupWrapper.querySelector('[data-nav-group-flyout-content]');
+                    if (groupContent) {
+                        hideTooltip();
+                        clearTimeout(flyoutHideTimeout);
+
+                        let targetBtn = groupTrigger || groupWrapper.querySelector('button') || groupWrapper;
+                        if (currentFlyoutTarget !== targetBtn) {
+                            currentFlyoutTarget = targetBtn;
+                            let flyout = getFloatingFlyout();
+                            flyout.innerHTML = groupContent.innerHTML;
+
+                            let rect = targetBtn.getBoundingClientRect();
+                            flyout.style.display = 'flex';
+                            let topPos = Math.max(8, Math.min(rect.top, window.innerHeight - 300));
+                            flyout.style.top = topPos + 'px';
+                            flyout.style.left = (rect.right + 10) + 'px';
+
+                            requestAnimationFrame(() => {
+                                if (currentFlyoutTarget === targetBtn) {
+                                    flyout.style.opacity = '1';
+                                }
+                            });
+                        }
+                        return;
                     }
+                }
+
+                // 2. Normal Item Tooltip
+                let target = e.target.closest('[data-pin-title], [data-nav-tooltip]');
+                if (!target || target.closest('[data-nav-group-trigger]') || target.closest('[data-pin-type="group"]')) {
+                    return;
+                }
+
+                if (target.closest('[data-nav-pin-btn]')) {
+                    hideTooltip();
                     return;
                 }
 
                 let title = target.dataset.navTooltip || target.dataset.pinTitle;
                 if (!title || !title.trim()) return;
 
+                hideFlyout();
                 currentHovered = target;
+                let tooltip = getFloatingTooltip();
                 tooltip.textContent = title.trim();
                 let rect = target.getBoundingClientRect();
                 tooltip.style.display = 'flex';
                 tooltip.style.top = (rect.top + rect.height / 2) + 'px';
                 tooltip.style.left = (rect.right + 10) + 'px';
                 tooltip.style.transform = 'translateY(-50%)';
-                
+
                 requestAnimationFrame(() => {
                     if (currentHovered === target) {
                         tooltip.style.opacity = '1';
@@ -330,21 +424,24 @@
             document.addEventListener('mouseout', function(e) {
                 let target = e.target.closest('[data-pin-title], [data-nav-tooltip]');
                 if (target && target === currentHovered) {
-                    currentHovered = null;
-                    tooltip.style.opacity = '0';
-                    setTimeout(() => {
-                        if (!currentHovered) tooltip.style.display = 'none';
-                    }, 150);
+                    hideTooltip();
+                }
+
+                let groupTrigger = e.target.closest('[data-nav-group-trigger], .group\\/group-wrapper');
+                if (groupTrigger && groupTrigger.contains(currentFlyoutTarget)) {
+                    hideFlyout();
                 }
             });
 
             window.addEventListener('scroll', function() {
-                if (currentHovered) {
-                    currentHovered = null;
-                    tooltip.style.opacity = '0';
-                    tooltip.style.display = 'none';
-                }
+                hideTooltip();
+                hideFlyout();
             }, true);
+
+            document.addEventListener('livewire:navigated', function() {
+                hideTooltip();
+                hideFlyout();
+            });
         }
     </script>
 </nav>
