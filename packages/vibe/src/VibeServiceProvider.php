@@ -56,7 +56,7 @@ class VibeServiceProvider extends ServiceProvider
                                 setTimeout(trigger, 10);
                             });
                             window.addEventListener(\"DOMContentLoaded\", function() {
-                                setTimeout(trigger, 150);
+                                setTimeout(trigger, 50);
                             });
                         } else {
                             setTimeout(trigger, 50);
@@ -85,7 +85,7 @@ class VibeServiceProvider extends ServiceProvider
                                 setTimeout(trigger, 10);
                             });
                             window.addEventListener(\"DOMContentLoaded\", function() {
-                                setTimeout(trigger, 150);
+                                setTimeout(trigger, 50);
                             });
                         } else {
                             setTimeout(trigger, 50);
@@ -128,27 +128,31 @@ class VibeServiceProvider extends ServiceProvider
                             }
                         } catch (e) {}
 
-                        // Scroll Anti-FOUC without blinking/hiding elements:
-                        // Continuously enforce scroll positions during HTML parsing so the very first paint is correct.
+                        // Scroll Anti-FOUC (Zero layout-shift opacity shielding)
                         try {
                             var p = window.VIBE_PREFIX;
+                            var mainKey = p + \'-scroll-\' + window.location.pathname;
+                            var sideKey = p + \'-scroll-sidebar-menu-body\';
+                            var ms = parseInt(sessionStorage.getItem(mainKey) || \'0\', 10);
+                            var ss = parseInt(sessionStorage.getItem(sideKey) || \'0\', 10);
+
+                            if (ms > 0) document.documentElement.classList.add(\'vibe-restoring-main\');
+                            if (ss > 0) document.documentElement.classList.add(\'vibe-restoring-side\');
+
                             var getSaved = function(id) {
-                                var k = (id === \'docs-main-scroll\') ? p + \'-scroll-\' + window.location.pathname : p + \'-scroll-\' + id;
+                                var k = (id === \'docs-main-scroll\') ? mainKey : ((id === \'sidebar-menu-body\') ? sideKey : p + \'-scroll-\' + id);
                                 return parseInt(sessionStorage.getItem(k) || \'0\', 10);
                             };
                             
                             var enforceScroll = function() {
                                 var main = document.getElementById(\'docs-main-scroll\');
-                                if (main) {
-                                    var ms = getSaved(\'docs-main-scroll\');
-                                    if (ms > 0) main.scrollTop = ms;
+                                if (main && ms > 0) {
+                                    main.scrollTop = ms;
                                 }
                                 var side = document.getElementById(\'sidebar-menu-body\');
-                                if (side) {
-                                    var ss = getSaved(\'sidebar-menu-body\');
-                                    if (ss > 0) side.scrollTop = ss;
+                                if (side && ss > 0) {
+                                    side.scrollTop = ss;
                                 }
-                                // Handle any other dynamically added scroll containers
                                 var others = document.querySelectorAll(\'[data-vibe-scroll]\');
                                 for (var i = 0; i < others.length; i++) {
                                     var id = others[i].getAttribute(\'data-vibe-scroll\');
@@ -163,22 +167,26 @@ class VibeServiceProvider extends ServiceProvider
                                 var obs = new MutationObserver(enforceScroll);
                                 obs.observe(document.documentElement, { childList: true, subtree: true });
                                 
-                                // Disconnect observer once DOM is fully built to save performance
                                 document.addEventListener(\'DOMContentLoaded\', function() {
                                     enforceScroll();
                                     obs.disconnect();
+
+                                    // Remove shield as soon as DOM layout is complete
+                                    document.documentElement.classList.remove(\'vibe-restoring-main\', \'vibe-restoring-side\');
                                     
                                     // Remove anti-FOUC transition blocker
                                     setTimeout(function() {
                                         var style = document.getElementById(\'vibe-anti-fouc-transitions\');
                                         if (style) style.remove();
-                                    }, 50);
+                                    }, 20);
                                 });
                             }
                         } catch (e) {}
                     })();
                 </script>
                 <style id=\"vibe-anti-fouc-transitions\">
+                    html.vibe-restoring-main #docs-main-scroll { opacity: 0 !important; }
+                    html.vibe-restoring-side #sidebar-menu-body { opacity: 0 !important; }
                     *, *::before, *::after {
                         transition: none !important;
                         animation-duration: 0ms !important;
