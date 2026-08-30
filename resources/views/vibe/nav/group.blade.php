@@ -76,6 +76,8 @@
 >
     <button 
         @click="open = !open" 
+        data-nav-group-trigger
+        data-pin-title="{{ $title }}" 
         x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" 
         type="button" 
         :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" 
@@ -154,11 +156,8 @@
         </div>
     </div>
 
-    <!-- Flyout Dropdown Panel when Minified on Hover -->
-    <div class="hidden group-data-[state=minified]/sheet:block opacity-0 invisible group-hover/group-wrapper:opacity-100 group-hover/group-wrapper:visible absolute left-full top-0 ml-2 z-50 w-52 p-1.5 rounded-xl bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 shadow-xl transition-all duration-150 before:absolute before:-left-3 before:top-0 before:bottom-0 before:w-3 before:content-[''] group-data-[state=minified]/sheet:[&_.group\/nav-item]:w-full group-data-[state=minified]/sheet:[&_.group\/nav-item]:h-auto group-data-[state=minified]/sheet:[&_.group\/nav-item]:px-3 group-data-[state=minified]/sheet:[&_.group\/nav-item]:py-2 group-data-[state=minified]/sheet:[&_.group\/nav-item]:justify-start group-data-[state=minified]/sheet:[&_.group\/nav-item]:mx-0 group-data-[state=minified]/sheet:[&_.group\/nav-item>div]:max-w-[100vw] group-data-[state=minified]/sheet:[&_.group\/nav-item>div]:opacity-100 group-data-[state=minified]/sheet:[&_.group\/nav-item>div]:ml-3">
-        <div class="px-3 py-1.5 text-xs font-semibold text-vibe-700 dark:text-vibe-300 border-b border-vibe-200 dark:border-vibe-800 mb-1 flex items-center justify-between">
-            <span>{{ $title }}</span>
-        </div>
+    <!-- Hidden Template for Flyout Dropdown Panel when Minified on Hover -->
+    <div data-nav-group-flyout-content class="hidden">
         <div class="flex flex-col gap-0.5">
             {{ $slot }}
         </div>
