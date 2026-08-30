@@ -1,4 +1,6 @@
 @layer components {
+    [x-cloak] { display: none !important; }
+
     .vibe-alert-start {
         opacity: 0;
         transform: scale(0.95);

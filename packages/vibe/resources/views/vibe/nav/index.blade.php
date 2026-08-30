@@ -174,6 +174,14 @@
                         icon.classList.add('text-vibe-500', 'group-hover/nav-item:text-vibe-900', 'dark:text-vibe-400', 'dark:group-hover/nav-item:text-vibe-200');
                     });
 
+                    // If cloned item is a group, ensure it starts collapsed
+                    if (clone.dataset.pinType === 'group') {
+                        let grid = clone.querySelector('[id^="nav-group-grid"]');
+                        let chevron = clone.querySelector('[id^="nav-group-chevron"]');
+                        if (grid) grid.style.gridTemplateRows = '0fr';
+                        if (chevron) chevron.style.transform = 'rotate(-90deg)';
+                    }
+
                     // Pre-set pin button state on clone — item in pinned section is ALWAYS pinned.
                     // Uses data-pinned attribute for 100% pure CSS icon and opacity management.
                     let pinBtn = clone.querySelector('[data-nav-pin-btn]');

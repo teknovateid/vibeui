@@ -216,3 +216,107 @@ const recordPageHistory = () => {
 document.addEventListener('DOMContentLoaded', recordPageHistory);
 document.addEventListener('livewire:navigated', recordPageHistory);
 
+// ==========================================
+// SCROLL RESTORATION & PERSISTENCE
+// ==========================================
+const initScrollRestoration = () => {
+    const getPrefix = () => window.VIBE_PREFIX || 'vibe';
+
+    const getStorageKey = (target) => {
+        const prefix = getPrefix();
+        if (target === document || target === window) {
+            return `${prefix}-scroll-${window.location.pathname}`;
+        }
+        if (target && target.nodeType === 1) {
+            const id = target.id || target.dataset.vibeScroll;
+            if (!id) return null;
+            const isPageSpecific = id === 'docs-main-scroll' || id === 'main-scroll' || target.tagName.toLowerCase() === 'main';
+            return isPageSpecific
+                ? `${prefix}-scroll-${window.location.pathname}`
+                : `${prefix}-scroll-${id}`;
+        }
+        return null;
+    };
+
+    let isRestoring = false;
+
+    const restoreAllScrolls = () => {
+        const prefix = getPrefix();
+        isRestoring = true;
+
+        // 1. Restore window scroll
+        const windowKey = `${prefix}-scroll-${window.location.pathname}`;
+        const savedWindowScroll = sessionStorage.getItem(windowKey);
+        if (savedWindowScroll !== null && parseInt(savedWindowScroll, 10) > 0) {
+            window.scrollTo(0, parseInt(savedWindowScroll, 10));
+        }
+
+        // 2. Restore all scroll containers with an id or data-vibe-scroll
+        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], [id], main');
+        containers.forEach(el => {
+            const key = getStorageKey(el);
+            if (!key) return;
+            const saved = sessionStorage.getItem(key);
+            if (saved !== null && parseInt(saved, 10) > 0) {
+                el.scrollTop = parseInt(saved, 10);
+            }
+        });
+
+        // 3. Mark done restoring
+        setTimeout(() => {
+            isRestoring = false;
+        }, 50);
+    };
+
+    // Auto-save scroll position using capture phase (catches all scroll events globally)
+    let scrollDebounce;
+    window.addEventListener('scroll', (e) => {
+        if (isRestoring) return; // Prevent overwriting stored scroll during restore
+        clearTimeout(scrollDebounce);
+        scrollDebounce = setTimeout(() => {
+            const target = e.target;
+            const key = getStorageKey(target);
+            if (!key) return;
+
+            if (target === document || target === window) {
+                sessionStorage.setItem(key, window.scrollY || window.pageYOffset);
+            } else if (target && target.nodeType === 1) {
+                sessionStorage.setItem(key, target.scrollTop);
+            }
+        }, 50);
+    }, { capture: true, passive: true });
+
+    // Sync save on beforeunload / pagehide (ensures latest scroll position is saved on refresh)
+    const saveAllScrollsNow = () => {
+        const prefix = getPrefix();
+        const windowKey = `${prefix}-scroll-${window.location.pathname}`;
+        sessionStorage.setItem(windowKey, window.scrollY || window.pageYOffset);
+
+        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], [id], main');
+        containers.forEach(el => {
+            const key = getStorageKey(el);
+            if (key && el.scrollTop !== undefined) {
+                sessionStorage.setItem(key, el.scrollTop);
+            }
+        });
+    };
+
+    window.addEventListener('beforeunload', saveAllScrollsNow);
+    window.addEventListener('pagehide', saveAllScrollsNow);
+
+    // Restore on load & Livewire SPA navigation & Alpine init
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', restoreAllScrolls);
+    } else {
+        restoreAllScrolls();
+    }
+    document.addEventListener('livewire:navigated', restoreAllScrolls);
+    document.addEventListener('alpine:initialized', () => {
+        setTimeout(restoreAllScrolls, 10);
+    });
+};
+
+initScrollRestoration();
+
+
+

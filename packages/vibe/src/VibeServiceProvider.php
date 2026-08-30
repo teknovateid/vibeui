@@ -124,8 +124,63 @@ class VibeServiceProvider extends ServiceProvider
                                 document.documentElement.classList.remove(\'dark\');
                             }
                         } catch (e) {}
+
+                        // Scroll Anti-FOUC without blinking/hiding elements:
+                        // Continuously enforce scroll positions during HTML parsing so the very first paint is correct.
+                        try {
+                            var p = window.VIBE_PREFIX;
+                            var getSaved = function(id) {
+                                var k = (id === \'docs-main-scroll\') ? p + \'-scroll-\' + window.location.pathname : p + \'-scroll-\' + id;
+                                return parseInt(sessionStorage.getItem(k) || \'0\', 10);
+                            };
+                            
+                            var enforceScroll = function() {
+                                var main = document.getElementById(\'docs-main-scroll\');
+                                if (main) {
+                                    var ms = getSaved(\'docs-main-scroll\');
+                                    if (ms > 0) main.scrollTop = ms;
+                                }
+                                var side = document.getElementById(\'sidebar-menu-body\');
+                                if (side) {
+                                    var ss = getSaved(\'sidebar-menu-body\');
+                                    if (ss > 0) side.scrollTop = ss;
+                                }
+                                // Handle any other dynamically added scroll containers
+                                var others = document.querySelectorAll(\'[data-vibe-scroll]\');
+                                for (var i = 0; i < others.length; i++) {
+                                    var id = others[i].getAttribute(\'data-vibe-scroll\');
+                                    if (id) {
+                                        var val = getSaved(id);
+                                        if (val > 0) others[i].scrollTop = val;
+                                    }
+                                }
+                            };
+
+                            if (\'MutationObserver\' in window) {
+                                var obs = new MutationObserver(enforceScroll);
+                                obs.observe(document.documentElement, { childList: true, subtree: true });
+                                
+                                // Disconnect observer once DOM is fully built to save performance
+                                document.addEventListener(\'DOMContentLoaded\', function() {
+                                    enforceScroll();
+                                    obs.disconnect();
+                                    
+                                    // Remove anti-FOUC transition blocker
+                                    setTimeout(function() {
+                                        var style = document.getElementById(\'vibe-anti-fouc-transitions\');
+                                        if (style) style.remove();
+                                    }, 50);
+                                });
+                            }
+                        } catch (e) {}
                     })();
-                </script>';
+                </script>
+                <style id=\"vibe-anti-fouc-transitions\">
+                    *, *::before, *::after {
+                        transition: none !important;
+                        animation-duration: 0ms !important;
+                    }
+                </style>';
             ?>";
         });
 

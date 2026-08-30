@@ -12,10 +12,15 @@
 
 <div 
     x-data="{
-        open: {{ $defaultOpenState ? 'true' : 'false' }},
+        open: $el.dataset.pinnedShortcutFor ? false : {{ $defaultOpenState ? 'true' : 'false' }},
         ready: false,
         isGroupChild: true,
         init() {
+            if (this.$el.dataset.pinnedShortcutFor) {
+                this.open = false;
+                this.$nextTick(() => { this.ready = true; });
+                return;
+            }
             @if ($persist)
                 let key = (window.VIBE_PREFIX || 'vibe') + '-nav';
                 let navEl = this.$el.closest('nav');
@@ -114,16 +119,22 @@
                 </div>
 
                 <!-- Chevron -->
-                <span 
+                <svg 
                     id="{{ $chevronId }}" 
-                    class="origin-center"
-                    :class="[ready ? 'transition-transform duration-300' : '', open ? 'rotate-90' : 'rotate-0']" 
-                    style="{{ $defaultOpenState ? 'transform: rotate(90deg);' : '' }}"
+                    class="size-3.5 shrink-0 text-vibe-400 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-300" 
+                    :class="ready ? 'transition-transform duration-300' : ''" 
+                    style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};" 
+                    x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2.5" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
                 >
-                    <svg class="size-4 text-vibe-400 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" class="solar solar-alt-arrow-right-outline">
-                        <path fill-rule="evenodd" clip-rule="evenodd" d="M8.51192 4.43057C8.82641 4.161 9.29989 4.19743 9.56946 4.51192L15.5695 11.5119C15.8102 11.7928 15.8102 12.2072 15.5695 12.4881L9.56946 19.4881C9.29989 19.8026 8.82641 19.839 8.51192 19.5695C8.19743 19.2999 8.161 18.8264 8.43057 18.5119L14.0122 12L8.43057 5.48811C8.161 5.17361 8.19743 4.70014 8.51192 4.43057Z" fill="currentColor" />
-                    </svg>
-                </span>
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
         </div>
     </button>
@@ -172,16 +183,10 @@
                         var chevron = document.getElementById('{{ $chevronId }}');
                         if (saved === false && !{{ $active ? 'true' : 'false' }}) {
                             if (grid) grid.style.gridTemplateRows = '0fr';
-                            if (chevron) {
-                                chevron.style.transform = '';
-                                chevron.classList.remove('rotate-90');
-                            }
+                            if (chevron) chevron.style.transform = 'rotate(-90deg)';
                         } else if (saved === true) {
                             if (grid) grid.style.gridTemplateRows = '1fr';
-                            if (chevron) {
-                                chevron.style.transform = 'rotate(90deg)';
-                                chevron.classList.add('rotate-90');
-                            }
+                            if (chevron) chevron.style.transform = 'none';
                         }
                     }
                 }
