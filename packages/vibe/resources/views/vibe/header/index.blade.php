@@ -6,7 +6,7 @@
 ])
 
 @php
-    $baseClasses = 'flex items-center justify-between shrink-0 bg-vibe-50 dark:bg-vibe-900 border-b border-gray-200 dark:border-vibe-800';
+    $baseClasses = 'flex items-center justify-between shrink-0 bg-card text-card-foreground border-b border-border';
 
     $variantClasses = match ($variant) {
         'sticky' => 'sticky top-0 z-50',

@@ -10,8 +10,8 @@
     $gridClasses = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4';
     $listClasses = 'flex flex-col gap-4';
     
-    $activeBtnClass = 'bg-white dark:bg-vibe-800 text-vibe-900 dark:text-vibe-100 shadow-sm';
-    $inactiveBtnClass = 'text-vibe-500 hover:text-vibe-700 dark:text-vibe-400 dark:hover:text-vibe-300';
+    $activeBtnClass = 'bg-background text-foreground shadow-sm';
+    $inactiveBtnClass = 'text-muted-foreground hover:text-foreground';
     $baseBtnClass = 'flex items-center gap-2 px-3 py-1.5 text-sm font-medium transition-all duration-200 rounded-md';
 @endphp
 
@@ -65,7 +65,7 @@
             {{ $header  }}
         </div>
 
-        <div class="flex p-1 bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 rounded-lg w-max shrink-0">
+        <div class="flex p-1 bg-muted border border-border rounded-lg w-max shrink-0">
             <button id="vibe-glb-grid-{{ $id }}" type="button" @click="changeLayout('grid')" 
                     :class="{
                         '{{ $activeBtnClass }}': layout === 'grid',

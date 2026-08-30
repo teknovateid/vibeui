@@ -35,34 +35,14 @@
 [data-pinned-container] [data-pinned-shortcut-for] button,
 [data-pinned-container] a[data-pinned-shortcut-for] {
     background-color: transparent !important;
-    color: var(--color-vibe-600, #52525b) !important;
-}
-
-.dark [data-pinned-container] [data-pinned-shortcut-for] a,
-.dark [data-pinned-container] [data-pinned-shortcut-for] button,
-.dark [data-pinned-container] a[data-pinned-shortcut-for],
-:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] a,
-:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] button,
-:where(.dark, .dark *) [data-pinned-container] a[data-pinned-shortcut-for] {
-    background-color: transparent !important;
-    color: var(--color-vibe-400, #a1a1aa) !important;
+    color: var(--muted-foreground, #717372) !important;
 }
 
 [data-pinned-container] [data-pinned-shortcut-for] a:hover,
 [data-pinned-container] [data-pinned-shortcut-for] button:hover,
 [data-pinned-container] a[data-pinned-shortcut-for]:hover {
-    background-color: var(--color-vibe-200, #e4e4e7) !important;
-    color: var(--color-vibe-950, #09090b) !important;
-}
-
-.dark [data-pinned-container] [data-pinned-shortcut-for] a:hover,
-.dark [data-pinned-container] [data-pinned-shortcut-for] button:hover,
-.dark [data-pinned-container] a[data-pinned-shortcut-for]:hover,
-:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] a:hover,
-:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] button:hover,
-:where(.dark, .dark *) [data-pinned-container] a[data-pinned-shortcut-for]:hover {
-    background-color: var(--color-vibe-800, #27272a) !important;
-    color: var(--color-vibe-50, #fafafa) !important;
+    background-color: var(--accent, #e5e6e5) !important;
+    color: var(--accent-foreground, #0a0b0a) !important;
 }
 
 /* Scoped preview canvas explicit styles */

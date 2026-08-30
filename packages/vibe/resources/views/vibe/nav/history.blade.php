@@ -121,8 +121,8 @@
     };
 })()">
     {{-- Label / Toggle Header --}}
-    <div class="minified:hidden! flex items-center justify-between w-full py-1 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider dark:text-vibe-300 group/nav-label select-none">
-        <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-vibe-950 dark:hover:text-vibe-100 cursor-pointer flex-1 min-w-0">
+    <div class="minified:hidden! flex items-center justify-between w-full py-1 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider group/nav-label select-none">
+        <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-foreground cursor-pointer flex-1 min-w-0">
             <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
@@ -137,7 +137,7 @@
                 </svg>
             </button>
             <!-- Counter (hidden on hover) -->
-            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="group-hover/nav-label:hidden font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 text-[10px]"></span>
+            <span data-history-counter x-show="maxHistory > 0" x-text="itemCount + ' / ' + maxHistory" class="group-hover/nav-label:hidden font-normal normal-case tracking-normal text-muted-foreground text-[10px]"></span>
         </div>
     </div>
 
@@ -164,8 +164,8 @@
                     a.dataset.pinTitle = item.title || item.url;
                     a.dataset.navTooltip = item.title || item.url;
                     a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer ' + minCls + ' ' +
-                        (isActive ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50'
-                                  : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50');
+                        (isActive ? 'bg-accent text-accent-foreground font-semibold'
+                                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground');
 
                     a.addEventListener('click', function(e) {
                         if (e.target.closest('[data-history-delete]')) {
@@ -180,7 +180,7 @@
                     });
 
                     var iconSpan = document.createElement('span');
-                    iconSpan.className = 'shrink-0 flex items-center justify-center size-4 text-vibe-400 group-hover/nav-item:text-vibe-700 dark:text-vibe-500 dark:group-hover/nav-item:text-vibe-300';
+                    iconSpan.className = 'shrink-0 flex items-center justify-center size-4 text-muted-foreground group-hover/nav-item:text-foreground';
                     iconSpan.innerHTML = item.icon || window.VibeHistoryBuilder.clockSvg;
                     a.appendChild(iconSpan);
 
@@ -197,7 +197,7 @@
                     delBtn.type = 'button';
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = 'Remove from history';
-                    delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
+                    delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-accent text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
                     delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
                     
                     var handleDelete = function(e) {

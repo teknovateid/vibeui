@@ -37,7 +37,7 @@
     class="absolute z-50 mt-2 {{ $widthClasses }} rounded-md shadow-lg {{ $alignmentClasses }}"
     style="display: none;"
     @click="close()">
-    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-md shadow-sm p-1 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100']) }} role="menu" aria-orientation="vertical" tabindex="-1">
+    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-md shadow-sm p-1 bg-popover text-popover-foreground border border-border']) }} role="menu" aria-orientation="vertical" tabindex="-1">
         {{ $slot }}
     </div>
 </div>

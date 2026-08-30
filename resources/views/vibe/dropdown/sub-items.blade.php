@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'contentClasses' => 'p-1 bg-white dark:bg-vibe-950 border border-vibe-200 dark:border-vibe-800',
+    'contentClasses' => 'p-1 bg-popover text-popover-foreground border border-border',
     'align' => 'right',
     'width' => '48',
     'position' => 'absolute',
@@ -25,9 +25,9 @@
         $wrapperClasses = "relative w-full mt-1";
         $treeStyles = 
             "[&>*]:relative " .
-            "[&>*:before]:content-[''] [&>*:before]:absolute [&>*:before]:top-0 [&>*:before]:-left-3 [&>*:before]:w-3 [&>*:before]:h-1/2 [&>*:before]:border-l [&>*:before]:border-b [&>*:before]:border-vibe-200 dark:[&>*:before]:border-vibe-800 [&>*:before]:rounded-bl-md " .
+            "[&>*:before]:content-[''] [&>*:before]:absolute [&>*:before]:top-0 [&>*:before]:-left-3 [&>*:before]:w-3 [&>*:before]:h-1/2 [&>*:before]:border-l [&>*:before]:border-b [&>*:before]:border-border [&>*:before]:rounded-bl-md " .
             "[&>*:first-child:before]:-top-1 [&>*:first-child:before]:h-[calc(50%+0.25rem)] " .
-            "[&>*:not(:last-child):after]:content-[''] [&>*:not(:last-child):after]:absolute [&>*:not(:last-child):after]:top-0 [&>*:not(:last-child):after]:-left-3 [&>*:not(:last-child):after]:w-px [&>*:not(:last-child):after]:h-[calc(100%+0.25rem)] [&>*:not(:last-child):after]:bg-vibe-200 dark:[&>*:not(:last-child):after]:bg-vibe-800";
+            "[&>*:not(:last-child):after]:content-[''] [&>*:not(:last-child):after]:absolute [&>*:not(:last-child):after]:top-0 [&>*:not(:last-child):after]:-left-3 [&>*:not(:last-child):after]:w-px [&>*:not(:last-child):after]:h-[calc(100%+0.25rem)] [&>*:not(:last-child):after]:bg-border";
         $innerClasses = "pl-3 ml-3 flex flex-col gap-1 $treeStyles";
     }
 @endphp

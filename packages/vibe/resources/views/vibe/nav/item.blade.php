@@ -14,7 +14,7 @@
     $itemId = $id ?? Str::slug(strip_tags($slot));
     $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:px-0 data-[collapsed=true]:justify-center data-[collapsed=true]:mx-auto group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible';
     $baseClasses = "flex items-center min-h-9 px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item $minifiedClasses";
-    $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50';
+    $activeClasses = $active ? 'bg-accent text-accent-foreground font-semibold' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground';
 
     $badgeClasses = match ($badgeColor) {
         'green', 'success' => 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
@@ -30,7 +30,7 @@
 
     <!-- Icon -->
     @if (isset($icon))
-        <span data-pin-icon class="shrink-0 flex items-center justify-center w-5 h-5 {{ $active ? 'text-vibe-900 dark:text-vibe-100' : 'text-vibe-500 group-hover/nav-item:text-vibe-900 dark:text-vibe-400 dark:group-hover/nav-item:text-vibe-200' }}">
+        <span data-pin-icon class="shrink-0 flex items-center justify-center w-5 h-5 {{ $active ? 'text-foreground' : 'text-muted-foreground group-hover/nav-item:text-foreground' }}">
             {{ $icon }}
         </span>
     @endif
@@ -57,7 +57,7 @@
                 :data-pinned="typeof isPinned !== 'undefined' && isPinned('{{ $itemId }}') ? 'true' : 'false'"
                 x-show="(! (typeof isGroupChild !== 'undefined' && isGroupChild)) && ((typeof pinnable !== 'undefined' && pinnable) || {{ $pinnable ? 'true' : 'false' }})" 
                 @click.stop.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $itemId }}')" 
-                class="inline-flex items-center justify-center size-6 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors cursor-pointer text-vibe-400 opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-vibe-600 dark:group-hover/nav-item:text-vibe-400 data-[pinned=true]:text-vibe-900 dark:data-[pinned=true]:text-vibe-100 data-[pinned=true]:opacity-100" 
+                class="inline-flex items-center justify-center size-6 rounded hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer text-muted-foreground opacity-0 group-hover/nav-item:opacity-100 group-hover/nav-item:text-foreground data-[pinned=true]:text-foreground data-[pinned=true]:opacity-100" 
                 style="display:none" 
                 title="Pin"
             >

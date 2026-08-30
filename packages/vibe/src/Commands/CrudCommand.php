@@ -213,9 +213,9 @@ class CrudCommand extends Command implements PromptsForMissingInput
             if ($isFirst) { // Actually, $isFirst is already false, we can use a counter
                 // First column might be handled outside, but let's just dump it
             }
-            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-vibe-100 dark:border-vibe-800 last:border-0\">\n";
-            $listGridData .= "    <span class=\"text-sm text-vibe-500 dark:text-vibe-400\">{$label}</span>\n";
-            $listGridData .= "    <span class=\"text-sm font-medium text-vibe-900 dark:text-vibe-100\">{{ \$item->{$col} }}</span>\n";
+            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-border last:border-0\">\n";
+            $listGridData .= "    <span class=\"text-sm text-muted-foreground\">{$label}</span>\n";
+            $listGridData .= "    <span class=\"text-sm font-medium text-foreground\">{{ \$item->{$col} }}</span>\n";
             $listGridData .= "</div>\n                            ";
             
             $formFields .= $this->buildFormField($col, $label, $map);
@@ -310,9 +310,9 @@ class CrudCommand extends Command implements PromptsForMissingInput
             $label = Str::headline($col);
             $tableHeaders .= "<th class=\"px-6 py-3\">{$label}</th>\n                    ";
             $tableData    .= "<td class=\"px-6 py-4\">{{ \$item->{$col} }}</td>\n                    ";
-            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-vibe-100 dark:border-vibe-800 last:border-0\">\n";
-            $listGridData .= "    <span class=\"text-sm text-vibe-500 dark:text-vibe-400\">{$label}</span>\n";
-            $listGridData .= "    <span class=\"text-sm font-medium text-vibe-900 dark:text-vibe-100\">{{ \$item->{$col} }}</span>\n";
+            $listGridData .= "<div class=\"flex justify-between items-center py-1 border-b border-border last:border-0\">\n";
+            $listGridData .= "    <span class=\"text-sm text-muted-foreground\">{$label}</span>\n";
+            $listGridData .= "    <span class=\"text-sm font-medium text-foreground\">{{ \$item->{$col} }}</span>\n";
             $listGridData .= "</div>\n                            ";
             $formFields   .= $this->buildFormField($col, $label, $map);
         }

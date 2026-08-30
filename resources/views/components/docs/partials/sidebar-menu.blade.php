@@ -1,7 +1,7 @@
 <vibe:nav {{ $attributes->twMerge(['class' => 'gap-2']) }} pinnable maxpin="5">
     <vibe:nav.pinned title="PINNED" persist />
 
-    <div class=" divide-x h-px bg-vibe-200 dark:bg-vibe-800"></div>
+    <div class="h-px bg-border"></div>
 
     <vibe:nav.label title="GET STARTED" persist>
         <!-- Docs -->

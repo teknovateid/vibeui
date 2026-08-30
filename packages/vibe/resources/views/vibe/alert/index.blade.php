@@ -208,7 +208,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         class="fixed inset-0 bg-vibe-900/40 dark:bg-black/40 backdrop-blur-[2px] pointer-events-auto"
+         class="fixed inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-auto"
          style="display: none; z-index: -1;"></div>
 
 

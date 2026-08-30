@@ -5,9 +5,9 @@
 ])
 
 <div {{ $attributes->merge(['class' => 'flex flex-wrap gap-4 items-center justify-between w-full']) }}>
-    <nav aria-label="Breadcrumb" class="flex flex-col gap-1.5 text-sm font-medium text-vibe-500 dark:text-vibe-400">
+    <nav aria-label="Breadcrumb" class="flex flex-col gap-1.5 text-sm font-medium text-muted-foreground">
         @if ($title)
-            <h2 class="text-xl md:text-2xl font-bold text-black dark:text-white">
+            <h2 class="text-xl md:text-2xl font-bold text-foreground">
                 {{ $title === true ? config('app.name') : $title }}
             </h2>
         @endif

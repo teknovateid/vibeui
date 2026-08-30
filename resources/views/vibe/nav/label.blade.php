@@ -58,11 +58,11 @@
     <button 
         type="button" 
         @click="open = !open" 
-        class="minified:hidden! flex items-center gap-2 w-full py-1.5 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider hover:text-vibe-950 dark:text-vibe-300 dark:hover:text-vibe-100 transition-colors group/nav-label cursor-pointer select-none"
+        class="minified:hidden! flex items-center gap-2 w-full py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors group/nav-label cursor-pointer select-none"
     >
         <div class="flex items-center">
             @if ($pinnable ?? false)
-                <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="inline-flex items-center justify-center size-6 rounded hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-vibe-900 dark:text-vibe-100' : 'text-vibe-400 group-hover/nav-label:text-vibe-600 dark:group-hover/nav-label:text-vibe-400'" title="Pin">
+                <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="inline-flex items-center justify-center size-6 rounded hover:bg-accent hover:text-accent-foreground transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-foreground' : 'text-muted-foreground group-hover/nav-label:text-foreground'" title="Pin">
                     <!-- Pinned Icon -->
                     <svg x-show="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}')" class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M14 4h-4v2h4v-2zm2 2h2c1.1 0 2 .9 2 2v2h-8v-2h4v-2zm-6 4v5h3v7l1 2 1-2v-7h3v-5h-8z" />
@@ -79,7 +79,7 @@
                 id="{{ $chevronId }}" 
                 class="size-3 shrink-0" 
                 :class="ready ? 'transition-transform duration-300' : ''" 
-                style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};"
+                style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};" 
                 x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`"
                 xmlns="http://www.w3.org/2000/svg" 
                 viewBox="0 0 24 24" 
@@ -95,7 +95,7 @@
         <div class="flex items-center gap-1 justify-between w-full">
             <span class="whitespace-nowrap">{{ $title }}</span>
             @if ($pinnedContainer)
-                <span x-show="$data.maxpin" x-text="($data.maxpin ? (($data.pinned ? $data.pinned.length : 0) + ' / ' + $data.maxpin) : '')" class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"></span>
+                <span x-show="$data.maxpin" x-text="($data.maxpin ? (($data.pinned ? $data.pinned.length : 0) + ' / ' + $data.maxpin) : '')" class="font-normal normal-case tracking-normal text-muted-foreground mr-2"></span>
             @endif
         </div>
     </button>

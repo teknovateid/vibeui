@@ -9,7 +9,7 @@
     @livewireStyles
     @stack('head')
 </head>
-<body class="font-medium font-sans antialiased bg-vibe-50 dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 vibe-scrollbar">
+<body class="font-medium font-sans antialiased bg-background text-foreground vibe-scrollbar">
     {{ $slot }}
     <vibe:alert position="top-right" />
     <vibe:toast position="top-right" />

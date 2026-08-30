@@ -80,7 +80,7 @@
     <button
         type="button"
         @click="open = !open"
-        class="minified:hidden! flex items-center gap-2 w-full py-1.5 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider hover:text-vibe-950 dark:text-vibe-300 dark:hover:text-vibe-100 transition-colors group/nav-label cursor-pointer select-none"
+        class="minified:hidden! flex items-center gap-2 w-full py-1.5 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider hover:text-foreground transition-colors group/nav-label cursor-pointer select-none"
     >
         
         {{-- Chevron --}}
@@ -107,7 +107,7 @@
             <span
                 x-show="$data.maxpin"
                 x-text="($data.maxpin ? (($data.pinned ? $data.pinned.length : 0) + ' / ' + $data.maxpin) : '')"
-                class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"
+                class="font-normal normal-case tracking-normal text-muted-foreground mr-2"
             ></span>
         </div>
     </button>
