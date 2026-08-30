@@ -141,24 +141,12 @@ class VibeServiceProvider extends ServiceProvider
                                 var main = document.getElementById(\'docs-main-scroll\');
                                 if (main) {
                                     var ms = getSaved(\'docs-main-scroll\');
-                                    if (ms > 0) {
-                                        var m = main.querySelector(\'main\');
-                                        if (m && !m.style.minHeight) {
-                                            m.style.minHeight = (ms + (window.innerHeight || 800) + 100) + \'px\';
-                                        }
-                                        main.scrollTop = ms;
-                                    }
+                                    if (ms > 0) main.scrollTop = ms;
                                 }
                                 var side = document.getElementById(\'sidebar-menu-body\');
                                 if (side) {
                                     var ss = getSaved(\'sidebar-menu-body\');
-                                    if (ss > 0) {
-                                        var fc = side.firstElementChild;
-                                        if (fc && !fc.style.minHeight) {
-                                            fc.style.minHeight = (ss + (window.innerHeight || 800) + 100) + \'px\';
-                                        }
-                                        side.scrollTop = ss;
-                                    }
+                                    if (ss > 0) side.scrollTop = ss;
                                 }
                                 // Handle any other dynamically added scroll containers
                                 var others = document.querySelectorAll(\'[data-vibe-scroll]\');
@@ -179,21 +167,6 @@ class VibeServiceProvider extends ServiceProvider
                                 document.addEventListener(\'DOMContentLoaded\', function() {
                                     enforceScroll();
                                     obs.disconnect();
-
-                                    var main = document.getElementById(\'docs-main-scroll\');
-                                    if (main) {
-                                        var m = main.querySelector(\'main\');
-                                        if (m) m.style.minHeight = \'\';
-                                        var ms = getSaved(\'docs-main-scroll\');
-                                        if (ms > 0) main.scrollTop = ms;
-                                    }
-                                    var side = document.getElementById(\'sidebar-menu-body\');
-                                    if (side) {
-                                        var fc = side.firstElementChild;
-                                        if (fc) fc.style.minHeight = \'\';
-                                        var ss = getSaved(\'sidebar-menu-body\');
-                                        if (ss > 0) side.scrollTop = ss;
-                                    }
                                     
                                     // Remove anti-FOUC transition blocker
                                     setTimeout(function() {

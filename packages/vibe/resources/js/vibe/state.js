@@ -222,18 +222,35 @@ document.addEventListener('livewire:navigated', recordPageHistory);
 const initScrollRestoration = () => {
     const getPrefix = () => window.VIBE_PREFIX || 'vibe';
 
+    // Auto-clean any zero or invalid legacy scroll keys from sessionStorage
+    try {
+        const prefix = getPrefix();
+        Object.keys(sessionStorage).forEach(key => {
+            if (key.startsWith(`${prefix}-scroll-`)) {
+                const val = parseFloat(sessionStorage.getItem(key));
+                if (isNaN(val) || val <= 0) {
+                    sessionStorage.removeItem(key);
+                }
+            }
+        });
+    } catch (e) {}
+
     const getStorageKey = (target) => {
         const prefix = getPrefix();
         if (target === document || target === window) {
             return `${prefix}-scroll-${window.location.pathname}`;
         }
         if (target && target.nodeType === 1) {
-            const id = target.id || target.dataset.vibeScroll;
-            if (!id) return null;
-            const isPageSpecific = id === 'docs-main-scroll' || id === 'main-scroll' || target.tagName.toLowerCase() === 'main';
-            return isPageSpecific
-                ? `${prefix}-scroll-${window.location.pathname}`
-                : `${prefix}-scroll-${id}`;
+            const id = target.id;
+            const vibeScroll = target.dataset ? target.dataset.vibeScroll : target.getAttribute('data-vibe-scroll');
+            
+            // Only track explicit scrollable containers
+            if (id === 'docs-main-scroll' || id === 'main-scroll' || target.tagName.toLowerCase() === 'main') {
+                return `${prefix}-scroll-${window.location.pathname}`;
+            }
+            if (id === 'sidebar-menu-body' || vibeScroll) {
+                return `${prefix}-scroll-${vibeScroll || id}`;
+            }
         }
         return null;
     };
@@ -247,18 +264,18 @@ const initScrollRestoration = () => {
         // 1. Restore window scroll
         const windowKey = `${prefix}-scroll-${window.location.pathname}`;
         const savedWindowScroll = sessionStorage.getItem(windowKey);
-        if (savedWindowScroll !== null && parseInt(savedWindowScroll, 10) > 0) {
-            window.scrollTo(0, parseInt(savedWindowScroll, 10));
+        if (savedWindowScroll !== null && parseFloat(savedWindowScroll) > 0) {
+            window.scrollTo(0, Math.round(parseFloat(savedWindowScroll)));
         }
 
-        // 2. Restore all scroll containers with an id or data-vibe-scroll
-        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], [id], main');
+        // 2. Restore dedicated scroll containers
+        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], main');
         containers.forEach(el => {
             const key = getStorageKey(el);
             if (!key) return;
             const saved = sessionStorage.getItem(key);
-            if (saved !== null && parseInt(saved, 10) > 0) {
-                el.scrollTop = parseInt(saved, 10);
+            if (saved !== null && parseFloat(saved) > 0) {
+                el.scrollTop = Math.round(parseFloat(saved));
             }
         });
 
@@ -268,7 +285,7 @@ const initScrollRestoration = () => {
         }, 50);
     };
 
-    // Auto-save scroll position using capture phase (catches all scroll events globally)
+    // Auto-save scroll position using capture phase
     let scrollDebounce;
     window.addEventListener('scroll', (e) => {
         if (isRestoring) return; // Prevent overwriting stored scroll during restore
@@ -278,10 +295,14 @@ const initScrollRestoration = () => {
             const key = getStorageKey(target);
             if (!key) return;
 
-            if (target === document || target === window) {
-                sessionStorage.setItem(key, window.scrollY || window.pageYOffset);
-            } else if (target && target.nodeType === 1) {
-                sessionStorage.setItem(key, target.scrollTop);
+            const scrollVal = (target === document || target === window)
+                ? (window.scrollY || window.pageYOffset || 0)
+                : (target.scrollTop || 0);
+
+            if (scrollVal > 0) {
+                sessionStorage.setItem(key, Math.round(scrollVal));
+            } else {
+                sessionStorage.removeItem(key);
             }
         }, 50);
     }, { capture: true, passive: true });
@@ -290,13 +311,22 @@ const initScrollRestoration = () => {
     const saveAllScrollsNow = () => {
         const prefix = getPrefix();
         const windowKey = `${prefix}-scroll-${window.location.pathname}`;
-        sessionStorage.setItem(windowKey, window.scrollY || window.pageYOffset);
+        const winScroll = window.scrollY || window.pageYOffset || 0;
+        if (winScroll > 0) {
+            sessionStorage.setItem(windowKey, Math.round(winScroll));
+        } else {
+            sessionStorage.removeItem(windowKey);
+        }
 
-        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], [id], main');
+        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll], main');
         containers.forEach(el => {
             const key = getStorageKey(el);
-            if (key && el.scrollTop !== undefined) {
-                sessionStorage.setItem(key, el.scrollTop);
+            if (key) {
+                if (el.scrollTop > 0) {
+                    sessionStorage.setItem(key, Math.round(el.scrollTop));
+                } else {
+                    sessionStorage.removeItem(key);
+                }
             }
         });
     };
