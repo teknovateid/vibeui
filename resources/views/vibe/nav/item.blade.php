@@ -13,7 +13,7 @@
 @php
     $itemId = $id ?? Str::slug(strip_tags($slot));
     $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:px-0 data-[collapsed=true]:justify-center data-[collapsed=true]:mx-auto group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible';
-    $baseClasses = "flex items-center px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item $minifiedClasses";
+    $baseClasses = "flex items-center min-h-9 px-3 py-2 rounded-lg text-sm font-medium w-full relative group/nav-item $minifiedClasses";
     $activeClasses = $active ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50' : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50';
 
     $badgeClasses = match ($badgeColor) {

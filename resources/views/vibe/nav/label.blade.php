@@ -95,7 +95,7 @@
         <div class="flex items-center gap-1 justify-between w-full">
             <span class="whitespace-nowrap">{{ $title }}</span>
             @if ($pinnedContainer)
-                <span x-show="typeof maxpin !== 'undefined' && maxpin" x-text="(typeof pinned !== 'undefined' ? pinned.length : 0) + ' / ' + maxpin" class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"></span>
+                <span x-show="$data.maxpin" x-text="($data.maxpin ? (($data.pinned ? $data.pinned.length : 0) + ' / ' + $data.maxpin) : '')" class="font-normal normal-case tracking-normal text-vibe-600 dark:text-vibe-400 mr-2"></span>
             @endif
         </div>
     </button>
