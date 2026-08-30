@@ -122,16 +122,16 @@
 })()">
     {{-- Label / Toggle Header --}}
     <div class="minified:hidden! flex items-center justify-between w-full py-1 text-[11px] font-semibold text-vibe-700 uppercase tracking-wider dark:text-vibe-300 group/nav-label select-none">
-        <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-vibe-950 dark:hover:text-vibe-100 transition-colors cursor-pointer flex-1 min-w-0">
-            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5695 8.51192C19.839 8.82641 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.161 19.2999 8.19743 19.5695 8.51192Z" fill="currentColor" />
+        <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-vibe-950 dark:hover:text-vibe-100 cursor-pointer flex-1 min-w-0">
+            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
             </svg>
             <span class="whitespace-nowrap truncate">{{ $title }}</span>
         </button>
 
         <div class="flex items-center justify-end shrink-0 pr-2">
             <!-- Trash icon (shown on hover) -->
-            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:flex items-center justify-center hover:text-red-500 p-0.5 rounded transition-colors cursor-pointer">
+            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:flex items-center justify-center hover:text-red-500 p-0.5 rounded cursor-pointer">
                 <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
                 </svg>
@@ -163,9 +163,9 @@
                     a.href = item.url;
                     a.dataset.pinTitle = item.title || item.url;
                     a.dataset.navTooltip = item.title || item.url;
-                    a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer transition-colors ' + minCls + ' ' +
+                    a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer ' + minCls + ' ' +
                         (isActive ? 'bg-vibe-200 dark:bg-vibe-800 text-vibe-950 dark:text-vibe-50'
-                                  : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200/70 dark:hover:bg-vibe-800/70 hover:text-vibe-950 dark:hover:text-vibe-50');
+                                  : 'text-vibe-600 dark:text-vibe-400 hover:bg-vibe-200 dark:hover:bg-vibe-800 hover:text-vibe-950 dark:hover:text-vibe-50');
 
                     a.addEventListener('click', function(e) {
                         if (e.target.closest('[data-history-delete]')) {
@@ -197,7 +197,7 @@
                     delBtn.type = 'button';
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = 'Remove from history';
-                    delBtn.className = 'opacity-0 group-hover/nav-item:opacity-100 p-0.5 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 transition-all shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
+                    delBtn.className = 'opacity-0 group-hover/nav-item:opacity-100 p-0.5 rounded hover:bg-vibe-300 dark:hover:bg-vibe-700 text-vibe-400 hover:text-vibe-700 dark:hover:text-vibe-200 shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
                     delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
                     
                     var handleDelete = function(e) {

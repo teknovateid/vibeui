@@ -1,0 +1,653 @@
+/* Vibe UI Highlight.js Stylesheet (Multi-Theme Support) */
+
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    tab-size: 4;
+}
+
+code.hljs {
+    padding: 0;
+    background: transparent;
+    font-family: inherit;
+}
+
+/* ==========================================================================
+   1. VIBE THEME (Adaptive Light & Dark - Default)
+   ========================================================================== */
+
+/* Light Mode */
+.vibe-theme-vibe .hljs,
+.hljs {
+    color: #24292f;
+    background: transparent;
+}
+
+.vibe-theme-vibe .hljs-doctag,
+.vibe-theme-vibe .hljs-keyword,
+.vibe-theme-vibe .hljs-meta .hljs-keyword,
+.vibe-theme-vibe .hljs-template-tag,
+.vibe-theme-vibe .hljs-template-variable,
+.vibe-theme-vibe .hljs-type,
+.vibe-theme-vibe .hljs-variable.language_,
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+    color: #cf222e;
+    font-weight: 600;
+}
+
+.vibe-theme-vibe .hljs-title,
+.vibe-theme-vibe .hljs-title.class_,
+.vibe-theme-vibe .hljs-title.class_.inherited__,
+.vibe-theme-vibe .hljs-title.function_,
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+    color: #8250df;
+    font-weight: 600;
+}
+
+.vibe-theme-vibe .hljs-attr,
+.vibe-theme-vibe .hljs-attribute,
+.vibe-theme-vibe .hljs-literal,
+.vibe-theme-vibe .hljs-meta,
+.vibe-theme-vibe .hljs-number,
+.vibe-theme-vibe .hljs-operator,
+.vibe-theme-vibe .hljs-variable,
+.vibe-theme-vibe .hljs-selector-attr,
+.vibe-theme-vibe .hljs-selector-class,
+.vibe-theme-vibe .hljs-selector-id,
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+    color: #0550ae;
+}
+
+.vibe-theme-vibe .hljs-regexp,
+.vibe-theme-vibe .hljs-string,
+.vibe-theme-vibe .hljs-meta .hljs-string,
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+    color: #0a3069;
+}
+
+.vibe-theme-vibe .hljs-built_in,
+.vibe-theme-vibe .hljs-symbol,
+.hljs-built_in,
+.hljs-symbol {
+    color: #953800;
+}
+
+.vibe-theme-vibe .hljs-comment,
+.vibe-theme-vibe .hljs-code,
+.vibe-theme-vibe .hljs-formula,
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+    color: #6e7781;
+    font-style: italic;
+}
+
+.vibe-theme-vibe .hljs-name,
+.vibe-theme-vibe .hljs-quote,
+.vibe-theme-vibe .hljs-selector-tag,
+.vibe-theme-vibe .hljs-selector-pseudo,
+.vibe-theme-vibe .hljs-tag,
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo,
+.hljs-tag {
+    color: #116329;
+}
+
+.vibe-theme-vibe .hljs-subst,
+.hljs-subst {
+    color: #24292f;
+}
+
+.vibe-theme-vibe .hljs-section,
+.hljs-section {
+    color: #0550ae;
+    font-weight: bold;
+}
+
+.vibe-theme-vibe .hljs-bullet,
+.hljs-bullet {
+    color: #f59e0b;
+}
+
+.vibe-theme-vibe .hljs-addition,
+.hljs-addition {
+    color: #1a7f37;
+    background-color: #dafbe1;
+}
+
+.vibe-theme-vibe .hljs-deletion,
+.hljs-deletion {
+    color: #cf222e;
+    background-color: #ffebe9;
+}
+
+/* Adaptive Dark Mode for Vibe Theme */
+.dark .vibe-theme-vibe .hljs {
+    color: #e6edf3;
+    background: transparent;
+}
+
+.dark .vibe-theme-vibe .hljs-doctag,
+.dark .vibe-theme-vibe .hljs-keyword,
+.dark .vibe-theme-vibe .hljs-meta .hljs-keyword,
+.dark .vibe-theme-vibe .hljs-template-tag,
+.dark .vibe-theme-vibe .hljs-template-variable,
+.dark .vibe-theme-vibe .hljs-type,
+.dark .vibe-theme-vibe .hljs-variable.language_ {
+    color: #ff7b72;
+    font-weight: 600;
+}
+
+.dark .vibe-theme-vibe .hljs-title,
+.dark .vibe-theme-vibe .hljs-title.class_,
+.dark .vibe-theme-vibe .hljs-title.class_.inherited__,
+.dark .vibe-theme-vibe .hljs-title.function_ {
+    color: #d2a8ff;
+    font-weight: 600;
+}
+
+.dark .vibe-theme-vibe .hljs-attr,
+.dark .vibe-theme-vibe .hljs-attribute,
+.dark .vibe-theme-vibe .hljs-literal,
+.dark .vibe-theme-vibe .hljs-meta,
+.dark .vibe-theme-vibe .hljs-number,
+.dark .vibe-theme-vibe .hljs-operator,
+.dark .vibe-theme-vibe .hljs-variable,
+.dark .vibe-theme-vibe .hljs-selector-attr,
+.dark .vibe-theme-vibe .hljs-selector-class,
+.dark .vibe-theme-vibe .hljs-selector-id {
+    color: #79c0ff;
+}
+
+.dark .vibe-theme-vibe .hljs-regexp,
+.dark .vibe-theme-vibe .hljs-string,
+.dark .vibe-theme-vibe .hljs-meta .hljs-string {
+    color: #a5d6ff;
+}
+
+.dark .vibe-theme-vibe .hljs-built_in,
+.dark .vibe-theme-vibe .hljs-symbol {
+    color: #ffa657;
+}
+
+.dark .vibe-theme-vibe .hljs-comment,
+.dark .vibe-theme-vibe .hljs-code,
+.dark .vibe-theme-vibe .hljs-formula {
+    color: #8b949e;
+    font-style: italic;
+}
+
+.dark .vibe-theme-vibe .hljs-name,
+.dark .vibe-theme-vibe .hljs-quote,
+.dark .vibe-theme-vibe .hljs-selector-tag,
+.dark .vibe-theme-vibe .hljs-selector-pseudo,
+.dark .vibe-theme-vibe .hljs-tag {
+    color: #7ee787;
+}
+
+.dark .vibe-theme-vibe .hljs-subst {
+    color: #e6edf3;
+}
+
+.dark .vibe-theme-vibe .hljs-section {
+    color: #1f6feb;
+    font-weight: bold;
+}
+
+.dark .vibe-theme-vibe .hljs-bullet {
+    color: #f2cc60;
+}
+
+.dark .vibe-theme-vibe .hljs-addition {
+    color: #aff5b4;
+    background-color: #033a16;
+}
+
+.dark .vibe-theme-vibe .hljs-deletion {
+    color: #ffdcd7;
+    background-color: #67060c;
+}
+
+/* ==========================================================================
+   2. GITHUB DARK THEME
+   ========================================================================== */
+.vibe-theme-github,
+.vibe-theme-github-dark {
+    background-color: #0d1117 !important;
+    border-color: #30363d !important;
+}
+.vibe-theme-github [data-vibe-header],
+.vibe-theme-github-dark [data-vibe-header] {
+    background-color: #161b22 !important;
+    border-color: #30363d !important;
+    color: #e6edf3 !important;
+}
+.vibe-theme-github [data-vibe-gutter],
+.vibe-theme-github-dark [data-vibe-gutter] {
+    border-color: #30363d !important;
+    color: #6e7681 !important;
+}
+.vibe-theme-github .hljs,
+.vibe-theme-github-dark .hljs {
+    color: #c9d1d9 !important;
+    background: transparent !important;
+}
+.vibe-theme-github .hljs-keyword,
+.vibe-theme-github .hljs-doctag,
+.vibe-theme-github .hljs-meta .hljs-keyword,
+.vibe-theme-github .hljs-template-tag,
+.vibe-theme-github .hljs-template-variable,
+.vibe-theme-github .hljs-type,
+.vibe-theme-github-dark .hljs-keyword,
+.vibe-theme-github-dark .hljs-doctag,
+.vibe-theme-github-dark .hljs-meta .hljs-keyword,
+.vibe-theme-github-dark .hljs-template-tag,
+.vibe-theme-github-dark .hljs-template-variable,
+.vibe-theme-github-dark .hljs-type {
+    color: #ff7b72 !important;
+    font-weight: 600;
+}
+.vibe-theme-github .hljs-title,
+.vibe-theme-github .hljs-title.class_,
+.vibe-theme-github .hljs-title.function_,
+.vibe-theme-github-dark .hljs-title,
+.vibe-theme-github-dark .hljs-title.class_,
+.vibe-theme-github-dark .hljs-title.function_ {
+    color: #d2a8ff !important;
+    font-weight: 600;
+}
+.vibe-theme-github .hljs-attr,
+.vibe-theme-github .hljs-attribute,
+.vibe-theme-github .hljs-literal,
+.vibe-theme-github .hljs-number,
+.vibe-theme-github .hljs-operator,
+.vibe-theme-github .hljs-variable,
+.vibe-theme-github-dark .hljs-attr,
+.vibe-theme-github-dark .hljs-attribute,
+.vibe-theme-github-dark .hljs-literal,
+.vibe-theme-github-dark .hljs-number,
+.vibe-theme-github-dark .hljs-operator,
+.vibe-theme-github-dark .hljs-variable {
+    color: #79c0ff !important;
+}
+.vibe-theme-github .hljs-string,
+.vibe-theme-github .hljs-regexp,
+.vibe-theme-github .hljs-meta .hljs-string,
+.vibe-theme-github-dark .hljs-string,
+.vibe-theme-github-dark .hljs-regexp,
+.vibe-theme-github-dark .hljs-meta .hljs-string {
+    color: #a5d6ff !important;
+}
+.vibe-theme-github .hljs-built_in,
+.vibe-theme-github .hljs-symbol,
+.vibe-theme-github-dark .hljs-built_in,
+.vibe-theme-github-dark .hljs-symbol {
+    color: #ffa657 !important;
+}
+.vibe-theme-github .hljs-comment,
+.vibe-theme-github .hljs-code,
+.vibe-theme-github-dark .hljs-comment,
+.vibe-theme-github-dark .hljs-code {
+    color: #8b949e !important;
+    font-style: italic;
+}
+.vibe-theme-github .hljs-name,
+.vibe-theme-github .hljs-tag,
+.vibe-theme-github .hljs-selector-tag,
+.vibe-theme-github-dark .hljs-name,
+.vibe-theme-github-dark .hljs-tag,
+.vibe-theme-github-dark .hljs-selector-tag {
+    color: #7ee787 !important;
+}
+
+/* ==========================================================================
+   3. GITHUB LIGHT THEME
+   ========================================================================== */
+.vibe-theme-github-light {
+    background-color: #ffffff !important;
+    border-color: #d0d7de !important;
+}
+.vibe-theme-github-light [data-vibe-header] {
+    background-color: #f6f8fa !important;
+    border-color: #d0d7de !important;
+    color: #24292f !important;
+}
+.vibe-theme-github-light [data-vibe-gutter] {
+    border-color: #d0d7de !important;
+    color: #8c959f !important;
+}
+.vibe-theme-github-light .hljs {
+    color: #24292f !important;
+    background: transparent !important;
+}
+.vibe-theme-github-light .hljs-keyword,
+.vibe-theme-github-light .hljs-type,
+.vibe-theme-github-light .hljs-doctag {
+    color: #cf222e !important;
+    font-weight: 600;
+}
+.vibe-theme-github-light .hljs-title,
+.vibe-theme-github-light .hljs-title.function_,
+.vibe-theme-github-light .hljs-title.class_ {
+    color: #8250df !important;
+    font-weight: 600;
+}
+.vibe-theme-github-light .hljs-attr,
+.vibe-theme-github-light .hljs-number,
+.vibe-theme-github-light .hljs-literal,
+.vibe-theme-github-light .hljs-variable {
+    color: #0550ae !important;
+}
+.vibe-theme-github-light .hljs-string,
+.vibe-theme-github-light .hljs-regexp {
+    color: #0a3069 !important;
+}
+.vibe-theme-github-light .hljs-built_in {
+    color: #953800 !important;
+}
+.vibe-theme-github-light .hljs-comment {
+    color: #6e7781 !important;
+    font-style: italic;
+}
+.vibe-theme-github-light .hljs-name,
+.vibe-theme-github-light .hljs-tag,
+.vibe-theme-github-light .hljs-selector-tag {
+    color: #116329 !important;
+}
+
+/* ==========================================================================
+   4. DRACULA THEME
+   ========================================================================== */
+.vibe-theme-dracula {
+    background-color: #282a36 !important;
+    border-color: #44475a !important;
+}
+.vibe-theme-dracula [data-vibe-header] {
+    background-color: #21222c !important;
+    border-color: #44475a !important;
+    color: #f8f8f2 !important;
+}
+.vibe-theme-dracula [data-vibe-gutter] {
+    border-color: #44475a !important;
+    color: #6272a4 !important;
+}
+.vibe-theme-dracula .hljs {
+    color: #f8f8f2 !important;
+    background: transparent !important;
+}
+.vibe-theme-dracula .hljs-keyword,
+.vibe-theme-dracula .hljs-selector-tag,
+.vibe-theme-dracula .hljs-meta .hljs-keyword,
+.vibe-theme-dracula .hljs-doctag {
+    color: #ff79c6 !important;
+    font-weight: 600;
+}
+.vibe-theme-dracula .hljs-function,
+.vibe-theme-dracula .hljs-title.function_ {
+    color: #50fa7b !important;
+    font-weight: 600;
+}
+.vibe-theme-dracula .hljs-title,
+.vibe-theme-dracula .hljs-title.class_,
+.vibe-theme-dracula .hljs-type,
+.vibe-theme-dracula .hljs-name,
+.vibe-theme-dracula .hljs-tag {
+    color: #8be9fd !important;
+    font-weight: 600;
+}
+.vibe-theme-dracula .hljs-string,
+.vibe-theme-dracula .hljs-meta .hljs-string {
+    color: #f1fa8c !important;
+}
+.vibe-theme-dracula .hljs-number,
+.vibe-theme-dracula .hljs-literal,
+.vibe-theme-dracula .hljs-variable,
+.vibe-theme-dracula .hljs-attr {
+    color: #bd93f9 !important;
+}
+.vibe-theme-dracula .hljs-comment,
+.vibe-theme-dracula .hljs-quote {
+    color: #6272a4 !important;
+    font-style: italic;
+}
+.vibe-theme-dracula .hljs-built_in {
+    color: #8be9fd !important;
+}
+
+/* ==========================================================================
+   5. TOKYO NIGHT THEME
+   ========================================================================== */
+.vibe-theme-tokyo-night {
+    background-color: #1a1b26 !important;
+    border-color: #2f354a !important;
+}
+.vibe-theme-tokyo-night [data-vibe-header] {
+    background-color: #16161e !important;
+    border-color: #2f354a !important;
+    color: #c0caf5 !important;
+}
+.vibe-theme-tokyo-night [data-vibe-gutter] {
+    border-color: #2f354a !important;
+    color: #565f89 !important;
+}
+.vibe-theme-tokyo-night .hljs {
+    color: #a9b1d6 !important;
+    background: transparent !important;
+}
+.vibe-theme-tokyo-night .hljs-keyword,
+.vibe-theme-tokyo-night .hljs-selector-tag {
+    color: #bb9af7 !important;
+    font-weight: 600;
+}
+.vibe-theme-tokyo-night .hljs-title.function_,
+.vibe-theme-tokyo-night .hljs-function {
+    color: #7aa2f7 !important;
+    font-weight: 600;
+}
+.vibe-theme-tokyo-night .hljs-title.class_,
+.vibe-theme-tokyo-night .hljs-type,
+.vibe-theme-tokyo-night .hljs-name,
+.vibe-theme-tokyo-night .hljs-tag {
+    color: #2ac3de !important;
+    font-weight: 600;
+}
+.vibe-theme-tokyo-night .hljs-string {
+    color: #9ece6a !important;
+}
+.vibe-theme-tokyo-night .hljs-number,
+.vibe-theme-tokyo-night .hljs-literal,
+.vibe-theme-tokyo-night .hljs-variable,
+.vibe-theme-tokyo-night .hljs-attr {
+    color: #ff9e64 !important;
+}
+.vibe-theme-tokyo-night .hljs-comment {
+    color: #565f89 !important;
+    font-style: italic;
+}
+.vibe-theme-tokyo-night .hljs-built_in {
+    color: #0db9d7 !important;
+}
+
+/* ==========================================================================
+   6. ATOM ONE DARK THEME
+   ========================================================================== */
+.vibe-theme-atom-one-dark,
+.vibe-theme-one-dark {
+    background-color: #282c34 !important;
+    border-color: #3e4451 !important;
+}
+.vibe-theme-atom-one-dark [data-vibe-header],
+.vibe-theme-one-dark [data-vibe-header] {
+    background-color: #21252b !important;
+    border-color: #3e4451 !important;
+    color: #abb2bf !important;
+}
+.vibe-theme-atom-one-dark [data-vibe-gutter],
+.vibe-theme-one-dark [data-vibe-gutter] {
+    border-color: #3e4451 !important;
+    color: #5c6370 !important;
+}
+.vibe-theme-atom-one-dark .hljs,
+.vibe-theme-one-dark .hljs {
+    color: #abb2bf !important;
+    background: transparent !important;
+}
+.vibe-theme-atom-one-dark .hljs-keyword,
+.vibe-theme-one-dark .hljs-keyword {
+    color: #c678dd !important;
+    font-weight: 600;
+}
+.vibe-theme-atom-one-dark .hljs-title.function_,
+.vibe-theme-one-dark .hljs-title.function_ {
+    color: #61afef !important;
+    font-weight: 600;
+}
+.vibe-theme-atom-one-dark .hljs-title.class_,
+.vibe-theme-one-dark .hljs-type {
+    color: #e5c07b !important;
+    font-weight: 600;
+}
+.vibe-theme-atom-one-dark .hljs-name,
+.vibe-theme-atom-one-dark .hljs-tag,
+.vibe-theme-one-dark .hljs-name,
+.vibe-theme-one-dark .hljs-tag {
+    color: #e06c75 !important;
+}
+.vibe-theme-atom-one-dark .hljs-string,
+.vibe-theme-one-dark .hljs-string {
+    color: #98c379 !important;
+}
+.vibe-theme-atom-one-dark .hljs-number,
+.vibe-theme-one-dark .hljs-number {
+    color: #d19a66 !important;
+}
+.vibe-theme-atom-one-dark .hljs-comment,
+.vibe-theme-one-dark .hljs-comment {
+    color: #5c6370 !important;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   7. MONOKAI THEME
+   ========================================================================== */
+.vibe-theme-monokai {
+    background-color: #272822 !important;
+    border-color: #3e3d32 !important;
+}
+.vibe-theme-monokai [data-vibe-header] {
+    background-color: #1e1f1c !important;
+    border-color: #3e3d32 !important;
+    color: #f8f8f2 !important;
+}
+.vibe-theme-monokai [data-vibe-gutter] {
+    border-color: #3e3d32 !important;
+    color: #75715e !important;
+}
+.vibe-theme-monokai .hljs {
+    color: #f8f8f2 !important;
+    background: transparent !important;
+}
+.vibe-theme-monokai .hljs-keyword,
+.vibe-theme-monokai .hljs-selector-tag,
+.vibe-theme-monokai .hljs-name,
+.vibe-theme-monokai .hljs-tag {
+    color: #f92672 !important;
+    font-weight: 600;
+}
+.vibe-theme-monokai .hljs-title.function_,
+.vibe-theme-monokai .hljs-function {
+    color: #a6e22e !important;
+    font-weight: 600;
+}
+.vibe-theme-monokai .hljs-type,
+.vibe-theme-monokai .hljs-title.class_ {
+    color: #66d9ef !important;
+    font-weight: 600;
+}
+.vibe-theme-monokai .hljs-string {
+    color: #e6db74 !important;
+}
+.vibe-theme-monokai .hljs-number,
+.vibe-theme-monokai .hljs-literal,
+.vibe-theme-monokai .hljs-attr {
+    color: #fd971f !important;
+}
+.vibe-theme-monokai .hljs-comment {
+    color: #75715e !important;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   8. NORD THEME
+   ========================================================================== */
+.vibe-theme-nord {
+    background-color: #2e3440 !important;
+    border-color: #434c5e !important;
+}
+.vibe-theme-nord [data-vibe-header] {
+    background-color: #242933 !important;
+    border-color: #434c5e !important;
+    color: #d8dee9 !important;
+}
+.vibe-theme-nord [data-vibe-gutter] {
+    border-color: #434c5e !important;
+    color: #616e88 !important;
+}
+.vibe-theme-nord .hljs {
+    color: #d8dee9 !important;
+    background: transparent !important;
+}
+.vibe-theme-nord .hljs-keyword,
+.vibe-theme-nord .hljs-name,
+.vibe-theme-nord .hljs-tag {
+    color: #81a1c1 !important;
+    font-weight: 600;
+}
+.vibe-theme-nord .hljs-title.function_,
+.vibe-theme-nord .hljs-function {
+    color: #88c0d0 !important;
+    font-weight: 600;
+}
+.vibe-theme-nord .hljs-type,
+.vibe-theme-nord .hljs-title.class_ {
+    color: #8fbcbb !important;
+    font-weight: 600;
+}
+.vibe-theme-nord .hljs-string {
+    color: #a3be8c !important;
+}
+.vibe-theme-nord .hljs-number,
+.vibe-theme-nord .hljs-literal {
+    color: #b48ead !important;
+}
+.vibe-theme-nord .hljs-comment {
+    color: #616e88 !important;
+    font-style: italic;
+}
