@@ -8,7 +8,7 @@
 
 @custom-variant select (&:where(:hover, :focus, :focus-visible));
 
-@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant dark (&:where(.dark:not(.light *), :where(.dark:not(.light *)) *:not(.light, .light *)));
 
 [data-nav-pin-btn][data-pinned="true"] {
     opacity: 1 !important;
@@ -28,4 +28,39 @@
 
 [data-nav-pin-btn]:not([data-pinned="true"]) .pin-icon-unpinned {
     display: block !important;
+}
+
+/* Ensure shortcuts in PINNED container are never rendered with active state */
+[data-pinned-container] [data-pinned-shortcut-for] a,
+[data-pinned-container] [data-pinned-shortcut-for] button,
+[data-pinned-container] a[data-pinned-shortcut-for] {
+    background-color: transparent !important;
+    color: var(--color-vibe-600, #52525b) !important;
+}
+
+.dark [data-pinned-container] [data-pinned-shortcut-for] a,
+.dark [data-pinned-container] [data-pinned-shortcut-for] button,
+.dark [data-pinned-container] a[data-pinned-shortcut-for],
+:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] a,
+:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] button,
+:where(.dark, .dark *) [data-pinned-container] a[data-pinned-shortcut-for] {
+    background-color: transparent !important;
+    color: var(--color-vibe-400, #a1a1aa) !important;
+}
+
+[data-pinned-container] [data-pinned-shortcut-for] a:hover,
+[data-pinned-container] [data-pinned-shortcut-for] button:hover,
+[data-pinned-container] a[data-pinned-shortcut-for]:hover {
+    background-color: var(--color-vibe-200, #e4e4e7) !important;
+    color: var(--color-vibe-950, #09090b) !important;
+}
+
+.dark [data-pinned-container] [data-pinned-shortcut-for] a:hover,
+.dark [data-pinned-container] [data-pinned-shortcut-for] button:hover,
+.dark [data-pinned-container] a[data-pinned-shortcut-for]:hover,
+:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] a:hover,
+:where(.dark, .dark *) [data-pinned-container] [data-pinned-shortcut-for] button:hover,
+:where(.dark, .dark *) [data-pinned-container] a[data-pinned-shortcut-for]:hover {
+    background-color: var(--color-vibe-800, #27272a) !important;
+    color: var(--color-vibe-50, #fafafa) !important;
 }

@@ -1,7 +1,7 @@
 @props([
     'enabled' => config('vibe.seo.enabled', true),
     'title' => null,
-    'titleTemplate' => config('vibe.seo.title_template', '%s — ' . config('app.name', 'Laravel')),
+    'titleTemplate' => config('vibe.seo.title_template', '%s — ' . config('app.name')),
     'siteName' => config('vibe.seo.site_name', config('app.name', 'Vibe UI')),
     'description' => config('vibe.seo.description', 'Modern Blade & Tailwind CSS UI Components for Laravel.'),
     'keywords' => config('vibe.seo.keywords'),

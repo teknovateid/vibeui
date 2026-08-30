@@ -6,7 +6,7 @@
     'type' => 'text',
     'name' => null,
     'description' => null,
-    'size' => 'lg',
+    'size' => 'md',
     'info' => null,
     'error' => null,
     'errorName' => null,
