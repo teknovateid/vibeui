@@ -39,8 +39,8 @@
     x-transition:leave-end="transform opacity-0 scale-95"
     class="absolute z-50 {{ $widthClasses }} {{ $alignmentClasses }}"
     style="display: none;"
-    @click="close()">
-    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-xl shadow-xl p-1.5 bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 text-vibe-900 dark:text-vibe-100 flex flex-col gap-0.5']) }} role="menu" aria-orientation="vertical" tabindex="-1">
+>
+    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-xl shadow-xl p-1 bg-popover border border-border text-popover-foreground flex flex-col gap-0.5']) }} role="menu" aria-orientation="vertical" tabindex="-1">
         {{ $slot }}
     </div>
 </div>

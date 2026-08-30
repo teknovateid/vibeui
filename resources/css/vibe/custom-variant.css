@@ -8,7 +8,7 @@
 
 @custom-variant select (&:where(:hover, :focus, :focus-visible));
 
-@custom-variant dark (&:where(.dark:not(.light *), :where(.dark:not(.light *)) *:not(.light, .light *)));
+@custom-variant dark (&:where(.dark:not(.light *, [data-canvas-theme="light"] *), :where(.dark:not(.light *, [data-canvas-theme="light"] *)) *:not(.light, .light *, [data-canvas-theme="light"], [data-canvas-theme="light"] *)));
 
 [data-nav-pin-btn][data-pinned="true"] {
     opacity: 1 !important;
@@ -63,4 +63,26 @@
 :where(.dark, .dark *) [data-pinned-container] a[data-pinned-shortcut-for]:hover {
     background-color: var(--color-vibe-800, #27272a) !important;
     color: var(--color-vibe-50, #fafafa) !important;
+}
+
+/* Scoped preview canvas explicit styles */
+[data-canvas-theme="light"] {
+    background-color: #ffffff !important;
+    color: #0a0b0a !important;
+}
+
+[data-canvas-theme="dark"] {
+    background-color: #0a0b0a !important;
+    color: #f9fafa !important;
+}
+
+[data-canvas-theme="auto"] {
+    background-color: #ffffff;
+    color: #0a0b0a;
+}
+
+.dark [data-canvas-theme="auto"],
+:where(.dark, .dark *) [data-canvas-theme="auto"] {
+    background-color: #0a0b0a !important;
+    color: #f9fafa !important;
 }

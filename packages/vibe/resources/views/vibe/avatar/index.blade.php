@@ -37,7 +37,7 @@
         'yellow' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
         'pink'   => 'bg-pink-100 text-pink-700 dark:bg-pink-900 dark:text-pink-300',
         'orange' => 'bg-orange-100 text-orange-700 dark:bg-orange-900 dark:text-orange-300',
-        default  => 'bg-gray-100 text-gray-700 dark:bg-vibe-800 dark:text-vibe-200',
+        default  => 'bg-secondary text-secondary-foreground',
     };
 
     $baseClasses = "relative inline-flex items-center justify-center font-medium overflow-hidden shrink-0 {$sizeClasses} {$shapeClasses} {$colorClasses}";
@@ -59,14 +59,14 @@
         };
 
         $indicatorColorClasses = match ($indicator) {
-            'online'  => 'bg-green-500',
-            'offline' => 'bg-gray-400',
-            'busy'    => 'bg-red-500',
-            'away'    => 'bg-yellow-400',
-            default   => 'bg-gray-400',
+            'online'  => 'bg-emerald-500',
+            'offline' => 'bg-muted-foreground',
+            'busy'    => 'bg-destructive',
+            'away'    => 'bg-amber-500',
+            default   => 'bg-muted-foreground',
         };
 
-        $indicatorClasses = "absolute block rounded-full ring-2 ring-white dark:ring-vibe-900 {$indicatorSizeClasses} {$indicatorPositionClasses} {$indicatorColorClasses}";
+        $indicatorClasses = "absolute block rounded-full ring-2 ring-background {$indicatorSizeClasses} {$indicatorPositionClasses} {$indicatorColorClasses}";
     }
 @endphp
 

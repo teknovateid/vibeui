@@ -77,14 +77,14 @@
     style="display: none;"
 >
     <div class="flex justify-center min-h-screen p-4 text-center {{ $positionClasses }}">
-        <div x-show="open" x-transition.opacity class="fixed inset-0 transition-opacity bg-black/5 backdrop-blur-xs" aria-hidden="true" @if($dismissible) @click="close" @endif></div>
+        <div x-show="open" x-transition.opacity class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-xs" aria-hidden="true" @if($dismissible) @click="close" @endif></div>
 
-        <vibe:card x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative overflow-hidden text-left transition-all transform shadow-xl w-full {{ $maxWidthClasses }}">
+        <vibe:card x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative overflow-hidden text-left transition-all transform shadow-2xl w-full {{ $maxWidthClasses }}">
             <div class="absolute top-4 right-4 hidden sm:block z-10">
                 @if($dismissible)
-                <vibe:button @click="close" type="button" variant="ghost" class="p-1.5! text-gray-400 hover:text-gray-500">
+                <vibe:button @click="close" type="button" variant="ghost" size="icon-sm" class="text-muted-foreground hover:text-foreground">
                     <span class="sr-only">Close</span>
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </vibe:button>
