@@ -182,14 +182,13 @@
     },
 
     startResize(e) {
-        if (this.isMobile) return;
         if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
         this.isResizing = true;
 
         this.startSize = this.currentSize;
 
-        let clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-        let clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+        let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
+        let clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : (e.clientY !== undefined ? e.clientY : 0);
 
         if (this.position === 'left' || this.position === 'right') {
             this.startPos = clientX;
@@ -203,10 +202,10 @@
     },
 
     doResize(e) {
-        if (!this.isResizing || this.isMobile) return;
+        if (!this.isResizing) return;
 
-        let clientX = e.clientX !== undefined ? e.clientX : (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-        let clientY = e.clientY !== undefined ? e.clientY : (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+        let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
+        let clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : (e.clientY !== undefined ? e.clientY : 0);
 
         let delta = 0;
         if (this.position === 'left') delta = clientX - this.startPos;
@@ -216,29 +215,34 @@
 
         let newSize = this.startSize + delta;
 
-
         let dynamicMaxSize = this.maxSize;
         if (this.position === 'left' || this.position === 'right') {
-            if (window.innerWidth - 16 < dynamicMaxSize) dynamicMaxSize = window.innerWidth - 16;
+            if (window.innerWidth - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerWidth - 16);
         } else {
-            if (window.innerHeight - 16 < dynamicMaxSize) dynamicMaxSize = window.innerHeight - 16;
+            if (window.innerHeight - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerHeight - 16);
         }
+
+        let effectiveMinSize = Math.min(this.minSize, dynamicMaxSize);
 
         if (newSize > dynamicMaxSize) newSize = dynamicMaxSize;
 
         if (this.behavior === 'static') {
-            if (newSize < this.minSize) newSize = this.minSize;
+            if (newSize < effectiveMinSize) newSize = effectiveMinSize;
         } else if (this.behavior === 'collapsible') {
-            if (this.minSize > 0) {
-                if (newSize < this.minSize) newSize = this.minSize;
+            if (effectiveMinSize > 0) {
+                if (newSize < effectiveMinSize) newSize = effectiveMinSize;
             } else {
                 if (newSize < 0) newSize = 0;
             }
         } else if (this.behavior === 'minify') {
-            if (this.minSize > 0 && newSize < this.minSize && newSize > this.minifiedSize + 20) {
-                newSize = this.minSize;
+            if (this.isMobile) {
+                if (newSize < 0) newSize = 0;
+            } else {
+                if (effectiveMinSize > 0 && newSize < effectiveMinSize && newSize > this.minifiedSize + 20) {
+                    newSize = effectiveMinSize;
+                }
+                if (newSize < 0) newSize = 0;
             }
-            if (newSize < 0) newSize = 0;
         } else {
             if (newSize < 0) newSize = 0;
         }
@@ -246,12 +250,20 @@
         this.size = newSize;
 
         if (this.behavior === 'minify') {
-            if (this.size < this.minifiedSize / 2) {
-                this.state = 'collapsed';
-            } else if (this.size <= this.minifiedSize + 20) { // Tambah zona 'snap' +20px
-                this.state = 'minified';
+            if (this.isMobile) {
+                if (this.size < (effectiveMinSize > 0 ? effectiveMinSize / 2 : 80)) {
+                    this.state = 'collapsed';
+                } else {
+                    this.state = 'expanded';
+                }
             } else {
-                this.state = 'expanded';
+                if (this.size < this.minifiedSize / 2) {
+                    this.state = 'collapsed';
+                } else if (this.size <= this.minifiedSize + 20) { // Snap zone +20px
+                    this.state = 'minified';
+                } else {
+                    this.state = 'expanded';
+                }
             }
         } else {
             if (this.size === 0) {
@@ -300,7 +312,7 @@
         this.state = 'expanded';
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     (position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
@@ -422,14 +434,14 @@
     <!-- Resize Handle -->
     @if ($resizable)
         {{--
-            Hit area dibuat lebih lebar (w-5/h-5) agar mudah diklik bahkan saat sheet size=0.
+            Hit area dibuat lebih lebar (w-5/h-5) agar mudah diklik/disentuh bahkan saat sheet size=0.
             overflow-visible pada parent sheet sudah memastikan handle tidak terclip.
-            Garis visual (inner div) hanya tampil saat hover via opacity transition.
+            Garis visual (inner div) tampil saat hover pada desktop atau saat resizing.
         --}}
         <div
             @mousedown.prevent="startResize($event)"
             @touchstart.prevent="startResize($event)"
-            class="absolute z-50 hidden md:flex items-center justify-center group/resizer"
+            class="absolute z-50 flex items-center justify-center group/resizer touch-none select-none"
             :class="{
                 'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
                 'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',
@@ -437,13 +449,15 @@
                 'left-0 right-0 -top-2.5 h-5 cursor-row-resize': position === 'bottom'
             }"
         >
-            {{-- Garis visual: transparan by default, muncul saat hover --}}
+            {{-- Garis visual: transparan by default, muncul saat hover atau sedang di-resize --}}
             <div
-                class="transition-all duration-200 rounded-full opacity-0 group-hover/resizer:opacity-100"
-                :class="{
-                    'h-full w-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60': position === 'left' || position === 'right',
-                    'w-full h-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60': position === 'top' || position === 'bottom'
-                }"
+                class="transition-all duration-200 rounded-full group-hover/resizer:opacity-100"
+                :class="[
+                    isResizing ? 'opacity-100' : 'opacity-0',
+                    (position === 'left' || position === 'right')
+                        ? 'h-full w-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60 ' + (isResizing ? 'bg-vibe-500 dark:bg-vibe-400' : '')
+                        : 'w-full h-0.5 group-hover/resizer:bg-vibe-400/60 dark:group-hover/resizer:bg-vibe-500/60 ' + (isResizing ? 'bg-vibe-500 dark:bg-vibe-400' : '')
+                ]"
             ></div>
         </div>
     @endif

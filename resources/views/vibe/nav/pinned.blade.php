@@ -86,13 +86,19 @@
         {{-- Chevron --}}
         <svg
             id="{{ $chevronId }}"
-            class="size-3"
+            class="size-3 shrink-0"
             :class="ready ? 'transition-transform duration-300' : ''"
             style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};"
             x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`"
-            xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
         >
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M19.5695 8.51192C19.839 8.82641 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.161 19.2999 8.19743 19.5695 8.51192Z" fill="currentColor" />
+            <polyline points="6 9 12 15 18 9"></polyline>
         </svg>
 
         <div class="flex items-center gap-1 justify-between w-full">
