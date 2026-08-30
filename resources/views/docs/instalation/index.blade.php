@@ -103,7 +103,7 @@
     @stack('head')
 </head>
 
-<body class="bg-vibe-50 dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 vibe-scrollbar font-medium font-inter antialiased">
+<body class="bg-vibe-50 dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 vibe-scrollbar font-medium font-sans antialiased">
     {{ $slot }}
 
     <vibe:alert position="top-right" />

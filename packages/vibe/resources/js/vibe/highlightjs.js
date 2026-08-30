@@ -1,5 +1,41 @@
-import hljs from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import xml from 'highlight.js/lib/languages/xml'; // HTML, XML, SVG
+import css from 'highlight.js/lib/languages/css';
+import php from 'highlight.js/lib/languages/php';
+import bash from 'highlight.js/lib/languages/bash';
+import json from 'highlight.js/lib/languages/json';
+import yaml from 'highlight.js/lib/languages/yaml';
+import markdown from 'highlight.js/lib/languages/markdown';
+import sql from 'highlight.js/lib/languages/sql';
+import diff from 'highlight.js/lib/languages/diff';
+import ini from 'highlight.js/lib/languages/ini'; // .env config
 import '../../css/vibe/highlightjs.css';
+
+// Register standard web development languages
+hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('js', javascript);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('ts', typescript);
+hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('html', xml);
+hljs.registerLanguage('svg', xml);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('php', php);
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('sh', bash);
+hljs.registerLanguage('shell', bash);
+hljs.registerLanguage('zsh', bash);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('yaml', yaml);
+hljs.registerLanguage('yml', yaml);
+hljs.registerLanguage('markdown', markdown);
+hljs.registerLanguage('md', markdown);
+hljs.registerLanguage('sql', sql);
+hljs.registerLanguage('diff', diff);
+hljs.registerLanguage('ini', ini);
+hljs.registerLanguage('env', ini);
 
 // Configure highlight.js to suppress unescaped HTML warnings
 hljs.configure({ ignoreUnescapedHTML: true });
@@ -53,9 +89,17 @@ export function highlightElement(el) {
 }
 
 export function highlightAll() {
-    document.querySelectorAll('code[data-vibe-highlight]:not([data-highlighted="yes"])').forEach((el) => {
-        highlightElement(el);
-    });
+    if (typeof requestAnimationFrame !== 'undefined') {
+        requestAnimationFrame(() => {
+            document.querySelectorAll('code[data-vibe-highlight]:not([data-highlighted="yes"])').forEach((el) => {
+                highlightElement(el);
+            });
+        });
+    } else {
+        document.querySelectorAll('code[data-vibe-highlight]:not([data-highlighted="yes"])').forEach((el) => {
+            highlightElement(el);
+        });
+    }
 }
 
 window.VibeHighlight = {
