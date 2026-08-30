@@ -1,4 +1,4 @@
-<x-docs.layouts.base>
+<x-layouts.base>
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
@@ -17,7 +17,7 @@
             </vibe:sheet.header>
 
             <vibe:sheet.body id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
-                <x-docs.partials.sidebar-menu />
+                <x-partials.sidebar-menu />
             </vibe:sheet.body>
 
             <vibe:sheet.footer class="px-0 py-3">
@@ -214,6 +214,7 @@
             <main class="flex-1 p-4">
                 {{ $slot }}
             </main>
+            
         </div>
 
         <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
@@ -276,4 +277,4 @@
             </vibe:sheet.footer>
         </vibe:sheet>
     </div>
-</x-docs.layouts.base>
+</x-layouts.base>
