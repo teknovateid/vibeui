@@ -115,6 +115,9 @@ export default defineConfig({
         tailwindcss(),
         vibeSyncPlugin(),
     ],
+    build: {
+        sourcemap: true,
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
