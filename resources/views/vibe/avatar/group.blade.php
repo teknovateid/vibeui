@@ -22,7 +22,7 @@
 
     $limitClass = $limitInt ? "[&>[data-avatar]:nth-child(n+" . ($limitInt + 1) . ")]:hidden!" : "";
     $overlapClass = $overlap ? '-space-x-3' : 'gap-2';
-    $baseClasses  = "vibe-avatar-group flex items-center {$overlapClass} [&>[data-avatar]]:ring-2 [&>[data-avatar]]:ring-white dark:[&>[data-avatar]]:ring-vibe-900 {$limitClass}";
+    $baseClasses  = "vibe-avatar-group flex items-center {$overlapClass} [&>[data-avatar]]:ring-2 [&>[data-avatar]]:ring-background {$limitClass}";
 
     $badgeSizeClasses = match ($size) {
         'xs'    => 'w-6 h-6 text-xs',
@@ -33,7 +33,7 @@
         default => 'w-10 h-10 text-sm',
     };
 
-    $badgeClasses = "relative inline-flex items-center justify-center font-medium shrink-0 rounded-full bg-vibe-200 dark:bg-vibe-700 text-vibe-700 dark:text-vibe-200 ring-2 ring-white dark:ring-vibe-900 z-10 select-none {$badgeSizeClasses}";
+    $badgeClasses = "relative inline-flex items-center justify-center font-medium shrink-0 rounded-full bg-muted text-muted-foreground ring-2 ring-background z-10 select-none {$badgeSizeClasses}";
 @endphp
 
 @php

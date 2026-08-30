@@ -14,7 +14,7 @@
     $resolvedTitle = $filename ?? $title;
 @endphp
 
-<div {{ $attributes->twMerge(['class' => 'relative w-full border-t border-vibe-200 dark:border-vibe-800']) }}>
+<div {{ $attributes->twMerge(['class' => 'relative w-full border-t border-border']) }}>
     <vibe:highlightjs
         :language="$resolvedLang"
         :title="$resolvedTitle"

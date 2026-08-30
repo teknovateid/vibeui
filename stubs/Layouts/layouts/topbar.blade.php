@@ -2,7 +2,7 @@
 <x-layouts.base>
     <div class="flex min-h-screen overflow-hidden">
         <div class="flex flex-col flex-1 w-full">
-            <section class="bg-white dark:bg-vibe-900 border-b border-vibe-200 dark:border-vibe-800">
+            <section class="bg-card text-card-foreground border-b border-border">
                 <vibe:header class="border-none max-w-400 mx-auto">
                     <vibe:header.heading>
                         {{ $heading }}

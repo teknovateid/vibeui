@@ -109,22 +109,22 @@
             }
         }
     }"
-    {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-vibe-200 dark:border-vibe-800 bg-vibe-50 dark:bg-vibe-950 overflow-hidden shadow-xs']) }}
+    {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-xs']) }}
 >
     {{-- Preview Toolbar Header --}}
-    <div class="relative flex items-center justify-between min-h-10.5 px-3.5 py-2 bg-vibe-100/70 dark:bg-vibe-900/60 border-b border-vibe-200 dark:border-vibe-800 text-xs">
+    <div class="relative flex items-center justify-between min-h-10.5 px-3.5 py-2 bg-muted/70 border-b border-border text-xs">
         {{-- Left: Segmented Tab Buttons --}}
         <div class="relative z-10 flex items-center gap-2 shrink-0">
-            <div class="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-vibe-200/80 dark:bg-vibe-800/80 border border-vibe-300/40 dark:border-vibe-700/40 select-none">
+            <div class="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-muted border border-border/40 select-none">
                 <button
                     data-vibe-btn-tab="preview"
                     type="button"
                     @click="tab = 'preview'"
                     :class="{
-                        'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs font-semibold': tab === 'preview',
-                        'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 font-medium': tab !== 'preview'
+                        'bg-background text-foreground shadow-xs font-semibold': tab === 'preview',
+                        'text-muted-foreground hover:text-foreground font-medium': tab !== 'preview'
                     }"
-                    class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-colors duration-150 {{ $tab === 'preview' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs font-semibold' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 font-medium' }}"
+                    class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-colors duration-150 {{ $tab === 'preview' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground font-medium' }}"
                     aria-label="Tampilkan live preview"
                 >
                     <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -139,10 +139,10 @@
                     type="button"
                     @click="tab = 'code'"
                     :class="{
-                        'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs font-semibold': tab === 'code',
-                        'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 font-medium': tab !== 'code'
+                        'bg-background text-foreground shadow-xs font-semibold': tab === 'code',
+                        'text-muted-foreground hover:text-foreground font-medium': tab !== 'code'
                     }"
-                    class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-colors duration-150 {{ $tab === 'code' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs font-semibold' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 font-medium' }}"
+                    class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-colors duration-150 {{ $tab === 'code' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground font-medium' }}"
                     aria-label="Tampilkan kode sumber"
                 >
                     <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -157,7 +157,7 @@
         {{-- Center: Title (True Absolute Geometric Center) --}}
         @if ($title)
             <div class="pointer-events-none absolute inset-x-0 inset-y-0 flex items-center justify-center px-36 text-center">
-                <span class="truncate font-semibold text-xs text-vibe-900 dark:text-vibe-100">{{ $title }}</span>
+                <span class="truncate font-semibold text-xs text-foreground">{{ $title }}</span>
             </div>
         @endif
 
@@ -168,7 +168,7 @@
                 <div
                     id="{{ $viewportGroupId }}"
                     x-show="tab === 'preview'"
-                    class="hidden sm:inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-vibe-200/80 dark:bg-vibe-800/80 border border-vibe-300/40 dark:border-vibe-700/40 select-none"
+                    class="hidden sm:inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-muted border border-border/40 select-none"
                     style="{{ $tab === 'code' ? 'display: none;' : '' }}"
                 >
                     {{-- Desktop 100% --}}
@@ -177,10 +177,10 @@
                         type="button"
                         @click="viewport = '100%'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs': viewport === '100%',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': viewport !== '100%'
+                            'bg-background text-foreground shadow-xs': viewport === '100%',
+                            'text-muted-foreground hover:text-foreground': viewport !== '100%'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '100%' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '100%' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Desktop (100%)"
                         aria-label="Tampilan desktop 100%"
                     >
@@ -197,10 +197,10 @@
                         type="button"
                         @click="viewport = '768px'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs': viewport === '768px',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': viewport !== '768px'
+                            'bg-background text-foreground shadow-xs': viewport === '768px',
+                            'text-muted-foreground hover:text-foreground': viewport !== '768px'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '768px' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '768px' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Tablet (768px)"
                         aria-label="Tampilan tablet 768px"
                     >
@@ -216,10 +216,10 @@
                         type="button"
                         @click="viewport = '375px'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs': viewport === '375px',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': viewport !== '375px'
+                            'bg-background text-foreground shadow-xs': viewport === '375px',
+                            'text-muted-foreground hover:text-foreground': viewport !== '375px'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '375px' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $viewport === '375px' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Mobile (375px)"
                         aria-label="Tampilan mobile 375px"
                     >
@@ -236,7 +236,7 @@
                 <div
                     id="{{ $themeGroupId }}"
                     x-show="tab === 'preview'"
-                    class="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-vibe-200/80 dark:bg-vibe-800/80 border border-vibe-300/40 dark:border-vibe-700/40 select-none"
+                    class="inline-flex items-center gap-0.5 p-0.5 rounded-lg bg-muted border border-border/40 select-none"
                     style="{{ $tab === 'code' ? 'display: none;' : '' }}"
                 >
                     {{-- Auto / System Mode --}}
@@ -245,10 +245,10 @@
                         type="button"
                         @click="canvasTheme = 'auto'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs': canvasTheme === 'auto',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': canvasTheme !== 'auto'
+                            'bg-background text-foreground shadow-xs': canvasTheme === 'auto',
+                            'text-muted-foreground hover:text-foreground': canvasTheme !== 'auto'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'auto' ? 'bg-white dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'auto' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Mode Otomatis (Mengikuti tema web)"
                         aria-label="Mode tema otomatis"
                     >
@@ -265,10 +265,10 @@
                         type="button"
                         @click="canvasTheme = 'light'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-amber-500 shadow-xs': canvasTheme === 'light',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': canvasTheme !== 'light'
+                            'bg-background text-amber-500 shadow-xs': canvasTheme === 'light',
+                            'text-muted-foreground hover:text-foreground': canvasTheme !== 'light'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'light' ? 'bg-white dark:bg-vibe-950 text-amber-500 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'light' ? 'bg-background text-amber-500 shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Uji Canvas Mode Terang"
                         aria-label="Uji mode terang"
                     >
@@ -284,10 +284,10 @@
                         type="button"
                         @click="canvasTheme = 'dark'"
                         :class="{
-                            'bg-white dark:bg-vibe-950 text-indigo-400 shadow-xs': canvasTheme === 'dark',
-                            'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50': canvasTheme !== 'dark'
+                            'bg-background text-indigo-400 shadow-xs': canvasTheme === 'dark',
+                            'text-muted-foreground hover:text-foreground': canvasTheme !== 'dark'
                         }"
-                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'dark' ? 'bg-white dark:bg-vibe-950 text-indigo-400 shadow-xs' : 'text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50' }}"
+                        class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-colors duration-150 {{ $canvasTheme === 'dark' ? 'bg-background text-indigo-400 shadow-xs' : 'text-muted-foreground hover:text-foreground' }}"
                         title="Uji Canvas Mode Gelap"
                         aria-label="Uji mode gelap"
                     >
@@ -366,8 +366,8 @@
                 if (item.tab) {
                     var btnPreview = root ? root.querySelector('[data-vibe-btn-tab="preview"]') : null;
                     var btnCode = root ? root.querySelector('[data-vibe-btn-tab="code"]') : null;
-                    var activeTabClasses = ['bg-white', 'dark:bg-vibe-950', 'text-vibe-950', 'dark:text-vibe-50', 'shadow-xs', 'font-semibold'];
-                    var inactiveTabClasses = ['text-vibe-600', 'dark:text-vibe-400', 'hover:text-vibe-950', 'dark:hover:text-vibe-50', 'font-medium'];
+                    var activeTabClasses = ['bg-background', 'text-foreground', 'shadow-xs', 'font-semibold'];
+                    var inactiveTabClasses = ['text-muted-foreground', 'hover:text-foreground', 'font-medium'];
 
                     if (item.tab === 'code') {
                         if (canvas) canvas.style.display = 'none';
@@ -404,8 +404,8 @@
                 if (item.viewport) {
                     if (wrapper) wrapper.style.maxWidth = item.viewport;
                     var vpButtons = root ? root.querySelectorAll('[data-vibe-btn-viewport]') : [];
-                    var activeVpClasses = ['bg-white', 'dark:bg-vibe-950', 'text-vibe-950', 'dark:text-vibe-50', 'shadow-xs'];
-                    var inactiveVpClasses = ['text-vibe-600', 'dark:text-vibe-400', 'hover:text-vibe-950', 'dark:hover:text-vibe-50'];
+                    var activeVpClasses = ['bg-background', 'text-foreground', 'shadow-xs'];
+                    var inactiveVpClasses = ['text-muted-foreground', 'hover:text-foreground'];
 
                     vpButtons.forEach(function(btn) {
                         if (btn.getAttribute('data-vibe-btn-viewport') === item.viewport) {
@@ -433,15 +433,15 @@
                     var themeButtons = root ? root.querySelectorAll('[data-vibe-btn-theme]') : [];
                     themeButtons.forEach(function(btn) {
                         var t = btn.getAttribute('data-vibe-btn-theme');
-                        btn.classList.remove('bg-white', 'dark:bg-vibe-950', 'text-vibe-950', 'dark:text-vibe-50', 'text-amber-500', 'text-indigo-400', 'shadow-xs');
+                        btn.classList.remove('bg-background', 'text-foreground', 'text-amber-500', 'text-indigo-400', 'shadow-xs');
                         if (t === item.canvasTheme) {
-                            btn.classList.add('bg-white', 'dark:bg-vibe-950', 'shadow-xs');
+                            btn.classList.add('bg-background', 'shadow-xs');
                             if (t === 'light') btn.classList.add('text-amber-500');
                             else if (t === 'dark') btn.classList.add('text-indigo-400');
-                            else btn.classList.add('text-vibe-950', 'dark:text-vibe-50');
-                            btn.classList.remove('text-vibe-600', 'dark:text-vibe-400');
+                            else btn.classList.add('text-foreground');
+                            btn.classList.remove('text-muted-foreground');
                         } else {
-                            btn.classList.add('text-vibe-600', 'dark:text-vibe-400', 'hover:text-vibe-950', 'dark:hover:text-vibe-50');
+                            btn.classList.add('text-muted-foreground', 'hover:text-foreground');
                         }
                     });
                 }

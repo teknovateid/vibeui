@@ -45,14 +45,14 @@
                     [ListGridData]
                 </div>
 
-                <div class="mt-6 flex items-center justify-end gap-2 border-t border-vibe-200 dark:border-vibe-800 pt-4">
+                <div class="mt-6 flex items-center justify-end gap-2 border-t border-border pt-4">
                     [EditAction]
                     <vibe:button size="sm" variant="danger" type="button" @click="confirmDelete({{ $item->id }})">Hapus</vibe:button>
                 </div>
             </vibe:card>
         @empty
             <vibe:card class="col-span-full py-12 text-center">
-                <p class="text-vibe-500 dark:text-vibe-400">Data tidak ditemukan.</p>
+                <p class="text-muted-foreground">Data tidak ditemukan.</p>
             </vibe:card>
         @endforelse
     </vibe:grid-list>

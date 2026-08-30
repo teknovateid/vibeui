@@ -15,16 +15,16 @@
         hoverTimeout: null,
         
         typeClasses: {
-            success: 'bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 dark:text-green-100 text-green-900',
-            error: 'bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 dark:text-red-100 text-red-900',
-            warning: 'bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 dark:text-yellow-100 text-yellow-900',
-            info: 'bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 dark:text-blue-100 text-blue-900'
+            success: 'bg-card text-card-foreground border border-border',
+            error: 'bg-card text-card-foreground border border-border',
+            warning: 'bg-card text-card-foreground border border-border',
+            info: 'bg-card text-card-foreground border border-border'
         },
         bubbleClasses: {
-            success: 'bg-vibe-300 dark:bg-vibe-700',
-            error: 'bg-vibe-300 dark:bg-vibe-700',
-            warning: 'bg-vibe-300 dark:bg-vibe-700',
-            info: 'bg-vibe-300 dark:bg-vibe-700'
+            success: 'bg-muted',
+            error: 'bg-muted',
+            warning: 'bg-muted',
+            info: 'bg-muted'
         },
         iconClasses: {
             success: 'bg-green-100 dark:bg-green-900/40',
@@ -178,7 +178,7 @@
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
     "
-    class="fixed z-[100] flex flex-col pointer-events-none"
+    class="fixed z-100 flex flex-col pointer-events-none"
     :class="[getPositionClasses(), getMarginClasses()]"
 >
     <!-- Handle Session Flash Messages -->

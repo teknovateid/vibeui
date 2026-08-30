@@ -58,12 +58,12 @@
     }
 
     .vibe-scrollbar:hover {
-        scrollbar-color: var(--color-vibe-400, #a2a4a3) transparent;
+        scrollbar-color: var(--border, #a2a4a3) transparent;
     }
 
     .dark .vibe-scrollbar:hover,
     :where(.dark, .dark *) .vibe-scrollbar:hover {
-        scrollbar-color: var(--color-vibe-500, #717372) transparent;
+        scrollbar-color: var(--border, #262726) transparent;
     }
 
     .vibe-scrollbar::-webkit-scrollbar {
@@ -88,32 +88,32 @@
     }
 
     .vibe-scrollbar:hover::-webkit-scrollbar-thumb {
-        background-color: var(--color-vibe-400, #a2a4a3);
+        background-color: var(--border, #a2a4a3);
     }
 
     .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-        background-color: var(--color-vibe-500, #717372);
+        background-color: var(--muted-foreground, #717372);
     }
 
     .dark .vibe-scrollbar:hover::-webkit-scrollbar-thumb,
     :where(.dark, .dark *) .vibe-scrollbar:hover::-webkit-scrollbar-thumb {
-        background-color: var(--color-vibe-500, #717372);
+        background-color: var(--border, #262726);
     }
 
     .dark .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover,
     :where(.dark, .dark *) .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-        background-color: var(--color-vibe-400, #a2a4a3);
+        background-color: var(--muted-foreground, #717372);
     }
 
     /* Vibe UI Scrollbar - Always Visible Variation */
     .vibe-scrollbar-always {
         scrollbar-width: thin;
-        scrollbar-color: var(--color-vibe-400, #a2a4a3) transparent;
+        scrollbar-color: var(--border, #a2a4a3) transparent;
     }
 
     .dark .vibe-scrollbar-always,
     :where(.dark, .dark *) .vibe-scrollbar-always {
-        scrollbar-color: var(--color-vibe-500, #717372) transparent;
+        scrollbar-color: var(--border, #262726) transparent;
     }
 
     .vibe-scrollbar-always::-webkit-scrollbar {
@@ -126,12 +126,12 @@
     }
 
     .vibe-scrollbar-always::-webkit-scrollbar-thumb {
-        background-color: var(--color-vibe-400, #a2a4a3);
+        background-color: var(--border, #a2a4a3);
         border-radius: 9999px;
     }
 
     .dark .vibe-scrollbar-always::-webkit-scrollbar-thumb,
     :where(.dark, .dark *) .vibe-scrollbar-always::-webkit-scrollbar-thumb {
-        background-color: var(--color-vibe-500, #717372);
+        background-color: var(--border, #262726);
     }
 }

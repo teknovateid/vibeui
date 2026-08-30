@@ -165,14 +165,14 @@
                     // Reset active state on shortcut clones
                     let targets = [clone, ...clone.querySelectorAll('a, button')];
                     targets.forEach(t => {
-                        t.classList.remove('bg-vibe-200', 'dark:bg-vibe-800', 'text-vibe-950', 'dark:text-vibe-50');
-                        t.classList.add('text-vibe-600', 'dark:text-vibe-400');
+                        t.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+                        t.classList.add('text-muted-foreground');
                     });
 
                     let icons = clone.querySelectorAll('[data-pin-icon]');
                     icons.forEach(icon => {
-                        icon.classList.remove('text-vibe-900', 'dark:text-vibe-100');
-                        icon.classList.add('text-vibe-500', 'group-hover/nav-item:text-vibe-900', 'dark:text-vibe-400', 'dark:group-hover/nav-item:text-vibe-200');
+                        icon.classList.remove('text-foreground');
+                        icon.classList.add('text-muted-foreground', 'group-hover/nav-item:text-foreground');
                     });
 
                     // If cloned item is a group, ensure it starts collapsed
@@ -290,7 +290,7 @@
                     if (el) el.remove();
                     el = document.createElement('div');
                     el.id = 'vibe-nav-floating-tooltip';
-                    el.className = 'fixed pointer-events-none z-[99999] px-2.5 py-1.5 rounded-lg bg-vibe-50 dark:bg-vibe-900 text-vibe-900 dark:text-vibe-100 border border-vibe-200 dark:border-vibe-800 text-xs font-medium shadow-xl whitespace-nowrap flex items-center gap-1.5 transition-opacity duration-150 opacity-0';
+                    el.className = 'fixed pointer-events-none z-[99999] px-2.5 py-1.5 rounded-lg bg-popover text-popover-foreground border border-border text-xs font-medium shadow-xl whitespace-nowrap flex items-center gap-1.5 transition-opacity duration-150 opacity-0';
                     el.style.display = 'none';
                     el.style.top = '0px';
                     el.style.left = '0px';
@@ -305,7 +305,7 @@
                     if (el) el.remove();
                     el = document.createElement('div');
                     el.id = 'vibe-nav-floating-flyout';
-                    el.className = 'fixed z-[99999] min-w-[120px] w-max max-w-[180px] p-1 rounded-lg bg-vibe-50 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 shadow-xl transition-all duration-150 opacity-0 pointer-events-auto flex flex-col [&_a]:w-full! [&_a]:h-auto! [&_a]:px-2.5! [&_a]:py-1.5! [&_a]:text-xs! [&_a]:font-medium! [&_a]:rounded-md! [&_a]:justify-start! [&_a]:mx-0! [&_a>div]:max-w-[100vw]! [&_a>div]:opacity-100! [&_a>div]:ml-0! [&_a>div]:flex! [&_a>div]:block!';
+                    el.className = 'fixed z-[99999] min-w-[120px] w-max max-w-[180px] p-1 rounded-lg bg-popover text-popover-foreground border border-border shadow-xl transition-all duration-150 opacity-0 pointer-events-auto flex flex-col [&_a]:w-full! [&_a]:h-auto! [&_a]:px-2.5! [&_a]:py-1.5! [&_a]:text-xs! [&_a]:font-medium! [&_a]:rounded-md! [&_a]:justify-start! [&_a]:mx-0! [&_a>div]:max-w-[100vw]! [&_a>div]:opacity-100! [&_a>div]:ml-0! [&_a>div]:flex! [&_a>div]:block!';
                     el.style.display = 'none';
                     el.style.top = '0px';
                     el.style.left = '0px';

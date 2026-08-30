@@ -154,30 +154,30 @@
             }
         }
     }"
-    {{ $attributes->twMerge(['class' => "group/highlight relative flex flex-col rounded-xl bg-vibe-100 dark:bg-vibe-900 border border-vibe-200 dark:border-vibe-800 overflow-hidden shadow-xs {$themeClass}"]) }}
+    {{ $attributes->twMerge(['class' => "group/highlight relative flex flex-col rounded-xl bg-card text-card-foreground border border-border overflow-hidden shadow-xs {$themeClass}"]) }}
 >
     @if ($showHeader)
-        <div data-vibe-header class="flex items-center justify-between px-4 py-2.5 bg-vibe-200/50 dark:bg-vibe-800/40 border-b border-vibe-200 dark:border-vibe-800 text-xs text-vibe-700 dark:text-vibe-300">
+        <div data-vibe-header class="flex items-center justify-between px-4 py-2.5 bg-muted/60 border-b border-border text-xs text-muted-foreground">
             <div class="flex items-center gap-2 min-w-0">
                 @if ($resolvedTitle)
-                    <div class="flex items-center gap-1.5 font-mono text-xs font-semibold text-vibe-900 dark:text-vibe-100 truncate">
+                    <div class="flex items-center gap-1.5 font-mono text-xs font-semibold text-foreground truncate">
                         {{-- Icon Rendering --}}
                         @if (isset($iconSlot))
                             {{ $iconSlot }}
                         @elseif (str_starts_with(trim($resolvedIcon), '<svg'))
                             {!! $resolvedIcon !!}
                         @elseif ($resolvedIcon === 'terminal' || $resolvedIcon === 'bash')
-                            <svg class="size-3.5 text-vibe-500 dark:text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="4 17 10 11 4 5"/>
                                 <line x1="12" y1="19" x2="20" y2="19"/>
                             </svg>
                         @elseif ($resolvedIcon === 'code')
-                            <svg class="size-3.5 text-vibe-500 dark:text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="16 18 22 12 16 6"/>
                                 <polyline points="8 6 2 12 8 18"/>
                             </svg>
                         @else
-                            <svg class="size-3.5 text-vibe-500 dark:text-vibe-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
                                 <polyline points="14 2 14 8 20 8"/>
                             </svg>
@@ -188,7 +188,7 @@
                 @endif
 
                 @if ($showBadge && $badgeText)
-                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase tracking-wider bg-vibe-200 dark:bg-vibe-800 text-vibe-700 dark:text-vibe-300 border border-vibe-300/60 dark:border-vibe-700/60">
+                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase tracking-wider bg-muted text-foreground border border-border">
                         {{ $badgeText }}
                     </span>
                 @endif
@@ -199,7 +199,7 @@
                     <button
                         type="button"
                         @click="copyCode()"
-                        class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 hover:bg-vibe-200 dark:hover:bg-vibe-800 transition-colors focus:outline-none cursor-pointer"
+                        class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none cursor-pointer"
                         aria-label="Copy code to clipboard"
                     >
                         <span x-show="!copied" class="inline-flex items-center gap-1.5">
@@ -225,7 +225,7 @@
             <button
                 type="button"
                 @click="copyCode()"
-                class="inline-flex items-center justify-center size-8 rounded-lg bg-vibe-200/80 dark:bg-vibe-800/80 backdrop-blur-xs text-xs font-medium text-vibe-600 dark:text-vibe-400 hover:text-vibe-950 dark:hover:text-vibe-50 hover:bg-vibe-300 dark:hover:bg-vibe-700 transition-all border border-vibe-300/40 dark:border-vibe-700/40 shadow-xs focus:outline-none cursor-pointer"
+                class="inline-flex items-center justify-center size-8 rounded-lg bg-muted/80 backdrop-blur-xs text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all border border-border shadow-xs focus:outline-none cursor-pointer"
                 aria-label="Copy code to clipboard"
                 title="Copy code"
             >
@@ -242,7 +242,7 @@
 
     <div class="relative flex min-w-0 overflow-x-auto vibe-scrollbar @if($maxHeight) overflow-y-auto @endif" @if($maxHeightStyle) style="{{ $maxHeightStyle }}" @endif>
         @if ($showLines)
-            <div data-vibe-gutter class="select-none text-right py-4 pr-3 pl-3.5 font-mono text-xs sm:text-sm text-vibe-400 dark:text-vibe-600 border-r border-vibe-200 dark:border-vibe-800 shrink-0 leading-relaxed">
+            <div data-vibe-gutter class="select-none text-right py-4 pr-3 pl-3.5 font-mono text-xs sm:text-sm text-muted-foreground/70 border-r border-border shrink-0 leading-relaxed">
                 @for ($i = 1; $i <= $lineCount; $i++)
                     <div>{{ $i }}</div>
                 @endfor
