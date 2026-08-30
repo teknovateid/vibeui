@@ -104,8 +104,8 @@ class VibeServiceProvider extends ServiceProvider
                     (function() {
                         window.VIBE_PREFIX = \'' . \$prefix . '\';
                         window.VIBE_HISTORY_CONFIG = ' . \$historyConfig . ';
-                        if ('scrollRestoration' in history) {
-                            history.scrollRestoration = 'manual';
+                        if (\'scrollRestoration\' in history) {
+                            history.scrollRestoration = \'manual\';
                         }
                         try {
                             var k = window.VIBE_PREFIX + \'-theme\';
