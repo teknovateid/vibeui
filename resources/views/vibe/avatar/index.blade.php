@@ -68,11 +68,21 @@
 
         $indicatorClasses = "absolute block rounded-full ring-2 ring-background {$indicatorSizeClasses} {$indicatorPositionClasses} {$indicatorColorClasses}";
     }
+
+    $pixelDim = match ($size) {
+        'xs' => 24,
+        'sm' => 32,
+        'md' => 40,
+        'lg' => 48,
+        'xl' => 56,
+        '2xl' => 64,
+        default => 40,
+    };
 @endphp
 
 <div data-avatar {{ $attributes->twMerge(['class' => $baseClasses]) }}>
     @if ($src)
-        <img src="{{ $src }}" alt="{{ $alt }}" class="w-full h-full object-cover" />
+        <img src="{{ $src }}" alt="{{ $alt }}" width="{{ $pixelDim }}" height="{{ $pixelDim }}" loading="lazy" decoding="async" class="w-full h-full object-cover" />
     @elseif ($initials)
         <span class="font-semibold leading-none select-none">{{ $initials }}</span>
     @elseif ($slot->isNotEmpty())

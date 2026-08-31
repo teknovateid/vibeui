@@ -215,55 +215,53 @@
     })()"
     {{ $attributes->twMerge(['class' => 'w-full text-xs bg-card text-card-foreground border border-border rounded-xl p-4 shadow-2xs']) }}
 >
-    {{-- ─── Mobile Accordion / Drawer Quick Jump ─── --}}
-    @if ($collapsible)
-        <div class="md:hidden mb-4 rounded-lg border border-border bg-card p-3 shadow-2xs">
-            <button 
-                type="button" 
-                @click="isOpenMobile = !isOpenMobile"
-                class="flex w-full items-center justify-between font-medium text-card-foreground text-xs select-none"
-            >
-                <div class="flex items-center gap-2">
-                    <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="21" x2="3" y1="6" y2="6"/>
-                        <line x1="15" x2="3" y1="12" y2="12"/>
-                        <line x1="17" x2="3" y1="18" y2="18"/>
-                    </svg>
-                    <span>{{ $title }}</span>
-                </div>
-                <svg 
-                    class="size-4 text-muted-foreground transition-transform duration-200"
-                    :class="isOpenMobile ? 'rotate-180' : ''"
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    stroke-width="2" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"
-                >
-                    <polyline points="6 9 12 15 18 9"/>
+    {{-- ─── Mobile Accordion / Quick Jump (Zero CLS on mobile) ─── --}}
+    <div class="md:hidden">
+        <button 
+            type="button" 
+            @click="isOpenMobile = !isOpenMobile"
+            class="flex w-full items-center justify-between font-medium text-card-foreground text-xs select-none"
+        >
+            <div class="flex items-center gap-2">
+                <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="21" x2="3" y1="6" y2="6"/>
+                    <line x1="15" x2="3" y1="12" y2="12"/>
+                    <line x1="17" x2="3" y1="18" y2="18"/>
                 </svg>
-            </button>
-
-            <div 
-                x-show="isOpenMobile" 
-                x-collapse 
-                style="display: none;" 
-                class="mt-3 pt-3 border-t border-border space-y-1"
-                data-toc-mobile-items
-            >
-                @if ($hasSlot)
-                    <ul class="space-y-1">
-                        {{ $slot }}
-                    </ul>
-                @endif
+                <span>{{ $title }}</span>
             </div>
+            <svg 
+                class="size-4 text-muted-foreground transition-transform duration-200"
+                :class="isOpenMobile ? 'rotate-180' : ''"
+                xmlns="http://www.w3.org/2000/svg" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+            >
+                <polyline points="6 9 12 15 18 9"/>
+            </svg>
+        </button>
+
+        <div 
+            x-show="isOpenMobile" 
+            x-collapse 
+            style="display: none;" 
+            class="mt-3 pt-3 border-t border-border space-y-1"
+            data-toc-mobile-items
+        >
+            @if ($hasSlot)
+                <ul class="space-y-1">
+                    {{ $slot }}
+                </ul>
+            @endif
         </div>
-    @endif
+    </div>
 
     {{-- ─── Desktop Sticky TOC ─── --}}
-    <nav class="flex flex-col gap-3">
+    <nav class="hidden md:flex flex-col gap-3">
         @if ($title)
             <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-card-foreground">
                 <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
