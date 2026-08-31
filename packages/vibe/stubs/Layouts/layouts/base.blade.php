@@ -4,8 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @vibeStyles
-    <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.bunny.net">
     @stack('seo')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles

@@ -103,9 +103,14 @@ class VibeServiceProvider extends ServiceProvider
             ?>";
         });
 
-        // Register custom @vibeStyles directive for theme init (Anti-FOUC) and global configuration in <head>
+        // Register custom @vibeStyles directive for theme init (Anti-FOUC), fonts preloading, and global configuration in <head>
         Blade::directive('vibeStyles', function () {
             return "<?php
+                if (class_exists(\Illuminate\Support\Facades\Vite::class)) {
+                    try {
+                        echo \Illuminate\Support\Facades\Vite::fonts();
+                    } catch (\Throwable \$e) {}
+                }
                 \$prefix = config('vibe.prefix', 'vibe');
                 \$historyConfig = json_encode(config('vibe.history'));
                 echo '<script>
