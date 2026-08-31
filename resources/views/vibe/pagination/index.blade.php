@@ -1,8 +1,11 @@
-@php
-if (! isset($scrollTo)) {
-    $scrollTo = 'body';
-}
+@blaze(fold: true)
 
+@props([
+    'paginator',
+    'scrollTo' => 'body',
+])
+
+@php
 $scrollIntoViewJsSnippet = ($scrollTo !== false)
     ? <<<JS
        (\$el.closest('{$scrollTo}') || document.querySelector('{$scrollTo}')).scrollIntoView()
