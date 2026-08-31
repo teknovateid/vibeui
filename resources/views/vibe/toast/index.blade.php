@@ -183,10 +183,10 @@
 >
     <!-- Handle Session Flash Messages -->
     <div class="hidden" x-init="
-        @if (session()->has('toast_success')) add({ type: 'success', message: '{{ session('toast_success') }}', title: 'Berhasil' }); @endif
-        @if (session()->has('toast_error')) add({ type: 'error', message: '{{ session('toast_error') }}', title: 'Error' }); @endif
-        @if (session()->has('toast_warning')) add({ type: 'warning', message: '{{ session('toast_warning') }}', title: 'Peringatan' }); @endif
-        @if (session()->has('toast_info')) add({ type: 'info', message: '{{ session('toast_info') }}', title: 'Informasi' }); @endif
+        @if (session()->has('toast_success')) add({ type: 'success', message: '{{ session('toast_success') }}', title: '{{ __('vibe/toast.success') }}' }); @endif
+        @if (session()->has('toast_error')) add({ type: 'error', message: '{{ session('toast_error') }}', title: '{{ __('vibe/toast.error') }}' }); @endif
+        @if (session()->has('toast_warning')) add({ type: 'warning', message: '{{ session('toast_warning') }}', title: '{{ __('vibe/toast.warning') }}' }); @endif
+        @if (session()->has('toast_info')) add({ type: 'info', message: '{{ session('toast_info') }}', title: '{{ __('vibe/toast.info') }}' }); @endif
     "></div>
 
     <div 
@@ -225,7 +225,7 @@
                 </div>
                 
                 <!-- Tombol Close -->
-                <button @click="remove(toast.id)" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all">
+                <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>

@@ -33,6 +33,13 @@ class VibeServiceProvider extends ServiceProvider
             __DIR__.'/../public' => public_path(),
         ], 'vibe-assets');
 
+        // Load translations from package lang folder
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'vibe');
+
+        $this->publishes([
+            __DIR__.'/../lang' => $this->app->langPath(),
+        ], 'vibe-lang');
+
         // Register anonymous component path for the 'vibe' namespace.
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');

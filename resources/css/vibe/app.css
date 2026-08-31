@@ -43,6 +43,15 @@
     --radius-xl: calc(var(--radius) + 4px);
     --radius-2xl: calc(var(--radius) + 6px);
     --radius-3xl: calc(var(--radius) + 8px);
+    --radius-full: 9999px;
+
+    /* --radius-sm: calc(0px);
+    --radius-md: calc(0px);
+    --radius-lg: var(0px);
+    --radius-xl: calc(0px);
+    --radius-2xl: calc(0px);
+    --radius-3xl: calc(0px);
+    --radius-full: calc(0px); */
 
     --color-vibe-50: #f9fafa;
     --color-vibe-100: #f4f5f5;
