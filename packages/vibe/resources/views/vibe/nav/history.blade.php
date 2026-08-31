@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'title' => 'RECENTLY VISITED',
+    'title' => __('vibe/nav.history'),
     'open' => true,
     'persist' => true,
 ])
@@ -131,7 +131,7 @@
 
         <div class="flex items-center justify-end shrink-0 pr-2">
             <!-- Trash icon (shown on hover) -->
-            <button type="button" @click.stop="clearAllHistory()" title="Clear history" class="hidden group-hover/nav-label:inline-flex items-center justify-center size-6 hover:text-red-500 rounded cursor-pointer">
+            <button type="button" @click.stop="clearAllHistory()" title="{{ __('vibe/nav.clear_history') }}" class="hidden group-hover/nav-label:inline-flex items-center justify-center size-6 hover:text-red-500 rounded cursor-pointer">
                 <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
                 </svg>

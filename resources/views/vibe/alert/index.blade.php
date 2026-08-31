@@ -81,9 +81,9 @@
             } else if (alert.primaryAction !== undefined || alert.primaryCallback !== undefined) {
                 alert.confirmButton = { text: alert.primaryAction, action: alert.primaryCallback };
             } else if (alert.type === 'confirm') {
-                alert.confirmButton = { text: 'Ya, Lanjutkan' };
+                alert.confirmButton = { text: '{{ __('vibe/alert.confirm') }}' };
             } else {
-                alert.confirmButton = { text: 'Tutup' };
+                alert.confirmButton = { text: '{{ __('vibe/alert.close') }}' };
             }
 
             if (alert.closeButton !== undefined) {
@@ -91,7 +91,7 @@
             } else if (alert.secondaryAction !== undefined || alert.secondaryCallback !== undefined) {
                 alert.closeButton = { text: alert.secondaryAction, action: alert.secondaryCallback };
             } else if (alert.type === 'confirm') {
-                alert.closeButton = { text: 'Batal' };
+                alert.closeButton = { text: '{{ __('vibe/alert.cancel') }}' };
             }
             
             let s = alert.sound !== undefined ? alert.sound : this.globalSound;
@@ -194,10 +194,10 @@
     :class="getPositionClasses()"
 >
     <div class="hidden" x-init="
-        @if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: 'Berhasil' }); @endif
-        @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: 'Error' }); @endif
-        @if (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: 'Peringatan' }); @endif
-        @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: 'Informasi' }); @endif
+        @if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/toast.success') }}' }); @endif
+        @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/toast.error') }}' }); @endif
+        @if (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: '{{ __('vibe/toast.warning') }}' }); @endif
+        @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/toast.info') }}' }); @endif
     "></div>
 
     <!-- Backdrop -->

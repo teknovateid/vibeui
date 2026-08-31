@@ -200,20 +200,20 @@
                         type="button"
                         @click="copyCode()"
                         class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none cursor-pointer"
-                        aria-label="Copy code to clipboard"
+                        aria-label="{{ __('vibe/preview.copy') }}"
                     >
                         <span x-show="!copied" class="inline-flex items-center gap-1.5">
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                             </svg>
-                            <span>Copy</span>
+                            <span>{{ __('vibe/preview.copy') }}</span>
                         </span>
                         <span x-show="copied" x-cloak class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold" style="display: none;">
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
-                            <span>Copied!</span>
+                            <span>{{ __('vibe/preview.copied') }}</span>
                         </span>
                     </button>
                 @endif
@@ -226,8 +226,8 @@
                 type="button"
                 @click="copyCode()"
                 class="inline-flex items-center justify-center size-8 rounded-lg bg-muted/80 backdrop-blur-xs text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all border border-border shadow-xs focus:outline-none cursor-pointer"
-                aria-label="Copy code to clipboard"
-                title="Copy code"
+                aria-label="{{ __('vibe/preview.copy') }}"
+                title="{{ __('vibe/preview.copy') }}"
             >
                 <svg x-show="!copied" class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>

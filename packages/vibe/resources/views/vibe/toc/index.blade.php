@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'title' => 'Daftar Isi',
+    'title' => __('vibe/toc.title'),
     'selector' => null,       // e.g. '#docs-content' or 'main'
     'levels' => 'h2, h3',     // Headings to scan in auto-mode
     'offset' => 40,           // Scroll offset in pixels for header clearance
@@ -229,7 +229,7 @@
                         <line x1="15" x2="3" y1="12" y2="12"/>
                         <line x1="17" x2="3" y1="18" y2="18"/>
                     </svg>
-                    <span>{{ $title ?? 'Daftar Isi' }}</span>
+                    <span>{{ $title }}</span>
                 </div>
                 <svg 
                     class="size-4 text-muted-foreground transition-transform duration-200"

@@ -131,7 +131,7 @@
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
                         <circle cx="12" cy="12" r="3" />
                     </svg>
-                    <span>Preview</span>
+                    <span>{{ __('vibe/preview.preview') }}</span>
                 </button>
 
                 <button
@@ -149,14 +149,14 @@
                         <polyline points="16 18 22 12 16 6" />
                         <polyline points="8 6 2 12 8 18" />
                     </svg>
-                    <span>Code</span>
+                    <span>{{ __('vibe/preview.code') }}</span>
                 </button>
             </div>
         </div>
 
         {{-- Center: Title (True Absolute Geometric Center) --}}
         @if ($title)
-            <div class="pointer-events-none absolute inset-x-0 inset-y-0 flex items-center justify-center px-36 text-center">
+            <div class="pointer-events-none absolute inset-x-0 inset-y-0 hidden md:flex items-center justify-center px-32 text-center">
                 <span class="truncate font-semibold text-xs text-foreground">{{ $title }}</span>
             </div>
         @endif

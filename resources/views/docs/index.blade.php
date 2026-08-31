@@ -4,7 +4,7 @@
         ['name' => 'Docs', 'url' => '/docs']
     ]" />
     <div>
-        <div class="mb-6 flex justify-end">
+        <div class="mb-6 flex justify-end rounded-full">
             <vibe:button @click="$dispatch('open-modal', 'test-modal')">
                 Buka Modal
             </vibe:button>

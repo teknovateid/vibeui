@@ -6,42 +6,38 @@
         ['name' => 'Input', 'url' => '/docs/input']
     ]" />
 
-    <div class="mx-auto w-full p-2 max-w-7xl grid grid-cols-12 gap-10 items-start justify-between">
+    <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
         
-        <div id="docs-content" class="col-span-12 md:col-span-9 space-y-14">
+        <div id="docs-content" class="col-span-12 order-2 md:order-1 md:col-span-9 min-w-0 w-full space-y-14">
 
-            {{-- ─── Page Header ─── --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-vibe-200 dark:bg-vibe-800 text-vibe-800 dark:text-vibe-200">Komponen</span>
-                    <span class="text-xs text-vibe-500 dark:text-vibe-400">Form & Input</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">Komponen</span>
+                    <span class="text-xs text-muted-foreground">Form & Input</span>
                 </div>
-                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-vibe-950 dark:text-vibe-50">Input</h1>
-                <p class="text-base text-vibe-600 dark:text-vibe-400 leading-relaxed max-w-3xl">
-                    Komponen input teks yang modern dan fleksibel. Mendukung 5 varian tampilan, 4 ukuran, ikon leading/trailing, prefix/suffix teks, pill style, state error & disabled, serta integrasi penuh dengan Livewire <code class="font-mono text-xs text-vibe-900 dark:text-vibe-100">wire:model</code>.
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Input</h1>
+                <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
+                    Komponen input teks yang modern dan fleksibel. Mendukung 5 varian tampilan, 4 ukuran, ikon leading/trailing, prefix/suffix teks, pill style, state error & disabled, serta integrasi penuh dengan Livewire <code class="font-mono text-xs text-foreground font-semibold">wire:model</code>.
                 </p>
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['outline', 'filled', 'flush', 'ghost', 'accent'] as $v)
-                        <span class="px-2 py-0.5 rounded-md bg-vibe-100 dark:bg-vibe-900 text-vibe-700 dark:text-vibe-300 text-[11px] font-mono font-medium border border-vibe-200 dark:border-vibe-800">{{ $v }}</span>
+                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $v }}</span>
                     @endforeach
-                    <span class="text-vibe-300 dark:text-vibe-700 text-xs">|</span>
+                    <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['sm', 'md', 'lg', 'xl'] as $s)
-                        <span class="px-2 py-0.5 rounded-md bg-vibe-100 dark:bg-vibe-900 text-vibe-700 dark:text-vibe-300 text-[11px] font-mono font-medium border border-vibe-200 dark:border-vibe-800">{{ $s }}</span>
+                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $s }}</span>
                     @endforeach
                 </div>
             </div>
 
-            {{-- ─── Mobile Table of Contents (collapsible) ─── --}}
-            <vibe:toc selector="#docs-content" title="Daftar Isi Halaman" class="xl:hidden" />
-
-            {{-- ─── 1. Penggunaan Dasar ─── --}}
+            
             <section id="penggunaan-dasar" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Penggunaan Dasar</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Gunakan tag <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">&lt;vibe:input&gt;</code> untuk membuat input dengan label bawaan. Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">name</code> otomatis tersinkron dengan <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">id</code> dan Laravel validation.
+                    <h2 class="text-xl font-bold text-foreground">Penggunaan Dasar</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:input&gt;</code> untuk membuat input dengan label bawaan. Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> otomatis tersinkron dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">id</code> dan Laravel validation.
                     </p>
                 </div>
 
@@ -55,19 +51,19 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Basic Input" :code="$basicCode" persist>
+                <vibe:preview title="Basic Input" :code="$basicCode">
                     <div class="w-full max-w-sm">
                         <vibe:input name="full_name" label="Nama Lengkap" placeholder="Masukkan nama lengkap Anda..." />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- ─── 2. Varian Tampilan ─── --}}
+            
             <section id="varian-tampilan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Varian Tampilan</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">variant</code> mengontrol gaya visual input. Tersedia 5 pilihan untuk berbagai konteks desain.
+                    <h2 class="text-xl font-bold text-foreground">Varian Tampilan</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> mengontrol gaya visual input. Tersedia 5 pilihan untuk berbagai konteks desain.
                     </p>
                 </div>
 
@@ -90,7 +86,7 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Varian Input" :code="$variantCode" persist>
+                <vibe:preview title="Varian Input" :code="$variantCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input variant="outline" label="Outline (default)" placeholder="Varian default..." />
                         <vibe:input variant="filled" label="Filled" placeholder="Tampilan solid..." />
@@ -101,12 +97,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 3. Ukuran ─── --}}
+            
             <section id="ukuran" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Ukuran</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">size</code> mengatur tinggi dan ukuran teks input. Default adalah <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">md</code>.
+                    <h2 class="text-xl font-bold text-foreground">Ukuran</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">size</code> mengatur tinggi dan ukuran teks input. Default adalah <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code>.
                     </p>
                 </div>
 
@@ -119,7 +115,7 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Ukuran Input" :code="$sizesCode" persist>
+                <vibe:preview title="Ukuran Input" :code="$sizesCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input size="sm" label="Small (sm)" placeholder="Tinggi 32px, text-xs..." />
                         <vibe:input size="md" label="Medium (md)" placeholder="Tinggi 36px, text-sm..." />
@@ -129,12 +125,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 4. Ikon & Addon ─── --}}
+            
             <section id="ikon-dan-addon" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Ikon & Addon</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Tambahkan ikon di sisi kiri dengan slot <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">icon</code>, di kanan dengan <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">trailingIcon</code>. Untuk teks, gunakan prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">prefix</code> dan <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">suffix</code>.
+                    <h2 class="text-xl font-bold text-foreground">Ikon & Addon</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Tambahkan ikon di sisi kiri dengan slot <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">icon</code>, di kanan dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">trailingIcon</code>. Untuk teks, gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">prefix</code> dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">suffix</code>.
                     </p>
                 </div>
 
@@ -166,11 +162,11 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Input dengan Ikon & Addon" :code="$iconCode" persist>
+                <vibe:preview title="Input dengan Ikon & Addon" :code="$iconCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="Cari" placeholder="Ketik untuk mencari...">
                             <x-slot:icon>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8" />
                                     <path d="m21 21-4.3-4.3" />
                                 </svg>
@@ -178,7 +174,7 @@
                         </vibe:input>
                         <vibe:input type="email" label="Email" placeholder="nama@email.com">
                             <x-slot:trailingIcon>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="20" height="16" x="2" y="4" rx="2" />
                                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                                 </svg>
@@ -190,12 +186,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 5. Pill Style ─── --}}
+            
             <section id="pill-style" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Pill Style</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Prop boolean <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">pill</code> mengubah sudut input menjadi fully rounded. Cocok untuk komponen search bar atau filter chip.
+                    <h2 class="text-xl font-bold text-foreground">Pill Style</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Prop boolean <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pill</code> mengubah sudut input menjadi fully rounded. Cocok untuk komponen search bar atau filter chip.
                     </p>
                 </div>
 
@@ -214,11 +210,11 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Pill Style" :code="$pillCode" persist>
+                <vibe:preview title="Pill Style" :code="$pillCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input pill label="Search" placeholder="Cari sesuatu...">
                             <x-slot:icon>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8" />
                                     <path d="m21 21-4.3-4.3" />
                                 </svg>
@@ -230,12 +226,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 6. Deskripsi & Bantuan ─── --}}
+            
             <section id="deskripsi-dan-bantuan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Deskripsi & Teks Bantuan</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">description</code> menampilkan teks kecil di bawah label (sebelum input). Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">info</code> menampilkan teks panduan di bawah input (hanya jika tidak ada error).
+                    <h2 class="text-xl font-bold text-foreground">Deskripsi & Teks Bantuan</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">description</code> menampilkan teks kecil di bawah label (sebelum input). Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code> menampilkan teks panduan di bawah input (hanya jika tidak ada error).
                     </p>
                 </div>
 
@@ -252,19 +248,19 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Input dengan Teks Bantuan" :code="$helperCode" persist>
+                <vibe:preview title="Input dengan Teks Bantuan" :code="$helperCode">
                     <div class="w-full max-w-sm">
                         <vibe:input name="email" type="email" label="Alamat Email" description="Gunakan email aktif yang bisa dihubungi." info="Kami tidak akan pernah membagikan email Anda ke pihak ketiga." placeholder="nama@perusahaan.com" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- ─── 7. Error & Validasi ─── --}}
+            
             <section id="error-dan-validasi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Error & Validasi</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Komponen secara otomatis membaca error dari Laravel <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">$errors</code> menggunakan <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">name</code> atau <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">wire:model</code>. Gunakan prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">error</code> untuk pesan kustom, atau <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">errorName</code> jika key validasi berbeda dari name.
+                    <h2 class="text-xl font-bold text-foreground">Error & Validasi</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Komponen secara otomatis membaca error dari Laravel <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> menggunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code>. Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code> untuk pesan kustom, atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">errorName</code> jika key validasi berbeda dari name.
                     </p>
                 </div>
 
@@ -296,7 +292,7 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Input Error State" :code="$errorCode" persist>
+                <vibe:preview title="Input Error State" :code="$errorCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input name="password" type="password" label="Kata Sandi" value="12345" error="Kata sandi minimal 8 karakter dan harus mengandung angka." />
                         <vibe:input name="user_phone" label="Nomor Telepon" error="Format nomor telepon tidak valid." placeholder="+62 812 3456 7890" />
@@ -304,12 +300,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 8. Status Input ─── --}}
+            
             <section id="status-input" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Status: Disabled & Readonly</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">disabled</code> menonaktifkan input sepenuhnya (tidak bisa diklik atau difokus). Prop <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">readonly</code> memungkinkan fokus dan copy, namun nilai tidak bisa diubah.
+                    <h2 class="text-xl font-bold text-foreground">Status: Disabled & Readonly</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> menonaktifkan input sepenuhnya (tidak bisa diklik atau difokus). Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">readonly</code> memungkinkan fokus dan copy, namun nilai tidak bisa diubah.
                     </p>
                 </div>
 
@@ -331,7 +327,7 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Disabled & Readonly" :code="$stateCode" persist>
+                <vibe:preview title="Disabled & Readonly" :code="$stateCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="ID Pengguna (Disabled)" value="USR-994821" disabled />
                         <vibe:input label="Kode Referral (Readonly)" value="VIBE-REF-2025" readonly />
@@ -339,12 +335,12 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 9. Integrasi Livewire ─── --}}
+            
             <section id="integrasi-livewire" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Integrasi Livewire</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Gunakan <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">wire:model</code> seperti biasa. Komponen secara otomatis membaca <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">name</code> dari directive tersebut dan menyinkronkan error validasi Laravel.
+                    <h2 class="text-xl font-bold text-foreground">Integrasi Livewire</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code> seperti biasa. Komponen secara otomatis membaca <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> dari directive tersebut dan menyinkronkan error validasi Laravel.
                     </p>
                 </div>
 
@@ -389,7 +385,7 @@
                     HTML;
                 @endphp
 
-                <vibe:preview title="Livewire wire:model" :code="$livewireCode" persist>
+                <vibe:preview title="Livewire wire:model" :code="$livewireCode">
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="Nama Lengkap (wire:model.live)" placeholder="Masukkan nama..." />
                         <vibe:input type="email" label="Email (wire:model)" placeholder="nama@email.com" info="Digunakan untuk login." />
@@ -398,18 +394,18 @@
                 </vibe:preview>
             </section>
 
-            {{-- ─── 10. Props Reference ─── --}}
+            
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">Referensi Props</h2>
-                    <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                        Semua properti yang didukung oleh komponen <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">&lt;vibe:input&gt;</code>. Atribut HTML standar (seperti <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">wire:model</code>, <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">class</code>, dll.) diteruskan langsung ke elemen <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono">&lt;input&gt;</code>.
+                    <h2 class="text-xl font-bold text-foreground">Referensi Props</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Semua properti yang didukung oleh komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:input&gt;</code>. Atribut HTML standar (seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class</code>, dll.) diteruskan langsung ke elemen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;input&gt;</code>.
                     </p>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-vibe-200 dark:border-vibe-800 bg-white dark:bg-vibe-950">
+                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
                     <table class="w-full text-left text-xs">
-                        <thead class="border-b border-vibe-200 dark:border-vibe-800 bg-vibe-100/75 dark:bg-vibe-900/60 text-vibe-900 dark:text-vibe-100 font-semibold">
+                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                             <tr>
                                 <th class="px-4 py-3 whitespace-nowrap">Prop</th>
                                 <th class="px-4 py-3 whitespace-nowrap">Tipe</th>
@@ -417,7 +413,7 @@
                                 <th class="px-4 py-3">Deskripsi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-vibe-200 dark:divide-vibe-800 text-vibe-700 dark:text-vibe-300">
+                        <tbody class="divide-y divide-border text-muted-foreground">
                             @php
                                 $props = [
                                     ['label', 'string', 'null', 'Teks label di atas input.'],
@@ -437,11 +433,11 @@
                                 ];
                             @endphp
                             @foreach ($props as [$prop, $type, $default, $desc])
-                                <tr class="hover:bg-vibe-50 dark:hover:bg-vibe-900/30 transition-colors">
-                                    <td class="px-4 py-3 font-mono font-bold text-vibe-900 dark:text-vibe-100 whitespace-nowrap">{{ $prop }}</td>
-                                    <td class="px-4 py-3 font-mono text-vibe-500 dark:text-vibe-400 whitespace-nowrap">{{ $type }}</td>
-                                    <td class="px-4 py-3 font-mono text-vibe-400 dark:text-vibe-500 whitespace-nowrap">{{ $default }}</td>
-                                    <td class="px-4 py-3 text-vibe-600 dark:text-vibe-400">{{ $desc }}</td>
+                                <tr class="hover:bg-accent/40 transition-colors">
+                                    <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
+                                    <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
+                                    <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
+                                    <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -449,23 +445,23 @@
                 </div>
 
                 {{-- Slots table --}}
-                <p class="text-sm font-semibold text-vibe-950 dark:text-vibe-50 pt-2">Slots</p>
-                <div class="overflow-x-auto rounded-xl border border-vibe-200 dark:border-vibe-800 bg-white dark:bg-vibe-950">
+                <p class="text-sm font-semibold text-foreground pt-2">Slots</p>
+                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
                     <table class="w-full text-left text-xs">
-                        <thead class="border-b border-vibe-200 dark:border-vibe-800 bg-vibe-100/75 dark:bg-vibe-900/60 text-vibe-900 dark:text-vibe-100 font-semibold">
+                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                             <tr>
                                 <th class="px-4 py-3">Slot</th>
                                 <th class="px-4 py-3">Deskripsi</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-vibe-200 dark:divide-vibe-800 text-vibe-700 dark:text-vibe-300">
-                            <tr class="hover:bg-vibe-50 dark:hover:bg-vibe-900/30 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-vibe-900 dark:text-vibe-100">icon</td>
-                                <td class="px-4 py-3 text-vibe-600 dark:text-vibe-400">Ikon SVG di sisi kiri input (leading icon). Gunakan <code class="font-mono">&lt;x-slot:icon&gt;</code>.</td>
+                        <tbody class="divide-y divide-border text-muted-foreground">
+                            <tr class="hover:bg-accent/40 transition-colors">
+                                <td class="px-4 py-3 font-mono font-bold text-foreground">icon</td>
+                                <td class="px-4 py-3 text-muted-foreground">Ikon SVG di sisi kiri input (leading icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.</td>
                             </tr>
-                            <tr class="hover:bg-vibe-50 dark:hover:bg-vibe-900/30 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-vibe-900 dark:text-vibe-100">trailingIcon</td>
-                                <td class="px-4 py-3 text-vibe-600 dark:text-vibe-400">Ikon SVG di sisi kanan input (trailing icon). Gunakan <code class="font-mono">&lt;x-slot:trailingIcon&gt;</code>.</td>
+                            <tr class="hover:bg-accent/40 transition-colors">
+                                <td class="px-4 py-3 font-mono font-bold text-foreground">trailingIcon</td>
+                                <td class="px-4 py-3 text-muted-foreground">Ikon SVG di sisi kanan input (trailing icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -474,8 +470,8 @@
 
         </div>
 
-        <aside class="hidden md:block md:col-span-3 w-full sticky top-6">
-            <vibe:toc selector="#docs-content" title="Daftar Isi" />
+        <aside class="col-span-12 order-1 md:order-2 md:col-span-3 w-full md:sticky md:top-6">
+            <vibe:toc selector="#docs-content" />
         </aside>
 
     </div>

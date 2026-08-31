@@ -9,15 +9,15 @@
         <!-- Page Header -->
         <div class="space-y-2">
             <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-vibe-200 dark:bg-vibe-800 text-vibe-800 dark:text-vibe-200">
+                <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
                     Dokumentasi
                 </span>
-                <span class="text-xs text-vibe-500 dark:text-vibe-400">Laravel 11+ / 12+ / 13+ & Tailwind CSS v4</span>
+                <span class="text-xs text-muted-foreground">Laravel 11+ / 12+ / 13+ & Tailwind CSS v4</span>
             </div>
-            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-vibe-950 dark:text-vibe-50">
+            <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
                 Instalasi Vibe UI
             </h1>
-            <p class="text-base text-vibe-600 dark:text-vibe-400 leading-relaxed">
+            <p class="text-base text-muted-foreground leading-relaxed">
                 Pelajari cara menginstal dan mengintegrasikan Vibe UI ke dalam aplikasi Laravel Anda untuk mempercepat pengembangan antarmuka yang modern dan elegan.
             </p>
         </div>
@@ -25,14 +25,14 @@
         <!-- Step 1: Install Package -->
         <section class="space-y-4">
             <div class="flex items-center gap-3">
-                <div class="flex size-7 items-center justify-center rounded-lg bg-vibe-950 dark:bg-vibe-50 text-white dark:text-vibe-950 text-xs font-bold shrink-0">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold shrink-0">
                     1
                 </div>
-                <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">
+                <h2 class="text-xl font-bold text-foreground">
                     Instalasi Package via Composer
                 </h2>
             </div>
-            <p class="text-sm text-vibe-600 dark:text-vibe-400">
+            <p class="text-sm text-muted-foreground">
                 Jalankan perintah Composer di terminal untuk menambahkan library Vibe UI ke dalam proyek Anda:
             </p>
             <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibe-ui" />
@@ -41,14 +41,14 @@
         <!-- Step 2: Publish Assets & Config -->
         <section class="space-y-4">
             <div class="flex items-center gap-3">
-                <div class="flex size-7 items-center justify-center rounded-lg bg-vibe-950 dark:bg-vibe-50 text-white dark:text-vibe-950 text-xs font-bold shrink-0">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold shrink-0">
                     2
                 </div>
-                <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">
+                <h2 class="text-xl font-bold text-foreground">
                     Publikasikan Aset & Konfigurasi
                 </h2>
             </div>
-            <p class="text-sm text-vibe-600 dark:text-vibe-400">
+            <p class="text-sm text-muted-foreground">
                 Gunakan perintah Artisan bawaan Vibe UI untuk mempublikasikan konfigurasi, CSS custom variants, dan skrip pendukung:
             </p>
             <vibe:highlightjs>
@@ -59,14 +59,14 @@
         <!-- Step 3: Configure Tailwind CSS -->
         <section class="space-y-4">
             <div class="flex items-center gap-3">
-                <div class="flex size-7 items-center justify-center rounded-lg bg-vibe-950 dark:bg-vibe-50 text-white dark:text-vibe-950 text-xs font-bold shrink-0">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold shrink-0">
                     3
                 </div>
-                <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">
+                <h2 class="text-xl font-bold text-foreground">
                     Konfigurasi Tailwind CSS v4
                 </h2>
             </div>
-            <p class="text-sm text-vibe-600 dark:text-vibe-400">
+            <p class="text-sm text-muted-foreground">
                 Pastikan file CSS utama Anda mengimpor Tailwind CSS dan custom variant Vibe UI:
             </p>
             <vibe:highlightjs language="css" title="resources/css/app.css" :lineNumbers="true">
@@ -78,15 +78,15 @@
         <!-- Step 4: Setup Base Layout -->
         <section class="space-y-4">
             <div class="flex items-center gap-3">
-                <div class="flex size-7 items-center justify-center rounded-lg bg-vibe-950 dark:bg-vibe-50 text-white dark:text-vibe-950 text-xs font-bold shrink-0">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold shrink-0">
                     4
                 </div>
-                <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">
+                <h2 class="text-xl font-bold text-foreground">
                     Konfigurasi Template Layout Dasar
                 </h2>
             </div>
-            <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                Sertakan direktif <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono text-vibe-900 dark:text-vibe-100">@vibeStyles</code> pada bagian <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono text-vibe-900 dark:text-vibe-100">&lt;head&gt;</code> untuk inisialisasi tema dark mode anti-FOUC:
+            <p class="text-sm text-muted-foreground">
+                Sertakan direktif <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">@vibeStyles</code> pada bagian <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;head&gt;</code> untuk inisialisasi tema dark mode anti-FOUC:
             </p>
             @php
                 $baseLayoutCode = <<<'HTML'
@@ -103,7 +103,7 @@
     @stack('head')
 </head>
 
-<body class="bg-vibe-50 dark:bg-vibe-950 text-vibe-950 dark:text-vibe-50 vibe-scrollbar font-medium font-sans antialiased">
+<body class="bg-background text-foreground vibe-scrollbar font-medium font-sans antialiased">
     {{ $slot }}
 
     <vibe:alert position="top-right" />
@@ -121,15 +121,15 @@ HTML;
         <!-- Step 5: Ready to Use Components -->
         <section class="space-y-4">
             <div class="flex items-center gap-3">
-                <div class="flex size-7 items-center justify-center rounded-lg bg-vibe-950 dark:bg-vibe-50 text-white dark:text-vibe-950 text-xs font-bold shrink-0">
+                <div class="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold shrink-0">
                     5
                 </div>
-                <h2 class="text-xl font-bold text-vibe-950 dark:text-vibe-50">
+                <h2 class="text-xl font-bold text-foreground">
                     Mulai Menggunakan Komponen
                 </h2>
             </div>
-            <p class="text-sm text-vibe-600 dark:text-vibe-400">
-                Panggil komponen Vibe UI menggunakan sintaks tag ringkas <code class="px-1.5 py-0.5 rounded bg-vibe-200 dark:bg-vibe-800 text-xs font-mono text-vibe-900 dark:text-vibe-100">&lt;vibe:...&gt;</code> langsung di dalam file Blade Anda:
+            <p class="text-sm text-muted-foreground">
+                Panggil komponen Vibe UI menggunakan sintaks tag ringkas <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:...&gt;</code> langsung di dalam file Blade Anda:
             </p>
             @php
                 $componentsExampleCode = <<<'HTML'

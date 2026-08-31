@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'title' => 'PINNED',
+    'title' => __('vibe/nav.pinned'),
     'open' => true,
     'persist' => true,
     'id' => null,

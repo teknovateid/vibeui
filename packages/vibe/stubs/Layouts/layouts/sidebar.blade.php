@@ -23,7 +23,7 @@
             <vibe:sheet.footer class="px-0 py-3">
 
                 <vibe:nav id="sidebar-footer-nav" {{ $attributes->twMerge(['class' => 'mb-1']) }}>
-                    <vibe:nav.history title="RECENTLY VISITED" persist class="max-h-30 pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar" />
+                    <vibe:nav.history persist class="max-h-30 pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar" />
                 </vibe:nav>
 
                 <vibe:dropdown keyboard class="w-full px-3 minified:px-0">
@@ -211,7 +211,7 @@
                     {{-- <div class="h-[80%] w-px bg-border" role="separator"></div> --}}
                 </vibe:header.actions>
             </vibe:header>
-            <main class="flex-1 p-4">
+            <main class="flex-1 p-4 min-w-0 w-full">
                 {{ $slot }}
             </main>
 
