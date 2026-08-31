@@ -4,6 +4,7 @@ namespace Teknovate\VibeUi;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Vite;
 use Teknovate\VibeUi\Commands\LayoutCommand;
 use Teknovate\VibeUi\Commands\ComponentCommand;
 use Teknovate\VibeUi\Commands\VibeCommand;
@@ -23,6 +24,17 @@ class VibeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Disable redundant CSS preloads that cause browser console warnings
+        if (class_exists(Vite::class)) {
+            Vite::usePreloadTagAttributes(function (string $src, string $url, ?array $chunk, ?array $manifest) {
+                if (str_ends_with($url, '.css')) {
+                    return false;
+                }
+
+                return [];
+            });
+        }
+
         $this->publishes([
             __DIR__.'/../config/vibe.php' => config_path('vibe.php'),
         ], 'vibe-config');
