@@ -22,4 +22,9 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/{id}/edit', 'docs.input.edit')->name('edit');
     });
 
+
+    Route::prefix('directories')->name('directories.')->group(function () {
+        Route::view('/', 'docs.directories.index')->name('index');
+    });
+
 });
