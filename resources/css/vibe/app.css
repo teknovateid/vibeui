@@ -2,6 +2,9 @@
 @import './custom-variant.css';
 
 @theme {
+
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -66,7 +69,10 @@
     --color-vibe-950: #0a0b0a;
 }
 
-:root, .light, .dark .light, [data-canvas-theme="light"] {
+:root,
+.light,
+.dark .light,
+[data-canvas-theme="light"] {
     --background: #ffffff !important;
     --foreground: #0a0b0a !important;
     --card: #ffffff !important;
@@ -132,7 +138,9 @@
     color-scheme: light;
 }
 
-.dark, .light .dark, [data-canvas-theme="dark"] {
+.dark,
+.light .dark,
+[data-canvas-theme="dark"] {
     --background: #0a0b0a !important;
     --foreground: #f9fafa !important;
     --card: #191a19 !important;
