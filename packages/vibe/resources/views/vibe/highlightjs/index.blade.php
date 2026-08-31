@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props([
     'code' => null,
     'language' => null,
@@ -16,9 +18,9 @@
 ])
 
 @php
-    $resolvedLang = strtolower($language ?? $lang ?? '');
+    $resolvedLang = strtolower($language ?: ($lang ?: ''));
     $showLines = $lines !== null ? (bool) $lines : (bool) $lineNumbers;
-    $rawCode = $code ?? (isset($slot) ? (string) $slot : '');
+    $rawCode = $code !== null ? (string) $code : (isset($slot) ? (string) $slot : '');
     
     // Trim initial and trailing empty newlines while preserving inner structure
     $rawCode = preg_replace('/^\r?\n|\r?\n\s*$/', '', $rawCode);
@@ -64,7 +66,7 @@
             $resolvedTitle = null;
         }
     } else {
-        $resolvedTitle = $title ?? $filename;
+        $resolvedTitle = $title !== null ? $title : $filename;
     }
     
     // Resolve Default Badge Text
@@ -85,7 +87,6 @@
     }
     
     // Resolve Theme
-    $theme = $theme ?? 'vibe';
     $themeClass = 'vibe-theme-' . $theme;
     
     // Resolve Icon

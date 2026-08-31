@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props(['src', 'alt' => '', 'lazy' => true, 'priority' => false, 'fallback' => null, 'skeleton' => true, 'caption' => null, 'imgClass' => 'w-full h-full object-cover'])
 
 @php
@@ -8,7 +10,6 @@
 @endphp
 
 @if ($priority)
-{{-- @dd($priority) --}}
     @push('head')
         <link rel="preload" as="image" href="{{ $src }}">
     @endpush
@@ -47,9 +48,13 @@
     </div>
 
     {{-- Figcaption Support --}}
-    @if ($caption || $slot->isNotEmpty())
+    @if ($caption)
         <figcaption class="shrink-0 text-xs text-muted-foreground mt-2 text-center w-full px-1">
-            {{ $caption ?? $slot }}
+            {{ $caption }}
+        </figcaption>
+    @elseif ($slot->isNotEmpty())
+        <figcaption class="shrink-0 text-xs text-muted-foreground mt-2 text-center w-full px-1">
+            {{ $slot }}
         </figcaption>
     @endif
 </figure>

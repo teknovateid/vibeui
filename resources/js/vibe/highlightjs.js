@@ -11,6 +11,7 @@ import markdown from 'highlight.js/lib/languages/markdown';
 import sql from 'highlight.js/lib/languages/sql';
 import diff from 'highlight.js/lib/languages/diff';
 import ini from 'highlight.js/lib/languages/ini'; // .env config
+import plaintext from 'highlight.js/lib/languages/plaintext';
 import '../../css/vibe/highlightjs.css';
 
 // Register standard web development languages
@@ -36,6 +37,10 @@ hljs.registerLanguage('sql', sql);
 hljs.registerLanguage('diff', diff);
 hljs.registerLanguage('ini', ini);
 hljs.registerLanguage('env', ini);
+hljs.registerLanguage('plaintext', plaintext);
+hljs.registerLanguage('text', plaintext);
+hljs.registerLanguage('txt', plaintext);
+hljs.registerLanguage('none', plaintext);
 
 // Configure highlight.js to suppress unescaped HTML warnings
 hljs.configure({ ignoreUnescapedHTML: true });

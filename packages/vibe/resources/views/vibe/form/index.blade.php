@@ -1,4 +1,5 @@
-@blaze
+@blaze(fold: true)
+
 @props([
     'id' => null,
     'saveToStorage' => false,

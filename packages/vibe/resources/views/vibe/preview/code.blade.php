@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props([
     'language' => 'blade',
     'lang' => null,
@@ -10,8 +12,8 @@
 ])
 
 @php
-    $resolvedLang = $lang ?? $language ?? 'blade';
-    $resolvedTitle = $filename ?? $title;
+    $resolvedLang = $lang ?: $language;
+    $resolvedTitle = $filename ?: $title;
 @endphp
 
 <div {{ $attributes->twMerge(['class' => 'relative w-full border-t border-border']) }}>

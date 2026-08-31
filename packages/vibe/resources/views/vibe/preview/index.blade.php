@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props([
     'id' => null,
     'persist' => false,
@@ -16,7 +18,7 @@
 ])
 
 @php
-    $resolvedLang = $lang ?? ($language ?? 'blade');
+    $resolvedLang = $lang ?: $language;
     $minHeightStyle = $minHeight ? (is_numeric($minHeight) ? "min-height: {$minHeight}px;" : "min-height: {$minHeight};") : 'min-height: 180px;';
     $previewId = $id ?? ($title ? 'preview-' . \Illuminate\Support\Str::slug($title) : uniqid('preview-'));
     $canvasId = $previewId . '-canvas';

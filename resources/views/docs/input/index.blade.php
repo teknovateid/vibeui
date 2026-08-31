@@ -1,9 +1,9 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo title="Input" description="Komponen input teks fleksibel dengan 5 varian tampilan, 4 ukuran, dukungan ikon, prefix/suffix, state validasi, dan integrasi penuh Livewire wire:model." schema="techarticle" :breadcrumbs="[
+    <vibe:seo :title="__('docs/input.title')" :description="__('docs/input.description')" schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
         ['name' => 'Docs', 'url' => '/docs'],
         ['name' => 'Components', 'url' => '/docs'],
-        ['name' => 'Input', 'url' => '/docs/input']
+        ['name' => __('docs/input.title'), 'url' => '/docs/input']
     ]" />
 
     <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
@@ -12,12 +12,12 @@
 
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">Komponen</span>
-                    <span class="text-xs text-muted-foreground">Form & Input</span>
+                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/input.badge') }}</span>
+                    <span class="text-xs text-muted-foreground">{{ __('docs/input.group') }}</span>
                 </div>
-                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Input</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/input.title') }}</h1>
                 <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
-                    Komponen input teks yang modern dan fleksibel. Mendukung 5 varian tampilan, 4 ukuran, ikon leading/trailing, prefix/suffix teks, pill style, state error & disabled, serta integrasi penuh dengan Livewire <code class="font-mono text-xs text-foreground font-semibold">wire:model</code>.
+                    {{ __('docs/input.description') }}
                 </p>
 
                 {{-- Quick props badge strip --}}
@@ -32,12 +32,12 @@
                 </div>
             </div>
 
-            
+            {{-- 1. Basic Usage --}}
             <section id="penggunaan-dasar" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Penggunaan Dasar</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.basic_usage_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:input&gt;</code> untuk membuat input dengan label bawaan. Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> otomatis tersinkron dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">id</code> dan Laravel validation.
+                        {!! __('docs/input.basic_usage_desc') !!}
                     </p>
                 </div>
 
@@ -45,99 +45,99 @@
                     $basicCode = <<<'HTML'
                     <vibe:input
                         name="full_name"
-                        label="Nama Lengkap"
-                        placeholder="Masukkan nama lengkap Anda..."
+                        label="Full Name"
+                        placeholder="Enter your full name..."
                     />
                     HTML;
                 @endphp
 
                 <vibe:preview title="Basic Input" :code="$basicCode">
                     <div class="w-full max-w-sm">
-                        <vibe:input name="full_name" label="Nama Lengkap" placeholder="Masukkan nama lengkap Anda..." />
+                        <vibe:input name="full_name" :label="__('docs/input.basic_input_label')" :placeholder="__('docs/input.basic_input_placeholder')" />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 2. Variants --}}
             <section id="varian-tampilan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Varian Tampilan</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.variants_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> mengontrol gaya visual input. Tersedia 5 pilihan untuk berbagai konteks desain.
+                        {!! __('docs/input.variants_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $variantCode = <<<'HTML'
-                    {{-- outline (default) — border klasik --}}
-                    <vibe:input variant="outline" label="Outline" placeholder="Varian default..." />
+                    {{-- outline (default) --}}
+                    <vibe:input variant="outline" label="Outline" placeholder="Default variant..." />
 
-                    {{-- filled — background solid, border transparan --}}
-                    <vibe:input variant="filled" label="Filled" placeholder="Tampilan solid..." />
+                    {{-- filled --}}
+                    <vibe:input variant="filled" label="Filled" placeholder="Solid look..." />
 
-                    {{-- flush — hanya border bawah, minimalis --}}
-                    <vibe:input variant="flush" label="Flush" placeholder="Garis bawah saja..." />
+                    {{-- flush --}}
+                    <vibe:input variant="flush" label="Flush" placeholder="Bottom line only..." />
 
-                    {{-- ghost — tanpa border, cocok di dalam card --}}
-                    <vibe:input variant="ghost" label="Ghost" placeholder="Transparan penuh..." />
+                    {{-- ghost --}}
+                    <vibe:input variant="ghost" label="Ghost" placeholder="Transparent..." />
 
-                    {{-- accent — menggunakan warna aksen tema --}}
-                    <vibe:input variant="accent" label="Accent" placeholder="Warna aksen..." />
+                    {{-- accent --}}
+                    <vibe:input variant="accent" label="Accent" placeholder="Accent color..." />
                     HTML;
                 @endphp
 
-                <vibe:preview title="Varian Input" :code="$variantCode">
+                <vibe:preview title="Input Variants" :code="$variantCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input variant="outline" label="Outline (default)" placeholder="Varian default..." />
-                        <vibe:input variant="filled" label="Filled" placeholder="Tampilan solid..." />
-                        <vibe:input variant="flush" label="Flush" placeholder="Garis bawah saja..." />
-                        <vibe:input variant="ghost" label="Ghost" placeholder="Transparan penuh..." />
-                        <vibe:input variant="accent" label="Accent" placeholder="Warna aksen..." />
+                        <vibe:input variant="outline" :label="__('docs/input.variant_outline')" placeholder="Default variant..." />
+                        <vibe:input variant="filled" :label="__('docs/input.variant_filled')" placeholder="Solid look..." />
+                        <vibe:input variant="flush" :label="__('docs/input.variant_flush')" placeholder="Bottom line only..." />
+                        <vibe:input variant="ghost" :label="__('docs/input.variant_ghost')" placeholder="Transparent..." />
+                        <vibe:input variant="accent" :label="__('docs/input.variant_accent')" placeholder="Accent color..." />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 3. Sizes --}}
             <section id="ukuran" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Ukuran</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.sizes_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">size</code> mengatur tinggi dan ukuran teks input. Default adalah <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code>.
+                        {!! __('docs/input.sizes_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $sizesCode = <<<'HTML'
-                    <vibe:input size="sm" label="Small (sm)"   placeholder="Tinggi 32px, text-xs..." />
-                    <vibe:input size="md" label="Medium (md)"  placeholder="Tinggi 36px, text-sm..." />
-                    <vibe:input size="lg" label="Large (lg)"   placeholder="Tinggi 40px, text-sm..." />
-                    <vibe:input size="xl" label="X-Large (xl)" placeholder="Tinggi 44px, text-base..." />
+                    <vibe:input size="sm" label="Small (sm)"   placeholder="Height 32px, text-xs..." />
+                    <vibe:input size="md" label="Medium (md)"  placeholder="Height 36px, text-sm..." />
+                    <vibe:input size="lg" label="Large (lg)"   placeholder="Height 40px, text-sm..." />
+                    <vibe:input size="xl" label="X-Large (xl)" placeholder="Height 44px, text-base..." />
                     HTML;
                 @endphp
 
-                <vibe:preview title="Ukuran Input" :code="$sizesCode">
+                <vibe:preview title="Input Sizes" :code="$sizesCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input size="sm" label="Small (sm)" placeholder="Tinggi 32px, text-xs..." />
-                        <vibe:input size="md" label="Medium (md)" placeholder="Tinggi 36px, text-sm..." />
-                        <vibe:input size="lg" label="Large (lg)" placeholder="Tinggi 40px, text-sm..." />
-                        <vibe:input size="xl" label="X-Large (xl)" placeholder="Tinggi 44px, text-base..." />
+                        <vibe:input size="sm" label="Small (sm)" placeholder="Height 32px, text-xs..." />
+                        <vibe:input size="md" label="Medium (md)" placeholder="Height 36px, text-sm..." />
+                        <vibe:input size="lg" label="Large (lg)" placeholder="Height 40px, text-sm..." />
+                        <vibe:input size="xl" label="X-Large (xl)" placeholder="Height 44px, text-base..." />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 4. Icons & Addons --}}
             <section id="ikon-dan-addon" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Ikon & Addon</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.icons_addons_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Tambahkan ikon di sisi kiri dengan slot <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">icon</code>, di kanan dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">trailingIcon</code>. Untuk teks, gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">prefix</code> dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">suffix</code>.
+                        {!! __('docs/input.icons_addons_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $iconCode = <<<'HTML'
                     {{-- Leading icon (slot) --}}
-                    <vibe:input label="Cari" placeholder="Ketik untuk mencari...">
+                    <vibe:input label="Search" placeholder="Type to search...">
                         <x-slot:icon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -146,7 +146,7 @@
                     </vibe:input>
 
                     {{-- Trailing icon (slot) --}}
-                    <vibe:input type="email" label="Email" placeholder="nama@email.com">
+                    <vibe:input type="email" label="Email" placeholder="name@email.com">
                         <x-slot:trailingIcon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
@@ -154,17 +154,17 @@
                         </x-slot:trailingIcon>
                     </vibe:input>
 
-                    {{-- Prefix teks --}}
-                    <vibe:input label="Website" placeholder="namadomain" prefix="https://" suffix=".com" />
+                    {{-- Prefix text --}}
+                    <vibe:input label="Website" placeholder="domainname" prefix="https://" suffix=".com" />
 
-                    {{-- Suffix teks --}}
-                    <vibe:input label="Harga" type="number" placeholder="0" prefix="Rp" suffix="/bulan" />
+                    {{-- Suffix text --}}
+                    <vibe:input label="Price" type="number" placeholder="0" prefix="$" suffix="/month" />
                     HTML;
                 @endphp
 
-                <vibe:preview title="Input dengan Ikon & Addon" :code="$iconCode">
+                <vibe:preview title="Input with Icons & Addons" :code="$iconCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input label="Cari" placeholder="Ketik untuk mencari...">
+                        <vibe:input label="Search" placeholder="Type to search...">
                             <x-slot:icon>
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8" />
@@ -172,7 +172,7 @@
                                 </svg>
                             </x-slot:icon>
                         </vibe:input>
-                        <vibe:input type="email" label="Email" placeholder="nama@email.com">
+                        <vibe:input type="email" label="Email" placeholder="name@email.com">
                             <x-slot:trailingIcon>
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="20" height="16" x="2" y="4" rx="2" />
@@ -180,24 +180,24 @@
                                 </svg>
                             </x-slot:trailingIcon>
                         </vibe:input>
-                        <vibe:input label="Website" placeholder="namadomain" prefix="https://" suffix=".com" />
-                        <vibe:input label="Harga" type="number" placeholder="0" prefix="Rp" suffix="/bulan" />
+                        <vibe:input label="Website" placeholder="domainname" prefix="https://" suffix=".com" />
+                        <vibe:input label="Price" type="number" placeholder="0" prefix="$" suffix="/month" />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 5. Pill Style --}}
             <section id="pill-style" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Pill Style</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.pill_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Prop boolean <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pill</code> mengubah sudut input menjadi fully rounded. Cocok untuk komponen search bar atau filter chip.
+                        {!! __('docs/input.pill_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $pillCode = <<<'HTML'
-                    <vibe:input pill label="Search" placeholder="Cari sesuatu..." >
+                    <vibe:input pill label="Search" placeholder="Search anything..." >
                         <x-slot:icon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -212,7 +212,7 @@
 
                 <vibe:preview title="Pill Style" :code="$pillCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input pill label="Search" placeholder="Cari sesuatu...">
+                        <vibe:input pill label="Search" placeholder="Search anything...">
                             <x-slot:icon>
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8" />
@@ -226,12 +226,12 @@
                 </vibe:preview>
             </section>
 
-            
+            {{-- 6. Helper & Description --}}
             <section id="deskripsi-dan-bantuan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Deskripsi & Teks Bantuan</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.helper_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">description</code> menampilkan teks kecil di bawah label (sebelum input). Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code> menampilkan teks panduan di bawah input (hanya jika tidak ada error).
+                        {!! __('docs/input.helper_desc') !!}
                     </p>
                 </div>
 
@@ -240,87 +240,87 @@
                     <vibe:input
                         name="email"
                         type="email"
-                        label="Alamat Email"
-                        description="Gunakan email aktif yang bisa dihubungi."
-                        info="Kami tidak akan pernah membagikan email Anda ke pihak terbaik."
-                        placeholder="nama@perusahaan.com"
+                        label="Email Address"
+                        description="Use an active email address."
+                        info="We'll never share your email with anyone."
+                        placeholder="name@company.com"
                     />
                     HTML;
                 @endphp
 
-                <vibe:preview title="Input dengan Teks Bantuan" :code="$helperCode">
+                <vibe:preview title="Input with Helper Text" :code="$helperCode">
                     <div class="w-full max-w-sm">
-                        <vibe:input name="email" type="email" label="Alamat Email" description="Gunakan email aktif yang bisa dihubungi." info="Kami tidak akan pernah membagikan email Anda ke pihak ketiga." placeholder="nama@perusahaan.com" />
+                        <vibe:input name="email" type="email" label="Email Address" description="Use an active email address." info="We'll never share your email with anyone." placeholder="name@company.com" />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 7. Error & Validation --}}
             <section id="error-dan-validasi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Error & Validasi</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.error_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen secara otomatis membaca error dari Laravel <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> menggunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code>. Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code> untuk pesan kustom, atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">errorName</code> jika key validasi berbeda dari name.
+                        {!! __('docs/input.error_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $errorCode = <<<'HTML'
-                    {{-- Error dari prop langsung --}}
+                    {{-- Error from prop directly --}}
                     <vibe:input
                         name="password"
                         type="password"
-                        label="Kata Sandi"
+                        label="Password"
                         value="12345"
-                        error="Kata sandi minimal 8 karakter dan harus mengandung angka."
+                        error="Password must be at least 8 characters long."
                     />
 
-                    {{-- Error otomatis dari Laravel $errors (setelah form submit) --}}
+                    {{-- Automatic Laravel $errors --}}
                     <vibe:input
                         name="username"
                         label="Username"
                         wire:model="username"
                     />
 
-                    {{-- Error dengan key berbeda (errorName) --}}
+                    {{-- Custom error key (errorName) --}}
                     <vibe:input
                         name="user[phone]"
                         errorName="user.phone"
-                        label="Nomor Telepon"
-                        error="Format nomor telepon tidak valid."
+                        label="Phone Number"
+                        error="Invalid phone number format."
                     />
                     HTML;
                 @endphp
 
                 <vibe:preview title="Input Error State" :code="$errorCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input name="password" type="password" label="Kata Sandi" value="12345" error="Kata sandi minimal 8 karakter dan harus mengandung angka." />
-                        <vibe:input name="user_phone" label="Nomor Telepon" error="Format nomor telepon tidak valid." placeholder="+62 812 3456 7890" />
+                        <vibe:input name="password" type="password" label="Password" value="12345" error="Password must be at least 8 characters long." />
+                        <vibe:input name="user_phone" label="Phone Number" error="Invalid phone number format." placeholder="+1 (555) 000-0000" />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 8. Status: Disabled & Readonly --}}
             <section id="status-input" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Status: Disabled & Readonly</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.status_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> menonaktifkan input sepenuhnya (tidak bisa diklik atau difokus). Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">readonly</code> memungkinkan fokus dan copy, namun nilai tidak bisa diubah.
+                        {!! __('docs/input.status_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $stateCode = <<<'HTML'
-                    {{-- Disabled: tidak bisa diklik --}}
+                    {{-- Disabled --}}
                     <vibe:input
-                        label="ID Pengguna (Disabled)"
+                        label="User ID (Disabled)"
                         value="USR-994821"
                         disabled
                     />
 
-                    {{-- Readonly: bisa difokus & dicopy, tidak bisa diubah --}}
+                    {{-- Readonly --}}
                     <vibe:input
-                        label="Kode Referral (Readonly)"
+                        label="Referral Code (Readonly)"
                         value="VIBE-REF-2025"
                         readonly
                     />
@@ -329,24 +329,24 @@
 
                 <vibe:preview title="Disabled & Readonly" :code="$stateCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input label="ID Pengguna (Disabled)" value="USR-994821" disabled />
-                        <vibe:input label="Kode Referral (Readonly)" value="VIBE-REF-2025" readonly />
+                        <vibe:input label="User ID (Disabled)" value="USR-994821" disabled />
+                        <vibe:input label="Referral Code (Readonly)" value="VIBE-REF-2025" readonly />
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 9. Livewire Integration --}}
             <section id="integrasi-livewire" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Integrasi Livewire</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.livewire_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code> seperti biasa. Komponen secara otomatis membaca <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> dari directive tersebut dan menyinkronkan error validasi Laravel.
+                        {!! __('docs/input.livewire_desc') !!}
                     </p>
                 </div>
 
                 @php
                     $livewireCode = <<<'HTML'
-                    {{-- Di Livewire Component (PHP) --}}
+                    {{-- In Livewire Component (PHP) --}}
                     class ProfileForm extends Component
                     {
                         #[Validate('required|min:3|max:50')]
@@ -358,28 +358,28 @@
                         public function save()
                         {
                             $this->validate();
-                            // simpan data...
+                            // save logic...
                         }
                     }
 
-                    {{-- Di Blade template --}}
+                    {{-- In Blade template --}}
                     <form wire:submit="save">
                         <vibe:input
                             wire:model.live="name"
-                            label="Nama Lengkap"
-                            placeholder="Masukkan nama..."
+                            label="Full Name"
+                            placeholder="Enter name..."
                         />
 
                         <vibe:input
                             wire:model="email"
                             type="email"
                             label="Email"
-                            placeholder="nama@email.com"
-                            info="Digunakan untuk login."
+                            placeholder="name@email.com"
+                            info="Used for login."
                         />
 
                         <vibe:button type="submit" variant="primary">
-                            Simpan Perubahan
+                            Save Changes
                         </vibe:button>
                     </form>
                     HTML;
@@ -387,19 +387,19 @@
 
                 <vibe:preview title="Livewire wire:model" :code="$livewireCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input label="Nama Lengkap (wire:model.live)" placeholder="Masukkan nama..." />
-                        <vibe:input type="email" label="Email (wire:model)" placeholder="nama@email.com" info="Digunakan untuk login." />
-                        <vibe:button variant="primary" class="w-full">Simpan Perubahan</vibe:button>
+                        <vibe:input label="Full Name (wire:model.live)" placeholder="Enter name..." />
+                        <vibe:input type="email" label="Email (wire:model)" placeholder="name@email.com" info="Used for login." />
+                        <vibe:button variant="primary" class="w-full">Save Changes</vibe:button>
                     </div>
                 </vibe:preview>
             </section>
 
-            
+            {{-- 10. Props Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Referensi Props</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.props_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Semua properti yang didukung oleh komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:input&gt;</code>. Atribut HTML standar (seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:model</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class</code>, dll.) diteruskan langsung ke elemen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;input&gt;</code>.
+                        {!! __('docs/input.props_desc') !!}
                     </p>
                 </div>
 
@@ -407,29 +407,29 @@
                     <table class="w-full text-left text-xs">
                         <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                             <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">Prop</th>
-                                <th class="px-4 py-3 whitespace-nowrap">Tipe</th>
-                                <th class="px-4 py-3 whitespace-nowrap">Default</th>
-                                <th class="px-4 py-3">Deskripsi</th>
+                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/input.table_prop') }}</th>
+                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/input.table_type') }}</th>
+                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/input.table_default') }}</th>
+                                <th class="px-4 py-3">{{ __('docs/input.table_desc') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             @php
                                 $props = [
-                                    ['label', 'string', 'null', 'Teks label di atas input.'],
-                                    ['id', 'string', 'auto', 'Atribut id input. Default: nilai name atau uniqid().'],
-                                    ['name', 'string', 'null', 'Atribut name. Otomatis diambil dari wire:model jika tidak diisi.'],
-                                    ['type', 'string', "'text'", 'Tipe input HTML: text, email, password, number, url, tel, dll.'],
-                                    ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Ukuran tinggi dan teks input.'],
-                                    ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", 'Gaya visual input.'],
-                                    ['description', 'string', 'null', 'Teks kecil di bawah label, sebelum input.'],
-                                    ['info', 'string', 'null', 'Teks panduan di bawah input. Tersembunyi jika ada error.'],
-                                    ['error', 'string|bool', 'null', 'Pesan error kustom atau boolean untuk memicu error state.'],
-                                    ['errorName', 'string', 'null', 'Key validasi Laravel jika berbeda dari name (misal: user.phone).'],
-                                    ['prefix', 'string', 'null', 'Teks di sisi kiri input (misal: "https://", "Rp").'],
-                                    ['suffix', 'string', 'null', 'Teks di sisi kanan input (misal: ".com", "/bulan").'],
-                                    ['pill', 'bool', 'false', 'Mengubah radius sudut menjadi fully rounded (pill shape).'],
-                                    ['wrapperClass', 'string', 'null', 'Class tambahan untuk div pembungkus luar.'],
+                                    ['label', 'string', 'null', 'Label text above the input.'],
+                                    ['id', 'string', 'auto', 'HTML input id attribute. Default: name or uniqid().'],
+                                    ['name', 'string', 'null', 'HTML name attribute. Automatically extracted from wire:model if omitted.'],
+                                    ['type', 'string', "'text'", 'HTML input type: text, email, password, number, url, tel, etc.'],
+                                    ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Input height and text size.'],
+                                    ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", 'Visual style variant.'],
+                                    ['description', 'string', 'null', 'Small helper text below the label, before the input.'],
+                                    ['info', 'string', 'null', 'Helper note below the input. Hidden when error exists.'],
+                                    ['error', 'string|bool', 'null', 'Custom error message or boolean to trigger error state.'],
+                                    ['errorName', 'string', 'null', 'Laravel validation error key if different from name (e.g. user.phone).'],
+                                    ['prefix', 'string', 'null', 'Text on the left side of the input (e.g. "https://", "$").'],
+                                    ['suffix', 'string', 'null', 'Text on the right side of the input (e.g. ".com", "/month").'],
+                                    ['pill', 'bool', 'false', 'Changes corner radius to fully rounded (pill shape).'],
+                                    ['wrapperClass', 'string', 'null', 'Extra class for the outer wrapper div.'],
                                 ];
                             @endphp
                             @foreach ($props as [$prop, $type, $default, $desc])
@@ -445,23 +445,23 @@
                 </div>
 
                 {{-- Slots table --}}
-                <p class="text-sm font-semibold text-foreground pt-2">Slots</p>
+                <p class="text-sm font-semibold text-foreground pt-2">{{ __('docs/input.slots_title') }}</p>
                 <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
                     <table class="w-full text-left text-xs">
                         <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                             <tr>
-                                <th class="px-4 py-3">Slot</th>
-                                <th class="px-4 py-3">Deskripsi</th>
+                                <th class="px-4 py-3">{{ __('docs/input.table_slot') }}</th>
+                                <th class="px-4 py-3">{{ __('docs/input.table_desc') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="px-4 py-3 font-mono font-bold text-foreground">icon</td>
-                                <td class="px-4 py-3 text-muted-foreground">Ikon SVG di sisi kiri input (leading icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.</td>
+                                <td class="px-4 py-3 text-muted-foreground">SVG icon on the left side (leading icon). Use <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.</td>
                             </tr>
                             <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="px-4 py-3 font-mono font-bold text-foreground">trailingIcon</td>
-                                <td class="px-4 py-3 text-muted-foreground">Ikon SVG di sisi kanan input (trailing icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.</td>
+                                <td class="px-4 py-3 text-muted-foreground">SVG icon on the right side (trailing icon). Use <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.</td>
                             </tr>
                         </tbody>
                     </table>

@@ -13,8 +13,11 @@ return [
     'step_2_desc' => 'Gunakan perintah Artisan bawaan Vibe UI untuk mempublikasikan konfigurasi, CSS custom variants, dan skrip pendukung:',
 
     'step_3_title' => 'Konfigurasi Tailwind CSS v4',
-    'step_3_desc' => 'Tambahkan import file CSS Vibe UI di dalam file CSS utama proyek Anda (misalnya app.css):',
+    'step_3_desc' => 'Pastikan file CSS utama Anda mengimpor Tailwind CSS dan custom variant Vibe UI:',
 
-    'step_4_title' => 'Dukungan Blade & Livewire',
-    'step_4_desc' => 'Vibe UI langsung siap digunakan pada komponen Blade standar maupun komponen full-stack Livewire.',
+    'step_4_title' => 'Konfigurasi Template Layout Dasar',
+    'step_4_desc' => 'Sertakan direktif <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">@vibeStyles</code> pada bagian <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;head&gt;</code> untuk inisialisasi tema dark mode anti-FOUC:',
+
+    'step_5_title' => 'Mulai Menggunakan Komponen',
+    'step_5_desc' => 'Panggil komponen Vibe UI menggunakan sintaks tag ringkas <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:...&gt;</code> langsung di dalam file Blade Anda:',
 ];

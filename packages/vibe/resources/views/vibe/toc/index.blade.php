@@ -2,7 +2,7 @@
 
 @props([
     'title' => __('vibe/toc.title'),
-    'selector' => null,       // e.g. '#docs-content' or 'main'
+    'selector' => '',       // e.g. '#docs-content' or 'main'
     'levels' => 'h2, h3',     // Headings to scan in auto-mode
     'offset' => 40,           // Scroll offset in pixels for header clearance
     'collapsible' => false,   // Show mobile quick-jump bar
@@ -18,7 +18,7 @@
 <div 
     id="{{ $tocId }}"
     data-vibe-toc="{{ $tocId }}"
-    data-toc-selector="{{ $selector ?? '' }}"
+    data-toc-selector="{{ $selector }}"
     data-toc-levels="{{ $levels }}"
     data-toc-offset="{{ $offset }}"
     x-data="(function() {

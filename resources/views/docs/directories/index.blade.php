@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo title="Struktur Direktori" description="Panduan struktur direktori dan arsitektur file Vibe UI pada aplikasi Laravel." schema="techarticle" :breadcrumbs="[
+    <vibe:seo :title="__('docs/directories.title')" :description="__('docs/directories.description')" schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
         ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Directories', 'url' => '/docs/directories']
+        ['name' => __('docs/directories.title'), 'url' => '/docs/directories']
     ]" />
 
     <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
@@ -13,80 +13,78 @@
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
                     <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
-                        Dokumentasi
+                        {{ __('docs/directories.badge') }}
                     </span>
-                    <span class="text-xs text-muted-foreground">Arsitektur & Penataan File</span>
+                    <span class="text-xs text-muted-foreground">{{ __('docs/directories.subtitle') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-                    Struktur Direktori
+                    {{ __('docs/directories.title') }}
                 </h1>
                 <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
-                    Pelajari penataan folder dan arsitektur file Vibe UI dalam proyek Laravel untuk memudahkan kustomisasi komponen Blade, styling Tailwind CSS v4, aset JavaScript, dan lokalisasi multi-bahasa.
+                    {{ __('docs/directories.description') }}
                 </p>
             </div>
 
             {{-- ─── 1. Ringkasan Pohon Direktori ─── --}}
             <section id="ringkasan-struktur" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Ringkasan Struktur Folder</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.overview_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Setelah menjalankan perintah instalasi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">php artisan vibe:install</code>, file dan aset Vibe UI akan terpasang di lokasi berikut:
+                        {!! __('docs/directories.overview_desc') !!}
                     </p>
                 </div>
 
                 @php
-                    $directoryTree = <<<'TEXT'
-vibe-project/
-├── config/
-│   └── vibe.php                      # Konfigurasi utama Vibe UI (prefix, tema, dll.)
-├── lang/
-│   ├── en/
-│   │   └── vibe/                     # File terjemahan komponen (English)
-│   └── id/
-│       └── vibe/                     # File terjemahan komponen (Bahasa Indonesia)
-├── resources/
-│   ├── css/
-│   │   └── vibe/
-│   │       ├── app.css               # Token warna semantik, radius, & dark mode
-│   │       ├── custom-variant.css    # Custom variant Tailwind CSS v4 (select:, minified:, dll.)
-│   │       └── highlightjs.css       # Tema Syntax Highlighter bawaan
-│   ├── js/
-│   │   └── vibe/
-│   │       ├── highlightjs.js        # Helper renderer sintaks Highlight.js
-│   │       └── theme.js              # Theme manager (Dark / Light mode switcher)
-│   └── views/
-│       └── vibe/                     # Seluruh template komponen Blade Vibe UI
-│           ├── alert/                # Komponen Notifikasi Alert
-│           ├── avatar/               # Komponen Gambar Avatar Pengguna
-│           ├── button/               # Komponen Tombol Interaktif
-│           ├── card/                 # Komponen Kartu Konten
-│           ├── datatable/            # Komponen Tabel Dinamis & Filter
-│           ├── dropdown/             # Komponen Menu Dropdown
-│           ├── header/               # Komponen Header & Navbar
-│           ├── highlightjs/          # Komponen Codeblock Highlighter
-│           ├── input/                # Komponen Input & Form Controls
-│           ├── modal/                # Komponen Dialog Modal
-│           ├── nav/                  # Komponen Navigasi, Pinned, & History
-│           ├── pagination/           # Komponen Navigasi Halaman
-│           ├── preview/              # Komponen Interactive Code Previewer
-│           ├── seo/                  # Komponen Meta Tags & Schema SEO
-│           ├── sheet/                # Komponen Drawer / Sidebar Sheet
-│           ├── toast/                # Komponen Flash Toast Notification
-│           └── toc/                  # Komponen Table of Contents Otomatis
-└── routes/
-    └── docs.php                      # File routing modular aplikasi
-TEXT;
+                    $directoryTree = "vibe-project/\n"
+                        . "├── config/\n"
+                        . "│   └── vibe.php                      # " . __('docs/directories.tree_comment_config') . "\n"
+                        . "├── lang/\n"
+                        . "│   ├── en/\n"
+                        . "│   │   └── vibe/                     # " . __('docs/directories.tree_comment_lang_en') . "\n"
+                        . "│   └── id/\n"
+                        . "│       └── vibe/                     # " . __('docs/directories.tree_comment_lang_id') . "\n"
+                        . "├── resources/\n"
+                        . "│   ├── css/\n"
+                        . "│   │   └── vibe/\n"
+                        . "│   │       ├── app.css               # " . __('docs/directories.tree_comment_css_app') . "\n"
+                        . "│   │       ├── custom-variant.css    # " . __('docs/directories.tree_comment_css_variant') . "\n"
+                        . "│   │       └── highlightjs.css       # " . __('docs/directories.tree_comment_css_highlight') . "\n"
+                        . "│   ├── js/\n"
+                        . "│   │   └── vibe/\n"
+                        . "│   │       ├── highlightjs.js        # " . __('docs/directories.tree_comment_js_highlight') . "\n"
+                        . "│   │       └── theme.js              # " . __('docs/directories.tree_comment_js_theme') . "\n"
+                        . "│   └── views/\n"
+                        . "│       └── vibe/                     # " . __('docs/directories.tree_comment_views') . "\n"
+                        . "│           ├── alert/                \n"
+                        . "│           ├── avatar/               \n"
+                        . "│           ├── button/               \n"
+                        . "│           ├── card/                 \n"
+                        . "│           ├── datatable/            \n"
+                        . "│           ├── dropdown/             \n"
+                        . "│           ├── header/               \n"
+                        . "│           ├── highlightjs/          \n"
+                        . "│           ├── input/                \n"
+                        . "│           ├── modal/                \n"
+                        . "│           ├── nav/                  \n"
+                        . "│           ├── pagination/           \n"
+                        . "│           ├── preview/              \n"
+                        . "│           ├── seo/                  \n"
+                        . "│           ├── sheet/                \n"
+                        . "│           ├── toast/                \n"
+                        . "│           └── toc/                  \n"
+                        . "└── routes/\n"
+                        . "    └── docs.php                      # " . __('docs/directories.tree_comment_routes');
                 @endphp
 
-                <vibe:highlightjs language="plaintext" title="Struktur Direktori Vibe UI" :code="$directoryTree" />
+                <vibe:highlightjs language="plaintext" :title="__('docs/directories.tree_title')" :code="$directoryTree" />
             </section>
 
             {{-- ─── 2. Komponen Blade ─── --}}
             <section id="komponen-blade" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">1. Komponen Blade (<code class="font-mono text-base text-foreground">resources/views/vibe/</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.views_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Semua komponen Vibe UI dibangun menggunakan Blade View standar. Setelah di-publish, Anda memiliki kendali 100% untuk memodifikasi struktur HTML, styling Tailwind CSS, atau interaksi Alpine.js langsung dari folder ini.
+                        {{ __('docs/directories.views_desc') }}
                     </p>
                 </div>
 
@@ -94,20 +92,20 @@ TEXT;
                     <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">views/vibe/</span>
-                            <span class="text-sm font-semibold text-foreground">Struktur Komponen</span>
+                            <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.views_card_structure_title') }}</span>
                         </div>
                         <p class="text-xs text-muted-foreground leading-relaxed">
-                            Tiap komponen memiliki subfolder tersendiri (misal: <code class="font-mono text-foreground">vibe/input/</code>, <code class="font-mono text-foreground">vibe/sheet/</code>). File <code class="font-mono text-foreground">index.blade.php</code> berfungsi sebagai entry point utama komponen.
+                            {!! __('docs/directories.views_card_structure_desc') !!}
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">@@props([...])</span>
-                            <span class="text-sm font-semibold text-foreground">Konfigurasi Prop Bersih</span>
+                            <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.views_card_props_title') }}</span>
                         </div>
                         <p class="text-xs text-muted-foreground leading-relaxed">
-                            Seluruh properti dan nilai default dideklarasikan secara ringkas melalui direktif <code class="font-mono text-foreground">@@props</code>, termasuk string terjemahan bahasa dinamis bawaan.
+                            {!! __('docs/directories.views_card_props_desc') !!}
                         </p>
                     </div>
                 </div>
@@ -116,9 +114,9 @@ TEXT;
             {{-- ─── 3. Styling & Token CSS ─── --}}
             <section id="styling-css" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">2. Styling & Token CSS (<code class="font-mono text-base text-foreground">resources/css/vibe/</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.css_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Folder ini mengelola seluruh token Design System Vibe UI berbasis Tailwind CSS v4:
+                        {{ __('docs/directories.css_desc') }}
                     </p>
                 </div>
 
@@ -126,22 +124,22 @@ TEXT;
                     <table class="w-full text-left text-xs">
                         <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                             <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">File CSS</th>
-                                <th class="px-4 py-3">Fungsi & Kegunaan</th>
+                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/directories.css_th_file') }}</th>
+                                <th class="px-4 py-3">{{ __('docs/directories.css_th_desc') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">app.css</td>
-                                <td class="px-4 py-3">Mendefinisikan variabel warna CSS (<code class="font-mono text-foreground">--background</code>, <code class="font-mono text-foreground">--primary</code>, dll.), radius (<code class="font-mono text-foreground">--radius-*</code>), dan skema dark mode.</td>
+                                <td class="px-4 py-3">{!! __('docs/directories.css_row_app') !!}</td>
                             </tr>
                             <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">custom-variant.css</td>
-                                <td class="px-4 py-3">Mendaftarkan variant kustom Tailwind CSS v4 seperti <code class="font-mono text-foreground">select:</code> (untuk item aktif), <code class="font-mono text-foreground">minified:</code>, dan state sheet/sidebar.</td>
+                                <td class="px-4 py-3">{!! __('docs/directories.css_row_variant') !!}</td>
                             </tr>
                             <tr class="hover:bg-accent/40 transition-colors">
                                 <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">highlightjs.css</td>
-                                <td class="px-4 py-3">Tema pewarnaan sintaks codeblock bawaan yang otomatis beradaptasi dengan mode terang dan gelap.</td>
+                                <td class="px-4 py-3">{!! __('docs/directories.css_row_highlight') !!}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -151,9 +149,9 @@ TEXT;
             {{-- ─── 4. Skrip JavaScript ─── --}}
             <section id="aset-javascript" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">3. Aset JavaScript (<code class="font-mono text-base text-foreground">resources/js/vibe/</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.js_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Vibe UI mengedepankan performa tinggi tanpa framework JS berat. Skrip pendukung diorganisasi secara modular:
+                        {{ __('docs/directories.js_desc') }}
                     </p>
                 </div>
 
@@ -161,20 +159,20 @@ TEXT;
                     <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-muted text-foreground font-mono text-xs font-bold">theme.js</span>
-                            <span class="text-sm font-semibold text-foreground">Theme Manager</span>
+                            <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.js_card_theme_title') }}</span>
                         </div>
                         <p class="text-xs text-muted-foreground leading-relaxed">
-                            Mengelola pergantian Dark/Light mode secara instan, menyinkronkan dengan preferensi sistem operasi, dan menyimpan status tema di LocalStorage tanpa FOUC (*Flash of Unstyled Content*).
+                            {!! __('docs/directories.js_card_theme_desc') !!}
                         </p>
                     </div>
 
                     <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-muted text-foreground font-mono text-xs font-bold">highlightjs.js</span>
-                            <span class="text-sm font-semibold text-foreground">Syntax Highlighter</span>
+                            <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.js_card_highlight_title') }}</span>
                         </div>
                         <p class="text-xs text-muted-foreground leading-relaxed">
-                            Inisialisasi ringan untuk komponen <code class="font-mono text-foreground">&lt;vibe:highlightjs&gt;</code> dan <code class="font-mono text-foreground">&lt;vibe:preview&gt;</code> dengan fitur copy code dan auto-detect bahasa.
+                            {!! __('docs/directories.js_card_highlight_desc') !!}
                         </p>
                     </div>
                 </div>
@@ -183,15 +181,15 @@ TEXT;
             {{-- ─── 5. Multi-Bahasa ─── --}}
             <section id="bahasa-dan-terjemahan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">4. Bahasa & Terjemahan (<code class="font-mono text-base text-foreground">lang/{locale}/vibe/</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.lang_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Seluruh label dan teks UI pada komponen Vibe UI mendukung multi-bahasa secara native melalui sistem terjemahan Laravel:
+                        {{ __('docs/directories.lang_desc') }}
                     </p>
                 </div>
 
                 <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-3">
                     <p class="text-xs text-muted-foreground">
-                        Struktur file bahasa dipecah per komponen sehingga sangat rapi dan mudah dimodifikasi:
+                        {{ __('docs/directories.lang_card_desc') }}
                     </p>
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
                         <span class="p-2 rounded-lg bg-muted border border-border text-foreground">vibe/alert.php</span>
@@ -209,9 +207,9 @@ TEXT;
             {{-- ─── 6. File Konfigurasi ─── --}}
             <section id="file-konfigurasi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">5. File Konfigurasi (<code class="font-mono text-base text-foreground">config/vibe.php</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/directories.config_title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        File konfigurasi utama untuk mengatur perilaku global Vibe UI dalam aplikasi Anda:
+                        {{ __('docs/directories.config_desc') }}
                     </p>
                 </div>
 
@@ -222,8 +220,8 @@ return [
     |--------------------------------------------------------------------------
     | Component Tag Prefix
     |--------------------------------------------------------------------------
-    | Prefix yang digunakan untuk memanggil komponen Blade.
-    | Default 'vibe' menghasilkan tag: <vibe:button>, <vibe:input>, dll.
+    | Prefix used for referencing Blade components.
+    | Default 'vibe' yields tags: <vibe:button>, <vibe:input>, etc.
     */
     'prefix' => 'vibe',
 

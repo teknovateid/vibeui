@@ -1,13 +1,13 @@
-@blaze
+@blaze(fold: true)
 
 @props([
-    'href' => null,
+    'href' => '',
     'depth' => 1, // 1 for h2, 2 for h3, 3 for h4
     'active' => false,
 ])
 
 @php
-    $targetId = ltrim($href ?? '', '#');
+    $targetId = ltrim($href, '#');
     $depthClasses = match ((int)$depth) {
         2 => 'pl-5 text-[11.5px]',
         3 => 'pl-8 text-[11px]',
@@ -27,4 +27,4 @@
     >
         <span class="truncate leading-relaxed">{{ $slot }}</span>
     </a>
-</li>
+ </li>

@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props(['title', 'active' => false, 'open' => false, 'persist' => false, 'id' => null, 'pinnable' => false])
 
 @php

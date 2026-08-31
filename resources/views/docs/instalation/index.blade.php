@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo title="Instalasi" description="Panduan instalasi dan integrasi Vibe UI di proyek Laravel dengan Tailwind CSS v4." schema="techarticle" :breadcrumbs="[
+    <vibe:seo :title="__('docs/instalation.title')" :description="__('docs/instalation.description')" schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
         ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Installation', 'url' => '/docs/instalation']
+        ['name' => __('docs/instalation.title'), 'url' => '/docs/instalation']
     ]" />
 
     <div class="mx-auto max-w-6xl space-y-10">
@@ -10,15 +10,15 @@
         <div class="space-y-2">
             <div class="flex items-center gap-2">
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
-                    Dokumentasi
+                    {{ __('docs/instalation.badge') }}
                 </span>
-                <span class="text-xs text-muted-foreground">Laravel 11+ / 12+ / 13+ & Tailwind CSS v4</span>
+                <span class="text-xs text-muted-foreground">{{ __('docs/instalation.subtitle') }}</span>
             </div>
             <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
-                Instalasi Vibe UI
+                {{ __('docs/instalation.title') }}
             </h1>
             <p class="text-base text-muted-foreground leading-relaxed">
-                Pelajari cara menginstal dan mengintegrasikan Vibe UI ke dalam aplikasi Laravel Anda untuk mempercepat pengembangan antarmuka yang modern dan elegan.
+                {{ __('docs/instalation.description') }}
             </p>
         </div>
 
@@ -29,11 +29,11 @@
                     1
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    Instalasi Package via Composer
+                    {{ __('docs/instalation.step_1_title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                Jalankan perintah Composer di terminal untuk menambahkan library Vibe UI ke dalam proyek Anda:
+                {{ __('docs/instalation.step_1_desc') }}
             </p>
             <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibe-ui" />
         </section>
@@ -45,11 +45,11 @@
                     2
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    Publikasikan Aset & Konfigurasi
+                    {{ __('docs/instalation.step_2_title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                Gunakan perintah Artisan bawaan Vibe UI untuk mempublikasikan konfigurasi, CSS custom variants, dan skrip pendukung:
+                {{ __('docs/instalation.step_2_desc') }}
             </p>
             <vibe:highlightjs>
                 php artisan vibe:install
@@ -63,11 +63,11 @@
                     3
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    Konfigurasi Tailwind CSS v4
+                    {{ __('docs/instalation.step_3_title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                Pastikan file CSS utama Anda mengimpor Tailwind CSS dan custom variant Vibe UI:
+                {{ __('docs/instalation.step_3_desc') }}
             </p>
             <vibe:highlightjs language="css" title="resources/css/app.css" :lineNumbers="true">
                 @import "tailwindcss";
@@ -82,11 +82,11 @@
                     4
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    Konfigurasi Template Layout Dasar
+                    {{ __('docs/instalation.step_4_title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                Sertakan direktif <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">@vibeStyles</code> pada bagian <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;head&gt;</code> untuk inisialisasi tema dark mode anti-FOUC:
+                {!! __('docs/instalation.step_4_desc') !!}
             </p>
             @php
                 $baseLayoutCode = <<<'HTML'
@@ -125,23 +125,23 @@ HTML;
                     5
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    Mulai Menggunakan Komponen
+                    {{ __('docs/instalation.step_5_title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                Panggil komponen Vibe UI menggunakan sintaks tag ringkas <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:...&gt;</code> langsung di dalam file Blade Anda:
+                {!! __('docs/instalation.step_5_desc') !!}
             </p>
             @php
                 $componentsExampleCode = <<<'HTML'
 <div class="p-6 space-y-4">
-    <!-- Tombol Primer -->
+    <!-- Primary Button -->
     <vibe:button variant="primary">
-        Simpan Data
+        Save Changes
     </vibe:button>
 
-    <!-- Tombol Outline -->
+    <!-- Outline Button -->
     <vibe:button variant="outline">
-        Batal
+        Cancel
     </vibe:button>
 
     <!-- Syntax Highlighter -->

@@ -1,3 +1,5 @@
+@blaze(fold: true)
+
 @props([
     'limit'   => null,
     'total'   => null,
@@ -34,9 +36,7 @@
     };
 
     $badgeClasses = "relative inline-flex items-center justify-center font-medium shrink-0 rounded-full bg-muted text-muted-foreground ring-2 ring-background z-10 select-none {$badgeSizeClasses}";
-@endphp
 
-@php
     // Map size prop to CSS dimensions (matches Tailwind's w/h scale)
     $avatarSize = match ($size) {
         'xs'    => ['dim' => '1.5rem', 'font' => '0.75rem'],   // w-6 h-6
