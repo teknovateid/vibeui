@@ -31,7 +31,7 @@
                         <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-card text-card-foreground border border-border hover:bg-accent hover:text-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
                             <div class="flex items-center gap-2 min-w-0">
                                 <div class="relative flex shrink-0 ">
-                                    <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop" alt="Masum Parvej" />
+                                    <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=64&h=64&auto=format&fit=crop" alt="Masum Parvej" />
                                     <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-background"></span>
                                 </div>
 
