@@ -30,6 +30,10 @@ return [
     'blur_title' => 'Efek Background Blur',
     'blur_desc' => 'Tingkatkan fokus visual pengguna pada alert dengan memberikan efek blur pada latar belakang backdrop. Mendukung opsi <code class="font-mono text-xs text-foreground">blur: true</code>, serta berbagai tingkat intensitas seperti <code class="font-mono text-xs text-foreground">\'xs\'</code>, <code class="font-mono text-xs text-foreground">\'sm\'</code>, <code class="font-mono text-xs text-foreground">\'md\'</code>, <code class="font-mono text-xs text-foreground">\'lg\'</code>, <code class="font-mono text-xs text-foreground">\'xl\'</code>, atau <code class="font-mono text-xs text-foreground">false / \'none\'</code> untuk mematikan blur.',
 
+    // Section 7: Persist
+    'persist_title' => 'Persistensi Status Alert (Don\'t Show Again)',
+    'persist_desc' => 'Gunakan opsi <code class="font-mono text-xs text-foreground">persist: true</code> (atau key string kustom) untuk menyimpan status penutupan alert ke <code class="font-mono text-xs text-foreground">localStorage</code> (atau <code class="font-mono text-xs text-foreground">persist: \'session\'</code> untuk <code class="font-mono text-xs text-foreground">sessionStorage</code>). Sangat ideal untuk alert pengumuman, banner promo, atau onboarding agar tidak muncul berulang kali setelah ditutup oleh pengguna. Gunakan <code class="font-mono text-xs text-foreground">vibeAlert.reset(id)</code> untuk mereset status penyimpanan.',
+
     // Section 6: Methods
     'integration_title' => 'Metode Pemanggilan Alert',
     'integration_desc' => 'Terdapat beberapa metode untuk memicu alert: fungsi JavaScript <code class="font-mono text-xs text-foreground">vibeAlert(...)</code>, direktif Blade <code class="font-mono text-xs text-foreground">@vibeAlert(...)</code>, dan event dispatch dari komponen Livewire.',

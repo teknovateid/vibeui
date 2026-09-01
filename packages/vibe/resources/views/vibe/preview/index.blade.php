@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'id' => null,
@@ -62,6 +62,16 @@
         isInitialized: false,
 
         init() {
+            // Relocate preview.code from canvas to code viewer container
+            let codeContainer = this.$el.querySelector('#' + this.id + '-code');
+            let codeEls = this.$el.querySelectorAll('[data-vibe-preview-code]');
+            codeEls.forEach(el => {
+                if (codeContainer && el.parentElement !== codeContainer) {
+                    codeContainer.appendChild(el);
+                }
+                el.style.display = '';
+            });
+
             this.$nextTick(() => {
                 setTimeout(() => {
                     this.isInitialized = true;
@@ -102,7 +112,7 @@
 
         copyAllCode() {
             let codeBlock = this.$el.querySelector('[data-vibe-highlight]') || this.$el.querySelector('code.hljs');
-            let text = codeBlock ? (codeBlock.innerText || codeBlock.textContent) : '';
+            let text = codeBlock ? (codeBlock.dataset.rawCode || codeBlock.innerText || codeBlock.textContent) : '';
             if (navigator.clipboard && text) {
                 navigator.clipboard.writeText(text.trim()).then(() => {
                     this.copied = true;
@@ -139,7 +149,14 @@
                 <button
                     data-vibe-btn-tab="code"
                     type="button"
-                    @click="tab = 'code'"
+                    @click="tab = 'code'; $nextTick(() => {
+                        let blocks = $el.closest('[id^=preview-]')?.querySelectorAll('code[data-vibe-highlight]');
+                        if (blocks && window.hljs) {
+                            blocks.forEach(b => {
+                                if (b.dataset.highlighted !== 'yes') window.hljs.highlightElement(b);
+                            });
+                        }
+                    })"
                     :class="{
                         'bg-background text-foreground shadow-xs font-semibold': tab === 'code',
                         'text-muted-foreground hover:text-foreground hover:bg-background/40 font-medium': tab !== 'code'

@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'language' => 'blade',
@@ -16,18 +16,14 @@
     $resolvedTitle = $filename ?: $title;
 @endphp
 
-<div {{ $attributes->twMerge(['class' => 'relative w-full border-t border-border']) }}>
+<div data-vibe-preview-code style="display: none;" {{ $attributes->twMerge(['class' => 'relative w-full border-t border-border']) }}>
     <vibe:highlightjs
         :language="$resolvedLang"
         :title="$resolvedTitle"
         :theme="$theme"
         :lineNumbers="$lineNumbers"
         :copyable="$copyable"
-        :code="$code"
+        :code="$code ?? (string) $slot"
         class="rounded-none! border-none! shadow-none!"
-    >
-        @if (!$code)
-            {{ $slot }}
-        @endif
-    </vibe:highlightjs>
+    />
 </div>

@@ -7,7 +7,7 @@
     ]" />
 
     <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
-        
+
         <div id="docs-content" class="col-span-12 order-2 md:order-1 md:col-span-9 min-w-0 w-full space-y-14">
 
             <div class="space-y-4">
@@ -41,17 +41,12 @@
                     </p>
                 </div>
 
-                @php
-                    $basicCode = <<<'HTML'
-                    <vibe:input
-                        name="full_name"
-                        label="Full Name"
-                        placeholder="Enter your full name..."
-                    />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Basic Input" :code="$basicCode">
+                <vibe:preview title="Basic Input">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:input name="full_name" label="Full Name" placeholder="Enter your full name..." />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm">
                         <vibe:input name="full_name" :label="__('docs/input.basic_input_label')" :placeholder="__('docs/input.basic_input_placeholder')" />
                     </div>
@@ -67,26 +62,25 @@
                     </p>
                 </div>
 
-                @php
-                    $variantCode = <<<'HTML'
-                    {{-- outline (default) --}}
-                    <vibe:input variant="outline" label="Outline" placeholder="Default variant..." />
+                <vibe:preview title="Input Variants">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- outline (default) --}}
+                            <vibe:input variant="outline" label="Outline" placeholder="Default variant..." />
 
-                    {{-- filled --}}
-                    <vibe:input variant="filled" label="Filled" placeholder="Solid look..." />
+                            {{-- filled --}}
+                            <vibe:input variant="filled" label="Filled" placeholder="Solid look..." />
 
-                    {{-- flush --}}
-                    <vibe:input variant="flush" label="Flush" placeholder="Bottom line only..." />
+                            {{-- flush --}}
+                            <vibe:input variant="flush" label="Flush" placeholder="Bottom line only..." />
 
-                    {{-- ghost --}}
-                    <vibe:input variant="ghost" label="Ghost" placeholder="Transparent..." />
+                            {{-- ghost --}}
+                            <vibe:input variant="ghost" label="Ghost" placeholder="Transparent..." />
 
-                    {{-- accent --}}
-                    <vibe:input variant="accent" label="Accent" placeholder="Accent color..." />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Input Variants" :code="$variantCode">
+                            {{-- accent --}}
+                            <vibe:input variant="accent" label="Accent" placeholder="Accent color..." />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input variant="outline" :label="__('docs/input.variant_outline')" placeholder="Default variant..." />
                         <vibe:input variant="filled" :label="__('docs/input.variant_filled')" placeholder="Solid look..." />
@@ -106,16 +100,15 @@
                     </p>
                 </div>
 
-                @php
-                    $sizesCode = <<<'HTML'
-                    <vibe:input size="sm" label="Small (sm)"   placeholder="Height 32px, text-xs..." />
-                    <vibe:input size="md" label="Medium (md)"  placeholder="Height 36px, text-sm..." />
-                    <vibe:input size="lg" label="Large (lg)"   placeholder="Height 40px, text-sm..." />
-                    <vibe:input size="xl" label="X-Large (xl)" placeholder="Height 44px, text-base..." />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Input Sizes" :code="$sizesCode">
+                <vibe:preview title="Input Sizes">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:input size="sm" label="Small (sm)" placeholder="Height 32px, text-xs..." />
+                            <vibe:input size="md" label="Medium (md)" placeholder="Height 36px, text-sm..." />
+                            <vibe:input size="lg" label="Large (lg)" placeholder="Height 40px, text-sm..." />
+                            <vibe:input size="xl" label="X-Large (xl)" placeholder="Height 44px, text-base..." />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input size="sm" label="Small (sm)" placeholder="Height 32px, text-xs..." />
                         <vibe:input size="md" label="Medium (md)" placeholder="Height 36px, text-sm..." />
@@ -134,35 +127,36 @@
                     </p>
                 </div>
 
-                @php
-                    $iconCode = <<<'HTML'
-                    {{-- Leading icon (slot) --}}
-                    <vibe:input label="Search" placeholder="Type to search...">
-                        <x-slot:icon>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                            </svg>
-                        </x-slot:icon>
-                    </vibe:input>
+                <vibe:preview title="Input with Icons & Addons">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- Leading icon (slot) --}}
+                            <vibe:input label="Search" placeholder="Type to search...">
+                                <x-slot:icon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="m21 21-4.3-4.3" />
+                                    </svg>
+                                </x-slot:icon>
+                            </vibe:input>
 
-                    {{-- Trailing icon (slot) --}}
-                    <vibe:input type="email" label="Email" placeholder="name@email.com">
-                        <x-slot:trailingIcon>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-                            </svg>
-                        </x-slot:trailingIcon>
-                    </vibe:input>
+                            {{-- Trailing icon (slot) --}}
+                            <vibe:input type="email" label="Email" placeholder="name@email.com">
+                                <x-slot:trailingIcon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect width="20" height="16" x="2" y="4" rx="2" />
+                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                    </svg>
+                                </x-slot:trailingIcon>
+                            </vibe:input>
 
-                    {{-- Prefix text --}}
-                    <vibe:input label="Website" placeholder="domainname" prefix="https://" suffix=".com" />
+                            {{-- Prefix text --}}
+                            <vibe:input label="Website" placeholder="domainname" prefix="https://" suffix=".com" />
 
-                    {{-- Suffix text --}}
-                    <vibe:input label="Price" type="number" placeholder="0" prefix="$" suffix="/month" />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Input with Icons & Addons" :code="$iconCode">
+                            {{-- Suffix text --}}
+                            <vibe:input label="Price" type="number" placeholder="0" prefix="$" suffix="/month" />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="Search" placeholder="Type to search...">
                             <x-slot:icon>
@@ -195,22 +189,22 @@
                     </p>
                 </div>
 
-                @php
-                    $pillCode = <<<'HTML'
-                    <vibe:input class="rounded-full" label="Search" placeholder="Search anything...">
-                        <x-slot:icon>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                            </svg>
-                        </x-slot:icon>
-                    </vibe:input>
+                <vibe:preview title="Pill Style">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:input class="rounded-full" label="Search" placeholder="Search anything...">
+                                <x-slot:icon>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="11" cy="11" r="8" />
+                                        <path d="m21 21-4.3-4.3" />
+                                    </svg>
+                                </x-slot:icon>
+                            </vibe:input>
 
-                    <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
-                    <vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Pill Style" :code="$pillCode">
+                            <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
+                            <vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input class="rounded-full" label="Search" placeholder="Search anything...">
                             <x-slot:icon>
@@ -235,20 +229,12 @@
                     </p>
                 </div>
 
-                @php
-                    $helperCode = <<<'HTML'
-                    <vibe:input
-                        name="email"
-                        type="email"
-                        label="Email Address"
-                        description="Use an active email address."
-                        info="We'll never share your email with anyone."
-                        placeholder="name@company.com"
-                    />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Input with Helper Text" :code="$helperCode">
+                <vibe:preview title="Input with Helper Text">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:input name="email" type="email" label="Email Address" description="Use an active email address." info="We'll never share your email with anyone." placeholder="name@company.com" />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm">
                         <vibe:input name="email" type="email" label="Email Address" description="Use an active email address." info="We'll never share your email with anyone." placeholder="name@company.com" />
                     </div>
@@ -264,35 +250,19 @@
                     </p>
                 </div>
 
-                @php
-                    $errorCode = <<<'HTML'
-                    {{-- Error from prop directly --}}
-                    <vibe:input
-                        name="password"
-                        type="password"
-                        label="Password"
-                        value="12345"
-                        error="Password must be at least 8 characters long."
-                    />
+                <vibe:preview title="Input Error State">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- Error from prop directly --}}
+                            <vibe:input name="password" type="password" label="Password" value="12345" error="Password must be at least 8 characters long." />
 
-                    {{-- Automatic Laravel $errors --}}
-                    <vibe:input
-                        name="username"
-                        label="Username"
-                        wire:model="username"
-                    />
+                            {{-- Automatic Laravel $errors --}}
+                            <vibe:input name="username" label="Username" wire:model="username" />
 
-                    {{-- Custom error key (errorName) --}}
-                    <vibe:input
-                        name="user[phone]"
-                        errorName="user.phone"
-                        label="Phone Number"
-                        error="Invalid phone number format."
-                    />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Input Error State" :code="$errorCode">
+                            {{-- Custom error key (errorName) --}}
+                            <vibe:input name="user[phone]" errorName="user.phone" label="Phone Number" error="Invalid phone number format." />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input name="password" type="password" label="Password" value="12345" error="Password must be at least 8 characters long." />
                         <vibe:input name="user_phone" label="Phone Number" error="Invalid phone number format." placeholder="+1 (555) 000-0000" />
@@ -309,25 +279,16 @@
                     </p>
                 </div>
 
-                @php
-                    $stateCode = <<<'HTML'
-                    {{-- Disabled --}}
-                    <vibe:input
-                        label="User ID (Disabled)"
-                        value="USR-994821"
-                        disabled
-                    />
+                <vibe:preview title="Disabled & Readonly">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- Disabled --}}
+                            <vibe:input label="User ID (Disabled)" value="USR-994821" disabled />
 
-                    {{-- Readonly --}}
-                    <vibe:input
-                        label="Referral Code (Readonly)"
-                        value="VIBE-REF-2025"
-                        readonly
-                    />
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Disabled & Readonly" :code="$stateCode">
+                            {{-- Readonly --}}
+                            <vibe:input label="Referral Code (Readonly)" value="VIBE-REF-2025" readonly />
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="User ID (Disabled)" value="USR-994821" disabled />
                         <vibe:input label="Referral Code (Readonly)" value="VIBE-REF-2025" readonly />
@@ -344,48 +305,37 @@
                     </p>
                 </div>
 
-                @php
-                    $livewireCode = <<<'HTML'
-                    {{-- In Livewire Component (PHP) --}}
-                    class ProfileForm extends Component
-                    {
-                        #[Validate('required|min:3|max:50')]
-                        public string $name = '';
+                <vibe:preview title="Livewire wire:model">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- In Livewire Component (PHP) --}}
+                            class ProfileForm extends Component
+                            {
+                            #[Validate('required|min:3|max:50')]
+                            public string $name = '';
 
-                        #[Validate('required|email')]
-                        public string $email = '';
+                            #[Validate('required|email')]
+                            public string $email = '';
 
-                        public function save()
-                        {
+                            public function save()
+                            {
                             $this->validate();
                             // save logic...
-                        }
-                    }
+                            }
+                            }
 
-                    {{-- In Blade template --}}
-                    <form wire:submit="save">
-                        <vibe:input
-                            wire:model.live="name"
-                            label="Full Name"
-                            placeholder="Enter name..."
-                        />
+                            {{-- In Blade template --}}
+                            <form wire:submit="save">
+                                <vibe:input wire:model.live="name" label="Full Name" placeholder="Enter name..." />
 
-                        <vibe:input
-                            wire:model="email"
-                            type="email"
-                            label="Email"
-                            placeholder="name@email.com"
-                            info="Used for login."
-                        />
+                                <vibe:input wire:model="email" type="email" label="Email" placeholder="name@email.com" info="Used for login." />
 
-                        <vibe:button type="submit" variant="primary">
-                            Save Changes
-                        </vibe:button>
-                    </form>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Livewire wire:model" :code="$livewireCode">
+                                <vibe:button type="submit" variant="primary">
+                                    Save Changes
+                                </vibe:button>
+                            </form>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input label="Full Name (wire:model.live)" placeholder="Enter name..." />
                         <vibe:input type="email" label="Email (wire:model)" placeholder="name@email.com" info="Used for login." />
@@ -415,22 +365,7 @@
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             @php
-                                $props = [
-                                    ['label', 'string', 'null', 'Label text above the input.'],
-                                    ['id', 'string', 'auto', 'HTML input id attribute. Default: name or uniqid().'],
-                                    ['name', 'string', 'null', 'HTML name attribute. Automatically extracted from wire:model if omitted.'],
-                                    ['type', 'string', "'text'", 'HTML input type: text, email, password, number, url, tel, etc.'],
-                                    ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Input height and text size.'],
-                                    ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", 'Visual style variant.'],
-                                    ['description', 'string', 'null', 'Small helper text below the label, before the input.'],
-                                    ['info', 'string', 'null', 'Helper note below the input. Hidden when error exists.'],
-                                    ['error', 'string|bool', 'null', 'Custom error message or boolean to trigger error state.'],
-                                    ['errorName', 'string', 'null', 'Laravel validation error key if different from name (e.g. user.phone).'],
-                                    ['prefix', 'string', 'null', 'Text on the left side of the input (e.g. "https://", "$").'],
-                                    ['suffix', 'string', 'null', 'Text on the right side of the input (e.g. ".com", "/month").'],
-                                    ['class', 'string', 'null', 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).'],
-                                    ['wrapperClass', 'string', 'null', 'Extra class for the outer wrapper div.'],
-                                ];
+                                $props = [['label', 'string', 'null', 'Label text above the input.'], ['id', 'string', 'auto', 'HTML input id attribute. Default: name or uniqid().'], ['name', 'string', 'null', 'HTML name attribute. Automatically extracted from wire:model if omitted.'], ['type', 'string', "'text'", 'HTML input type: text, email, password, number, url, tel, etc.'], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Input height and text size.'], ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", 'Visual style variant.'], ['description', 'string', 'null', 'Small helper text below the label, before the input.'], ['info', 'string', 'null', 'Helper note below the input. Hidden when error exists.'], ['error', 'string|bool', 'null', 'Custom error message or boolean to trigger error state.'], ['errorName', 'string', 'null', 'Laravel validation error key if different from name (e.g. user.phone).'], ['prefix', 'string', 'null', 'Text on the left side of the input (e.g. "https://", "$").'], ['suffix', 'string', 'null', 'Text on the right side of the input (e.g. ".com", "/month").'], ['class', 'string', 'null', 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).'], ['wrapperClass', 'string', 'null', 'Extra class for the outer wrapper div.']];
                             @endphp
                             @foreach ($props as [$prop, $type, $default, $desc])
                                 <tr class="hover:bg-accent/40 transition-colors">

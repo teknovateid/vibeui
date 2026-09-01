@@ -30,6 +30,10 @@ return [
     'blur_title' => 'Background Blur Effects',
     'blur_desc' => 'Enhance visual focus on important alerts by applying a backdrop blur effect behind the modal card. Supports <code class="font-mono text-xs text-foreground">blur: true</code>, as well as intensity levels like <code class="font-mono text-xs text-foreground">\'xs\'</code>, <code class="font-mono text-xs text-foreground">\'sm\'</code>, <code class="font-mono text-xs text-foreground">\'md\'</code>, <code class="font-mono text-xs text-foreground">\'lg\'</code>, <code class="font-mono text-xs text-foreground">\'xl\'</code>, or <code class="font-mono text-xs text-foreground">false / \'none\'</code> to disable blur.',
 
+    // Section 7: Persist
+    'persist_title' => 'Alert Persistence (Don\'t Show Again)',
+    'persist_desc' => 'Use <code class="font-mono text-xs text-foreground">persist: true</code> (or a custom string key) to save the alert dismissal state to <code class="font-mono text-xs text-foreground">localStorage</code> (or <code class="font-mono text-xs text-foreground">persist: \'session\'</code> for <code class="font-mono text-xs text-foreground">sessionStorage</code>). Perfect for announcement banners, promos, or onboarding alerts so they don\'t repeatedly pop up once dismissed. Use <code class="font-mono text-xs text-foreground">vibeAlert.reset(id)</code> to clear the stored state.',
+
     // Section 6: Methods
     'integration_title' => 'Alert Trigger Methods',
     'integration_desc' => 'Multiple trigger methods are supported: JavaScript function <code class="font-mono text-xs text-foreground">vibeAlert(...)</code>, Blade directive <code class="font-mono text-xs text-foreground">@vibeAlert(...)</code>, and Livewire component event dispatching.',

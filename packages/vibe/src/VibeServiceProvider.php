@@ -348,12 +348,21 @@ class VibeServiceProvider extends ServiceProvider
      */
     public function parseVibeTags(string $string): string
     {
-        // Convert opening <vibe:component> tags
-        $string = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $string);
+        // Protect @verbatim ... @endverbatim blocks from tag conversion
+        $parts = preg_split('/(?<!@)(@verbatim.*?@endverbatim)/s', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
 
-        // Convert closing </vibe:component> tags
-        $string = preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $string);
+        foreach ($parts as &$part) {
+            if (str_starts_with($part, '@verbatim')) {
+                continue;
+            }
 
-        return $string;
+            // Convert opening <vibe:component> tags
+            $part = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $part);
+
+            // Convert closing </vibe:component> tags
+            $part = preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $part);
+        }
+
+        return implode('', $parts);
     }
 }

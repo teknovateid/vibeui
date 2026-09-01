@@ -7,7 +7,7 @@
     ]" />
 
     <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
-        
+
         <div id="docs-content" class="col-span-12 order-2 md:order-1 md:col-span-9 min-w-0 w-full space-y-14">
 
             {{-- Hero Header --}}
@@ -42,49 +42,48 @@
                     </p>
                 </div>
 
-                @php
-                    $basicCode = <<<'HTML'
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column>Name</vibe:table.column>
-                            <vibe:table.column>Email</vibe:table.column>
-                            <vibe:table.column>Role</vibe:table.column>
-                            <vibe:table.column align="right">Status</vibe:table.column>
-                        </vibe:table.header>
+                <vibe:preview title="Basic Table" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:table>
+                                <vibe:table.header>
+                                    <vibe:table.column>Name</vibe:table.column>
+                                    <vibe:table.column>Email</vibe:table.column>
+                                    <vibe:table.column>Role</vibe:table.column>
+                                    <vibe:table.column align="right">Status</vibe:table.column>
+                                </vibe:table.header>
 
-                        <vibe:table.rows>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Sarah Connor</vibe:table.cell>
-                                <vibe:table.cell variant="muted">sarah@example.com</vibe:table.cell>
-                                <vibe:table.cell>Administrator</vibe:table.cell>
-                                <vibe:table.cell align="right">
-                                    <vibe:badge variant="success">Active</vibe:badge>
-                                </vibe:table.cell>
-                            </vibe:table.row>
+                                <vibe:table.rows>
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">Sarah Connor</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">sarah@example.com</vibe:table.cell>
+                                        <vibe:table.cell>Administrator</vibe:table.cell>
+                                        <vibe:table.cell align="right">
+                                            <vibe:badge variant="success">Active</vibe:badge>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
 
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">John Doe</vibe:table.cell>
-                                <vibe:table.cell variant="muted">john@example.com</vibe:table.cell>
-                                <vibe:table.cell>Editor</vibe:table.cell>
-                                <vibe:table.cell align="right">
-                                    <vibe:badge variant="warning">Pending</vibe:badge>
-                                </vibe:table.cell>
-                            </vibe:table.row>
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">John Doe</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">john@example.com</vibe:table.cell>
+                                        <vibe:table.cell>Editor</vibe:table.cell>
+                                        <vibe:table.cell align="right">
+                                            <vibe:badge variant="warning">Pending</vibe:badge>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
 
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Alex Rivers</vibe:table.cell>
-                                <vibe:table.cell variant="muted">alex@example.com</vibe:table.cell>
-                                <vibe:table.cell>Member</vibe:table.cell>
-                                <vibe:table.cell align="right">
-                                    <vibe:badge variant="default">Offline</vibe:badge>
-                                </vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Basic Table" :code="$basicCode" :center="false">
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">Alex Rivers</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">alex@example.com</vibe:table.cell>
+                                        <vibe:table.cell>Member</vibe:table.cell>
+                                        <vibe:table.cell align="right">
+                                            <vibe:badge variant="default">Offline</vibe:badge>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
+                                </vibe:table.rows>
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
@@ -136,47 +135,37 @@
                     </p>
                 </div>
 
-                @php
-                    $variantCode = <<<'HTML'
-                    {{-- 1. Striped Table --}}
-                    <vibe:table variant="striped">
-                        <vibe:table.header>
-                            <vibe:table.column>Product</vibe:table.column>
-                            <vibe:table.column>Category</vibe:table.column>
-                            <vibe:table.column align="right">Price</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Mechanical Keyboard</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
-                                <vibe:table.cell align="right">$129.00</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Wireless Mouse</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
-                                <vibe:table.cell align="right">$79.00</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">4K Monitor 27"</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Display</vibe:table.cell>
-                                <vibe:table.cell align="right">$349.00</vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                    </vibe:table>
+                <vibe:preview title="Table Variants" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            {{-- 1. Striped Table --}}
+                            <vibe:table variant="striped">
+                                <vibe:table.header>
+                                    <vibe:table.column>Product</vibe:table.column>
+                                    <vibe:table.column>Category</vibe:table.column>
+                                    <vibe:table.column align="right">Price</vibe:table.column>
+                                </vibe:table.header>
+                                <vibe:table.rows>
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">Mechanical Keyboard</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
+                                        <vibe:table.cell align="right">$129.00</vibe:table.cell>
+                                    </vibe:table.row>
+                                    ...
+                                </vibe:table.rows>
+                            </vibe:table>
 
-                    {{-- 2. Bordered Table --}}
-                    <vibe:table variant="bordered">
-                        ...
-                    </vibe:table>
+                            {{-- 2. Bordered Table --}}
+                            <vibe:table variant="bordered">
+                                ...
+                            </vibe:table>
 
-                    {{-- 3. Flush Table --}}
-                    <vibe:table variant="flush">
-                        ...
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Table Variants" :code="$variantCode" :center="false">
+                            {{-- 3. Flush Table --}}
+                            <vibe:table variant="flush">
+                                ...
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full space-y-6">
                         <div>
                             <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Variant: Striped</p>
@@ -224,7 +213,9 @@
                                         <vibe:table.cell>Custom Domain</vibe:table.cell>
                                         <vibe:table.cell align="center" variant="muted">—</vibe:table.cell>
                                         <vibe:table.cell align="center">
-                                            <svg class="size-4 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                            <svg class="size-4 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <polyline points="20 6 9 17 4 12" />
+                                            </svg>
                                         </vibe:table.cell>
                                     </vibe:table.row>
                                 </vibe:table.rows>
@@ -243,44 +234,32 @@
                     </p>
                 </div>
 
-                @php
-                    $denseCode = <<<'HTML'
-                    <vibe:table dense>
-                        <vibe:table.header>
-                            <vibe:table.column>Invoice #</vibe:table.column>
-                            <vibe:table.column>Date</vibe:table.column>
-                            <vibe:table.column>Client</vibe:table.column>
-                            <vibe:table.column align="right">Amount</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">INV-2026-001</vibe:table.cell>
-                                <vibe:table.cell variant="muted">01 Sep 2026</vibe:table.cell>
-                                <vibe:table.cell>Acme Corp</vibe:table.cell>
-                                <vibe:table.cell align="right" variant="strong">$1,250.00</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">INV-2026-002</vibe:table.cell>
-                                <vibe:table.cell variant="muted">02 Sep 2026</vibe:table.cell>
-                                <vibe:table.cell>Starlight Labs</vibe:table.cell>
-                                <vibe:table.cell align="right" variant="strong">$820.00</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">INV-2026-003</vibe:table.cell>
-                                <vibe:table.cell variant="muted">03 Sep 2026</vibe:table.cell>
-                                <vibe:table.cell>Nexus Studio</vibe:table.cell>
-                                <vibe:table.cell align="right" variant="strong">$2,100.00</vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                        <vibe:table.footer>
-                            <vibe:table.cell colspan="3" variant="strong">Total</vibe:table.cell>
-                            <vibe:table.cell align="right" variant="strong">$4,170.00</vibe:table.cell>
-                        </vibe:table.footer>
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Dense Table" :code="$denseCode" :center="false">
+                <vibe:preview title="Dense Table" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:table dense>
+                                <vibe:table.header>
+                                    <vibe:table.column>Invoice #</vibe:table.column>
+                                    <vibe:table.column>Date</vibe:table.column>
+                                    <vibe:table.column>Client</vibe:table.column>
+                                    <vibe:table.column align="right">Amount</vibe:table.column>
+                                </vibe:table.header>
+                                <vibe:table.rows>
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">INV-2026-001</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">01 Sep 2026</vibe:table.cell>
+                                        <vibe:table.cell>Acme Corp</vibe:table.cell>
+                                        <vibe:table.cell align="right" variant="strong">$1,250.00</vibe:table.cell>
+                                    </vibe:table.row>
+                                    ...
+                                </vibe:table.rows>
+                                <vibe:table.footer>
+                                    <vibe:table.cell colspan="3" variant="strong">Total</vibe:table.cell>
+                                    <vibe:table.cell align="right" variant="strong">$4,170.00</vibe:table.cell>
+                                </vibe:table.footer>
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table dense>
                             <vibe:table.header>
@@ -327,48 +306,38 @@
                     </p>
                 </div>
 
-                @php
-                    $sortableCode = <<<'HTML'
-                    <vibe:table>
-                        <vibe:table.header>
-                            {{-- Sorted Column (Ascending) --}}
-                            <vibe:table.column sortable :sorted="true" direction="asc">
-                                Name
-                            </vibe:table.column>
+                <vibe:preview title="Sortable Columns" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:table>
+                                <vibe:table.header>
+                                    {{-- Sorted Column (Ascending) --}}
+                                    <vibe:table.column sortable :sorted="true" direction="asc">
+                                        Name
+                                    </vibe:table.column>
 
-                            {{-- Sortable but not active --}}
-                            <vibe:table.column sortable>
-                                Department
-                            </vibe:table.column>
+                                    {{-- Sortable but not active --}}
+                                    <vibe:table.column sortable>
+                                        Department
+                                    </vibe:table.column>
 
-                            {{-- Sortable Column --}}
-                            <vibe:table.column sortable align="right">
-                                Performance
-                            </vibe:table.column>
-                        </vibe:table.header>
+                                    {{-- Sortable Column --}}
+                                    <vibe:table.column sortable align="right">
+                                        Performance
+                                    </vibe:table.column>
+                                </vibe:table.header>
 
-                        <vibe:table.rows>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Ahmad Fauzi</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Engineering</vibe:table.cell>
-                                <vibe:table.cell align="right">98%</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Budi Santoso</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Product</vibe:table.cell>
-                                <vibe:table.cell align="right">94%</vibe:table.cell>
-                            </vibe:table.row>
-                            <vibe:table.row>
-                                <vibe:table.cell variant="strong">Citra Lestari</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Design</vibe:table.cell>
-                                <vibe:table.cell align="right">89%</vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Sortable Columns" :code="$sortableCode" :center="false">
+                                <vibe:table.rows>
+                                    <vibe:table.row>
+                                        <vibe:table.cell variant="strong">Ahmad Fauzi</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">Engineering</vibe:table.cell>
+                                        <vibe:table.cell align="right">98%</vibe:table.cell>
+                                    </vibe:table.row>
+                                    ...
+                                </vibe:table.rows>
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
@@ -414,46 +383,45 @@
                     </p>
                 </div>
 
-                @php
-                    $selectionCode = <<<'HTML'
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column class="w-10"></vibe:table.column>
-                            <vibe:table.column>User</vibe:table.column>
-                            <vibe:table.column>Plan</vibe:table.column>
-                            <vibe:table.column align="right">Action</vibe:table.column>
-                        </vibe:table.header>
+                <vibe:preview title="Row Selection" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:table>
+                                <vibe:table.header>
+                                    <vibe:table.column class="w-10"></vibe:table.column>
+                                    <vibe:table.column>User</vibe:table.column>
+                                    <vibe:table.column>Plan</vibe:table.column>
+                                    <vibe:table.column align="right">Action</vibe:table.column>
+                                </vibe:table.header>
 
-                        <vibe:table.rows>
-                            {{-- Selected Row --}}
-                            <vibe:table.row :selected="true">
-                                <vibe:table.cell>
-                                    <input type="checkbox" checked class="rounded border-input text-primary focus:ring-primary size-4" />
-                                </vibe:table.cell>
-                                <vibe:table.cell variant="strong">Dani Ramadhan (Selected)</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Enterprise</vibe:table.cell>
-                                <vibe:table.cell align="right">
-                                    <vibe:button size="xs" variant="outline">Edit</vibe:button>
-                                </vibe:table.cell>
-                            </vibe:table.row>
+                                <vibe:table.rows>
+                                    {{-- Selected Row --}}
+                                    <vibe:table.row :selected="true">
+                                        <vibe:table.cell>
+                                            <input type="checkbox" checked class="rounded border-input text-primary focus:ring-primary size-4" />
+                                        </vibe:table.cell>
+                                        <vibe:table.cell variant="strong">Dani Ramadhan (Selected)</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">Enterprise</vibe:table.cell>
+                                        <vibe:table.cell align="right">
+                                            <vibe:button size="xs" variant="outline">Edit</vibe:button>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
 
-                            {{-- Normal Row --}}
-                            <vibe:table.row>
-                                <vibe:table.cell>
-                                    <input type="checkbox" class="rounded border-input text-primary focus:ring-primary size-4" />
-                                </vibe:table.cell>
-                                <vibe:table.cell variant="strong">Eka Wulandari</vibe:table.cell>
-                                <vibe:table.cell variant="muted">Pro</vibe:table.cell>
-                                <vibe:table.cell align="right">
-                                    <vibe:button size="xs" variant="outline">Edit</vibe:button>
-                                </vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Row Selection" :code="$selectionCode" :center="false">
+                                    {{-- Normal Row --}}
+                                    <vibe:table.row>
+                                        <vibe:table.cell>
+                                            <input type="checkbox" class="rounded border-input text-primary focus:ring-primary size-4" />
+                                        </vibe:table.cell>
+                                        <vibe:table.cell variant="strong">Eka Wulandari</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">Pro</vibe:table.cell>
+                                        <vibe:table.cell align="right">
+                                            <vibe:button size="xs" variant="outline">Edit</vibe:button>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
+                                </vibe:table.rows>
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
@@ -500,30 +468,26 @@
                     </p>
                 </div>
 
-                @php
-                    $emptyCode = <<<'HTML'
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column>Name</vibe:table.column>
-                            <vibe:table.column>Category</vibe:table.column>
-                            <vibe:table.column align="right">Stock</vibe:table.column>
-                        </vibe:table.header>
+                <vibe:preview title="Empty State Table" :center="false">
+                    <vibe:preview.code>
+                        @verbatim
+                            <vibe:table>
+                                <vibe:table.header>
+                                    <vibe:table.column>Name</vibe:table.column>
+                                    <vibe:table.column>Category</vibe:table.column>
+                                    <vibe:table.column align="right">Stock</vibe:table.column>
+                                </vibe:table.header>
 
-                        <vibe:table.rows>
-                            <vibe:table.empty 
-                                title="No products found"
-                                description="Your search criteria did not match any inventory records."
-                            >
-                                <vibe:button size="xs" variant="primary">
-                                    Clear Filters
-                                </vibe:button>
-                            </vibe:table.empty>
-                        </vibe:table.rows>
-                    </vibe:table>
-                    HTML;
-                @endphp
-
-                <vibe:preview title="Empty State Table" :code="$emptyCode" :center="false">
+                                <vibe:table.rows>
+                                    <vibe:table.empty title="No products found" description="Your search criteria did not match any inventory records.">
+                                        <vibe:button size="xs" variant="primary">
+                                            Clear Filters
+                                        </vibe:button>
+                                    </vibe:table.empty>
+                                </vibe:table.rows>
+                            </vibe:table>
+                        @endverbatim
+                    </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
@@ -533,10 +497,7 @@
                             </vibe:table.header>
 
                             <vibe:table.rows>
-                                <vibe:table.empty 
-                                    title="No products found"
-                                    description="Your search criteria did not match any inventory records."
-                                >
+                                <vibe:table.empty title="No products found" description="Your search criteria did not match any inventory records.">
                                     <vibe:button size="xs" variant="primary">
                                         Clear Filters
                                     </vibe:button>
@@ -634,13 +595,7 @@
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             @php
-                                $mainProps = [
-                                    ['variant', "'default'|'striped'|'bordered'|'flush'", "'default'", 'Gaya visual tabel.'],
-                                    ['dense', 'bool', 'false', 'Mode kompak dengan tinggi baris dan padding lebih ramping.'],
-                                    ['hoverable', 'bool', 'true', 'Efek sorot (highlight) saat kursor berada di atas baris.'],
-                                    ['caption', 'string|null', 'null', 'Keterangan teks kecil di bawah tabel.'],
-                                    ['containerClass', 'string|null', 'null', 'Kelas Tailwind tambahan untuk div wrapper pembungkus luar tabel.'],
-                                ];
+                                $mainProps = [['variant', "'default'|'striped'|'bordered'|'flush'", "'default'", 'Gaya visual tabel.'], ['dense', 'bool', 'false', 'Mode kompak dengan tinggi baris dan padding lebih ramping.'], ['hoverable', 'bool', 'true', 'Efek sorot (highlight) saat kursor berada di atas baris.'], ['caption', 'string|null', 'null', 'Keterangan teks kecil di bawah tabel.'], ['containerClass', 'string|null', 'null', 'Kelas Tailwind tambahan untuk div wrapper pembungkus luar tabel.']];
                             @endphp
                             @foreach ($mainProps as [$prop, $type, $default, $desc])
                                 <tr class="hover:bg-accent/40 transition-colors">
@@ -668,12 +623,7 @@
                         </thead>
                         <tbody class="divide-y divide-border text-muted-foreground">
                             @php
-                                $colProps = [
-                                    ['align', "'left'|'center'|'right'", "'left'", 'Perataan horizontal isi kolom.'],
-                                    ['sortable', 'bool', 'false', 'Menandai kolom dapat diurutkan (menampilkan indikator sort).'],
-                                    ['sorted', 'bool', 'false', 'Status apakah kolom sedang aktif menjadi acuan pengurutan.'],
-                                    ['direction', "'asc'|'desc'|null", 'null', 'Arah panah pengurutan saat kolom berstatus sorted.'],
-                                ];
+                                $colProps = [['align', "'left'|'center'|'right'", "'left'", 'Perataan horizontal isi kolom.'], ['sortable', 'bool', 'false', 'Menandai kolom dapat diurutkan (menampilkan indikator sort).'], ['sorted', 'bool', 'false', 'Status apakah kolom sedang aktif menjadi acuan pengurutan.'], ['direction', "'asc'|'desc'|null", 'null', 'Arah panah pengurutan saat kolom berstatus sorted.']];
                             @endphp
                             @foreach ($colProps as [$prop, $type, $default, $desc])
                                 <tr class="hover:bg-accent/40 transition-colors">
