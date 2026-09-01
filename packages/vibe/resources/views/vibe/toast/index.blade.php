@@ -40,7 +40,12 @@
             info: `<svg class='size-7 text-blue-500' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z' /></svg>`
         },
         
+        getActivePosition() {
+            return this.toasts.length > 0 ? (this.toasts[0].position || this.globalPosition) : this.globalPosition;
+        },
+
         getPositionClasses() {
+            let pos = this.getActivePosition();
             const positions = {
                 'top-right': 'top-0 right-0',
                 'top-left': 'top-0 left-0',
@@ -49,10 +54,11 @@
                 'top-center': 'top-0 left-1/2 -translate-x-1/2',
                 'bottom-center': 'bottom-0 left-1/2 -translate-x-1/2',
             };
-            return positions[this.globalPosition] || positions['bottom-right'];
+            return positions[pos] || positions['bottom-right'];
         },
         
         getMarginClasses() {
+            let pos = this.getActivePosition();
             const margins = {
                 'top-right': 'mt-4 mr-4 sm:mt-6 sm:mr-6',
                 'top-left': 'mt-4 ml-4 sm:mt-6 sm:ml-6',
@@ -61,7 +67,7 @@
                 'top-center': 'mt-4 sm:mt-6',
                 'bottom-center': 'mb-4 sm:mb-6',
             };
-            return margins[this.globalPosition] || margins['bottom-right'];
+            return margins[pos] || margins['bottom-right'];
         },
         
         add(toast) {
@@ -179,7 +185,7 @@
         },
         
         getTransform(index) {
-            let isTop = this.globalPosition.includes('top');
+            let isTop = this.getActivePosition().includes('top');
             
             if (this.expanded) {
                 let y = index * 96; // Increased gap to prevent overlapping
@@ -224,7 +230,7 @@
                 class="absolute left-0 right-0 p-4 rounded-xl lg:rounded-2xl shadow-lg pointer-events-auto flex items-center gap-3 overflow-hidden"
                 :class="[
                     typeClasses[toast.type] || typeClasses.info,
-                    globalPosition.includes('top') ? 'top-0 origin-top' : 'bottom-0 origin-bottom'
+                    getActivePosition().includes('top') ? 'top-0 origin-top' : 'bottom-0 origin-bottom'
                 ]"
                 :style="`transform: ${getTransform(index)}; z-index: ${50 - index}; opacity: ${index > 2 && !expanded ? 0 : 1}; transition-property: transform, opacity; transition-duration: 300ms;`"
             >
