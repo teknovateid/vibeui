@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'variant' => 'default', // default, striped, bordered, flush
@@ -33,6 +33,10 @@
 
     $tableCompiledClasses = trim("{$baseTableClasses} {$densityClasses} {$variantClasses} {$hoverClasses}");
 @endphp
+
+@pushOnce('head')
+    @vite(['resources/js/vibe/table.js'])
+@endPushOnce
 
 <div class="{{ $containerCompiledClasses }}">
     <table {{ $attributes->twMerge(['class' => $tableCompiledClasses]) }}>
