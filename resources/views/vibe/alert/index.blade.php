@@ -6,6 +6,8 @@
     'timeout' => 3000,
     'sound' => false,
     'blur' => false, // false, true, xs, sm, md, lg, xl, 2xl, 3xl, none
+    'closeOnOutside' => null, // null (auto: true for non-confirm, false for confirm), or boolean
+    'persist' => false, // simpan status tampil alert ke storage
 ])
 
 <div x-data="{
@@ -14,6 +16,27 @@
     globalAlign: '{{ $align }}',
     globalSound: '{{ $sound }}',
     globalBlur: @js($blur),
+    globalCloseOnOutside: @js($closeOnOutside),
+    globalPersist: @js($persist),
+
+    init() {
+        let key = '{{ config('vibe.prefix', 'vibe') }}-alert';
+        [window.localStorage, window.sessionStorage].forEach(storage => {
+            try {
+                let stored = storage.getItem(key);
+                if (stored) {
+                    let data = JSON.parse(stored);
+                    if (Array.isArray(data)) {
+                        data.forEach(item => {
+                            if (item && item.status === 'open' && item.payload) {
+                                this.add({ ...item.payload, fromStorage: true });
+                            }
+                        });
+                    }
+                }
+            } catch (e) {}
+        });
+    },
 
     typeClasses: {
         success: 'bg-green-500/15 dark:bg-green-900/40 text-green-600 dark:text-green-400',
@@ -95,11 +118,12 @@
             return;
         }
 
-        if (this.alerts.some(a => a.title === alert.title && a.message === alert.message && a.type === alert.type)) {
+        if (this.alerts.some(a => (alert.id && a.id === alert.id) || (a.title === alert.title && a.message === alert.message && a.type === alert.type))) {
             return;
         }
 
-        let id = Date.now() + Math.random().toString(36).substr(2, 9);
+        let id = alert.id ? alert.id : (Date.now() + Math.random().toString(36).substr(2, 9));
+        alert.id = id;
 
         if (alert.type === 'confirm') {
             alert.timeout = false;
@@ -133,13 +157,37 @@
         if (s === 'true' || s === '1') s = true;
         if (s === 'false' || s === '0' || s === '') s = false;
 
-        let item = { ...alert, id, timer: null, hover: false, sound: s };
+        let item = { ...alert, id, timer: null, hover: false, sound: s, ready: false };
 
         setTimeout(() => {
             this.alerts.push(item);
             this.startTimer(item);
             this.playSound(item);
+            setTimeout(() => { item.ready = true; }, 100);
         }, 50);
+
+        if (this.shouldPersist(item) && !item.fromStorage) {
+            this.saveToStorage(item, 'open');
+        }
+    },
+
+    canCloseOutside(alert) {
+        if (!alert) return false;
+        if (alert.closeOnOutside !== undefined) {
+            return !!alert.closeOnOutside;
+        }
+        if (this.globalCloseOnOutside !== null && this.globalCloseOnOutside !== undefined) {
+            return !!this.globalCloseOnOutside;
+        }
+        return alert.type !== 'confirm';
+    },
+
+    closeOutsideAlerts() {
+        this.alerts.slice().forEach(a => {
+            if (a.ready && this.canCloseOutside(a)) {
+                this.remove(a.id);
+            }
+        });
     },
 
     playSound(alert) {
@@ -197,11 +245,92 @@
         alert.hover = false;
         this.startTimer(alert);
     },
+    shouldPersist(alert) {
+        if (!alert) return false;
+        if (alert.persist !== undefined) {
+            return alert.persist !== false && alert.persist !== 'false' && alert.persist !== 'none';
+        }
+        return !!this.globalPersist && !!alert.id;
+    },
+
+    getAlertPersistId(alert) {
+        if (!alert) return null;
+        if (typeof alert.persist === 'string' && alert.persist !== 'local' && alert.persist !== 'session') {
+            return alert.persist;
+        }
+        return alert.id || null;
+    },
+
+    serializeAlert(alert) {
+        let clean = {
+            id: alert.id,
+            type: alert.type || 'info',
+            title: alert.title || null,
+            message: alert.message || '',
+            position: alert.position || null,
+            align: alert.align || null,
+            timeout: alert.timeout !== undefined ? alert.timeout : false,
+            blur: alert.blur !== undefined ? alert.blur : null,
+            blocking: alert.blocking !== undefined ? alert.blocking : null,
+            closeOnOutside: alert.closeOnOutside !== undefined ? alert.closeOnOutside : null,
+            buttonLayout: alert.buttonLayout || null,
+            persist: alert.persist !== undefined ? alert.persist : true,
+        };
+        if (alert.confirmButton) {
+            clean.confirmButton = typeof alert.confirmButton === 'string'
+                ? { text: alert.confirmButton }
+                : { text: alert.confirmButton.text, class: alert.confirmButton.class };
+        }
+        if (alert.closeButton) {
+            clean.closeButton = typeof alert.closeButton === 'string'
+                ? { text: alert.closeButton }
+                : { text: alert.closeButton.text, class: alert.closeButton.class };
+        }
+        return clean;
+    },
+
+    saveToStorage(alert, status = 'open') {
+        if (!this.shouldPersist(alert)) return;
+        let alertId = this.getAlertPersistId(alert);
+        if (!alertId) return;
+
+        let key = '{{ config('vibe.prefix', 'vibe') }}-alert';
+        let storage = (alert.persist === 'session' || alert.persistType === 'session') ? window.sessionStorage : window.localStorage;
+        let stored = storage.getItem(key);
+        let data = [];
+        if (stored) {
+            try {
+                let parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) {
+                    data = parsed;
+                }
+            } catch (e) {}
+        }
+
+        let index = data.findIndex(i => i.id === alertId);
+        let newItem = {
+            id: alertId,
+            status: status,
+            payload: this.serializeAlert(alert),
+            timestamp: Date.now()
+        };
+
+        if (index !== -1) {
+            data[index] = newItem;
+        } else {
+            data.push(newItem);
+        }
+
+        storage.setItem(key, JSON.stringify(data));
+    },
+
     remove(id) {
-        this.alerts = this.alerts.filter(a => {
-            if (a.id === id && a.timer) clearTimeout(a.timer);
-            return a.id !== id;
-        });
+        let item = this.alerts.find(a => a.id === id);
+        if (item) {
+            if (item.timer) clearTimeout(item.timer);
+            this.saveToStorage(item, 'closed');
+        }
+        this.alerts = this.alerts.filter(a => a.id !== id);
     },
     executeCallback(cb) {
         if (typeof cb === 'function') {
@@ -229,12 +358,12 @@
     @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/toast.info') }}' }); @endif"></div>
 
     <!-- Backdrop -->
-    <div x-show="alerts.some(a => a.blocking || (a.blur && a.blur !== false && a.blur !== 'none'))" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" style="display: none; z-index: -1;"></div>
+    <div x-show="alerts.some(a => a.blocking || (a.blur && a.blur !== false && a.blur !== 'none'))" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" @click="closeOutsideAlerts()" style="display: none; z-index: -1;"></div>
 
 
     <div class="w-full max-w-88 sm:max-w-md flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
-            <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
+            <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready && canCloseOutside(alert)) remove(alert.id)" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
                 <div class="p-5 sm:p-6 flex flex-col" :class="getAlignClasses(alert)">
                     <div class="flex size-16 items-center justify-center rounded-full mb-4" :class="typeClasses[alert.type] || typeClasses.info" x-html="alert.icon || icons[alert.type] || icons.info"></div>
                     <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
@@ -303,6 +432,29 @@
                 // If DOM is ready, wait a tiny bit to ensure Alpine has mounted
                 setTimeout(dispatchEvent, 50);
             }
+        };
+
+        window.vibeAlert.reset = function(id) {
+            let key = '{{ config('vibe.prefix', 'vibe') }}-alert';
+            [window.localStorage, window.sessionStorage].forEach(storage => {
+                try {
+                    if (!id) {
+                        storage.removeItem(key);
+                        return;
+                    }
+                    let stored = storage.getItem(key);
+                    if (stored) {
+                        let data = JSON.parse(stored);
+                        if (Array.isArray(data)) {
+                            data = data.filter(i => i.id !== id);
+                            storage.setItem(key, JSON.stringify(data));
+                        } else if (typeof data === 'object') {
+                            delete data[id];
+                            storage.setItem(key, JSON.stringify(data));
+                        }
+                    }
+                } catch (e) {}
+            });
         };
     }
 </script>

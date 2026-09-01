@@ -84,32 +84,125 @@ hljs.registerLanguage('blade', function(hljs) {
 
 window.hljs = hljs;
 
+function decodeHtmlEntities(str) {
+    if (!str) return '';
+    return str
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&amp;/g, '&');
+}
+
+export function cleanAndUnindent(raw) {
+    if (!raw) return '';
+    // Normalize custom vibe tags
+    raw = raw.replace(/<x-vibe::([a-zA-Z0-9\-\.]+)/g, '<vibe:$1')
+             .replace(/<\/x-vibe::([a-zA-Z0-9\-\.]+)/g, '</vibe:$1');
+    
+    // Normalize line endings
+    raw = raw.replace(/\r\n|\r/g, '\n');
+    
+    // Trim initial and trailing empty/whitespace-only lines
+    raw = raw.replace(/^(\s*\n)+/, '').replace(/(\n\s*)+$/, '');
+    
+    const lines = raw.split('\n');
+    if (lines.length <= 1) return raw.trim();
+
+    let allMinIndent = null;
+    for (const line of lines) {
+        if (!line.trim()) continue;
+        const indent = line.match(/^(\s*)/)[1].length;
+        if (allMinIndent === null || indent < allMinIndent) allMinIndent = indent;
+    }
+
+    if (allMinIndent !== null && allMinIndent > 0) {
+        return lines.map(l => l.replace(new RegExp('^\\s{' + allMinIndent + '}'), '')).join('\n');
+    }
+
+    // If first line was trimmed by Blade/Blaze to 0 indent, check common indent of remaining lines
+    if (allMinIndent === 0 && lines.length > 1) {
+        let subMinIndent = null;
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i];
+            if (!line.trim()) continue;
+            const indent = line.match(/^(\s*)/)[1].length;
+            if (subMinIndent === null || indent < subMinIndent) subMinIndent = indent;
+        }
+        if (subMinIndent !== null && subMinIndent > 0) {
+            for (let i = 1; i < lines.length; i++) {
+                lines[i] = lines[i].replace(new RegExp('^\\s{' + subMinIndent + '}'), '');
+            }
+            return lines.join('\n');
+        }
+    }
+
+    return raw;
+}
+
 export function highlightElement(el) {
     if (!el || el.dataset.highlighted === 'yes') return;
     try {
-        hljs.highlightElement(el);
+        // Extract raw code
+        let rawContent = el.dataset.rawCode || el.innerHTML;
+        let rawCode = cleanAndUnindent(decodeHtmlEntities(rawContent));
+        
+        // Save clean raw code for copy button
+        el.dataset.rawCode = rawCode;
+        
+        // Detect language from class e.g. language-blade
+        let lang = null;
+        const langMatch = el.className.match(/\blanguage-([a-zA-Z0-9_-]+)\b/);
+        if (langMatch) {
+            lang = langMatch[1].toLowerCase();
+        }
+        
+        // Compute and update line numbers in gutter
+        const totalLines = rawCode ? rawCode.split('\n').length : 1;
+        const card = el.closest('.group\\/highlight') || el.closest('[data-vibe-preview-code]') || el.parentElement?.parentElement;
+        if (card) {
+            const gutter = card.querySelector('[data-vibe-gutter]');
+            if (gutter) {
+                let gutterHtml = '';
+                for (let i = 1; i <= totalLines; i++) {
+                    gutterHtml += `<div>${i}</div>`;
+                }
+                gutter.innerHTML = gutterHtml;
+            }
+        }
+        
+        // Highlight with highlight.js
+        let highlighted = '';
+        if (lang && hljs.getLanguage(lang)) {
+            highlighted = hljs.highlight(rawCode, { language: lang }).value;
+        } else {
+            highlighted = hljs.highlightAuto(rawCode).value;
+        }
+        
+        el.innerHTML = highlighted;
+        el.dataset.highlighted = 'yes';
     } catch (e) {
         console.warn('[VibeHighlight] Highlight error:', e);
     }
 }
 
 export function highlightAll() {
-    if (typeof requestAnimationFrame !== 'undefined') {
-        requestAnimationFrame(() => {
-            document.querySelectorAll('code[data-vibe-highlight]:not([data-highlighted="yes"])').forEach((el) => {
-                highlightElement(el);
-            });
-        });
-    } else {
+    const run = () => {
         document.querySelectorAll('code[data-vibe-highlight]:not([data-highlighted="yes"])').forEach((el) => {
             highlightElement(el);
         });
+    };
+    if (typeof requestAnimationFrame !== 'undefined') {
+        requestAnimationFrame(run);
+    } else {
+        run();
     }
 }
 
 window.VibeHighlight = {
     highlightElement,
     highlightAll,
+    cleanAndUnindent,
     highlightAuto(code) {
         return hljs.highlightAuto(code).value;
     },

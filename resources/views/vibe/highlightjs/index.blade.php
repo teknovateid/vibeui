@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'code' => null,
@@ -22,25 +22,54 @@
     $showLines = $lines !== null ? (bool) $lines : (bool) $lineNumbers;
     $rawCode = $code !== null ? (string) $code : (isset($slot) ? (string) $slot : '');
     
-    // Trim initial and trailing empty newlines while preserving inner structure
-    $rawCode = preg_replace('/^\r?\n|\r?\n\s*$/', '', $rawCode);
+    // Normalize compiled <x-vibe:: tags back to custom <vibe: tags for documentation code display
+    $rawCode = preg_replace('/<x-vibe::([a-zA-Z0-9\-\.]+)/', '<vibe:$1', $rawCode);
+    $rawCode = preg_replace('/<\/x-vibe::([a-zA-Z0-9\-\.]+)/', '</vibe:$1', $rawCode);
+
+    // Normalize Windows CRLF / CR line endings to standard LF
+    $rawCode = str_replace(["\r\n", "\r"], "\n", $rawCode);
+
+    // Trim initial and trailing empty/whitespace-only lines
+    $rawCode = preg_replace('/^(\s*\n)+/', '', $rawCode);
+    $rawCode = preg_replace('/(\n\s*)+$/', '', $rawCode);
     
     // Auto-unindent multiline code blocks indented in Blade templates
     $codeLines = explode("\n", $rawCode);
-    $minIndent = null;
-    foreach ($codeLines as $line) {
-        if (trim($line) === '') continue;
-        preg_match('/^(\s*)/', $line, $m);
-        $indent = strlen($m[1] ?? '');
-        if ($minIndent === null || $indent < $minIndent) {
-            $minIndent = $indent;
+    if (count($codeLines) > 1) {
+        $allMinIndent = null;
+        foreach ($codeLines as $line) {
+            if (trim($line) === '') continue;
+            preg_match('/^(\s*)/', $line, $m);
+            $indent = strlen($m[1] ?? '');
+            if ($allMinIndent === null || $indent < $allMinIndent) {
+                $allMinIndent = $indent;
+            }
         }
-    }
-    if ($minIndent !== null && $minIndent > 0) {
-        $codeLines = array_map(function($line) use ($minIndent) {
-            return preg_replace('/^\s{' . $minIndent . '}/', '', $line);
-        }, $codeLines);
-        $rawCode = implode("\n", $codeLines);
+
+        if ($allMinIndent !== null && $allMinIndent > 0) {
+            $codeLines = array_map(function($line) use ($allMinIndent) {
+                return preg_replace('/^\s{' . $allMinIndent . '}/', '', $line);
+            }, $codeLines);
+            $rawCode = implode("\n", $codeLines);
+        } elseif ($allMinIndent === 0) {
+            // If the first line was trimmed by Blade/Blaze to 0 indent, calculate common indent from remaining lines
+            $subMinIndent = null;
+            for ($i = 1; $i < count($codeLines); $i++) {
+                $line = $codeLines[$i];
+                if (trim($line) === '') continue;
+                preg_match('/^(\s*)/', $line, $m);
+                $indent = strlen($m[1] ?? '');
+                if ($subMinIndent === null || $indent < $subMinIndent) {
+                    $subMinIndent = $indent;
+                }
+            }
+            if ($subMinIndent !== null && $subMinIndent > 0) {
+                for ($i = 1; $i < count($codeLines); $i++) {
+                    $codeLines[$i] = preg_replace('/^\s{' . $subMinIndent . '}/', '', $codeLines[$i]);
+                }
+                $rawCode = implode("\n", $codeLines);
+            }
+        }
     }
     
     $trimmedCode = trim($rawCode);
@@ -112,7 +141,7 @@
     $wrapClass = $wrap ? 'whitespace-pre-wrap break-words' : 'whitespace-pre overflow-x-auto';
 @endphp
 
-@pushOnce('head')
+@pushOnce('head', 'vibe-highlightjs')
     @vite(['resources/css/vibe/highlightjs.css', 'resources/js/vibe/highlightjs.js'])
 @endPushOnce
 
@@ -121,9 +150,9 @@
         copied: false,
         copyCode() {
             let codeEl = this.$refs.codeBlock;
-            let text = codeEl ? codeEl.innerText : '';
+            let text = codeEl ? (codeEl.dataset.rawCode || codeEl.innerText || codeEl.textContent) : '';
             if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(() => {
+                navigator.clipboard.writeText(text.trim()).then(() => {
                     this.copied = true;
                     setTimeout(() => this.copied = false, 2000);
                 });
@@ -131,12 +160,10 @@
         },
         runHighlight() {
             let el = this.$refs.codeBlock;
-            if (el && window.hljs && el.dataset.highlighted !== 'yes') {
-                if (typeof requestAnimationFrame !== 'undefined') {
-                    requestAnimationFrame(() => window.hljs.highlightElement(el));
-                } else {
-                    window.hljs.highlightElement(el);
-                }
+            if (el && window.VibeHighlight) {
+                window.VibeHighlight.highlightElement(el);
+            } else if (el && window.hljs && el.dataset.highlighted !== 'yes') {
+                window.hljs.highlightElement(el);
             }
         },
         init() {
@@ -250,6 +277,6 @@
             </div>
         @endif
 
-        <pre class="flex-1 p-4 font-mono text-xs sm:text-sm leading-relaxed {{ $wrapClass }} focus:outline-none"><code x-ref="codeBlock" data-vibe-highlight class="hljs @if($resolvedLang) language-{{ $resolvedLang }} @endif">{{ $rawCode }}</code></pre>
+        <pre class="flex-1 p-4 font-mono text-xs sm:text-sm leading-relaxed {{ $wrapClass }} focus:outline-none"><code x-ref="codeBlock" data-vibe-highlight class="hljs @if($resolvedLang) language-{{ $resolvedLang }} @endif">{!! htmlspecialchars($rawCode, ENT_QUOTES, 'UTF-8') !!}</code></pre>
     </div>
 </div>
