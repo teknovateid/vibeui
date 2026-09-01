@@ -48,7 +48,7 @@
                         @endverbatim
                     </vibe:preview.code>
                     <div class="w-full max-w-sm">
-                        <vibe:input name="full_name" :label="__('docs/input.basic_input_label')" :placeholder="__('docs/input.basic_input_placeholder')" />
+                        <vibe:input name="full_name" label="Full Name" placeholder="Enter your full name..." />
                     </div>
                 </vibe:preview>
             </section>
@@ -82,11 +82,11 @@
                         @endverbatim
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input variant="outline" :label="__('docs/input.variant_outline')" placeholder="Default variant..." />
-                        <vibe:input variant="filled" :label="__('docs/input.variant_filled')" placeholder="Solid look..." />
-                        <vibe:input variant="flush" :label="__('docs/input.variant_flush')" placeholder="Bottom line only..." />
-                        <vibe:input variant="ghost" :label="__('docs/input.variant_ghost')" placeholder="Transparent..." />
-                        <vibe:input variant="accent" :label="__('docs/input.variant_accent')" placeholder="Accent color..." />
+                        <vibe:input variant="outline" label="Outline" placeholder="Default variant..." />
+                        <vibe:input variant="filled" label="Filled" placeholder="Solid look..." />
+                        <vibe:input variant="flush" label="Flush" placeholder="Bottom line only..." />
+                        <vibe:input variant="ghost" label="Ghost" placeholder="Transparent..." />
+                        <vibe:input variant="accent" label="Accent" placeholder="Accent color..." />
                     </div>
                 </vibe:preview>
             </section>
@@ -256,16 +256,13 @@
                             {{-- Error from prop directly --}}
                             <vibe:input name="password" type="password" label="Password" value="12345" error="Password must be at least 8 characters long." />
 
-                            {{-- Automatic Laravel $errors --}}
-                            <vibe:input name="username" label="Username" wire:model="username" />
-
-                            {{-- Custom error key (errorName) --}}
-                            <vibe:input name="user[phone]" errorName="user.phone" label="Phone Number" error="Invalid phone number format." />
+                            {{-- Error with placeholder --}}
+                            <vibe:input name="phone" label="Phone Number" error="Invalid phone number format." placeholder="+1 (555) 000-0000" />
                         @endverbatim
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input name="password" type="password" label="Password" value="12345" error="Password must be at least 8 characters long." />
-                        <vibe:input name="user_phone" label="Phone Number" error="Invalid phone number format." placeholder="+1 (555) 000-0000" />
+                        <vibe:input name="phone" label="Phone Number" error="Invalid phone number format." placeholder="+1 (555) 000-0000" />
                     </div>
                 </vibe:preview>
             </section>

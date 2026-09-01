@@ -83,37 +83,56 @@
             }
         },
         
+        getAudioContext() {
+            if (!window.vibeAudioContext || window.vibeAudioContext.state === 'closed') {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (AudioCtx) {
+                    window.vibeAudioContext = new AudioCtx();
+                }
+            }
+            if (window.vibeAudioContext && window.vibeAudioContext.state === 'suspended') {
+                window.vibeAudioContext.resume().catch(() => {});
+            }
+            return window.vibeAudioContext;
+        },
+
         playSound(toast) {
-            if (!toast.sound) return;
+            if (!toast || !toast.sound) return;
 
             if (typeof toast.sound === 'string' && toast.sound.length > 5) {
-                window.vibeAudioCache = window.vibeAudioCache || {};
-                let audio = window.vibeAudioCache[toast.sound];
-                if (!audio) {
-                    audio = new Audio(toast.sound);
-                    window.vibeAudioCache[toast.sound] = audio;
+                try {
+                    let audio = new Audio(toast.sound);
+                    let p = audio.play();
+                    if (p !== undefined) {
+                        p.catch(e => console.warn('Audio play failed:', e));
+                    }
+                } catch (e) {
+                    console.warn('Audio play failed:', e);
                 }
-                audio.currentTime = 0;
-                audio.play().catch(e => console.warn('Audio play failed:', e));
             } else {
                 try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const ctx = this.getAudioContext();
+                    if (!ctx) return;
+
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
                     
                     osc.connect(gain);
                     gain.connect(ctx.destination);
                     
+                    const now = ctx.currentTime;
                     osc.type = 'sine';
-                    osc.frequency.setValueAtTime(800, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
                     
-                    gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
                     
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.1);
-                } catch (e) { }
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } catch (e) {
+                    console.warn('Web Audio API error:', e);
+                }
             }
         },
         

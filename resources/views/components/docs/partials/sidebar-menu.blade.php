@@ -45,17 +45,15 @@
 
     <vibe:nav.label title="COMPONENTS" persist>
         <!-- Input Group -->
-        <vibe:nav.group title="Input" :active="request()->routeIs('docs.input.*')">
+         <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
             <x-slot:icon>
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+                    <rect x="3" y="6" width="18" height="12" rx="3"></rect>
+                    <path d="M8 12h8"></path>
                 </svg>
             </x-slot:icon>
-
-            <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
-                List Input
-            </vibe:nav.item>
-        </vibe:nav.group>
+            Input
+        </vibe:nav.item>
 
         <!-- Button -->
         <vibe:nav.item href="{{ route('docs.button.index') }}" :active="request()->routeIs('docs.button.*')">

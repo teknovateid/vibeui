@@ -49,23 +49,59 @@
                 <vibe:preview title="Basic Alert Types">
                     <vibe:preview.code>
 @verbatim
-{{-- 1. Fungsi JavaScript vibeAlert --}}
-vibeAlert({
-    type: 'success',
-    title: 'Berhasil Disimpan',
-    message: 'Perubahan pada profil Anda telah berhasil disimpan.'
-});
-
-{{-- 2. Shorthand Pesan Cepat --}}
-vibeAlert('Operasi berhasil diselesaikan!');
-
-{{-- 3. Alpine.js $dispatch Event --}}
-<vibe:button @click="$dispatch('alert', {
+{{-- 1. Info Alert --}}
+<vibe:button variant="info" size="sm" onclick="vibeAlert({
     type: 'info',
     title: 'Informasi Sistem',
-    message: 'Pembaruan versi terbaru telah diterapkan.'
+    message: 'Pembaruan data selesai dilakukan secara otomatis.'
 })">
-    Tampilkan Alert Info
+    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="12" y1="16" x2="12" y2="12" />
+        <line x1="12" y1="8" x2="12.01" y2="8" />
+    </svg>
+    Info Alert
+</vibe:button>
+
+{{-- 2. Success Alert --}}
+<vibe:button variant="success" size="sm" onclick="vibeAlert({
+    type: 'success',
+    title: 'Transaksi Sukses',
+    message: 'Pesanan #VB-9821 telah berhasil diverifikasi dan diproses.'
+})">
+    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+        <polyline points="22 4 12 14.01 9 11.01" />
+    </svg>
+    Success Alert
+</vibe:button>
+
+{{-- 3. Warning Alert --}}
+<vibe:button variant="warning" size="sm" onclick="vibeAlert({
+    type: 'warning',
+    title: 'Peringatan Kapasitas',
+    message: 'Kapasitas penyimpanan server Anda saat ini tersisa 15%.'
+})">
+    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+        <line x1="12" y1="9" x2="12" y2="13" />
+        <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+    Warning Alert
+</vibe:button>
+
+{{-- 4. Error Alert --}}
+<vibe:button variant="destructive" size="sm" onclick="vibeAlert({
+    type: 'error',
+    title: 'Terjadi Kesalahan',
+    message: 'Gagal terhubung ke database. Silakan periksa koneksi Anda.'
+})">
+    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="15" y1="9" x2="9" y2="15" />
+        <line x1="9" y1="9" x2="15" y2="15" />
+    </svg>
+    Error Alert
 </vibe:button>
 @endverbatim
                     </vibe:preview.code>
@@ -136,25 +172,62 @@ vibeAlert('Operasi berhasil diselesaikan!');
                 <vibe:preview title="Confirmation Modal Dialog">
                     <vibe:preview.code>
 @verbatim
-vibeAlert({
+{{-- Destructive Confirm --}}
+<vibe:button variant="destructive" onclick="vibeAlert({
     type: 'confirm',
-    title: 'Hapus Item Ini?',
-    message: 'Tindakan ini permanen dan tidak dapat dibatalkan kembali.',
+    title: 'Hapus Akun Pengguna?',
+    message: 'Semua data transaksi dan riwayat pengguna akan dihapus permanen dari server.',
     confirmButton: {
-        text: 'Ya, Hapus Data',
+        text: 'Ya, Hapus Akun',
         class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         action: () => {
             vibeAlert({
                 type: 'success',
-                title: 'Berhasil Dihapus',
-                message: 'Data pengguna telah berhasil dihapus dari sistem.'
+                title: 'Akun Dihapus',
+                message: 'Akun pengguna telah dinonaktifkan secara permanen.'
             });
         }
     },
     closeButton: {
         text: 'Batal'
     }
-});
+})">
+    <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18" />
+        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+        <line x1="10" y1="11" x2="10" y2="17" />
+        <line x1="14" y1="11" x2="14" y2="17" />
+    </svg>
+    Hapus Akun (Destructive Confirm)
+</vibe:button>
+
+{{-- Standard Confirm --}}
+<vibe:button variant="outline" onclick="vibeAlert({
+    type: 'confirm',
+    title: 'Publikasikan Artikel?',
+    message: 'Artikel ini akan dapat diakses oleh publik di website resmi.',
+    confirmButton: {
+        text: 'Publikasikan Sekarang',
+        action: () => {
+            vibeAlert({
+                type: 'success',
+                title: 'Berhasil Dipublikasikan',
+                message: 'Artikel Anda sudah aktif dan dapat dibaca publik.'
+            });
+        }
+    },
+    closeButton: {
+        text: 'Simpan Draf'
+    }
+})">
+    <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
+        <polyline points="16 6 12 2 8 6" />
+        <line x1="12" y1="2" x2="12" y2="15" />
+    </svg>
+    Publikasikan (Standard Confirm)
+</vibe:button>
 @endverbatim
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-4">
