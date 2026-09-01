@@ -16,7 +16,6 @@
     'trailingIcon' => null,
     'prefix' => null,
     'suffix' => null,
-    'pill' => false,
 ])
 
 @php
@@ -33,11 +32,11 @@
     $baseClasses = 'block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 read-only:bg-muted/20 read-only:cursor-default';
 
     $sizeClasses = match ($size) {
-        'sm' => 'h-8 text-xs ' . ($pill ? 'rounded-full' : 'rounded-md') . ' ' . ($hasLeading ? 'pl-8 ' : 'px-3 ') . ($hasTrailing ? 'pr-8' : ''),
-        'md' => 'h-9 text-sm ' . ($pill ? 'rounded-full' : 'rounded-lg') . ' ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
-        'lg' => 'h-10 text-sm ' . ($pill ? 'rounded-full' : 'rounded-lg') . ' ' . ($hasLeading ? 'pl-10 ' : 'px-4 ') . ($hasTrailing ? 'pr-10' : ''),
-        'xl' => 'h-11 text-base ' . ($pill ? 'rounded-full' : 'rounded-xl') . ' ' . ($hasLeading ? 'pl-11 ' : 'px-5 ') . ($hasTrailing ? 'pr-11' : ''),
-        default => 'h-9 text-sm ' . ($pill ? 'rounded-full' : 'rounded-lg') . ' ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
+        'sm' => 'h-8 text-xs rounded-md ' . ($hasLeading ? 'pl-8 ' : 'px-3 ') . ($hasTrailing ? 'pr-8' : ''),
+        'md' => 'h-9 text-sm rounded-lg ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
+        'lg' => 'h-10 text-sm rounded-lg ' . ($hasLeading ? 'pl-10 ' : 'px-4 ') . ($hasTrailing ? 'pr-10' : ''),
+        'xl' => 'h-11 text-base rounded-xl ' . ($hasLeading ? 'pl-11 ' : 'px-5 ') . ($hasTrailing ? 'pr-11' : ''),
+        default => 'h-9 text-sm rounded-lg ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
     };
 
     if ($variant === 'flush') {

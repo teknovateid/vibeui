@@ -4,7 +4,7 @@ return [
     'title' => 'Input',
     'badge' => 'Komponen',
     'group' => 'Form & Input',
-    'description' => 'Komponen input teks yang modern dan fleksibel. Mendukung 5 varian tampilan, 4 ukuran, ikon leading/trailing, prefix/suffix teks, pill style, state error & disabled, serta integrasi penuh dengan Livewire wire:model.',
+    'description' => 'Komponen input teks yang modern dan fleksibel. Mendukung 5 varian tampilan, 4 ukuran, ikon leading/trailing, prefix/suffix teks, state error & disabled, serta integrasi penuh dengan Livewire wire:model.',
 
     // Section 1: Basic Usage
     'basic_usage_title' => 'Penggunaan Dasar',
@@ -31,7 +31,7 @@ return [
 
     // Section 5: Pill
     'pill_title' => 'Pill Style',
-    'pill_desc' => 'Tambahkan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pill</code> untuk membuat input dengan sudut membulat penuh (<code class="font-mono text-xs text-foreground">rounded-full</code>), sangat cocok untuk input pencarian.',
+    'pill_desc' => 'Gunakan class Tailwind <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">rounded-full</code> untuk membuat input dengan sudut membulat penuh, sangat cocok untuk field pencarian.',
 
     // Section 6: Helper & Description
     'helper_title' => 'Deskripsi & Teks Bantuan',

@@ -4,7 +4,7 @@ return [
     'title' => 'Input',
     'badge' => 'Component',
     'group' => 'Form & Input',
-    'description' => 'Modern and flexible text input component. Supports 5 visual variants, 4 sizes, leading/trailing icons, prefix/suffix text, pill style, error & disabled states, and full Livewire wire:model integration.',
+    'description' => 'Modern and flexible text input component. Supports 5 visual variants, 4 sizes, leading/trailing icons, prefix/suffix text, error & disabled states, and full Livewire wire:model integration.',
 
     // Section 1: Basic Usage
     'basic_usage_title' => 'Basic Usage',
@@ -31,7 +31,7 @@ return [
 
     // Section 5: Pill
     'pill_title' => 'Pill Style',
-    'pill_desc' => 'Add the prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pill</code> to create an input with fully rounded corners (<code class="font-mono text-xs text-foreground">rounded-full</code>), perfect for search inputs.',
+    'pill_desc' => 'Use the Tailwind class <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">rounded-full</code> to create an input with fully rounded corners, perfect for search inputs.',
 
     // Section 6: Helper & Description
     'helper_title' => 'Description & Help Text',

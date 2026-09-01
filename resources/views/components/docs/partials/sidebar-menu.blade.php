@@ -55,10 +55,18 @@
             <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
                 List Input
             </vibe:nav.item>
-            <vibe:nav.item href="{{ route('docs.input.create') }}" :active="request()->routeIs('docs.input.create')">
-                Create Input
-            </vibe:nav.item>
         </vibe:nav.group>
+
+        <!-- Button -->
+        <vibe:nav.item href="{{ route('docs.button.index') }}" :active="request()->routeIs('docs.button.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="6" width="18" height="12" rx="3"></rect>
+                    <path d="M8 12h8"></path>
+                </svg>
+            </x-slot:icon>
+            Button
+        </vibe:nav.item>
     </vibe:nav.label>
 
 </vibe:nav>

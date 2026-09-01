@@ -197,7 +197,7 @@
 
                 @php
                     $pillCode = <<<'HTML'
-                    <vibe:input pill label="Search" placeholder="Search anything..." >
+                    <vibe:input class="rounded-full" label="Search" placeholder="Search anything...">
                         <x-slot:icon>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
@@ -205,14 +205,14 @@
                         </x-slot:icon>
                     </vibe:input>
 
-                    <vibe:input pill variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
-                    <vibe:input pill variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
+                    <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
+                    <vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
                     HTML;
                 @endphp
 
                 <vibe:preview title="Pill Style" :code="$pillCode">
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input pill label="Search" placeholder="Search anything...">
+                        <vibe:input class="rounded-full" label="Search" placeholder="Search anything...">
                             <x-slot:icon>
                                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="11" cy="11" r="8" />
@@ -220,8 +220,8 @@
                                 </svg>
                             </x-slot:icon>
                         </vibe:input>
-                        <vibe:input pill variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
-                        <vibe:input pill variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
+                        <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
+                        <vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
                     </div>
                 </vibe:preview>
             </section>
@@ -428,7 +428,7 @@
                                     ['errorName', 'string', 'null', 'Laravel validation error key if different from name (e.g. user.phone).'],
                                     ['prefix', 'string', 'null', 'Text on the left side of the input (e.g. "https://", "$").'],
                                     ['suffix', 'string', 'null', 'Text on the right side of the input (e.g. ".com", "/month").'],
-                                    ['pill', 'bool', 'false', 'Changes corner radius to fully rounded (pill shape).'],
+                                    ['class', 'string', 'null', 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).'],
                                     ['wrapperClass', 'string', 'null', 'Extra class for the outer wrapper div.'],
                                 ];
                             @endphp
