@@ -307,13 +307,19 @@
                         if (!headingElements.length) return;
 
                         let ul = root.querySelector('[data-toc-items]');
-                        let mobileContainer = root.querySelector('[data-toc-mobile-items]');
-
                         if (ul) ul.innerHTML = '';
-                        if (mobileContainer && !mobileContainer.querySelector('ul')) {
-                            mobileContainer.innerHTML = '<ul class="space-y-1"></ul>';
+
+                        let mobileContainer = root.querySelector('[data-toc-mobile-items]');
+                        let mobileUl = null;
+                        if (mobileContainer) {
+                            mobileUl = mobileContainer.querySelector('ul');
+                            if (!mobileUl) {
+                                mobileUl = document.createElement('ul');
+                                mobileUl.className = 'space-y-1';
+                                mobileContainer.appendChild(mobileUl);
+                            }
+                            mobileUl.innerHTML = '';
                         }
-                        let mobileUl = mobileContainer ? mobileContainer.querySelector('ul') : null;
 
                         // Calculate which heading is truly in view RIGHT NOW strictly based on scroll position
                         let scrollContainer = document.getElementById('docs-main-scroll') || window;

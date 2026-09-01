@@ -8,4 +8,5 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/button', 'docs.button.index')->name('button.index');
+    Route::view('/table', 'docs.table.index')->name('table.index');
 });

@@ -40,13 +40,13 @@
     --color-input: var(--input);
     --color-ring: var(--ring);
 
-    --radius-sm: calc(var(--radius) - 4px);
+    /* --radius-sm: calc(var(--radius) - 4px);
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
     --radius-2xl: calc(var(--radius) + 6px);
     --radius-3xl: calc(var(--radius) + 8px);
-    --radius-full: 9999px;
+    --radius-full: 9999px; */
 
     /* --radius-sm: calc(0px);
     --radius-md: calc(0px);

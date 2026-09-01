@@ -105,6 +105,7 @@ export default defineConfig({
                 
                 'resources/css/vibe/highlightjs.css',
                 'resources/js/vibe/highlightjs.js',
+                'resources/js/vibe/table.js',
             ],
             refresh: true,
             fonts: [
