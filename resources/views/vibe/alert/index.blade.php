@@ -118,7 +118,13 @@
             return;
         }
 
-        if (this.alerts.some(a => (alert.id && a.id === alert.id) || (a.title === alert.title && a.message === alert.message && a.type === alert.type))) {
+        let existing = this.alerts.find(a => (alert.id && a.id === alert.id) || (a.title === alert.title && a.message === alert.message && a.type === alert.type));
+        if (existing) {
+            let s = alert.sound !== undefined ? alert.sound : (existing.sound !== undefined ? existing.sound : this.globalSound);
+            if (s === 'true' || s === '1') s = true;
+            if (s === 'false' || s === '0' || s === '') s = false;
+            this.playSound({ sound: s });
+            this.startTimer(existing);
             return;
         }
 
@@ -190,42 +196,63 @@
         });
     },
 
+    getAudioContext() {
+        if (!window.vibeAudioContext || window.vibeAudioContext.state === 'closed') {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+                window.vibeAudioContext = new AudioCtx();
+            }
+        }
+        if (window.vibeAudioContext && window.vibeAudioContext.state === 'suspended') {
+            window.vibeAudioContext.resume().catch(() => {});
+        }
+        return window.vibeAudioContext;
+    },
+
     playSound(alert) {
-        if (!alert.sound) return;
+        if (!alert || !alert.sound) return;
 
         if (typeof alert.sound === 'string' && alert.sound.length > 5) {
-            window.vibeAudioCache = window.vibeAudioCache || {};
-            let audio = window.vibeAudioCache[alert.sound];
-            if (!audio) {
-                audio = new Audio(alert.sound);
-                window.vibeAudioCache[alert.sound] = audio;
+            try {
+                let audio = new Audio(alert.sound);
+                let p = audio.play();
+                if (p !== undefined) {
+                    p.catch(e => console.warn('Audio play failed:', e));
+                }
+            } catch (e) {
+                console.warn('Audio play failed:', e);
             }
-            audio.currentTime = 0;
-            audio.play().catch(e => console.warn('Audio play failed:', e));
         } else {
             try {
-                const ctx = new(window.AudioContext || window.webkitAudioContext)();
+                const ctx = this.getAudioContext();
+                if (!ctx) return;
+
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
 
                 osc.connect(gain);
                 gain.connect(ctx.destination);
 
+                const now = ctx.currentTime;
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.1);
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
 
-                gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
 
-                osc.start(ctx.currentTime);
-                osc.stop(ctx.currentTime + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.12);
             } catch (e) {
-                console.warn('Web Audio API not supported', e);
+                console.warn('Web Audio API error:', e);
             }
         }
     },
     startTimer(alert) {
+        if (alert.timer) {
+            clearTimeout(alert.timer);
+            alert.timer = null;
+        }
         if (alert.timeout !== false && (alert.timeout || {{ $timeout }})) {
             let duration = alert.timeout || {{ $timeout }};
             alert.timer = setTimeout(() => {
@@ -363,7 +390,7 @@
 
     <div class="w-full max-w-88 sm:max-w-md flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
-            <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready && canCloseOutside(alert)) remove(alert.id)" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
+            <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready && canCloseOutside(alert)) remove(alert.id)" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
                 <div class="p-5 sm:p-6 flex flex-col" :class="getAlignClasses(alert)">
                     <div class="flex size-16 items-center justify-center rounded-full mb-4" :class="typeClasses[alert.type] || typeClasses.info" x-html="alert.icon || icons[alert.type] || icons.info"></div>
                     <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
