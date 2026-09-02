@@ -9,6 +9,7 @@
 <div 
     x-data="{
         toasts: [],
+        heights: {},
         globalPosition: '{{ $position }}',
         globalSound: '{{ $sound }}',
         expanded: false,
@@ -146,6 +147,7 @@
             let t = this.toasts.find(t => t.id === id);
             if (t && t.timer) clearTimeout(t.timer);
             this.toasts = this.toasts.filter(t => t.id !== id);
+            delete this.heights[id];
         },
         
         startTimer(toast) {
@@ -183,12 +185,29 @@
                 this.toasts.forEach(t => this.resumeTimer(t));
             }, 300); // 300ms grace period for gaps
         },
+
+        updateHeight(id, height) {
+            if (height > 0) {
+                this.heights[id] = height;
+            }
+        },
+
+        getExpandedOffset(index) {
+            let offset = 0;
+            const gap = 12; // Gap/jarak antar toast saat expanded (12px)
+            for (let i = 0; i < index; i++) {
+                let t = this.toasts[i];
+                let h = (t && this.heights[t.id]) ? this.heights[t.id] : (t && t.title ? 96 : 64);
+                offset += h + gap;
+            }
+            return offset;
+        },
         
         getTransform(index) {
             let isTop = this.getActivePosition().includes('top');
             
             if (this.expanded) {
-                let y = index * 96; // Increased gap to prevent overlapping
+                let y = this.getExpandedOffset(index);
                 return `translateY(${isTop ? y : -y}px) scale(1)`;
             }
             
@@ -221,6 +240,17 @@
     >
         <template x-for="(toast, index) in toasts" :key="toast.id">
             <div 
+                x-init="
+                    $nextTick(() => {
+                        updateHeight(toast.id, $el.offsetHeight);
+                    });
+                    if (window.ResizeObserver) {
+                        const ro = new ResizeObserver(() => {
+                            if ($el) updateHeight(toast.id, $el.offsetHeight);
+                        });
+                        ro.observe($el);
+                    }
+                "
                 x-transition:enter="transition-all ease-out duration-300"
                 x-transition:enter-start="opacity-0 translate-y-4 scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
