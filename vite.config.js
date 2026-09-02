@@ -39,6 +39,16 @@ function vibeSyncPlugin() {
                     .replace(/<\/x-docs\.partials\./g, '</x-partials.');
             },
         },
+        {
+            srcPattern: '/lang/en/vibe/',
+            destDir: 'packages/vibe/lang/en/vibe',
+            label: 'Lang EN',
+        },
+        {
+            srcPattern: '/lang/id/vibe/',
+            destDir: 'packages/vibe/lang/id/vibe',
+            label: 'Lang ID',
+        },
     ];
 
     return {

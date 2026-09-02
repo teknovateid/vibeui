@@ -15,6 +15,19 @@ return [
         'placeholder' => 'Select account role...',
     ],
 
+    // Section 1.5: Label, Description & Info
+    'label_info' => [
+        'title' => 'Label, Description & Info',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">description</code> prop to add a hint text below the label, and the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code> prop for helper text below the select component.',
+        'preview_title' => 'Label, Description & Helper Info',
+        'plan_label' => 'Subscription Plan',
+        'plan_desc' => 'Choose the plan that best fits your team\'s needs.',
+        'plan_placeholder' => 'Select plan...',
+        'tz_label' => 'Timezone',
+        'tz_info' => 'Times are displayed according to the selected timezone.',
+        'tz_placeholder' => 'Select timezone...',
+    ],
+
     // Section 2: Searchable
     'searchable' => [
         'title' => 'Real-Time Search (Searchable)',
@@ -75,6 +88,15 @@ return [
         'preview_title' => 'Select with Keyboard Navigation',
         'label' => 'Keyboard Navigation',
         'placeholder' => 'Use arrow keys to navigate...',
+    ],
+
+    // Section 9: Multiple Select & Limits
+    'multiple' => [
+        'title' => 'Multiple Selection & Limits (Min & Max)',
+        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> attribute to select multiple options. Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> to require a minimum number of selected items and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> to restrict the maximum number of items.',
+        'preview_title' => 'Multi-Select with Min & Max Constraints',
+        'label' => 'Topics of Interest (Choose 2 to 4 topics)',
+        'placeholder' => 'Select multiple topics...',
     ],
 
     // Props table

@@ -15,6 +15,19 @@ return [
         'placeholder' => 'Pilih peran akun...',
     ],
 
+    // Section 1.5: Label, Description & Info
+    'label_info' => [
+        'title' => 'Label, Deskripsi & Info',
+        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">description</code> untuk menambahkan teks keterangan di bawah label, dan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code> untuk teks bantuan di bawah komponen select.',
+        'preview_title' => 'Label, Deskripsi & Info Bantuan',
+        'plan_label' => 'Paket Berlangganan',
+        'plan_desc' => 'Pilih paket yang sesuai kebutuhan tim Anda.',
+        'plan_placeholder' => 'Pilih paket...',
+        'tz_label' => 'Zona Waktu',
+        'tz_info' => 'Waktu ditampilkan sesuai zona waktu yang dipilih.',
+        'tz_placeholder' => 'Pilih zona waktu...',
+    ],
+
     // Section 2: Searchable
     'searchable' => [
         'title' => 'Pencarian Real-Time (Searchable)',
@@ -75,6 +88,15 @@ return [
         'preview_title' => 'Select dengan Navigasi Keyboard',
         'label' => 'Navigasi Keyboard',
         'placeholder' => 'Gunakan tombol panah keyboard...',
+    ],
+
+    // Section 9: Multiple Select & Limits
+    'multiple' => [
+        'title' => 'Pilihan Ganda & Batasan (Multiple, Min & Max)',
+        'desc' => 'Tambahkan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> untuk memilih lebih dari 1 opsi sekaligus. Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> untuk menentukan jumlah minimal opsi yang wajib dipilih dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> untuk membatasi jumlah maksimal opsi.',
+        'preview_title' => 'Pilihan Ganda dengan Batasan Min & Max',
+        'label' => 'Topik Minat (Pilih 2 hingga 4 topik)',
+        'placeholder' => 'Pilih beberapa topik minat...',
     ],
 
     // Props table
