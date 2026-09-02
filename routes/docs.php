@@ -9,6 +9,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/table', 'docs.table.index')->name('table.index');
+    Route::view('/datatable', 'docs.datatable.index')->name('datatable.index');
 
     Route::prefix('alert')->name('alert.')->group(function () {
         Route::view('/', 'docs.alert.index')->name('index');

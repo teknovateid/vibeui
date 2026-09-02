@@ -43,6 +43,7 @@ class VibeCommand extends Command
             [
                 'install' => 'Install Vibe UI (Publish config & inject assets)',
                 'component' => 'Publish a Vibe UI component',
+                'table' => 'Create a new Livewire DataTable component',
                 'page' => 'Generate a new page inside a layout',
                 'layout' => 'Generate a layout panel',
                 'clean' => 'Clean unused published components',
@@ -59,6 +60,8 @@ class VibeCommand extends Command
             $this->call('vibe:install');
         } elseif ($action === 'component') {
             $this->call('vibe:component');
+        } elseif ($action === 'table') {
+            $this->call('vibe:table');
         } elseif ($action === 'layout') {
             $this->call('vibe:layout');
         } elseif ($action === 'page') {

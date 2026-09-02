@@ -13,6 +13,7 @@ return [
         'input' => 'Input',
         'button' => 'Button',
         'table' => 'Table',
+        'datatable' => 'DataTable',
         'alert' => 'Alert',
         'toast' => 'Toast',
     ],

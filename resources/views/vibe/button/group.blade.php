@@ -3,6 +3,7 @@
 @props([
     'orientation' => 'horizontal', // horizontal, vertical
     'attached' => true,
+    'variant' => 'default',        // default, outline, ghost, transparent
 ])
 
 @php
@@ -21,7 +22,11 @@
         $stackClasses = '[&>*]:relative [&>*:hover]:z-10 [&>*:focus-visible]:z-20 [&>*:active]:z-20 [&>*[aria-current=page]]:z-10 [&>*[data-active=true]]:z-10';
         $compiledClasses = "{$layoutClasses} {$pillClasses} {$stackClasses}";
     } else {
-        $compiledClasses = $isVertical ? 'inline-flex flex-col gap-2' : 'inline-flex flex-row items-center gap-2';
+        $compiledClasses = $isVertical ? 'inline-flex flex-col gap-1' : 'inline-flex flex-row items-center gap-1';
+    }
+
+    if ($variant === 'ghost' || $variant === 'transparent') {
+        $compiledClasses .= ' bg-transparent [&>*]:bg-transparent [&>*]:border-transparent [&>*]:shadow-none';
     }
 @endphp
 

@@ -1,0 +1,30 @@
+<?php
+
+namespace [Namespace];
+
+[ModelImport]use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Blade;
+use Rappasoft\LaravelLivewireTables\Views\Column;
+use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+
+class [ClassName] extends VibeDataTableComponent
+{
+    public function configure(): void
+    {
+        parent::configure();
+        
+        $this->setPrimaryKey('id');
+    }
+
+    public function builder(): Builder
+    {
+        [BuilderQuery]
+    }
+
+    public function columns(): array
+    {
+        return [
+[Columns]
+        ];
+    }
+}
