@@ -170,7 +170,7 @@ PHP;
                 </div>
 
                 @php
-                    $bulkComponent = \App\Livewire\DemoBulkTable::class;
+                    $bulkComponent = \App\Livewire\UserTes::class;
                     $bulkActionCode = <<<'PHP'
 public function configure(): void
 {

@@ -13,7 +13,10 @@ class [ClassName] extends VibeDataTableComponent
     {
         parent::configure();
         
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setBulkActions([
+                'bulkDelete' => 'Hapus Terpilih',
+            ]);
     }
 
     public function builder(): Builder
@@ -26,5 +29,27 @@ class [ClassName] extends VibeDataTableComponent
         return [
 [Columns]
         ];
+    }
+
+    public function delete(string $id): void
+    {
+        [DeleteLogic]
+
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'title' => 'Berhasil',
+            'message' => 'Data berhasil dihapus.',
+        ]);
+    }
+
+    public function bulkDelete(): void
+    {
+        [BulkDeleteLogic]
+
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'title' => 'Berhasil',
+            'message' => 'Data terpilih berhasil dihapus.',
+        ]);
     }
 }

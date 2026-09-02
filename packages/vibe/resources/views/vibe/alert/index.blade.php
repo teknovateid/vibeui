@@ -484,4 +484,43 @@
             });
         };
     }
+
+    if (typeof window.vibeConfirmDelete === 'undefined') {
+        window.vibeConfirmDelete = function(target, callback) {
+            var options = {};
+            var cb = callback;
+
+            if (target instanceof Element) {
+                options = {
+                    title: target.getAttribute('data-confirm-title'),
+                    message: target.getAttribute('data-confirm-message'),
+                    confirmText: target.getAttribute('data-confirm-text'),
+                    cancelText: target.getAttribute('data-cancel-text')
+                };
+            } else if (typeof target === 'object' && target !== null) {
+                options = target;
+                cb = callback || target.callback;
+            }
+
+            if (typeof vibeAlert !== 'undefined') {
+                vibeAlert({
+                    type: 'confirm',
+                    title: options.title,
+                    message: options.message,
+                    confirmButton: {
+                        text: options.confirmText,
+                        class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+                        action: cb
+                    },
+                    closeButton: {
+                        text: options.cancelText
+                    }
+                });
+            } else if (confirm(options.message)) {
+                if (typeof cb === 'function') {
+                    cb();
+                }
+            }
+        };
+    }
 </script>

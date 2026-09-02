@@ -11,8 +11,8 @@
     $baseClasses = 'inline-flex';
 
     $layoutClasses = match ($orientation) {
-        'vertical' => $attached ? 'flex-col -space-y-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-b-none! [&>*:last-child:not(:only-child)]:rounded-t-none!' : 'flex-col gap-1',
-        default => $attached ? 'flex-row -space-x-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-r-none! [&>*:last-child:not(:only-child)]:rounded-l-none!' : 'flex-row items-center gap-1',
+        'vertical' => $attached ? 'flex-col -space-y-px' : 'flex-col gap-1',
+        default => $attached ? 'flex-row -space-x-px' : 'flex-row items-center gap-1',
     };
 
     $pillClasses = match ($orientation) {
