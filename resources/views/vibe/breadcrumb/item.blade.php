@@ -11,7 +11,7 @@
     </span>
 
     @if($href)
-        <a href="{{ $href }}" class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus:outline-none focus:underline {{ $active ? 'text-foreground font-semibold' : '' }}">
+        <a wire:navigate href="{{ $href }}" class="inline-flex items-center gap-1.5 transition-colors hover:text-foreground focus:outline-none focus:underline {{ $active ? 'text-foreground font-semibold' : '' }}">
             {{ $slot }}
         </a>
     @else
