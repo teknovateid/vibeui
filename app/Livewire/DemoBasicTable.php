@@ -15,8 +15,7 @@ class DemoBasicTable extends VibeDataTableComponent
     {
         parent::configure();
 
-        $this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc');
+        $this->setPrimaryKey('id');
     }
 
     public function builder(): Builder

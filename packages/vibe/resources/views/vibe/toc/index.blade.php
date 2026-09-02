@@ -303,7 +303,9 @@
                         if (!container) return;
 
                         let selectors = levels.split(',').map(s => s.trim()).filter(Boolean);
-                        let headingElements = container.querySelectorAll(selectors.join(', '));
+                        let headingElements = Array.from(container.querySelectorAll(selectors.join(', '))).filter(el => {
+                            return !el.closest('[data-toc-ignore], [id$="-canvas"], [id$="-wrapper"], [wire\\:offline]');
+                        });
                         if (!headingElements.length) return;
 
                         let ul = root.querySelector('[data-toc-items]');

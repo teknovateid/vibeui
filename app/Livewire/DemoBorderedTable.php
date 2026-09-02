@@ -7,17 +7,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoFooterTable extends VibeDataTableComponent
+class DemoBorderedTable extends VibeDataTableComponent
 {
-    public string $tableName = 'footer_table';
+    public string $tableName = 'bordered_table';
 
     public function configure(): void
     {
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setFooterStatus(true)
-            ->setUseHeaderAsFooterStatus(true);
+            ->setBorderedEnabled();
     }
 
     public function builder(): Builder
@@ -29,13 +28,11 @@ class DemoFooterTable extends VibeDataTableComponent
     {
         return [
             Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn ($rows) => 'Total: ' . $rows->count() . ' User'),
+                ->sortable(),
 
             Column::make('Name', 'name')
                 ->sortable()
-                ->searchable()
-                ->footer(fn () => 'Ringkasan Halaman'),
+                ->searchable(),
 
             Column::make('Email', 'email')
                 ->sortable()

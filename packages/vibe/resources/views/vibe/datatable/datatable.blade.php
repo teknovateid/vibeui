@@ -133,12 +133,24 @@
                         <x-livewire-tables::table.empty />
                     @endif
 
-                    @if ($this->footerIsEnabled() && $this->hasColumnsWithFooter())
+                    @if ($this->footerIsEnabled() && ($this->hasColumnsWithFooter() || $this->useHeaderAsFooterIsEnabled()))
                         <x-slot name="tfoot">
-                            @if ($this->useHeaderAsFooterIsEnabled())
-                                <x-livewire-tables::table.tr.secondary-header />
-                            @else
+                            @if ($this->hasColumnsWithFooter())
                                 <x-livewire-tables::table.tr.footer />
+                            @endif
+                            @if ($this->useHeaderAsFooterIsEnabled())
+                                <tr>
+                                    @if($this->showBulkActionsSections)
+                                        <x-livewire-tables::table.th.bulk-actions :displayMinimisedOnReorder="true" />
+                                    @endif
+                                    @if ($this->showCollapsingColumnSections)
+                                        <x-livewire-tables::table.th.collapsed-columns />
+                                    @endif
+
+                                    @tableloop($this->selectedVisibleColumns as $index => $column)
+                                        <x-livewire-tables::table.th wire:key="{{ $tableName.'-table-foot-'.$index }}" :$column :$index />
+                                    @endtableloop
+                                </tr>
                             @endif
                         </x-slot>
                     @endif

@@ -16,8 +16,7 @@ class DemoActionsTable extends VibeDataTableComponent
     {
         parent::configure();
 
-        $this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc');
+        $this->setPrimaryKey('id');
     }
 
     public function builder(): Builder
@@ -52,9 +51,7 @@ class DemoActionsTable extends VibeDataTableComponent
                         <vibe:button size="icon-xs" variant="ghost" class="text-muted-foreground hover:text-foreground" title="Edit" wire:click="edit({{ $row->id }})">
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
                         </vibe:button>
-                        <vibe:button size="icon-xs" variant="ghost" class="text-destructive/80 hover:text-destructive hover:bg-destructive/30" title="Delete" wire:click="delete({{ $row->id }})">
-                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
-                        </vibe:button>
+                        <vibe:button.delete size="icon-xs" variant="ghost" wire:click="delete({{ $row->id }})" />
                     </vibe:button.group>
                 ', ['row' => $row]))
                 ->html(),
@@ -72,10 +69,10 @@ class DemoActionsTable extends VibeDataTableComponent
 
     public function delete($id): void
     {
-        $this->dispatch('alert', [
-            'type' => 'warning',
-            'title' => 'Hapus User',
-            'message' => "Hapus data user ID #{$id}.",
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'title' => 'Berhasil Dihapus',
+            'message' => "Data user ID #{$id} telah berhasil dihapus.",
         ]);
     }
 }

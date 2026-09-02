@@ -8,20 +8,20 @@ use Illuminate\Support\Facades\Blade;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoColumnSearchTable extends VibeDataTableComponent
+class DemoFooterColumnSearchTable extends VibeDataTableComponent
 {
     public string $searchId = '';
     public string $searchName = '';
     public string $searchEmail = '';
 
-    public string $tableName = 'col_search_table';
+    public string $tableName = 'footer_col_search_table';
 
     public function configure(): void
     {
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setSecondaryHeaderStatus(true);
+            ->setFooterStatus(true);
     }
 
     public function builder(): Builder
@@ -37,22 +37,22 @@ class DemoColumnSearchTable extends VibeDataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="ID..." class="w-20" />'))
+                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="ID..." class="w-20" />'))
                 ->html(),
 
             Column::make('Name', 'name')
                 ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="Cari nama..." />'))
+                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="Cari nama..." />'))
                 ->html(),
 
             Column::make('Email', 'email')
                 ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="Cari email..." />'))
+                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="Cari email..." />'))
                 ->html(),
 
             Column::make('Created At', 'created_at')
                 ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
+                ->footer(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
                 ->html(),
         ];
     }

@@ -16,7 +16,6 @@ class DemoBulkTable extends VibeDataTableComponent
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc')
             ->setHideBulkActionsWhenEmptyStatus(false)
             ->setBulkActions([
                 'exportSelected' => 'Ekspor CSV',
@@ -62,10 +61,10 @@ class DemoBulkTable extends VibeDataTableComponent
     public function deleteSelected(): void
     {
         $count = count($this->getSelected());
-        $this->dispatch('alert', [
-            'type' => 'info',
-            'title' => 'Hapus Massal',
-            'message' => "Aksi hapus massal untuk {$count} data dipanggil.",
+        $this->dispatch('toast', [
+            'type' => 'success',
+            'title' => 'Hapus Massal Berhasil',
+            'message' => "{$count} data terpilih telah berhasil dihapus.",
         ]);
         $this->clearSelected();
     }

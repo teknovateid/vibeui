@@ -52,6 +52,7 @@
 
 <div
     id="{{ $previewId }}"
+    data-toc-ignore
     x-data="{
         id: '{{ $previewId }}',
         tab: {{ $persist ? "window.VibePreview.getProp('{$previewId}', 'tab', '{$tab}')" : "'{$tab}'" }},

@@ -16,7 +16,6 @@ class DemoUsersTable extends VibeDataTableComponent
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc')
             ->setFooterStatus(true)
             ->setBulkActions([
                 'exportSelected' => 'Ekspor CSV',
