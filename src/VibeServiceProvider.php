@@ -4,6 +4,7 @@ namespace Teknovate\VibeUi;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Teknovate\VibeUi\Commands\LayoutCommand;
 use Teknovate\VibeUi\Commands\ComponentCommand;
@@ -12,6 +13,7 @@ use Teknovate\VibeUi\Commands\CleanCommand;
 use Teknovate\VibeUi\Commands\PageCommand;
 use Teknovate\VibeUi\Commands\CrudCommand;
 use Teknovate\VibeUi\Commands\InstallCommand;
+use Teknovate\VibeUi\Commands\TableMakeCommand;
 
 class VibeServiceProvider extends ServiceProvider
 {
@@ -54,6 +56,16 @@ class VibeServiceProvider extends ServiceProvider
         // Register anonymous component path for the 'vibe' namespace.
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
+
+        // Override livewire-tables views with Vibe UI custom theme views
+        $vibeDatatableViews = resource_path('views/vibe/datatable');
+        if (is_dir($vibeDatatableViews)) {
+            View::prependNamespace('livewire-tables', $vibeDatatableViews);
+        }
+        $packageDatatableViews = __DIR__.'/../resources/views/vibe/datatable';
+        if (is_dir($packageDatatableViews)) {
+            View::prependNamespace('livewire-tables', $packageDatatableViews);
+        }
 
         // Register custom @alert directive
         Blade::directive('vibeAlert', function ($expression) {
@@ -122,8 +134,8 @@ class VibeServiceProvider extends ServiceProvider
                         echo str_replace('<link ', '<link data-navigate-once ', str_replace('<style', '<style data-navigate-once', \$fonts));
                     } catch (\Throwable \$e) {}
                 }
-                \$prefix = config('vibe.prefix', 'vibe');
-                \$historyConfig = json_encode(config('vibe.history'));
+                \$prefix = \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
+                \$historyConfig = json_encode(\Illuminate\Support\Facades\Config::get('vibe.history'));
                 echo '<script>
                     (function() {
                         window.VIBE_PREFIX = \'' . \$prefix . '\';
@@ -271,6 +283,7 @@ class VibeServiceProvider extends ServiceProvider
                 PageCommand::class,
                 CrudCommand::class,
                 InstallCommand::class,
+                TableMakeCommand::class,
             ]);
         }
     }
