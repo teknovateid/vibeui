@@ -3,6 +3,9 @@
         ['name' => __('docs/index.breadcrumbs.home'), 'url' => '/'],
         ['name' => __('docs/index.breadcrumbs.docs'), 'url' => '/docs']
     ]" />
+
+
+
     <div>
         <div class="mb-6 flex justify-end rounded-full">
             <vibe:button @click="$dispatch('open-modal', 'test-modal')">

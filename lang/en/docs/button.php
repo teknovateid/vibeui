@@ -97,7 +97,39 @@ return [
         'sync' => 'Sync Livewire Action',
     ],
 
-    // Section 10: Props Reference
+    // Section 10: Button Group
+    'button_group' => [
+        'title' => 'Button Group',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.group&gt;</code> component attaches multiple buttons together into a cohesive visual unit. Inner button corners automatically flatten, borders collapse cleanly without doubling up, and active or focused buttons gracefully elevate their z-index above sibling elements.',
+        'preview_attached_title' => 'Attached Button Group',
+        'preview_padded_title' => 'Button Group with Padding (Padded Container)',
+        'preview_split_title' => 'Split Button with Dropdown',
+        'preview_pill_title' => 'Pill Button Group',
+        'preview_vertical_title' => 'Vertical Button Group',
+        'padded_active' => 'Active',
+        'padded_pending' => 'Pending',
+        'padded_completed' => 'Completed',
+        'segmented' => [
+            'daily' => 'Daily',
+            'weekly' => 'Weekly',
+            'monthly' => 'Monthly',
+            'yearly' => 'Yearly',
+        ],
+        'split' => [
+            'save' => 'Save Changes',
+            'save_draft' => 'Save as Draft',
+            'save_publish' => 'Save & Publish',
+        ],
+        'vertical' => [
+            'overview' => 'Overview',
+            'analytics' => 'Analytics',
+            'reports' => 'Reports',
+        ],
+        'props_title' => '<vibe:button.group> Props',
+        'props_desc' => 'Listing of attributes and properties accepted by the <code class="font-mono text-xs text-foreground">&lt;vibe:button.group&gt;</code> component.',
+    ],
+
+    // Section 11: Props Reference
     'props' => [
         'title' => 'Props Reference',
         'desc' => 'Complete list of attributes and properties supported by the <code class="font-mono text-xs text-foreground">&lt;vibe:button&gt;</code> component.',

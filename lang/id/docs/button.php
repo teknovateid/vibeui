@@ -97,7 +97,39 @@ return [
         'sync' => 'Sinkronisasi Aksi Livewire',
     ],
 
-    // Section 10: Props Reference
+    // Section 10: Button Group
+    'button_group' => [
+        'title' => 'Button Group',
+        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.group&gt;</code> menggabungkan beberapa tombol menjadi satu kesatuan visual yang kohesif. Sudut-sudut tombol di bagian tengah otomatis dibuat siku, border antar tombol tidak bertumpuk (border collapse), dan tombol yang di-hover atau di-fokus akan otomatis naik ke layer teratas (*z-index*).',
+        'preview_attached_title' => 'Grup Tombol Terhubung (Attached)',
+        'preview_padded_title' => 'Grup Tombol dengan Padding (Padded Container)',
+        'preview_split_title' => 'Split Button dengan Dropdown',
+        'preview_pill_title' => 'Grup Tombol Membulat (Pill)',
+        'preview_vertical_title' => 'Grup Tombol Vertikal',
+        'padded_active' => 'Aktif',
+        'padded_pending' => 'Tertunda',
+        'padded_completed' => 'Selesai',
+        'segmented' => [
+            'daily' => 'Harian',
+            'weekly' => 'Mingguan',
+            'monthly' => 'Bulanan',
+            'yearly' => 'Tahunan',
+        ],
+        'split' => [
+            'save' => 'Simpan Data',
+            'save_draft' => 'Simpan sebagai Draf',
+            'save_publish' => 'Simpan & Publikasikan',
+        ],
+        'vertical' => [
+            'overview' => 'Ringkasan',
+            'analytics' => 'Analitik',
+            'reports' => 'Laporan',
+        ],
+        'props_title' => 'Props <vibe:button.group>',
+        'props_desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button.group&gt;</code>.',
+    ],
+
+    // Section 11: Props Reference
     'props' => [
         'title' => 'Referensi Props',
         'desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button&gt;</code>.',

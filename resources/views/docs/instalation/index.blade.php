@@ -8,15 +8,18 @@
     <div class="mx-auto max-w-6xl space-y-10">
         <!-- Page Header -->
         <div class="space-y-2">
+
             <div class="flex items-center gap-2">
                 <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
                     {{ __('docs/instalation.badge') }}
                 </span>
                 <span class="text-xs text-muted-foreground">{{ __('docs/instalation.subtitle') }}</span>
             </div>
+
             <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">
                 {{ __('docs/instalation.title') }}
             </h1>
+
             <p class="text-base text-muted-foreground leading-relaxed">
                 {{ __('docs/instalation.description') }}
             </p>

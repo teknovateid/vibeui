@@ -40,13 +40,13 @@
 
                 <vibe:preview :title="__('docs/button.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:button>
-    {{ __('docs/button.basic_usage.default_btn') }}
-</vibe:button>
+                        <vibe:button>
+                            {{ __('docs/button.basic_usage.default_btn') }}
+                        </vibe:button>
 
-<vibe:button variant="primary">
-    {{ __('docs/button.basic_usage.primary_btn') }}
-</vibe:button>
+                        <vibe:button variant="primary">
+                            {{ __('docs/button.basic_usage.primary_btn') }}
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3">
                         <vibe:button>{{ __('docs/button.basic_usage.default_btn') }}</vibe:button>
@@ -66,23 +66,23 @@
 
                 <vibe:preview :title="__('docs/button.variants.preview_title')">
                     <vibe:preview.code>
-{{-- Core Variants --}}
-<vibe:button variant="default">{{ __('docs/button.variants.items.default') }}</vibe:button>
-<vibe:button variant="primary">{{ __('docs/button.variants.items.primary') }}</vibe:button>
-<vibe:button variant="secondary">{{ __('docs/button.variants.items.secondary') }}</vibe:button>
-<vibe:button variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
-<vibe:button variant="ghost">{{ __('docs/button.variants.items.ghost') }}</vibe:button>
-<vibe:button variant="surface">{{ __('docs/button.variants.items.surface') }}</vibe:button>
-<vibe:button variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
+                        {{-- Core Variants --}}
+                        <vibe:button variant="default">{{ __('docs/button.variants.items.default') }}</vibe:button>
+                        <vibe:button variant="primary">{{ __('docs/button.variants.items.primary') }}</vibe:button>
+                        <vibe:button variant="secondary">{{ __('docs/button.variants.items.secondary') }}</vibe:button>
+                        <vibe:button variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
+                        <vibe:button variant="ghost">{{ __('docs/button.variants.items.ghost') }}</vibe:button>
+                        <vibe:button variant="surface">{{ __('docs/button.variants.items.surface') }}</vibe:button>
+                        <vibe:button variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
 
-{{-- Feedback / Status Variants --}}
-<vibe:button variant="destructive">{{ __('docs/button.variants.items.destructive') }}</vibe:button>
-<vibe:button variant="success">{{ __('docs/button.variants.items.success') }}</vibe:button>
-<vibe:button variant="warning">{{ __('docs/button.variants.items.warning') }}</vibe:button>
-<vibe:button variant="info">{{ __('docs/button.variants.items.info') }}</vibe:button>
+                        {{-- Feedback / Status Variants --}}
+                        <vibe:button variant="destructive">{{ __('docs/button.variants.items.destructive') }}</vibe:button>
+                        <vibe:button variant="success">{{ __('docs/button.variants.items.success') }}</vibe:button>
+                        <vibe:button variant="warning">{{ __('docs/button.variants.items.warning') }}</vibe:button>
+                        <vibe:button variant="info">{{ __('docs/button.variants.items.info') }}</vibe:button>
 
-{{-- Link Variant --}}
-<vibe:button variant="link">{{ __('docs/button.variants.items.link') }}</vibe:button>
+                        {{-- Link Variant --}}
+                        <vibe:button variant="link">{{ __('docs/button.variants.items.link') }}</vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'accent', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
@@ -103,11 +103,11 @@
 
                 <vibe:preview :title="__('docs/button.sizes.preview_title')">
                     <vibe:preview.code>
-<vibe:button size="xs" variant="primary">Extra Small (xs)</vibe:button>
-<vibe:button size="sm" variant="primary">Small (sm)</vibe:button>
-<vibe:button size="md" variant="primary">Medium (md)</vibe:button>
-<vibe:button size="lg" variant="primary">Large (lg)</vibe:button>
-<vibe:button size="xl" variant="primary">Extra Large (xl)</vibe:button>
+                        <vibe:button size="xs" variant="primary">Extra Small (xs)</vibe:button>
+                        <vibe:button size="sm" variant="primary">Small (sm)</vibe:button>
+                        <vibe:button size="md" variant="primary">Medium (md)</vibe:button>
+                        <vibe:button size="lg" variant="primary">Large (lg)</vibe:button>
+                        <vibe:button size="xl" variant="primary">Extra Large (xl)</vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button size="xs" variant="primary">Extra Small (xs)</vibe:button>
@@ -130,45 +130,45 @@
 
                 <vibe:preview :title="__('docs/button.icons.preview_title')">
                     <vibe:preview.code>
-{{-- Leading Icon --}}
-<vibe:button variant="primary">
-    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-    </svg>
-    {{ __('docs/button.icons.download') }}
-</vibe:button>
+                        {{-- Leading Icon --}}
+                        <vibe:button variant="primary">
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="M12 5v14" />
+                            </svg>
+                            {{ __('docs/button.icons.download') }}
+                        </vibe:button>
 
-{{-- Trailing Icon --}}
-<vibe:button variant="outline">
-    {{ __('docs/button.icons.continue') }}
-    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="m12 5 7 7-7 7" />
-    </svg>
-</vibe:button>
+                        {{-- Trailing Icon --}}
+                        <vibe:button variant="outline">
+                            {{ __('docs/button.icons.continue') }}
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </vibe:button>
 
-{{-- Icon-Only Buttons (xs, sm, md, lg) --}}
-<vibe:button size="icon-xs" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
-    <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-</vibe:button>
-<vibe:button size="icon-sm" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
-    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-</vibe:button>
-<vibe:button size="icon-md" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
-    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-</vibe:button>
-<vibe:button size="icon-lg" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
-    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-</vibe:button>
+                        {{-- Icon-Only Buttons (xs, sm, md, lg) --}}
+                        <vibe:button size="icon-xs" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
+                            <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                            </svg>
+                        </vibe:button>
+                        <vibe:button size="icon-sm" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
+                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                            </svg>
+                        </vibe:button>
+                        <vibe:button size="icon-md" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                            </svg>
+                        </vibe:button>
+                        <vibe:button size="icon-lg" variant="secondary" aria-label="{{ __('docs/button.icons.filter') }}">
+                            <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                            </svg>
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button variant="primary">
@@ -222,18 +222,18 @@
 
                 <vibe:preview :title="__('docs/button.pill.preview_title')">
                     <vibe:preview.code>
-<vibe:button class="rounded-full" variant="primary">{{ __('docs/button.pill.popular') }}</vibe:button>
-<vibe:button class="rounded-full" variant="secondary">{{ __('docs/button.pill.explore') }}</vibe:button>
-<vibe:button class="rounded-full" variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
-<vibe:button class="rounded-full" variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
+                        <vibe:button class="rounded-full" variant="primary">{{ __('docs/button.pill.popular') }}</vibe:button>
+                        <vibe:button class="rounded-full" variant="secondary">{{ __('docs/button.pill.explore') }}</vibe:button>
+                        <vibe:button class="rounded-full" variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
+                        <vibe:button class="rounded-full" variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
 
-{{-- Circular Icon Button --}}
-<vibe:button class="rounded-full" size="icon-md" variant="primary" aria-label="Add Item">
-    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="M12 5v14" />
-    </svg>
-</vibe:button>
+                        {{-- Circular Icon Button --}}
+                        <vibe:button class="rounded-full" size="icon-md" variant="primary" aria-label="Add Item">
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="M12 5v14" />
+                            </svg>
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button class="rounded-full" variant="primary">{{ __('docs/button.pill.popular') }}</vibe:button>
@@ -261,16 +261,16 @@
 
                 <vibe:preview :title="__('docs/button.loading.preview_title')">
                     <vibe:preview.code>
-<vibe:button loading variant="primary">
-    {{ __('docs/button.loading.saving') }}
-</vibe:button>
+                        <vibe:button loading variant="primary">
+                            {{ __('docs/button.loading.saving') }}
+                        </vibe:button>
 
-<vibe:button loading variant="outline">
-    {{ __('docs/button.loading.deleting') }}
-</vibe:button>
+                        <vibe:button loading variant="outline">
+                            {{ __('docs/button.loading.deleting') }}
+                        </vibe:button>
 
-<vibe:button loading variant="secondary" size="icon-md" aria-label="Loading action">
-</vibe:button>
+                        <vibe:button loading variant="secondary" size="icon-md" aria-label="Loading action">
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button loading variant="primary">
@@ -296,14 +296,14 @@
 
                 <vibe:preview :title="__('docs/button.status.preview_title')">
                     <vibe:preview.code>
-{{-- Disabled Buttons --}}
-<vibe:button disabled variant="primary">{{ __('docs/button.status.disabled') }}</vibe:button>
-<vibe:button disabled variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
-<vibe:button disabled variant="destructive">{{ __('docs/button.variants.items.destructive') }}</vibe:button>
+                        {{-- Disabled Buttons --}}
+                        <vibe:button disabled variant="primary">{{ __('docs/button.status.disabled') }}</vibe:button>
+                        <vibe:button disabled variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
+                        <vibe:button disabled variant="destructive">{{ __('docs/button.variants.items.destructive') }}</vibe:button>
 
-{{-- HTML Form Button Types --}}
-<vibe:button type="submit" variant="primary">{{ __('docs/button.status.submit') }}</vibe:button>
-<vibe:button type="reset" variant="secondary">{{ __('docs/button.status.reset') }}</vibe:button>
+                        {{-- HTML Form Button Types --}}
+                        <vibe:button type="submit" variant="primary">{{ __('docs/button.status.submit') }}</vibe:button>
+                        <vibe:button type="reset" variant="secondary">{{ __('docs/button.status.reset') }}</vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button disabled variant="primary">{{ __('docs/button.status.disabled') }}</vibe:button>
@@ -326,18 +326,18 @@
 
                 <vibe:preview :title="__('docs/button.link.preview_title')">
                     <vibe:preview.code>
-{{-- Rendered as <a wire:navigate href="..."> --}}
-<vibe:button href="/docs" variant="primary">
-    {{ __('docs/button.link.docs') }}
-</vibe:button>
+                        {{-- Rendered as <a wire:navigate href="..."> --}}
+                        <vibe:button href="/docs" variant="primary">
+                            {{ __('docs/button.link.docs') }}
+                        </vibe:button>
 
-<vibe:button href="/docs/input" variant="outline">
-    Explore Input
-    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M5 12h14" />
-        <path d="m12 5 7 7-7 7" />
-    </svg>
-</vibe:button>
+                        <vibe:button href="/docs/input" variant="outline">
+                            Explore Input
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M5 12h14" />
+                                <path d="m12 5 7 7-7 7" />
+                            </svg>
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button href="/docs" variant="primary">
@@ -365,10 +365,10 @@
 
                 <vibe:preview :title="__('docs/button.livewire.preview_title')">
                     <vibe:preview.code>
-{{-- In Blade template --}}
-<vibe:button wire:click="save" wire:loading.attr="disabled" wire:target="save" variant="primary">
-    {{ __('docs/button.livewire.sync') }}
-</vibe:button>
+                        {{-- In Blade template --}}
+                        <vibe:button wire:click="save" wire:loading.attr="disabled" wire:target="save" variant="primary">
+                            {{ __('docs/button.livewire.sync') }}
+                        </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button variant="primary">
@@ -378,7 +378,203 @@
                 </vibe:preview>
             </section>
 
-            {{-- 10. Props Reference --}}
+            {{-- 10. Button Group --}}
+            <section id="button-group" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.button_group.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/button.button_group.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Example 1: Attached / Segmented Filter --}}
+                <vibe:preview :title="__('docs/button.button_group.preview_attached_title')">
+                    <vibe:preview.code>
+                        <vibe:button.group>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
+                            <vibe:button variant="primary">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.yearly') }}</vibe:button>
+                        </vibe:button.group>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center justify-center p-4">
+                        <vibe:button.group>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
+                            <vibe:button variant="primary">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
+                            <vibe:button variant="default">{{ __('docs/button.button_group.segmented.yearly') }}</vibe:button>
+                        </vibe:button.group>
+                    </div>
+                </vibe:preview>
+
+                {{-- Example 2: Padded Container (Segmented Track & Framed Panel) --}}
+                <vibe:preview :title="__('docs/button.button_group.preview_padded_title')">
+                    <vibe:preview.code>
+                        {{-- Segmented Track Style --}}
+                        <vibe:button.group :attached="false" class="p-1 bg-muted rounded-xl gap-1 border border-border">
+                            <vibe:button variant="ghost" size="sm" class="bg-card text-card-foreground shadow-2xs font-semibold">
+                                {{ __('docs/button.button_group.padded_active') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_pending') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_completed') }}
+                            </vibe:button>
+                        </vibe:button.group>
+
+                        {{-- Padded Pill Switcher --}}
+                        <vibe:button.group :attached="false" class="p-1 bg-muted rounded-full gap-1 border border-border">
+                            <vibe:button variant="primary" size="sm" class="rounded-full">
+                                {{ __('docs/button.button_group.padded_active') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="rounded-full text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_pending') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="rounded-full text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_completed') }}
+                            </vibe:button>
+                        </vibe:button.group>
+
+                        {{-- Padded Attached Toolbar Panel --}}
+                        <vibe:button.group class="p-1.5 bg-muted/60 rounded-xl border border-border">
+                            <vibe:button variant="default" size="sm">
+                                {{ __('docs/button.button_group.segmented.daily') }}
+                            </vibe:button>
+                            <vibe:button variant="primary" size="sm">
+                                {{ __('docs/button.button_group.segmented.weekly') }}
+                            </vibe:button>
+                            <vibe:button variant="default" size="sm">
+                                {{ __('docs/button.button_group.segmented.monthly') }}
+                            </vibe:button>
+                        </vibe:button.group>
+                    </vibe:preview.code>
+                    <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-6 p-6">
+                        {{-- Segmented Track Style --}}
+                        <vibe:button.group :attached="false" class="p-1 bg-muted rounded-xl gap-1 border border-border">
+                            <vibe:button variant="ghost" size="sm" class="bg-card text-card-foreground shadow-2xs font-semibold">
+                                {{ __('docs/button.button_group.padded_active') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_pending') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_completed') }}
+                            </vibe:button>
+                        </vibe:button.group>
+
+                        {{-- Padded Pill Switcher --}}
+                        <vibe:button.group :attached="false" class="p-1 bg-muted rounded-full gap-1 border border-border">
+                            <vibe:button variant="primary" size="sm" class="rounded-full">
+                                {{ __('docs/button.button_group.padded_active') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="rounded-full text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_pending') }}
+                            </vibe:button>
+                            <vibe:button variant="ghost" size="sm" class="rounded-full text-muted-foreground hover:text-foreground">
+                                {{ __('docs/button.button_group.padded_completed') }}
+                            </vibe:button>
+                        </vibe:button.group>
+
+                        {{-- Padded Attached Toolbar Panel --}}
+                        <vibe:button.group class="p-1.5 bg-muted/60 rounded-xl border border-border">
+                            <vibe:button variant="default" size="sm">
+                                {{ __('docs/button.button_group.segmented.daily') }}
+                            </vibe:button>
+                            <vibe:button variant="primary" size="sm">
+                                {{ __('docs/button.button_group.segmented.weekly') }}
+                            </vibe:button>
+                            <vibe:button variant="default" size="sm">
+                                {{ __('docs/button.button_group.segmented.monthly') }}
+                            </vibe:button>
+                        </vibe:button.group>
+                    </div>
+                </vibe:preview>
+
+                {{-- Example 3: Split Button with Dropdown Chevron --}}
+                <vibe:preview :title="__('docs/button.button_group.preview_split_title')">
+                    <vibe:preview.code>
+                        <vibe:button.group>
+                            <vibe:button variant="primary">
+                                <svg class="size-4 -ml-0.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                </svg>
+                                {{ __('docs/button.button_group.split.save') }}
+                            </vibe:button>
+                            <vibe:button variant="primary" size="icon-md" aria-label="More options">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </vibe:button>
+                        </vibe:button.group>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center justify-center p-4">
+                        <vibe:button.group>
+                            <vibe:button variant="primary">
+                                <svg class="size-4 -ml-0.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                                </svg>
+                                {{ __('docs/button.button_group.split.save') }}
+                            </vibe:button>
+                            <vibe:button variant="primary" size="icon-md" aria-label="More options">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </vibe:button>
+                        </vibe:button.group>
+                    </div>
+                </vibe:preview>
+
+                {{-- Example 3: Pill Style Group (rounded-full) --}}
+                <vibe:preview :title="__('docs/button.button_group.preview_pill_title')">
+                    <vibe:preview.code>
+                        <vibe:button.group class="rounded-full">
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
+                        </vibe:button.group>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center justify-center p-4">
+                        <vibe:button.group class="rounded-full">
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
+                            <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
+                        </vibe:button.group>
+                    </div>
+                </vibe:preview>
+
+                {{-- Example 4: Vertical Button Group --}}
+                <vibe:preview :title="__('docs/button.button_group.preview_vertical_title')">
+                    <vibe:preview.code>
+                        <vibe:button.group orientation="vertical" class="w-48">
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.overview') }}
+                            </vibe:button>
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.analytics') }}
+                            </vibe:button>
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.reports') }}
+                            </vibe:button>
+                        </vibe:button.group>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center justify-center p-4">
+                        <vibe:button.group orientation="vertical" class="w-48">
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.overview') }}
+                            </vibe:button>
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.analytics') }}
+                            </vibe:button>
+                            <vibe:button variant="default" class="w-full justify-start">
+                                {{ __('docs/button.button_group.vertical.reports') }}
+                            </vibe:button>
+                        </vibe:button.group>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 11. Props Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.props.title') }}</h2>
@@ -396,17 +592,33 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [
-                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'accent'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'],
-                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'],
-                                ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'],
-                                ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'],
-                                ['loading', 'bool', 'false', 'Menampilkan animasi spinner loading bawaan dan menonaktifkan klik.'],
-                                ['disabled', 'bool', 'false', 'Menonaktifkan tombol serta menerapkan pengurangan opasitas.'],
-                                ['class', 'string|null', 'null', 'Kelas Tailwind tambahan yang dimerge via `twMerge` (misal: `rounded-full` untuk gaya pill).']
-                            ];
+                            $props = [['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'accent'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'], ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'], ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'], ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'], ['loading', 'bool', 'false', 'Menampilkan animasi spinner loading bawaan dan menonaktifkan klik.'], ['disabled', 'bool', 'false', 'Menonaktifkan tombol serta menerapkan pengurangan opasitas.'], ['class', 'string|null', 'null', 'Kelas Tailwind tambahan yang dimerge via `twMerge` (misal: `rounded-full` untuk gaya pill).']];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- Button Group Props table --}}
+                <p class="text-sm font-semibold text-foreground pt-4">{{ __('docs/button.button_group.props_title') }}</p>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/button.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $groupProps = [['orientation', "'horizontal'|'vertical'", "'horizontal'", 'Orientasi penataan tombol di dalam grup.'], ['attached', 'bool', 'true', 'Jika true, border dan radius sudut tombol saling menempel tanpa celah.'], ['class', 'string|null', 'null', 'Kelas Tailwind tambahan (gunakan `rounded-full` untuk membuat grup membulat penuh).']];
+                        @endphp
+                        @foreach ($groupProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
