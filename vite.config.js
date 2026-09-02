@@ -111,6 +111,7 @@ export default defineConfig({
             fonts: [
                 bunny('Figtree', {
                     weights: [400, 500, 600, 700],
+                    display: 'swap',
                 }),
             ],
         }),
