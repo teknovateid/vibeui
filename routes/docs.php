@@ -20,3 +20,11 @@ Route::prefix('docs')->name('docs.')->group(function () {
     });
 
 });
+
+Route::get('/locale/{locale}', function (string $locale) {
+    if (in_array($locale, ['id', 'en'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('locale.switch');
+

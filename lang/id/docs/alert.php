@@ -1,48 +1,133 @@
 <?php
 
 return [
-    'title' => 'Alert',
+    'title' => 'Alert Dialog',
     'badge' => 'Komponen',
     'group' => 'Feedback & Notifikasi',
-    'description' => 'Komponen modal dialog dan notifikasi umpan balik penting dengan animasi halus, backdrop blur, dukungan audio sintesis Web Audio API, dialog konfirmasi interaktif, serta integrasi fleksibel via JavaScript vibeAlert, direktif Blade @vibeAlert, dan Livewire event dispatch.',
+    'description' => 'Komponen dialog peringatan modal/popup modern dengan animasi transisi halus, tata letak fleksibel, dialog konfirmasi interaktif, efek backdrop blur, audio feedback, dan persistensi state.',
 
     // Section 1: Basic Usage
-    'basic_usage_title' => 'Penggunaan Dasar',
-    'basic_usage_desc' => 'Pastikan tag penampung <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:alert /&gt;</code> sudah terpasang di layout utama (seperti <code class="font-mono text-xs text-foreground">base.blade.php</code>). Alert dapat dipicu secara instan melalui fungsi JavaScript <code class="font-mono text-xs text-foreground">vibeAlert(...)</code> atau Alpine event <code class="font-mono text-xs text-foreground">$dispatch(\'alert\', ...)</code>.',
+    'basic_usage' => [
+        'title' => 'Penggunaan Dasar & Tipe',
+        'desc' => 'Gunakan fungsi global <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">vibeAlert()</code> untuk memunculkan modal peringatan. Tersedia 4 tipe semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
+        'preview_title' => 'Tipe Alert Dialog',
+        'types' => [
+            'info' => [
+                'btn' => 'Info Alert',
+                'title' => 'Pembaruan Sistem',
+                'msg' => 'Fitur pembaruan versi 2.4 telah berhasil diaplikasikan ke sistem Anda.',
+            ],
+            'success' => [
+                'btn' => 'Success Alert',
+                'title' => 'Transaksi Berhasil',
+                'msg' => 'Pembayaran pesanan Anda telah diverifikasi oleh bank mitra.',
+            ],
+            'warning' => [
+                'btn' => 'Warning Alert',
+                'title' => 'Peringatan Akun',
+                'msg' => 'Masa aktif langganan Anda akan berakhir dalam 3 hari ke depan.',
+            ],
+            'error' => [
+                'btn' => 'Error Alert',
+                'title' => 'Autentikasi Gagal',
+                'msg' => 'Kombinasi email dan kata sandi yang Anda masukkan tidak cocok.',
+            ],
+        ],
+    ],
 
-    // Section 2: Confirmation Dialog
-    'confirm_title' => 'Dialog Konfirmasi (Confirm Modal)',
-    'confirm_desc' => 'Gunakan tipe <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">confirm</code> untuk meminta verifikasi sebelum tindakan penting atau destruktif dieksekusi. Dialog ini otomatis menampilkan backdrop overlay (<code class="font-mono text-xs text-foreground">blocking: true</code>) dan mematikan auto-dismiss (<code class="font-mono text-xs text-foreground">timeout: false</code>).',
+    // Section 2: Confirm Dialog
+    'confirm' => [
+        'title' => 'Dialog Konfirmasi Interaktif',
+        'desc' => 'Opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">buttons</code> memungkinkan Anda mendefinisikan tombol aksi konfirmasi dengan callback handler.',
+        'preview_title' => 'Dialog Konfirmasi Tindakan Penting',
+        'open_btn' => 'Hapus Berkas (Konfirmasi)',
+        'dialog_title' => 'Konfirmasi Penghapusan',
+        'dialog_msg' => 'Apakah Anda yakin ingin menghapus dokumen ini secara permanen?',
+        'yes_btn' => 'Ya, Hapus Sekarang',
+        'cancel_btn' => 'Batalkan',
+        'confirmed_title' => 'Dihapus',
+        'confirmed_msg' => 'Dokumen berhasil dihapus dari sistem.',
+        'cancelled_title' => 'Dibatalkan',
+        'cancelled_msg' => 'Tindakan penghapusan dibatalkan.',
+    ],
 
     // Section 3: Positions
-    'positions_title' => 'Pilihan Posisi (Positions)',
-    'positions_desc' => 'Alert mendukung 7 pilihan posisi penempatan: <code class="font-mono text-xs text-foreground">center</code> (default tengah layar), <code class="font-mono text-xs text-foreground">top-right</code>, <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">bottom-right</code>, <code class="font-mono text-xs text-foreground">bottom-left</code>, <code class="font-mono text-xs text-foreground">top-center</code>, dan <code class="font-mono text-xs text-foreground">bottom-center</code>.',
+    'positions' => [
+        'title' => 'Posisi Dialog Layar',
+        'desc' => 'Tersedia 7 pilihan posisi penempatan via prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">position</code>: <code class="font-mono text-xs text-foreground">center</code> (default), <code class="font-mono text-xs text-foreground">top-center</code>, <code class="font-mono text-xs text-foreground">bottom-center</code>, <code class="font-mono text-xs text-foreground">top-right</code>, <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">bottom-right</code>, dan <code class="font-mono text-xs text-foreground">bottom-left</code>.',
+        'preview_title' => 'Pilihan Posisi Alert',
+        'demo_title' => 'Posisi Dialog',
+        'demo_msg' => 'Dialog alert diposisikan pada :position.',
+        'items' => [
+            'center' => 'Tengah (Default)',
+            'top_center' => 'Atas Tengah',
+            'bottom_center' => 'Bawah Tengah',
+            'top_right' => 'Kanan Atas',
+            'top_left' => 'Kiri Atas',
+            'bottom_right' => 'Kanan Bawah',
+            'bottom_left' => 'Kiri Bawah',
+        ],
+    ],
 
-    // Section 4: Custom Buttons & Layout
-    'buttons_title' => 'Kustomisasi Tombol & Tata Letak',
-    'buttons_desc' => 'Sesuaikan label teks tombol, kelas Tailwind (<code class="font-mono text-xs text-foreground">class</code>), callback aksi saat diklik, serta orientasi tata letak tombol menggunakan <code class="font-mono text-xs text-foreground">buttonLayout: \'row\'|\'col\'</code>.',
+    // Section 4: Buttons Layout
+    'buttons' => [
+        'title' => 'Tata Letak Tombol (Row vs Col)',
+        'desc' => 'Gunakan opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">buttonLayout: "row" | "col"</code> untuk mengatur orientasi susunan tombol aksi.',
+        'preview_title' => 'Orientasi Tombol Aksi',
+        'row_btn' => 'Susunan Sejajar (Row)',
+        'col_btn' => 'Susunan Bertumpuk (Col)',
+        'row_title' => 'Simpan Perubahan?',
+        'row_msg' => 'Tombol aksi diatur berdampingan horizontal.',
+        'col_title' => 'Opsi Tindakan Lanjutan',
+        'col_msg' => 'Tombol aksi diatur bertumpuk vertikal.',
+    ],
 
     // Section 5: Sound & Timeout
-    'sound_title' => 'Efek Suara Audio & Durasi',
-    'sound_desc' => 'Tambahkan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: true</code> untuk membunyikan nada sintesis jernih via Web Audio API tanpa perlu file eksternal, atau berikan URL file audio kustom. Saat kursor mouse berada di atas alert, penghitung waktu auto-dismiss otomatis dihentikan sementara (pause on hover).',
+    'sound_timeout' => [
+        'title' => 'Efek Audio & Durasi Auto-Dismiss',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: "chime" | "pop"</code> untuk efek suara Web Audio API, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">timeout</code> untuk auto-close otomatis.',
+        'preview_title' => 'Uji Suara & Waktu Tunda',
+        'sound_btn' => 'Alert dengan Suara Chime',
+        'timeout_fast_btn' => 'Auto-Close 3 Detik',
+        'timeout_sticky_btn' => 'Tanpa Auto-Close (Sticky)',
+    ],
 
-    // Section 6: Background Blur
-    'blur_title' => 'Efek Background Blur',
-    'blur_desc' => 'Tingkatkan fokus visual pengguna pada alert dengan memberikan efek blur pada latar belakang backdrop. Mendukung opsi <code class="font-mono text-xs text-foreground">blur: true</code>, serta berbagai tingkat intensitas seperti <code class="font-mono text-xs text-foreground">\'xs\'</code>, <code class="font-mono text-xs text-foreground">\'sm\'</code>, <code class="font-mono text-xs text-foreground">\'md\'</code>, <code class="font-mono text-xs text-foreground">\'lg\'</code>, <code class="font-mono text-xs text-foreground">\'xl\'</code>, atau <code class="font-mono text-xs text-foreground">false / \'none\'</code> untuk mematikan blur.',
+    // Section 6: Backdrop Blur
+    'blur' => [
+        'title' => 'Backdrop Blur Kustom',
+        'desc' => 'Gunakan opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">blur: "sm" | "md" | "lg" | "none"</code> untuk efek blur latar belakang.',
+        'preview_title' => 'Efek Glassmorphism Backdrop Blur',
+        'open_btn' => 'Buka Alert dengan Blur Kuat (lg)',
+        'dialog_title' => 'Fokus Eksklusif',
+        'dialog_msg' => 'Latar belakang di-blur secara intens untuk fokus visual penuh.',
+    ],
 
-    // Section 7: Persist
-    'persist_title' => 'Persistensi Status Alert (Don\'t Show Again)',
-    'persist_desc' => 'Gunakan opsi <code class="font-mono text-xs text-foreground">persist: true</code> (atau key string kustom) untuk menyimpan status penutupan alert ke <code class="font-mono text-xs text-foreground">localStorage</code> (atau <code class="font-mono text-xs text-foreground">persist: \'session\'</code> untuk <code class="font-mono text-xs text-foreground">sessionStorage</code>). Sangat ideal untuk alert pengumuman, banner promo, atau onboarding agar tidak muncul berulang kali setelah ditutup oleh pengguna. Gunakan <code class="font-mono text-xs text-foreground">vibeAlert.reset(id)</code> untuk mereset status penyimpanan.',
+    // Section 7: Persist State
+    'persist' => [
+        'title' => 'Persistensi Dialog (LocalStorage)',
+        'desc' => 'Fitur <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">persist: true</code> menyimpan status dialog di LocalStorage agar tidak muncul kembali setelah ditutup pengguna.',
+        'preview_title' => 'Peringatan Sekali Tampil (Persist)',
+        'open_btn' => 'Buka Alert Persisten',
+        'reset_btn' => 'Reset Status LocalStorage',
+        'dialog_title' => 'Kebijakan Cookie & Privasi',
+        'dialog_msg' => 'Dialog ini hanya akan muncul satu kali. Jika Anda mengklik OK, dialog tidak akan muncul lagi.',
+    ],
 
-    // Section 6: Methods
-    'integration_title' => 'Metode Pemanggilan Alert',
-    'integration_desc' => 'Terdapat beberapa metode untuk memicu alert: fungsi JavaScript <code class="font-mono text-xs text-foreground">vibeAlert(...)</code>, direktif Blade <code class="font-mono text-xs text-foreground">@vibeAlert(...)</code>, dan event dispatch dari komponen Livewire.',
+    // Section 8: Integration Methods
+    'integration' => [
+        'title' => 'Metode Pemanggilan',
+        'desc' => 'Komponen alert dapat dipicu melalui berbagai metode fleksibel: helper JavaScript global, direktif Blade, atau event browser dari Livewire.',
+    ],
 
-    // Section 7: Props Reference
-    'props_title' => 'Referensi Props & Payload',
-    'props_desc' => 'Daftar lengkap atribut kontainer dan struktur parameter objek payload yang didukung oleh Alert.',
-    'table_prop' => 'Prop / Parameter',
-    'table_type' => 'Tipe',
-    'table_default' => 'Default',
-    'table_desc' => 'Deskripsi',
+    // Section 9: Props Reference
+    'props' => [
+        'title' => 'Referensi Opsi (Payload API)',
+        'desc' => 'Daftar lengkap konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeAlert(options)</code>.',
+        'columns' => [
+            'prop' => 'Opsi',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+    ],
 ];

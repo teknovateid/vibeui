@@ -1,48 +1,133 @@
 <?php
 
 return [
-    'title' => 'Alert',
+    'title' => 'Alert Dialog',
     'badge' => 'Component',
     'group' => 'Feedback & Notifications',
-    'description' => 'Modal dialog and important notification feedback component with smooth entrance animations, backdrop blur, Web Audio API sound effects, interactive confirmation dialogs, and flexible integration via JavaScript vibeAlert, Blade @vibeAlert directive, and Livewire event dispatching.',
+    'description' => 'Modern modal/popup alert dialog component with smooth transitions, flexible layouts, interactive confirmation workflows, glassmorphism backdrop blur, audio feedback, and state persistence.',
 
     // Section 1: Basic Usage
-    'basic_usage_title' => 'Basic Usage',
-    'basic_usage_desc' => 'Ensure the container tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:alert /&gt;</code> is placed in your primary layout (e.g. <code class="font-mono text-xs text-foreground">base.blade.php</code>). Alerts can be triggered instantly via the JavaScript function <code class="font-mono text-xs text-foreground">vibeAlert(...)</code> or Alpine event <code class="font-mono text-xs text-foreground">$dispatch(\'alert\', ...)</code>.',
+    'basic_usage' => [
+        'title' => 'Basic Usage & Types',
+        'desc' => 'Use the global JavaScript function <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">vibeAlert()</code> to trigger alert modals. 4 semantic types are available: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
+        'preview_title' => 'Alert Dialog Types',
+        'types' => [
+            'info' => [
+                'btn' => 'Info Alert',
+                'title' => 'System Update',
+                'msg' => 'Version 2.4 updates have been successfully deployed to your instance.',
+            ],
+            'success' => [
+                'btn' => 'Success Alert',
+                'title' => 'Transaction Completed',
+                'msg' => 'Your order payment has been successfully verified by the partner bank.',
+            ],
+            'warning' => [
+                'btn' => 'Warning Alert',
+                'title' => 'Subscription Warning',
+                'msg' => 'Your current subscription plan will expire in 3 days.',
+            ],
+            'error' => [
+                'btn' => 'Error Alert',
+                'title' => 'Authentication Failed',
+                'msg' => 'The email and password combination provided does not match our records.',
+            ],
+        ],
+    ],
 
-    // Section 2: Confirmation Dialog
-    'confirm_title' => 'Confirmation Dialog (Confirm Modal)',
-    'confirm_desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">confirm</code> type to request user verification before critical or destructive actions take place. This automatically displays a backdrop overlay (<code class="font-mono text-xs text-foreground">blocking: true</code>) and disables auto-dismiss (<code class="font-mono text-xs text-foreground">timeout: false</code>).',
+    // Section 2: Confirm Dialog
+    'confirm' => [
+        'title' => 'Interactive Confirmation Dialog',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">buttons</code> option enables you to specify custom action buttons with event callbacks.',
+        'preview_title' => 'Action Confirmation Dialog',
+        'open_btn' => 'Delete File (Confirm)',
+        'dialog_title' => 'Delete Confirmation',
+        'dialog_msg' => 'Are you sure you want to permanently delete this document?',
+        'yes_btn' => 'Yes, Delete Now',
+        'cancel_btn' => 'Cancel',
+        'confirmed_title' => 'Deleted',
+        'confirmed_msg' => 'Document was successfully removed from the system.',
+        'cancelled_title' => 'Cancelled',
+        'cancelled_msg' => 'Deletion action was aborted.',
+    ],
 
     // Section 3: Positions
-    'positions_title' => 'Available Positions',
-    'positions_desc' => 'Alert supports 7 layout placement positions: <code class="font-mono text-xs text-foreground">center</code> (default screen center), <code class="font-mono text-xs text-foreground">top-right</code>, <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">bottom-right</code>, <code class="font-mono text-xs text-foreground">bottom-left</code>, <code class="font-mono text-xs text-foreground">top-center</code>, and <code class="font-mono text-xs text-foreground">bottom-center</code>.',
+    'positions' => [
+        'title' => 'Screen Anchor Positions',
+        'desc' => 'Supports 7 anchor positions via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">position</code> option: <code class="font-mono text-xs text-foreground">center</code> (default), <code class="font-mono text-xs text-foreground">top-center</code>, <code class="font-mono text-xs text-foreground">bottom-center</code>, <code class="font-mono text-xs text-foreground">top-right</code>, <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">bottom-right</code>, and <code class="font-mono text-xs text-foreground">bottom-left</code>.',
+        'preview_title' => 'Alert Placement Positions',
+        'demo_title' => 'Position Dialog',
+        'demo_msg' => 'Alert dialog positioned at :position.',
+        'items' => [
+            'center' => 'Center (Default)',
+            'top_center' => 'Top Center',
+            'bottom_center' => 'Bottom Center',
+            'top_right' => 'Top Right',
+            'top_left' => 'Top Left',
+            'bottom_right' => 'Bottom Right',
+            'bottom_left' => 'Bottom Left',
+        ],
+    ],
 
-    // Section 4: Custom Buttons & Layout
-    'buttons_title' => 'Custom Buttons & Layout',
-    'buttons_desc' => 'Customize button text labels, Tailwind utility classes (<code class="font-mono text-xs text-foreground">class</code>), click action callbacks, and button orientation using <code class="font-mono text-xs text-foreground">buttonLayout: \'row\'|\'col\'</code>.',
+    // Section 4: Buttons Layout
+    'buttons' => [
+        'title' => 'Button Orientation (Row vs Col)',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">buttonLayout: "row" | "col"</code> option to arrange action buttons horizontally or stacked vertically.',
+        'preview_title' => 'Action Buttons Orientation',
+        'row_btn' => 'Horizontal Row',
+        'col_btn' => 'Vertical Column',
+        'row_title' => 'Save Changes?',
+        'row_msg' => 'Buttons are placed side-by-side horizontally.',
+        'col_title' => 'Advanced Action Choices',
+        'col_msg' => 'Buttons are stacked vertically on top of each other.',
+    ],
 
     // Section 5: Sound & Timeout
-    'sound_title' => 'Audio Sound Effects & Timeout',
-    'sound_desc' => 'Add <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: true</code> to play a clean synthesized tone via Web Audio API without requiring any external audio files, or provide a custom audio URL. Hovering your mouse over the alert temporarily pauses the auto-dismiss timer.',
+    'sound_timeout' => [
+        'title' => 'Audio Chimes & Auto-Dismiss Duration',
+        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: "chime" | "pop"</code> for browser Web Audio chimes, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">timeout</code> for auto-dismiss timers.',
+        'preview_title' => 'Audio & Duration Controls',
+        'sound_btn' => 'Alert with Audio Chime',
+        'timeout_fast_btn' => 'Auto-Close 3 Seconds',
+        'timeout_sticky_btn' => 'Sticky Alert (Persistent)',
+    ],
 
-    // Section 6: Background Blur
-    'blur_title' => 'Background Blur Effects',
-    'blur_desc' => 'Enhance visual focus on important alerts by applying a backdrop blur effect behind the modal card. Supports <code class="font-mono text-xs text-foreground">blur: true</code>, as well as intensity levels like <code class="font-mono text-xs text-foreground">\'xs\'</code>, <code class="font-mono text-xs text-foreground">\'sm\'</code>, <code class="font-mono text-xs text-foreground">\'md\'</code>, <code class="font-mono text-xs text-foreground">\'lg\'</code>, <code class="font-mono text-xs text-foreground">\'xl\'</code>, or <code class="font-mono text-xs text-foreground">false / \'none\'</code> to disable blur.',
+    // Section 6: Backdrop Blur
+    'blur' => [
+        'title' => 'Custom Backdrop Blur',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">blur: "sm" | "md" | "lg" | "none"</code> option for frosted glass backdrop blur intensity.',
+        'preview_title' => 'Glassmorphism Backdrop Blur',
+        'open_btn' => 'Open Alert with Intense Blur (lg)',
+        'dialog_title' => 'Exclusive Focus',
+        'dialog_msg' => 'The background is intensely blurred to keep focus entirely on this modal.',
+    ],
 
-    // Section 7: Persist
-    'persist_title' => 'Alert Persistence (Don\'t Show Again)',
-    'persist_desc' => 'Use <code class="font-mono text-xs text-foreground">persist: true</code> (or a custom string key) to save the alert dismissal state to <code class="font-mono text-xs text-foreground">localStorage</code> (or <code class="font-mono text-xs text-foreground">persist: \'session\'</code> for <code class="font-mono text-xs text-foreground">sessionStorage</code>). Perfect for announcement banners, promos, or onboarding alerts so they don\'t repeatedly pop up once dismissed. Use <code class="font-mono text-xs text-foreground">vibeAlert.reset(id)</code> to clear the stored state.',
+    // Section 7: Persist State
+    'persist' => [
+        'title' => 'Dialog Persistence (LocalStorage)',
+        'desc' => 'Enable <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">persist: true</code> to store dismissal state in LocalStorage so the dialog only shows once.',
+        'preview_title' => 'Show-Once Persist Alert',
+        'open_btn' => 'Open Persistent Alert',
+        'reset_btn' => 'Reset LocalStorage State',
+        'dialog_title' => 'Cookie & Privacy Policy',
+        'dialog_msg' => 'This alert dialog is shown only once. Once acknowledged, it will not appear again.',
+    ],
 
-    // Section 6: Methods
-    'integration_title' => 'Alert Trigger Methods',
-    'integration_desc' => 'Multiple trigger methods are supported: JavaScript function <code class="font-mono text-xs text-foreground">vibeAlert(...)</code>, Blade directive <code class="font-mono text-xs text-foreground">@vibeAlert(...)</code>, and Livewire component event dispatching.',
+    // Section 8: Integration Methods
+    'integration' => [
+        'title' => 'Invocation Methods',
+        'desc' => 'Alert modals can be triggered across various touchpoints: global JavaScript helper, Blade directive, or Livewire browser events.',
+    ],
 
-    // Section 7: Props Reference
-    'props_title' => 'Props & Payload Reference',
-    'props_desc' => 'Comprehensive reference of container attributes and payload object structure supported by the Alert component.',
-    'table_prop' => 'Prop / Parameter',
-    'table_type' => 'Type',
-    'table_default' => 'Default',
-    'table_desc' => 'Description',
+    // Section 9: Props Reference
+    'props' => [
+        'title' => 'Options Reference (API Payload)',
+        'desc' => 'Comprehensive listing of parameters accepted by <code class="font-mono text-xs text-foreground">vibeAlert(options)</code>.',
+        'columns' => [
+            'prop' => 'Option',
+            'type' => 'Type',
+            'default' => 'Default',
+            'desc' => 'Description',
+        ],
+    ],
 ];

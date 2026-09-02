@@ -29,11 +29,11 @@
                     1
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    {{ __('docs/instalation.step_1_title') }}
+                    {{ __('docs/instalation.steps.step_1.title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                {{ __('docs/instalation.step_1_desc') }}
+                {{ __('docs/instalation.steps.step_1.desc') }}
             </p>
             <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibe-ui" />
         </section>
@@ -45,14 +45,14 @@
                     2
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    {{ __('docs/instalation.step_2_title') }}
+                    {{ __('docs/instalation.steps.step_2.title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                {{ __('docs/instalation.step_2_desc') }}
+                {{ __('docs/instalation.steps.step_2.desc') }}
             </p>
             <vibe:highlightjs>
-                php artisan vibe:install
+php artisan vibe:install
             </vibe:highlightjs>
         </section>
 
@@ -63,15 +63,15 @@
                     3
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    {{ __('docs/instalation.step_3_title') }}
+                    {{ __('docs/instalation.steps.step_3.title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                {{ __('docs/instalation.step_3_desc') }}
+                {{ __('docs/instalation.steps.step_3.desc') }}
             </p>
             <vibe:highlightjs language="css" title="resources/css/app.css" :lineNumbers="true">
-                @import "tailwindcss";
-                @import "./vibe/custom-variant.css";
+@import "tailwindcss";
+@import "./vibe/custom-variant.css";
             </vibe:highlightjs>
         </section>
 
@@ -82,11 +82,11 @@
                     4
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    {{ __('docs/instalation.step_4_title') }}
+                    {{ __('docs/instalation.steps.step_4.title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                {!! __('docs/instalation.step_4_desc') !!}
+                {!! __('docs/instalation.steps.step_4.desc') !!}
             </p>
             @php
                 $baseLayoutCode = <<<'HTML'
@@ -125,23 +125,25 @@ HTML;
                     5
                 </div>
                 <h2 class="text-xl font-bold text-foreground">
-                    {{ __('docs/instalation.step_5_title') }}
+                    {{ __('docs/instalation.steps.step_5.title') }}
                 </h2>
             </div>
             <p class="text-sm text-muted-foreground">
-                {!! __('docs/instalation.step_5_desc') !!}
+                {!! __('docs/instalation.steps.step_5.desc') !!}
             </p>
             @php
-                $componentsExampleCode = <<<'HTML'
+                $saveBtn = __('docs/instalation.steps.step_5.btn_save');
+                $cancelBtn = __('docs/instalation.steps.step_5.btn_cancel');
+                $componentsExampleCode = <<<HTML
 <div class="p-6 space-y-4">
     <!-- Primary Button -->
     <vibe:button variant="primary">
-        Save Changes
+        {$saveBtn}
     </vibe:button>
 
     <!-- Outline Button -->
     <vibe:button variant="outline">
-        Cancel
+        {$cancelBtn}
     </vibe:button>
 
     <!-- Syntax Highlighter -->

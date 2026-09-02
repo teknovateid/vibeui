@@ -40,121 +40,100 @@
             {{-- 1. Basic Usage --}}
             <section id="penggunaan-dasar" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.basic_usage_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.basic_usage.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.basic_usage_desc') !!}
+                        {!! __('docs/alert.basic_usage.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Basic Alert Types">
+                <vibe:preview :title="__('docs/alert.basic_usage.preview_title')">
                     <vibe:preview.code>
-@verbatim
 {{-- 1. Info Alert --}}
 <vibe:button variant="info" size="sm" onclick="vibeAlert({
     type: 'info',
-    title: 'Informasi Sistem',
-    message: 'Pembaruan data selesai dilakukan secara otomatis.'
+    title: '{{ __('docs/alert.basic_usage.types.info.title') }}',
+    message: '{{ __('docs/alert.basic_usage.types.info.msg') }}'
 })">
-    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="12" y1="16" x2="12" y2="12" />
-        <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-    Info Alert
+    {{ __('docs/alert.basic_usage.types.info.btn') }}
 </vibe:button>
 
 {{-- 2. Success Alert --}}
 <vibe:button variant="success" size="sm" onclick="vibeAlert({
     type: 'success',
-    title: 'Transaksi Sukses',
-    message: 'Pesanan #VB-9821 telah berhasil diverifikasi dan diproses.'
+    title: '{{ __('docs/alert.basic_usage.types.success.title') }}',
+    message: '{{ __('docs/alert.basic_usage.types.success.msg') }}'
 })">
-    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-        <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-    Success Alert
+    {{ __('docs/alert.basic_usage.types.success.btn') }}
 </vibe:button>
 
 {{-- 3. Warning Alert --}}
 <vibe:button variant="warning" size="sm" onclick="vibeAlert({
     type: 'warning',
-    title: 'Peringatan Kapasitas',
-    message: 'Kapasitas penyimpanan server Anda saat ini tersisa 15%.'
+    title: '{{ __('docs/alert.basic_usage.types.warning.title') }}',
+    message: '{{ __('docs/alert.basic_usage.types.warning.msg') }}'
 })">
-    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-        <line x1="12" y1="9" x2="12" y2="13" />
-        <line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
-    Warning Alert
+    {{ __('docs/alert.basic_usage.types.warning.btn') }}
 </vibe:button>
 
 {{-- 4. Error Alert --}}
 <vibe:button variant="destructive" size="sm" onclick="vibeAlert({
     type: 'error',
-    title: 'Terjadi Kesalahan',
-    message: 'Gagal terhubung ke database. Silakan periksa koneksi Anda.'
+    title: '{{ __('docs/alert.basic_usage.types.error.title') }}',
+    message: '{{ __('docs/alert.basic_usage.types.error.msg') }}'
 })">
-    <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <line x1="15" y1="9" x2="9" y2="15" />
-        <line x1="9" y1="9" x2="15" y2="15" />
-    </svg>
-    Error Alert
+    {{ __('docs/alert.basic_usage.types.error.btn') }}
 </vibe:button>
-@endverbatim
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <vibe:button variant="info" size="sm" onclick="vibeAlert({
                                 type: 'info',
-                                title: 'Informasi Sistem',
-                                message: 'Pembaruan data selesai dilakukan secara otomatis.'
+                                title: '{{ __('docs/alert.basic_usage.types.info.title') }}',
+                                message: '{{ __('docs/alert.basic_usage.types.info.msg') }}'
                             })">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10" />
                                 <line x1="12" y1="16" x2="12" y2="12" />
                                 <line x1="12" y1="8" x2="12.01" y2="8" />
                             </svg>
-                            Info Alert
+                            {{ __('docs/alert.basic_usage.types.info.btn') }}
                         </vibe:button>
 
                         <vibe:button variant="success" size="sm" onclick="vibeAlert({
                                 type: 'success',
-                                title: 'Transaksi Sukses',
-                                message: 'Pesanan #VB-9821 telah berhasil diverifikasi dan diproses.'
+                                title: '{{ __('docs/alert.basic_usage.types.success.title') }}',
+                                message: '{{ __('docs/alert.basic_usage.types.success.msg') }}'
                             })">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                                 <polyline points="22 4 12 14.01 9 11.01" />
                             </svg>
-                            Success Alert
+                            {{ __('docs/alert.basic_usage.types.success.btn') }}
                         </vibe:button>
 
                         <vibe:button variant="warning" size="sm" onclick="vibeAlert({
                                 type: 'warning',
-                                title: 'Peringatan Kapasitas',
-                                message: 'Kapasitas penyimpanan server Anda saat ini tersisa 15%.'
+                                title: '{{ __('docs/alert.basic_usage.types.warning.title') }}',
+                                message: '{{ __('docs/alert.basic_usage.types.warning.msg') }}'
                             })">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
                                 <line x1="12" y1="9" x2="12" y2="13" />
                                 <line x1="12" y1="17" x2="12.01" y2="17" />
                             </svg>
-                            Warning Alert
+                            {{ __('docs/alert.basic_usage.types.warning.btn') }}
                         </vibe:button>
 
                         <vibe:button variant="destructive" size="sm" onclick="vibeAlert({
                                 type: 'error',
-                                title: 'Terjadi Kesalahan',
-                                message: 'Gagal terhubung ke database. Silakan periksa koneksi Anda.'
+                                title: '{{ __('docs/alert.basic_usage.types.error.title') }}',
+                                message: '{{ __('docs/alert.basic_usage.types.error.msg') }}'
                             })">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10" />
                                 <line x1="15" y1="9" x2="9" y2="15" />
                                 <line x1="9" y1="9" x2="15" y2="15" />
                             </svg>
-                            Error Alert
+                            {{ __('docs/alert.basic_usage.types.error.btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -163,91 +142,54 @@
             {{-- 2. Confirmation Dialog --}}
             <section id="dialog-konfirmasi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.confirm_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.confirm.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.confirm_desc') !!}
+                        {!! __('docs/alert.confirm.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Confirmation Modal Dialog">
+                <vibe:preview :title="__('docs/alert.confirm.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- Destructive Confirm --}}
 <vibe:button variant="destructive" onclick="vibeAlert({
     type: 'confirm',
-    title: 'Hapus Akun Pengguna?',
-    message: 'Semua data transaksi dan riwayat pengguna akan dihapus permanen dari server.',
+    title: '{{ __('docs/alert.confirm.dialog_title') }}',
+    message: '{{ __('docs/alert.confirm.dialog_msg') }}',
     confirmButton: {
-        text: 'Ya, Hapus Akun',
+        text: '{{ __('docs/alert.confirm.yes_btn') }}',
         class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         action: () => {
             vibeAlert({
                 type: 'success',
-                title: 'Akun Dihapus',
-                message: 'Akun pengguna telah dinonaktifkan secara permanen.'
+                title: '{{ __('docs/alert.confirm.confirmed_title') }}',
+                message: '{{ __('docs/alert.confirm.confirmed_msg') }}'
             });
         }
     },
     closeButton: {
-        text: 'Batal'
+        text: '{{ __('docs/alert.confirm.cancel_btn') }}'
     }
 })">
-    <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 6h18" />
-        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
-        <line x1="10" y1="11" x2="10" y2="17" />
-        <line x1="14" y1="11" x2="14" y2="17" />
-    </svg>
-    Hapus Akun (Destructive Confirm)
+    {{ __('docs/alert.confirm.open_btn') }}
 </vibe:button>
-
-{{-- Standard Confirm --}}
-<vibe:button variant="outline" onclick="vibeAlert({
-    type: 'confirm',
-    title: 'Publikasikan Artikel?',
-    message: 'Artikel ini akan dapat diakses oleh publik di website resmi.',
-    confirmButton: {
-        text: 'Publikasikan Sekarang',
-        action: () => {
-            vibeAlert({
-                type: 'success',
-                title: 'Berhasil Dipublikasikan',
-                message: 'Artikel Anda sudah aktif dan dapat dibaca publik.'
-            });
-        }
-    },
-    closeButton: {
-        text: 'Simpan Draf'
-    }
-})">
-    <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-        <polyline points="16 6 12 2 8 6" />
-        <line x1="12" y1="2" x2="12" y2="15" />
-    </svg>
-    Publikasikan (Standard Confirm)
-</vibe:button>
-@endverbatim
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-4">
                         <vibe:button variant="destructive" onclick="vibeAlert({
                                 type: 'confirm',
-                                title: 'Hapus Akun Pengguna?',
-                                message: 'Semua data transaksi dan riwayat pengguna akan dihapus permanen dari server.',
+                                title: '{{ __('docs/alert.confirm.dialog_title') }}',
+                                message: '{{ __('docs/alert.confirm.dialog_msg') }}',
                                 confirmButton: {
-                                    text: 'Ya, Hapus Akun',
+                                    text: '{{ __('docs/alert.confirm.yes_btn') }}',
                                     class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
                                     action: () => {
                                         vibeAlert({
                                             type: 'success',
-                                            title: 'Akun Dihapus',
-                                            message: 'Akun pengguna telah dinonaktifkan secara permanen.'
+                                            title: '{{ __('docs/alert.confirm.confirmed_title') }}',
+                                            message: '{{ __('docs/alert.confirm.confirmed_msg') }}'
                                         });
                                     }
                                 },
                                 closeButton: {
-                                    text: 'Batal'
+                                    text: '{{ __('docs/alert.confirm.cancel_btn') }}'
                                 }
                             })">
                             <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -257,33 +199,7 @@
                                 <line x1="10" y1="11" x2="10" y2="17" />
                                 <line x1="14" y1="11" x2="14" y2="17" />
                             </svg>
-                            Hapus Akun (Destructive Confirm)
-                        </vibe:button>
-
-                        <vibe:button variant="outline" onclick="vibeAlert({
-                                type: 'confirm',
-                                title: 'Publikasikan Artikel?',
-                                message: 'Artikel ini akan dapat diakses oleh publik di website resmi.',
-                                confirmButton: {
-                                    text: 'Publikasikan Sekarang',
-                                    action: () => {
-                                        vibeAlert({
-                                            type: 'success',
-                                            title: 'Berhasil Dipublikasikan',
-                                            message: 'Artikel Anda sudah aktif dan dapat dibaca publik.'
-                                        });
-                                    }
-                                },
-                                closeButton: {
-                                    text: 'Simpan Draf'
-                                }
-                            })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" />
-                                <polyline points="16 6 12 2 8 6" />
-                                <line x1="12" y1="2" x2="12" y2="15" />
-                            </svg>
-                            Publikasikan (Standard Confirm)
+                            {{ __('docs/alert.confirm.open_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -292,57 +208,32 @@
             {{-- 3. Positions --}}
             <section id="pilihan-posisi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.positions_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.positions.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.positions_desc') !!}
+                        {!! __('docs/alert.positions.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Alert Placement Positions">
+                <vibe:preview :title="__('docs/alert.positions.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- Pilihan Posisi Alert --}}
-vibeAlert({ position: 'top-right', type: 'info', message: 'Muncul di pojok kanan atas.' });
-vibeAlert({ position: 'top-center', type: 'info', message: 'Muncul di bagian tengah atas.' });
-vibeAlert({ position: 'top-left', type: 'info', message: 'Muncul di pojok kiri atas.' });
-vibeAlert({ position: 'center', type: 'info', message: 'Muncul di tengah layar (default).' });
-vibeAlert({ position: 'bottom-right', type: 'info', message: 'Muncul di pojok kanan bawah.' });
-vibeAlert({ position: 'bottom-center', type: 'info', message: 'Muncul di bagian tengah bawah.' });
-vibeAlert({ position: 'bottom-left', type: 'info', message: 'Muncul di pojok kiri bawah.' });
-@endverbatim
+vibeAlert({ position: 'top-right', type: 'info', message: 'Alert di pojok kanan atas.' });
+vibeAlert({ position: 'center', type: 'info', message: 'Alert di tengah layar.' });
+vibeAlert({ position: 'bottom-right', type: 'info', message: 'Alert di pojok kanan bawah.' });
                     </vibe:preview.code>
                     <div class="w-full max-w-md mx-auto grid grid-cols-3 gap-2">
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'top-left', type: 'info', title: 'Top Left', message: 'Alert berada di sudut kiri atas layar.' })">
-                            Top Left
-                        </vibe:button>
-
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'top-center', type: 'info', title: 'Top Center', message: 'Alert berada di bagian tengah atas layar.' })">
-                            Top Center
-                        </vibe:button>
-
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'top-right', type: 'info', title: 'Top Right', message: 'Alert berada di sudut kanan atas layar.' })">
-                            Top Right
-                        </vibe:button>
-
-                        <div></div>
-
-                        <vibe:button size="sm" variant="primary" onclick="vibeAlert({ position: 'center', type: 'info', title: 'Center', message: 'Alert berada di tengah layar secara terpusat.' })">
-                            Center
-                        </vibe:button>
-
-                        <div></div>
-
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'bottom-left', type: 'info', title: 'Bottom Left', message: 'Alert berada di sudut kiri bawah layar.' })">
-                            Bottom Left
-                        </vibe:button>
-
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'bottom-center', type: 'info', title: 'Bottom Center', message: 'Alert berada di bagian tengah bawah layar.' })">
-                            Bottom Center
-                        </vibe:button>
-
-                        <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: 'bottom-right', type: 'info', title: 'Bottom Right', message: 'Alert berada di sudut kanan bawah layar.' })">
-                            Bottom Right
-                        </vibe:button>
+                        @foreach (['top-left' => 'top_left', 'top-center' => 'top_center', 'top-right' => 'top_right', 'center' => 'center', 'bottom-left' => 'bottom_left', 'bottom-center' => 'bottom_center', 'bottom-right' => 'bottom_right'] as $pos => $key)
+                            @if ($pos === 'center')
+                                <div></div>
+                                <vibe:button size="sm" variant="primary" onclick="vibeAlert({ position: 'center', type: 'info', title: '{{ __('docs/alert.positions.demo_title') }}', message: '{{ __('docs/alert.positions.demo_msg', ['position' => 'Center']) }}' })">
+                                    {{ __('docs/alert.positions.items.center') }}
+                                </vibe:button>
+                                <div></div>
+                            @else
+                                <vibe:button size="sm" variant="outline" onclick="vibeAlert({ position: '{{ $pos }}', type: 'info', title: '{{ __('docs/alert.positions.demo_title') }}', message: '{{ __('docs/alert.positions.demo_msg', ['position' => $pos]) }}' })">
+                                    {{ __('docs/alert.positions.items.' . $key) }}
+                                </vibe:button>
+                            @endif
+                        @endforeach
                     </div>
                 </vibe:preview>
             </section>
@@ -350,69 +241,53 @@ vibeAlert({ position: 'bottom-left', type: 'info', message: 'Muncul di pojok kir
             {{-- 4. Custom Buttons & Layout --}}
             <section id="kustomisasi-tombol" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.buttons_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.buttons.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.buttons_desc') !!}
+                        {!! __('docs/alert.buttons.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Button Layouts & Styling">
+                <vibe:preview :title="__('docs/alert.buttons.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- 1. Tata Letak Tombol Bertumpuk Vertikal (Column) --}}
-vibeAlert({
-    type: 'info',
-    title: 'Tingkatkan Paket Langganan',
-    message: 'Dapatkan akses tak terbatas ke semua template dan komponen premium.',
-    buttonLayout: 'col',
-    confirmButton: {
-        text: 'Upgrade ke Paket Pro ($19/bln)',
-        class: 'bg-primary text-primary-foreground hover:bg-primary/90'
-    },
-    closeButton: {
-        text: 'Lanjutkan dengan Paket Gratis',
-        class: 'border-transparent bg-transparent hover:bg-muted text-muted-foreground shadow-none'
-    }
-});
-
-{{-- 2. Tata Letak Tombol Berdampingan (Row) --}}
+{{-- Layout Row --}}
 vibeAlert({
     type: 'warning',
-    title: 'Simpan Perubahan?',
-    message: 'Terdapat perubahan dokumen yang belum tersimpan di server.',
+    title: '{{ __('docs/alert.buttons.row_title') }}',
+    message: '{{ __('docs/alert.buttons.row_msg') }}',
     buttonLayout: 'row',
-    confirmButton: { text: 'Simpan Dokumen' },
-    closeButton: { text: 'Abaikan' }
+    confirmButton: { text: 'OK' }
 });
-@endverbatim
+
+{{-- Layout Column --}}
+vibeAlert({
+    type: 'info',
+    title: '{{ __('docs/alert.buttons.col_title') }}',
+    message: '{{ __('docs/alert.buttons.col_msg') }}',
+    buttonLayout: 'col',
+    confirmButton: { text: 'Action 1' },
+    closeButton: { text: 'Action 2' }
+});
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <vibe:button variant="secondary" onclick="vibeAlert({
-                                type: 'info',
-                                title: 'Tingkatkan Paket Langganan',
-                                message: 'Dapatkan akses tak terbatas ke seluruh koleksi komponen, layout, dan template premium Vibe UI.',
-                                buttonLayout: 'col',
-                                confirmButton: {
-                                    text: 'Upgrade ke Paket Pro ($19/bln)',
-                                    class: 'bg-primary text-primary-foreground hover:bg-primary/90 py-2 text-sm'
-                                },
-                                closeButton: {
-                                    text: 'Lanjutkan dengan Paket Gratis',
-                                    class: 'border-transparent bg-transparent hover:bg-muted text-muted-foreground shadow-none hover:underline text-xs'
-                                }
+                                type: 'warning',
+                                title: '{{ __('docs/alert.buttons.row_title') }}',
+                                message: '{{ __('docs/alert.buttons.row_msg') }}',
+                                buttonLayout: 'row',
+                                confirmButton: { text: 'OK' }
                             })">
-                            Tata Letak Tombol Column (Stacked)
+                            {{ __('docs/alert.buttons.row_btn') }}
                         </vibe:button>
 
                         <vibe:button variant="secondary" onclick="vibeAlert({
-                                type: 'warning',
-                                title: 'Simpan Perubahan?',
-                                message: 'Terdapat perubahan formulir yang belum disimpan ke database.',
-                                buttonLayout: 'row',
-                                confirmButton: { text: 'Simpan Formulir' },
-                                closeButton: { text: 'Abaikan' }
+                                type: 'info',
+                                title: '{{ __('docs/alert.buttons.col_title') }}',
+                                message: '{{ __('docs/alert.buttons.col_msg') }}',
+                                buttonLayout: 'col',
+                                confirmButton: { text: 'Action 1' },
+                                closeButton: { text: 'Action 2' }
                             })">
-                            Tata Letak Tombol Row (Side-by-side)
+                            {{ __('docs/alert.buttons.col_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -421,46 +296,22 @@ vibeAlert({
             {{-- 5. Sound & Timeout --}}
             <section id="audio-dan-durasi" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.sound_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.sound_timeout.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.sound_desc') !!}
+                        {!! __('docs/alert.sound_timeout.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Audio Feedback & Timeout Control">
+                <vibe:preview :title="__('docs/alert.sound_timeout.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- 1. Alert dengan Audio Sintesis Bawaan --}}
-vibeAlert({
-    type: 'success',
-    title: 'Berhasil dengan Suara',
-    message: 'Alert ini berbunyi menggunakan Web Audio API tanpa file tambahan.',
-    sound: true
-});
-
-{{-- 2. Alert Persisten (Tanpa Auto-dismiss) --}}
-vibeAlert({
-    type: 'warning',
-    title: 'Pemberitahuan Wajib Baca',
-    message: 'Alert ini tidak akan tertutup otomatis sampai tombol diklik.',
-    timeout: false,
-    confirmButton: { text: 'Saya Mengerti' }
-});
-
-{{-- 3. Durasi Kustom (6 Detik) --}}
-vibeAlert({
-    type: 'info',
-    title: 'Durasi Panjang',
-    message: 'Alert ini tampil selama 6000 milidetik (6 detik).',
-    timeout: 6000
-});
-@endverbatim
+vibeAlert({ type: 'success', title: 'Audio Beep', message: 'Sound played.', sound: true });
+vibeAlert({ type: 'warning', title: 'Sticky Alert', message: 'Persistent alert.', timeout: false });
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <vibe:button variant="outline" onclick="vibeAlert({
                                 type: 'success',
-                                title: 'Audio Beep Berhasil',
-                                message: 'Nada audio dihasilkan via Web Audio API browser secara instan.',
+                                title: 'Audio Beep',
+                                message: 'Sound played via Web Audio API.',
                                 sound: true
                             })">
                             <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -468,21 +319,17 @@ vibeAlert({
                                 <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
                                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
                             </svg>
-                            Uji Efek Suara (Sound: true)
+                            {{ __('docs/alert.sound_timeout.sound_btn') }}
                         </vibe:button>
 
                         <vibe:button variant="outline" onclick="vibeAlert({
                                 type: 'warning',
-                                title: 'Peringatan Persisten',
-                                message: 'Alert ini memiliki timeout: false dan hanya akan tertutup saat tombol diklik.',
+                                title: 'Sticky Alert',
+                                message: 'Alert persistent timeout: false.',
                                 timeout: false,
-                                confirmButton: { text: 'Tutup Alert' }
+                                confirmButton: { text: 'Close' }
                             })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <polyline points="12 6 12 12 16 14" />
-                            </svg>
-                            Alert Persisten (Timeout: false)
+                            {{ __('docs/alert.sound_timeout.timeout_sticky_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -491,90 +338,30 @@ vibeAlert({
             {{-- 6. Background Blur Options --}}
             <section id="background-blur" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.blur_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.blur.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.blur_desc') !!}
+                        {!! __('docs/alert.blur.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Backdrop Blur Intensity Options">
+                <vibe:preview :title="__('docs/alert.blur.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- 1. Backdrop Blur Sedang (blur: 'md') --}}
-vibeAlert({
-    type: 'info',
-    title: 'Backdrop Blur Sedang (MD)',
-    message: 'Latar belakang diburamkan dengan efek blur sedang (backdrop-blur-md).',
-    blur: 'md',
-    timeout: 5000,
-    confirmButton: { text: 'Tutup' }
-});
-
-{{-- 2. Backdrop Blur Kuat (blur: 'lg') --}}
 vibeAlert({
     type: 'confirm',
-    title: 'Backdrop Blur Kuat (LG)',
-    message: 'Latar belakang diburamkan secara intensif untuk dialog konfirmasi penting.',
-    blur: 'lg',
-    confirmButton: { text: 'Lanjutkan' },
-    closeButton: { text: 'Batal' }
+    title: '{{ __('docs/alert.blur.dialog_title') }}',
+    message: '{{ __('docs/alert.blur.dialog_msg') }}',
+    blur: 'lg'
 });
-
-{{-- 3. Tanpa Efek Blur (blur: false) --}}
-vibeAlert({
-    type: 'confirm',
-    title: 'Tanpa Blur (None)',
-    message: 'Backdrop overlay gelap standar tanpa filter blur.',
-    blur: false,
-    confirmButton: { text: 'Oke' },
-    closeButton: { text: 'Batal' }
-});
-@endverbatim
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <vibe:button variant="secondary" onclick="vibeAlert({
-                                type: 'info',
-                                title: 'Backdrop Blur Sedang (MD)',
-                                message: 'Latar belakang diburamkan dengan efek blur sedang (backdrop-blur-md).',
-                                blur: 'md',
-                                timeout: 5000,
-                                position:'center',
-                                confirmButton: { text: 'Tutup' }
-                            })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <path d="m4.93 4.93 4.24 4.24" />
-                                <path d="m14.83 9.17 4.24-4.24" />
-                                <path d="m14.83 14.83 4.24 4.24" />
-                                <path d="m9.17 14.83-4.24 4.24" />
-                            </svg>
-                            Blur Sedang (blur: 'md')
-                        </vibe:button>
-
-                        <vibe:button variant="secondary" onclick="vibeAlert({
                                 type: 'confirm',
-                                title: 'Backdrop Blur Kuat (LG)',
-                                message: 'Latar belakang diburamkan secara intensif untuk dialog konfirmasi penting.',
+                                title: '{{ __('docs/alert.blur.dialog_title') }}',
+                                message: '{{ __('docs/alert.blur.dialog_msg') }}',
                                 blur: 'lg',
-                                confirmButton: { text: 'Lanjutkan' },
-                                closeButton: { text: 'Batal' }
+                                confirmButton: { text: 'OK' }
                             })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10" />
-                                <circle cx="12" cy="12" r="4" />
-                            </svg>
-                            Blur Kuat (blur: 'lg')
-                        </vibe:button>
-
-                        <vibe:button variant="outline" onclick="vibeAlert({
-                                type: 'confirm',
-                                title: 'Tanpa Blur (None)',
-                                message: 'Backdrop overlay gelap standar tanpa filter blur.',
-                                blur: false,
-                                confirmButton: { text: 'Oke' },
-                                closeButton: { text: 'Batal' }
-                            })">
-                            Tanpa Blur (blur: false)
+                            {{ __('docs/alert.blur.open_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -583,65 +370,37 @@ vibeAlert({
             {{-- 7. Persist Option --}}
             <section id="persistensi-alert" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.persist_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.persist.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.persist_desc') !!}
+                        {!! __('docs/alert.persist.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Alert Persistence & Don't Show Again">
+                <vibe:preview :title="__('docs/alert.persist.preview_title')">
                     <vibe:preview.code>
-@verbatim
-{{-- 1. Alert Pengumuman Sekali Tampil (Disimpan ke localStorage) --}}
 vibeAlert({
-    id: 'promo-ramadhan',
+    id: 'demo-persist-alert',
     persist: true,
     type: 'info',
-    title: 'Promo Spesial Ramadhan',
-    message: 'Gunakan voucher VIBE50 untuk potongan harga 50%. Jika ditutup, alert ini tidak akan muncul lagi.',
-    confirmButton: { text: 'Klaim Promo' },
-    closeButton: { text: 'Tutup' }
+    title: '{{ __('docs/alert.persist.dialog_title') }}',
+    message: '{{ __('docs/alert.persist.dialog_msg') }}'
 });
-
-{{-- 2. Menggunakan Key String Langsung --}}
-vibeAlert({
-    persist: 'onboarding-tour-v2',
-    type: 'success',
-    title: 'Fitur Baru Tersedia!',
-    message: 'Kini Anda dapat mengatur tema warna kustom langsung dari dashboard.'
-});
-
-{{-- 3. Reset Status Persist (Untuk Keperluan Testing) --}}
-vibeAlert.reset('promo-ramadhan'); // Reset alert tertentu
-vibeAlert.reset();                 // Reset seluruh alert
-@endverbatim
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
                         <vibe:button variant="secondary" onclick="vibeAlert({
-                                id: 'demo-persist-banner',
+                                id: 'demo-persist-alert',
                                 persist: true,
                                 type: 'info',
-                                title: 'Pengumuman Penting (Persist)',
-                                message: 'Status alert disimpan sebagai open di storage. Coba refresh halaman (F5), alert ini akan tetap tampil kembali sampai Anda menutupnya!',
+                                title: '{{ __('docs/alert.persist.dialog_title') }}',
+                                message: '{{ __('docs/alert.persist.dialog_msg') }}',
                                 timeout: false,
-                                confirmButton: { text: 'Tutup Alert' }
+                                confirmButton: { text: 'OK' }
                             })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-                                <polyline points="17 21 17 13 7 13 7 21" />
-                                <polyline points="7 3 7 8 15 8" />
-                            </svg>
-                            Tampilkan Alert (Persist: true)
+                            {{ __('docs/alert.persist.open_btn') }}
                         </vibe:button>
 
-                        <vibe:button variant="outline" onclick="vibeAlert.reset('demo-persist-banner'); vibeAlert({ type: 'success', title: 'Status Direset!', message: 'Penyimpanan untuk demo-persist-banner telah dihapus. Silakan klik tombol pertama lagi.' })">
-                            <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
-                                <path d="M21 3v5h-5" />
-                                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
-                                <path d="M8 16H3v5" />
-                            </svg>
-                            Reset Status Persist
+                        <vibe:button variant="outline" onclick="vibeAlert.reset('demo-persist-alert'); vibeAlert({ type: 'success', title: 'Reset', message: 'Storage reset.' })">
+                            {{ __('docs/alert.persist.reset_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -650,9 +409,9 @@ vibeAlert.reset();                 // Reset seluruh alert
             {{-- 8. Integration Methods --}}
             <section id="metode-pemanggilan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.integration_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.integration.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.integration_desc') !!}
+                        {!! __('docs/alert.integration.desc') !!}
                     </p>
                 </div>
 
@@ -708,19 +467,16 @@ vibeAlert.reset();                 // Reset seluruh alert
                         PHP;
                     @endphp
 
-                    {{-- Method 1: JavaScript vibeAlert --}}
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">1. JavaScript Function (vibeAlert)</p>
                         <vibe:highlightjs language="javascript" title="app.js / script" :code="$jsSnippet" />
                     </div>
 
-                    {{-- Method 2: Blade Directive (@vibeAlert) --}}
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">2. Blade Directive (&#64;vibeAlert)</p>
                         <vibe:highlightjs language="html" title="resources/views/pages/dashboard.blade.php" :code="$bladeSnippet" />
                     </div>
 
-                    {{-- Method 3: Livewire Component Dispatch --}}
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">3. Livewire Component Event Dispatch</p>
                         <vibe:highlightjs language="php" title="app/Livewire/UserManager.php" :code="$livewireSnippet" />
@@ -731,9 +487,9 @@ vibeAlert.reset();                 // Reset seluruh alert
             {{-- 7. Props Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.props_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.props.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/alert.props_desc') !!}
+                        {!! __('docs/alert.props.desc') !!}
                     </p>
                 </div>
 
@@ -744,15 +500,22 @@ vibeAlert.reset();                 // Reset seluruh alert
                         <table class="w-full text-left text-xs">
                             <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                                 <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/alert.table_desc') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/alert.props.columns.desc') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-border text-muted-foreground">
                                 @php
-                                    $containerProps = [['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", 'Posisi penempatan default container notifikasi alert pada layar.'], ['align', "'start'|'center'|'end'", "'center'", 'Perataan konten teks dan ikon di dalam bodi alert.'], ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).'], ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).'], ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).'], ['closeOnOutside', 'bool|null', 'null (auto)', 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).']];
+                                    $containerProps = [
+                                        ['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", 'Posisi penempatan default container notifikasi alert pada layar.'],
+                                        ['align', "'start'|'center'|'end'", "'center'", 'Perataan konten teks dan ikon di dalam bodi alert.'],
+                                        ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).'],
+                                        ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).'],
+                                        ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).'],
+                                        ['closeOnOutside', 'bool|null', 'null (auto)', 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).']
+                                    ];
                                 @endphp
                                 @foreach ($containerProps as [$prop, $type, $default, $desc])
                                     <tr class="hover:bg-accent/40 transition-colors">
@@ -774,15 +537,32 @@ vibeAlert.reset();                 // Reset seluruh alert
                         <table class="w-full text-left text-xs">
                             <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
                                 <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.table_default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/alert.table_desc') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/alert.props.columns.desc') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-border text-muted-foreground">
                                 @php
-                                    $payloadParams = [['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.'], ['title', 'string', 'null', 'Judul utama notifikasi alert.'], ['message', 'string', '""', 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.'], ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.'], ['position', 'string', 'Inherit', 'Menimpa posisi penempatan container khusus untuk alert ini.'], ['align', "'start'|'center'|'end'", 'Inherit', 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.'], ['timeout', 'int|false', 'Inherit (false for confirm)', 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).'], ['blocking', 'bool', 'false (true for confirm)', 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.'], ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).'], ['sound', 'bool|string', 'false', 'Menimpa preferensi efek suara saat alert muncul.'], ['confirmButton', 'string|object', "{ text: 'Tutup' }", 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.'], ['closeButton', 'string|object', "null ('Batal' for confirm)", 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.'], ['buttonLayout', "'row'|'col'", 'null', 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.'], ['closeOnOutside', 'bool', 'true (false for confirm)', 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.'], ['id', 'string', 'null', 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.'], ['persist', 'bool|string', 'false', 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".']];
+                                    $payloadParams = [
+                                        ['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.'],
+                                        ['title', 'string', 'null', 'Judul utama notifikasi alert.'],
+                                        ['message', 'string', '""', 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.'],
+                                        ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.'],
+                                        ['position', 'string', 'Inherit', 'Menimpa posisi penempatan container khusus untuk alert ini.'],
+                                        ['align', "'start'|'center'|'end'", 'Inherit', 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.'],
+                                        ['timeout', 'int|false', 'Inherit (false for confirm)', 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).'],
+                                        ['blocking', 'bool', 'false (true for confirm)', 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.'],
+                                        ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).'],
+                                        ['sound', 'bool|string', 'false', 'Menimpa preferensi efek suara saat alert muncul.'],
+                                        ['confirmButton', 'string|object', "{ text: 'Tutup' }", 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.'],
+                                        ['closeButton', 'string|object', "null ('Batal' for confirm)", 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.'],
+                                        ['buttonLayout', "'row'|'col'", 'null', 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.'],
+                                        ['closeOnOutside', 'bool', 'true (false for confirm)', 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.'],
+                                        ['id', 'string', 'null', 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.'],
+                                        ['persist', 'bool|string', 'false', 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".']
+                                    ];
                                 @endphp
                                 @foreach ($payloadParams as [$prop, $type, $default, $desc])
                                     <tr class="hover:bg-accent/40 transition-colors">

@@ -1,39 +1,39 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo title="Documentation" description="Dokumentasi resmi komponen Vibe UI untuk Laravel dan Tailwind CSS." schema="techarticle" :breadcrumbs="[
-        ['name' => 'Home', 'url' => '/'],
-        ['name' => 'Docs', 'url' => '/docs']
+    <vibe:seo :title="__('docs/index.title')" :description="__('docs/index.description')" schema="techarticle" :breadcrumbs="[
+        ['name' => __('docs/index.breadcrumbs.home'), 'url' => '/'],
+        ['name' => __('docs/index.breadcrumbs.docs'), 'url' => '/docs']
     ]" />
     <div>
         <div class="mb-6 flex justify-end rounded-full">
             <vibe:button @click="$dispatch('open-modal', 'test-modal')">
-                Buka Modal
+                {{ __('docs/index.demo.open_modal_btn') }}
             </vibe:button>
         </div>
 
         <div class="gap-6 grid grid-cols-1 md:grid-cols-3">
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Total Pengguna</h3>
+                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.total_users') }}</h3>
                 <p class="mt-2 font-bold text-3xl">1,204</p>
             </vibe:card>
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Pendapatan</h3>
-                <p class="mt-2 font-bold text-3xl">Rp 15.000.000</p>
+                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.revenue') }}</h3>
+                <p class="mt-2 font-bold text-3xl">{{ __('docs/index.demo.stats.revenue_val') }}</p>
             </vibe:card>
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">Server Status</h3>
-                <p class="mt-2 font-bold text-3xl">Online</p>
+                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.server_status') }}</h3>
+                <p class="mt-2 font-bold text-3xl">{{ __('docs/index.demo.stats.online') }}</p>
             </vibe:card>
         </div>
 
         <vibe:modal id="test-modal">
-            <h2 class="text-xl mb-4">Ini Adalah Judul Modal</h2>
+            <h2 class="text-xl mb-4">{{ __('docs/index.demo.modal.title') }}</h2>
             <p class="text-gray-600 dark:text-gray-400 mb-6">
-                Konten modal ada di sini. Modal ini sekarang mewarisi gaya langsung dari komponen Card, sehingga tampilan bayangan dan warna latarnya sudah terintegrasi secara mulus.
+                {{ __('docs/index.demo.modal.content') }}
             </p>
 
             <div class="flex justify-end gap-3 mt-6">
-                <vibe:button variant="ghost" @click="close">Batal</vibe:button>
-                <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">Simpan Perubahan</vibe:button>
+                <vibe:button variant="ghost" @click="close">{{ __('docs/index.demo.modal.cancel_btn') }}</vibe:button>
+                <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">{{ __('docs/index.demo.modal.save_btn') }}</vibe:button>
             </div>
         </vibe:modal>
     </div>

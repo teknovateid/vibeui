@@ -173,7 +173,17 @@
                     </vibe:button>
                 </vibe:header.heading>
 
-                <vibe:header.actions class="items-center h-full relative">
+                <vibe:header.actions class="items-center h-full relative gap-1.5">
+
+                    <!-- Language Switcher -->
+                    <div class="flex items-center rounded-lg border border-border bg-muted/40 p-0.5 text-xs font-medium">
+                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'id' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
+                            ID
+                        </vibe:button>
+                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'en' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
+                            EN
+                        </vibe:button>
+                    </div>
 
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
                         isFullscreen: false,
@@ -220,8 +230,8 @@
         <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
             <vibe:sheet.header class="flex items-center justify-between p-4">
                 <div class="flex items-center gap-2">
-                    <span class="font-semibold text-sm text-foreground">Notifikasi</span>
-                    <span class="text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">3 Baru</span>
+                    <span class="font-semibold text-sm text-foreground">{{ __('docs/sidebar.notifications.title') }}</span>
+                    <span class="text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{{ __('docs/sidebar.notifications.new', ['count' => 3]) }}</span>
                 </div>
                 <vibe:sheet.close />
             </vibe:sheet.header>

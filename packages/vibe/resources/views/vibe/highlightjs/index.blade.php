@@ -25,6 +25,7 @@
     // Normalize compiled <x-vibe:: tags back to custom <vibe: tags for documentation code display
     $rawCode = preg_replace('/<x-vibe::([a-zA-Z0-9\-\.]+)/', '<vibe:$1', $rawCode);
     $rawCode = preg_replace('/<\/x-vibe::([a-zA-Z0-9\-\.]+)/', '</vibe:$1', $rawCode);
+    $rawCode = preg_replace('/<(\/)?\\\\(vibe:|x-)/', '<$1$2', $rawCode);
 
     // Normalize Windows CRLF / CR line endings to standard LF
     $rawCode = str_replace(["\r\n", "\r"], "\n", $rawCode);

@@ -81,6 +81,10 @@ const ThemeManager = {
         } else {
             document.documentElement.classList.remove('dark');
         }
+
+        try {
+            document.cookie = `${VIBE_PREFIX}_theme=${isDark ? 'dark' : 'light'}; path=/; max-age=31536000; SameSite=Lax`;
+        } catch (e) {}
     },
 
     applyComponentThemes(config) {
@@ -101,7 +105,11 @@ const ThemeManager = {
 ThemeManager.init();
 window.VibeTheme = ThemeManager;
 
-// Re-apply theme after Livewire SPA navigation
+// Re-apply theme before and after Livewire SPA navigation
+document.addEventListener('livewire:navigating', () => {
+    ThemeManager.init();
+});
+
 document.addEventListener('livewire:navigated', () => {
     ThemeManager.init();
 });

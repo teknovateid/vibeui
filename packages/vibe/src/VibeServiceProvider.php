@@ -24,22 +24,32 @@ class VibeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__.'/../config/vibe.php' => config_path('vibe.php'),
-        ], 'vibe-config');
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__.'/../config/vibe.php' => config_path('vibe.php'),
+            ], 'vibe-config');
 
-        $this->publishes([
-            __DIR__.'/../resources/css/vibe' => resource_path('css/vibe'),
-            __DIR__.'/../resources/js/vibe' => resource_path('js/vibe'),
-            __DIR__.'/../public' => public_path(),
-        ], 'vibe-assets');
+            $this->publishes([
+                __DIR__.'/../resources/css/vibe' => resource_path('css/vibe'),
+                __DIR__.'/../resources/js/vibe' => resource_path('js/vibe'),
+                __DIR__.'/../public' => public_path(),
+            ], 'vibe-assets');
+
+            $this->publishes([
+                __DIR__.'/../lang' => $this->app->langPath(),
+            ], 'vibe-lang');
+        }
 
         // Load translations from package lang folder
         $this->loadTranslationsFrom(__DIR__.'/../lang', 'vibe');
 
-        $this->publishes([
-            __DIR__.'/../lang' => $this->app->langPath(),
-        ], 'vibe-lang');
+        // Automatically exclude theme cookie from Laravel cookie encryption so no manual app.php configuration is needed
+        $prefix = config('vibe.prefix', 'vibe');
+        if (class_exists(\Illuminate\Cookie\Middleware\EncryptCookies::class)) {
+            \Illuminate\Cookie\Middleware\EncryptCookies::except([
+                $prefix.'_theme',
+            ]);
+        }
 
         // Register anonymous component path for the 'vibe' namespace.
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
@@ -136,9 +146,27 @@ class VibeServiceProvider extends ServiceProvider
                             }
                             if (d) {
                                 document.documentElement.classList.add(\'dark\');
+                                try {
+                                    document.cookie = window.VIBE_PREFIX + \'_theme=dark; path=/; max-age=31536000; SameSite=Lax\';
+                                } catch (e) {}
                             } else {
                                 document.documentElement.classList.remove(\'dark\');
+                                try {
+                                    document.cookie = window.VIBE_PREFIX + \'_theme=light; path=/; max-age=31536000; SameSite=Lax\';
+                                } catch (e) {}
                             }
+
+                            // Prevent Alpine / Livewire wire:navigate from stripping the \'dark\' class during HTML attribute replacement
+                            var origRemoveAttr = Element.prototype.removeAttribute;
+                            Element.prototype.removeAttribute = function(attr) {
+                                if (this === document.documentElement && attr === \'class\') {
+                                    if (document.documentElement.classList.contains(\'dark\')) {
+                                        this.className = \'dark\';
+                                        return;
+                                    }
+                                }
+                                return origRemoveAttr.apply(this, arguments);
+                            };
                         } catch (e) {}
 
                         // Scroll Anti-FOUC (Instant Micro-Shielding):
@@ -192,24 +220,22 @@ class VibeServiceProvider extends ServiceProvider
                                 var obs = new MutationObserver(enforceScroll);
                                 obs.observe(document.documentElement, { childList: true, subtree: true });
                                 
-                                document.addEventListener(\'DOMContentLoaded\', function() {
+                                var cleanup = function() {
                                     enforceScroll();
                                     obs.disconnect();
                                     unshieldMain();
                                     unshieldSide();
 
                                     // Remove anti-FOUC transition blocker
-                                    setTimeout(function() {
-                                        var style = document.getElementById(\'vibe-anti-fouc-transitions\');
-                                        if (style) style.remove();
-                                    }, 20);
-                                });
+                                    var style = document.getElementById(\'vibe-anti-fouc-transitions\');
+                                    if (style) style.remove();
+                                };
+
+                                document.addEventListener(\'DOMContentLoaded\', cleanup);
+                                document.addEventListener(\'livewire:navigated\', cleanup);
 
                                 // Fast safety timeout: never keep shielded for more than 80ms
-                                setTimeout(function() {
-                                    unshieldMain();
-                                    unshieldSide();
-                                }, 80);
+                                setTimeout(cleanup, 80);
                             }
                         } catch (e) {}
                     })();
@@ -219,7 +245,6 @@ class VibeServiceProvider extends ServiceProvider
                     html.vibe-restoring-side #sidebar-menu-body { opacity: 0 !important; }
                     *, *::before, *::after {
                         transition: none !important;
-                        animation-duration: 0ms !important;
                     }
                 </style>';
             ?>";
@@ -238,15 +263,17 @@ class VibeServiceProvider extends ServiceProvider
         // to work correctly when vibe components call other vibe components.
         $this->registerVibeAsBlazePrefixAfterBoot();
 
-        $this->commands([
-            LayoutCommand::class,
-            ComponentCommand::class,
-            VibeCommand::class,
-            CleanCommand::class,
-            PageCommand::class,
-            CrudCommand::class,
-            InstallCommand::class,
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                LayoutCommand::class,
+                ComponentCommand::class,
+                VibeCommand::class,
+                CleanCommand::class,
+                PageCommand::class,
+                CrudCommand::class,
+                InstallCommand::class,
+            ]);
+        }
     }
 
     /**
@@ -348,7 +375,28 @@ class VibeServiceProvider extends ServiceProvider
      */
     public function parseVibeTags(string $string): string
     {
-        // Protect @verbatim ... @endverbatim blocks from tag conversion
+        // 1. Fast-path: Skip immediately if template does not contain any <vibe: tags
+        if (! str_contains($string, '<vibe:')) {
+            return $string;
+        }
+
+        // 2. Shield <vibe:* and <x-* tags inside <vibe:preview.code>...</vibe:preview.code> blocks
+        // so Blade and Blaze do not compile them into rendered components, while allowing
+        // dynamic Blade expressions (like {{ __('...') }}) to evaluate for multilingual docs.
+        if (str_contains($string, '<vibe:preview.code')) {
+            $string = preg_replace_callback('/(<vibe:preview\.code[^>]*>)(.*?)(<\/vibe:preview\.code>)/s', function ($m) {
+                $inner = preg_replace('/<(\/?)(vibe:|x-)/', '<$1\\\\$2', $m[2]);
+                return $m[1] . $inner . $m[3];
+            }, $string);
+        }
+
+        // 3. Fast-path: If template has no @verbatim, convert directly without array allocation & preg_split
+        if (! str_contains($string, '@verbatim')) {
+            $string = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $string);
+            return preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $string);
+        }
+
+        // 4. Protect @verbatim ... @endverbatim blocks from tag conversion
         $parts = preg_split('/(?<!@)(@verbatim.*?@endverbatim)/s', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
 
         foreach ($parts as &$part) {

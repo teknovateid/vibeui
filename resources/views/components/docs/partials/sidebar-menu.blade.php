@@ -3,7 +3,7 @@
 
     <div class="h-px bg-border"></div>
 
-    <vibe:nav.label title="GET STARTED" persist>
+    <vibe:nav.label :title="__('docs/sidebar.groups.get_started')" persist>
         <!-- Docs -->
         <vibe:nav.item href="{{ route('docs.index') }}" :active="request()->routeIs('docs.index')">
             <x-slot:icon>
@@ -13,7 +13,7 @@
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                 </svg>
             </x-slot:icon>
-            Docs
+            {{ __('docs/sidebar.nav.docs') }}
         </vibe:nav.item>
 
         <!-- Instalation -->
@@ -25,7 +25,7 @@
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                 </svg>
             </x-slot:icon>
-            Instalation
+            {{ __('docs/sidebar.nav.instalation') }}
         </vibe:nav.item>
 
         <!-- Directories -->
@@ -37,13 +37,13 @@
                     <line x1="9" y1="21" x2="9" y2="9"></line>
                 </svg>
             </x-slot:icon>
-            Directories
+            {{ __('docs/sidebar.nav.directories') }}
         </vibe:nav.item>
     </vibe:nav.label>
 
 
 
-    <vibe:nav.label title="COMPONENTS" persist>
+    <vibe:nav.label :title="__('docs/sidebar.groups.components')" persist>
         <!-- Input Group -->
          <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
             <x-slot:icon>
@@ -52,7 +52,7 @@
                     <path d="M8 12h8"></path>
                 </svg>
             </x-slot:icon>
-            Input
+            {{ __('docs/sidebar.nav.input') }}
         </vibe:nav.item>
 
         <!-- Button -->
@@ -63,7 +63,7 @@
                     <path d="M8 12h8"></path>
                 </svg>
             </x-slot:icon>
-            Button
+            {{ __('docs/sidebar.nav.button') }}
         </vibe:nav.item>
 
         <!-- Table -->
@@ -76,7 +76,7 @@
                     <path d="M12 3v18"/>
                 </svg>
             </x-slot:icon>
-            Table
+            {{ __('docs/sidebar.nav.table') }}
         </vibe:nav.item>
     </vibe:nav.label>
 
@@ -90,7 +90,7 @@
                 <line x1="12" y1="16" x2="12.01" y2="16" />
             </svg>
         </x-slot:icon>
-        Alert
+        {{ __('docs/sidebar.nav.alert') }}
     </vibe:nav.item>
 
 
@@ -103,7 +103,7 @@
                 <line x1="9" y1="21" x2="9" y2="9"></line>
             </svg>
         </x-slot:icon>
-        Toast
+        {{ __('docs/sidebar.nav.toast') }}
     </vibe:nav.item>
 
 </vibe:nav>

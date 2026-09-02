@@ -4,33 +4,105 @@ return [
     'title' => 'Toast',
     'badge' => 'Komponen',
     'group' => 'Feedback & Notifikasi',
-    'description' => 'Komponen notifikasi toast mengambang yang ringan, modern, dan interaktif. Mendukung penumpukan berlapis (stacked cards), auto-expand saat dihover, pause timer on hover, efek audio sintesis Web Audio API, serta integrasi mudah via JavaScript vibeToast, Alpine event, Laravel session flash, dan Livewire.',
+    'description' => 'Komponen notifikasi toast mengambang yang modern dan kaya fitur. Mendukung penumpukan dinamis (stacked cards), audio chime, 6 posisi layar, integrasi Laravel flash message, dan pemanggilan via fungsi global JavaScript.',
 
     // Section 1: Basic Usage
-    'basic_usage_title' => 'Penggunaan Dasar',
-    'basic_usage_desc' => 'Pastikan tag penampung <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:toast /&gt;</code> sudah terpasang di layout utama Anda (seperti <code class="font-mono text-xs text-foreground">base.blade.php</code>). Notifikasi toast dapat dimunculkan melalui fungsi JavaScript <code class="font-mono text-xs text-foreground">vibeToast(...)</code> atau Alpine event <code class="font-mono text-xs text-foreground">$dispatch(\'toast\', ...)</code>.',
+    'basic_usage' => [
+        'title' => 'Penggunaan Dasar & Tipe',
+        'desc' => 'Panggil fungsi global JavaScript <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">vibeToast()</code> dari mana saja untuk memunculkan notifikasi instan. Tersedia 4 tipe semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
+        'preview_title' => 'Pemicu Tipe Toast Dasar',
+        'types' => [
+            'info' => [
+                'btn' => 'Info Toast',
+                'title' => 'Pemberitahuan Sistem',
+                'msg' => 'Sinkronisasi data cloud sedang berjalan di latar belakang.',
+            ],
+            'success' => [
+                'btn' => 'Success Toast',
+                'title' => 'Berhasil Disimpan',
+                'msg' => 'Profil dan preferensi pengguna telah berhasil diperbarui.',
+            ],
+            'warning' => [
+                'btn' => 'Warning Toast',
+                'title' => 'Peringatan Kuota',
+                'msg' => 'Penyimpanan server Anda telah mencapai 85% kapasitas.',
+            ],
+            'error' => [
+                'btn' => 'Error Toast',
+                'title' => 'Gagal Memproses',
+                'msg' => 'Terjadi kesalahan saat mengunggah berkas ke server.',
+            ],
+        ],
+    ],
 
-    // Section 2: Stacked & Hover
-    'stacked_title' => 'Penumpukan Berlapis & Interaksi Hover',
-    'stacked_desc' => 'Beberapa toast yang muncul bersamaan akan ditumpuk secara rapi di sudut layar (stacked effect). Saat pengguna mengarahkan kursor mouse ke atas tumpukan toast (<code class="font-mono text-xs text-foreground">hover</code>), seluruh toast akan memuai secara otomatis (expand) dan penghitung waktu auto-dismiss akan dijeda sementara (pause timer).',
+    // Section 2: Stacked Toasts
+    'stacked' => [
+        'title' => 'Penumpukan Kartu (Stacked Cards)',
+        'desc' => 'Ketika beberapa toast aktif bersamaan di posisi yang sama, kartu akan otomatis tertumpuk rapi dengan efek kedalaman (scale & translateY). Arahkan kursor (*hover*) ke tumpukan kartu untuk membukanya secara berjarak dinamis.',
+        'preview_title' => 'Demonstrasi Penumpukan Toast',
+        'trigger_btn' => 'Munculkan 3 Toast Berurutan',
+        'toast_1' => [
+            'title' => 'Pesanan Baru Masuk',
+            'msg' => 'Invoice #INV-2025-001 senilai Rp 750.000 telah diterima.',
+        ],
+        'toast_2' => [
+            'title' => 'Pesan dari Dukungan',
+            'msg' => 'Tiket kendala #TK-4821 telah dijawab oleh tim teknis.',
+        ],
+        'toast_3' => [
+            'title' => 'Pembaruan Siap Dipasang',
+            'msg' => 'Versi 2.4.0 siap diperbarui pada sistem produksi.',
+        ],
+    ],
 
     // Section 3: Positions
-    'positions_title' => 'Pilihan Posisi (Positions)',
-    'positions_desc' => 'Toast mendukung 6 pilihan posisi penempatan melalui prop <code class="font-mono text-xs text-foreground">position</code> pada tag kontainer: <code class="font-mono text-xs text-foreground">bottom-right</code> (default), <code class="font-mono text-xs text-foreground">bottom-left</code>, <code class="font-mono text-xs text-foreground">top-right</code>, <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">top-center</code>, dan <code class="font-mono text-xs text-foreground">bottom-center</code>.',
+    'positions' => [
+        'title' => 'Posisi Layar',
+        'desc' => 'Toast dapat ditempatkan di 6 titik sudut layar berbeda via opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">position</code>: <code class="font-mono text-xs text-foreground">top-right</code> (default), <code class="font-mono text-xs text-foreground">top-left</code>, <code class="font-mono text-xs text-foreground">top-center</code>, <code class="font-mono text-xs text-foreground">bottom-right</code>, <code class="font-mono text-xs text-foreground">bottom-left</code>, dan <code class="font-mono text-xs text-foreground">bottom-center</code>.',
+        'preview_title' => '6 Titik Posisi Layar',
+        'demo_title' => 'Toast Posisi',
+        'demo_msg' => 'Ini adalah contoh toast di posisi :position.',
+        'items' => [
+            'top_right' => 'Top Right (Bawaan)',
+            'top_left' => 'Top Left',
+            'top_center' => 'Top Center',
+            'bottom_right' => 'Bottom Right',
+            'bottom_left' => 'Bottom Left',
+            'bottom_center' => 'Bottom Center',
+        ],
+    ],
 
     // Section 4: Sound & Timeout
-    'sound_title' => 'Efek Suara Audio & Durasi',
-    'sound_desc' => 'Aktifkan efek audio bawaan dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: true</code> (menggunakan sintesis Web Audio API tanpa aset tambahan) atau teruskan URL file audio kustom. Durasi tampil dapat diatur dalam milidetik via <code class="font-mono text-xs text-foreground">timeout</code> (default: 3000ms), atau <code class="font-mono text-xs text-foreground">timeout: false</code> untuk toast persisten.',
+    'sound_timeout' => [
+        'title' => 'Durasi & Efek Suara (Audio)',
+        'desc' => 'Atur durasi tampil melalui properti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">timeout</code> (dalam milidetik). Gunakan nilai <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">0</code> untuk membuat toast tetap terbuka (*sticky*) sampai tombol close diklik. Efek audio dapat ditentukan via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sound: "chime" | "pop" | false</code>.',
+        'timeout_preview' => 'Pilihan Durasi Waktu',
+        'sound_preview' => 'Efek Audio Notifikasi',
+        'fast_btn' => 'Cepat (2 Detik)',
+        'sticky_btn' => 'Sticky (Tanpa Batas)',
+        'chime_btn' => 'Suara Chime',
+        'pop_btn' => 'Suara Pop',
+        'silent_btn' => 'Tanpa Suara (Mute)',
+    ],
 
-    // Section 5: Trigger Methods
-    'integration_title' => 'Metode Pemanggilan Toast',
-    'integration_desc' => 'Vibe UI menyediakan integrasi lengkap pemanggilan toast untuk berbagai ekosistem Laravel: JavaScript helper, Alpine.js event dispatch, Laravel controller flash session, dan Livewire component.',
+    // Section 5: Integration
+    'integration' => [
+        'title' => 'Integrasi Laravel Flash Session & Event',
+        'desc' => 'Komponen Toast otomatis mendengarkan session flash dari Controller Laravel serta Event Browser Livewire <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">window.dispatchEvent(new CustomEvent("vibe-toast", ...))</code>.',
+        'preview_title' => 'Simulasi Laravel Flash Session',
+        'success_btn' => 'Flash Session Berhasil',
+        'error_btn' => 'Flash Session Gagal',
+    ],
 
     // Section 6: Props Reference
-    'props_title' => 'Referensi Props & Payload',
-    'props_desc' => 'Daftar atribut tag kontainer <code class="font-mono text-xs text-foreground">&lt;vibe:toast&gt;</code> dan parameter objek payload yang didukung.',
-    'table_prop' => 'Prop / Parameter',
-    'table_type' => 'Tipe',
-    'table_default' => 'Default',
-    'table_desc' => 'Deskripsi',
+    'props' => [
+        'title' => 'Referensi Opsi (Payload API)',
+        'desc' => 'Daftar parameter konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeToast(options)</code>.',
+        'columns' => [
+            'prop' => 'Opsi',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+    ],
 ];
