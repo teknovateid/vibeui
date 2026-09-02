@@ -4,7 +4,7 @@ return [
     'title' => 'DataTable',
     'badge' => 'Komponen Enterprise',
     'group' => 'Komponen UI',
-    'description' => 'Tabel data server-side berperforma tinggi bertenaga Rappasoft yang didesain ulang sepenuhnya menggunakan token tema Vibe UI. Dilengkapi pencarian debounced, sorting multi-kolom, seleksi visibilitas kolom, bulk action, dan navigasi paginasi elegan.',
+    'description' => 'Tabel data server-side berperforma tinggi bertenaga Rappasoft yang didesain ulang sepenuhnya menggunakan token tema Vibe UI. Dilengkapi pencarian debounced, sorting multi-kolom, seleksi visibilitas kolom, bulk action, filter per-kolom, baris footer agregasi, dan navigasi paginasi elegan.',
 
     'features' => [
         'title' => 'Kemampuan Utama',
@@ -12,6 +12,8 @@ return [
         'sorting' => 'Pengurutan interaktif dengan indikator visual modern',
         'searching' => 'Pencarian langsung (debounced) di berbagai kolom',
         'column_select' => 'Tampilkan atau sembunyikan kolom secara dinamis',
+        'bulk_actions' => 'Seleksi baris massal dengan eksekusi aksi instan',
+        'footer' => 'Baris ringkasan footer untuk total dan kalkulasi',
         'pagination' => 'Navigasi paginasi khas Vibe UI yang intuitif',
     ],
 
@@ -34,7 +36,36 @@ return [
     'basic_usage' => [
         'title' => 'Penggunaan Dasar',
         'desc' => 'Cukup buat class turunan dari <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">VibeDataTableComponent</code> lalu definisikan query Eloquent dan kolomnya. Komponen secara otomatis mewarisi token desain, debounce pencarian, dan layout Vibe UI.',
-        'preview_title' => 'DataTable Live Interaktif',
+        'preview_title' => 'Pratinjau Tabel Dasar (Basic Table)',
+    ],
+
+    'bulk_actions' => [
+        'title' => 'Aksi Massal (Bulk Actions)',
+        'desc' => 'Aktifkan seleksi checkbox untuk menjalankan aksi terhadap banyak baris data sekaligus, seperti ekspor laporan atau penghapusan data massal.',
+        'preview_title' => 'Pratinjau Aksi Massal (Bulk Actions)',
+    ],
+
+    'column_search' => [
+        'title' => 'Pencarian di Setiap Kolom (Per-Column Search)',
+        'desc' => 'Sematkan input pencarian langsung di bawah judul setiap kolom menggunakan secondary header, sehingga pengguna dapat memfilter baris berdasarkan kolom ID, nama, atau email secara independen.',
+        'preview_title' => 'Pratinjau Pencarian di Setiap Kolom',
+    ],
+
+    'filters_section' => [
+        'title' => 'Filter Popover Kustom',
+        'desc' => 'Tambahkan komponen filter popover dropdown status, domain email, pencarian tanggal, atau kriteria khusus lainnya.',
+        'preview_title' => 'Pratinjau Filter Popover',
+    ],
+
+    'footer_section' => [
+        'title' => 'Footer Kolom & Ringkasan (Aggregations)',
+        'desc' => 'Tampilkan baris footer di bagian bawah tabel untuk menyajikan kalkulasi seperti total record, jumlah nominal (sum), atau rata-rata (average).',
+        'preview_title' => 'Pratinjau Footer Kolom & Ringkasan',
+    ],
+
+    'secondary_header_section' => [
+        'title' => 'Header Tambahan (Secondary Header)',
+        'desc' => 'Gunakan header sekunder untuk meletakkan input pencarian atau filter tepat di bawah judul masing-masing kolom.',
     ],
 
     'blade_usage' => [
@@ -43,8 +74,9 @@ return [
     ],
 
     'columns' => [
-        'title' => 'Konfigurasi Kolom',
-        'desc' => 'Definisikan kolom menggunakan class <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Column</code> yang mendukung pengurutan (sorting), pencarian (searchable), dan kustomisasi tampilan:',
+        'title' => 'Kustomisasi Kolom & Tombol Aksi',
+        'desc' => 'Definisikan kolom menggunakan class <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Column</code> yang mendukung pengurutan (sorting), format status badge, hingga tombol aksi ikon via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.group variant="ghost"&gt;</code>:',
+        'preview_title' => 'Pratinjau Kolom Kustom & Aksi Ikon',
     ],
 
     'props' => [

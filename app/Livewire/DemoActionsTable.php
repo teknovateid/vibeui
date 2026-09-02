@@ -6,22 +6,18 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Blade;
 use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
 use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoUsersTable extends VibeDataTableComponent
+class DemoActionsTable extends VibeDataTableComponent
 {
+    public string $tableName = 'actions_table';
+
     public function configure(): void
     {
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc')
-            ->setFooterStatus(true)
-            ->setBulkActions([
-                'exportSelected' => 'Ekspor CSV',
-                'deleteSelected' => 'Hapus Terpilih',
-            ]);
+            ->setDefaultSort('id', 'asc');
     }
 
     public function builder(): Builder
@@ -29,29 +25,11 @@ class DemoUsersTable extends VibeDataTableComponent
         return User::query();
     }
 
-    public function filters(): array
-    {
-        return [
-            SelectFilter::make('Domain')
-                ->options([
-                    '' => 'Semua Domain',
-                    'example.com' => '@example.com',
-                    'test.com' => '@test.com',
-                ])
-                ->filter(function (Builder $builder, string $value) {
-                    if (! empty($value)) {
-                        $builder->where('email', 'like', '%' . $value);
-                    }
-                }),
-        ];
-    }
-
     public function columns(): array
     {
         return [
             Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn ($rows) => 'Total: ' . $rows->count()),
+                ->sortable(),
 
             Column::make('Name', 'name')
                 ->sortable()
@@ -61,8 +39,12 @@ class DemoUsersTable extends VibeDataTableComponent
                 ->sortable()
                 ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable(),
+            Column::make('Status')
+                ->label(fn ($row) => $row->id % 2 === 0
+                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">Active</span>'
+                    : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground border border-border">Inactive</span>'
+                )
+                ->html(),
 
             Column::make('Actions')
                 ->label(fn ($row) => Blade::render('
@@ -79,21 +61,21 @@ class DemoUsersTable extends VibeDataTableComponent
         ];
     }
 
-    public function exportSelected(): void
-    {
-        $this->clearSelected();
-    }
-
-    public function deleteSelected(): void
-    {
-        $this->clearSelected();
-    }
-
     public function edit($id): void
     {
+        $this->dispatch('alert', [
+            'type' => 'info',
+            'title' => 'Edit User',
+            'message' => "Edit data user ID #{$id}.",
+        ]);
     }
 
     public function delete($id): void
     {
+        $this->dispatch('alert', [
+            'type' => 'warning',
+            'title' => 'Hapus User',
+            'message' => "Hapus data user ID #{$id}.",
+        ]);
     }
 }

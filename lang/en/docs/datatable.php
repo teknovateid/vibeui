@@ -4,7 +4,7 @@ return [
     'title' => 'DataTable',
     'badge' => 'Enterprise Component',
     'group' => 'UI Components',
-    'description' => 'High-performance server-side data table powered by Rappasoft and completely redesigned with Vibe UI theme tokens. Features debounced live search, multi-column sorting, dynamic column visibility, bulk actions, and seamless pagination.',
+    'description' => 'High-performance server-side data table powered by Rappasoft and completely redesigned with Vibe UI theme tokens. Features debounced live search, multi-column sorting, dynamic column visibility, bulk actions, column filters, footer summary rows, and seamless pagination.',
 
     'features' => [
         'title' => 'Core Capabilities',
@@ -12,6 +12,8 @@ return [
         'sorting' => 'Interactive sorting with visual indicators',
         'searching' => 'Debounced live searching across fields',
         'column_select' => 'Show / hide columns dynamically',
+        'bulk_actions' => 'Bulk row selection with batch actions',
+        'footer' => 'Summary footer rows for aggregates and counts',
         'pagination' => 'Tailored Vibe UI pagination controls',
     ],
 
@@ -34,7 +36,36 @@ return [
     'basic_usage' => [
         'title' => 'Basic Usage',
         'desc' => 'Extend <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">VibeDataTableComponent</code> and define your query and columns. The component automatically inherits Vibe UI design tokens, search debouncing, and pagination layout.',
-        'preview_title' => 'Interactive Live DataTable',
+        'preview_title' => 'Basic Table Preview',
+    ],
+
+    'bulk_actions' => [
+        'title' => 'Bulk Actions',
+        'desc' => 'Enable checkbox selection across rows to perform batch actions such as data exports, status updates, or mass deletion.',
+        'preview_title' => 'Bulk Actions Preview',
+    ],
+
+    'column_search' => [
+        'title' => 'Per-Column Search',
+        'desc' => 'Embed search inputs directly beneath each column header using a secondary header row, allowing users to independently filter by ID, name, or email.',
+        'preview_title' => 'Per-Column Search Preview',
+    ],
+
+    'filters_section' => [
+        'title' => 'Custom Popover Filters',
+        'desc' => 'Add popover filter components like select dropdowns, email domain pickers, date ranges, and custom criteria.',
+        'preview_title' => 'Popover Filters Preview',
+    ],
+
+    'footer_section' => [
+        'title' => 'Column Footers & Summaries',
+        'desc' => 'Display a summary row at the bottom of the table to compute totals, counts, averages, or custom calculated values.',
+        'preview_title' => 'Column Footer Preview',
+    ],
+
+    'secondary_header_section' => [
+        'title' => 'Secondary Header',
+        'desc' => 'Add an extra header row right below column labels to place search inputs or column-specific filter widgets.',
     ],
 
     'blade_usage' => [
@@ -43,8 +74,9 @@ return [
     ],
 
     'columns' => [
-        'title' => 'Column Configuration',
-        'desc' => 'Define columns using the fluent <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Column</code> class with sorting, searching, and custom rendering:',
+        'title' => 'Column Customization & Action Buttons',
+        'desc' => 'Define columns using the fluent <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Column</code> class with sorting, searching, status badge formatting, and sleek icon actions via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.group variant="ghost"&gt;</code>:',
+        'preview_title' => 'Custom Columns & Actions Preview',
     ],
 
     'props' => [
