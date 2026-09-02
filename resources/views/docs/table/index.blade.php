@@ -36,88 +36,86 @@
             {{-- 1. Basic Usage --}}
             <section id="penggunaan-dasar" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.basic_usage_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.basic_usage.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.basic_usage_desc') !!}
+                        {!! __('docs/table.basic_usage.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Basic Table" :center="false">
+                <vibe:preview :title="__('docs/table.basic_usage.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            <vibe:table>
-                                <vibe:table.header>
-                                    <vibe:table.column>Name</vibe:table.column>
-                                    <vibe:table.column>Email</vibe:table.column>
-                                    <vibe:table.column>Role</vibe:table.column>
-                                    <vibe:table.column align="right">Status</vibe:table.column>
-                                </vibe:table.header>
-
-                                <vibe:table.rows>
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Sarah Connor</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">sarah@example.com</vibe:table.cell>
-                                        <vibe:table.cell>Administrator</vibe:table.cell>
-                                        <vibe:table.cell align="right">
-                                            <vibe:badge variant="success">Active</vibe:badge>
-                                        </vibe:table.cell>
-                                    </vibe:table.row>
-
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">John Doe</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">john@example.com</vibe:table.cell>
-                                        <vibe:table.cell>Editor</vibe:table.cell>
-                                        <vibe:table.cell align="right">
-                                            <vibe:badge variant="warning">Pending</vibe:badge>
-                                        </vibe:table.cell>
-                                    </vibe:table.row>
-
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Alex Rivers</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">alex@example.com</vibe:table.cell>
-                                        <vibe:table.cell>Member</vibe:table.cell>
-                                        <vibe:table.cell align="right">
-                                            <vibe:badge variant="default">Offline</vibe:badge>
-                                        </vibe:table.cell>
-                                    </vibe:table.row>
-                                </vibe:table.rows>
-                            </vibe:table>
-                        @endverbatim
-                    </vibe:preview.code>
-                    <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
-                                <vibe:table.column>Name</vibe:table.column>
-                                <vibe:table.column>Email</vibe:table.column>
-                                <vibe:table.column>Role</vibe:table.column>
-                                <vibe:table.column align="right">Status</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.name') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.email') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.role') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.columns.status') }}</vibe:table.column>
                             </vibe:table.header>
 
                             <vibe:table.rows>
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">Sarah Connor</vibe:table.cell>
                                     <vibe:table.cell variant="muted">sarah@example.com</vibe:table.cell>
-                                    <vibe:table.cell>Administrator</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.admin') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">
-                                        <vibe:badge variant="success">Active</vibe:badge>
+                                        <vibe:badge variant="success">{{ __('docs/table.sample_data.statuses.active') }}</vibe:badge>
                                     </vibe:table.cell>
                                 </vibe:table.row>
 
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">John Doe</vibe:table.cell>
                                     <vibe:table.cell variant="muted">john@example.com</vibe:table.cell>
-                                    <vibe:table.cell>Editor</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.editor') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">
-                                        <vibe:badge variant="warning">Pending</vibe:badge>
+                                        <vibe:badge variant="warning">{{ __('docs/table.sample_data.statuses.pending') }}</vibe:badge>
                                     </vibe:table.cell>
                                 </vibe:table.row>
 
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">Alex Rivers</vibe:table.cell>
                                     <vibe:table.cell variant="muted">alex@example.com</vibe:table.cell>
-                                    <vibe:table.cell>Member</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.member') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">
-                                        <vibe:badge variant="default">Offline</vibe:badge>
+                                        <vibe:badge variant="default">{{ __('docs/table.sample_data.statuses.offline') }}</vibe:badge>
+                                    </vibe:table.cell>
+                                </vibe:table.row>
+                            </vibe:table.rows>
+                        </vibe:table>
+                    </vibe:preview.code>
+                    <div class="w-full">
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column>{{ __('docs/table.columns.name') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.email') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.role') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.columns.status') }}</vibe:table.column>
+                            </vibe:table.header>
+
+                            <vibe:table.rows>
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">Sarah Connor</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">sarah@example.com</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.admin') }}</vibe:table.cell>
+                                    <vibe:table.cell align="right">
+                                        <vibe:badge variant="success">{{ __('docs/table.sample_data.statuses.active') }}</vibe:badge>
+                                    </vibe:table.cell>
+                                </vibe:table.row>
+
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">John Doe</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">john@example.com</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.editor') }}</vibe:table.cell>
+                                    <vibe:table.cell align="right">
+                                        <vibe:badge variant="warning">{{ __('docs/table.sample_data.statuses.pending') }}</vibe:badge>
+                                    </vibe:table.cell>
+                                </vibe:table.row>
+
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">Alex Rivers</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">alex@example.com</vibe:table.cell>
+                                    <vibe:table.cell>{{ __('docs/table.sample_data.roles.member') }}</vibe:table.cell>
+                                    <vibe:table.cell align="right">
+                                        <vibe:badge variant="default">{{ __('docs/table.sample_data.statuses.offline') }}</vibe:badge>
                                     </vibe:table.cell>
                                 </vibe:table.row>
                             </vibe:table.rows>
@@ -129,66 +127,69 @@
             {{-- 2. Variants --}}
             <section id="varian-tampilan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.variants_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.variants.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.variants_desc') !!}
+                        {!! __('docs/table.variants.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Table Variants" :center="false">
+                <vibe:preview :title="__('docs/table.variants.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            {{-- 1. Striped Table --}}
-                            <vibe:table variant="striped">
-                                <vibe:table.header>
-                                    <vibe:table.column>Product</vibe:table.column>
-                                    <vibe:table.column>Category</vibe:table.column>
-                                    <vibe:table.column align="right">Price</vibe:table.column>
-                                </vibe:table.header>
-                                <vibe:table.rows>
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Mechanical Keyboard</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
-                                        <vibe:table.cell align="right">$129.00</vibe:table.cell>
-                                    </vibe:table.row>
-                                    ...
-                                </vibe:table.rows>
-                            </vibe:table>
-
-                            {{-- 2. Bordered Table --}}
-                            <vibe:table variant="bordered">
+                        {{-- 1. Striped Table --}}
+                        <vibe:table variant="striped">
+                            <vibe:table.header>
+                                <vibe:table.column>{{ __('docs/table.variants.product') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.variants.category') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.variants.price') }}</vibe:table.column>
+                            </vibe:table.header>
+                            <vibe:table.rows>
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">{{ __('docs/table.variants.keyboard') }}</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">{{ __('docs/table.variants.cat_accessories') }}</vibe:table.cell>
+                                    <vibe:table.cell align="right">$129.00</vibe:table.cell>
+                                </vibe:table.row>
                                 ...
-                            </vibe:table>
+                            </vibe:table.rows>
+                        </vibe:table>
 
-                            {{-- 3. Flush Table --}}
-                            <vibe:table variant="flush">
-                                ...
-                            </vibe:table>
-                        @endverbatim
+                        {{-- 2. Bordered Table --}}
+                        <vibe:table variant="bordered">
+                            <vibe:table.header>
+                                <vibe:table.column>{{ __('docs/table.variants.feature') }}</vibe:table.column>
+                                <vibe:table.column align="center">{{ __('docs/table.variants.starter') }}</vibe:table.column>
+                                <vibe:table.column align="center">{{ __('docs/table.variants.pro') }}</vibe:table.column>
+                            </vibe:table.header>
+                            ...
+                        </vibe:table>
+
+                        {{-- 3. Flush Table --}}
+                        <vibe:table variant="flush">
+                            ...
+                        </vibe:table>
                     </vibe:preview.code>
                     <div class="w-full space-y-6">
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Variant: Striped</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{{ __('docs/table.variants.items.striped') }}</p>
                             <vibe:table variant="striped">
                                 <vibe:table.header>
-                                    <vibe:table.column>Product</vibe:table.column>
-                                    <vibe:table.column>Category</vibe:table.column>
-                                    <vibe:table.column align="right">Price</vibe:table.column>
+                                    <vibe:table.column>{{ __('docs/table.variants.product') }}</vibe:table.column>
+                                    <vibe:table.column>{{ __('docs/table.variants.category') }}</vibe:table.column>
+                                    <vibe:table.column align="right">{{ __('docs/table.variants.price') }}</vibe:table.column>
                                 </vibe:table.header>
                                 <vibe:table.rows>
                                     <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Mechanical Keyboard</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
+                                        <vibe:table.cell variant="strong">{{ __('docs/table.variants.keyboard') }}</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">{{ __('docs/table.variants.cat_accessories') }}</vibe:table.cell>
                                         <vibe:table.cell align="right">$129.00</vibe:table.cell>
                                     </vibe:table.row>
                                     <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Wireless Mouse</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Accessories</vibe:table.cell>
+                                        <vibe:table.cell variant="strong">{{ __('docs/table.variants.mouse') }}</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">{{ __('docs/table.variants.cat_accessories') }}</vibe:table.cell>
                                         <vibe:table.cell align="right">$79.00</vibe:table.cell>
                                     </vibe:table.row>
                                     <vibe:table.row>
-                                        <vibe:table.cell variant="strong">4K Monitor 27"</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Display</vibe:table.cell>
+                                        <vibe:table.cell variant="strong">{{ __('docs/table.variants.monitor') }}</vibe:table.cell>
+                                        <vibe:table.cell variant="muted">{{ __('docs/table.variants.cat_display') }}</vibe:table.cell>
                                         <vibe:table.cell align="right">$349.00</vibe:table.cell>
                                     </vibe:table.row>
                                 </vibe:table.rows>
@@ -196,21 +197,21 @@
                         </div>
 
                         <div>
-                            <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Variant: Bordered</p>
+                            <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">{{ __('docs/table.variants.items.bordered') }}</p>
                             <vibe:table variant="bordered">
                                 <vibe:table.header>
-                                    <vibe:table.column>Feature</vibe:table.column>
-                                    <vibe:table.column align="center">Starter</vibe:table.column>
-                                    <vibe:table.column align="center">Pro</vibe:table.column>
+                                    <vibe:table.column>{{ __('docs/table.variants.feature') }}</vibe:table.column>
+                                    <vibe:table.column align="center">{{ __('docs/table.variants.starter') }}</vibe:table.column>
+                                    <vibe:table.column align="center">{{ __('docs/table.variants.pro') }}</vibe:table.column>
                                 </vibe:table.header>
                                 <vibe:table.rows>
                                     <vibe:table.row>
-                                        <vibe:table.cell>Unlimited Projects</vibe:table.cell>
+                                        <vibe:table.cell>{{ __('docs/table.variants.unlimited_projects') }}</vibe:table.cell>
                                         <vibe:table.cell align="center" variant="muted">5</vibe:table.cell>
-                                        <vibe:table.cell align="center" variant="strong">Unlimited</vibe:table.cell>
+                                        <vibe:table.cell align="center" variant="strong">{{ __('docs/table.variants.unlimited') }}</vibe:table.cell>
                                     </vibe:table.row>
                                     <vibe:table.row>
-                                        <vibe:table.cell>Custom Domain</vibe:table.cell>
+                                        <vibe:table.cell>{{ __('docs/table.variants.custom_domain') }}</vibe:table.cell>
                                         <vibe:table.cell align="center" variant="muted">—</vibe:table.cell>
                                         <vibe:table.cell align="center">
                                             <svg class="size-4 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -228,45 +229,43 @@
             {{-- 3. Dense Mode --}}
             <section id="tabel-kompak" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.dense_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.dense.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.dense_desc') !!}
+                        {!! __('docs/table.dense.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Dense Table" :center="false">
+                <vibe:preview :title="__('docs/table.dense.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            <vibe:table dense>
-                                <vibe:table.header>
-                                    <vibe:table.column>Invoice #</vibe:table.column>
-                                    <vibe:table.column>Date</vibe:table.column>
-                                    <vibe:table.column>Client</vibe:table.column>
-                                    <vibe:table.column align="right">Amount</vibe:table.column>
-                                </vibe:table.header>
-                                <vibe:table.rows>
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">INV-2026-001</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">01 Sep 2026</vibe:table.cell>
-                                        <vibe:table.cell>Acme Corp</vibe:table.cell>
-                                        <vibe:table.cell align="right" variant="strong">$1,250.00</vibe:table.cell>
-                                    </vibe:table.row>
-                                    ...
-                                </vibe:table.rows>
-                                <vibe:table.footer>
-                                    <vibe:table.cell colspan="3" variant="strong">Total</vibe:table.cell>
-                                    <vibe:table.cell align="right" variant="strong">$4,170.00</vibe:table.cell>
-                                </vibe:table.footer>
-                            </vibe:table>
-                        @endverbatim
+                        <vibe:table dense>
+                            <vibe:table.header>
+                                <vibe:table.column>{{ __('docs/table.dense.invoice') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.dense.date') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.dense.client') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.dense.amount') }}</vibe:table.column>
+                            </vibe:table.header>
+                            <vibe:table.rows>
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">INV-2026-001</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">01 Sep 2026</vibe:table.cell>
+                                    <vibe:table.cell>Acme Corp</vibe:table.cell>
+                                    <vibe:table.cell align="right" variant="strong">$1,250.00</vibe:table.cell>
+                                </vibe:table.row>
+                                ...
+                            </vibe:table.rows>
+                            <vibe:table.footer>
+                                <vibe:table.cell colspan="3" variant="strong">{{ __('docs/table.dense.total') }}</vibe:table.cell>
+                                <vibe:table.cell align="right" variant="strong">$4,170.00</vibe:table.cell>
+                            </vibe:table.footer>
+                        </vibe:table>
                     </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table dense>
                             <vibe:table.header>
-                                <vibe:table.column>Invoice #</vibe:table.column>
-                                <vibe:table.column>Date</vibe:table.column>
-                                <vibe:table.column>Client</vibe:table.column>
-                                <vibe:table.column align="right">Amount</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.dense.invoice') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.dense.date') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.dense.client') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.dense.amount') }}</vibe:table.column>
                             </vibe:table.header>
                             <vibe:table.rows>
                                 <vibe:table.row>
@@ -289,7 +288,7 @@
                                 </vibe:table.row>
                             </vibe:table.rows>
                             <vibe:table.footer>
-                                <vibe:table.cell colspan="3" variant="strong">Total</vibe:table.cell>
+                                <vibe:table.cell colspan="3" variant="strong">{{ __('docs/table.dense.total') }}</vibe:table.cell>
                                 <vibe:table.cell align="right" variant="strong">$4,170.00</vibe:table.cell>
                             </vibe:table.footer>
                         </vibe:table>
@@ -300,72 +299,70 @@
             {{-- 4. Sortable Columns --}}
             <section id="kolom-pengurutan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.sortable_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.sortable.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.sortable_desc') !!}
+                        {!! __('docs/table.sortable.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Sortable Columns" :center="false">
+                <vibe:preview :title="__('docs/table.sortable.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            <vibe:table>
-                                <vibe:table.header>
-                                    {{-- Sorted Column (Ascending) --}}
-                                    <vibe:table.column sortable :sorted="true" direction="asc">
-                                        Name
-                                    </vibe:table.column>
-
-                                    {{-- Sortable but not active --}}
-                                    <vibe:table.column sortable>
-                                        Department
-                                    </vibe:table.column>
-
-                                    {{-- Sortable Column --}}
-                                    <vibe:table.column sortable align="right">
-                                        Performance
-                                    </vibe:table.column>
-                                </vibe:table.header>
-
-                                <vibe:table.rows>
-                                    <vibe:table.row>
-                                        <vibe:table.cell variant="strong">Ahmad Fauzi</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Engineering</vibe:table.cell>
-                                        <vibe:table.cell align="right">98%</vibe:table.cell>
-                                    </vibe:table.row>
-                                    ...
-                                </vibe:table.rows>
-                            </vibe:table>
-                        @endverbatim
-                    </vibe:preview.code>
-                    <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
+                                {{-- Sorted Column (Ascending) --}}
                                 <vibe:table.column sortable :sorted="true" direction="asc">
-                                    Name
+                                    {{ __('docs/table.columns.name') }}
                                 </vibe:table.column>
+
+                                {{-- Sortable but not active --}}
                                 <vibe:table.column sortable>
-                                    Department
+                                    {{ __('docs/table.sortable.department') }}
                                 </vibe:table.column>
+
+                                {{-- Sortable Column --}}
                                 <vibe:table.column sortable align="right">
-                                    Performance
+                                    {{ __('docs/table.sortable.performance') }}
                                 </vibe:table.column>
                             </vibe:table.header>
 
                             <vibe:table.rows>
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">Ahmad Fauzi</vibe:table.cell>
-                                    <vibe:table.cell variant="muted">Engineering</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">{{ __('docs/table.sortable.dept_engineering') }}</vibe:table.cell>
+                                    <vibe:table.cell align="right">98%</vibe:table.cell>
+                                </vibe:table.row>
+                                ...
+                            </vibe:table.rows>
+                        </vibe:table>
+                    </vibe:preview.code>
+                    <div class="w-full">
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column sortable :sorted="true" direction="asc">
+                                    {{ __('docs/table.columns.name') }}
+                                </vibe:table.column>
+                                <vibe:table.column sortable>
+                                    {{ __('docs/table.sortable.department') }}
+                                </vibe:table.column>
+                                <vibe:table.column sortable align="right">
+                                    {{ __('docs/table.sortable.performance') }}
+                                </vibe:table.column>
+                            </vibe:table.header>
+
+                            <vibe:table.rows>
+                                <vibe:table.row>
+                                    <vibe:table.cell variant="strong">Ahmad Fauzi</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">{{ __('docs/table.sortable.dept_engineering') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">98%</vibe:table.cell>
                                 </vibe:table.row>
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">Budi Santoso</vibe:table.cell>
-                                    <vibe:table.cell variant="muted">Product</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">{{ __('docs/table.sortable.dept_product') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">94%</vibe:table.cell>
                                 </vibe:table.row>
                                 <vibe:table.row>
                                     <vibe:table.cell variant="strong">Citra Lestari</vibe:table.cell>
-                                    <vibe:table.cell variant="muted">Design</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">{{ __('docs/table.sortable.dept_design') }}</vibe:table.cell>
                                     <vibe:table.cell align="right">89%</vibe:table.cell>
                                 </vibe:table.row>
                             </vibe:table.rows>
@@ -377,58 +374,56 @@
             {{-- 5. Selection & Actions --}}
             <section id="baris-terpilih" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.selection_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.selection.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.selection_desc') !!}
+                        {!! __('docs/table.selection.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Row Selection" :center="false">
+                <vibe:preview :title="__('docs/table.selection.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            <vibe:table>
-                                <vibe:table.header>
-                                    <vibe:table.column class="w-10"></vibe:table.column>
-                                    <vibe:table.column>User</vibe:table.column>
-                                    <vibe:table.column>Plan</vibe:table.column>
-                                    <vibe:table.column align="right">Action</vibe:table.column>
-                                </vibe:table.header>
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column class="w-10"></vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.selection.user') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.selection.plan') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.selection.action') }}</vibe:table.column>
+                            </vibe:table.header>
 
-                                <vibe:table.rows>
-                                    {{-- Selected Row --}}
-                                    <vibe:table.row :selected="true">
-                                        <vibe:table.cell>
-                                            <input type="checkbox" checked class="rounded border-input text-primary focus:ring-primary size-4" />
-                                        </vibe:table.cell>
-                                        <vibe:table.cell variant="strong">Dani Ramadhan (Selected)</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Enterprise</vibe:table.cell>
-                                        <vibe:table.cell align="right">
-                                            <vibe:button size="xs" variant="outline">Edit</vibe:button>
-                                        </vibe:table.cell>
-                                    </vibe:table.row>
+                            <vibe:table.rows>
+                                {{-- Selected Row --}}
+                                <vibe:table.row :selected="true">
+                                    <vibe:table.cell>
+                                        <input type="checkbox" checked class="rounded border-input text-primary focus:ring-primary size-4" />
+                                    </vibe:table.cell>
+                                    <vibe:table.cell variant="strong">Dani Ramadhan {{ __('docs/table.selection.selected_badge') }}</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">Enterprise</vibe:table.cell>
+                                    <vibe:table.cell align="right">
+                                        <vibe:button size="xs" variant="outline">{{ __('docs/table.selection.edit') }}</vibe:button>
+                                    </vibe:table.cell>
+                                </vibe:table.row>
 
-                                    {{-- Normal Row --}}
-                                    <vibe:table.row>
-                                        <vibe:table.cell>
-                                            <input type="checkbox" class="rounded border-input text-primary focus:ring-primary size-4" />
-                                        </vibe:table.cell>
-                                        <vibe:table.cell variant="strong">Eka Wulandari</vibe:table.cell>
-                                        <vibe:table.cell variant="muted">Pro</vibe:table.cell>
-                                        <vibe:table.cell align="right">
-                                            <vibe:button size="xs" variant="outline">Edit</vibe:button>
-                                        </vibe:table.cell>
-                                    </vibe:table.row>
-                                </vibe:table.rows>
-                            </vibe:table>
-                        @endverbatim
+                                {{-- Normal Row --}}
+                                <vibe:table.row>
+                                    <vibe:table.cell>
+                                        <input type="checkbox" class="rounded border-input text-primary focus:ring-primary size-4" />
+                                    </vibe:table.cell>
+                                    <vibe:table.cell variant="strong">Eka Wulandari</vibe:table.cell>
+                                    <vibe:table.cell variant="muted">Pro</vibe:table.cell>
+                                    <vibe:table.cell align="right">
+                                        <vibe:button size="xs" variant="outline">{{ __('docs/table.selection.edit') }}</vibe:button>
+                                    </vibe:table.cell>
+                                </vibe:table.row>
+                            </vibe:table.rows>
+                        </vibe:table>
                     </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
                                 <vibe:table.column class="w-10"></vibe:table.column>
-                                <vibe:table.column>User</vibe:table.column>
-                                <vibe:table.column>Plan</vibe:table.column>
-                                <vibe:table.column align="right">Action</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.selection.user') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.selection.plan') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.selection.action') }}</vibe:table.column>
                             </vibe:table.header>
 
                             <vibe:table.rows>
@@ -436,10 +431,10 @@
                                     <vibe:table.cell>
                                         <input type="checkbox" checked class="rounded border-input text-primary focus:ring-primary size-4" />
                                     </vibe:table.cell>
-                                    <vibe:table.cell variant="strong">Dani Ramadhan (Selected)</vibe:table.cell>
+                                    <vibe:table.cell variant="strong">Dani Ramadhan {{ __('docs/table.selection.selected_badge') }}</vibe:table.cell>
                                     <vibe:table.cell variant="muted">Enterprise</vibe:table.cell>
                                     <vibe:table.cell align="right">
-                                        <vibe:button size="xs" variant="outline">Edit</vibe:button>
+                                        <vibe:button size="xs" variant="outline">{{ __('docs/table.selection.edit') }}</vibe:button>
                                     </vibe:table.cell>
                                 </vibe:table.row>
 
@@ -450,7 +445,7 @@
                                     <vibe:table.cell variant="strong">Eka Wulandari</vibe:table.cell>
                                     <vibe:table.cell variant="muted">Pro</vibe:table.cell>
                                     <vibe:table.cell align="right">
-                                        <vibe:button size="xs" variant="outline">Edit</vibe:button>
+                                        <vibe:button size="xs" variant="outline">{{ __('docs/table.selection.edit') }}</vibe:button>
                                     </vibe:table.cell>
                                 </vibe:table.row>
                             </vibe:table.rows>
@@ -462,44 +457,42 @@
             {{-- 6. Empty State --}}
             <section id="tampilan-kosong" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.empty_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.empty_state.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.empty_desc') !!}
+                        {!! __('docs/table.empty_state.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Empty State Table" :center="false">
+                <vibe:preview :title="__('docs/table.empty_state.preview_title')" :center="false">
                     <vibe:preview.code>
-                        @verbatim
-                            <vibe:table>
-                                <vibe:table.header>
-                                    <vibe:table.column>Name</vibe:table.column>
-                                    <vibe:table.column>Category</vibe:table.column>
-                                    <vibe:table.column align="right">Stock</vibe:table.column>
-                                </vibe:table.header>
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column>{{ __('docs/table.columns.name') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.variants.category') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.empty_state.stock') }}</vibe:table.column>
+                            </vibe:table.header>
 
-                                <vibe:table.rows>
-                                    <vibe:table.empty title="No products found" description="Your search criteria did not match any inventory records.">
-                                        <vibe:button size="xs" variant="primary">
-                                            Clear Filters
-                                        </vibe:button>
-                                    </vibe:table.empty>
-                                </vibe:table.rows>
-                            </vibe:table>
-                        @endverbatim
+                            <vibe:table.rows>
+                                <vibe:table.empty :title="__('docs/table.empty_state.empty_title')" :description="__('docs/table.empty_state.empty_desc')">
+                                    <vibe:button size="xs" variant="primary">
+                                        {{ __('docs/table.empty_state.clear_filters') }}
+                                    </vibe:button>
+                                </vibe:table.empty>
+                            </vibe:table.rows>
+                        </vibe:table>
                     </vibe:preview.code>
                     <div class="w-full">
                         <vibe:table>
                             <vibe:table.header>
-                                <vibe:table.column>Name</vibe:table.column>
-                                <vibe:table.column>Category</vibe:table.column>
-                                <vibe:table.column align="right">Stock</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.columns.name') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/table.variants.category') }}</vibe:table.column>
+                                <vibe:table.column align="right">{{ __('docs/table.empty_state.stock') }}</vibe:table.column>
                             </vibe:table.header>
 
                             <vibe:table.rows>
-                                <vibe:table.empty title="No products found" description="Your search criteria did not match any inventory records.">
+                                <vibe:table.empty :title="__('docs/table.empty_state.empty_title')" :description="__('docs/table.empty_state.empty_desc')">
                                     <vibe:button size="xs" variant="primary">
-                                        Clear Filters
+                                        {{ __('docs/table.empty_state.clear_filters') }}
                                     </vibe:button>
                                 </vibe:table.empty>
                             </vibe:table.rows>
@@ -511,131 +504,164 @@
             {{-- 7. Subcomponents Reference --}}
             <section id="subkomponen-table" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.subcomponents_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.subcomponents.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.subcomponents_desc') !!}
+                        {!! __('docs/table.subcomponents.desc') !!}
                     </p>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                    <table class="w-full text-left text-xs">
-                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                            <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_component') }}</th>
-                                <th class="px-4 py-3">Tag HTML</th>
-                                <th class="px-4 py-3">{{ __('docs/table.table_desc') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border text-muted-foreground">
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;table&gt; + wrapper div</td>
-                                <td class="px-4 py-3 text-muted-foreground">Kontainer tabel utama dengan pembungkus overflow responsif dan bayangan lembut.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.header&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;thead&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Bagian kepala tabel. Mendukung prop <code class="font-mono text-foreground">sticky</code>.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.column&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;th&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Kolom judul tabel. Mendukung perataan teks dan fitur sortir (<code class="font-mono text-foreground">sortable</code>).</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.rows&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;tbody&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Badan tabel yang mengelompokkan baris-baris data dengan pemisah horizontal.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.row&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;tr&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Baris tunggal. Mendukung status baris terpilih (<code class="font-mono text-foreground">selected</code>) dan <code class="font-mono text-foreground">clickable</code>.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.cell&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;td&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Sel data tabel dengan kontrol perataan teks (<code class="font-mono text-foreground">align</code>) dan varian teks.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.footer&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;tfoot&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Bagian kaki tabel untuk baris ringkasan, total, atau kontrol paginasi.</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:table.empty&gt;</td>
-                                <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">&lt;tr&gt; + &lt;td&gt;</td>
-                                <td class="px-4 py-3 text-muted-foreground">Tampilan state kosong ketika tidak ada catatan data untuk ditampilkan.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.subcomponents.columns.component') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.subcomponents.columns.tag') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/table.subcomponents.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $subcomponents = [
+                                ['<vibe:table>', '<table> + wrapper div', 'table'],
+                                ['<vibe:table.header>', '<thead>', 'header'],
+                                ['<vibe:table.column>', '<th>', 'column'],
+                                ['<vibe:table.rows>', '<tbody>', 'rows'],
+                                ['<vibe:table.row>', '<tr>', 'row'],
+                                ['<vibe:table.cell>', '<td>', 'cell'],
+                                ['<vibe:table.footer>', '<tfoot>', 'footer'],
+                                ['<vibe:table.empty>', '<tr> + <td>', 'empty'],
+                            ];
+                        @endphp
+                        @foreach ($subcomponents as [$comp, $tag, $key])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $comp }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $tag }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! __('docs/table.subcomponents.items.' . $key) !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
             {{-- 8. Props Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.props_title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/table.props.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/table.props_desc') !!}
+                        {!! __('docs/table.props.desc') !!}
                     </p>
                 </div>
 
                 {{-- Table props --}}
                 <p class="text-sm font-semibold text-foreground pt-1">&lt;vibe:table&gt;</p>
-                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                    <table class="w-full text-left text-xs">
-                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                            <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_prop') }}</th>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_type') }}</th>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_default') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/table.table_desc') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border text-muted-foreground">
-                            @php
-                                $mainProps = [['variant', "'default'|'striped'|'bordered'|'flush'", "'default'", 'Gaya visual tabel.'], ['dense', 'bool', 'false', 'Mode kompak dengan tinggi baris dan padding lebih ramping.'], ['hoverable', 'bool', 'true', 'Efek sorot (highlight) saat kursor berada di atas baris.'], ['caption', 'string|null', 'null', 'Keterangan teks kecil di bawah tabel.'], ['containerClass', 'string|null', 'null', 'Kelas Tailwind tambahan untuk div wrapper pembungkus luar tabel.']];
-                            @endphp
-                            @foreach ($mainProps as [$prop, $type, $default, $desc])
-                                <tr class="hover:bg-accent/40 transition-colors">
-                                    <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                    <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                    <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                    <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/table.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $mainProps = [
+                                ['variant', "'default'|'striped'|'bordered'|'flush'", "'default'", 'variant'],
+                                ['dense', 'bool', 'false', 'dense'],
+                                ['hoverable', 'bool', 'true', 'hoverable'],
+                                ['caption', 'string|null', 'null', 'caption'],
+                                ['containerClass', 'string|null', 'null', 'containerClass'],
+                            ];
+                        @endphp
+                        @foreach ($mainProps as [$prop, $type, $default, $key])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/table.props.table.' . $key) }}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
 
                 {{-- Column props --}}
                 <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:table.column&gt;</p>
-                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                    <table class="w-full text-left text-xs">
-                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                            <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_prop') }}</th>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_type') }}</th>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/table.table_default') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/table.table_desc') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border text-muted-foreground">
-                            @php
-                                $colProps = [['align', "'left'|'center'|'right'", "'left'", 'Perataan horizontal isi kolom.'], ['sortable', 'bool', 'false', 'Menandai kolom dapat diurutkan (menampilkan indikator sort).'], ['sorted', 'bool', 'false', 'Status apakah kolom sedang aktif menjadi acuan pengurutan.'], ['direction', "'asc'|'desc'|null", 'null', 'Arah panah pengurutan saat kolom berstatus sorted.']];
-                            @endphp
-                            @foreach ($colProps as [$prop, $type, $default, $desc])
-                                <tr class="hover:bg-accent/40 transition-colors">
-                                    <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                    <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                    <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                    <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/table.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $colProps = [
+                                ['align', "'left'|'center'|'right'", "'left'", 'align'],
+                                ['sortable', 'bool', 'false', 'sortable'],
+                                ['sorted', 'bool', 'false', 'sorted'],
+                                ['direction', "'asc'|'desc'|null", 'null', 'direction'],
+                            ];
+                        @endphp
+                        @foreach ($colProps as [$prop, $type, $default, $key])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/table.props.column.' . $key) }}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- Row props --}}
+                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:table.row&gt;</p>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/table.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $rowProps = [
+                                ['selected', 'bool', 'false', 'selected'],
+                                ['clickable', 'bool', 'false', 'clickable'],
+                            ];
+                        @endphp
+                        @foreach ($rowProps as [$prop, $type, $default, $key])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/table.props.row.' . $key) }}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- Cell props --}}
+                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:table.cell&gt;</p>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/table.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/table.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $cellProps = [
+                                ['align', "'left'|'center'|'right'", "'left'", 'align'],
+                                ['variant', "'default'|'strong'|'muted'", "'default'", 'variant'],
+                                ['colspan', 'int|string|null', 'null', 'colspan'],
+                            ];
+                        @endphp
+                        @foreach ($cellProps as [$prop, $type, $default, $key])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/table.props.cell.' . $key) }}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
         </div>
