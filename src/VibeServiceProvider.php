@@ -118,7 +118,8 @@ class VibeServiceProvider extends ServiceProvider
             return "<?php
                 if (class_exists(\Illuminate\Support\Facades\Vite::class)) {
                     try {
-                        echo \Illuminate\Support\Facades\Vite::fonts();
+                        \$fonts = \Illuminate\Support\Facades\Vite::fonts();
+                        echo str_replace('<link ', '<link data-navigate-once ', str_replace('<style', '<style data-navigate-once', \$fonts));
                     } catch (\Throwable \$e) {}
                 }
                 \$prefix = config('vibe.prefix', 'vibe');
@@ -241,8 +242,6 @@ class VibeServiceProvider extends ServiceProvider
                     })();
                 </script>
                 <style id=\"vibe-anti-fouc-transitions\">
-                    html.vibe-restoring-main #docs-main-scroll { opacity: 0 !important; }
-                    html.vibe-restoring-side #sidebar-menu-body { opacity: 0 !important; }
                     *, *::before, *::after {
                         transition: none !important;
                     }
