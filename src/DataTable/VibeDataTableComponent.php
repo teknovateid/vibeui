@@ -58,4 +58,29 @@ abstract class VibeDataTableComponent extends DataTableComponent
             ];
         });
     }
+
+    protected bool $borderedStatus = false;
+
+    public function setBorderedStatus(bool $status): self
+    {
+        $this->borderedStatus = $status;
+
+        if ($status) {
+            $this->setTableAttributes([
+                'class' => 'w-full text-left text-sm caption-bottom select-text border-collapse [&_th]:border [&_th]:border-border [&_td]:border [&_td]:border-border',
+            ]);
+        }
+
+        return $this;
+    }
+
+    public function setBorderedEnabled(): self
+    {
+        return $this->setBorderedStatus(true);
+    }
+
+    public function setBorderedDisabled(): self
+    {
+        return $this->setBorderedStatus(false);
+    }
 }

@@ -53,7 +53,7 @@
         @isset($tfoot)
             <tfoot
                 wire:key="{{ $tableName }}-tfoot"
-                class="border-t border-border bg-muted/20 text-xs font-medium text-muted-foreground"
+                class="border-t border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
                 {{ $tfoot }}
             </tfoot>
