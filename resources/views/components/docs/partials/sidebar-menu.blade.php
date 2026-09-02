@@ -55,6 +55,17 @@
             {{ __('docs/sidebar.nav.input') }}
         </vibe:nav.item>
 
+        <!-- Select -->
+        <vibe:nav.item href="{{ route('docs.select.index') }}" :active="request()->routeIs('docs.select.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                    <path d="m8 10 4 4 4-4"></path>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.select') }}
+        </vibe:nav.item>
+
         <!-- Button -->
         <vibe:nav.item href="{{ route('docs.button.index') }}" :active="request()->routeIs('docs.button.*')">
             <x-slot:icon>

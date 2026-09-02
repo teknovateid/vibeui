@@ -11,6 +11,7 @@ return [
         'instalation' => 'Instalasi',
         'directories' => 'Direktori',
         'input' => 'Input',
+        'select' => 'Select',
         'button' => 'Button',
         'table' => 'Table',
         'datatable' => 'DataTable',

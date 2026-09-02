@@ -3,31 +3,33 @@
 @props([
     'orientation' => 'horizontal', // horizontal, vertical
     'attached' => true,
-    'variant' => 'default',        // default, outline, ghost, transparent
+    'variant' => 'default', // default, outline, ghost, transparent, surface
+    'size' => null, // xs, sm, md, lg, xl
 ])
 
 @php
-    $isVertical = $orientation === 'vertical';
+    $baseClasses = 'inline-flex';
 
-    if ($attached) {
-        $layoutClasses = $isVertical
-            ? 'inline-flex flex-col -space-y-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-b-none! [&>*:last-child:not(:only-child)]:rounded-t-none!'
-            : 'inline-flex flex-row -space-x-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-r-none! [&>*:last-child:not(:only-child)]:rounded-l-none!';
+    $layoutClasses = match ($orientation) {
+        'vertical' => $attached ? 'flex-col -space-y-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-b-none! [&>*:last-child:not(:only-child)]:rounded-t-none!' : 'flex-col gap-1',
+        default => $attached ? 'flex-row -space-x-px [&>*:not(:first-child):not(:last-child)]:rounded-none! [&>*:first-child:not(:only-child)]:rounded-r-none! [&>*:last-child:not(:only-child)]:rounded-l-none!' : 'flex-row items-center gap-1',
+    };
 
-        // Support rounded-full on group level (Rule 4: use rounded-full utility class)
-        $pillClasses = $isVertical
-            ? '[&.rounded-full>*:first-child:not(:only-child)]:rounded-t-full! [&.rounded-full>*:last-child:not(:only-child)]:rounded-b-full! [&.rounded-full>*:not(:first-child):not(:last-child)]:rounded-none!'
-            : '[&.rounded-full>*:first-child:not(:only-child)]:rounded-l-full! [&.rounded-full>*:last-child:not(:only-child)]:rounded-r-full! [&.rounded-full>*:not(:first-child):not(:last-child)]:rounded-none!';
+    $pillClasses = match ($orientation) {
+        'vertical' => '[&.rounded-full>*:first-child:not(:only-child)]:rounded-t-full! [&.rounded-full>*:last-child:not(:only-child)]:rounded-b-full! [&.rounded-full>*:not(:first-child):not(:last-child)]:rounded-none!',
+        default => '[&.rounded-full>*:first-child:not(:only-child)]:rounded-l-full! [&.rounded-full>*:last-child:not(:only-child)]:rounded-r-full! [&.rounded-full>*:not(:first-child):not(:last-child)]:rounded-none!',
+    };
 
-        $stackClasses = '[&>*]:relative [&>*:hover]:z-10 [&>*:focus-visible]:z-20 [&>*:active]:z-20 [&>*[aria-current=page]]:z-10 [&>*[data-active=true]]:z-10';
-        $compiledClasses = "{$layoutClasses} {$pillClasses} {$stackClasses}";
-    } else {
-        $compiledClasses = $isVertical ? 'inline-flex flex-col gap-1' : 'inline-flex flex-row items-center gap-1';
-    }
+    $variantClasses = match ($variant) {
+        'ghost', 'transparent' => 'bg-transparent [&>*]:bg-transparent [&>*]:border-transparent [&>*]:shadow-none',
+        'outline' => '[&>*]:border-input [&>*]:bg-background',
+        'surface' => '[&>*]:border-border/80 [&>*]:bg-card',
+        default => '',
+    };
 
-    if ($variant === 'ghost' || $variant === 'transparent') {
-        $compiledClasses .= ' bg-transparent [&>*]:bg-transparent [&>*]:border-transparent [&>*]:shadow-none';
-    }
+    $stackClasses = $attached ? '[&>*]:relative [&>*:hover]:z-10 [&>*:focus-visible]:z-20 [&>*:active]:z-20 [&>*[aria-current=page]]:z-10 [&>*[data-active=true]]:z-10' : '';
+
+    $compiledClasses = trim("{$baseClasses} {$layoutClasses} " . ($attached ? "{$pillClasses} {$stackClasses} " : '') . "{$variantClasses}");
 @endphp
 
 <div role="group" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>{{ $slot }}</div>

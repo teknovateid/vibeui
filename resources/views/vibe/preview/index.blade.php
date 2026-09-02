@@ -121,7 +121,7 @@
             }
         }
     }"
-    {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-border bg-card text-card-foreground overflow-hidden shadow-xs']) }}
+    {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-border bg-card text-card-foreground shadow-xs']) }}
 >
     {{-- Preview Toolbar Header --}}
     <div class="relative flex items-center justify-between min-h-10.5 px-3.5 py-2 bg-muted/40 dark:bg-muted/20 border-b border-border text-xs">
@@ -325,7 +325,7 @@
         x-show="tab === 'preview'"
         data-canvas-theme="{{ $canvasTheme }}"
         :data-canvas-theme="canvasTheme"
-        class="relative w-full overflow-hidden transition-colors duration-300 {{ $canvasTheme === 'dark' ? 'dark' : ($canvasTheme === 'light' ? 'light' : '') }}"
+        class="relative w-full transition-colors duration-300 {{ $canvasTheme === 'dark' ? 'dark' : ($canvasTheme === 'light' ? 'light' : '') }}"
         :class="{
             'dark': canvasTheme === 'dark',
             'light': canvasTheme === 'light'
@@ -334,9 +334,9 @@
     >
         {{-- Background Pattern Decoration --}}
         @if ($pattern === 'dots')
-            <div class="pointer-events-none absolute inset-0 opacity-25 dark:opacity-15 bg-[radial-gradient(#737373_1px,transparent_1px)] dark:bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] bg-size-[16px_16px]"></div>
+            <div class="pointer-events-none absolute inset-0 rounded-b-2xl opacity-25 dark:opacity-15 bg-[radial-gradient(#737373_1px,transparent_1px)] dark:bg-[radial-gradient(#d4d4d8_1px,transparent_1px)] bg-size-[16px_16px]"></div>
         @elseif ($pattern === 'grid')
-            <div class="pointer-events-none absolute inset-0 opacity-25 dark:opacity-20 bg-[linear-gradient(to_right,#8080801a_1px,transparent_1px),linear-gradient(to_bottom,#8080801a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff1a_1px,transparent_1px)] bg-size-[24px_24px]"></div>
+            <div class="pointer-events-none absolute inset-0 rounded-b-2xl opacity-25 dark:opacity-20 bg-[linear-gradient(to_right,#8080801a_1px,transparent_1px),linear-gradient(to_bottom,#8080801a_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff1a_1px,transparent_1px)] bg-size-[24px_24px]"></div>
         @endif
 
         {{-- Resizable Inner Wrapper --}}
@@ -354,6 +354,7 @@
     <div
         id="{{ $codeId }}"
         x-show="tab === 'code'"
+        class="rounded-b-2xl overflow-hidden"
         style="{{ $tab === 'code' ? 'display: block;' : 'display: none;' }}"
     >
         @if (isset($code) && !empty($code))
