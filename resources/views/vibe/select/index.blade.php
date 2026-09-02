@@ -7,9 +7,9 @@
     'description' => null,
     'size' => 'md', // sm, md, lg, xl
     'variant' => 'outline', // outline, filled, flush, ghost, accent
-    'placeholder' => 'Pilih opsi...',
+    'placeholder' => null,
     'searchable' => false,
-    'searchPlaceholder' => 'Cari opsi...',
+    'searchPlaceholder' => null,
     'disabled' => false,
     'error' => null,
     'errorName' => null,
@@ -19,9 +19,14 @@
     'value' => null,
     'placement' => 'auto', // auto, bottom, top
     'keyboard' => false,
+    'multiple' => false,
+    'min' => null,
+    'max' => null,
 ])
 
 @php
+    $placeholder = $placeholder ?? __('vibe/select.placeholder');
+    $searchPlaceholder = $searchPlaceholder ?? __('vibe/select.search_placeholder');
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
     $id = $id ?? ($name ?? uniqid('select-'));
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
@@ -32,20 +37,20 @@
     $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
     $sizeClasses = match ($size) {
-        'sm' => 'h-8 text-xs rounded-md pl-3 pr-8 gap-1.5',
-        'md' => 'h-9 text-sm rounded-lg pl-3.5 pr-9 gap-2',
-        'lg' => 'h-10 text-sm rounded-lg pl-4 pr-10 gap-2',
-        'xl' => 'h-11 text-base rounded-xl pl-5 pr-11 gap-2.5',
-        default => 'h-9 text-sm rounded-lg pl-3.5 pr-9 gap-2',
+        'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs rounded-md pl-3 pr-8 gap-1.5',
+        'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
+        'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm rounded-lg pl-4 pr-10 gap-2',
+        'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base rounded-xl pl-5 pr-11 gap-2.5',
+        default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
     };
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
-            'sm' => 'h-8 text-xs px-0 rounded-none pr-6',
-            'md' => 'h-9 text-sm px-0 rounded-none pr-7',
-            'lg' => 'h-10 text-sm px-0 rounded-none pr-8',
-            'xl' => 'h-11 text-base px-0 rounded-none pr-9',
-            default => 'h-9 text-sm px-0 rounded-none pr-7',
+            'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs px-0 rounded-none pr-6',
+            'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
+            'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm px-0 rounded-none pr-8',
+            'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base px-0 rounded-none pr-9',
+            default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
         };
     }
 
@@ -103,19 +108,34 @@
     x-data="{
         open: false,
         search: '',
-        value: @if($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($value ?? $attributes->get('value') ?? '') @endif,
+        value: @if($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($multiple ? (is_array($value) ? array_values($value) : ($value !== null && $value !== '' ? [(string)$value] : [])) : ($value ?? $attributes->get('value') ?? '')) @endif,
         selectedLabel: '',
         selectedAvatar: '',
         selectedIcon: '',
         selectedDescription: '',
+        selectedItems: [],
         hasVisibleOptions: true,
         disabled: {{ $disabled ? 'true' : 'false' }},
         keyboard: {{ $keyboard ? 'true' : 'false' }},
+        multiple: {{ $multiple ? 'true' : 'false' }},
+        min: {{ $min !== null ? (int)$min : 'null' }},
+        max: {{ $max !== null ? (int)$max : 'null' }},
         placement: '{{ $placement }}',
         openUp: {{ $placement === 'top' ? 'true' : 'false' }},
 
         init() {
             this.$nextTick(() => {
+                let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
+                if (isEmptyValue && this.$refs.optionsContainer) {
+                    let preselected = Array.from(this.$refs.optionsContainer.querySelectorAll('[data-selected=\'true\']'));
+                    if (preselected.length > 0) {
+                        if (this.multiple) {
+                            this.value = preselected.map(el => el.getAttribute('data-value'));
+                        } else {
+                            this.value = preselected[0].getAttribute('data-value');
+                        }
+                    }
+                }
                 this.updateSelectionFromValue();
             });
             this.$watch('value', () => {
@@ -126,7 +146,114 @@
             });
         },
 
+        selectOption(el) {
+            if (!el) return;
+            let val = el.getAttribute('data-value');
+            let lbl = el.getAttribute('data-label') || el.innerText.trim();
+            let av = el.getAttribute('data-avatar') || '';
+            let ic = el.getAttribute('data-icon') || '';
+            let desc = el.getAttribute('data-description') || '';
+            this.select(val, lbl, av, ic, desc);
+        },
+
+        isSelected(val) {
+            if (this.multiple) {
+                return Array.isArray(this.value) && this.value.some(v => String(v) === String(val));
+            }
+            return String(this.value) === String(val);
+        },
+
+        canSelectMore() {
+            if (!this.multiple) return true;
+            if (this.max === null) return true;
+            return Array.isArray(this.value) && this.value.length < this.max;
+        },
+
+        canDeselect() {
+            if (!this.multiple) return true;
+            if (this.min === null) return true;
+            return Array.isArray(this.value) && this.value.length > this.min;
+        },
+
+        isOptionDisabled(val, isDisabled) {
+            if (isDisabled) return true;
+            if (this.multiple && this.max !== null && !this.isSelected(val) && !this.canSelectMore()) {
+                return true;
+            }
+            return false;
+        },
+
+        removeTag(val) {
+            if (this.disabled) return;
+            if (this.min !== null && Array.isArray(this.value) && this.value.length <= this.min) {
+                return;
+            }
+            let strVal = String(val);
+            this.value = this.value.filter(v => String(v) !== strVal);
+            this.updateSelectionFromValue();
+            this.$nextTick(() => {
+                this.dispatchChangeEvent();
+            });
+        },
+
+        clearAll() {
+            if (this.disabled) return;
+            if (this.min !== null && this.min > 0) {
+                // Trim down to minimum required items (keep first min items)
+                if (Array.isArray(this.value) && this.value.length > this.min) {
+                    this.value = this.value.slice(0, this.min);
+                    this.updateSelectionFromValue();
+                    this.$nextTick(() => {
+                        this.dispatchChangeEvent();
+                    });
+                }
+                return;
+            }
+            this.value = [];
+            this.updateSelectionFromValue();
+            this.$nextTick(() => {
+                this.dispatchChangeEvent();
+            });
+        },
+
+        dispatchChangeEvent() {
+            if (this.$refs.hiddenInput) {
+                this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+                this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        },
+
         updateSelectionFromValue() {
+            if (this.multiple) {
+                if (!Array.isArray(this.value)) {
+                    this.value = this.value !== null && this.value !== undefined && this.value !== '' ? [this.value] : [];
+                }
+                let items = [];
+                this.value.forEach(val => {
+                    let strVal = String(val);
+                    let el = this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelector(`[data-value='${strVal}']`) : null;
+                    if (el) {
+                        items.push({
+                            value: val,
+                            label: el.getAttribute('data-label') || el.innerText.trim(),
+                            avatar: el.getAttribute('data-avatar') || '',
+                            icon: el.getAttribute('data-icon') || '',
+                            description: el.getAttribute('data-description') || ''
+                        });
+                    } else {
+                        items.push({
+                            value: val,
+                            label: String(val),
+                            avatar: '',
+                            icon: '',
+                            description: ''
+                        });
+                    }
+                });
+                this.selectedItems = items;
+                return;
+            }
+
             if (this.value === '' || this.value === null || this.value === undefined) {
                 this.selectedLabel = '';
                 this.selectedAvatar = '';
@@ -145,6 +272,33 @@
 
         select(val, lbl, av, ic, desc) {
             if (this.disabled) return;
+            if (this.isOptionDisabled(val, false)) return;
+
+            if (this.multiple) {
+                if (!Array.isArray(this.value)) {
+                    this.value = [];
+                }
+                let strVal = String(val);
+                let exists = this.value.some(v => String(v) === strVal);
+
+                if (exists) {
+                    if (this.min !== null && this.value.length <= this.min) {
+                        return;
+                    }
+                    this.value = this.value.filter(v => String(v) !== strVal);
+                } else {
+                    if (this.max !== null && this.value.length >= this.max) {
+                        return;
+                    }
+                    this.value.push(val);
+                }
+                this.updateSelectionFromValue();
+                this.$nextTick(() => {
+                    this.dispatchChangeEvent();
+                });
+                return;
+            }
+
             this.value = val;
             this.selectedLabel = lbl;
             this.selectedAvatar = av || '';
@@ -154,10 +308,7 @@
             this.search = '';
 
             this.$nextTick(() => {
-                if (this.$refs.hiddenInput) {
-                    this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
-                    this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
-                }
+                this.dispatchChangeEvent();
             });
         },
 
@@ -272,14 +423,26 @@
         <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
     @endif
 
-    {{-- Hidden input for native form compatibility --}}
-    <input 
-        type="hidden" 
-        id="{{ $id }}" 
-        name="{{ $name }}" 
-        :value="value" 
-        x-ref="hiddenInput"
-    />
+    {{-- Hidden input(s) for native form compatibility --}}
+    @if ($multiple)
+        <template x-for="val in value" :key="val">
+            <input type="hidden" name="{{ $name }}[]" :value="val" />
+        </template>
+        <input 
+            type="hidden" 
+            id="{{ $id }}" 
+            x-ref="hiddenInput"
+            :value="JSON.stringify(value)" 
+        />
+    @else
+        <input 
+            type="hidden" 
+            id="{{ $id }}" 
+            name="{{ $name }}" 
+            :value="value" 
+            x-ref="hiddenInput"
+        />
+    @endif
 
     {{-- Trigger & Popover Wrapper --}}
     <div class="relative">
@@ -300,23 +463,56 @@
             @endif
             {{ $attributes->twMerge(['class' => $compiledClasses]) }}
         >
-            {{-- Content Display (Avatar/Icon + Label) --}}
-            <span class="flex items-center gap-2 min-w-0 truncate">
-                {{-- Dynamic Avatar or Icon when an option is selected --}}
-                <template x-if="selectedAvatar">
-                    <img :src="selectedAvatar" class="size-5 rounded-full object-cover shrink-0" alt="" />
-                </template>
-                <template x-if="!selectedAvatar && selectedIcon">
-                    <span class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4" x-html="selectedIcon"></span>
-                </template>
+            {{-- Content Display --}}
+            @if ($multiple)
+                <div class="flex flex-wrap items-center gap-1.5 py-0.5 max-w-[calc(100%-2rem)]">
+                    <template x-if="selectedItems.length === 0">
+                        <span class="text-muted-foreground truncate">{{ $placeholder }}</span>
+                    </template>
 
-                {{-- Selected Label or Placeholder --}}
-                <span 
-                    x-text="selectedLabel || '{{ addslashes($placeholder) }}'" 
-                    :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'"
-                    class="truncate"
-                ></span>
-            </span>
+                    <template x-for="item in selectedItems" :key="item.value">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-muted/80 text-foreground border border-border/70 shadow-2xs">
+                            <template x-if="item.avatar">
+                                <img :src="item.avatar" class="size-3.5 rounded-full object-cover shrink-0" alt="" />
+                            </template>
+                            <template x-if="!item.avatar && item.icon">
+                                <span class="size-3 shrink-0 flex items-center justify-center [&>svg]:size-3" x-html="item.icon"></span>
+                            </template>
+                            <span x-text="item.label" class="truncate max-w-30"></span>
+                            <button
+                                type="button"
+                                @click.stop="removeTag(item.value)"
+                                :disabled="disabled || (min !== null && value.length <= min)"
+                                :class="{'opacity-30 cursor-not-allowed': min !== null && value.length <= min}"
+                                class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 text-muted-foreground transition-colors cursor-pointer"
+                                aria-label="{{ __('vibe/select.remove_tag') }}"
+                            >
+                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6 6 18" />
+                                    <path d="m6 6 12 12" />
+                                </svg>
+                            </button>
+                        </span>
+                    </template>
+                </div>
+            @else
+                <span class="flex items-center gap-2 min-w-0 truncate">
+                    {{-- Dynamic Avatar or Icon when an option is selected --}}
+                    <template x-if="selectedAvatar">
+                        <img :src="selectedAvatar" class="size-5 rounded-full object-cover shrink-0" alt="" />
+                    </template>
+                    <template x-if="!selectedAvatar && selectedIcon">
+                        <span class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4" x-html="selectedIcon"></span>
+                    </template>
+
+                    {{-- Selected Label or Placeholder --}}
+                    <span 
+                        x-text="selectedLabel || '{{ addslashes($placeholder) }}'" 
+                        :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'"
+                        class="truncate"
+                    ></span>
+                </span>
+            @endif
 
             {{-- Custom Animated Chevron Indicator --}}
             <div class="pointer-events-none absolute inset-y-0 {{ $chevronRightPosition }} flex items-center text-muted-foreground">
@@ -386,6 +582,40 @@
                 </div>
             @endif
 
+            {{-- Multi-Select Counter / Limit Banner --}}
+            @if ($multiple)
+                <div class="px-3 py-1.5 text-xs font-medium border-b border-border bg-muted/30 flex items-center justify-between select-none">
+                    <span class="text-muted-foreground">
+                        {{ __('vibe/select.selected_count') }}
+                        <span x-text="value.length" class="font-bold text-foreground"></span>
+                        @if ($max)
+                            / <span>{{ $max }}</span>
+                        @endif
+                    </span>
+
+                    <div class="flex items-center gap-2">
+                        @if ($min)
+                            <span x-show="value.length < {{ $min }}" class="text-[11px] text-muted-foreground font-medium">
+                                {{ __('vibe/select.min_limit', ['min' => $min]) }}
+                            </span>
+                        @endif
+                        @if ($max)
+                            <span x-show="value.length >= {{ $max }}" class="text-[11px] text-muted-foreground font-medium">
+                                {{ __('vibe/select.max_reached') }}
+                            </span>
+                        @endif
+                        <button
+                            x-show="value.length > 0 && (!min || value.length > min)"
+                            type="button"
+                            @click.stop="clearAll()"
+                            class="text-[11px] text-muted-foreground hover:text-destructive transition-colors cursor-pointer"
+                        >
+                            {{ __('vibe/select.reset') }}
+                        </button>
+                    </div>
+                </div>
+            @endif
+
             {{-- Options List Container --}}
             <div 
                 x-ref="optionsContainer" 
@@ -402,6 +632,7 @@
                             $optAvatar = is_array($optVal) ? ($optVal['avatar'] ?? null) : null;
                             $optIcon = is_array($optVal) ? ($optVal['icon'] ?? null) : null;
                             $optDisabled = is_array($optVal) ? ($optVal['disabled'] ?? false) : false;
+                            $optSelected = is_array($optVal) ? ($optVal['selected'] ?? false) : false;
                         @endphp
                         <vibe:select.option 
                             :value="$optValue" 
@@ -410,6 +641,7 @@
                             :avatar="$optAvatar" 
                             :icon="$optIcon" 
                             :disabled="$optDisabled" 
+                            :selected="$optSelected" 
                         />
                     @endforeach
                 @endif
@@ -428,7 +660,7 @@
                         <line x1="21" x2="16.65" y1="21" y2="16.65" />
                         <line x1="8" x2="14" y1="11" y2="11" />
                     </svg>
-                    <span>Tidak ada opsi ditemukan.</span>
+                    <span>{{ __('vibe/select.no_options') }}</span>
                 </div>
             </div>
         </div>

@@ -80,7 +80,7 @@
                 let links = this.$el.querySelectorAll('[data-toc-href]');
                 if (!links.length) return;
 
-                // Collect tracked heading/section elements in unique order
+                // Collect tracked heading elements (use el.id directly, never section.id)
                 let seen = new Set();
                 let items = [];
                 links.forEach(link => {
@@ -325,45 +325,57 @@
                         let scrollContainer = document.getElementById('docs-main-scroll') || window;
                         let scrollTop = (scrollContainer === window) ? window.scrollY : (scrollContainer.scrollTop || 0);
 
-                        let initialActiveId = '';
-                        if (scrollTop < 50 && headingElements.length > 0) {
-                            let firstH = headingElements[0];
-                            initialActiveId = firstH.id || (firstH.closest('section[id]')?.id);
-                        } else {
-                            let containerRect = (scrollContainer === window) ? { top: 0 } : scrollContainer.getBoundingClientRect();
-                            let threshold = offset + 60;
-
-                            for (let i = 0; i < headingElements.length; i++) {
-                                let hEl = headingElements[i].closest('section[id]') || headingElements[i];
-                                let rect = hEl.getBoundingClientRect();
-                                let top = rect.top - containerRect.top;
-                                
-                                let bottom;
-                                if (i < headingElements.length - 1) {
-                                    let nextEl = headingElements[i + 1].closest('section[id]') || headingElements[i + 1];
-                                    bottom = nextEl.getBoundingClientRect().top - containerRect.top;
-                                } else {
-                                    bottom = rect.bottom - containerRect.top;
-                                }
-
-                                if (top <= threshold && bottom > threshold) {
-                                    initialActiveId = hEl.id || headingElements[i].id;
-                                    break;
-                                }
-                            }
-                        }
-
+                        // === STEP 1: Assign unique IDs to all headings BEFORE calculating active ===
+                        let headingIds = [];
                         headingElements.forEach((el, index) => {
-                            let section = el.closest('section[id]');
-                            let targetId = el.id || (section ? section.id : '');
+                            let targetId = el.id;
                             if (!targetId) {
                                 let slug = el.textContent.trim().toLowerCase()
                                     .replace(/[^\w\s-]/g, '')
                                     .replace(/[\s_-]+/g, '-')
                                     .replace(/^-+|-+$/g, '');
-                                targetId = slug || ('section-' + (index + 1));
+                                targetId = slug || ('toc-section-' + (index + 1));
+                                // Deduplicate: append counter if slug already used by another element
+                                let orig = targetId;
+                                let count = 1;
+                                while (document.getElementById(targetId) && document.getElementById(targetId) !== el) {
+                                    targetId = orig + '-' + (count++);
+                                }
                                 el.id = targetId;
                             }
+                            headingIds.push(targetId);
+                        });
+
+                        // === STEP 2: Calculate initial active ID using now-assigned heading IDs ===
+                        let initialActiveId = '';
+                        if (scrollTop < 50 && headingElements.length > 0) {
+                            initialActiveId = headingIds[0];
+                        } else {
+                            let containerRect = (scrollContainer === window) ? { top: 0 } : scrollContainer.getBoundingClientRect();
+                            let threshold = offset + 60;
+
+                            for (let i = 0; i < headingElements.length; i++) {
+                                let rect = headingElements[i].getBoundingClientRect();
+                                let top = rect.top - containerRect.top;
+
+                                let bottom;
+                                if (i < headingElements.length - 1) {
+                                    bottom = headingElements[i + 1].getBoundingClientRect().top - containerRect.top;
+                                } else {
+                                    bottom = rect.bottom - containerRect.top;
+                                }
+
+                                if (top <= threshold && bottom > threshold) {
+                                    initialActiveId = headingIds[i];
+                                    break;
+                                }
+                            }
+                        }
+
+                        // === STEP 3: Render TOC items ===
+                        headingElements.forEach((el, index) => {
+                            // IDs already assigned in STEP 1 — just read from headingIds
+                            let targetId = headingIds[index];
 
                             if (!initialActiveId && index === 0) {
                                 initialActiveId = targetId;
