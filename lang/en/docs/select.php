@@ -92,11 +92,19 @@ return [
 
     // Section 9: Multiple Select & Limits
     'multiple' => [
-        'title' => 'Multiple Selection & Limits (Min & Max)',
-        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> attribute to select multiple options. Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> to require a minimum number of selected items and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> to restrict the maximum number of items.',
-        'preview_title' => 'Multi-Select with Min & Max Constraints',
-        'label' => 'Topics of Interest (Choose 2 to 4 topics)',
-        'placeholder' => 'Select multiple topics...',
+        'title' => 'Multiple Selection & Limits (Multiple, Min & Max)',
+        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> attribute to enable selecting more than one option. Selected values are cleanly presented as interactive removable chip tags. Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> to enforce a minimum number of selections and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> to restrict the maximum number of items.',
+        'preview_title' => 'Multiple Selection (Multi-Select)',
+        'basic_title' => 'Basic Multiple Select',
+        'basic_label' => 'Technical Skills',
+        'basic_placeholder' => 'Select multiple skills...',
+        'searchable_title' => 'Multi-Select with Instant Search',
+        'searchable_label' => 'Frameworks & Tools',
+        'searchable_placeholder' => 'Search and choose frameworks...',
+        'limits_title' => 'Selection Limits (Min & Max)',
+        'limits_label' => 'Topics of Interest (Min 2, Max 4)',
+        'limits_placeholder' => 'Choose between 2 and 4 topics...',
+        'limits_info' => 'Tags cannot be removed once at the minimum of 2, and other items lock once 4 are selected.',
     ],
 
     // Props table

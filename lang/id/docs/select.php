@@ -93,10 +93,18 @@ return [
     // Section 9: Multiple Select & Limits
     'multiple' => [
         'title' => 'Pilihan Ganda & Batasan (Multiple, Min & Max)',
-        'desc' => 'Tambahkan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> untuk memilih lebih dari 1 opsi sekaligus. Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> untuk menentukan jumlah minimal opsi yang wajib dipilih dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> untuk membatasi jumlah maksimal opsi.',
-        'preview_title' => 'Pilihan Ganda dengan Batasan Min & Max',
-        'label' => 'Topik Minat (Pilih 2 hingga 4 topik)',
-        'placeholder' => 'Pilih beberapa topik minat...',
+        'desc' => 'Tambahkan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">multiple</code> untuk memilih lebih dari 1 opsi sekaligus. Item yang terpilih akan otomatis ditampilkan dalam bentuk chip/badge elegan yang dapat dihapus individual. Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:min="n"</code> untuk menentukan batas minimum pilihan dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:max="n"</code> untuk membatasi jumlah maksimum opsi yang dapat dipilih.',
+        'preview_title' => 'Pilihan Ganda (Multi-Select)',
+        'basic_title' => 'Pilihan Ganda Dasar',
+        'basic_label' => 'Keahlian Teknis',
+        'basic_placeholder' => 'Pilih beberapa keahlian...',
+        'searchable_title' => 'Pilihan Ganda dengan Fitur Pencarian',
+        'searchable_label' => 'Framework & Teknologi',
+        'searchable_placeholder' => 'Cari dan pilih framework...',
+        'limits_title' => 'Batasan Jumlah Pilihan (Min & Max)',
+        'limits_label' => 'Topik Minat (Minimal 2, Maksimal 4)',
+        'limits_placeholder' => 'Pilih 2 hingga 4 topik...',
+        'limits_info' => 'Item tidak bisa dihapus jika sudah mencapai batas minimal 2, dan opsi lain terkunci saat mencapai maksimal 4.',
     ],
 
     // Props table

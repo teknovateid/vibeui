@@ -30,6 +30,10 @@
                     @foreach (['sm', 'md', 'lg', 'xl'] as $s)
                         <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $s }}</span>
                     @endforeach
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    @foreach (['searchable', 'multiple', 'min', 'max', 'keyboard'] as $f)
+                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $f }}</span>
+                    @endforeach
                 </div>
             </div>
 
@@ -353,13 +357,13 @@
 
                 <vibe:preview :title="__('docs/select.keyboard.preview_title')" minHeight="300px">
                     <vibe:preview.code>
-<vibe:select name="os" label="{{ __('docs/select.keyboard.label') }}" placeholder="{{ __('docs/select.keyboard.placeholder') }}" keyboard searchable>
-    <vibe:select.option value="mac">macOS Sonoma</vibe:select.option>
-    <vibe:select.option value="linux">Ubuntu Linux</vibe:select.option>
-    <vibe:select.option value="windows">Windows 11 Pro</vibe:select.option>
-    <vibe:select.option value="fedora">Fedora Workstation</vibe:select.option>
-    <vibe:select.option value="arch">Arch Linux</vibe:select.option>
-</vibe:select>
+                        <vibe:select name="os" label="{{ __('docs/select.keyboard.label') }}" placeholder="{{ __('docs/select.keyboard.placeholder') }}" keyboard searchable>
+                            <vibe:select.option value="mac">macOS Sonoma</vibe:select.option>
+                            <vibe:select.option value="linux">Ubuntu Linux</vibe:select.option>
+                            <vibe:select.option value="windows">Windows 11 Pro</vibe:select.option>
+                            <vibe:select.option value="fedora">Fedora Workstation</vibe:select.option>
+                            <vibe:select.option value="arch">Arch Linux</vibe:select.option>
+                        </vibe:select>
                     </vibe:preview.code>
                     <div class="w-full max-w-sm">
                         <vibe:select name="os" :label="__('docs/select.keyboard.label')" :placeholder="__('docs/select.keyboard.placeholder')" keyboard searchable>
@@ -373,7 +377,104 @@
                 </vibe:preview>
             </section>
 
-            {{-- 9. Component Properties Table --}}
+            {{-- 9. Multiple Selection & Limits --}}
+            <section id="pilihan-ganda" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.multiple.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/select.multiple.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Demo 1: Basic Multiple Select --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.basic_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.multiple.basic_title')" minHeight="320px">
+                        <vibe:preview.code>
+                            <vibe:select name="skills" label="{{ __('docs/select.multiple.basic_label') }}" placeholder="{{ __('docs/select.multiple.basic_placeholder') }}" multiple keyboard :value="['php', 'laravel']">
+                                <vibe:select.option value="php">PHP</vibe:select.option>
+                                <vibe:select.option value="laravel">Laravel</vibe:select.option>
+                                <vibe:select.option value="livewire">Livewire</vibe:select.option>
+                                <vibe:select.option value="tailwind">Tailwind CSS</vibe:select.option>
+                                <vibe:select.option value="alpine">Alpine.js</vibe:select.option>
+                                <vibe:select.option value="vue">Vue.js</vibe:select.option>
+                                <vibe:select.option value="react">React</vibe:select.option>
+                            </vibe:select>
+                        </vibe:preview.code>
+                        <div class="w-full max-w-md">
+                            <vibe:select name="skills" :label="__('docs/select.multiple.basic_label')" :placeholder="__('docs/select.multiple.basic_placeholder')" multiple keyboard :value="['php', 'laravel']">
+                                <vibe:select.option value="php">PHP</vibe:select.option>
+                                <vibe:select.option value="laravel">Laravel</vibe:select.option>
+                                <vibe:select.option value="livewire">Livewire</vibe:select.option>
+                                <vibe:select.option value="tailwind">Tailwind CSS</vibe:select.option>
+                                <vibe:select.option value="alpine">Alpine.js</vibe:select.option>
+                                <vibe:select.option value="vue">Vue.js</vibe:select.option>
+                                <vibe:select.option value="react">React</vibe:select.option>
+                            </vibe:select>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 2: Multiple with Searchable --}}
+                <div class="space-y-2 pt-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.searchable_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.multiple.searchable_title')" minHeight="340px">
+                        <vibe:preview.code>
+                            <vibe:select name="tech_stack" label="{{ __('docs/select.multiple.searchable_label') }}" placeholder="{{ __('docs/select.multiple.searchable_placeholder') }}" multiple  keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
+                                <vibe:select.option value="docker">Docker</vibe:select.option>
+                                <vibe:select.option value="k8s">Kubernetes</vibe:select.option>
+                                <vibe:select.option value="redis">Redis Cache</vibe:select.option>
+                                <vibe:select.option value="postgres">PostgreSQL</vibe:select.option>
+                                <vibe:select.option value="mysql">MySQL Server</vibe:select.option>
+                                <vibe:select.option value="aws">Amazon Web Services</vibe:select.option>
+                                <vibe:select.option value="gcp">Google Cloud Platform</vibe:select.option>
+                            </vibe:select>
+                        </vibe:preview.code>
+                        <div class="w-full max-w-md">
+                            <vibe:select name="tech_stack" :label="__('docs/select.multiple.searchable_label')" :placeholder="__('docs/select.multiple.searchable_placeholder')" multiple keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
+                                <vibe:select.option value="docker">Docker</vibe:select.option>
+                                <vibe:select.option value="k8s">Kubernetes</vibe:select.option>
+                                <vibe:select.option value="redis">Redis Cache</vibe:select.option>
+                                <vibe:select.option value="postgres">PostgreSQL</vibe:select.option>
+                                <vibe:select.option value="mysql">MySQL Server</vibe:select.option>
+                                <vibe:select.option value="aws">Amazon Web Services</vibe:select.option>
+                                <vibe:select.option value="gcp">Google Cloud Platform</vibe:select.option>
+                            </vibe:select>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 3: Min and Max Constraints --}}
+                <div class="space-y-2 pt-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.limits_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.multiple.limits_title')" minHeight="340px">
+                        <vibe:preview.code>
+                            <vibe:select name="interests" label="{{ __('docs/select.multiple.limits_label') }}" placeholder="{{ __('docs/select.multiple.limits_placeholder') }}" info="{{ __('docs/select.multiple.limits_info') }}" multiple keyboard :min="2" :max="4" :value="['ai', 'cloud']">
+                                <vibe:select.option value="ai">Artificial Intelligence</vibe:select.option>
+                                <vibe:select.option value="cloud">Cloud Computing</vibe:select.option>
+                                <vibe:select.option value="cyber">Cyber Security</vibe:select.option>
+                                <vibe:select.option value="data">Data Science</vibe:select.option>
+                                <vibe:select.option value="mobile">Mobile Development</vibe:select.option>
+                                <vibe:select.option value="devops">DevOps & CI/CD</vibe:select.option>
+                                <vibe:select.option value="blockchain">Blockchain</vibe:select.option>
+                            </vibe:select>
+                        </vibe:preview.code>
+                        <div class="w-full max-w-md">
+                            <vibe:select name="interests" :label="__('docs/select.multiple.limits_label')" :placeholder="__('docs/select.multiple.limits_placeholder')" :info="__('docs/select.multiple.limits_info')" multiple keyboard :min="2" :max="4" :value="['ai', 'cloud']">
+                                <vibe:select.option value="ai">Artificial Intelligence</vibe:select.option>
+                                <vibe:select.option value="cloud">Cloud Computing</vibe:select.option>
+                                <vibe:select.option value="cyber">Cyber Security</vibe:select.option>
+                                <vibe:select.option value="data">Data Science</vibe:select.option>
+                                <vibe:select.option value="mobile">Mobile Development</vibe:select.option>
+                                <vibe:select.option value="devops">DevOps & CI/CD</vibe:select.option>
+                                <vibe:select.option value="blockchain">Blockchain</vibe:select.option>
+                            </vibe:select>
+                        </div>
+                    </vibe:preview>
+                </div>
+            </section>
+
+            {{-- 10. Component Properties Table --}}
             <section id="properti-komponen" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.props.title') }}</h2>
@@ -391,24 +492,7 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $selectProps = [
-                                    ['label', 'string', 'null', 'Label teks di atas komponen select.'],
-                                    ['name', 'string', 'null', 'Nama atribut form (otomatis fallback ke wire:model).'],
-                                    ['id', 'string', 'null', 'ID elemen unik untuk aksesibilitas.'],
-                                    ['placeholder', 'string', '"Pilih opsi..."', 'Teks placeholder saat belum ada item terpilih.'],
-                                    ['placement', 'string', '"auto"', 'Arah dropdown popover: "auto" (dinamis cerdas), "bottom", atau "top".'],
-                                    ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi penuh tombol keyboard (Up, Down, Enter, Space, Escape) seperti pada komponen dropdown.'],
-                                    ['size', 'string', '"md"', 'Ukuran: "sm" (32px), "md" (36px), "lg" (40px), "xl" (44px).'],
-                                    ['variant', 'string', '"outline"', 'Gaya: "outline", "filled", "flush", "ghost", "accent".'],
-                                    ['searchable', 'bool', 'false', 'Menampilkan kolom filter pencarian real-time.'],
-                                    ['searchPlaceholder', 'string', '"Cari opsi..."', 'Placeholder pada kotak pencarian.'],
-                                    ['disabled', 'bool', 'false', 'Menonaktifkan seluruh komponen select.'],
-                                    ['error', 'string', 'null', 'Pesan error validasi manual.'],
-                                    ['errorName', 'string', 'null', 'Kunci error bag spesifik di $errors.'],
-                                    ['description', 'string', 'null', 'Teks keterangan bantuan di bawah label.'],
-                                    ['info', 'string', 'null', 'Teks bantuan informasi di bawah select.'],
-                                    ['wrapperClass', 'string', 'null', 'Class kustom untuk pembungkus kontainer terluar.']
-                                ];
+                                $selectProps = [['label', 'string', 'null', 'Label teks di atas komponen select.'], ['name', 'string', 'null', 'Nama atribut form (otomatis fallback ke wire:model).'], ['id', 'string', 'null', 'ID elemen unik untuk aksesibilitas.'], ['placeholder', 'string', '"Pilih opsi..."', 'Teks placeholder saat belum ada item terpilih.'], ['placement', 'string', '"auto"', 'Arah dropdown popover: "auto" (dinamis cerdas), "bottom", atau "top".'], ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi penuh tombol keyboard (Up, Down, Enter, Space, Escape) seperti pada komponen dropdown.'], ['size', 'string', '"md"', 'Ukuran: "sm" (32px), "md" (36px), "lg" (40px), "xl" (44px).'], ['variant', 'string', '"outline"', 'Gaya: "outline", "filled", "flush", "ghost", "accent".'], ['searchable', 'bool', 'false', 'Menampilkan kolom filter pencarian real-time.'], ['searchPlaceholder', 'string', '"Cari opsi..."', 'Placeholder pada kotak pencarian.'], ['disabled', 'bool', 'false', 'Menonaktifkan seluruh komponen select.'], ['error', 'string', 'null', 'Pesan error validasi manual.'], ['errorName', 'string', 'null', 'Kunci error bag spesifik di $errors.'], ['description', 'string', 'null', 'Teks keterangan bantuan di bawah label.'], ['info', 'string', 'null', 'Teks bantuan informasi di bawah select.'], ['wrapperClass', 'string', 'null', 'Class kustom untuk pembungkus kontainer terluar.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan lebih dari satu opsi (array value). Ditampilkan dalam bentuk chips yang dapat dihapus.'], ['min', 'int', 'null', 'Jumlah minimum opsi yang wajib dipilih pada mode multiple.'], ['max', 'int', 'null', 'Jumlah maksimum opsi yang dapat dipilih pada mode multiple. Opsi lain otomatis terkunci saat batas tercapai.']];
                             @endphp
                             @foreach ($selectProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
