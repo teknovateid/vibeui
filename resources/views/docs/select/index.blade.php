@@ -13,7 +13,7 @@
             {{-- Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/select.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/select.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/select.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/select.title') }}</h1>
@@ -24,15 +24,15 @@
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['outline', 'filled', 'flush', 'ghost', 'accent'] as $v)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $v }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['sm', 'md', 'lg', 'xl'] as $s)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $s }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['searchable', 'multiple', 'min', 'max', 'keyboard'] as $f)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $f }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $f }}</vibe:badge>
                     @endforeach
                 </div>
             </div>
@@ -508,7 +508,7 @@
                 <div class="space-y-2">
                     <div class="flex items-center justify-between gap-2">
                         <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.basic_title') }}</h3>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-muted text-muted-foreground border border-border">Tanpa Batasan (Bebas Pilih/Kosongkan)</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">Tanpa Batasan (Bebas Pilih/Kosongkan)</vibe:badge>
                     </div>
                     <vibe:preview :title="__('docs/select.multiple.basic_title')" minHeight="320px">
                         <vibe:preview.code>
@@ -569,7 +569,7 @@
                 <div class="space-y-2 pt-2">
                     <div class="flex items-center justify-between gap-2">
                         <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.limits_title') }}</h3>
-                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">:min="2" & :max="4" (Terkunci Otomatis)</span>
+                        <vibe:badge variant="warning" size="sm" class="font-mono text-[10px]">:min="2" & :max="4" (Terkunci Otomatis)</vibe:badge>
                     </div>
                     <vibe:preview :title="__('docs/select.multiple.limits_title')" minHeight="340px">
                         <vibe:preview.code>

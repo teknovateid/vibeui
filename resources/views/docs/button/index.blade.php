@@ -13,7 +13,7 @@
             {{-- Component Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/button.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/button.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/button.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/button.title') }}</h1>
@@ -24,7 +24,7 @@
                 {{-- Quick Variants Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'accent', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $v }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                 </div>
             </div>

@@ -13,7 +13,7 @@
             {{-- Hero Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/modal.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/modal.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/modal.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/modal.title') }}</h1>
@@ -24,19 +24,19 @@
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'remember'] as $p)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $p }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['sm', 'md', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl', 'full'] as $s)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $s }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['top', 'center', 'bottom'] as $pos)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $pos }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $pos }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['open-modal', 'close-modal'] as $ev)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $ev }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $ev }}</vibe:badge>
                     @endforeach
                 </div>
             </div>

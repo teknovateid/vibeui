@@ -12,9 +12,7 @@
             {{-- Page Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">
-                        {{ __('docs/directories.badge') }}
-                    </span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/directories.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/directories.subtitle') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">

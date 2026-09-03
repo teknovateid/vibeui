@@ -13,7 +13,7 @@
             {{-- Hero Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/table.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/table.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/table.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/table.title') }}</h1>
@@ -24,11 +24,11 @@
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['default', 'striped', 'bordered', 'flush'] as $v)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $v }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['dense', 'hoverable', 'sortable', 'selected'] as $f)
-                        <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $f }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $f }}</vibe:badge>
                     @endforeach
                 </div>
             </div>

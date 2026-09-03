@@ -13,7 +13,7 @@
             {{-- Component Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/breadcrumb.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/breadcrumb.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/breadcrumb.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/breadcrumb.title') }}</h1>
@@ -23,10 +23,10 @@
 
                 {{-- Quick Tags Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">&lt;vibe:breadcrumb&gt;</span>
-                    <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">&lt;vibe:breadcrumb.item&gt;</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:breadcrumb&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:breadcrumb.item&gt;</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    <span class="px-2 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">wire:navigate</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">wire:navigate</vibe:badge>
                 </div>
             </div>
 

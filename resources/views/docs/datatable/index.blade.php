@@ -16,7 +16,7 @@
             {{-- Hero Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground">{{ __('docs/datatable.badge') }}</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/datatable.badge') }}</vibe:badge>
                     <span class="text-xs text-muted-foreground">{{ __('docs/datatable.group') }}</span>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/datatable.title') }}</h1>
@@ -27,7 +27,7 @@
                 {{-- Feature Badges --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     @foreach (['Livewire 3', 'Rappasoft Engine', 'Debounced Search', 'Multi-Sort', 'Bulk Actions', 'Column Selector', 'Custom Filters', 'Footer Aggregates', 'Bordered Mode'] as $badge)
-                        <span class="px-2.5 py-0.5 rounded-md bg-muted text-muted-foreground text-[11px] font-mono font-medium border border-border">{{ $badge }}</span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $badge }}</vibe:badge>
                     @endforeach
                 </div>
             </div>
@@ -379,8 +379,8 @@ class DemoActionsTable extends VibeDataTableComponent
 
             Column::make('Status')
                 ->label(fn ($row) => $row->id % 2 === 0
-                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">Active</span>'
-                    : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground border border-border">Inactive</span>'
+                    ? Blade::render('<vibe:badge variant="success" class="rounded-full">Active</vibe:badge>')
+                    : Blade::render('<vibe:badge variant="secondary" class="rounded-full">Inactive</vibe:badge>')
                 )
                 ->html(),
 
