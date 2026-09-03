@@ -9,6 +9,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/select', 'docs.select.index')->name('select.index');
     Route::view('/button', 'docs.button.index')->name('button.index');
+    Route::view('/badge', 'docs.badge.index')->name('badge.index');
+    Route::view('/breadcrumb', 'docs.breadcrumb.index')->name('breadcrumb.index');
     Route::view('/table', 'docs.table.index')->name('table.index');
     Route::view('/datatable', 'docs.datatable.index')->name('datatable.index');
     Route::view('/modal', 'docs.modal.index')->name('modal.index');

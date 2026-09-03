@@ -13,6 +13,8 @@ return [
         'input' => 'Input',
         'select' => 'Select',
         'button' => 'Button',
+        'badge' => 'Badge',
+        'breadcrumb' => 'Breadcrumb',
         'table' => 'Table',
         'datatable' => 'DataTable',
         'modal' => 'Modal',
