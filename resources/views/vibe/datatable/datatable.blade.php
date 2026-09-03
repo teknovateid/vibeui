@@ -1,3 +1,13 @@
+@pushOnce('head', 'vibe-datatable-styles')
+    @rappasoftTableStyles
+    @rappasoftTableThirdPartyStyles
+@endPushOnce
+
+@pushOnce('body', 'vibe-datatable-scripts')
+    @rappasoftTableScripts
+    @rappasoftTableThirdPartyScripts
+@endPushOnce
+
 @php($tableName = $this->getTableName)
 @php($tableId = $this->getTableId)
 @php($primaryKey = $this->getPrimaryKey)

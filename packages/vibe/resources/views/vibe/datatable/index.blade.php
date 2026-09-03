@@ -5,6 +5,16 @@
     'bordered' => false,
 ])
 
+@pushOnce('head', 'vibe-datatable-styles')
+    @rappasoftTableStyles
+    @rappasoftTableThirdPartyStyles
+@endPushOnce
+
+@pushOnce('body', 'vibe-datatable-scripts')
+    @rappasoftTableScripts
+    @rappasoftTableThirdPartyScripts
+@endPushOnce
+
 @php
     $classAttr = (string) $attributes->get('class', '');
     $classesList = preg_split('/\s+/', trim($classAttr));
