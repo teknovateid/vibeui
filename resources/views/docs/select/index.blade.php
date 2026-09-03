@@ -66,7 +66,125 @@
                 </vibe:preview>
             </section>
 
-            {{-- 2. Searchable --}}
+            {{-- 2. Selected Values (2 Methods: value & selected) --}}
+            <section id="opsi-terpilih" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.selected_methods.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/select.selected_methods.desc') !!}
+                    </p>
+                </div>
+
+                {{-- A. Single Select --}}
+                <div class="space-y-3">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.single_tab') }}</h3>
+                    <vibe:preview :title="__('docs/select.selected_methods.single_tab')" minHeight="300px">
+                        <vibe:preview.code>
+{{-- Metode 1: Prop value pada <vibe:select> (Single) --}}
+<vibe:select name="status" label="{{ __('docs/select.selected_methods.method1_label') }}" value="active">
+    <vibe:select.option value="draft">Draft</vibe:select.option>
+    <vibe:select.option value="active">Active</vibe:select.option>
+    <vibe:select.option value="archived">Archived</vibe:select.option>
+</vibe:select>
+
+{{-- Metode 2: Atribut selected pada <vibe:select.option> (Single) --}}
+<vibe:select name="department" label="{{ __('docs/select.selected_methods.method2_label') }}">
+    <vibe:select.option value="engineering">Engineering</vibe:select.option>
+    <vibe:select.option value="design" selected>Product Design</vibe:select.option>
+    <vibe:select.option value="marketing">Marketing</vibe:select.option>
+</vibe:select>
+                        </vibe:preview.code>
+
+                        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                            {{-- Card Metode 1 Single --}}
+                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.method1_title') }}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary">value="active"</span>
+                                </div>
+                                <vibe:select name="demo_status" :label="__('docs/select.selected_methods.method1_label')" :placeholder="__('docs/select.selected_methods.method1_placeholder')" value="active">
+                                    <vibe:select.option value="draft">Draft (Konsep)</vibe:select.option>
+                                    <vibe:select.option value="active">Active (Dipublikasikan)</vibe:select.option>
+                                    <vibe:select.option value="archived">Archived (Diarsipkan)</vibe:select.option>
+                                </vibe:select>
+                                <p class="text-[11px] text-muted-foreground">Opsi "Active" otomatis terpilih melalui prop <code>value="active"</code>.</p>
+                            </div>
+
+                            {{-- Card Metode 2 Single --}}
+                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.method2_title') }}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">&lt;option selected&gt;</span>
+                                </div>
+                                <vibe:select name="demo_department" :label="__('docs/select.selected_methods.method2_label')" :placeholder="__('docs/select.selected_methods.method2_placeholder')">
+                                    <vibe:select.option value="engineering">Engineering</vibe:select.option>
+                                    <vibe:select.option value="design" selected>Product Design</vibe:select.option>
+                                    <vibe:select.option value="marketing">Marketing</vibe:select.option>
+                                </vibe:select>
+                                <p class="text-[11px] text-muted-foreground">Opsi "Product Design" otomatis terpilih melalui atribut <code>selected</code> pada option.</p>
+                            </div>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- B. Multiple Select --}}
+                <div class="space-y-3 pt-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.multi_tab') }}</h3>
+                    <vibe:preview :title="__('docs/select.selected_methods.multi_tab')" minHeight="320px">
+                        <vibe:preview.code>
+{{-- Metode 1: Prop :value array pada <vibe:select multiple> --}}
+<vibe:select name="frontend" label="{{ __('docs/select.selected_methods.multi_method1_label') }}" multiple :value="['react', 'vue']">
+    <vibe:select.option value="react">React</vibe:select.option>
+    <vibe:select.option value="vue">Vue.js</vibe:select.option>
+    <vibe:select.option value="svelte">Svelte</vibe:select.option>
+    <vibe:select.option value="angular">Angular</vibe:select.option>
+</vibe:select>
+
+{{-- Metode 2: Atribut selected pada beberapa <vibe:select.option> (Multiple) --}}
+<vibe:select name="backend" label="{{ __('docs/select.selected_methods.multi_method2_label') }}" multiple>
+    <vibe:select.option value="php" selected>PHP</vibe:select.option>
+    <vibe:select.option value="laravel" selected>Laravel</vibe:select.option>
+    <vibe:select.option value="nodejs">Node.js</vibe:select.option>
+    <vibe:select.option value="python">Python</vibe:select.option>
+</vibe:select>
+                        </vibe:preview.code>
+
+                        <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
+                            {{-- Card Metode 1 Multiple --}}
+                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.multi_method1_title') }}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary">:value="['react', 'vue']"</span>
+                                </div>
+                                <vibe:select name="demo_frontend" :label="__('docs/select.selected_methods.multi_method1_label')" :placeholder="__('docs/select.selected_methods.multi_method1_placeholder')" multiple :value="['react', 'vue']">
+                                    <vibe:select.option value="react">React</vibe:select.option>
+                                    <vibe:select.option value="vue">Vue.js</vibe:select.option>
+                                    <vibe:select.option value="svelte">Svelte</vibe:select.option>
+                                    <vibe:select.option value="angular">Angular</vibe:select.option>
+                                </vibe:select>
+                                <p class="text-[11px] text-muted-foreground">Opsi "React" dan "Vue.js" terpilih melalui array binding <code>:value="['react', 'vue']"</code>.</p>
+                            </div>
+
+                            {{-- Card Metode 2 Multiple --}}
+                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                                <div class="flex items-center justify-between gap-2">
+                                    <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.multi_method2_title') }}</span>
+                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">multiple &lt;option selected&gt;</span>
+                                </div>
+                                <vibe:select name="demo_backend" :label="__('docs/select.selected_methods.multi_method2_label')" :placeholder="__('docs/select.selected_methods.multi_method2_placeholder')" multiple>
+                                    <vibe:select.option value="php" selected>PHP</vibe:select.option>
+                                    <vibe:select.option value="laravel" selected>Laravel</vibe:select.option>
+                                    <vibe:select.option value="nodejs">Node.js</vibe:select.option>
+                                    <vibe:select.option value="python">Python</vibe:select.option>
+                                </vibe:select>
+                                <p class="text-[11px] text-muted-foreground">Opsi "PHP" dan "Laravel" otomatis terpilih berkat atribut <code>selected</code> pada masing-masing opsi.</p>
+                            </div>
+                        </div>
+                    </vibe:preview>
+                </div>
+            </section>
+
+            {{-- 3. Searchable --}}
             <section id="pencarian" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.searchable.title') }}</h2>
@@ -388,7 +506,10 @@
 
                 {{-- Demo 1: Basic Multiple Select --}}
                 <div class="space-y-2">
-                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.basic_title') }}</h3>
+                    <div class="flex items-center justify-between gap-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.basic_title') }}</h3>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-muted text-muted-foreground border border-border">Tanpa Batasan (Bebas Pilih/Kosongkan)</span>
+                    </div>
                     <vibe:preview :title="__('docs/select.multiple.basic_title')" minHeight="320px">
                         <vibe:preview.code>
                             <vibe:select name="skills" label="{{ __('docs/select.multiple.basic_label') }}" placeholder="{{ __('docs/select.multiple.basic_placeholder') }}" multiple keyboard :value="['php', 'laravel']">
@@ -446,7 +567,10 @@
 
                 {{-- Demo 3: Min and Max Constraints --}}
                 <div class="space-y-2 pt-2">
-                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.limits_title') }}</h3>
+                    <div class="flex items-center justify-between gap-2">
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.limits_title') }}</h3>
+                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">:min="2" & :max="4" (Terkunci Otomatis)</span>
+                    </div>
                     <vibe:preview :title="__('docs/select.multiple.limits_title')" minHeight="340px">
                         <vibe:preview.code>
                             <vibe:select name="interests" label="{{ __('docs/select.multiple.limits_label') }}" placeholder="{{ __('docs/select.multiple.limits_placeholder') }}" info="{{ __('docs/select.multiple.limits_info') }}" multiple keyboard :min="2" :max="4" :value="['ai', 'cloud']">

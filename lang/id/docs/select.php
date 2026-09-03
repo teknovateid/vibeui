@@ -15,6 +15,29 @@ return [
         'placeholder' => 'Pilih peran akun...',
     ],
 
+    // Section 1.2: Selected Values (2 Methods)
+    'selected_methods' => [
+        'title' => 'Menentukan Opsi Terpilih (2 Metode: value & selected)',
+        'desc' => 'Komponen Vibe UI menyediakan dua cara fleksibel untuk menentukan opsi yang aktif atau terpilih secara default, baik untuk <strong>Single Select</strong> maupun <strong>Multiple Select</strong>:<br><br>
+        1. <strong>Metode 1 (Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">value</code> pada <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:select&gt;</code>)</strong>: Tentukan nilai yang dipilih di tingkat komponen induk. Mendukung string tunggal (misal <code class="font-mono text-xs">value="active"</code>) maupun array nilai untuk mode multiple (misal <code class="font-mono text-xs">:value="[\'react\', \'vue\']"</code>).<br>
+        2. <strong>Metode 2 (Atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">selected</code> pada <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:select.option&gt;</code>)</strong>: Pasang atribut boolean <code class="font-mono text-xs">selected</code> atau ekspresi <code class="font-mono text-xs">:selected="..."</code> langsung pada tag opsi. Pada mode multiple, Anda cukup menambahkan <code class="font-mono text-xs">selected</code> pada lebih dari satu opsi sekaligus.',
+        'preview_title' => 'Perbandingan 2 Metode Opsi Terpilih',
+        'single_tab' => 'Pilihan Tunggal (Single Select)',
+        'multi_tab' => 'Pilihan Ganda (Multiple Select)',
+        'method1_title' => 'Metode 1: Menggunakan Prop value di <vibe:select>',
+        'method1_label' => 'Status Akun (via prop value)',
+        'method1_placeholder' => 'Pilih status...',
+        'method2_title' => 'Metode 2: Menggunakan Atribut selected di <vibe:select.option>',
+        'method2_label' => 'Departemen (via option selected)',
+        'method2_placeholder' => 'Pilih departemen...',
+        'multi_method1_title' => 'Metode 1: Array :value="[\'...\']"',
+        'multi_method1_label' => 'Teknologi Frontend (via prop value)',
+        'multi_method1_placeholder' => 'Pilih teknologi...',
+        'multi_method2_title' => 'Metode 2: Multiple <option selected>',
+        'multi_method2_label' => 'Keahlian Backend (via option selected)',
+        'multi_method2_placeholder' => 'Pilih keahlian...',
+    ],
+
     // Section 1.5: Label, Description & Info
     'label_info' => [
         'title' => 'Label, Deskripsi & Info',

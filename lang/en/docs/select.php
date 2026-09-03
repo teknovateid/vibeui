@@ -15,6 +15,29 @@ return [
         'placeholder' => 'Select account role...',
     ],
 
+    // Section 1.2: Selected Values (2 Methods)
+    'selected_methods' => [
+        'title' => 'Pre-selecting Options (2 Methods: value & selected)',
+        'desc' => 'Vibe UI provides two flexible ways to declare pre-selected or active options for both <strong>Single Select</strong> and <strong>Multiple Select</strong> modes:<br><br>
+        1. <strong>Method 1 (Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">value</code> on <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:select&gt;</code>)</strong>: Declare the active value at the parent component level. Accepts a single string (e.g. <code class="font-mono text-xs">value="active"</code>) or an array for multiple mode (e.g. <code class="font-mono text-xs">:value="[\'react\', \'vue\']"</code>).<br>
+        2. <strong>Method 2 (Attribute <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">selected</code> on <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:select.option&gt;</code>)</strong>: Place the boolean attribute <code class="font-mono text-xs">selected</code> or dynamic condition <code class="font-mono text-xs">:selected="..."</code> directly on each option tag. In multiple mode, you simply add <code class="font-mono text-xs">selected</code> to multiple option tags.',
+        'preview_title' => 'Comparison of Both Pre-selection Methods',
+        'single_tab' => 'Single Selection',
+        'multi_tab' => 'Multiple Selection',
+        'method1_title' => 'Method 1: Using value Prop on <vibe:select>',
+        'method1_label' => 'Account Status (via value prop)',
+        'method1_placeholder' => 'Choose status...',
+        'method2_title' => 'Method 2: Using selected Attribute on <vibe:select.option>',
+        'method2_label' => 'Department (via option selected)',
+        'method2_placeholder' => 'Choose department...',
+        'multi_method1_title' => 'Method 1: Array :value="[\'...\']"',
+        'multi_method1_label' => 'Frontend Stack (via value prop)',
+        'multi_method1_placeholder' => 'Select technologies...',
+        'multi_method2_title' => 'Method 2: Multiple <option selected>',
+        'multi_method2_label' => 'Backend Skills (via option selected)',
+        'multi_method2_placeholder' => 'Select skills...',
+    ],
+
     // Section 1.5: Label, Description & Info
     'label_info' => [
         'title' => 'Label, Description & Info',
