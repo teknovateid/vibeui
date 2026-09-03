@@ -17,12 +17,13 @@ class DemoFooterTable extends VibeDataTableComponent
 
         $this->setPrimaryKey('id')
             ->setFooterStatus(true)
-            ->setUseHeaderAsFooterStatus(true);
+            ->setPerPageAccepted([5, 10, 25])
+            ->setDefaultPerPage(5);
     }
 
     public function builder(): Builder
     {
-        return User::query();
+        return User::query()->select(['id', 'name', 'email', 'created_at']);
     }
 
     public function columns(): array
@@ -30,19 +31,19 @@ class DemoFooterTable extends VibeDataTableComponent
         return [
             Column::make('ID', 'id')
                 ->sortable()
-                ->footer(fn ($rows) => 'Total: ' . $rows->count() . ' User'),
+                ->footer(fn ($rows) => 'Total: ' . $rows->count()),
 
             Column::make('Name', 'name')
                 ->sortable()
-                ->searchable()
-                ->footer(fn () => 'Ringkasan Halaman'),
+                ->searchable(),
 
             Column::make('Email', 'email')
                 ->sortable()
                 ->searchable(),
 
             Column::make('Created At', 'created_at')
-                ->sortable(),
+                ->sortable()
+                ->footer(fn () => '-'),
         ];
     }
 }

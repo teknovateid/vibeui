@@ -4,125 +4,173 @@ return [
     'title' => 'DataTable',
     'badge' => 'Komponen Enterprise',
     'group' => 'Komponen UI',
-    'description' => 'Tabel data server-side berperforma tinggi bertenaga Rappasoft yang didesain ulang sepenuhnya menggunakan token tema Vibe UI. Dilengkapi pencarian debounced, sorting multi-kolom, seleksi visibilitas kolom, bulk action, filter per-kolom, baris footer agregasi, dan navigasi paginasi elegan.',
+    'description' => 'Tabel data server-side berperforma tinggi bertenaga Rappasoft yang didesain ulang sepenuhnya menggunakan token tema Vibe UI. Dilengkapi pencarian debounced, sorting multi-kolom, seleksi visibilitas kolom, aksi massal (bulk actions), filter per-kolom, baris footer agregasi, mode bergaris (bordered), dan navigasi paginasi elegan.',
 
-    'features' => [
-        'title' => 'Kemampuan Utama',
-        'server_side' => 'Pemrosesan sisi server dengan optimasi query Eloquent',
-        'sorting' => 'Pengurutan interaktif dengan indikator visual modern',
-        'searching' => 'Pencarian langsung (debounced) di berbagai kolom',
-        'column_select' => 'Tampilkan atau sembunyikan kolom secara dinamis',
-        'bulk_actions' => 'Seleksi baris massal dengan eksekusi aksi instan',
-        'footer' => 'Baris ringkasan footer untuk total dan kalkulasi',
-        'pagination' => 'Navigasi paginasi khas Vibe UI yang intuitif',
+    'common' => [
+        'preview_component' => 'Komponen Preview',
+        'livewire_component' => 'Komponen Livewire',
+        'home' => 'Beranda',
+        'docs' => 'Dokumentasi',
     ],
 
-    'installation' => [
-        'title' => 'Instalasi & Generator',
-        'desc' => 'Vibe UI telah dikonfigurasi untuk bekerja dengan engine tabel Rappasoft resmi. Anda dapat membuat komponen DataTable baru secara instan menggunakan perintah artisan:',
+    'code' => [
+        'blade_call_1' => 'Cara 1: Menggunakan Tag Helper Vibe UI (Direkomendasikan)',
+        'blade_call_2' => 'Atau menggunakan alias Livewire kebab-case',
+        'blade_call_3' => 'Cara 2: Menggunakan Tag Livewire Asli',
+        'blade_call_4' => 'Cara 3: Menggunakan Direktif Blade Klasik',
+        'prop_forwarding_1' => 'Forwarding parameter id dan status ke komponen Livewire',
+        'prop_forwarding_2' => 'Menambahkan class styling wrapper kustom',
+        'bordered_1' => 'Cara 1: Menggunakan Class Utility (Sangat Praktis & Bersih)',
+        'bordered_2' => 'Cara 2: Menggunakan Atribut Boolean "bordered"',
+        'bordered_3' => 'Cara 3: Menggunakan Komponen dengan Konfigurasi PHP Class',
+        'comment_bordered_enabled' => 'Mengaktifkan border penuh pada setiap baris & kolom',
+        'comment_default_sort' => 'Urutan bawaan',
+        'comment_export_csv' => 'Ekspor data terpilih ke file CSV',
+        'comment_delete_selected' => 'Hapus data terpilih',
+        'comment_clear_selected' => 'Bersihkan pilihan setelah aksi selesai',
+        'comment_secondary_header' => 'Mengaktifkan baris header sekunder untuk pencarian per kolom',
+        'comment_footer_status' => 'Mengaktifkan baris footer tabel',
+        'comment_header_as_footer' => 'Menampilkan baris judul kolom juga sebagai footer di bagian bawah tabel',
+        'comment_large_dataset' => 'Menetapkan pilihan data per halaman hingga 250 baris dengan default 50 baris',
+        'placeholder_id' => 'ID...',
+        'placeholder_name' => 'Cari nama...',
+        'placeholder_email' => 'Cari email...',
+        'filter_all_domains' => 'Semua Domain',
     ],
 
-    'generator' => [
-        'title' => 'Artisan Generator',
-        'desc' => 'Buat komponen DataTable siap pakai dalam hitungan detik menggunakan perintah generator artisan bawaan Vibe UI:',
-    ],
-
-    'tag_helper' => [
-        'title' => 'Penggunaan Tag <vibe:datatable>',
-        'desc' => 'Selain menggunakan sintaks bawaan Livewire, Vibe UI menyediakan tag kustom <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:datatable&gt;</code> yang lebih deklaratif dan terintegrasi dengan ekosistem Vibe UI.',
-        'preview_title' => 'DataTable via <vibe:datatable>',
+    'how_to_call' => [
+        'title' => 'Cara Memanggil DataTable',
+        'desc' => 'Komponen DataTable di Vibe UI berbasis Livewire, sehingga Anda memiliki berbagai cara fleksibel untuk memanggil dan merendernya di dalam file Blade view aplikasi Anda:',
+        'vibe_tag' => [
+            'title' => 'Menggunakan Tag Helper <vibe:datatable>',
+            'desc' => 'Cara paling bersih dan direkomendasikan di ekosistem Vibe UI. Menerima nama class FQCN (Fully Qualified Class Name) secara langsung atau string alias Livewire:',
+        ],
+        'livewire_tag' => [
+            'title' => 'Menggunakan Tag Asli <livewire:...>',
+            'desc' => 'Jika Anda lebih menyukai sintaks tag bawaan Livewire, Anda tetap dapat memanggilnya langsung menggunakan nama alias kebab-case komponen:',
+        ],
+        'blade_directive' => [
+            'title' => 'Menggunakan Direktif @livewire',
+            'desc' => 'Sintaks klasik Blade helper `@livewire(...)` juga didukung penuh untuk memanggil class maupun alias:',
+        ],
+        'prop_forwarding' => [
+            'title' => 'Meneruskan Properti & Parameter (Prop Forwarding)',
+            'desc' => 'Semua atribut tambahan yang Anda sematkan pada tag `<vibe:datatable>` akan otomatis diteruskan (forwarded) ke komponen Livewire di dalamnya:',
+        ],
     ],
 
     'basic_usage' => [
-        'title' => 'Penggunaan Dasar',
-        'desc' => 'Cukup buat class turunan dari <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">VibeDataTableComponent</code> lalu definisikan query Eloquent dan kolomnya. Komponen secara otomatis mewarisi token desain, debounce pencarian, dan layout Vibe UI.',
-        'preview_title' => 'Pratinjau Tabel Dasar (Basic Table)',
+        'title' => 'Basic Usage',
+        'desc' => 'Contoh implementasi dasar DataTable dengan mewarisi <code class="font-mono text-xs">VibeDataTableComponent</code>. Mendukung pengurutan kolom klik header dan pencarian debounced live secara otomatis.',
+        'preview_title' => 'Preview: Basic DataTable',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap menggunakan <code class="font-mono text-xs">parent::configure()</code> dan pendefinisian query model via <code class="font-mono text-xs">builder()</code>.',
     ],
 
-    'bulk_actions' => [
-        'title' => 'Aksi Massal (Bulk Actions)',
-        'desc' => 'Aktifkan seleksi checkbox untuk menjalankan aksi terhadap banyak baris data sekaligus, seperti ekspor laporan atau penghapusan data massal.',
-        'preview_title' => 'Pratinjau Aksi Massal (Bulk Actions)',
-    ],
-
-    'column_search' => [
-        'title' => 'Pencarian di Setiap Kolom (Per-Column Search)',
-        'desc' => 'Sematkan input pencarian langsung di bawah judul setiap kolom menggunakan secondary header, sehingga pengguna dapat memfilter baris berdasarkan kolom ID, nama, atau email secara independen.',
-        'preview_title' => 'Pratinjau Pencarian di Setiap Kolom',
-    ],
-
-    'filters_section' => [
-        'title' => 'Filter Popover Kustom',
-        'desc' => 'Tambahkan komponen filter popover dropdown status, domain email, pencarian tanggal, atau kriteria khusus lainnya.',
-        'preview_title' => 'Pratinjau Filter Popover',
-    ],
-
-    'footer_section' => [
-        'title' => 'Footer Kolom & Ringkasan (Aggregations)',
-        'desc' => 'Tampilkan baris footer di bagian bawah tabel untuk menyajikan kalkulasi seperti total record, jumlah nominal (sum), atau rata-rata (average).',
-        'preview_title' => 'Pratinjau Footer Kolom & Ringkasan',
-    ],
-
-    'secondary_header_section' => [
-        'title' => 'Header Tambahan (Secondary Header)',
-        'desc' => 'Gunakan header sekunder untuk meletakkan input pencarian atau filter tepat di bawah judul masing-masing kolom.',
-    ],
-
-    'blade_usage' => [
-        'title' => 'Pilihan Integrasi Blade',
-        'desc' => 'Anda memiliki dua opsi cara render DataTable di view Blade:',
+    'bordered' => [
+        'title' => 'Bordered Table',
+        'desc' => 'Menampilkan garis batas pembatas (borders) vertikal dan horizontal pada setiap sel header (<code class="font-mono text-xs">&lt;th&gt;</code>) dan data (<code class="font-mono text-xs">&lt;td&gt;</code>). Dapat diaktifkan secara instan cukup dengan menambahkan <code class="font-mono text-xs">class="border"</code> atau atribut <code class="font-mono text-xs">bordered</code> pada tag Blade, maupun melalui method <code class="font-mono text-xs">$this-&gt;setBorderedEnabled()</code> di PHP class.',
+        'preview_title' => 'Preview: Bordered DataTable',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap menggunakan method <code class="font-mono text-xs">setBorderedEnabled()</code> atau <code class="font-mono text-xs">setBorderedStatus(true)</code> di dalam <code class="font-mono text-xs">configure()</code>.',
     ],
 
     'columns' => [
         'title' => 'Kustomisasi Kolom & Tombol Aksi',
-        'desc' => 'Definisikan kolom menggunakan class <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Column</code> yang mendukung pengurutan (sorting), format status badge, hingga tombol aksi ikon via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.group variant="ghost"&gt;</code>:',
-        'preview_title' => 'Pratinjau Kolom Kustom & Aksi Ikon',
+        'desc' => 'Menampilkan data terformat (seperti badge avatar atau tanggal) dan tombol aksi (Edit, Hapus) pada setiap baris data menggunakan method <code class="font-mono text-xs">format()</code> dan <code class="font-mono text-xs">html()</code>.',
+        'preview_title' => 'Preview: Kolom Kustom & Tombol Aksi',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap dengan kolom badge kustom dan tombol aksi baris menggunakan <code class="font-mono text-xs">&lt;vibe:button&gt;</code>.',
     ],
 
-    'props' => [
-        'title' => 'Properti <vibe:datatable>',
-        'desc' => 'Daftar atribut yang didukung oleh komponen tag helper <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:datatable&gt;</code>:',
-        'columns' => [
-            'prop' => 'Properti',
-            'type' => 'Tipe',
-            'default' => 'Default',
-            'desc' => 'Deskripsi',
-        ],
-        'items' => [
-            'component' => 'Nama class FQCN (misal App\Livewire\UsersTable::class) atau nama alias Livewire (kebab-case).',
-            'attributes' => 'Atribut atau parameter tambahan lainnya akan otomatis diteruskan (forwarded) ke komponen Livewire.',
-            'slot' => 'Konten slot alternatif jika komponen digunakan sebagai pembungkus layout tabel kustom.',
-        ],
+    'bulk_actions' => [
+        'title' => 'Aksi Massal (Bulk Actions)',
+        'desc' => 'Memungkinkan pengguna memilih beberapa atau seluruh baris data menggunakan checkbox, lalu mengeksekusi aksi massal seperti ekspor CSV atau hapus data secara serentak.',
+        'preview_title' => 'Preview: Aksi Massal (Bulk Actions)',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap dengan pendefinisian <code class="font-mono text-xs">setBulkActions()</code> dan method handler aksi massal.',
     ],
 
-    'configuration' => [
-        'title' => 'Metode Konfigurasi Populer',
-        'desc' => 'Metode bawaan di dalam fungsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">configure()</code> untuk mengatur perilaku tabel:',
-        'columns' => [
-            'method' => 'Metode',
-            'desc' => 'Fungsi & Kegunaan',
-        ],
+    'column_search' => [
+        'title' => 'Pencarian di Setiap Kolom',
+        'desc' => 'Memasang input pencarian langsung di bawah judul masing-masing kolom menggunakan fitur <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondaryHeader</code>, memungkinkan pengguna memfilter baris berdasarkan kolom ID, nama, atau email secara independen.',
+        'preview_title' => 'Preview: Pencarian di Setiap Kolom',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP lengkap dengan public properties terikat, pengaktifan <code class="font-mono text-xs">setSecondaryHeaderStatus(true)</code>, dan query bersyarat <code class="font-mono text-xs">when()</code>.',
     ],
 
-    'features_section' => [
-        'title' => 'Fitur Unggulan',
-        'desc' => 'Kelebihan dan arsitektur unggulan Vibe DataTable:',
-        'items' => [
-            'server_perf' => [
-                'title' => 'Performa Server-Side Tinggi',
-                'desc' => 'Data ditarik secara efisien dengan klausa SQL Limit dan Offset, menjamin kecepatan rendering meski mengelola jutaan data.',
+    'footer_column_search' => [
+        'title' => 'Pencarian di Setiap Kolom (Footer)',
+        'desc' => 'Menempatkan input pencarian per kolom di bagian bawah tabel (<code class="font-mono text-xs">&lt;tfoot&gt;</code>) alih-alih di bawah header. Cocok untuk tabel dengan data banyak di mana pengguna ingin menyaring data dari dasar tabel menggunakan fitur <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">-&gt;footer(...)</code> dan <code class="font-mono text-xs">$this-&gt;setFooterStatus(true)</code>.',
+        'preview_title' => 'Preview: Pencarian di Setiap Kolom (Footer)',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP lengkap dengan pemanggilan <code class="font-mono text-xs">setFooterStatus(true)</code> di dalam <code class="font-mono text-xs">configure()</code> dan closure <code class="font-mono text-xs">-&gt;footer(...)</code> pada definisi setiap kolom.',
+    ],
+
+    'filters' => [
+        'title' => 'Filter Popover Kustom',
+        'desc' => 'Menambahkan tombol popover filter di toolbar atas tabel untuk memfilter data dengan dropdown kriteria tertentu (misalnya domain email atau rentang tanggal).',
+        'preview_title' => 'Preview: Filter Popover Kustom',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap dengan method <code class="font-mono text-xs">filters()</code> menggunakan class <code class="font-mono text-xs">SelectFilter</code>.',
+    ],
+
+    'footer_calc' => [
+        'title' => 'Footer Kolom & Kalkulasi Ringkasan',
+        'desc' => 'Menampilkan baris kalkulasi ringkasan (summary / aggregate) di bagian bawah tabel (<code class="font-mono text-xs">&lt;tfoot&gt;</code>), seperti total baris, jumlah nominal, atau statistik lainnya.',
+        'preview_title' => 'Preview: Footer Kolom & Kalkulasi Ringkasan',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap dengan method <code class="font-mono text-xs">setFooterStatus(true)</code> dan closure callback <code class="font-mono text-xs">footer()</code> pada kolom.',
+    ],
+
+    'header_as_footer' => [
+        'title' => 'Header Sebagai Footer (Use Header as Footer)',
+        'desc' => 'Menampilkan ulang judul kolom header di bagian paling bawah tabel (<code class="font-mono text-xs">&lt;tfoot&gt;</code>) dengan styling identik. Sangat berguna pada tabel data panjang agar pengguna tidak perlu menggulir kembali ke atas untuk melihat judul kolom.',
+        'preview_title' => 'Preview: Header Sebagai Footer',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Cukup tambahkan <code class="font-mono text-xs">setUseHeaderAsFooterStatus(true)</code> di dalam method <code class="font-mono text-xs">configure()</code>.',
+    ],
+
+    'performance' => [
+        'title' => 'Performa Dataset Besar (Large Dataset)',
+        'desc' => 'Mendemonstrasikan keandalan dan kecepatan pemrosesan server-side DataTable pada ribuan data baris dengan opsi tampilan 25, 50, 100, hingga 250 data sekaligus per halaman tanpa penurunan performa.',
+        'preview_title' => 'Preview: Performa Dataset Besar',
+        'livewire_title' => 'Komponen Livewire',
+        'livewire_desc' => 'Kode PHP class lengkap dengan opsi per-page besar (<code class="font-mono text-xs">25, 50, 100, 250</code>), default 50 data per halaman, dan pengurutan multi-kolom.',
+    ],
+
+    'api_reference' => [
+        'title' => 'Referensi Lengkap API & Konfigurasi',
+        'desc' => 'Daftar method konfigurasi dan properti tag yang paling sering digunakan pada komponen DataTable Vibe UI.',
+        'configure_table' => [
+            'title' => 'Daftar Metode configure() yang Sering Digunakan',
+            'method_col' => 'Metode',
+            'desc_col' => 'Penjelasan',
+            'methods' => [
+                'parent_configure' => 'Wajib dipanggil pertama kali untuk memuat tema dan token styling Vibe UI.',
+                'set_primary_key' => 'Menentukan primary key unik model untuk seleksi baris dan identifikasi data.',
+                'set_bordered_enabled' => 'Mengaktifkan garis batas pembatas (border) vertikal dan horizontal pada setiap sel tabel.',
+                'set_default_sort' => 'Menetapkan kolom dan arah pengurutan bawaan saat pertama kali dimuat.',
+                'set_bulk_actions' => 'Mendefinisikan aksi massal checkbox baris (seperti export CSV atau hapus terpilih).',
+                'set_secondary_header_status' => 'Mengaktifkan baris header sekunder tepat di bawah judul kolom untuk input pencarian per kolom.',
+                'set_footer_status' => 'Mengaktifkan baris footer di bagian bawah tabel untuk agregasi / total baris.',
+                'set_use_header_as_footer_status' => 'Menjadikan dan menampilkan baris judul header kolom juga sebagai footer di bagian bawah tabel.',
+                'set_search_debounce' => 'Mengatur jeda waktu (dalam milidetik) penundaan query pencarian live agar hemat server.',
+                'set_per_page_accepted' => 'Daftar opsi jumlah data per halaman yang tersedia pada dropdown paginasi.',
+                'set_column_select_status' => 'Mengaktifkan tombol selector untuk menyembunyikan atau menampilkan kolom secara dinamis.',
             ],
-            'theme_native' => [
-                'title' => '100% Token Desain Vibe UI',
-                'desc' => 'Input pencarian, ikon pengurutan chevron, checkbox seleksi, dan tombol paginasi otomatis mengikuti palet tema dan mode gelap.',
-            ],
-            'livewire_reactive' => [
-                'title' => 'Livewire v3 Reactive',
-                'desc' => 'Pencarian dengan debounce otomatis 350ms, respons sorting kilat, dan update DOM instan tanpa refresh halaman.',
-            ],
-            'column_visibility' => [
-                'title' => 'Selektor Kolom Dinamis',
-                'desc' => 'Memberikan kebebasan bagi pengguna untuk memilih kolom apa saja yang ingin ditampilkan atau disembunyikan.',
+        ],
+        'props_table' => [
+            'title' => 'Properti Tag Helper <vibe:datatable>',
+            'prop_col' => 'Properti',
+            'type_col' => 'Tipe',
+            'default_col' => 'Default',
+            'desc_col' => 'Deskripsi',
+            'props' => [
+                'component' => 'Nama class FQCN (misal App\Livewire\DemoBasicTable::class) atau alias kebab-case Livewire.',
+                'bordered' => 'Mengaktifkan garis batas pembatas (border) penuh di sekeliling setiap sel header dan baris data tabel langsung dari Blade.',
+                'attributes' => 'Semua atribut tambahan akan otomatis diteruskan (forwarded) ke komponen Livewire.',
+                'slot' => 'Konten slot opsional jika tag digunakan sebagai wrapper kontainer tabel kustom.',
             ],
         ],
     ],

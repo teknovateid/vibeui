@@ -16,25 +16,28 @@ class DemoFilterTable extends VibeDataTableComponent
     {
         parent::configure();
 
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setPerPageAccepted([5, 10, 25])
+            ->setDefaultPerPage(5);
     }
 
     public function builder(): Builder
     {
-        return User::query();
+        return User::query()->select(['id', 'name', 'email', 'created_at']);
     }
 
     public function filters(): array
     {
         return [
-            SelectFilter::make('Domain Email')
+            SelectFilter::make('Domain Email', 'domain_email')
                 ->options([
                     '' => 'Semua Domain',
                     'example.com' => '@example.com',
-                    'test.com' => '@test.com',
+                    'example.org' => '@example.org',
+                    'example.net' => '@example.net',
                 ])
                 ->filter(function (Builder $builder, string $value) {
-                    if (! empty($value)) {
+                    if ($value) {
                         $builder->where('email', 'like', '%' . $value);
                     }
                 }),
@@ -44,19 +47,10 @@ class DemoFilterTable extends VibeDataTableComponent
     public function columns(): array
     {
         return [
-            Column::make('ID', 'id')
-                ->sortable(),
-
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Created At', 'created_at')
-                ->sortable(),
+            Column::make('ID', 'id')->sortable(),
+            Column::make('Name', 'name')->sortable()->searchable(),
+            Column::make('Email', 'email')->sortable()->searchable(),
+            Column::make('Created At', 'created_at')->sortable(),
         ];
     }
 }

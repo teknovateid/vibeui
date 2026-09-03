@@ -7,15 +7,17 @@ use Illuminate\Database\Eloquent\Builder;
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoBasicTable extends VibeDataTableComponent
+class DemoHeaderFooterTable extends VibeDataTableComponent
 {
-    public string $tableName = 'basic_table';
+    public string $tableName = 'header_footer_table';
 
     public function configure(): void
     {
         parent::configure();
 
         $this->setPrimaryKey('id')
+            ->setFooterStatus(true)
+            ->setUseHeaderAsFooterStatus(true)
             ->setPerPageAccepted([5, 10, 25])
             ->setDefaultPerPage(5);
     }
@@ -29,11 +31,13 @@ class DemoBasicTable extends VibeDataTableComponent
     {
         return [
             Column::make('ID', 'id')
-                ->sortable(),
+                ->sortable()
+                ->footer(fn ($rows) => 'Total: ' . $rows->count() . ' User'),
 
             Column::make('Name', 'name')
                 ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->footer(fn () => 'Summary'),
 
             Column::make('Email', 'email')
                 ->sortable()

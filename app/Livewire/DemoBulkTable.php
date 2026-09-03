@@ -16,56 +16,38 @@ class DemoBulkTable extends VibeDataTableComponent
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setHideBulkActionsWhenEmptyStatus(false)
             ->setBulkActions([
-                'exportSelected' => 'Ekspor CSV',
+                'exportSelected' => 'Ekspor Data (CSV)',
                 'deleteSelected' => 'Hapus Terpilih',
-            ]);
-    }
-
-    public function builder(): Builder
-    {
-        return User::query();
-    }
-
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable(),
-
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
-
-            Column::make('Created At', 'created_at')
-                ->sortable(),
-        ];
+            ])
+            ->setPerPageAccepted([5, 10, 25])
+            ->setDefaultPerPage(5);
     }
 
     public function exportSelected(): void
     {
-        $count = count($this->getSelected());
-        $this->dispatch('alert', [
-            'type' => 'success',
-            'title' => 'Ekspor Berhasil',
-            'message' => "{$count} data terpilih telah berhasil diekspor.",
-        ]);
+        $selectedIds = $this->getSelected();
         $this->clearSelected();
     }
 
     public function deleteSelected(): void
     {
-        $count = count($this->getSelected());
-        $this->dispatch('toast', [
-            'type' => 'success',
-            'title' => 'Hapus Massal Berhasil',
-            'message' => "{$count} data terpilih telah berhasil dihapus.",
-        ]);
+        $selectedIds = $this->getSelected();
         $this->clearSelected();
+    }
+
+    public function builder(): Builder
+    {
+        return User::query()->select(['id', 'name', 'email', 'created_at']);
+    }
+
+    public function columns(): array
+    {
+        return [
+            Column::make('ID', 'id')->sortable(),
+            Column::make('Name', 'name')->sortable()->searchable(),
+            Column::make('Email', 'email')->sortable()->searchable(),
+            Column::make('Created At', 'created_at')->sortable(),
+        ];
     }
 }

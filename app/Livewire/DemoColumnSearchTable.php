@@ -21,12 +21,15 @@ class DemoColumnSearchTable extends VibeDataTableComponent
         parent::configure();
 
         $this->setPrimaryKey('id')
-            ->setSecondaryHeaderStatus(true);
+            ->setSecondaryHeaderStatus(true)
+            ->setPerPageAccepted([5, 10, 25])
+            ->setDefaultPerPage(5);
     }
 
     public function builder(): Builder
     {
         return User::query()
+            ->select(['id', 'name', 'email', 'created_at'])
             ->when($this->searchId, fn (Builder $q, $val) => $q->whereRaw('CAST(id AS TEXT) LIKE ?', ['%' . trim($val) . '%']))
             ->when($this->searchName, fn (Builder $q, $val) => $q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower(trim($val)) . '%']))
             ->when($this->searchEmail, fn (Builder $q, $val) => $q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower(trim($val)) . '%']));

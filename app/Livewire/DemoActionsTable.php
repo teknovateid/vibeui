@@ -16,12 +16,14 @@ class DemoActionsTable extends VibeDataTableComponent
     {
         parent::configure();
 
-        $this->setPrimaryKey('id');
+        $this->setPrimaryKey('id')
+            ->setPerPageAccepted([5, 10, 25])
+            ->setDefaultPerPage(5);
     }
 
     public function builder(): Builder
     {
-        return User::query();
+        return User::query()->select(['id', 'name', 'email', 'created_at']);
     }
 
     public function columns(): array
