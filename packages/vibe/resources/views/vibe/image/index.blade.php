@@ -1,12 +1,53 @@
 @blaze(fold: true)
 
-@props(['src', 'alt' => '', 'lazy' => true, 'priority' => false, 'fallback' => null, 'skeleton' => true, 'caption' => null, 'imgClass' => 'w-full h-full object-cover'])
+@props([
+    'src',
+    'alt' => '',
+    'aspect' => null,
+    'lazy' => true,
+    'priority' => false,
+    'fallback' => null,
+    'skeleton' => true,
+    'caption' => null,
+    'imgClass' => 'w-full h-full object-cover',
+])
 
 @php
     $isLazy = $priority ? false : (bool) $lazy;
     $loadingMode = $isLazy ? 'lazy' : 'eager';
     $fetchPriority = $priority ? 'high' : ($isLazy ? 'low' : 'auto');
     $decoding = 'async';
+
+    // Resolve Aspect Ratio: from prop or extracted from class
+    $rawAspect = $aspect;
+    $origClass = (string) $attributes->get('class', '');
+
+    if (!$rawAspect && preg_match('/\baspect-(video|square|[a-zA-Z0-9\-\/\[\]]+)\b/', $origClass, $m)) {
+        $rawAspect = $m[1];
+    }
+
+    $aspectClass = '';
+    if ($rawAspect) {
+        $aspectClass = match ($rawAspect) {
+            'square', '1/1', '1:1' => 'aspect-square',
+            'video', '16/9', '16:9' => 'aspect-video',
+            '4/3', '4:3', '4-3' => 'aspect-[4/3]',
+            '3/2', '3:2', '3-2' => 'aspect-[3/2]',
+            '21/9', '21:9', '21-9' => 'aspect-[21/9]',
+            default => str_starts_with($rawAspect, 'aspect-') ? $rawAspect : (str_starts_with($rawAspect, '[') ? "aspect-{$rawAspect}" : "aspect-[{$rawAspect}]"),
+        };
+    }
+
+    $hasAspect = !empty($aspectClass);
+
+    // Strip aspect class from figure root if present, so figure doesn't lock aspect ratio including figcaption
+    $cleanFigureClass = $origClass;
+    if ($hasAspect) {
+        $cleanFigureClass = trim(preg_replace('/\baspect-(?:video|square|[a-zA-Z0-9\-\/\[\]]+)\b/', '', $cleanFigureClass));
+        $cleanFigureClass = preg_replace('/\s+/', ' ', $cleanFigureClass);
+    }
+
+    $figureAttributes = $attributes->except('class')->merge(['class' => $cleanFigureClass]);
 @endphp
 
 @if ($priority)
@@ -15,7 +56,7 @@
     @endpush
 @endif
 
-<figure {{ $attributes->twMerge(['class' => 'relative inline-flex flex-col group/image rounded-lg']) }} x-data="{
+<figure {{ $figureAttributes->twMerge(['class' => 'relative inline-flex flex-col group/image rounded-lg']) }} x-data="{
     loaded: false,
     error: false,
     init() {
@@ -25,7 +66,7 @@
     }
 }">
     {{-- Image Container (Holds Skeleton + Image + Fallback) --}}
-    <div class="relative w-full flex-1 min-h-0 overflow-hidden rounded-[inherit]">
+    <div class="relative w-full {{ $hasAspect ? $aspectClass : 'flex-1 min-h-0' }} overflow-hidden rounded-[inherit]">
         {{-- Shimmer Skeleton Loading State (Prevents CLS) --}}
         @if ($skeleton)
             <div x-show="!loaded && !error" class="absolute inset-0 bg-muted animate-pulse rounded-[inherit] z-10 pointer-events-none"></div>
@@ -33,9 +74,9 @@
 
         {{-- Fallback on 404 / Broken Image --}}
         @if ($fallback)
-            <img x-show="error" src="{{ $fallback }}" alt="{{ $alt }}" class="{{ $imgClass }} transition-opacity duration-300" />
+            <img x-show="error" src="{{ $fallback }}" alt="{{ $alt }}" class="{{ $hasAspect ? 'absolute inset-0 ' : '' }}{{ $imgClass }} transition-opacity duration-300" />
         @else
-            <div x-show="error" class="w-full h-full min-h-25 flex flex-col items-center justify-center p-4 bg-muted/50 border border-dashed border-border text-muted-foreground rounded-[inherit]">
+            <div x-show="error" class="{{ $hasAspect ? 'absolute inset-0' : 'w-full h-full min-h-25' }} flex flex-col items-center justify-center p-4 bg-muted/50 border border-dashed border-border text-muted-foreground rounded-[inherit]">
                 <svg class="size-7 stroke-[1.5]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                 </svg>
@@ -44,7 +85,19 @@
         @endif
 
         {{-- Main Optimized Image --}}
-        <img x-ref="img" x-show="!error" src="{{ $src }}" alt="{{ $alt }}" loading="{{ $loadingMode }}" decoding="{{ $decoding }}" fetchpriority="{{ $fetchPriority }}" x-on:load="loaded = true" x-on:error="error = true" :class="loaded ? 'opacity-100' : 'opacity-0'" class="{{ $imgClass }} transition-opacity duration-300" />
+        <img
+            x-ref="img"
+            x-show="!error"
+            src="{{ $src }}"
+            alt="{{ $alt }}"
+            loading="{{ $loadingMode }}"
+            decoding="{{ $decoding }}"
+            fetchpriority="{{ $fetchPriority }}"
+            x-on:load="loaded = true"
+            x-on:error="error = true"
+            :class="loaded ? 'opacity-100' : 'opacity-0'"
+            class="{{ $hasAspect ? 'absolute inset-0 ' : '' }}{{ $imgClass }} transition-opacity duration-300"
+        />
     </div>
 
     {{-- Figcaption Support --}}

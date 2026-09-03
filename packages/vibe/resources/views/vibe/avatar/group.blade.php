@@ -13,15 +13,6 @@
     $groupId  = 'ag-' . Str::random(8);
     $limitInt = $limit !== null ? (int) $limit : null;
 
-    $slotHtml     = (string) $slot;
-    $computedTotal = $total !== null
-        ? (int) $total
-        : substr_count($slotHtml, 'data-avatar');
-
-    $overflow = ($limitInt !== null && $computedTotal > $limitInt)
-        ? $computedTotal - $limitInt
-        : 0;
-
     $limitClass = $limitInt ? "[&>[data-avatar]:nth-child(n+" . ($limitInt + 1) . ")]:hidden!" : "";
     $overlapClass = $overlap ? '-space-x-3' : 'gap-2';
     $baseClasses  = "vibe-avatar-group flex items-center {$overlapClass} [&>[data-avatar]]:ring-2 [&>[data-avatar]]:ring-background {$limitClass}";
@@ -53,7 +44,22 @@
     {{ $attributes->twMerge(['class' => $baseClasses]) }}
     style="--avatar-dim: {{ $avatarSize['dim'] }}; --avatar-font: {{ $avatarSize['font'] }};"
 >
-    {{ $slot }}
+    @php
+        $slotHtml = (string) $slot;
+        $computedTotal = $total !== null
+            ? (int) $total
+            : max(
+                substr_count($slotHtml, 'data-avatar'),
+                substr_count($slotHtml, '<vibe:avatar'),
+                substr_count($slotHtml, '<x-vibe::avatar')
+            );
+
+        $overflow = ($limitInt !== null && $computedTotal > $limitInt)
+            ? $computedTotal - $limitInt
+            : 0;
+    @endphp
+
+    {!! $slotHtml !!}
 
     @if($limitInt && $overflow > 0)
         <div class="{{ $badgeClasses }}">+{{ $overflow }}</div>
