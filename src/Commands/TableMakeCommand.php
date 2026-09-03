@@ -63,6 +63,8 @@ class TableMakeCommand extends Command implements PromptsForMissingInput
 
         File::put($destinationFile, $stub);
 
+        $this->ensureLivewireTablesConfigExists();
+
         $this->components->success("Vibe DataTable [{$className}] created successfully.");
         $this->components->bulletList([
             "File: {$destinationFile}",
@@ -71,6 +73,39 @@ class TableMakeCommand extends Command implements PromptsForMissingInput
         ]);
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Ensure livewire-tables configuration is published with auto-injection disabled.
+     */
+    protected function ensureLivewireTablesConfigExists(): void
+    {
+        $configPath = config_path('livewire-tables.php');
+        if (! File::exists($configPath)) {
+            $configContent = <<<'PHP'
+<?php
+
+return [
+    /**
+     * Enable or Disable automatic injection of core assets.
+     */
+    'inject_core_assets_enabled' => false,
+
+    /**
+     * Enable or Disable automatic injection of third-party assets.
+     */
+    'inject_third_party_assets_enabled' => false,
+
+    /**
+     * Enable Blade Directives.
+     */
+    'enable_blade_directives' => true,
+];
+PHP;
+            File::put($configPath, $configContent);
+
+            $this->components->info("Configuration [config/livewire-tables.php] automatically published with asset auto-injection disabled.");
+        }
     }
 
     protected function generateStub(string $namespace, string $className, ?string $modelClass, ?string $modelNamespace): string

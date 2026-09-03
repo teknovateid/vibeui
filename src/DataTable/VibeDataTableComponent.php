@@ -13,6 +13,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
      */
     public function configure(): void
     {
+        $this->setTheme('tailwind');
         $this->setPrimaryKey('id');
         $this->setSearchDebounce(350);
         $this->setPerPageAccepted([10, 25, 50, 100]);
