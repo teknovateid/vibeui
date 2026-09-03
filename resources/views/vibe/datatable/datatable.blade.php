@@ -99,7 +99,8 @@
                         <x-livewire-tables::table.tr.secondary-header />
                     @endif
                     @if($this->hasDisplayLoadingPlaceholder())
-                        <x-livewire-tables::includes.loading colCount="{{ $this->columns->count()+1 }}" />
+                        @include('livewire-tables::loading')
+                        {{-- <x-livewire-tables::includes.loading colCount="{{ $this->columns->count()+1 }}" /> --}}
                     @endif
 
                     @if($this->showBulkActionsSections)

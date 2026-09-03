@@ -155,6 +155,7 @@
 
     {{ $slot }}
 
+    @pushOnce('head', 'vibe-nav-builder-script')
     <script>
         if (!window.VibeNavBuilder) {
             window.VibeNavBuilder = {
@@ -203,7 +204,10 @@
                 }
             };
         }
+    </script>
+    @endPushOnce
 
+    <script>
         (function() {
             try {
                 let scriptEl = document.currentScript;
