@@ -34,7 +34,7 @@
     $tableCompiledClasses = trim("{$baseTableClasses} {$densityClasses} {$variantClasses} {$hoverClasses}");
 @endphp
 
-@pushOnce('body')
+@pushOnce('body', 'vibe-table-js')
     @vite(['resources/js/vibe/table.js'])
 @endPushOnce
 

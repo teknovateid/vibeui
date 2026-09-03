@@ -28,6 +28,7 @@
     $themeGroupId = $previewId . '-theme-group';
 @endphp
 
+@pushOnce('head', 'vibe-preview-script')
 <script>
     if (!window.VibePreview) {
         window.VibePreview = {
@@ -49,6 +50,7 @@
         };
     }
 </script>
+@endPushOnce
 
 <div
     id="{{ $previewId }}"

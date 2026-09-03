@@ -3,6 +3,7 @@
 @props([
     'component' => null,
     'bordered' => false,
+    'lazy' => false,
 ])
 
 @pushOnce('head', 'vibe-datatable-styles')
@@ -26,7 +27,11 @@
 
 @if ($component)
     <div {{ $attributes->twMerge(['class' => "w-full {$borderedCellStyles}"]) }}>
-        @livewire($component, $attributes->except(['class', 'bordered'])->getAttributes())
+        @if ($lazy)
+            <livewire:is :$component lazy />
+        @else
+            <livewire:is :$component />
+        @endif
     </div>
 @else
     <div {{ $attributes->twMerge(['class' => "w-full space-y-4 {$borderedCellStyles}"]) }}>

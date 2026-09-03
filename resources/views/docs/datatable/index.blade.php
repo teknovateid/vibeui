@@ -55,6 +55,9 @@
 
 {{-- {$c('blade_call_2')} --}}
 <vibe:datatable component="demo-basic-table" />
+
+{{-- Lazy Loading (Intersection Observer) --}}
+<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" lazy />
 HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callVibeTagCode" />
@@ -237,7 +240,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.bordered.preview_title')" :center="false" :code="$borderedBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$borderedComponent" />
+                            <vibe:datatable :component="$borderedComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -322,7 +325,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.columns.preview_title')" :center="false" :code="$columnsBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$columnsComponent" />
+                            <vibe:datatable :component="$columnsComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -422,7 +425,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.bulk_actions.preview_title')" :center="false" :code="$bulkBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$bulkComponent" />
+                            <vibe:datatable :component="$bulkComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -515,7 +518,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.column_search.preview_title')" :center="false" :code="$colSearchBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$colSearchComponent" />
+                            <vibe:datatable :component="$colSearchComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -614,7 +617,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.footer_column_search.preview_title')" :center="false" :code="$footerSearchBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$footerSearchComponent" />
+                            <vibe:datatable :component="$footerSearchComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -713,7 +716,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.filters.preview_title')" :center="false" :code="$filterBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$filterComponent" />
+                            <vibe:datatable :component="$filterComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -807,7 +810,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.footer_calc.preview_title')" :center="false" :code="$footerBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$footerComponent" />
+                            <vibe:datatable :component="$footerComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -894,7 +897,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.header_as_footer.preview_title')" :center="false" :code="$headerFooterBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$headerFooterComponent" />
+                            <vibe:datatable :component="$headerFooterComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -982,7 +985,7 @@ HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.performance.preview_title')" :center="false" :code="$perfBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$perfComponent" />
+                            <vibe:datatable :component="$perfComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
@@ -1049,6 +1052,126 @@ class DemoPerformanceTable extends VibeDataTableComponent
 PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoPerformanceTable.php" :lineNumbers="true" :code="$perfPhpCode" />
+                </div>
+            </section>
+
+            {{-- Lazy Loading (Optimasi Performa) --}}
+            <section id="lazy-loading" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/datatable.lazy_loading.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/datatable.lazy_loading.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Komponen Preview --}}
+                <div id="lazy-preview" class="space-y-3">
+                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+
+                    @php
+                        $lazyComponent = \App\Livewire\DemoLazyTable::class;
+                        $lazyBladeCode = <<<HTML
+{{-- {$c('blade_call_lazy')} --}}
+<vibe:datatable :component="\\App\\Livewire\\DemoLazyTable::class" lazy />
+
+{{-- {$c('blade_call_native_lazy')} --}}
+<livewire:demo-lazy-table lazy />
+HTML;
+                    @endphp
+                    <vibe:preview :title="__('docs/datatable.lazy_loading.preview_title')" :center="false" :code="$lazyBladeCode">
+                        <div class="w-full">
+                            <vibe:datatable :component="$lazyComponent" lazy />
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Penggunaan Atribut lazy --}}
+                <div id="penggunaan-lazy" class="space-y-3">
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.lazy_loading.syntax_title') }}</h3>
+                    @php
+                        $lazyUsageCode = <<<HTML
+{{-- {$c('blade_call_lazy')} --}}
+<vibe:datatable :component="\\App\\Livewire\\UserTable::class" lazy />
+
+{{-- {$c('blade_call_binding')} --}}
+<vibe:datatable :component="\\App\\Livewire\\UserTable::class" :lazy="\$isLazy" />
+
+{{-- {$c('blade_call_native_lazy')} --}}
+<livewire:user-table lazy />
+HTML;
+                    @endphp
+                    <vibe:highlightjs language="blade" title="resources/views/users.blade.php" :lineNumbers="true" :code="$lazyUsageCode" />
+                </div>
+
+                {{-- Keuntungan Utama --}}
+                <div id="keuntungan-lazy" class="space-y-3">
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.lazy_loading.benefits_title') }}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                            <div class="flex items-center gap-2 text-primary font-semibold text-sm">
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <span>{{ __('docs/datatable.lazy_loading.card_1_title') }}</span>
+                            </div>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                {!! __('docs/datatable.lazy_loading.benefit_1') !!}
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                            <div class="flex items-center gap-2 text-primary font-semibold text-sm">
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <span>{{ __('docs/datatable.lazy_loading.card_2_title') }}</span>
+                            </div>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                {!! __('docs/datatable.lazy_loading.benefit_2') !!}
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                            <div class="flex items-center gap-2 text-primary font-semibold text-sm">
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                                <span>{{ __('docs/datatable.lazy_loading.card_3_title') }}</span>
+                            </div>
+                            <p class="text-xs text-muted-foreground leading-relaxed">
+                                {!! __('docs/datatable.lazy_loading.benefit_3') !!}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Placeholder Skeleton Loading --}}
+                <div id="placeholder-loading" class="space-y-3">
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.lazy_loading.placeholder_title') }}</h3>
+                    <p class="text-xs text-muted-foreground">
+                        {!! __('docs/datatable.lazy_loading.placeholder_desc') !!}
+                    </p>
+                    @php
+                        $placeholderPhpCode = <<<PHP
+namespace App\Livewire;
+
+use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+
+class UserTable extends VibeDataTableComponent
+{
+    // ... configure() & columns() ...
+
+    /**
+     * {$c('comment_placeholder')}
+     */
+    public function placeholder(): string
+    {
+        return <<<'HTML'
+        <div class="w-full p-8 flex items-center justify-center space-x-3 rounded-xl border border-border bg-card animate-pulse text-muted-foreground">
+            <svg class="size-5 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            <span class="text-sm font-medium">{$c('loading_text')}</span>
+        </div>
+        HTML;
+    }
+}
+PHP;
+                    @endphp
+                    <vibe:highlightjs language="php" title="app/Livewire/UserTable.php" :lineNumbers="true" :code="$placeholderPhpCode" />
                 </div>
             </section>
 
@@ -1140,6 +1263,12 @@ PHP;
                                 <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">bool</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">false</vibe:table.cell>
                                 <vibe:table.cell class="text-muted-foreground">{{ __('docs/datatable.api_reference.props_table.props.bordered') }}</vibe:table.cell>
+                            </vibe:table.row>
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">lazy</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">bool</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">false</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/datatable.api_reference.props_table.props.lazy') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">$attributes</vibe:table.cell>

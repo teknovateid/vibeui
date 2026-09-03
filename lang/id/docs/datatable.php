@@ -36,6 +36,11 @@ return [
         'placeholder_name' => 'Cari nama...',
         'placeholder_email' => 'Cari email...',
         'filter_all_domains' => 'Semua Domain',
+        'blade_call_lazy' => 'Cara 1: Menggunakan Tag Helper dengan Atribut Boolean "lazy"',
+        'blade_call_binding' => 'Cara 2: Menggunakan Dynamic Boolean Binding (:lazy)',
+        'blade_call_native_lazy' => 'Cara 3: Menggunakan Tag Asli Livewire dengan Atribut lazy',
+        'comment_placeholder' => 'Tampilan placeholder loading kustom sebelum tabel masuk ke viewport',
+        'loading_text' => 'Memuat data tabel...',
     ],
 
     'how_to_call' => [
@@ -139,6 +144,22 @@ return [
         'livewire_desc' => 'Kode PHP class lengkap dengan opsi per-page besar (<code class="font-mono text-xs">25, 50, 100, 250</code>), default 50 data per halaman, dan pengurutan multi-kolom.',
     ],
 
+    'lazy_loading' => [
+        'title' => 'Lazy Loading (Optimasi Performa)',
+        'desc' => 'Gunakan atribut <code class="font-mono text-xs">lazy</code> pada tag <code class="font-mono text-xs">&lt;vibe:datatable&gt;</code> untuk menunda pemuatan komponen Livewire dan eksekusi query database sampai tabel benar-benar terlihat di layar pengguna (Intersection Observer).',
+        'preview_title' => 'Preview: Lazy Loading DataTable',
+        'syntax_title' => 'Sintaks Penggunaan',
+        'benefits_title' => 'Keuntungan Utama Lazy Loading',
+        'card_1_title' => 'Hemat Query Database',
+        'benefit_1' => 'Database tidak akan menjalankan query <code class="font-mono text-xs">COUNT(*)</code> atau <code class="font-mono text-xs">SELECT</code> sebelum tabel masuk ke viewport pengguna.',
+        'card_2_title' => 'Render First Paint Cepat',
+        'benefit_2' => 'Memangkas ukuran awal payload HTML dan mempercepat proses render DOM browser.',
+        'card_3_title' => 'Ideal untuk Multi-Tabel',
+        'benefit_3' => 'Sangat ideal untuk halaman dashboard analitik, layout bertab, atau halaman yang memuat banyak tabel.',
+        'placeholder_title' => 'Kustomisasi Tampilan Placeholder Loading (Opsional)',
+        'placeholder_desc' => 'Vibe UI secara bawaan sudah menyediakan skeleton loading table shimmer di dalam <code class="font-mono text-xs">VibeDataTableComponent</code> untuk mencegah layout shift (CLS). Jika ingin tampilan khusus, Anda dapat dengan mudah meng-override method <code class="font-mono text-xs">placeholder()</code> pada class DataTable Anda.',
+    ],
+
     'api_reference' => [
         'title' => 'Referensi Lengkap API & Konfigurasi',
         'desc' => 'Daftar method konfigurasi dan properti tag yang paling sering digunakan pada komponen DataTable Vibe UI.',
@@ -169,7 +190,8 @@ return [
             'props' => [
                 'component' => 'Nama class FQCN (misal App\Livewire\DemoBasicTable::class) atau alias kebab-case Livewire.',
                 'bordered' => 'Mengaktifkan garis batas pembatas (border) penuh di sekeliling setiap sel header dan baris data tabel langsung dari Blade.',
-                'attributes' => 'Semua atribut tambahan akan otomatis diteruskan (forwarded) ke komponen Livewire.',
+                'lazy' => 'Mengaktifkan pemuatan asinkron berbasis Intersection Observer. Komponen hanya akan di-render saat masuk ke dalam viewport layar pengguna.',
+                'attributes' => 'Semua atribut tambahan akan otomatis diteruskan (forwarded) ke elemen kontainer pembungkus tabel.',
                 'slot' => 'Konten slot opsional jika tag digunakan sebagai wrapper kontainer tabel kustom.',
             ],
         ],
