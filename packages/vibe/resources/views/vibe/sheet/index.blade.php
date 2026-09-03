@@ -97,6 +97,10 @@
     state: '{{ $defaultState }}',
     isMobile: window.innerWidth < 768,
 
+    get isHorizontal() {
+        return this.position === 'left' || this.position === 'right';
+    },
+
     init() {
         window.addEventListener('resize', () => {
             this.isMobile = window.innerWidth < 768;
@@ -191,7 +195,7 @@
         let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
         let clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : (e.clientY !== undefined ? e.clientY : 0);
 
-        if (this.position === 'left' || this.position === 'right') {
+        if (this.isHorizontal) {
             this.startPos = clientX;
             document.body.style.cursor = 'col-resize';
         } else {
@@ -217,7 +221,7 @@
         let newSize = this.startSize + delta;
 
         let dynamicMaxSize = this.maxSize;
-        if (this.position === 'left' || this.position === 'right') {
+        if (this.isHorizontal) {
             if (window.innerWidth - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerWidth - 16);
         } else {
             if (window.innerHeight - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerHeight - 16);
@@ -314,7 +318,7 @@
         this.saveToStorage();
     }
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
-    (position === 'left' || position === 'right') ? `width: ${currentSize}px` : `height: ${currentSize}px`,
+    isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
@@ -455,7 +459,7 @@
                 class="transition-all duration-200 rounded-full group-hover/resizer:opacity-100"
                 :class="[
                     isResizing ? 'opacity-100' : 'opacity-0',
-                    (position === 'left' || position === 'right')
+                    isHorizontal
                         ? 'h-full w-0.5 group-hover/resizer:bg-muted-foreground/60 ' + (isResizing ? 'bg-primary' : '')
                         : 'w-full h-0.5 group-hover/resizer:bg-muted-foreground/60 ' + (isResizing ? 'bg-primary' : '')
                 ]"
