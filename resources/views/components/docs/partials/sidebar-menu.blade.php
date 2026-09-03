@@ -87,6 +87,17 @@
             {{ __('docs/sidebar.nav.badge') }}
         </vibe:nav.item>
 
+        <!-- Card -->
+        <vibe:nav.item href="{{ route('docs.card.index') }}" :active="request()->routeIs('docs.card.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="14" x="3" y="5" rx="2" />
+                    <path d="M3 10h18" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.card') }}
+        </vibe:nav.item>
+
         <!-- Breadcrumb -->
         <vibe:nav.item href="{{ route('docs.breadcrumb.index') }}" :active="request()->routeIs('docs.breadcrumb.*')">
             <x-slot:icon>

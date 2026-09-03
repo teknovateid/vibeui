@@ -14,6 +14,7 @@ return [
         'select' => 'Select',
         'button' => 'Button',
         'badge' => 'Badge',
+        'card' => 'Card',
         'breadcrumb' => 'Breadcrumb',
         'table' => 'Table',
         'datatable' => 'DataTable',

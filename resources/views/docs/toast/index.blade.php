@@ -214,7 +214,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
 
                 <vibe:preview :title="__('docs/toast.sound_timeout.sound_preview')">
                     <vibe:preview.code>
-<vibe:button variant="outline" onclick="vibeToast({ type: 'success', title: 'Audio Chime', message: 'Audio notification tone.', sound: true })">
+<vibe:button variant="outline" onclick="vibeToast({ type: 'success', title: 'Audio Chime', message: 'Audio notification tone.', sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}' })">
     {{ __('docs/toast.sound_timeout.chime_btn') }}
 </vibe:button>
 
@@ -231,7 +231,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                                 type: 'success',
                                 title: 'Audio Chime',
                                 message: 'Audio notification chime.',
-                                sound: true
+                                sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}'
                             })">
                             <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />

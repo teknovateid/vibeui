@@ -304,7 +304,7 @@ vibeAlert({
 
                 <vibe:preview :title="__('docs/alert.sound_timeout.preview_title')">
                     <vibe:preview.code>
-vibeAlert({ type: 'success', title: 'Audio Beep', message: 'Sound played.', sound: true });
+vibeAlert({ type: 'success', title: 'Audio Beep', message: 'Sound played.', sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}' });
 vibeAlert({ type: 'warning', title: 'Sticky Alert', message: 'Persistent alert.', timeout: false });
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center gap-3">
@@ -312,7 +312,7 @@ vibeAlert({ type: 'warning', title: 'Sticky Alert', message: 'Persistent alert.'
                                 type: 'success',
                                 title: 'Audio Beep',
                                 message: 'Sound played via Web Audio API.',
-                                sound: true
+                                sound: '{{ asset('vibe/sounds/mixkit-software-interface-remove-2576.wav') }}'
                             })">
                             <svg class="size-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
