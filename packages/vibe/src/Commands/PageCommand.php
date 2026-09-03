@@ -95,10 +95,18 @@ class PageCommand extends Command implements PromptsForMissingInput
             }
             $routePrefix .= "    });\n";
             
-            if (str_contains($routeContent, "});")) {
-                $routeContent = preg_replace('/(}\);\s*)$/', $routePrefix . "\n$1", $routeContent);
+            $groupPattern = '/(Route::prefix\([\'"]' . preg_quote($layout, '/') . '[\'"].*?group\(function\s*\(\)\s*\{)(.*?)(\n\}\);)/s';
+            if (preg_match($groupPattern, $routeContent)) {
+                $routeContent = preg_replace_callback($groupPattern, function ($matches) use ($routePrefix) {
+                    return $matches[1] . $matches[2] . $routePrefix . $matches[3];
+                }, $routeContent);
             } else {
-                $routeContent .= $routePrefix;
+                $lastGroupClose = strrpos($routeContent, "});");
+                if ($lastGroupClose !== false) {
+                    $routeContent = substr_replace($routeContent, $routePrefix . "});", $lastGroupClose, 3);
+                } else {
+                    $routeContent .= $routePrefix;
+                }
             }
             File::put($routePath, $routeContent);
             $list[] = "Updated routes/{$layout}.php";

@@ -15,6 +15,8 @@ return [
         'button' => 'Button',
         'table' => 'Table',
         'datatable' => 'DataTable',
+        'modal' => 'Modal',
+        'sheet' => 'Sheet',
         'alert' => 'Alert',
         'toast' => 'Toast',
     ],

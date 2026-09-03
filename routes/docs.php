@@ -11,17 +11,16 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/table', 'docs.table.index')->name('table.index');
     Route::view('/datatable', 'docs.datatable.index')->name('datatable.index');
+    Route::view('/modal', 'docs.modal.index')->name('modal.index');
+    Route::view('/alert', 'docs.alert.index')->name('alert.index');
+    Route::view('/toast', 'docs.toast.index')->name('toast.index');
+    Route::view('/sheet', 'docs.sheet.index')->name('sheet.index');
 
-    Route::prefix('alert')->name('alert.')->group(function () {
-        Route::view('/', 'docs.alert.index')->name('index');
-    });
-
-
-    Route::prefix('toast')->name('toast.')->group(function () {
-        Route::view('/', 'docs.toast.index')->name('index');
-    });
 
 });
+
+
+Route::view('/', 'docs.index');
 
 Route::get('/locale/{locale}', function (string $locale) {
     if (in_array($locale, ['id', 'en'])) {
