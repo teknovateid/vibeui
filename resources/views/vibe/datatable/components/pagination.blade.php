@@ -41,7 +41,7 @@
 
             @if ($this->paginationIsEnabled)
                 <div class="order-1 sm:order-2">
-                    {{ $currentRows->links('livewire-tables::specific.tailwind.'.(!$this->isPaginationMethod('standard') ? 'simple-' : '').'pagination') }}
+                    {{ $currentRows->links('livewire-tables::specific.tailwind.'.(!$this->isPaginationMethod('standard') ? 'simple-' : '').'pagination', data: ['scrollTo' => false]) }}
                 </div>
             @endif
         </div>
