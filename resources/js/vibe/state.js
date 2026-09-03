@@ -366,6 +366,59 @@ const initScrollRestoration = () => {
         }
     });
 
+    // Lock and preserve scroll position across Livewire component updates (pagination, sorting, filters)
+    let lockedMainScroll = null;
+    let lockedWindowScroll = null;
+
+    const setupLivewireScrollLock = () => {
+        if (!window.Livewire || window.Livewire.__scrollLockInitialized) return;
+        window.Livewire.__scrollLockInitialized = true;
+
+        window.Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
+            const main = document.getElementById('docs-main-scroll') || document.getElementById('main-scroll');
+            lockedMainScroll = main ? main.scrollTop : null;
+            lockedWindowScroll = window.scrollY || window.pageYOffset || 0;
+            isRestoring = true;
+
+            succeed(() => {
+                const restoreNow = () => {
+                    if (main && lockedMainScroll !== null) {
+                        main.scrollTop = lockedMainScroll;
+                    }
+                    if (lockedWindowScroll > 0) {
+                        window.scrollTo(0, lockedWindowScroll);
+                    }
+                };
+
+                restoreNow();
+                queueMicrotask(restoreNow);
+                requestAnimationFrame(() => {
+                    restoreNow();
+                    setTimeout(() => {
+                        restoreNow();
+                        isRestoring = false;
+
+                        // Persist stable scroll
+                        if (main && lockedMainScroll !== null && lockedMainScroll > 0) {
+                            const key = getStorageKey(main);
+                            if (key) sessionStorage.setItem(key, Math.round(lockedMainScroll));
+                        }
+                    }, 40);
+                });
+            });
+
+            fail(() => {
+                isRestoring = false;
+            });
+        });
+    };
+
+    if (window.Livewire) {
+        setupLivewireScrollLock();
+    } else {
+        document.addEventListener('livewire:init', setupLivewireScrollLock);
+    }
+
     // Restore on load & Livewire SPA navigation & Alpine init
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', restoreAllScrolls);
