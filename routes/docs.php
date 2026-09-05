@@ -27,6 +27,12 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/toast', 'docs.toast.index')->name('toast.index');
     Route::view('/sheet', 'docs.sheet.index')->name('sheet.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
+    Route::get('/chart', function () {
+        $monthlyMetrics = \App\Models\SalesMetric::where('category', 'Semua Kategori')->orderBy('id')->get();
+        $categoryMetrics = \App\Models\SalesMetric::where('month', 'Total')->orderByDesc('revenue')->get();
+
+        return view('docs.chart.index', compact('monthlyMetrics', 'categoryMetrics'));
+    })->name('chart.index');
 });
 
 

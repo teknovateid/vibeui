@@ -31,6 +31,7 @@ return [
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',
+        'chart' => 'Chart',
     ],
 
     'notifications' => [

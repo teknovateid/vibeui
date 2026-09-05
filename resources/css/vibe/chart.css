@@ -1,0 +1,29 @@
+/* Vibe UI Chart.js Styling */
+
+.vibe-chart-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 80px;
+}
+
+.vibe-chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* Chart Skeleton Loading State */
+.vibe-chart-skeleton {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem;
+    animation: vibeChartPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes vibeChartPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+}
