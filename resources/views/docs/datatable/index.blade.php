@@ -136,7 +136,7 @@ HTML;
 
                 {{-- Komponen Preview --}}
                 <div id="basic-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $basicComponent = \App\Livewire\DemoBasicTable::class;
@@ -157,7 +157,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="basic-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.basic_usage.livewire_desc') !!}
                     </p>
@@ -223,7 +223,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="bordered-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $borderedComponent = \App\Livewire\DemoBorderedTable::class;
@@ -247,7 +247,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="bordered-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.bordered.livewire_desc') !!}
                     </p>
@@ -314,7 +314,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="columns-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $columnsComponent = \App\Livewire\DemoActionsTable::class;
@@ -332,7 +332,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="columns-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.columns.livewire_desc') !!}
                     </p>
@@ -414,7 +414,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="bulk-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $bulkComponent = \App\Livewire\DemoBulkTable::class;
@@ -432,7 +432,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="bulk-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.bulk_actions.livewire_desc') !!}
                     </p>
@@ -507,7 +507,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="column-search-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $colSearchComponent = \App\Livewire\DemoColumnSearchTable::class;
@@ -525,7 +525,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="column-search-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.column_search.livewire_desc') !!}
                     </p>
@@ -606,7 +606,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="footer-search-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $footerSearchComponent = \App\Livewire\DemoFooterColumnSearchTable::class;
@@ -624,7 +624,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="footer-search-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.footer_column_search.livewire_desc') !!}
                     </p>
@@ -705,7 +705,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="filter-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $filterComponent = \App\Livewire\DemoFilterTable::class;
@@ -723,7 +723,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="filter-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.filters.livewire_desc') !!}
                     </p>
@@ -799,7 +799,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="footer-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $footerComponent = \App\Livewire\DemoFooterTable::class;
@@ -817,7 +817,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="footer-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.footer_calc.livewire_desc') !!}
                     </p>
@@ -886,7 +886,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="header-as-footer-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $headerFooterComponent = \App\Livewire\DemoHeaderFooterTable::class;
@@ -904,7 +904,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="header-as-footer-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.header_as_footer.livewire_desc') !!}
                     </p>
@@ -974,7 +974,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="performance-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $perfComponent = \App\Livewire\DemoPerformanceTable::class;
@@ -992,7 +992,7 @@ HTML;
 
                 {{-- Komponen Livewire --}}
                 <div id="performance-livewire" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.livewire_component') }}</h3>
                     <p class="text-xs text-muted-foreground">
                         {!! __('docs/datatable.performance.livewire_desc') !!}
                     </p>
@@ -1066,7 +1066,7 @@ PHP;
 
                 {{-- Komponen Preview --}}
                 <div id="lazy-preview" class="space-y-3">
-                    <h4 class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h4>
+                    <h3 data-toc-ignore class="text-base font-semibold text-foreground">{{ __('docs/datatable.common.preview_component') }}</h3>
 
                     @php
                         $lazyComponent = \App\Livewire\DemoLazyTable::class;

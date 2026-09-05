@@ -4,11 +4,16 @@
     <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center gap-1.5">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
-            <span aria-disabled="true" aria-label="{{ __('pagination.previous') }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground opacity-40 cursor-not-allowed shadow-2xs">
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button
+                type="button"
+                disabled
+                aria-label="{{ __('pagination.previous') }}"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground opacity-40 cursor-not-allowed shadow-2xs"
+            >
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m15 18-6-6 6-6"/>
                 </svg>
-            </span>
+            </button>
         @else
             <button
                 type="button"
@@ -18,7 +23,7 @@
                 aria-label="{{ __('pagination.previous') }}"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
             >
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m15 18-6-6 6-6"/>
                 </svg>
             </button>
@@ -30,7 +35,7 @@
                 @foreach ($elements as $element)
                     {{-- "Three Dots" Separator --}}
                     @if (is_string($element))
-                        <span aria-disabled="true" class="inline-flex h-8 w-8 items-center justify-center text-xs font-medium text-muted-foreground">
+                        <span class="inline-flex h-8 w-8 items-center justify-center text-xs font-medium text-muted-foreground" aria-hidden="true">
                             {{ $element }}
                         </span>
                     @endif
@@ -71,16 +76,21 @@
                 aria-label="{{ __('pagination.next') }}"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
             >
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m9 18 6-6-6-6"/>
                 </svg>
             </button>
         @else
-            <span aria-disabled="true" aria-label="{{ __('pagination.next') }}" class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground opacity-40 cursor-not-allowed shadow-2xs">
-                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <button
+                type="button"
+                disabled
+                aria-label="{{ __('pagination.next') }}"
+                class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-muted-foreground opacity-40 cursor-not-allowed shadow-2xs"
+            >
+                <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="m9 18 6-6-6-6"/>
                 </svg>
-            </span>
+            </button>
         @endif
     </nav>
 @endif
