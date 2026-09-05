@@ -204,6 +204,20 @@
             {{ __('docs/sidebar.nav.table') }}
         </vibe:nav.item>
 
+        <!-- Grid -->
+        <vibe:nav.item href="{{ route('docs.grid.index') }}" :active="request()->routeIs('docs.grid.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                    <path d="M9 3v18" />
+                    <path d="M15 3v18" />
+                    <path d="M3 9h18" />
+                    <path d="M3 15h18" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.grid') }}
+        </vibe:nav.item>
+
         <!-- DataTable -->
         <vibe:nav.item href="{{ route('docs.datatable.index') }}" :active="request()->routeIs('docs.datatable.*')">
             <x-slot:icon>

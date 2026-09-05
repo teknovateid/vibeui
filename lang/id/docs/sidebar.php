@@ -24,6 +24,7 @@ return [
         'nav' => 'Nav',
         'breadcrumb' => 'Breadcrumb',
         'table' => 'Table',
+        'grid' => 'Grid',
         'datatable' => 'DataTable',
         'modal' => 'Modal',
         'sheet' => 'Sheet',

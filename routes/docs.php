@@ -20,6 +20,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/nav', 'docs.nav.index')->name('nav.index');
     Route::view('/breadcrumb', 'docs.breadcrumb.index')->name('breadcrumb.index');
     Route::view('/table', 'docs.table.index')->name('table.index');
+    Route::view('/grid', 'docs.grid.index')->name('grid.index');
     Route::view('/datatable', 'docs.datatable.index')->name('datatable.index');
     Route::view('/modal', 'docs.modal.index')->name('modal.index');
     Route::view('/alert', 'docs.alert.index')->name('alert.index');
