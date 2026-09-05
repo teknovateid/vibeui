@@ -76,6 +76,41 @@ document.addEventListener('alpine:init', () => {
     });
 
     // ==========================================
+    // STORE: vibeGrids (Grid layout persistence)
+    // ==========================================
+    window.Alpine.store('vibeGrids', {
+        items: window.Alpine.$persist([]).as(`${VIBE_PREFIX}-grids`),
+
+        save(id, data, expireHours = 24 * 90) { // Default 90 days for grid layouts
+            let index = this.items.findIndex(g => g.id === id);
+            let expired = new Date(Date.now() + expireHours * 60 * 60 * 1000).toISOString();
+            let entry = { id, data, expired };
+
+            if (index >= 0) {
+                this.items[index] = entry;
+            } else {
+                this.items.push(entry);
+            }
+            this.clean();
+        },
+
+        get(id) {
+            this.clean();
+            let item = this.items.find(g => g.id === id);
+            return item ? item.data : null;
+        },
+
+        remove(id) {
+            this.items = this.items.filter(g => g.id !== id);
+        },
+
+        clean() {
+            const now = new Date();
+            this.items = this.items.filter(g => new Date(g.expired) > now);
+        }
+    });
+
+    // ==========================================
     // STORE: vibeModals (Dismissed Modals/Announcements)
     // ==========================================
     window.Alpine.store('vibeModals', {
