@@ -4,6 +4,7 @@
     'id' => null,
     'key' => null,
     'title' => null,
+    'titleTag' => 'h3',
     'description' => null,
     'colSpan' => 4,
     'rowSpan' => 1,
@@ -17,6 +18,8 @@
 
 @php
     $cardId = $id ?? $key ?? 'card-' . Str::random(6);
+    $validTitleTags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'div', 'p', 'span'];
+    $tag = in_array($titleTag, $validTitleTags, true) ? $titleTag : 'h3';
 
     // Lock type: none | reorder | resize | both
     $lockType = 'none';
@@ -170,7 +173,7 @@
             {{-- Title & Description (Flush Left) --}}
             <div class="min-w-0 flex-1 pointer-events-none">
                 @if ($title)
-                    <h4 class="text-sm font-semibold text-foreground tracking-tight truncate">{{ $title }}</h4>
+                    <{{ $tag }} data-toc-ignore class="text-sm font-semibold text-foreground tracking-tight truncate">{{ $title }}</{{ $tag }}>
                 @endif
                 @if ($description)
                     <p class="text-xs text-muted-foreground truncate">{{ $description }}</p>

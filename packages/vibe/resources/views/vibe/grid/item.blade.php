@@ -4,6 +4,7 @@
     'id' => null,
     'key' => null,
     'title' => null,
+    'titleTag' => 'h3',
     'description' => null,
     'colSpan' => 4,
     'rowSpan' => 1,
@@ -19,6 +20,7 @@
     :id="$id"
     :key="$key"
     :title="$title"
+    :titleTag="$titleTag"
     :description="$description"
     :colSpan="$colSpan"
     :rowSpan="$rowSpan"
