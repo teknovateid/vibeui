@@ -142,3 +142,89 @@
         background-color: var(--border, #262726);
     }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Vibe UI Transitions & Smooth Page Animations
+───────────────────────────────────────────────────────────── */
+
+/* Native View Transitions API support */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root) {
+    animation: 0.2s cubic-bezier(0.16, 1, 0.3, 1) both vibeViewOut;
+}
+
+::view-transition-new(root) {
+    animation: 0.25s cubic-bezier(0.16, 1, 0.3, 1) both vibeViewIn;
+}
+
+@keyframes vibeViewOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes vibeViewIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth Page & Content Entrance for wire:navigate */
+.vibe-page-enter {
+    animation: vibePageFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes vibePageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth body color transition */
+body {
+    transition: background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Smooth Theme Toggle Transition */
+html.vibe-theme-transition,
+html.vibe-theme-transition *,
+html.vibe-theme-transition *::before,
+html.vibe-theme-transition *::after {
+    transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                fill 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                stroke 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    transition-delay: 0s !important;
+}
+
+/* Accessibility: Respect Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+    ::view-transition-old(root),
+    ::view-transition-new(root),
+    .vibe-page-enter,
+    html.vibe-theme-transition,
+    html.vibe-theme-transition * {
+        animation: none !important;
+        transition: none !important;
+    }
+}

@@ -221,7 +221,7 @@
                     {{-- <div class="h-[80%] w-px bg-border" role="separator"></div> --}}
                 </vibe:header.actions>
             </vibe:header>
-            <main class="flex-1 p-4 min-w-0 w-full">
+            <main class="flex-1 p-4 min-w-0 w-full vibe-page-enter">
                 {{ $slot }}
             </main>
 

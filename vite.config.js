@@ -118,12 +118,14 @@ export default defineConfig({
                 'resources/js/vibe/table.js',
                 'resources/css/vibe/chart.css',
                 'resources/js/vibe/chart.js',
+                'resources/js/vibe/form.js',
             ],
             refresh: true,
             fonts: [
                 bunny('Figtree', {
                     weights: [400, 500, 600, 700],
                     display: 'swap',
+                    preload: false,
                 }),
             ],
         }),

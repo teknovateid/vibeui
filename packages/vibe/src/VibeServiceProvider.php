@@ -67,6 +67,14 @@ class VibeServiceProvider extends ServiceProvider
             View::prependNamespace('livewire-tables', $packageDatatableViews);
         }
 
+        // Configure Rappasoft Livewire Tables script attributes for Livewire SPA wire:navigate
+        if (class_exists(\Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets::class)) {
+            app(\Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets::class)->useRappasoftTableScriptTagAttributes([
+                'data-navigate-once' => 'true',
+                'onload' => 'window.VibeInitDataTable ? window.VibeInitDataTable() : null',
+            ]);
+        }
+
         // Register custom @alert directive
         Blade::directive('vibeAlert', function ($expression) {
             return "<?php

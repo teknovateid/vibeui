@@ -257,6 +257,12 @@ document.addEventListener('livewire:navigated', recordPageHistory);
 const initScrollRestoration = () => {
     const getPrefix = () => window.VIBE_PREFIX || 'vibe';
 
+    if (typeof history !== 'undefined' && 'scrollRestoration' in history) {
+        try {
+            history.scrollRestoration = 'manual';
+        } catch (e) {}
+    }
+
     // Auto-clean any zero or invalid legacy scroll keys from sessionStorage
     try {
         const prefix = getPrefix();
@@ -270,19 +276,34 @@ const initScrollRestoration = () => {
         });
     } catch (e) {}
 
+    // Check if the current page load is a browser refresh / reload (F5, Ctrl+R, reload button)
+    const isPageReload = () => {
+        try {
+            const navEntries = performance.getEntriesByType('navigation');
+            if (navEntries && navEntries.length > 0) {
+                return navEntries[0].type === 'reload';
+            }
+            if (window.performance && window.performance.navigation) {
+                return window.performance.navigation.type === 1; // TYPE_RELOAD
+            }
+        } catch (e) {}
+        return false;
+    };
+
     const getStorageKey = (target) => {
         const prefix = getPrefix();
         if (target === document || target === window) {
-            return `${prefix}-scroll-${window.location.pathname}`;
+            return `${prefix}-scroll-window-${window.location.pathname}`;
         }
         if (target && target.nodeType === 1) {
             const id = target.id;
             const vibeScroll = target.dataset ? target.dataset.vibeScroll : target.getAttribute('data-vibe-scroll');
-            
-            // Only track explicit scrollable containers
+
+            // Explicit main scroll container (page specific)
             if (id === 'docs-main-scroll' || id === 'main-scroll') {
-                return `${prefix}-scroll-${window.location.pathname}`;
+                return `${prefix}-scroll-${id}-${window.location.pathname}`;
             }
+            // Global containers like sidebar menu
             if (id === 'sidebar-menu-body' || vibeScroll) {
                 return `${prefix}-scroll-${vibeScroll || id}`;
             }
@@ -290,52 +311,114 @@ const initScrollRestoration = () => {
         return null;
     };
 
-    let isRestoring = false;
+    const getSavedVal = (key, fallbackKey) => {
+        try {
+            let val = sessionStorage.getItem(key);
+            if ((val === null || isNaN(parseFloat(val))) && fallbackKey) {
+                val = sessionStorage.getItem(fallbackKey);
+            }
+            if (val !== null && !isNaN(parseFloat(val)) && parseFloat(val) > 0) {
+                return parseFloat(val);
+            }
+        } catch (e) {}
+        return null;
+    };
 
-    const restoreAllScrolls = () => {
+    let isRestoring = false;
+    let isInitialBoot = true;
+    const isReload = isPageReload();
+
+    // Scroll targets
+    const getMainScrollContainer = () => {
+        return document.getElementById('docs-main-scroll') || document.getElementById('main-scroll');
+    };
+
+    const resetPageScrollToTop = () => {
+        const main = getMainScrollContainer();
+        if (main) {
+            main.scrollTop = 0;
+        }
+        window.scrollTo(0, 0);
+    };
+
+    const restoreSidebarScroll = () => {
+        const prefix = getPrefix();
+        const side = document.getElementById('sidebar-menu-body');
+        if (side) {
+            const sideKey = `${prefix}-scroll-sidebar-menu-body`;
+            const saved = getSavedVal(sideKey);
+            if (saved !== null && saved > 0) {
+                side.scrollTop = Math.round(saved);
+            }
+        }
+    };
+
+    const restoreReloadScroll = () => {
         const prefix = getPrefix();
         isRestoring = true;
 
         // 1. Restore window scroll
-        const windowKey = `${prefix}-scroll-${window.location.pathname}`;
-        const savedWindowScroll = sessionStorage.getItem(windowKey);
-        if (savedWindowScroll !== null && parseFloat(savedWindowScroll) > 0) {
-            window.scrollTo(0, Math.round(parseFloat(savedWindowScroll)));
-        } else {
-            window.scrollTo(0, 0);
+        const windowKey = `${prefix}-scroll-window-${window.location.pathname}`;
+        const legacyWindowKey = `${prefix}-scroll-${window.location.pathname}`;
+        const savedWin = getSavedVal(windowKey, legacyWindowKey);
+        if (savedWin !== null && savedWin > 0) {
+            window.scrollTo(0, Math.round(savedWin));
         }
 
-        // 2. Restore dedicated scroll containers
-        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll]');
+        // 2. Restore dedicated containers
+        const containers = document.querySelectorAll('#docs-main-scroll, #main-scroll, #sidebar-menu-body, [data-vibe-scroll]');
         containers.forEach(el => {
             const key = getStorageKey(el);
             if (!key) return;
-            const saved = sessionStorage.getItem(key);
-            if (saved !== null && parseFloat(saved) > 0) {
-                el.scrollTop = Math.round(parseFloat(saved));
-            } else {
-                const isPageSpecific = el.id === 'docs-main-scroll' || el.id === 'main-scroll';
-                if (isPageSpecific) {
-                    el.scrollTop = 0;
-                }
+            const fallbackKey = (el.id === 'docs-main-scroll' || el.id === 'main-scroll')
+                ? `${prefix}-scroll-${window.location.pathname}`
+                : null;
+            const saved = getSavedVal(key, fallbackKey);
+            if (saved !== null && saved > 0) {
+                el.scrollTop = Math.round(saved);
             }
         });
+    };
 
-        // Ensure temporary minHeight is cleared
-        const main = document.getElementById('docs-main-scroll');
-        if (main) {
-            const m = main.querySelector('main');
-            if (m) m.style.minHeight = '';
-        }
-        const side = document.getElementById('sidebar-menu-body');
-        if (side && side.firstElementChild) {
-            side.firstElementChild.style.minHeight = '';
-        }
+    const scheduleReloadRestoration = () => {
+        if (!isReload) return;
+        isRestoring = true;
 
-        // 3. Mark done restoring after layout settles
+        const run = () => restoreReloadScroll();
+
+        run();
+        requestAnimationFrame(run);
+
+        const delays = [30, 80, 150, 300, 500];
+        delays.forEach(ms => setTimeout(run, ms));
+
         setTimeout(() => {
             isRestoring = false;
-        }, 20);
+        }, 650);
+    };
+
+    const handleHashOrTopScroll = () => {
+        const hash = window.location.hash;
+        if (hash) {
+            try {
+                const target = document.querySelector(hash) || document.getElementById(hash.slice(1));
+                if (target) {
+                    const scrollContainer = getMainScrollContainer() || window;
+                    if (scrollContainer === window) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    } else {
+                        const cRect = scrollContainer.getBoundingClientRect();
+                        const tRect = target.getBoundingClientRect();
+                        scrollContainer.scrollTo({
+                            top: scrollContainer.scrollTop + (tRect.top - cRect.top) - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                    return;
+                }
+            } catch (e) {}
+        }
+        resetPageScrollToTop();
     };
 
     // Auto-save scroll position using capture phase
@@ -365,7 +448,7 @@ const initScrollRestoration = () => {
     const saveAllScrollsNow = () => {
         if (isRestoring) return;
         const prefix = getPrefix();
-        const windowKey = `${prefix}-scroll-${window.location.pathname}`;
+        const windowKey = `${prefix}-scroll-window-${window.location.pathname}`;
         const winScroll = window.scrollY || window.pageYOffset || 0;
         if (winScroll > 0) {
             sessionStorage.setItem(windowKey, Math.round(winScroll));
@@ -373,7 +456,7 @@ const initScrollRestoration = () => {
             sessionStorage.removeItem(windowKey);
         }
 
-        const containers = document.querySelectorAll('#docs-main-scroll, #sidebar-menu-body, [data-vibe-scroll]');
+        const containers = document.querySelectorAll('#docs-main-scroll, #main-scroll, #sidebar-menu-body, [data-vibe-scroll]');
         containers.forEach(el => {
             const key = getStorageKey(el);
             if (key) {
@@ -394,11 +477,55 @@ const initScrollRestoration = () => {
         saveAllScrollsNow();
         isRestoring = true;
 
-        // Reset page-specific scroll to top (0) before morphing
-        const main = document.getElementById('docs-main-scroll');
-        if (main) {
-            main.scrollTop = 0;
+        // Reset page scroll to top immediately before morphing
+        resetPageScrollToTop();
+    });
+
+    // When navigating to a new page or initial load finishes
+    document.addEventListener('livewire:navigated', () => {
+        if (isInitialBoot) {
+            if (isReload) {
+                scheduleReloadRestoration();
+            } else {
+                resetPageScrollToTop();
+                restoreSidebarScroll();
+                if (window.location.hash) {
+                    handleHashOrTopScroll();
+                }
+            }
+            setTimeout(() => {
+                isInitialBoot = false;
+            }, 250);
+            return;
         }
+
+        // Subsequent livewire:navigated -> this is definitely "berpindah halaman"!
+        isRestoring = true;
+
+        // 1. Clear saved page scroll for the newly visited page so it always starts at top
+        const prefix = getPrefix();
+        const path = window.location.pathname;
+        sessionStorage.removeItem(`${prefix}-scroll-docs-main-scroll-${path}`);
+        sessionStorage.removeItem(`${prefix}-scroll-main-scroll-${path}`);
+        sessionStorage.removeItem(`${prefix}-scroll-window-${path}`);
+        sessionStorage.removeItem(`${prefix}-scroll-${path}`);
+
+        // 2. Keep sidebar menu scroll position intact
+        restoreSidebarScroll();
+
+        // 3. Reset page scroll position to the very top or scroll to hash
+        if (window.location.hash) {
+            handleHashOrTopScroll();
+        } else {
+            resetPageScrollToTop();
+            requestAnimationFrame(resetPageScrollToTop);
+            setTimeout(resetPageScrollToTop, 30);
+            setTimeout(resetPageScrollToTop, 80);
+        }
+
+        setTimeout(() => {
+            isRestoring = false;
+        }, 180);
     });
 
     // Lock and preserve scroll position across Livewire component updates (pagination, sorting, filters)
@@ -410,7 +537,7 @@ const initScrollRestoration = () => {
         window.Livewire.__scrollLockInitialized = true;
 
         window.Livewire.hook('commit', ({ component, commit, respond, succeed, fail }) => {
-            const main = document.getElementById('docs-main-scroll') || document.getElementById('main-scroll');
+            const main = getMainScrollContainer();
             lockedMainScroll = main ? main.scrollTop : null;
             lockedWindowScroll = window.scrollY || window.pageYOffset || 0;
             isRestoring = true;
@@ -454,16 +581,31 @@ const initScrollRestoration = () => {
         document.addEventListener('livewire:init', setupLivewireScrollLock);
     }
 
-    // Restore on load & Livewire SPA navigation & Alpine init
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', restoreAllScrolls);
+    // Initial load handling
+    if (isReload) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', scheduleReloadRestoration);
+        } else {
+            scheduleReloadRestoration();
+        }
+        document.addEventListener('alpine:initialized', () => {
+            setTimeout(scheduleReloadRestoration, 10);
+        });
+        window.addEventListener('load', () => {
+            setTimeout(restoreReloadScroll, 10);
+        });
     } else {
-        restoreAllScrolls();
+        // Fresh initial visit: ensure top position
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                resetPageScrollToTop();
+                restoreSidebarScroll();
+            });
+        } else {
+            resetPageScrollToTop();
+            restoreSidebarScroll();
+        }
     }
-    document.addEventListener('livewire:navigated', restoreAllScrolls);
-    document.addEventListener('alpine:initialized', () => {
-        setTimeout(restoreAllScrolls, 10);
-    });
 };
 
 initScrollRestoration();
