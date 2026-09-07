@@ -97,6 +97,77 @@ return [
         'preview_title' => 'Livewire Integration & URL Synchronization',
     ],
 
+    // Section 8: Custom Designs & Styling
+    'custom' => [
+        'title' => 'Custom Design Inspirations (Custom Class)',
+        'desc' => 'The Tabs component is crafted for complete styling freedom. Without modifying the component core source code, you can leverage Tailwind CSS utilities directly via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class="..."</code> to assemble diverse, state-of-the-art UI designs.',
+        
+        // 1. Floating Glassmorphism Pill
+        'floating_title' => '1. Floating Glassmorphism Pill',
+        'floating_desc' => 'A floating capsule design with frosted glass blur effect (<code class="font-mono text-xs text-foreground">backdrop-blur-xl</code>), subtle shadows, and full pill corners (<code class="font-mono text-xs text-foreground">rounded-full</code>). Excellent for hero navigation bars, portfolio showcases, or category filters.',
+        'floating_preview_title' => 'Floating Glassmorphism Tabs',
+        'floating_tab_overview' => 'Overview',
+        'floating_tab_analytics' => 'Analytics',
+        'floating_tab_reports' => 'Reports & Exports',
+        'floating_overview_title' => 'Sales & Conversion Performance',
+        'floating_overview_desc' => 'Gross revenue increased +24.8% this quarter with a customer retention rate reaching 94.2%.',
+        'floating_analytics_title' => 'Real-Time Traffic Metrics',
+        'floating_analytics_desc' => '82,450 daily active visitors with an average session duration of 4 minutes 12 seconds.',
+        'floating_reports_title' => 'Recent Financial Reports',
+        'floating_reports_desc' => 'Download audited quarterly statements (Q3) and transaction tax logs in PDF or CSV formats.',
+
+        // 2. Card Header Segmented
+        'card_header_title' => '2. Card Header Segmented (GitHub / Linear Style)',
+        'card_header_desc' => 'Seamlessly embeds tabs directly into a <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code> header with unified underline borders. Perfect for project configuration, repository administration, or SaaS dashboards.',
+        'card_header_preview_title' => 'Card Header Segmented Tabs',
+        'card_header_tab_general' => 'General Settings',
+        'card_header_tab_collaborators' => 'Team Collaborators',
+        'card_header_tab_webhooks' => 'Webhooks',
+        'card_header_general_title' => 'Primary Project Configuration',
+        'card_header_general_desc' => 'Update project name, repository visibility, and default primary branch.',
+        'card_header_collab_title' => 'Team Access & Permissions',
+        'card_header_collab_desc' => 'Manage permissions for contributors, developers, and release managers.',
+        'card_header_webhooks_title' => 'External Webhooks Endpoints',
+        'card_header_webhooks_desc' => 'Dispatch automated event payloads to your CI/CD pipelines or Discord/Slack bots.',
+
+        // 3. Sidebar Settings Navigation (2 Columns)
+        'sidebar_title' => '3. Dashboard Settings Sidebar Navigation (2 Columns)',
+        'sidebar_desc' => 'Combines vertical <code class="font-mono text-xs text-foreground">layout="cols"</code> with a dedicated sidebar container, purposeful SVG icons, status badges, and an expansive card content canvas.',
+        'sidebar_preview_title' => 'Dashboard Sidebar Tabs (2 Columns)',
+        'sidebar_tab_profile' => 'User Profile',
+        'sidebar_tab_billing' => 'Plans & Billing',
+        'sidebar_tab_api' => 'API Tokens',
+        'sidebar_tab_security' => 'Security & Auth',
+        'sidebar_profile_title' => 'Personal Account Information',
+        'sidebar_profile_desc' => 'Update your identity details, short bio, and public avatar image.',
+        'sidebar_billing_title' => 'Enterprise Subscription Plan',
+        'sidebar_billing_desc' => 'Your plan is active through December 31, 2026 with unlimited API request quotas.',
+        'sidebar_api_title' => 'Developer API Key Management',
+        'sidebar_api_desc' => 'API keys allow programmatic access to Vibe UI GraphQL and REST endpoints.',
+        'sidebar_security_title' => 'Security & Two-Factor Authentication (2FA)',
+        'sidebar_security_desc' => 'Protect your logins with an authenticator app or hardware FIDO2 security keys.',
+
+        // 4. Dark Dev Console / Terminal Code Tabs
+        'terminal_title' => '4. Dark Dev Terminal / Code Snippet Switcher',
+        'terminal_desc' => 'A dark developer console aesthetic featuring monospaced typography, macOS window dots, and compact tabs for switching between programming languages (cURL, PHP SDK, Node.js, Python).',
+        'terminal_preview_title' => 'Developer Terminal Console Tabs',
+        'terminal_tab_curl' => 'cURL',
+        'terminal_tab_php' => 'PHP (SDK)',
+        'terminal_tab_node' => 'Node.js',
+        'terminal_tab_python' => 'Python',
+
+        // 5. Segmented Filter Bar
+        'filter_title' => '5. Segmented Filter Bar with Counter Badges',
+        'filter_desc' => 'A compact filter toolbar utilizing <code class="font-mono text-xs text-foreground">fitted="true"</code>, fully rounded corners, and numeric counter badges to filter tasks by status (All, Active, Completed).',
+        'filter_preview_title' => 'Filter Bar Tabs with Counter Badges',
+        'filter_tab_all' => 'All Tasks',
+        'filter_tab_active' => 'In Progress',
+        'filter_tab_completed' => 'Completed',
+        'filter_all_content' => 'Displaying all 38 tasks registered across this project.',
+        'filter_active_content' => '14 tasks are currently being worked on by the engineering team.',
+        'filter_completed_content' => '24 tasks have been verified and marked as complete.',
+    ],
+
     // Props Table
     'props' => [
         'title' => 'Properties & API Reference',

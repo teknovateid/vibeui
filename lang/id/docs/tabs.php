@@ -97,6 +97,77 @@ return [
         'preview_title' => 'Kode Integrasi Livewire & Sinkronisasi URL',
     ],
 
+    // Section 8: Custom Designs & Styling
+    'custom' => [
+        'title' => 'Inspirasi Desain Kustom (Custom Class)',
+        'desc' => 'Komponen Tabs dirancang fleksibel tanpa membatasi kreativitas Anda. Tanpa memodifikasi kode inti komponen, Anda dapat memanfaatkan utilitas Tailwind CSS pada atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class="..."</code> untuk menciptakan beragam desain antarmuka modern yang unik.',
+        
+        // 1. Floating Glassmorphism Pill
+        'floating_title' => '1. Floating Glassmorphism Pill',
+        'floating_desc' => 'Desain kapsul melayang dengan efek kaca transparan (<code class="font-mono text-xs text-foreground">backdrop-blur-xl</code>), bayangan halus, dan sudut membulat penuh (<code class="font-mono text-xs text-foreground">rounded-full</code>). Sangat pas untuk menu navigasi hero beranda, etalase portofolio, atau filter kategori.',
+        'floating_preview_title' => 'Tabs Floating Glassmorphism',
+        'floating_tab_overview' => 'Ringkasan',
+        'floating_tab_analytics' => 'Analitik',
+        'floating_tab_reports' => 'Laporan & Ekspor',
+        'floating_overview_title' => 'Performa Penjualan & Konversi',
+        'floating_overview_desc' => 'Total pendapatan kotor meningkat +24.8% pada kuartal ini dengan tingkat retensi pelanggan mencapai 94.2%.',
+        'floating_analytics_title' => 'Metrik Lalu Lintas Real-Time',
+        'floating_analytics_desc' => '82,450 pengunjung aktif harian dengan rata-rata waktu interaksi 4 menit 12 detik.',
+        'floating_reports_title' => 'Laporan Keuangan Terakhir',
+        'floating_reports_desc' => 'Unduh laporan audit kuartalan (Q3) dan rekap transaksi pajak berformat PDF atau spreadsheet.',
+
+        // 2. Card Header Segmented
+        'card_header_title' => '2. Card Header Segmented (Linear / GitHub Style)',
+        'card_header_desc' => 'Menyematkan tab langsung di dalam header <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code> dengan pembatas garis bawah terpadu. Sangat rapi untuk halaman konfigurasi proyek, administrasi repositori, atau dasbor SaaS.',
+        'card_header_preview_title' => 'Tabs Card Header Segmented',
+        'card_header_tab_general' => 'Pengaturan Umum',
+        'card_header_tab_collaborators' => 'Kolaborator Tim',
+        'card_header_tab_webhooks' => 'Webhooks',
+        'card_header_general_title' => 'Konfigurasi Proyek Utama',
+        'card_header_general_desc' => 'Ubah nama proyek, visibilitas repositori, dan cabang utama (default branch).',
+        'card_header_collab_title' => 'Hak Akses & Anggota Tim',
+        'card_header_collab_desc' => 'Kelola izin akses kontributor, pengembang, dan manajer rilis.',
+        'card_header_webhooks_title' => 'Endpoint Webhooks Eksternal',
+        'card_header_webhooks_desc' => 'Kirim muatan event otomatis ke server CI/CD atau bot Discord/Slack Anda.',
+
+        // 3. Sidebar Settings Navigation (2 Kolom)
+        'sidebar_title' => '3. Sidebar Navigasi Dasbor Pengaturan (2 Kolom)',
+        'sidebar_desc' => 'Menggunakan tata letak vertikal <code class="font-mono text-xs text-foreground">layout="cols"</code> dengan daftar tab berwadah kartu samping (sidebar), ikon SVG terarah, badge status, dan panel formulir yang leluasa.',
+        'sidebar_preview_title' => 'Tabs Sidebar Dasbor (2 Kolom)',
+        'sidebar_tab_profile' => 'Profil Pengguna',
+        'sidebar_tab_billing' => 'Langganan & Paket',
+        'sidebar_tab_api' => 'Kunci Token API',
+        'sidebar_tab_security' => 'Keamanan Akun',
+        'sidebar_profile_title' => 'Informasi Akun Pribadi',
+        'sidebar_profile_desc' => 'Perbarui data identitas, bio singkat, dan avatar pengguna Anda.',
+        'sidebar_billing_title' => 'Paket Langganan Enterprise',
+        'sidebar_billing_desc' => 'Paket Anda aktif hingga 31 Desember 2026 dengan kuota unlimited API calls.',
+        'sidebar_api_title' => 'Manajemen Kunci API Pengembang',
+        'sidebar_api_desc' => 'Kunci API memberikan akses langsung ke endpoint GraphQL dan REST Vibe UI.',
+        'sidebar_security_title' => 'Keamanan & Autentikasi Dua Faktor (2FA)',
+        'sidebar_security_desc' => 'Amankan login Anda menggunakan aplikasi autentikator atau kunci fisik FIDO2.',
+
+        // 4. Dark Dev Console / Terminal Code Tabs
+        'terminal_title' => '4. Dark Dev Terminal / Code Snippet Switcher',
+        'terminal_desc' => 'Desain gelap bergaya konsol pengembang (developer terminal) dengan font monospaced, tombol jendela macOS, dan tab ringkas untuk beralih antar bahasa pemrograman (cURL, PHP SDK, Node.js, Python).',
+        'terminal_preview_title' => 'Tabs Terminal Konsol Pengembang',
+        'terminal_tab_curl' => 'cURL',
+        'terminal_tab_php' => 'PHP (SDK)',
+        'terminal_tab_node' => 'Node.js',
+        'terminal_tab_python' => 'Python',
+
+        // 5. Segmented Filter Bar
+        'filter_title' => '5. Segmented Filter Bar dengan Badge Counter',
+        'filter_desc' => 'Bilah penyaring data yang ringkas menggunakan prop <code class="font-mono text-xs text-foreground">fitted="true"</code>, sudut membulat penuh, dan badge counter untuk menyaring tugas berdasarkan status (Semua, Sedang Berjalan, Selesai).',
+        'filter_preview_title' => 'Tabs Filter Bar dengan Badge Counter',
+        'filter_tab_all' => 'Semua Tugas',
+        'filter_tab_active' => 'Sedang Berjalan',
+        'filter_tab_completed' => 'Selesai',
+        'filter_all_content' => 'Menampilkan seluruh 38 tugas yang terdaftar di proyek ini.',
+        'filter_active_content' => '14 tugas saat ini sedang dikerjakan oleh tim pengembang.',
+        'filter_completed_content' => '24 tugas telah diverifikasi dan diselesaikan dengan sukses.',
+    ],
+
     // Props Table
     'props' => [
         'title' => 'Referensi Properti & API',
