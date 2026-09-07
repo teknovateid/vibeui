@@ -11,13 +11,13 @@ Chart.register(zoomPlugin);
 // =========================================================================
 const origDraw = Chart.prototype.draw;
 Chart.prototype.draw = function() {
-    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+    if (!this.ctx || !this.canvas || !this.options || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
         return;
     }
     try {
         return origDraw.apply(this, arguments);
     } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+        if (err instanceof TypeError) {
             return;
         }
         throw err;
@@ -26,13 +26,13 @@ Chart.prototype.draw = function() {
 
 const origRender = Chart.prototype.render;
 Chart.prototype.render = function() {
-    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+    if (!this.ctx || !this.canvas || !this.options || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
         return;
     }
     try {
         return origRender.apply(this, arguments);
     } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+        if (err instanceof TypeError) {
             return;
         }
         throw err;
@@ -47,7 +47,7 @@ Chart.prototype.update = function(mode) {
     try {
         return origUpdate.apply(this, arguments);
     } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+        if (err instanceof TypeError) {
             return;
         }
         throw err;
@@ -62,8 +62,23 @@ Chart.prototype.clear = function() {
     try {
         return origClear.apply(this, arguments);
     } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+        if (err instanceof TypeError) {
             return this;
+        }
+        throw err;
+    }
+};
+
+const origResize = Chart.prototype.resize;
+Chart.prototype.resize = function(width, height) {
+    if (!this.ctx || !this.canvas || !this.options || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+        return;
+    }
+    try {
+        return origResize.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError) {
+            return;
         }
         throw err;
     }
@@ -71,15 +86,30 @@ Chart.prototype.clear = function() {
 
 const origDestroy = Chart.prototype.destroy;
 Chart.prototype.destroy = function() {
+    if (!this.canvas && !this.ctx) {
+        return;
+    }
     try {
         return origDestroy.apply(this, arguments);
     } catch (err) {
-        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
-            this.canvas = null;
-            this.ctx = null;
-            return;
-        }
-        throw err;
+        this.canvas = null;
+        this.ctx = null;
+        return;
+    }
+};
+
+const origEventHandler = Chart.prototype._eventHandler;
+Chart.prototype._eventHandler = function(e, replay) {
+    if (!this.canvas || !this.ctx || !this.options || !Array.isArray(this.options.events)) {
+        return this;
+    }
+    if (typeof document !== 'undefined' && !document.body.contains(this.canvas)) {
+        return this;
+    }
+    try {
+        return origEventHandler.apply(this, arguments);
+    } catch (err) {
+        return this;
     }
 };
 
@@ -90,13 +120,13 @@ try {
         if (BaseScale) {
             const origDrawLabels = BaseScale.drawLabels;
             BaseScale.drawLabels = function(chartArea) {
-                if (!this.ctx || (this.chart && (!this.chart.ctx || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
+                if (!this.ctx || (this.chart && (!this.chart.ctx || !this.chart.options || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
                     return;
                 }
                 try {
                     return origDrawLabels.apply(this, arguments);
                 } catch (err) {
-                    if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+                    if (err instanceof TypeError) {
                         return;
                     }
                     throw err;
@@ -105,13 +135,13 @@ try {
 
             const origScaleDraw = BaseScale.draw;
             BaseScale.draw = function(chartArea) {
-                if (!this.ctx || (this.chart && (!this.chart.ctx || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
+                if (!this.ctx || (this.chart && (!this.chart.ctx || !this.chart.options || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
                     return;
                 }
                 try {
                     return origScaleDraw.apply(this, arguments);
                 } catch (err) {
-                    if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+                    if (err instanceof TypeError) {
                         return;
                     }
                     throw err;
@@ -121,6 +151,21 @@ try {
     }
 } catch (e) {
     // Non-critical
+}
+
+// Automatically clean up all chart instances when Livewire starts navigating away
+if (typeof document !== 'undefined') {
+    document.addEventListener('livewire:navigating', () => {
+        if (window.Chart && window.Chart.instances) {
+            Object.values(window.Chart.instances).forEach(chart => {
+                try {
+                    chart.destroy();
+                } catch (e) {
+                    // Ignore transient destruction error
+                }
+            });
+        }
+    });
 }
 
 window.Chart = Chart;
@@ -545,17 +590,22 @@ export function vibeChart(initialConfig = {}) {
             }
 
             const isDark = isDarkMode();
+            this._lastDark = isDark;
             const finalConfig = applyVibeTheme(config, isDark, canvas);
 
             if (this.chart) {
-                this.chart.destroy();
+                try {
+                    this.chart.destroy();
+                } catch (e) {}
                 this.chart = null;
             }
 
             if (window.Chart) {
                 const existing = window.Chart.getChart(canvas);
                 if (existing) {
-                    existing.destroy();
+                    try {
+                        existing.destroy();
+                    } catch (e) {}
                 }
             }
 
@@ -577,21 +627,50 @@ export function vibeChart(initialConfig = {}) {
             }
 
             const isDark = isDarkMode();
+            if (this._lastDark === isDark) return;
+            this._lastDark = isDark;
+
             const updated = applyVibeTheme(this.rawConfig, isDark, canvas);
 
-            // Apply new options and dataset colors
-            this.chart.options = updated.options;
-            if (updated.data && updated.data.datasets) {
+            // Safely apply new dataset colors without overwriting options resolver
+            if (updated.data?.datasets && this.chart.data?.datasets) {
                 this.chart.data.datasets.forEach((ds, i) => {
-                    if (updated.data.datasets[i]) {
-                        ds.borderColor = updated.data.datasets[i].borderColor;
-                        ds.backgroundColor = updated.data.datasets[i].backgroundColor;
-                        if (ds.pointBackgroundColor) {
-                            ds.pointBackgroundColor = updated.data.datasets[i].pointBackgroundColor;
+                    const src = updated.data.datasets[i];
+                    if (src) {
+                        if (src.borderColor !== undefined) ds.borderColor = src.borderColor;
+                        if (src.backgroundColor !== undefined) ds.backgroundColor = src.backgroundColor;
+                        if (src.pointBackgroundColor !== undefined) {
+                            ds.pointBackgroundColor = src.pointBackgroundColor;
                         }
                     }
                 });
             }
+
+            if (this.chart.options?.plugins && updated.options?.plugins) {
+                if (updated.options.plugins.tooltip && this.chart.options.plugins.tooltip) {
+                    Object.assign(this.chart.options.plugins.tooltip, updated.options.plugins.tooltip);
+                }
+                if (updated.options.plugins.legend?.labels && this.chart.options.plugins.legend?.labels) {
+                    this.chart.options.plugins.legend.labels.color = updated.options.plugins.legend.labels.color;
+                }
+            }
+
+            if (this.chart.options?.scales && updated.options?.scales) {
+                if (updated.options.scales.x?.grid && this.chart.options.scales.x?.grid) {
+                    this.chart.options.scales.x.grid.color = updated.options.scales.x.grid.color;
+                }
+                if (updated.options.scales.x?.ticks && this.chart.options.scales.x?.ticks) {
+                    this.chart.options.scales.x.ticks.color = updated.options.scales.x.ticks.color;
+                }
+                if (updated.options.scales.y?.grid && this.chart.options.scales.y?.grid) {
+                    this.chart.options.scales.y.grid.color = updated.options.scales.y.grid.color;
+                }
+                if (updated.options.scales.y?.ticks && this.chart.options.scales.y?.ticks) {
+                    this.chart.options.scales.y.ticks.color = updated.options.scales.y.ticks.color;
+                }
+            }
+
+            this.chart.config.options = updated.options;
 
             try {
                 this.chart.update('none'); // Update without full disruptive animation
@@ -646,7 +725,9 @@ export function vibeChart(initialConfig = {}) {
                 this._themeHandler = null;
             }
             if (this.chart) {
-                this.chart.destroy();
+                try {
+                    this.chart.destroy();
+                } catch (e) {}
                 this.chart = null;
             }
         }
@@ -692,26 +773,62 @@ export const VibeChart = {
         }
 
         // Auto-hook theme changes with cleanup when canvas is detached from DOM
+        let lastDark = isDark;
         const observer = new MutationObserver(() => {
             if (!document.body.contains(canvas)) {
                 observer.disconnect();
                 if (window.Chart && window.Chart.getChart(canvas)) {
-                    chartInstance.destroy();
+                    try {
+                        chartInstance.destroy();
+                    } catch (e) {}
                 }
                 return;
             }
 
             const darkNow = isDarkMode();
+            if (darkNow === lastDark) return;
+            lastDark = darkNow;
+
             const updated = applyVibeTheme(config, darkNow, canvas);
-            chartInstance.options = updated.options;
-            if (updated.data?.datasets) {
+            if (updated.data?.datasets && chartInstance.data?.datasets) {
                 chartInstance.data.datasets.forEach((ds, i) => {
-                    if (updated.data.datasets[i]) {
-                        ds.borderColor = updated.data.datasets[i].borderColor;
-                        ds.backgroundColor = updated.data.datasets[i].backgroundColor;
+                    const src = updated.data.datasets[i];
+                    if (src) {
+                        if (src.borderColor !== undefined) ds.borderColor = src.borderColor;
+                        if (src.backgroundColor !== undefined) ds.backgroundColor = src.backgroundColor;
+                        if (src.pointBackgroundColor !== undefined) {
+                            ds.pointBackgroundColor = src.pointBackgroundColor;
+                        }
                     }
                 });
             }
+
+            if (chartInstance.options?.plugins && updated.options?.plugins) {
+                if (updated.options.plugins.tooltip && chartInstance.options.plugins.tooltip) {
+                    Object.assign(chartInstance.options.plugins.tooltip, updated.options.plugins.tooltip);
+                }
+                if (updated.options.plugins.legend?.labels && chartInstance.options.plugins.legend?.labels) {
+                    chartInstance.options.plugins.legend.labels.color = updated.options.plugins.legend.labels.color;
+                }
+            }
+
+            if (chartInstance.options?.scales && updated.options?.scales) {
+                if (updated.options.scales.x?.grid && chartInstance.options.scales.x?.grid) {
+                    chartInstance.options.scales.x.grid.color = updated.options.scales.x.grid.color;
+                }
+                if (updated.options.scales.x?.ticks && chartInstance.options.scales.x?.ticks) {
+                    chartInstance.options.scales.x.ticks.color = updated.options.scales.x.ticks.color;
+                }
+                if (updated.options.scales.y?.grid && chartInstance.options.scales.y?.grid) {
+                    chartInstance.options.scales.y.grid.color = updated.options.scales.y.grid.color;
+                }
+                if (updated.options.scales.y?.ticks && chartInstance.options.scales.y?.ticks) {
+                    chartInstance.options.scales.y.ticks.color = updated.options.scales.y.ticks.color;
+                }
+            }
+
+            chartInstance.config.options = updated.options;
+
             try {
                 chartInstance.update('none');
             } catch (e) {

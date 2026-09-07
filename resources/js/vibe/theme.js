@@ -172,6 +172,9 @@ document.addEventListener('livewire:navigated', () => {
         mainEl.classList.remove('vibe-page-enter');
         void mainEl.offsetWidth;
         mainEl.classList.add('vibe-page-enter');
+        mainEl.addEventListener('animationend', () => {
+            mainEl.classList.remove('vibe-page-enter');
+        }, { once: true });
     }
 
     // Initialize datatables if present on the navigated page

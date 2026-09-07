@@ -71,7 +71,14 @@
     {{ $attributes->twMerge(['class' => 'vibe-chart-wrapper relative w-full overflow-hidden transition-all duration-200 select-none']) }}
     style="{{ $heightStyle }}"
     x-data="typeof vibeChart !== 'undefined' ? vibeChart({{ $configJson }}) : {
+        chart: null,
         loading: true,
+        destroy() {
+            if (this.chart) {
+                try { this.chart.destroy(); } catch (e) {}
+                this.chart = null;
+            }
+        },
         init() {
             window.addEventListener('vibe-chart-ready', () => {
                 let instance = window.vibeChart({{ $configJson }});

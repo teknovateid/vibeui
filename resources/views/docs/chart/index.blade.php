@@ -2018,13 +2018,17 @@ BLADE;
                 document.addEventListener('livewire:navigating', () => {
                     const radar = document.querySelector('#standalone-radar-demo');
                     if (radar && window.Chart) {
-                        window.Chart.getChart(radar)?.destroy();
+                        try {
+                            window.Chart.getChart(radar)?.destroy();
+                        } catch (e) {}
                     }
                     const m4 = document.querySelector('#canvas-pure-js-demo');
                     if (m4 && window.Chart) {
-                        window.Chart.getChart(m4)?.destroy();
+                        try {
+                            window.Chart.getChart(m4)?.destroy();
+                        } catch (e) {}
                     }
-                }, { once: true });
+                });
             })();
         </script>
     @endpush

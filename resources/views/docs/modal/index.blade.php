@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'remember'] as $p)
+                    @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'remember', 'teleport'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
