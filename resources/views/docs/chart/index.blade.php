@@ -1931,10 +1931,11 @@ BLADE;
             (function() {
                 window.initMethod4Demo = () => {
                     const canvas = document.querySelector('#canvas-pure-js-demo');
-                    if (!canvas || !window.Chart) return;
+                    // Cegah inisialisasi jika canvas tidak ada, Chart belum siap, atau canvas sedang hidden (display: none)
+                    if (!canvas || !window.Chart || canvas.offsetParent === null) return;
                     let chart = window.Chart.getChart(canvas);
                     if (!chart && window.VibeChart) {
-                        window.VibeChart.create('#canvas-pure-js-demo', {
+                        window.VibeChart.create(canvas, {
                             type: 'bar',
                             data: {
                                 labels: @json(__('docs/chart.usage.demo.labels')),
@@ -1954,50 +1955,76 @@ BLADE;
                 };
 
                 const initDemos = () => {
-                    // 1. Inisialisasi Demo Metode 4 (Pure JS via canvas ID)
+                    // 1. Inisialisasi Demo Metode 4 HANYA jika tab Metode 4 sedang aktif / elemen terlihat
                     window.initMethod4Demo();
 
                     // 2. Inisialisasi Demo Radar Standalone
-                    if (window.VibeChart && document.querySelector('#standalone-radar-demo')) {
-                        window.VibeChart.create('#standalone-radar-demo', {
-                            type: 'radar',
-                            data: {
-                                labels: @json(__('docs/chart.direct_js.labels')),
-                                datasets: [{
-                                        label: 'Vibe UI',
-                                        data: [95, 90, 98, 88, 92, 96],
-                                        borderColor: 'primary',
-                                        backgroundColor: 'primary/20',
-                                        borderWidth: 2,
-                                    },
-                                    {
-                                        label: '{{ __('docs/chart.direct_js.datasets.industry_avg') }}',
-                                        data: [70, 75, 68, 65, 80, 78],
-                                        borderColor: 'muted-foreground',
-                                        backgroundColor: 'muted-foreground/15',
-                                        borderWidth: 2,
-                                    }
-                                ]
-                            },
-                            options: {
-                                plugins: {
-                                    legend: {
-                                        position: 'bottom',
-                                        align: 'center'
+                    const radarCanvas = document.querySelector('#standalone-radar-demo');
+                    if (window.VibeChart && radarCanvas && radarCanvas.offsetParent !== null) {
+                        const existing = window.Chart ? window.Chart.getChart(radarCanvas) : null;
+                        if (!existing) {
+                            window.VibeChart.create(radarCanvas, {
+                                type: 'radar',
+                                data: {
+                                    labels: @json(__('docs/chart.direct_js.labels')),
+                                    datasets: [{
+                                            label: 'Vibe UI',
+                                            data: [95, 90, 98, 88, 92, 96],
+                                            borderColor: 'primary',
+                                            backgroundColor: 'primary/20',
+                                            borderWidth: 2,
+                                        },
+                                        {
+                                            label: '{{ __('docs/chart.direct_js.datasets.industry_avg') }}',
+                                            data: [70, 75, 68, 65, 80, 78],
+                                            borderColor: 'muted-foreground',
+                                            backgroundColor: 'muted-foreground/15',
+                                            borderWidth: 2,
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    plugins: {
+                                        legend: {
+                                            position: 'bottom',
+                                            align: 'center'
+                                        }
                                     }
                                 }
-                            }
+                            });
+                        }
+                    }
+                };
+
+                const runInit = () => {
+                    if (window.VibeChart) {
+                        initDemos();
+                    } else {
+                        window.addEventListener('vibe-chart-ready', initDemos, {
+                            once: true
                         });
                     }
                 };
 
-                if (window.VibeChart) {
-                    initDemos();
+                // Lifecycle hooks untuk direct reload dan Livewire wire:navigate
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', runInit, { once: true });
                 } else {
-                    window.addEventListener('vibe-chart-ready', initDemos, {
-                        once: true
-                    });
+                    setTimeout(runInit, 50);
                 }
+
+                document.addEventListener('livewire:navigated', runInit);
+
+                document.addEventListener('livewire:navigating', () => {
+                    const radar = document.querySelector('#standalone-radar-demo');
+                    if (radar && window.Chart) {
+                        window.Chart.getChart(radar)?.destroy();
+                    }
+                    const m4 = document.querySelector('#canvas-pure-js-demo');
+                    if (m4 && window.Chart) {
+                        window.Chart.getChart(m4)?.destroy();
+                    }
+                }, { once: true });
             })();
         </script>
     @endpush
