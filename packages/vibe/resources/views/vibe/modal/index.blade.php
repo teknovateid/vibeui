@@ -2,7 +2,7 @@
 
 @props([
     'id' => null,
-    'remember' => false, 
+    'persist' => false,
     'dismissible' => true,
     'show' => false,
     'position' => 'center',
@@ -38,20 +38,32 @@
 
 <div 
     x-data="{ 
-        open: {{ $show ? 'true' : 'false' }},
+        open: {{ ($persist ? "(() => { const s = window.VibeModal?.getStored('{$modalId}'); return s ? !!s.open : " . ($show ? 'true' : 'false') . "; })()" : ($show ? 'true' : 'false')) }},
         modalId: '{{ $modalId }}',
-        isRemember: {{ $remember ? 'true' : 'false' }},
+        persist: {{ $persist ? 'true' : 'false' }},
         
         init() {
-            if (this.isRemember && this.modalId) {
-                if (window.Alpine && Alpine.store('vibeModals') && Alpine.store('vibeModals').isDismissed(this.modalId)) {
-                    this.open = false;
+            if (this.persist && this.modalId) {
+                let stored = window.VibeModal?.getStored(this.modalId);
+                if (stored) {
+                    this.open = !!stored.open;
                 }
+            }
+
+            if (this.open) {
+                document.body.classList.add('overflow-hidden');
             }
 
             this.$watch('open', value => {
                 if (value) {
                     document.body.classList.add('overflow-hidden');
+                    if (this.persist && this.modalId) {
+                        if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
+                            Alpine.store('vibeModals').setOpen(this.modalId, true);
+                        } else if (window.VibeModal) {
+                            window.VibeModal.setOpen(this.modalId, true);
+                        }
+                    }
                     setTimeout(() => {
                         let dialog = document.getElementById(this.modalId);
                         let input = dialog ? dialog.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])') : null;
@@ -59,6 +71,13 @@
                     }, 100);
                 } else {
                     document.body.classList.remove('overflow-hidden');
+                    if (this.persist && this.modalId) {
+                        if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
+                            Alpine.store('vibeModals').setOpen(this.modalId, false);
+                        } else if (window.VibeModal) {
+                            window.VibeModal.setOpen(this.modalId, false);
+                        }
+                    }
                 }
             });
 
@@ -72,8 +91,12 @@
         close() {
             this.open = false;
             document.body.classList.remove('overflow-hidden');
-            if (this.isRemember && this.modalId && window.Alpine && Alpine.store('vibeModals')) {
-                Alpine.store('vibeModals').dismiss(this.modalId);
+            if (this.persist && this.modalId) {
+                if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
+                    Alpine.store('vibeModals').dismiss(this.modalId);
+                } else if (window.VibeModal) {
+                    window.VibeModal.dismiss(this.modalId);
+                }
             }
         }
     }"

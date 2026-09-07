@@ -80,17 +80,19 @@ return [
         'btn_submit' => 'Save User',
     ],
 
-    // Section 6: Remember / Dismiss Persistence
-    'remember' => [
-        'title' => 'Announcement / Show Once Modal (remember)',
-        'desc' => 'Add prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:remember="true"</code> for announcement popups or onboarding tips. Once dismissed, the modal ID is stored in <code class="font-mono text-xs text-foreground">Alpine.store(\'vibeModals\')</code> (browser LocalStorage) so it won\'t reappear upon page refreshes.',
-        'preview_title' => 'Persistent Announcement Modal',
-        'btn' => 'Open Announcement Modal',
+    // Section 6: Persist / Modal Persistence
+    'persist' => [
+        'title' => 'Modal State Persistence (persist)',
+        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:persist="true"</code> prop to store the modal\'s state in <code class="font-mono text-xs text-foreground">localStorage</code>. When the modal is opened and the page is refreshed without closing it, the modal will <strong>automatically stay visible</strong> upon page reload. The state only resets to closed when the user clicks close, clicks the backdrop, or presses ESC.',
+        'preview_title' => 'Modal State Persistence Demo',
+        'btn' => 'Open Persistent Modal',
         'reset_btn' => 'Reset LocalStorage State',
-        'reset_toast' => 'Modal remember state reset! You can open it again.',
-        'modal_title' => 'System Update Notice 2.0',
-        'modal_desc' => 'The latest Vibe UI enhancements are now live. Once you dismiss this announcement with the button below, it will never show again.',
-        'btn_understand' => 'I Understand, Don\'t Show Again',
+        'reset_toast' => 'Modal persistence state reset! You can test it again.',
+        'modal_title' => 'Modal with State Persistence',
+        'modal_desc' => 'This modal uses :persist="true". Try refreshing your browser now (F5 / Ctrl+R / Cmd+R) without closing this modal—the modal will automatically reopen after page reload!',
+        'reload_tip' => '💡 <strong>Try it out:</strong> Do not close this modal, try refreshing the browser (F5 / Ctrl+R / Cmd+R). You will see this modal remain visible upon reload!',
+        'btn_understand' => 'Close Modal & Save State',
+        'announcement_note' => 'Announcement Popups Note: To create an announcement modal that appears immediately on first page load and never appears again once closed, combine props <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:show="true" :persist="true"</code>.',
     ],
 
     // Section 7: Livewire Integration
@@ -142,10 +144,10 @@ return [
                 'desc' => 'Allows closing via the top-right cross icon and backdrop outside clicks.',
             ],
             [
-                'name' => 'remember',
+                'name' => 'persist',
                 'type' => 'bool',
                 'default' => 'false',
-                'desc' => 'Stores dismissal state in LocalStorage so the modal is not displayed again after being closed.',
+                'desc' => 'Stores modal open/close state in browser LocalStorage so the modal automatically stays open upon page refresh if not yet closed.',
             ],
         ],
         'events_title' => 'Window Events Reference (Alpine.js & Livewire)',

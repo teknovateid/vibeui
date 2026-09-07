@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'remember', 'teleport'] as $p)
+                    @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'persist', 'teleport'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -466,94 +466,113 @@
                 </vibe:preview>
             </section>
 
-            {{-- 6. Remember / Dismiss Persistence --}}
-            <section id="modal-pengumuman" class="space-y-4">
+            {{-- 6. Persist / Dismiss Persistence --}}
+            <section id="modal-persist" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/modal.remember.title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/modal.persist.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/modal.remember.desc') !!}
+                        {!! __('docs/modal.persist.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/modal.remember.preview_title')">
+                <vibe:preview :title="__('docs/modal.persist.preview_title')">
                     <vibe:preview.code>
-{{-- Modal dengan prop remember="true" --}}
-<vibe:modal id="modal-announcement-demo" :remember="true" maxWidth="lg">
+{{-- 1. Modal dengan persistensi status: tetap terbuka saat browser direfresh jika belum ditutup --}}
+<vibe:button @click="$dispatch('open-modal', 'modal-persist-demo')" variant="outline" size="sm">
+    Buka Modal Persisten
+</vibe:button>
+
+<vibe:modal id="modal-persist-demo" :persist="true" maxWidth="lg">
     <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.remember.modal_title') }}</h3>
+        <h3 class="text-lg font-semibold">{{ __('docs/modal.persist.modal_title') }}</h3>
         <p class="text-sm text-muted-foreground">
-            {{ __('docs/modal.remember.modal_desc') }}
+            {{ __('docs/modal.persist.modal_desc') }}
         </p>
 
         <div class="flex justify-end pt-3 border-t border-border">
             <vibe:button type="button" variant="primary" size="sm" @click="close">
-                {{ __('docs/modal.remember.btn_understand') }}
+                {{ __('docs/modal.persist.btn_understand') }}
             </vibe:button>
         </div>
     </div>
 </vibe:modal>
+
+{{-- 2. Modal pengumuman sekali tampil (langsung muncul di awal, tidak muncul lagi setelah ditutup) --}}
+<vibe:modal id="modal-announcement" :show="true" :persist="true" maxWidth="lg">
+    ...
+</vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-3 p-4" x-data="{
-                        resetRemember() {
+                        resetPersist() {
                             if (window.Alpine && Alpine.store('vibeModals')) {
-                                let idx = Alpine.store('vibeModals').dismissed.indexOf('modal-announcement-demo');
-                                if (idx > -1) {
-                                    Alpine.store('vibeModals').dismissed.splice(idx, 1);
-                                }
+                                Alpine.store('vibeModals').reset('modal-persist-demo');
+                            } else if (window.VibeModal) {
+                                window.VibeModal.reset('modal-persist-demo');
                             }
                             if (typeof vibeToast === 'function') {
                                 vibeToast({
                                     type: 'success',
-                                    title: '{{ __('docs/modal.remember.reset_btn') }}',
-                                    message: '{{ __('docs/modal.remember.reset_toast') }}'
+                                    title: '{{ __('docs/modal.persist.reset_btn') }}',
+                                    message: '{{ __('docs/modal.persist.reset_toast') }}'
                                 });
                             }
                         }
                     }">
-                        <vibe:button @click="$dispatch('open-modal', 'modal-announcement-demo')" variant="outline" size="sm">
+                        <vibe:button @click="$dispatch('open-modal', 'modal-persist-demo')" variant="outline" size="sm">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m3 11 18-5v12L3 14v-3z"/>
                                 <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
                             </svg>
-                            {{ __('docs/modal.remember.btn') }}
+                            {{ __('docs/modal.persist.btn') }}
                         </vibe:button>
 
-                        <vibe:button @click="resetRemember" variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
+                        <vibe:button @click="resetPersist" variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
                                 <path d="M3 3v5h5"/>
                             </svg>
-                            {{ __('docs/modal.remember.reset_btn') }}
+                            {{ __('docs/modal.persist.reset_btn') }}
                         </vibe:button>
 
-                        <vibe:modal id="modal-announcement-demo" :remember="true" maxWidth="lg">
+                        <vibe:modal id="modal-persist-demo" :persist="true" maxWidth="lg">
                             <div class="space-y-4">
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-flex size-7 items-center justify-center rounded-lg bg-info/10 text-info">
-                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="10"/>
-                                            <line x1="12" y1="16" x2="12" y2="12"/>
-                                            <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                        </svg>
-                                    </span>
-                                    <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.remember.modal_title') }}</h3>
+                                     <span class="inline-flex size-7 items-center justify-center rounded-lg bg-info/10 text-info">
+                                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                             <circle cx="12" cy="12" r="10"/>
+                                             <line x1="12" y1="16" x2="12" y2="12"/>
+                                             <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                         </svg>
+                                     </span>
+                                    <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.persist.modal_title') }}</h3>
                                 </div>
                                 <p class="text-sm text-muted-foreground leading-relaxed">
-                                    {{ __('docs/modal.remember.modal_desc') }}
+                                    {{ __('docs/modal.persist.modal_desc') }}
                                 </p>
                                 <div class="p-3 rounded-lg bg-muted/40 border border-border text-xs text-muted-foreground">
-                                    💡 <strong>Info:</strong> Setelah modal ini ditutup, status dismiss dicatat di LocalStorage. Klik tombol <em>"{{ __('docs/modal.remember.reset_btn') }}"</em> untuk membuka kembali demo ini.
+                                    {!! __('docs/modal.persist.reload_tip') !!}
                                 </div>
                                 <div class="flex items-center justify-end pt-3 border-t border-border">
                                     <vibe:button type="button" variant="primary" size="sm" @click="close">
-                                        {{ __('docs/modal.remember.btn_understand') }}
+                                        {{ __('docs/modal.persist.btn_understand') }}
                                     </vibe:button>
                                 </div>
                             </div>
                         </vibe:modal>
                     </div>
                 </vibe:preview>
+
+                <div class="p-4 rounded-xl border border-border bg-card/50 text-xs text-muted-foreground flex items-start gap-3">
+                    <svg class="size-5 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="16" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                    </svg>
+                    <div>
+                        {!! __('docs/modal.persist.announcement_note') !!}
+                    </div>
+                </div>
             </section>
 
             {{-- 7. Livewire Integration --}}

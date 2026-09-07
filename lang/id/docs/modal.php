@@ -80,17 +80,19 @@ return [
         'btn_submit' => 'Simpan Pengguna',
     ],
 
-    // Section 6: Remember / Dismiss Persistence
-    'remember' => [
-        'title' => 'Modal Sekali Tampil / Pengumuman (remember)',
-        'desc' => 'Tambahkan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:remember="true"</code> untuk modal pengumuman (*announcement*) atau tips *onboarding*. Sekali pengguna menutup modal, ID modal dicatat secara persisten ke dalam <code class="font-mono text-xs text-foreground">Alpine.store(\'vibeModals\')</code> (disimpan di LocalStorage browser) dan tidak akan muncul kembali saat halaman dimuat ulang.',
-        'preview_title' => 'Modal Pengumuman Persisten',
-        'btn' => 'Buka Modal Pengumuman',
+    // Section 6: Persist / Modal Persistence
+    'persist' => [
+        'title' => 'Persistensi Status Modal (persist)',
+        'desc' => 'Tambahkan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:persist="true"</code> untuk menyimpan status modal ke <code class="font-mono text-xs text-foreground">localStorage</code> browser. Saat modal dibuka oleh pengguna dan halaman direfresh tanpa ditutup, modal akan <strong>otomatis tetap terbuka kembali</strong>. Status hanya akan tersimpan menjadi tertutup saat pengguna menekan tombol tutup, klik backdrop, atau menekan tombol ESC.',
+        'preview_title' => 'Demo Persistensi Status Modal',
+        'btn' => 'Buka Modal Persisten',
         'reset_btn' => 'Reset LocalStorage Modal',
-        'reset_toast' => 'Riwayat modal remember telah direset! Anda dapat membukanya kembali.',
-        'modal_title' => 'Pemberitahuan Sistem Versi 2.0',
-        'modal_desc' => 'Fitur-fitur terbaru Vibe UI telah aktif. Setelah Anda menutup pengumuman ini dengan tombol di bawah, modal tidak akan muncul lagi secara otomatis.',
-        'btn_understand' => 'Saya Mengerti, Jangan Tampilkan Lagi',
+        'reset_toast' => 'Riwayat persistensi modal telah direset! Anda dapat menguji kembali.',
+        'modal_title' => 'Modal dengan Persistensi State',
+        'modal_desc' => 'Modal ini menggunakan prop :persist="true". Coba refresh browser Anda sekarang (F5 / Ctrl+R) tanpa menutup modal ini—modal akan otomatis tetap terbuka kembali saat halaman selesai dimuat ulang!',
+        'reload_tip' => '💡 <strong>Uji Coba:</strong> Jangan tutup modal ini, coba tekan tombol refresh browser (F5 / Ctrl+R / Cmd+R). Anda akan melihat modal ini tetap tampil kembali!',
+        'btn_understand' => 'Tutup Modal & Simpan Status',
+        'announcement_note' => 'Tips Pengumuman (*Announcement*): Untuk membuat modal pengumuman yang langsung muncul saat halaman pertama dibuka dan tidak akan pernah muncul lagi setelah ditutup, kombinasikan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:show="true" :persist="true"</code>.',
     ],
 
     // Section 7: Livewire Integration
@@ -142,10 +144,10 @@ return [
                 'desc' => 'Mengizinkan penutupan modal via tombol silang (x) dan klik pada backdrop latar belakang.',
             ],
             [
-                'name' => 'remember',
+                'name' => 'persist',
                 'type' => 'bool',
                 'default' => 'false',
-                'desc' => 'Menyimpan status penutupan di LocalStorage browser agar modal tidak muncul kembali setelah ditutup.',
+                'desc' => 'Menyimpan status buka/tutup modal ke LocalStorage browser sehingga modal otomatis tetap terbuka saat halaman direfresh jika belum ditutup.',
             ],
         ],
         'events_title' => 'Referensi Event Window (Alpine.js & Livewire)',

@@ -2,6 +2,124 @@ import persist from '@alpinejs/persist'
 
 const VIBE_PREFIX = window.VIBE_PREFIX || 'vibe';
 
+window.VibeModal = {
+    getStorageKey() {
+        const prefix = window.VIBE_PREFIX || 'vibe';
+        return `${prefix}-modals`;
+    },
+
+    getStored(id) {
+        try {
+            const raw = localStorage.getItem(this.getStorageKey());
+            if (raw) {
+                const data = JSON.parse(raw);
+                if (Array.isArray(data)) {
+                    return data.find(i => i && i.id === id) || null;
+                }
+            }
+        } catch (e) {}
+        return null;
+    },
+
+    isOpen(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeModals')) {
+            return window.Alpine.store('vibeModals').isOpen(id);
+        }
+        const item = this.getStored(id);
+        return !!(item && item.open);
+    },
+
+    isDismissed(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeModals')) {
+            return window.Alpine.store('vibeModals').isDismissed(id);
+        }
+        const item = this.getStored(id);
+        return !!(item && item.dismissed);
+    },
+
+    setOpen(id, isOpen) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeModals')) {
+            window.Alpine.store('vibeModals').setOpen(id, isOpen);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            const raw = localStorage.getItem(key);
+            let items = [];
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) items = parsed;
+            }
+            const now = new Date().toISOString();
+            const index = items.findIndex(i => i && i.id === id);
+            const current = index >= 0 ? items[index] : {};
+            const entry = {
+                ...current,
+                id,
+                open: !!isOpen,
+                status: isOpen ? 'open' : (current.dismissed ? 'dismissed' : 'closed'),
+                updatedAt: now
+            };
+            if (index >= 0) {
+                items[index] = entry;
+            } else {
+                items.push(entry);
+            }
+            localStorage.setItem(key, JSON.stringify(items));
+        } catch (e) {}
+    },
+
+    dismiss(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeModals')) {
+            window.Alpine.store('vibeModals').dismiss(id);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            const raw = localStorage.getItem(key);
+            let items = [];
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) items = parsed;
+            }
+            const now = new Date().toISOString();
+            const index = items.findIndex(i => i && i.id === id);
+            const entry = {
+                id,
+                status: 'dismissed',
+                open: false,
+                dismissed: true,
+                dismissedAt: now,
+                updatedAt: now
+            };
+            if (index >= 0) {
+                items[index] = { ...items[index], ...entry };
+            } else {
+                items.push(entry);
+            }
+            localStorage.setItem(key, JSON.stringify(items));
+        } catch (e) {}
+    },
+
+    reset(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeModals')) {
+            window.Alpine.store('vibeModals').reset(id);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            const raw = localStorage.getItem(key);
+            if (raw) {
+                let items = JSON.parse(raw);
+                if (Array.isArray(items)) {
+                    items = items.filter(i => i && i.id !== id);
+                    localStorage.setItem(key, JSON.stringify(items));
+                }
+            }
+        } catch (e) {}
+    }
+};
+
 document.addEventListener('alpine:init', () => {
     try {
         window.Alpine.plugin(persist);
@@ -111,19 +229,82 @@ document.addEventListener('alpine:init', () => {
     });
 
     // ==========================================
-    // STORE: vibeModals (Dismissed Modals/Announcements)
+    // STORE: vibeModals (Modal Persistence & Dismissals)
     // ==========================================
     window.Alpine.store('vibeModals', {
-        dismissed: window.Alpine.$persist([]).as(`${VIBE_PREFIX}-modals`),
-        
-        dismiss(id) {
-            if (!this.dismissed.includes(id)) {
-                this.dismissed.push(id);
+        items: window.Alpine.$persist([]).as(`${VIBE_PREFIX}-modals`),
+
+        get(id) {
+            return this.items.find(item => item && item.id === id) || null;
+        },
+
+        isOpen(id) {
+            const item = this.get(id);
+            return !!(item && item.open);
+        },
+
+        isDismissed(id) {
+            const item = this.get(id);
+            return !!(item && item.dismissed);
+        },
+
+        setOpen(id, isOpen) {
+            const now = new Date().toISOString();
+            let index = this.items.findIndex(item => item && item.id === id);
+            const current = index >= 0 ? this.items[index] : {};
+            const entry = {
+                ...current,
+                id,
+                open: !!isOpen,
+                status: isOpen ? 'open' : (current.dismissed ? 'dismissed' : 'closed'),
+                updatedAt: now
+            };
+            if (index >= 0) {
+                this.items[index] = entry;
+            } else {
+                this.items.push(entry);
             }
         },
-        
-        isDismissed(id) {
-            return this.dismissed.includes(id);
+
+        dismiss(id) {
+            const now = new Date().toISOString();
+            let index = this.items.findIndex(item => item && item.id === id);
+            const entry = {
+                id,
+                status: 'dismissed',
+                open: false,
+                dismissed: true,
+                dismissedAt: now,
+                updatedAt: now
+            };
+            if (index >= 0) {
+                this.items[index] = { ...this.items[index], ...entry };
+            } else {
+                this.items.push(entry);
+            }
+        },
+
+        save(id, data = {}) {
+            const now = new Date().toISOString();
+            let index = this.items.findIndex(item => item && item.id === id);
+            let entry = { id, ...data, updatedAt: now };
+            if (index >= 0) {
+                this.items[index] = { ...this.items[index], ...entry };
+            } else {
+                this.items.push(entry);
+            }
+        },
+
+        reset(id) {
+            this.items = this.items.filter(item => item && item.id !== id);
+        },
+
+        clear() {
+            this.items = [];
+        },
+
+        getAll() {
+            return this.items;
         }
     });
 
