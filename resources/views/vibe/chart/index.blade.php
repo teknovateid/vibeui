@@ -76,7 +76,13 @@
             window.addEventListener('vibe-chart-ready', () => {
                 let instance = window.vibeChart({{ $configJson }});
                 Object.assign(this, instance);
-                this.$nextTick(() => this.renderChart());
+                this.$nextTick(() => {
+                    this.renderChart();
+                    this.setupThemeListener();
+                });
+                if (typeof this.$cleanup === 'function') {
+                    this.$cleanup(() => this.destroy());
+                }
             }, { once: true });
         }
     }"

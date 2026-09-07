@@ -4,6 +4,125 @@ import '../../css/vibe/chart.css';
 
 Chart.register(zoomPlugin);
 
+// =========================================================================
+// Defensive Lifecycle Patches for Chart.js in SPA / wire:navigate environments
+// (Prevents "Cannot read properties of null (reading 'save')" when
+// charts are unmounted, detached, or destroyed during page transitions)
+// =========================================================================
+const origDraw = Chart.prototype.draw;
+Chart.prototype.draw = function() {
+    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+        return;
+    }
+    try {
+        return origDraw.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+            return;
+        }
+        throw err;
+    }
+};
+
+const origRender = Chart.prototype.render;
+Chart.prototype.render = function() {
+    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+        return;
+    }
+    try {
+        return origRender.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+            return;
+        }
+        throw err;
+    }
+};
+
+const origUpdate = Chart.prototype.update;
+Chart.prototype.update = function(mode) {
+    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+        return;
+    }
+    try {
+        return origUpdate.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+            return;
+        }
+        throw err;
+    }
+};
+
+const origClear = Chart.prototype.clear;
+Chart.prototype.clear = function() {
+    if (!this.ctx || !this.canvas || (typeof document !== 'undefined' && !document.body.contains(this.canvas))) {
+        return this;
+    }
+    try {
+        return origClear.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+            return this;
+        }
+        throw err;
+    }
+};
+
+const origDestroy = Chart.prototype.destroy;
+Chart.prototype.destroy = function() {
+    try {
+        return origDestroy.apply(this, arguments);
+    } catch (err) {
+        if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+            this.canvas = null;
+            this.ctx = null;
+            return;
+        }
+        throw err;
+    }
+};
+
+try {
+    const categoryScale = Chart.registry.getScale('category');
+    if (categoryScale) {
+        const BaseScale = Object.getPrototypeOf(categoryScale.prototype);
+        if (BaseScale) {
+            const origDrawLabels = BaseScale.drawLabels;
+            BaseScale.drawLabels = function(chartArea) {
+                if (!this.ctx || (this.chart && (!this.chart.ctx || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
+                    return;
+                }
+                try {
+                    return origDrawLabels.apply(this, arguments);
+                } catch (err) {
+                    if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+                        return;
+                    }
+                    throw err;
+                }
+            };
+
+            const origScaleDraw = BaseScale.draw;
+            BaseScale.draw = function(chartArea) {
+                if (!this.ctx || (this.chart && (!this.chart.ctx || (this.chart.canvas && typeof document !== 'undefined' && !document.body.contains(this.chart.canvas))))) {
+                    return;
+                }
+                try {
+                    return origScaleDraw.apply(this, arguments);
+                } catch (err) {
+                    if (err instanceof TypeError && (err.message.includes("'save'") || err.message.includes("'restore'"))) {
+                        return;
+                    }
+                    throw err;
+                }
+            };
+        }
+    }
+} catch (e) {
+    // Non-critical
+}
+
 window.Chart = Chart;
 
 /**
@@ -399,11 +518,17 @@ export function vibeChart(initialConfig = {}) {
                 this.renderChart();
                 this.setupThemeListener();
             });
+
+            if (typeof this.$cleanup === 'function') {
+                this.$cleanup(() => {
+                    this.destroy();
+                });
+            }
         },
 
         renderChart() {
             const canvas = this.$refs.canvas;
-            if (!canvas) return;
+            if (!canvas || !document.body.contains(canvas)) return;
 
             // Merge rawConfig or check if user provided x-chart attribute
             let config = this.rawConfig;
@@ -424,6 +549,14 @@ export function vibeChart(initialConfig = {}) {
 
             if (this.chart) {
                 this.chart.destroy();
+                this.chart = null;
+            }
+
+            if (window.Chart) {
+                const existing = window.Chart.getChart(canvas);
+                if (existing) {
+                    existing.destroy();
+                }
             }
 
             try {
@@ -437,8 +570,14 @@ export function vibeChart(initialConfig = {}) {
 
         updateTheme() {
             if (!this.chart || !this.rawConfig) return;
+            const canvas = this.$refs.canvas;
+            if (!canvas || !document.body.contains(canvas)) {
+                this.destroy();
+                return;
+            }
+
             const isDark = isDarkMode();
-            const updated = applyVibeTheme(this.rawConfig, isDark, this.$refs.canvas);
+            const updated = applyVibeTheme(this.rawConfig, isDark, canvas);
 
             // Apply new options and dataset colors
             this.chart.options = updated.options;
@@ -454,7 +593,11 @@ export function vibeChart(initialConfig = {}) {
                 });
             }
 
-            this.chart.update('none'); // Update without full disruptive animation
+            try {
+                this.chart.update('none'); // Update without full disruptive animation
+            } catch (e) {
+                // Ignore update errors if chart or canvas is in transient state
+            }
         },
 
         setupThemeListener() {
@@ -471,8 +614,9 @@ export function vibeChart(initialConfig = {}) {
                 attributeFilter: ['class', 'data-canvas-theme']
             });
 
-            window.addEventListener('vibe:theme-change', () => this.updateTheme());
-            window.addEventListener('theme-changed', () => this.updateTheme());
+            this._themeHandler = () => this.updateTheme();
+            window.addEventListener('vibe:theme-change', this._themeHandler);
+            window.addEventListener('theme-changed', this._themeHandler);
         },
 
         zoomIn(factor = 1.2) {
@@ -494,9 +638,16 @@ export function vibeChart(initialConfig = {}) {
         destroy() {
             if (this.themeObserver) {
                 this.themeObserver.disconnect();
+                this.themeObserver = null;
+            }
+            if (this._themeHandler) {
+                window.removeEventListener('vibe:theme-change', this._themeHandler);
+                window.removeEventListener('theme-changed', this._themeHandler);
+                this._themeHandler = null;
             }
             if (this.chart) {
                 this.chart.destroy();
+                this.chart = null;
             }
         }
     };
@@ -514,18 +665,42 @@ export const VibeChart = {
      */
     create(target, config) {
         const el = typeof target === 'string' ? document.querySelector(target) : target;
+        if (!el) return null;
         const canvas = el.tagName === 'CANVAS' ? el : el.querySelector('canvas');
         if (!canvas) {
             console.error('[VibeChart] Target element does not contain a <canvas>');
             return null;
         }
 
+        // Clean up any existing chart attached to this canvas
+        if (window.Chart) {
+            const existing = window.Chart.getChart(canvas);
+            if (existing) {
+                existing.destroy();
+            }
+        }
+
         const isDark = isDarkMode();
         const finalConfig = applyVibeTheme(config, isDark, canvas);
-        const chartInstance = new Chart(canvas, finalConfig);
 
-        // Auto-hook theme changes
+        let chartInstance = null;
+        try {
+            chartInstance = new Chart(canvas, finalConfig);
+        } catch (err) {
+            console.error('[VibeChart] Error creating chart instance:', err);
+            return null;
+        }
+
+        // Auto-hook theme changes with cleanup when canvas is detached from DOM
         const observer = new MutationObserver(() => {
+            if (!document.body.contains(canvas)) {
+                observer.disconnect();
+                if (window.Chart && window.Chart.getChart(canvas)) {
+                    chartInstance.destroy();
+                }
+                return;
+            }
+
             const darkNow = isDarkMode();
             const updated = applyVibeTheme(config, darkNow, canvas);
             chartInstance.options = updated.options;
@@ -537,13 +712,19 @@ export const VibeChart = {
                     }
                 });
             }
-            chartInstance.update('none');
+            try {
+                chartInstance.update('none');
+            } catch (e) {
+                // Ignore transient update errors
+            }
         });
 
         observer.observe(document.documentElement, {
             attributes: true,
             attributeFilter: ['class', 'data-canvas-theme']
         });
+
+        chartInstance._themeObserver = observer;
 
         return chartInstance;
     },
