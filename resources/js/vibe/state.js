@@ -120,6 +120,77 @@ window.VibeModal = {
     }
 };
 
+window.VibeTabs = {
+    getStorageKey() {
+        const prefix = window.VIBE_PREFIX || 'vibe';
+        return `${prefix}-tabs`;
+    },
+
+    getStored(id) {
+        try {
+            const raw = localStorage.getItem(this.getStorageKey());
+            if (raw) {
+                const data = JSON.parse(raw);
+                if (Array.isArray(data)) {
+                    return data.find(i => i && i.id === id) || null;
+                }
+            }
+        } catch (e) {}
+        return null;
+    },
+
+    getActive(id, fallback = null) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTabs')) {
+            return window.Alpine.store('vibeTabs').getActive(id) || fallback;
+        }
+        const item = this.getStored(id);
+        return (item && item.active) ? item.active : fallback;
+    },
+
+    setActive(id, active) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTabs')) {
+            window.Alpine.store('vibeTabs').setActive(id, active);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            const raw = localStorage.getItem(key);
+            let items = [];
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) items = parsed;
+            }
+            const now = new Date().toISOString();
+            const index = items.findIndex(i => i && i.id === id);
+            const entry = { id, active, updatedAt: now };
+            if (index >= 0) {
+                items[index] = entry;
+            } else {
+                items.push(entry);
+            }
+            localStorage.setItem(key, JSON.stringify(items));
+        } catch (e) {}
+    },
+
+    reset(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTabs')) {
+            window.Alpine.store('vibeTabs').reset(id);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            const raw = localStorage.getItem(key);
+            if (raw) {
+                let items = JSON.parse(raw);
+                if (Array.isArray(items)) {
+                    items = items.filter(i => i && i.id !== id);
+                    localStorage.setItem(key, JSON.stringify(items));
+                }
+            }
+        } catch (e) {}
+    }
+};
+
 document.addEventListener('alpine:init', () => {
     try {
         window.Alpine.plugin(persist);
@@ -290,6 +361,45 @@ document.addEventListener('alpine:init', () => {
             let entry = { id, ...data, updatedAt: now };
             if (index >= 0) {
                 this.items[index] = { ...this.items[index], ...entry };
+            } else {
+                this.items.push(entry);
+            }
+        },
+
+        reset(id) {
+            this.items = this.items.filter(item => item && item.id !== id);
+        },
+
+        clear() {
+            this.items = [];
+        },
+
+        getAll() {
+            return this.items;
+        }
+    });
+
+    // ==========================================
+    // STORE: vibeTabs (Tab Navigation Persistence)
+    // ==========================================
+    window.Alpine.store('vibeTabs', {
+        items: window.Alpine.$persist([]).as(`${VIBE_PREFIX}-tabs`),
+
+        get(id) {
+            return this.items.find(item => item && item.id === id) || null;
+        },
+
+        getActive(id) {
+            const item = this.get(id);
+            return item ? item.active : null;
+        },
+
+        setActive(id, active) {
+            const now = new Date().toISOString();
+            let index = this.items.findIndex(item => item && item.id === id);
+            const entry = { id, active, updatedAt: now };
+            if (index >= 0) {
+                this.items[index] = entry;
             } else {
                 this.items.push(entry);
             }

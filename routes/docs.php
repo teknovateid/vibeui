@@ -26,6 +26,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/alert', 'docs.alert.index')->name('alert.index');
     Route::view('/toast', 'docs.toast.index')->name('toast.index');
     Route::view('/sheet', 'docs.sheet.index')->name('sheet.index');
+    Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
     Route::get('/chart', function () {
         $monthlyMetrics = \App\Models\SalesMetric::where('category', 'Semua Kategori')->orderBy('id')->get();

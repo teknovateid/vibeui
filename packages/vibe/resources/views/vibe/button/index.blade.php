@@ -13,6 +13,7 @@
     $baseClasses = 'inline-flex items-center justify-center font-medium select-none whitespace-nowrap cursor-pointer transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50';
 
     $variantClasses = match ($variant) {
+        'tab', 'plain', 'unstyled' => '',
         'primary' => 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
         'secondary' => 'bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80',
         'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',

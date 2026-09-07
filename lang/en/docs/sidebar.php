@@ -28,6 +28,7 @@ return [
         'datatable' => 'DataTable',
         'modal' => 'Modal',
         'sheet' => 'Sheet',
+        'tabs' => 'Tabs',
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',
