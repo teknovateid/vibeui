@@ -142,7 +142,7 @@
     $wrapClass = $wrap ? 'whitespace-pre-wrap break-words' : 'whitespace-pre overflow-x-auto';
 @endphp
 
-@pushOnce('body', 'vibe-highlightjs')
+@pushOnce('head', 'vibe-highlightjs')
     @vite(['resources/css/vibe/highlightjs.css', 'resources/js/vibe/highlightjs.js'])
 @endPushOnce
 
