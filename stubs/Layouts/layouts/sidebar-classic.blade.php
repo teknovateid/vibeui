@@ -185,17 +185,6 @@
                 </vibe:header.heading>
 
                 <vibe:header.actions class="items-center h-full relative gap-1.5">
-
-                    <!-- Language Switcher -->
-                    <div class="flex items-center rounded-lg border border-border bg-muted/40 p-0.5 text-xs font-medium">
-                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'id' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
-                            ID
-                        </vibe:button>
-                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'en' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
-                            EN
-                        </vibe:button>
-                    </div>
-
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {

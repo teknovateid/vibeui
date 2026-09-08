@@ -1,6 +1,29 @@
 const VIBE_PREFIX = window.VIBE_PREFIX || 'vibe';
 const THEME_KEY = `${VIBE_PREFIX}-theme`;
 
+// Injeksi instan override CSS secepat mungkin saat theme.js dimuat
+(function() {
+    try {
+        const stored = localStorage.getItem(THEME_KEY);
+        if (stored) {
+            const parsed = JSON.parse(stored);
+            if (parsed && parsed.css) {
+                const styleId = `${VIBE_PREFIX}-theme-override`;
+                let style = document.getElementById(styleId);
+                if (!style) {
+                    style = document.createElement('style');
+                    style.id = styleId;
+                    style.setAttribute('data-navigate-once', 'true');
+                    document.head.appendChild(style);
+                }
+                if (style.textContent !== parsed.css) {
+                    style.textContent = parsed.css;
+                }
+            }
+        }
+    } catch (e) {}
+})();
+
 const ThemeManager = {
     animation: 'curtain', // curtain, shutter, diagonal, wipe
     duration: 700, // Durasi animasi transisi dalam milidetik (misal: 650ms agar terlihat mulus dan elegan)
@@ -10,6 +33,11 @@ const ThemeManager = {
         sidebar: null,
         form: null,
         badge: null,
+        preset: null,
+        radius: null,
+        fontName: null,
+        fontValue: null,
+        css: null,
     },
 
     init() {
@@ -86,6 +114,24 @@ const ThemeManager = {
             config[component] = value;
             this.saveConfig(config);
         }
+    },
+
+    setCssOverride(css, extraData = {}) {
+        const config = this.getConfig();
+        config.css = css;
+        Object.assign(config, extraData);
+        this.saveConfig(config);
+    },
+
+    clearCssOverride() {
+        const config = this.getConfig();
+        delete config.css;
+        delete config.preset;
+        delete config.customHex;
+        delete config.radius;
+        delete config.fontName;
+        delete config.fontValue;
+        this.saveConfig(config);
     },
 
     setAnimation(animation) {
@@ -223,6 +269,26 @@ const ThemeManager = {
                 root.removeAttribute(`data-${component}`);
             }
         });
+
+        // Terapkan penimpaan variabel CSS tema (seperti --primary, --ring, --radius) jika ada
+        const overrideStyleId = `${VIBE_PREFIX}-theme-override`;
+        if (config.css) {
+            let style = document.getElementById(overrideStyleId);
+            if (!style) {
+                style = document.createElement('style');
+                style.id = overrideStyleId;
+                style.setAttribute('data-navigate-once', 'true');
+                document.head.appendChild(style);
+            }
+            if (style.textContent !== config.css) {
+                style.textContent = config.css;
+            }
+        } else {
+            const style = document.getElementById(overrideStyleId);
+            if (style) {
+                style.textContent = '';
+            }
+        }
     }
 };
 

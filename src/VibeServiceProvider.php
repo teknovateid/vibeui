@@ -144,6 +144,10 @@ class VibeServiceProvider extends ServiceProvider
                 }
                 \$prefix = \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
                 \$historyConfig = json_encode(\Illuminate\Support\Facades\Config::get('vibe.history'));
+                
+                // Pre-rendered Anti-FOUC Theme Shield style tag
+                echo '<style id=\"' . \$prefix . '-theme-override\" data-navigate-once=\"true\"></style>';
+
                 echo '<script>
                     (function() {
                         window.VIBE_PREFIX = \'' . \$prefix . '\';
@@ -155,12 +159,14 @@ class VibeServiceProvider extends ServiceProvider
                             var k = window.VIBE_PREFIX + \'-theme\';
                             var s = localStorage.getItem(k);
                             var d = false;
+                            var parsed = null;
                             if (s) {
                                 if (s === \'dark\') d = true;
                                 else if (s === \'system\') d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
+                                else if (s === \'light\') d = false;
                                 else {
-                                    var c = JSON.parse(s);
-                                    d = c.mode === \'dark\' || (c.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
+                                    parsed = JSON.parse(s);
+                                    d = parsed.mode === \'dark\' || (parsed.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
                                 }
                             } else {
                                 d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
@@ -175,6 +181,36 @@ class VibeServiceProvider extends ServiceProvider
                                 try {
                                     document.cookie = window.VIBE_PREFIX + \'_theme=light; path=/; max-age=31536000; SameSite=Lax\';
                                 } catch (e) {}
+                            }
+
+                            // Anti-FOUC Theme CSS Override:
+                            if (parsed) {
+                                var css = parsed.css;
+                                if (!css && (parsed.preset || parsed.customHex)) {
+                                    var presets = {
+                                        zinc: { light: \'#0a0b0a\', lightFg: \'#f9fafa\', dark: \'#f9fafa\', darkFg: \'#0a0b0a\' },
+                                        indigo: { light: \'#4f46e5\', lightFg: \'#ffffff\', dark: \'#818cf8\', darkFg: \'#0a0b0a\' },
+                                        violet: { light: \'#7c3aed\', lightFg: \'#ffffff\', dark: \'#a78bfa\', darkFg: \'#0a0b0a\' },
+                                        blue: { light: \'#2563eb\', lightFg: \'#ffffff\', dark: \'#38bdf8\', darkFg: \'#0a0b0a\' },
+                                        emerald: { light: \'#059669\', lightFg: \'#ffffff\', dark: \'#34d399\', darkFg: \'#0a0b0a\' },
+                                        rose: { light: \'#e11d48\', lightFg: \'#ffffff\', dark: \'#fb7185\', darkFg: \'#0a0b0a\' },
+                                        amber: { light: \'#d97706\', lightFg: \'#ffffff\', dark: \'#fbbf24\', darkFg: \'#0a0b0a\' },
+                                        cyan: { light: \'#0891b2\', lightFg: \'#ffffff\', dark: \'#22d3ee\', darkFg: \'#0a0b0a\' }
+                                    };
+                                    var col = parsed.customHex ? { light: parsed.customHex, lightFg: \'#ffffff\', dark: parsed.customHex, darkFg: \'#ffffff\' } : (presets[parsed.preset] || presets.zinc);
+                                    var rad = parsed.radius || \'0.5rem\';
+                                    var font = parsed.fontValue || \"\'Figtree\', ui-sans-serif, system-ui, sans-serif\";
+                                    var radRules = rad === \'0rem\' ? 
+                                        \'--radius:0rem !important;--radius-xs:0rem !important;--radius-sm:0rem !important;--radius-md:0rem !important;--radius-lg:0rem !important;--radius-xl:0rem !important;--radius-2xl:0rem !important;--radius-3xl:0rem !important;\' :
+                                        \'--radius:\'+rad+\' !important;--radius-xs:calc(\'+rad+\'*0.3) !important;--radius-sm:calc(\'+rad+\'*0.5) !important;--radius-md:calc(\'+rad+\'*0.75) !important;--radius-lg:\'+rad+\' !important;--radius-xl:calc(\'+rad+\'*1.25) !important;--radius-2xl:calc(\'+rad+\'*1.5) !important;--radius-3xl:calc(\'+rad+\'*2) !important;\';
+                                    css = \':root:root,html:root:root,html.light:root,html:not(#__vibe_shield__):root{--primary:\'+col.light+\' !important;--primary-foreground:\'+col.lightFg+\' !important;--ring:\'+col.light+\' !important;--font-sans:\'+font+\' !important;font-family:\'+font+\' !important;\'+radRules+\'}html.dark:root:root,html.dark:not(#__vibe_shield__):root{--primary:\'+col.dark+\' !important;--primary-foreground:\'+col.darkFg+\' !important;--ring:\'+col.dark+\' !important;--font-sans:\'+font+\' !important;font-family:\'+font+\' !important;\'+radRules+\'}body{font-family:\'+font+\' !important;}\';
+                                }
+                                if (css) {
+                                    var styleEl = document.getElementById(window.VIBE_PREFIX + \'-theme-override\');
+                                    if (styleEl) {
+                                        styleEl.textContent = css;
+                                    }
+                                }
                             }
 
                             // Prevent Alpine / Livewire wire:navigate from stripping the \'dark\' class during HTML attribute replacement
