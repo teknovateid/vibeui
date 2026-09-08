@@ -42,8 +42,8 @@ class DemoActionsTable extends VibeDataTableComponent
 
             Column::make('Status')
                 ->label(fn ($row) => $row->id % 2 === 0
-                    ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">Active</span>'
-                    : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-muted text-muted-foreground border border-border">Inactive</span>'
+                    ? Blade::render('<vibe:badge variant="success" size="sm" class="rounded-full">Active</vibe:badge>')
+                    : Blade::render('<vibe:badge variant="secondary" size="sm" class="rounded-full">Inactive</vibe:badge>')
                 )
                 ->html(),
 

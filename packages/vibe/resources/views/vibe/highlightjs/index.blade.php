@@ -238,7 +238,7 @@
                             </svg>
                             <span>{{ __('vibe/preview.copy') }}</span>
                         </span>
-                        <span x-show="copied" x-cloak class="inline-flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold" style="display: none;">
+                        <span x-show="copied" x-cloak class="inline-flex items-center gap-1.5 text-success font-semibold" style="display: none;">
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="20 6 9 17 4 12"/>
                             </svg>
@@ -262,7 +262,7 @@
                     <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                     <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                 </svg>
-                <svg x-show="copied" x-cloak class="size-4 text-emerald-600 dark:text-emerald-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+                <svg x-show="copied" x-cloak class="size-4 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
                     <polyline points="20 6 9 17 4 12"/>
                 </svg>
             </button>

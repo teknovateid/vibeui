@@ -54,7 +54,7 @@
     $trackColors = match ($variant) {
         'success' => $hasError
             ? 'bg-destructive/30 peer-checked:bg-destructive'
-            : 'bg-input peer-checked:bg-emerald-600 group-hover/switch:brightness-95',
+            : 'bg-input peer-checked:bg-success group-hover/switch:brightness-95',
         'accent' => $hasError
             ? 'bg-destructive/30 peer-checked:bg-destructive'
             : 'bg-input peer-checked:bg-accent group-hover/switch:brightness-95',

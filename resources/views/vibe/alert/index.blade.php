@@ -39,11 +39,11 @@
     },
 
     typeClasses: {
-        success: 'bg-green-500/15 dark:bg-green-900/40 text-green-600 dark:text-green-400',
-        error: 'bg-red-500/15 dark:bg-red-900/40 text-red-600 dark:text-red-400',
-        confirm: 'bg-red-500/15 dark:bg-red-900/40 text-red-600 dark:text-red-400',
-        warning: 'bg-yellow-500/15 dark:bg-yellow-900/40 text-yellow-600 dark:text-yellow-400',
-        info: 'bg-blue-500/15 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400'
+        success: 'bg-success/15 text-success',
+        error: 'bg-destructive/15 text-destructive',
+        confirm: 'bg-destructive/15 text-destructive',
+        warning: 'bg-warning/15 text-warning',
+        info: 'bg-info/15 text-info'
     },
 
     blurClasses: {

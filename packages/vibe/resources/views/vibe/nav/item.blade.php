@@ -17,10 +17,10 @@
     $activeClasses = $active ? 'bg-accent text-accent-foreground font-semibold' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground';
 
     $badgeClasses = match ($badgeColor) {
-        'green', 'success' => 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20',
-        'blue', 'info' => 'bg-sky-500/15 text-sky-700 dark:text-sky-400 border border-sky-500/20',
-        'red', 'danger', 'destructive' => 'bg-red-500/15 text-red-700 dark:text-red-400 border border-red-500/20',
-        'yellow', 'warning' => 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/20',
+        'green', 'success' => 'bg-success/15 text-success border border-success/20',
+        'blue', 'info' => 'bg-info/15 text-info border border-info/20',
+        'red', 'danger', 'destructive' => 'bg-destructive/15 text-destructive border border-destructive/20',
+        'yellow', 'warning' => 'bg-warning/15 text-warning border border-warning/20',
         'accent' => 'bg-accent text-accent-foreground border border-accent-foreground/20 font-semibold',
         default => 'bg-secondary text-secondary-foreground',
     };

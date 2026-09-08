@@ -4,7 +4,7 @@
     <div x-cloak x-show="(selectedItems.length > 0 || hideBulkActionsWhenEmpty == false)" class="w-full md:w-auto" wire:key="{{ $tableName }}-bulk-actions-toolbar-wrapper">
         <vibe:dropdown align="right" width="56" keyboard>
             <vibe:dropdown.trigger>
-                <button type="button" class="inline-flex items-center justify-center gap-2 h-9 px-3 w-full md:w-auto text-sm font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none" aria-haspopup="true" x-bind:aria-expanded="open">
+                <vibe:button variant="outline" size="md" class="gap-2 w-full md:w-auto shadow-2xs font-medium" aria-haspopup="true" x-bind:aria-expanded="open">
                     <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m3 7 3 3 3-3" />
                         <path d="M6 10V3" />
@@ -17,12 +17,12 @@
 
                     <span>{{ __($localisationPath . 'Bulk Actions') }}</span>
 
-                    <span x-show="selectedItems.length > 0" class="flex items-center justify-center px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-primary text-primary-foreground min-w-5 h-5 leading-none" x-text="selectedItems.length"></span>
+                    <vibe:badge variant="primary" size="sm" class="rounded-full min-w-5 h-5 px-1.5 font-bold text-[10px]" x-show="selectedItems.length > 0" x-text="selectedItems.length"></vibe:badge>
 
                     <svg class="size-3.5 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m6 9 6 6 6-6" />
                     </svg>
-                </button>
+                </vibe:button>
             </vibe:dropdown.trigger>
 
             <vibe:dropdown.items width="48">
