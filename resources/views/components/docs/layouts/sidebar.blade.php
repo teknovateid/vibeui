@@ -170,7 +170,7 @@
 
         </vibe:sheet>
 
-        <div id="docs-main-scroll" class="flex flex-col gap-4 flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
+        <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" class="border-none shadow-none" size="sm">
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
@@ -183,17 +183,6 @@
                 </vibe:header.heading>
 
                 <vibe:header.actions class="items-center h-full relative gap-1.5">
-
-                    <!-- Language Switcher -->
-                    <div class="flex items-center rounded-lg border border-border bg-muted/40 p-0.5 text-xs font-medium">
-                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'id' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
-                            ID
-                        </vibe:button>
-                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-2 py-1 rounded-md transition-all {{ app()->getLocale() === 'en' ? 'bg-background text-foreground shadow-xs font-bold' : 'text-muted-foreground hover:text-foreground' }}">
-                            EN
-                        </vibe:button>
-                    </div>
-
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {

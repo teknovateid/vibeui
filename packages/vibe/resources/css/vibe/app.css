@@ -5,6 +5,14 @@
 
     --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
+    --radius-xs: calc(var(--radius) * 0.3);
+    --radius-sm: calc(var(--radius) * 0.5);
+    --radius-md: calc(var(--radius) * 0.75);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.25);
+    --radius-2xl: calc(var(--radius) * 1.5);
+    --radius-3xl: calc(var(--radius) * 2);
+
     --color-background: var(--background);
     --color-foreground: var(--foreground);
     --color-card: var(--card);
@@ -52,6 +60,10 @@
     --color-sidebar-accent: var(--sidebar-accent);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 
+    --color-container: var(--container);
+    --color-container-foreground: var(--container-foreground);
+    --color-container-border: var(--container-border);
+
     --color-vibe-50: #f9fafa;
     --color-vibe-100: #f4f5f5;
     --color-vibe-200: #e5e6e5;
@@ -81,6 +93,10 @@
     --sidebar-border: #e5e6e5 !important;
     --sidebar-accent: #f4f5f5 !important;
     --sidebar-accent-foreground: #0a0b0a !important;
+
+    --container: #ffffff !important;
+    --container-foreground: #0a0b0a !important;
+    --container-border: #e5e6e5 !important;
 
     --primary: #0a0b0a !important;
     --primary-foreground: #f9fafa !important;
@@ -125,9 +141,9 @@
 [data-canvas-theme="dark"] {
     --background: #0a0b0a !important;
     --foreground: #f9fafa !important;
-    --card: #161716 !important;
+    --card: #181918 !important;
     --card-foreground: #f9fafa !important;
-    --popover: #161716 !important;
+    --popover: #181918 !important;
     --popover-foreground: #f9fafa !important;
 
     --sidebar: #121312 !important;
@@ -135,6 +151,10 @@
     --sidebar-border: #262726 !important;
     --sidebar-accent: #1e1f1e !important;
     --sidebar-accent-foreground: #f9fafa !important;
+
+    --container: #121312 !important;
+    --container-foreground: #f9fafa !important;
+    --container-border: #222322 !important;
 
     --primary: #f9fafa !important;
     --primary-foreground: #0a0b0a !important;
@@ -170,5 +190,6 @@
     --chart-4: #a78bfa !important;
     --chart-5: #f87171 !important;
 
+    --radius: 0.5rem;
     color-scheme: dark;
 }
