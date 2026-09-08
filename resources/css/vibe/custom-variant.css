@@ -66,3 +66,41 @@
     background-color: #0a0b0a !important;
     color: #f9fafa !important;
 }
+
+
+
+/* ==========================================================================
+   Table of Contents Sticky Offset:
+   - Sticky header: top-20 (5rem / 80px)
+   - Non-sticky header: top-6 (1.5rem / 24px)
+   ========================================================================== */
+@media (min-width: 768px) {
+    #docs-main-scroll.has-sticky-header aside[class*="sticky"],
+    #docs-main-scroll:has(> header.sticky) aside[class*="sticky"],
+    #docs-main-scroll:has(> header[data-variant="sticky"]) aside[class*="sticky"] {
+        top: 5rem !important;
+    }
+
+    #docs-main-scroll:not(.has-sticky-header):not(:has(> header.sticky)):not(:has(> header[data-variant="sticky"])) aside[class*="sticky"] {
+        top: 1.5rem !important;
+    }
+}
+
+/* ==========================================================================
+   Sticky Header Zero-FOUC & Scrolled Styling
+   ========================================================================== */
+header[data-variant="sticky"] {
+    border-bottom-width: 1px;
+}
+
+header[data-variant="sticky"][data-scrolled="false"] {
+    border-bottom-color: transparent !important;
+    background-color: transparent !important;
+}
+
+header[data-variant="sticky"][data-scrolled="true"]:not([data-custom-scrolled="true"]) {
+    background-color: color-mix(in srgb, var(--background) 80%, transparent) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border-bottom-color: color-mix(in srgb, var(--border) 80%, transparent) !important;
+}

@@ -176,7 +176,7 @@
 
                 <vibe:preview data-toc-ignore :title="__('docs/header.sticky.preview_title')">
                     <vibe:preview.code>
-{{-- Header Sticky yang menempel di bagian atas saat scroll --}}
+{{-- 1. Sticky Header standar (otomatis transparan saat di atas, semi-transparan blur saat di-scroll) --}}
 <vibe:header variant="sticky">
     <div>
         <vibe:header.heading>{{ __('docs/header.sticky.sticky_heading') }}</vibe:header.heading>
@@ -187,31 +187,78 @@
         <vibe:button variant="primary" size="sm">{{ __('docs/header.sticky.save_btn') }}</vibe:button>
     </vibe:header.actions>
 </vibe:header>
-                    </vibe:preview.code>
-                    <div class="w-full p-4 sm:p-6 bg-muted/20">
-                        {{-- Scrollable demo container --}}
-                        <div class="relative h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-2xs">
-                            <vibe:header variant="sticky">
-                                <div>
-                                    <vibe:header.heading class="text-sm font-bold">{{ __('docs/header.sticky.sticky_heading') }}</vibe:header.heading>
-                                    <vibe:header.subheading class="text-[11px]">{{ __('docs/header.sticky.sticky_sub') }}</vibe:header.subheading>
-                                </div>
-                                <vibe:header.actions>
-                                    <vibe:badge variant="warning" size="sm" class="rounded-full">Pending</vibe:badge>
-                                    <vibe:button variant="primary" size="xs">{{ __('docs/header.sticky.save_btn') }}</vibe:button>
-                                </vibe:header.actions>
-                            </vibe:header>
 
-                            <div class="p-6 space-y-4 text-xs text-muted-foreground">
-                                <p class="p-3 rounded-lg bg-muted/40 font-mono text-[11px] text-foreground">
-                                    💡 Gulir ke bawah (scroll) pada kotak ini untuk melihat header tetap menempel di bagian atas!
-                                </p>
-                                @for ($j = 1; $j <= 8; $j++)
-                                    <div class="p-3 rounded-lg border border-border/40 flex items-center justify-between">
-                                        <span>Rincian Item Pembayaran #{{ $j }}</span>
-                                        <span class="font-mono font-semibold text-foreground">Rp {{ number_format($j * 150000, 0, ',', '.') }}</span>
+{{-- 2. Sticky Header dengan Custom Class saat Scrolled --}}
+<vibe:header
+    variant="sticky"
+    scrolled-class="bg-primary/90 text-primary-foreground backdrop-blur-md shadow-md border-b border-primary/30"
+    unscrolled-class="bg-transparent border-b border-transparent"
+    threshold="15"
+>
+    <div>
+        <vibe:header.heading class="text-inherit">Custom Scrolled Header</vibe:header.heading>
+        <vibe:header.subheading class="text-inherit opacity-80">Aktif dengan styling khusus saat di-scroll</vibe:header.subheading>
+    </div>
+    <vibe:header.actions>
+        <vibe:badge variant="outline" size="sm" class="rounded-full border-current text-inherit">Custom</vibe:badge>
+    </vibe:header.actions>
+</vibe:header>
+                    </vibe:preview.code>
+                    <div class="w-full p-4 sm:p-6 bg-muted/20 space-y-6">
+                        {{-- Scrollable demo container 1: Default Sticky Blur --}}
+                        <div class="space-y-2">
+                            <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">1. Default Scrolled Blur:</span>
+                            <div class="relative h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-2xs">
+                                <vibe:header variant="sticky">
+                                    <div>
+                                        <vibe:header.heading class="text-sm font-bold">{{ __('docs/header.sticky.sticky_heading') }}</vibe:header.heading>
+                                        <vibe:header.subheading class="text-[11px]">{{ __('docs/header.sticky.sticky_sub') }}</vibe:header.subheading>
                                     </div>
-                                @endfor
+                                    <vibe:header.actions>
+                                        <vibe:badge variant="warning" size="sm" class="rounded-full">Pending</vibe:badge>
+                                        <vibe:button variant="primary" size="xs">{{ __('docs/header.sticky.save_btn') }}</vibe:button>
+                                    </vibe:header.actions>
+                                </vibe:header>
+
+                                <div class="p-6 space-y-4 text-xs text-muted-foreground">
+                                    <p class="p-3 rounded-lg bg-muted/40 font-mono text-[11px] text-foreground">
+                                        💡 {!! __('docs/header.sticky.hint') !!}
+                                    </p>
+                                    @for ($j = 1; $j <= 8; $j++)
+                                        <div class="p-3 rounded-lg border border-border/40 flex items-center justify-between">
+                                            <span>Rincian Item Pembayaran #{{ $j }}</span>
+                                            <span class="font-mono font-semibold text-foreground">Rp {{ number_format($j * 150000, 0, ',', '.') }}</span>
+                                        </div>
+                                    @endfor
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Scrollable demo container 2: Custom Scrolled Class --}}
+                        <div class="space-y-2">
+                            <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">2. Custom Scrolled Class (Primary Tint):</span>
+                            <div class="relative h-60 overflow-y-auto rounded-xl border border-border bg-card shadow-2xs">
+                                <vibe:header variant="sticky" scrolled-class="bg-primary/90 text-primary-foreground backdrop-blur-md shadow-md border-b border-primary/30">
+                                    <div>
+                                        <vibe:header.heading class="text-sm font-bold text-inherit">Kustomisasi Scrolled Class</vibe:header.heading>
+                                        <vibe:header.subheading class="text-[11px] text-inherit opacity-80">scrolled-class="bg-primary/90 text-primary-foreground..."</vibe:header.subheading>
+                                    </div>
+                                    <vibe:header.actions>
+                                        <vibe:badge variant="outline" size="sm" class="rounded-full border-current text-inherit">Custom</vibe:badge>
+                                    </vibe:header.actions>
+                                </vibe:header>
+
+                                <div class="p-6 space-y-4 text-xs text-muted-foreground">
+                                    <p class="p-3 rounded-lg bg-muted/40 font-mono text-[11px] text-foreground">
+                                        🎨 Gulir kotak ini untuk melihat custom class <code class="font-bold">bg-primary/90</code> aktif saat di-scroll!
+                                    </p>
+                                    @for ($k = 1; $k <= 8; $k++)
+                                        <div class="p-3 rounded-lg border border-border/40 flex items-center justify-between">
+                                            <span>Aktivitas Log #{{ $k }}</span>
+                                            <span class="font-mono font-semibold text-foreground">Status OK</span>
+                                        </div>
+                                    @endfor
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -340,6 +387,9 @@
                             $headerProps = [
                                 ['variant', 'string', "'default'", "Variasi posisi header: `'default'` (statis normal) atau `'sticky'` (menempel di bagian atas layar dengan `sticky top-0 z-50`)."],
                                 ['size', 'string', "'default'", "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`)."],
+                                ['scrolledClass', 'string', "'bg-background/80 backdrop-blur-md border-b border-border/80 shadow-2xs'", "Class utility yang ditambahkan saat header `variant=\"sticky\"` di-scroll melebihi threshold."],
+                                ['unscrolledClass', 'string', "'bg-transparent border-b border-transparent'", "Class utility saat header `variant=\"sticky\"` di posisi paling atas (belum di-scroll)."],
+                                ['threshold', 'int', "10", "Jarak scroll (dalam pixel) sebelum status scrolled aktif."],
                             ];
                         @endphp
                         @foreach ($headerProps as [$prop, $type, $default, $desc])
@@ -384,7 +434,7 @@
         </div>
 
         {{-- Table of Contents Sidebar --}}
-        <aside class="col-span-12 order-1 md:order-2 md:col-span-3 w-full md:sticky md:top-6">
+        <aside class="col-span-12 order-1 md:order-2 md:col-span-3 w-full md:sticky md:top-6 group-has-[header.sticky]/docs:md:top-20">
             <vibe:toc selector="#docs-content" />
         </aside>
 

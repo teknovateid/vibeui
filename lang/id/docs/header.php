@@ -33,12 +33,12 @@ return [
     // Section 3: Sticky Header
     'sticky' => [
         'title' => 'Header Menempel (variant="sticky")',
-        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sticky"</code> untuk mempertahankan header tetap menempel di bagian paling atas layar (<code class="font-mono text-xs text-foreground">sticky top-0 z-50</code>) saat pengguna menggulir halaman panjang.',
-        'preview_title' => 'Demonstrasi Header Sticky',
+        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sticky"</code> untuk mempertahankan header tetap menempel di bagian atas layar (<code class="font-mono text-xs text-foreground">sticky top-0 z-50</code>). Saat digulir (scroll), header secara dinamis beralih dari transparan menjadi latar belakang semi-transparan dengan efek blur (<code class="font-mono text-xs text-foreground">backdrop-blur-md</code>). Anda dapat menyesuaikan tampilan saat di-scroll menggunakan prop <code class="font-mono text-xs text-foreground">scrolled-class</code> dan <code class="font-mono text-xs text-foreground">unscrolled-class</code>.',
+        'preview_title' => 'Demonstrasi Header Sticky dengan Scrolled Background',
         'sticky_heading' => 'Detail Transaksi Pembayaran',
         'sticky_sub' => 'ID Transaksi: TRX-2026-981023',
         'save_btn' => 'Simpan Perubahan',
-        'hint' => 'Pada halaman aplikasi sesungguhnya, header dengan variant="sticky" akan tetap terlihat di bagian atas saat halaman di-scroll ke bawah.',
+        'hint' => 'Gulir ke bawah (scroll) pada kotak ini untuk melihat header tetap menempel di bagian atas dan otomatis berubah menjadi semi-transparan (frosted glass)!',
     ],
 
     // Section 4: Rich Composition

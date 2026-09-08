@@ -33,12 +33,12 @@ return [
     // Section 3: Sticky Header
     'sticky' => [
         'title' => 'Sticky Header (variant="sticky")',
-        'desc' => 'Set <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sticky"</code> to pin the header to the top of the viewport (<code class="font-mono text-xs text-foreground">sticky top-0 z-50</code>) as users scroll down long pages.',
-        'preview_title' => 'Sticky Header Demonstration',
+        'desc' => 'Set <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sticky"</code> to pin the header to the top of the viewport (<code class="font-mono text-xs text-foreground">sticky top-0 z-50</code>). When scrolled, the header dynamically transitions from transparent to a semi-transparent frosted glass background (<code class="font-mono text-xs text-foreground">backdrop-blur-md</code>). You can customize scrolling styles via <code class="font-mono text-xs text-foreground">scrolled-class</code> and <code class="font-mono text-xs text-foreground">unscrolled-class</code>.',
+        'preview_title' => 'Sticky Header Demonstration with Scrolled Background',
         'sticky_heading' => 'Payment Transaction Details',
         'sticky_sub' => 'Transaction Reference: TRX-2026-981023',
         'save_btn' => 'Save Changes',
-        'hint' => 'In real application pages, a header with variant="sticky" remains pinned at the viewport top during scroll.',
+        'hint' => 'Scroll down inside this container to see the header stay pinned at the top with a smooth semi-transparent frosted glass background!',
     ],
 
     // Section 4: Rich Composition

@@ -328,7 +328,7 @@
         x-show="tab === 'preview'"
         data-canvas-theme="{{ $canvasTheme }}"
         :data-canvas-theme="canvasTheme"
-        class="relative w-full transition-colors duration-300 {{ $canvasTheme === 'dark' ? 'dark' : ($canvasTheme === 'light' ? 'light' : '') }}"
+        class="relative w-full rounded-b-2xl transition-colors duration-300 {{ $canvasTheme === 'dark' ? 'dark' : ($canvasTheme === 'light' ? 'light' : '') }}"
         :class="{
             'dark': canvasTheme === 'dark',
             'light': canvasTheme === 'light'

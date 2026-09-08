@@ -1,6 +1,15 @@
+@props([
+    'headerVariant' => 'sticky',
+    'sticky' => true,
+])
+
+@php
+    $isHeaderSticky = ($headerVariant === 'sticky') && ($sticky !== false);
+@endphp
+
 <x-docs.layouts.base>
-    <div class="flex h-screen overflow-hidden relative">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
+    <div class="flex gap-2 h-screen overflow-hidden relative">
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="150" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
@@ -106,11 +115,11 @@
 
                         <vibe:dropdown.item class="gap-3 flex w-full justify-between items-center" x-data="{
                             isDark: document.documentElement.classList.contains('dark'),
-                            toggleTheme() {
-                                window.VibeTheme ? window.VibeTheme.toggle() : document.documentElement.classList.toggle('dark');
+                            toggleTheme(e) {
+                                window.VibeTheme ? window.VibeTheme.toggle(e) : document.documentElement.classList.toggle('dark');
                                 this.isDark = document.documentElement.classList.contains('dark');
                             }
-                        }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')" @click.stop="toggleTheme()">
+                        }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')" @click.stop="toggleTheme($event)">
                             <div class="flex items-center gap-3">
                                 <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
@@ -161,8 +170,10 @@
 
         </vibe:sheet>
 
-        <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar">
-            <vibe:header class="bg-transparent! border-none" size="sm" x-data>
+        <div id="docs-main-scroll" 
+             class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar rounded-lg group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}"
+             style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
+            <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" size="sm">
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
@@ -224,7 +235,6 @@
             <main class="flex-1 p-4 min-w-0 w-full vibe-page-enter">
                 {{ $slot }}
             </main>
-
         </div>
 
         <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>

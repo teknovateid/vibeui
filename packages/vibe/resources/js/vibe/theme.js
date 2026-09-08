@@ -2,6 +2,9 @@ const VIBE_PREFIX = window.VIBE_PREFIX || 'vibe';
 const THEME_KEY = `${VIBE_PREFIX}-theme`;
 
 const ThemeManager = {
+    animation: 'curtain', // curtain, shutter, diagonal, wipe
+    duration: 700, // Durasi animasi transisi dalam milidetik (misal: 650ms agar terlihat mulus dan elegan)
+
     defaultConfig: {
         mode: 'system',
         sidebar: null,
@@ -29,7 +32,9 @@ const ThemeManager = {
                     localStorage.setItem(THEME_KEY, JSON.stringify(migratedConfig));
                     return migratedConfig;
                 }
-                return { ...this.defaultConfig, ...JSON.parse(stored) };
+                const parsed = JSON.parse(stored);
+                delete parsed.animation; // Jangan biarkan cache localStorage lama menimpa konfigurasi animasi kode
+                return { ...this.defaultConfig, ...parsed };
             }
         } catch (e) {
             console.warn("VibeTheme: Gagal mem-parsing konfigurasi tema, kembali ke default.", e);
@@ -38,7 +43,9 @@ const ThemeManager = {
     },
 
     saveConfig(config) {
-        localStorage.setItem(THEME_KEY, JSON.stringify(config));
+        const toSave = { ...config };
+        delete toSave.animation;
+        localStorage.setItem(THEME_KEY, JSON.stringify(toSave));
         this.applyComponentThemes(config);
         
         window.dispatchEvent(new CustomEvent(`${VIBE_PREFIX}-theme-changed`, { 
@@ -46,11 +53,31 @@ const ThemeManager = {
         }));
     },
 
-    setMode(mode) {
+    setMode(mode, event = null) {
         const config = this.getConfig();
-        config.mode = mode;
-        this.saveConfig(config);
-        this.applyTheme(mode);
+        if (config.mode === mode) return;
+
+        let targetIsDark = false;
+        if (mode === 'dark') {
+            targetIsDark = true;
+        } else if (mode === 'light') {
+            targetIsDark = false;
+        } else {
+            targetIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        const currentlyDark = document.documentElement.classList.contains('dark');
+        if (targetIsDark === currentlyDark) {
+            config.mode = mode;
+            this.saveConfig(config);
+            return;
+        }
+
+        this._switchWithTransition(() => {
+            config.mode = mode;
+            this.saveConfig(config);
+            this.applyTheme(mode);
+        }, targetIsDark, event);
     },
 
     setComponent(component, value) {
@@ -61,13 +88,106 @@ const ThemeManager = {
         }
     },
 
-    toggle() {
-        document.documentElement.classList.add('vibe-theme-transition');
+    setAnimation(animation) {
+        const valid = ['curtain', 'shutter', 'diagonal', 'wipe'];
+        if (valid.includes(animation)) {
+            this.animation = animation;
+        }
+    },
+
+    getAnimation() {
+        return this.animation || 'shutter';
+    },
+
+    toggle(event = null) {
         const isDark = document.documentElement.classList.contains('dark');
-        this.setMode(isDark ? 'light' : 'dark');
-        setTimeout(() => {
-            document.documentElement.classList.remove('vibe-theme-transition');
-        }, 350);
+        const nextTheme = isDark ? 'light' : 'dark';
+        const targetIsDark = nextTheme === 'dark';
+
+        this._switchWithTransition(() => {
+            const config = this.getConfig();
+            config.mode = nextTheme;
+            this.saveConfig(config);
+            this.applyTheme(nextTheme);
+        }, targetIsDark, event);
+    },
+
+    _switchWithTransition(callback, targetIsDarkOrEvent = false, event = null) {
+        let targetIsDark = false;
+        if (typeof targetIsDarkOrEvent === 'boolean') {
+            targetIsDark = targetIsDarkOrEvent;
+        } else if (targetIsDarkOrEvent && typeof targetIsDarkOrEvent === 'object') {
+            event = targetIsDarkOrEvent;
+            targetIsDark = !document.documentElement.classList.contains('dark');
+        }
+
+        const isAppearanceTransition = typeof document.startViewTransition === 'function'
+            && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!isAppearanceTransition) {
+            document.documentElement.classList.add('vibe-theme-switching');
+            callback();
+            requestAnimationFrame(() => {
+                document.documentElement.classList.remove('vibe-theme-switching');
+            });
+            return;
+        }
+
+        const animType = this.getAnimation();
+
+        let clipPathKeyframes = [];
+        let duration = typeof this.duration === 'number' ? this.duration : 650;
+
+        if (animType === 'shutter') {
+            // Cinema Aperture: terbuka simetris dari tengah ke kiri dan kanan
+            clipPathKeyframes = ['inset(0 50% 0 50%)', 'inset(0 0 0 0)'];
+        } else if (animType === 'diagonal') {
+            // Diagonal Cyber Slash: membelah sudut layar secara miring
+            clipPathKeyframes = targetIsDark
+                ? ['polygon(0 0, 0 0, 0 0, 0 0)', 'polygon(0 0, 200% 0, 0 200%, 0 0)']
+                : ['polygon(100% 0, 100% 0, 100% 0, 100% 0)', 'polygon(100% 0, -100% 0, 100% 200%, 100% 0)'];
+        } else if (animType === 'wipe') {
+            // Horizontal Curtain: menyapu dari kanan ke kiri
+            clipPathKeyframes = ['inset(0 0 0 100%)', 'inset(0 0 0 0)'];
+        } else {
+            // Default: 'curtain' (Dusk & Dawn Horizon):
+            // Mode Gelap: Tirai malam turun dari atas ke bawah
+            // Mode Terang: Cahaya fajar naik dari bawah ke atas
+            clipPathKeyframes = targetIsDark
+                ? ['inset(0 0 100% 0)', 'inset(0 0 0 0)']
+                : ['inset(100% 0 0 0)', 'inset(0 0 0 0)'];
+        }
+
+        document.documentElement.classList.add('vibe-theme-switching');
+
+        const transition = document.startViewTransition(() => {
+            callback();
+        });
+
+        transition.ready.then(() => {
+            document.documentElement.classList.remove('vibe-theme-switching');
+
+            try {
+                document.documentElement.animate(
+                    {
+                        clipPath: clipPathKeyframes
+                    },
+                    {
+                        duration: duration,
+                        easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+                        pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+            } catch (e) {}
+        }).catch(() => {
+            document.documentElement.classList.remove('vibe-theme-switching');
+        });
+
+        if (transition.finished) {
+            transition.finished.finally(() => {
+                document.documentElement.classList.remove('vibe-theme-switching');
+            });
+        }
     },
 
     applyTheme(mode) {

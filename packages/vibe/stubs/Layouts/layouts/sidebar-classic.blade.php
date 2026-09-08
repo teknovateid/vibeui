@@ -1,6 +1,6 @@
 @props([
-    'headerVariant' => 'sticky',
-    'sticky' => true,
+    'headerVariant' => 'default',
+    'sticky' => false,
 ])
 
 @php
@@ -8,8 +8,8 @@
 @endphp
 
 <x-layouts.base>
-    <div class="flex gap-2 h-screen overflow-hidden relative">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="150" minifiedSize="80" :persist="true">
+    <div class="flex h-screen overflow-hidden relative">
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
@@ -26,7 +26,7 @@
             </vibe:sheet.header>
 
             <vibe:sheet.body id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
-                <x-partials.sidebar-menu />
+                <x-partials.sidebar-classic-menu />
             </vibe:sheet.body>
 
             <vibe:sheet.footer class="px-0 py-3">
@@ -171,9 +171,9 @@
         </vibe:sheet>
 
         <div id="docs-main-scroll" 
-             class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar rounded-lg group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}"
+             class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}"
              style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
-            <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" size="sm">
+            <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" size="sm" class="{{ $isHeaderSticky ? '' : 'bg-transparent! border-none' }}" x-data>
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
@@ -235,6 +235,7 @@
             <main class="flex-1 p-4 min-w-0 w-full vibe-page-enter">
                 {{ $slot }}
             </main>
+
         </div>
 
         <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
