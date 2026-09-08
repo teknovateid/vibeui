@@ -17,6 +17,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);
+
+        $middleware->validateCsrfTokens(except: [
+            'docs/filepond/presigned',
+            'docs/filepond/local-upload/*',
+        ]);
+
+        $middleware->replace(
+            \Illuminate\Http\Middleware\ValidatePostSize::class,
+            \App\Http\Middleware\ValidatePostSize::class,
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

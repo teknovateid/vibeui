@@ -21,6 +21,7 @@ return [
         'switch' => 'Switch',
         'range' => 'Range Slider',
         'date-time' => 'Date & Time',
+        'filepond' => 'FilePond',
         'button' => 'Button',
         'dropdown' => 'Dropdown',
         'badge' => 'Badge',

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardPageController;
+use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,14 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/switch', 'docs.switch.index')->name('switch.index');
     Route::view('/range', 'docs.range.index')->name('range.index');
     Route::view('/date-time', 'docs.date-time.index')->name('date-time.index');
+
+    Route::prefix('filepond')->name('filepond.')->group(function () {
+        Route::get('/', [FilepondController::class, 'index'])->name('index');
+        Route::post('/store', [FilepondController::class, 'store'])->name('store');
+        Route::post('/presigned', [FilepondController::class, 'presigned'])->name('presigned');
+        Route::put('/local-upload/{key}', [FilepondController::class, 'localUpload'])->name('local_upload');
+    });
+    
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
     Route::view('/badge', 'docs.badge.index')->name('badge.index');

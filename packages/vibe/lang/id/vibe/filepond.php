@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'label_idle' => '<div class="flex flex-col items-center justify-center gap-2 py-4 pointer-events-none"><div class="p-2.5 rounded-full bg-primary/10 text-primary ring-4 ring-primary/5 transition-transform duration-200"><svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg></div><div class="text-xs sm:text-sm font-medium text-foreground">Tarik & lepas berkas ke sini, atau <span class="filepond--label-action text-primary font-semibold hover:underline decoration-primary/40 underline-offset-4 pointer-events-auto cursor-pointer">Pilih dari perangkat</span></div><span class="text-[11px] text-muted-foreground">Mendukung berkas dokumen, gambar, & video</span></div>',
+    'label_avatar_idle' => '<div class="flex flex-col items-center justify-center gap-1.5 p-2 pointer-events-none"><svg class="size-7 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="filepond--label-action text-[11px] font-semibold text-primary pointer-events-auto cursor-pointer">Pilih Foto</span></div>',
+    'label_invalid_field' => 'Bidang berisi berkas yang tidak valid',
+    'label_file_waiting_for_size' => 'Menunggu ukuran berkas',
+    'label_file_size_not_allowed' => 'Ukuran berkas melebihi batas maksimal',
+    'label_file_size_too_small' => 'Ukuran berkas terlalu kecil',
+    'label_file_type_not_allowed' => 'Format berkas tidak didukung',
+    'label_file_processing' => 'Mengunggah...',
+    'label_file_processing_complete' => 'Unggahan selesai',
+    'label_file_processing_aborted' => 'Unggahan dibatalkan',
+    'label_file_processing_error' => 'Gagal mengunggah berkas',
+    'label_tap_to_cancel' => 'ketuk untuk membatalkan',
+    'label_tap_to_retry' => 'ketuk untuk mencoba lagi',
+    'label_tap_to_undo' => 'ketuk untuk mengembalikan',
+    'label_button_remove_item' => 'Hapus',
+    'label_button_abort_item_load' => 'Batal',
+    'label_button_retry_item_load' => 'Coba lagi',
+    'label_button_abort_item_processing' => 'Batal',
+    'label_button_undo_item_processing' => 'Batal',
+    'label_button_retry_item_processing' => 'Coba lagi',
+    'label_button_process_item' => 'Unggah',
+    'label_max_files_exceeded' => 'Jumlah maksimal berkas terlampaui',
+];
