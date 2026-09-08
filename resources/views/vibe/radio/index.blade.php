@@ -85,7 +85,7 @@
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                        {{ $attributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
                     />
                     <div class="{{ $outerSizes }} {{ $colorClasses }} rounded-full border transition-all duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-radio-dot]:scale-100">
                         <span class="{{ $dotSizes }} {{ $dotColor }} rounded-full scale-0 vibe-radio-dot transition-transform duration-150"></span>
@@ -129,9 +129,9 @@
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                        {{ $attributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
                     />
-                    <div class="{{ $outerSizes }} {{ $colorClasses }} rounded-full border transition-all duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none cursor-pointer peer-checked:[&_.vibe-radio-dot]:scale-100">
+                    <div class="{{ $outerSizes }} {{ $colorClasses }} rounded-full border transition-all duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none pointer-events-none peer-checked:[&_.vibe-radio-dot]:scale-100">
                         <span class="{{ $dotSizes }} {{ $dotColor }} rounded-full scale-0 vibe-radio-dot transition-transform duration-150"></span>
                     </div>
                 </div>

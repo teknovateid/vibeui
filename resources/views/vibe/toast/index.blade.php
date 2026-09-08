@@ -28,17 +28,17 @@
             info: 'bg-muted'
         },
         iconClasses: {
-            success: 'bg-green-100 dark:bg-green-900/40',
-            error: 'bg-red-100 dark:bg-red-900/40',
-            warning: 'bg-yellow-100 dark:bg-yellow-900/40',
-            info: 'bg-blue-100 dark:bg-blue-900/40'
+            success: 'bg-success/15 text-success',
+            error: 'bg-destructive/15 text-destructive',
+            warning: 'bg-warning/15 text-warning',
+            info: 'bg-info/15 text-info'
         },
         
         icons: {
-            success: `<svg class='size-7 text-green-500' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /></svg>`,
-            error: `<svg class='size-7 text-red-500' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01' /></svg>`,
-            warning: `<svg class='size-7 text-yellow-500' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>`,
-            info: `<svg class='size-7 text-blue-500' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z' /></svg>`
+            success: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /></svg>`,
+            error: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01' /></svg>`,
+            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>`,
+            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z' /></svg>`
         },
         
         getActivePosition() {
@@ -280,7 +280,7 @@
                 </div>
                 
                 <!-- Tombol Close -->
-                <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-all">
+                <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-accent hover:text-accent-foreground transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>

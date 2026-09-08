@@ -22,14 +22,14 @@
                         {{ __($localisationPath.'rows') }}.
                     </span>
 
-                    <button
+                    <vibe:button
+                        variant="link"
                         x-on:click="clearSelected"
                         wire:loading.attr="disabled"
-                        type="button"
-                        class="ml-1 font-semibold underline underline-offset-2 hover:text-primary/80 transition-colors cursor-pointer"
+                        class="ml-1 font-semibold underline underline-offset-2 text-primary hover:text-primary/80 transition-colors"
                     >
                         {{ __($localisationPath.'Deselect All') }}
-                    </button>
+                    </vibe:button>
                 </div>
             </template>
 
@@ -43,14 +43,14 @@
                         ?
                     </span>
 
-                    <button
+                    <vibe:button
+                        variant="link"
                         x-on:click="setAllSelected()"
                         wire:loading.attr="disabled"
-                        type="button"
-                        class="ml-1 font-semibold underline underline-offset-2 hover:text-primary/80 transition-colors cursor-pointer"
+                        class="ml-1 font-semibold underline underline-offset-2 text-primary hover:text-primary/80 transition-colors"
                     >
                         {{ __($localisationPath.'Select All') }}
-                    </button>
+                    </vibe:button>
                 </div>
             </template>
         </td>

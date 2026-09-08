@@ -68,9 +68,23 @@
     };
 
     $isCard = $variant === 'card';
+    $hasText = !empty($label) || !empty($description) || ($slot->isNotEmpty() && trim($slot) !== '');
+
+    $hasXShow = $attributes->has('x-show');
+    $xShow = $attributes->get('x-show');
+    $hasXCloak = $attributes->has('x-cloak');
+    $hasWireKey = $attributes->has('wire:key');
+    $wireKey = $attributes->get('wire:key');
+
+    $inputAttributes = $attributes->except(['x-show', 'x-cloak', 'wire:key']);
 @endphp
 
-<div class="{{ $wrapperClass }}">
+<div 
+    @if($wrapperClass) class="{{ $wrapperClass }}" @elseif(!$hasText) class="inline-flex items-center justify-center" @endif
+    @if($hasWireKey) wire:key="{{ $wireKey }}" @endif
+    @if($hasXShow) x-show="{{ $xShow }}" @endif
+    @if($hasXCloak) x-cloak @endif
+>
     @if ($isCard)
         {{-- Card Variant --}}
         <label for="{{ $id }}" class="relative flex items-start gap-3 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none {{ $hasError ? 'border-destructive/60 bg-destructive/5' : 'border-border bg-card hover:bg-muted/40 hover:border-border/80' }} has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-focus-visible:ring-2 has-focus-visible:ring-ring/20 has-disabled:opacity-50 has-disabled:pointer-events-none shadow-2xs">
@@ -82,16 +96,16 @@
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
                         @if($indeterminate) x-init="$el.indeterminate = true" @endif
                     />
-                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
+                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-check-icon]:hidden! peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-[3] hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-[3] hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </div>
@@ -103,7 +117,7 @@
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
                     @checked($checked)
-                    {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                    {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
                     @if($indeterminate) x-init="$el.indeterminate = true" @endif
                 />
             @endif
@@ -126,25 +140,25 @@
         </label>
     @else
         {{-- Standard / Inline Variant --}}
-        <div class="inline-flex items-start gap-2.5">
+        <div class="inline-flex {{ $hasText ? 'items-start gap-2.5' : 'items-center justify-center' }}">
             @if ($showIndicator)
-                <div class="relative flex items-center justify-center shrink-0 mt-0.5">
+                <div class="relative flex items-center justify-center shrink-0 {{ $hasText ? 'mt-0.5' : '' }}">
                     <input
                         type="checkbox"
                         id="{{ $id }}"
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
                         @if($indeterminate) x-init="$el.indeterminate = true" @endif
                     />
-                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none cursor-pointer peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
+                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none pointer-events-none peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-check-icon]:hidden! peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-[3] hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-[3] hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </div>
@@ -156,7 +170,7 @@
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
                     @checked($checked)
-                    {{ $attributes->merge(['class' => 'peer sr-only']) }}
+                    {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
                     @if($indeterminate) x-init="$el.indeterminate = true" @endif
                 />
             @endif

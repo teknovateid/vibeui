@@ -21,9 +21,9 @@
         'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-accent/60',
         'accent' => 'bg-accent text-accent-foreground border border-accent hover:bg-accent/80 shadow-2xs focus-visible:ring-accent',
         'destructive', 'danger' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
-        'success' => 'bg-emerald-600 text-white dark:bg-emerald-500 shadow-xs hover:bg-emerald-700 dark:hover:bg-emerald-600 focus-visible:ring-emerald-500',
-        'warning' => 'bg-amber-500 text-white dark:bg-amber-600 shadow-xs hover:bg-amber-600 dark:hover:bg-amber-700 focus-visible:ring-amber-500',
-        'info' => 'bg-sky-500 text-white dark:bg-sky-600 shadow-xs hover:bg-sky-600 dark:hover:bg-sky-700 focus-visible:ring-sky-500',
+        'success' => 'bg-success text-success-foreground shadow-xs hover:bg-success/90 focus-visible:ring-success',
+        'warning' => 'bg-warning text-warning-foreground shadow-xs hover:bg-warning/90 focus-visible:ring-warning',
+        'info' => 'bg-info text-info-foreground shadow-xs hover:bg-info/90 focus-visible:ring-info',
         'link' => 'text-primary underline-offset-4 hover:underline p-0 h-auto font-medium shadow-none active:scale-100',
         default => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
     };
