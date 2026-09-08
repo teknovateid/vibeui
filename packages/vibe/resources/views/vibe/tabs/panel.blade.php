@@ -19,7 +19,7 @@
         'class' => 'vibe-tabs-panel w-full focus:outline-none'
     ]) }}
     :class="{
-        'flex-1 min-w-0': layout === 'cols'
+        'flex-1 min-w-0': layout === 'cols' || variant === 'sidebar'
     }"
 >
     @if ($lazy)
