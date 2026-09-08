@@ -419,7 +419,7 @@
                 default => '-right-3 top-4',
             };
         @endphp
-        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-50 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
+        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-30 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
             '-right-3 top-4': position === 'left',
             '-left-3 top-4': position === 'right',
             '-bottom-3 left-1/2 -translate-x-1/2': position === 'top',
@@ -442,11 +442,12 @@
             Hit area dibuat lebih lebar (w-5/h-5) agar mudah diklik/disentuh bahkan saat sheet size=0.
             overflow-visible pada parent sheet sudah memastikan handle tidak terclip.
             Garis visual (inner div) tampil saat hover pada desktop atau saat resizing.
+            z-index diatur ke z-20 agar berada di bawah dropdown/popover body (z-50) pada sheet.
         --}}
         <div
             @mousedown.prevent="startResize($event)"
             @touchstart.prevent="startResize($event)"
-            class="absolute z-50 flex items-center justify-center group/resizer touch-none select-none"
+            class="absolute z-20 flex items-center justify-center group/resizer touch-none select-none"
             :class="{
                 'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
                 'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',

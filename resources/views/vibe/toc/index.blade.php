@@ -73,6 +73,17 @@
                 }
                 return window;
             },
+            getEffectiveOffset() {
+                if (this.offset !== 40) return this.offset;
+                let scrollContainer = this.getScrollContainer();
+                let stickyHeader = (scrollContainer && scrollContainer !== window)
+                    ? scrollContainer.querySelector('header.sticky, header[data-variant=sticky], .has-sticky-header > header')
+                    : document.querySelector('header.sticky, header[data-variant=sticky]');
+                if (stickyHeader) {
+                    return (stickyHeader.offsetHeight || 56) + 24;
+                }
+                return 40;
+            },
             updateActive() {
                 if (this.isClickScrolling) return;
 
@@ -117,7 +128,7 @@
                     ? { top: 0, bottom: window.innerHeight } 
                     : scrollContainer.getBoundingClientRect();
                 
-                let threshold = this.offset + 60;
+                let threshold = this.getEffectiveOffset() + 40;
                 let activeId = null;
 
                 for (let i = 0; i < items.length; i++) {
@@ -190,15 +201,16 @@
                 }
 
                 let scrollContainer = this.getScrollContainer();
+                let effectiveOffset = this.getEffectiveOffset();
 
                 if (scrollContainer === window || scrollContainer === document.documentElement || scrollContainer === document.body) {
-                    let top = el.getBoundingClientRect().top + window.scrollY - this.offset;
+                    let top = el.getBoundingClientRect().top + window.scrollY - effectiveOffset;
                     window.scrollTo({ top: top, behavior: 'smooth' });
                 } else {
                     let containerRect = scrollContainer.getBoundingClientRect();
                     let elRect = el.getBoundingClientRect();
                     let currentScrollTop = scrollContainer.scrollTop;
-                    let targetScrollTop = currentScrollTop + (elRect.top - containerRect.top) - this.offset;
+                    let targetScrollTop = currentScrollTop + (elRect.top - containerRect.top) - effectiveOffset;
 
                     scrollContainer.scrollTo({
                         top: targetScrollTop,
@@ -327,6 +339,15 @@
                         let scrollContainer = document.getElementById('docs-main-scroll') || window;
                         let scrollTop = (scrollContainer === window) ? window.scrollY : (scrollContainer.scrollTop || 0);
 
+                        let getScriptOffset = function(sc) {
+                            if (offset !== 40) return offset;
+                            let sHeader = (sc && sc !== window)
+                                ? sc.querySelector('header.sticky, header[data-variant=sticky], .has-sticky-header > header')
+                                : document.querySelector('header.sticky, header[data-variant=sticky]');
+                            return sHeader ? ((sHeader.offsetHeight || 56) + 24) : 40;
+                        };
+                        let effectiveOffset = getScriptOffset(scrollContainer);
+
                         // === STEP 1: Assign unique IDs to all headings BEFORE calculating active ===
                         let headingIds = [];
                         headingElements.forEach((el, index) => {
@@ -354,7 +375,7 @@
                             initialActiveId = headingIds[0];
                         } else {
                             let containerRect = (scrollContainer === window) ? { top: 0 } : scrollContainer.getBoundingClientRect();
-                            let threshold = offset + 60;
+                            let threshold = effectiveOffset + 40;
 
                             for (let i = 0; i < headingElements.length; i++) {
                                 let rect = headingElements[i].getBoundingClientRect();
@@ -416,13 +437,14 @@
                                         let target = document.getElementById(targetId);
                                         if (target) {
                                             let scrollEl = document.getElementById('docs-main-scroll') || window;
+                                            let effOffset = getScriptOffset(scrollEl);
                                             if (scrollEl === window) {
-                                                let top = target.getBoundingClientRect().top + window.scrollY - offset;
+                                                let top = target.getBoundingClientRect().top + window.scrollY - effOffset;
                                                 window.scrollTo({ top: top, behavior: 'smooth' });
                                             } else {
                                                 let cRect = scrollEl.getBoundingClientRect();
                                                 let tRect = target.getBoundingClientRect();
-                                                scrollEl.scrollTo({ top: scrollEl.scrollTop + (tRect.top - cRect.top) - offset, behavior: 'smooth' });
+                                                scrollEl.scrollTo({ top: scrollEl.scrollTop + (tRect.top - cRect.top) - effOffset, behavior: 'smooth' });
                                             }
                                         }
                                     }
