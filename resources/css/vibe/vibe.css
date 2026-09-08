@@ -236,3 +236,104 @@ html.vibe-theme-switching *::after {
         transition: none !important;
     }
 }
+
+/* ==========================================================================
+   Vibe UI Range Slider Component (Ultra-responsive 0ms input drag)
+   ========================================================================== */
+.vibe-range {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    background: transparent;
+    cursor: pointer;
+}
+
+.vibe-range:focus {
+    outline: none;
+}
+
+/* WebKit Track */
+.vibe-range::-webkit-slider-runnable-track {
+    width: 100%;
+    height: var(--range-track-height, 6px);
+    border-radius: 9999px;
+    background: linear-gradient(
+        to right,
+        var(--range-active-color, var(--primary)) var(--progress, 50%),
+        var(--range-track-color, var(--input)) var(--progress, 50%)
+    );
+}
+
+/* WebKit Thumb */
+.vibe-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: var(--range-thumb-size, 16px);
+    width: var(--range-thumb-size, 16px);
+    border-radius: 9999px;
+    background: var(--background);
+    border: 2px solid var(--range-active-color, var(--primary));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    margin-top: calc((var(--range-track-height, 6px) - var(--range-thumb-size, 16px)) / 2);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.vibe-range:hover::-webkit-slider-thumb {
+    transform: scale(1.1);
+}
+
+.vibe-range:active::-webkit-slider-thumb {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--range-active-color, var(--primary)) 25%, transparent);
+}
+
+.vibe-range:focus-visible::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
+}
+
+/* Firefox Track */
+.vibe-range::-moz-range-track {
+    width: 100%;
+    height: var(--range-track-height, 6px);
+    border-radius: 9999px;
+    background: var(--range-track-color, var(--input));
+}
+
+.vibe-range::-moz-range-progress {
+    height: var(--range-track-height, 6px);
+    border-radius: 9999px;
+    background: var(--range-active-color, var(--primary));
+}
+
+/* Firefox Thumb */
+.vibe-range::-moz-range-thumb {
+    height: var(--range-thumb-size, 16px);
+    width: var(--range-thumb-size, 16px);
+    border-radius: 9999px;
+    background: var(--background);
+    border: 2px solid var(--range-active-color, var(--primary));
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.vibe-range:hover::-moz-range-thumb {
+    transform: scale(1.1);
+}
+
+.vibe-range:active::-moz-range-thumb {
+    transform: scale(1.18);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--range-active-color, var(--primary)) 25%, transparent);
+}
+
+.vibe-range:focus-visible::-moz-range-thumb {
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--ring) 35%, transparent);
+}
+
+/* Disabled */
+.vibe-range:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
