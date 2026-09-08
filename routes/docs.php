@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/', 'docs.index')->name('index');
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
-    Route::view('/form', 'docs.form.index')->name('form.index');
+    Route::get('/form', [FormController::class, 'index'])->name('form.index');
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
     Route::view('/select', 'docs.select.index')->name('select.index');
@@ -50,4 +51,3 @@ Route::get('/locale/{locale}', function (string $locale) {
     }
     return redirect()->back();
 })->name('locale.switch');
-

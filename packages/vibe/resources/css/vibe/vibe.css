@@ -199,6 +199,81 @@
 }
 
 /* ==========================================================================
+   Vibe UI - SPA Navigation Loading Bar (wire:navigate / NProgress)
+   ========================================================================== */
+
+:root {
+    --livewire-progress-bar-color: var(--primary);
+}
+
+#nprogress {
+    pointer-events: none !important;
+    position: fixed !important;
+    z-index: 99999 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+}
+
+#nprogress .bar {
+    background: var(--primary) !important;
+    position: fixed !important;
+    z-index: 99999 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 2.5px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+    transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow: hidden !important;
+}
+
+/* Dynamic shimmer pulse beam across the bar */
+#nprogress .bar::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--primary-foreground) 35%, transparent) 50%,
+        transparent 100%
+    ) !important;
+    animation: vibe-nprogress-shimmer 1.5s infinite linear !important;
+}
+
+/* Glowing luminescent leading edge (peg) */
+#nprogress .peg {
+    display: block !important;
+    position: absolute !important;
+    right: 0px !important;
+    width: 100px !important;
+    height: 100% !important;
+    box-shadow: 0 0 12px var(--primary), 0 0 6px var(--primary) !important;
+    opacity: 1 !important;
+    border-radius: 9999px !important;
+    transform: rotate(3deg) translate(0px, -4px) !important;
+}
+
+/* Hide dated circular spinner */
+#nprogress .spinner {
+    display: none !important;
+}
+
+@keyframes vibe-nprogress-shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+
+/* ==========================================================================
    Theme Switch Zero-Duration Synchronization & Horizon Curtain Transition
    ========================================================================== */
 
