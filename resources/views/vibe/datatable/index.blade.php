@@ -11,7 +11,7 @@
     @rappasoftTableThirdPartyStyles
 @endPushOnce
 
-@pushOnce('body', 'vibe-datatable-scripts')
+@pushOnce('head', 'vibe-datatable-scripts')
     @rappasoftTableScripts
     @rappasoftTableThirdPartyScripts
 @endPushOnce
