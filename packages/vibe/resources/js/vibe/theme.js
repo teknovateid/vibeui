@@ -232,52 +232,134 @@ window.VibeTheme = ThemeManager;
 // Safely track registered Alpine.data components and prevent single-argument calls from wiping data callbacks
 const registeredAlpineData = new Set();
 
-function patchAlpineData() {
-    if (!window.Alpine || window.Alpine._vibePatched) return;
-    window.Alpine._vibePatched = true;
+function patchAlpineData(alpine = window.Alpine) {
+    if (!alpine || alpine._vibePatched) return;
+    alpine._vibePatched = true;
 
-    const originalData = window.Alpine.data;
-    window.Alpine.data = function (name, callback) {
+    const originalData = alpine.data;
+    alpine.data = function (name, callback) {
         if (arguments.length < 2 || typeof callback !== 'function') {
             return registeredAlpineData.has(name);
         }
         registeredAlpineData.add(name);
-        return originalData.call(window.Alpine, name, callback);
+        return originalData.call(alpine, name, callback);
     };
 }
 
 if (window.Alpine) {
-    patchAlpineData();
+    patchAlpineData(window.Alpine);
 }
-document.addEventListener('alpine:init', patchAlpineData, { capture: true });
-document.addEventListener('livewire:init', patchAlpineData);
+document.addEventListener('alpine:init', () => {
+    if (window.Alpine) patchAlpineData(window.Alpine);
+}, { capture: true });
+document.addEventListener('livewire:init', () => {
+    if (window.Alpine) patchAlpineData(window.Alpine);
+});
+
+function isTableDataRegistered() {
+    if (registeredAlpineData.has('laravellivewiretable')) return true;
+    if (window.Alpine && typeof window.Alpine.evaluate === 'function') {
+        try {
+            const testEl = document.createElement('div');
+            const result = window.Alpine.evaluate(testEl, 'typeof laravellivewiretable');
+            if (result === 'function') {
+                registeredAlpineData.add('laravellivewiretable');
+                return true;
+            }
+        } catch (e) {}
+    }
+    return false;
+}
+
+function ensureDataTableScripts() {
+    if (isTableDataRegistered()) return;
+
+    if (!document.querySelector('script[src*="laravel-livewire-tables/core.min.js"]')) {
+        const script = document.createElement('script');
+        script.src = '/rappasoft/laravel-livewire-tables/core.min.js';
+        script.setAttribute('data-navigate-once', 'true');
+        script.onload = () => {
+            window.VibeInitDataTable();
+        };
+        document.head.appendChild(script);
+    }
+    if (!document.querySelector('link[href*="laravel-livewire-tables/core.min.css"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/rappasoft/laravel-livewire-tables/core.min.css';
+        document.head.appendChild(link);
+    }
+}
 
 // Function to initialize Rappasoft Datatables when loaded on-demand via @pushOnce / wire:navigate
 window.VibeInitDataTable = function () {
-    patchAlpineData();
-
     if (!window.Alpine) return;
+    patchAlpineData(window.Alpine);
+
+    ensureDataTableScripts();
 
     // 1. If laravellivewiretable Alpine component is not registered, dispatch alpine:init
-    if (!registeredAlpineData.has('laravellivewiretable')) {
+    if (!isTableDataRegistered()) {
         try {
             document.dispatchEvent(new CustomEvent('alpine:init'));
         } catch (e) {}
     }
 
-    // 2. If laravellivewiretable is registered, initialize any table roots that are stuck on x-cloak
-    if (registeredAlpineData.has('laravellivewiretable') && typeof window.Alpine.initTree === 'function') {
-        const cloakedTables = document.querySelectorAll('[x-data*="laravellivewiretable"][x-cloak]');
+    // 2. If laravellivewiretable is registered, safely initialize any table roots stuck with x-cloak
+    if (isTableDataRegistered()) {
+        const cloakedTables = document.querySelectorAll('.vibe-datatable-root [x-cloak], [x-data*="laravellivewiretable"][x-cloak]');
         cloakedTables.forEach((el) => {
             try {
-                if (typeof window.Alpine.destroyTree === 'function') {
-                    window.Alpine.destroyTree(el);
+                if (typeof window.Alpine.initTree === 'function') {
+                    if (el._x_dataStack && !el._x_dataStack[0]) {
+                        delete el._x_dataStack;
+                    }
+                    if (!el._x_dataStack) {
+                        window.Alpine.initTree(el);
+                    }
                 }
-                window.Alpine.initTree(el);
             } catch (e) {}
+            if (el.hasAttribute('x-cloak')) {
+                el.removeAttribute('x-cloak');
+            }
         });
     }
 };
+
+// Detect when core.min.js is injected into DOM by Livewire SPA navigation
+function setupDataTableScriptObserver() {
+    const attachLoadHandler = (script) => {
+        if (script.tagName === 'SCRIPT' && script.src && script.src.includes('laravel-livewire-tables')) {
+            script.addEventListener('load', () => {
+                window.VibeInitDataTable();
+            }, { capture: true });
+        }
+    };
+
+    document.querySelectorAll('script[src*="laravel-livewire-tables"]').forEach(attachLoadHandler);
+
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            for (const node of mutation.addedNodes) {
+                if (node.nodeType === 1) {
+                    attachLoadHandler(node);
+                    if (node.querySelectorAll) {
+                        node.querySelectorAll('script[src*="laravel-livewire-tables"]').forEach(attachLoadHandler);
+                    }
+                }
+            }
+        }
+    });
+
+    if (document.head) observer.observe(document.head, { childList: true, subtree: true });
+    if (document.body) observer.observe(document.body, { childList: true, subtree: true });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupDataTableScriptObserver);
+} else {
+    setupDataTableScriptObserver();
+}
 
 // Re-apply theme before and after Livewire SPA navigation
 document.addEventListener('livewire:navigating', () => {
