@@ -125,6 +125,7 @@ class InstallCommand extends Command
             'resources/css/vibe/highlightjs.css',
             'resources/css/vibe/chart.css',
             'resources/js/vibe/chart.js',
+            'resources/js/vibe/date-time.js',
             'resources/js/vibe/form.js',
             'resources/js/vibe/grid.js',
             'resources/js/vibe/highlightjs.js',
