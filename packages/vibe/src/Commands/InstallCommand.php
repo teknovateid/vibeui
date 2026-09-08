@@ -59,7 +59,12 @@ class InstallCommand extends Command
             }
         });
 
-        // 5. Inject dependencies to package.json
+        // 5. Inject entry points to vite.config.js
+        $this->components->task('Registering Vite entry points', function () {
+            $this->registerViteAssets();
+        });
+
+        // 6. Inject dependencies to package.json
         $this->components->task('Updating NPM dependencies', function () {
             $packageJsonPath = base_path('package.json');
             if (file_exists($packageJsonPath)) {
@@ -85,7 +90,7 @@ class InstallCommand extends Command
             }
         });
 
-        // 6. Run NPM Install
+        // 7. Run NPM Install
         $this->components->info('Running npm install...');
         $process = new \Symfony\Component\Process\Process(['npm', 'install'], base_path());
         $process->setTimeout(null);
@@ -97,5 +102,69 @@ class InstallCommand extends Command
         $this->components->info('Vibe UI has been successfully installed!');
         $this->line(' <fg=gray>You can now start using vibe components.</>');
         $this->newLine();
+    }
+
+    /**
+     * Register Vibe UI on-demand assets in vite.config.js
+     */
+    protected function registerViteAssets(): void
+    {
+        $vitePath = null;
+        foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
+            if (file_exists(base_path($file))) {
+                $vitePath = base_path($file);
+                break;
+            }
+        }
+
+        if (!$vitePath) {
+            return;
+        }
+
+        $vibeAssets = [
+            'resources/css/vibe/highlightjs.css',
+            'resources/css/vibe/chart.css',
+            'resources/js/vibe/chart.js',
+            'resources/js/vibe/form.js',
+            'resources/js/vibe/grid.js',
+            'resources/js/vibe/highlightjs.js',
+            'resources/js/vibe/table.js',
+        ];
+
+        $content = file_get_contents($vitePath);
+        $assetsToInject = [];
+
+        foreach ($vibeAssets as $asset) {
+            if (!str_contains($content, "'{$asset}'") && !str_contains($content, "\"{$asset}\"")) {
+                $assetsToInject[] = $asset;
+            }
+        }
+
+        if (empty($assetsToInject)) {
+            return;
+        }
+
+        if (preg_match('/input\s*:\s*\[([^\]]*)\]/s', $content, $matches)) {
+            $existing = rtrim($matches[1]);
+            if (!empty($existing) && !str_ends_with($existing, ',')) {
+                $existing .= ',';
+            }
+
+            // Detect base indentation from existing entries
+            $indent = '                ';
+            if (preg_match('/\n(\s+)[\'"][^\'"]+[\'"]/', $matches[1], $indentMatch)) {
+                $indent = $indentMatch[1];
+            }
+
+            $injectedLines = implode("\n", array_map(fn($asset) => "{$indent}'{$asset}',", $assetsToInject));
+            $closingIndent = "\n            ";
+            if (preg_match('/(\n\s*)$/', $matches[1], $closingMatch)) {
+                $closingIndent = $closingMatch[1];
+            }
+
+            $replacement = "input: [" . $existing . "\n" . $injectedLines . $closingIndent . "]";
+            $content = str_replace($matches[0], $replacement, $content);
+            file_put_contents($vitePath, $content);
+        }
     }
 }

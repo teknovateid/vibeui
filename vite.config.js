@@ -113,13 +113,15 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 
+                
                 'resources/css/vibe/highlightjs.css',
-                'resources/js/vibe/highlightjs.js',
-                'resources/js/vibe/table.js',
                 'resources/css/vibe/chart.css',
+                
                 'resources/js/vibe/chart.js',
                 'resources/js/vibe/form.js',
                 'resources/js/vibe/grid.js',
+                'resources/js/vibe/highlightjs.js',
+                'resources/js/vibe/table.js',
             ],
             refresh: true,
             fonts: [
