@@ -131,6 +131,14 @@ const ThemeManager = {
         delete config.radius;
         delete config.fontName;
         delete config.fontValue;
+        delete config.sidebarPreset;
+        delete config.customSidebarBg;
+        delete config.customSidebarFg;
+        delete config.customSidebarBorder;
+        delete config.headerPreset;
+        delete config.customHeaderBg;
+        delete config.customHeaderFg;
+        delete config.customHeaderBorder;
         this.saveConfig(config);
     },
 
