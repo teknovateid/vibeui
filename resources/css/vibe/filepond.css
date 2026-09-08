@@ -1,0 +1,342 @@
+@import 'filepond/dist/filepond.min.css';
+@import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
+
+/* =========================================================================
+   Vibe UI FilePond Custom Theme
+   Tailwind CSS v4 & Vibe Design System Integration
+   ========================================================================= */
+
+/* Guaranteed container dimensions preventing zero-height layout shifts */
+[data-vibe-filepond] {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 8.5rem;
+}
+
+[data-vibe-filepond].filepond-avatar-mode {
+    min-height: 130px;
+    max-width: 130px;
+    margin: 0 auto;
+}
+
+/* Fallback / Loading skeleton before FilePond mounts */
+[data-vibe-filepond]:not(:has(.filepond--root)) {
+    min-height: 8.5rem;
+    border: 1.5px dashed color-mix(in srgb, var(--border, #e2e8f0) 80%, transparent);
+    border-radius: var(--radius-xl, 1rem);
+    background-color: color-mix(in srgb, var(--muted, #f1f5f9) 30%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filepond--root {
+    font-family: inherit;
+    margin-bottom: 0;
+    width: 100%;
+    min-height: 8.5rem;
+    cursor: pointer;
+}
+
+.filepond--credits {
+    display: none !important;
+}
+
+/* Panel Background & Border */
+.filepond--root .filepond--panel-root {
+    background-color: color-mix(in srgb, var(--muted, #f1f5f9) 35%, transparent);
+    border: 1.5px dashed color-mix(in srgb, var(--border, #e2e8f0) 90%, transparent);
+    border-radius: var(--radius-xl, 1rem);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+/* Hover & Drag-over State */
+.filepond--root:hover .filepond--panel-root,
+.filepond--root[data-hover="true"] .filepond--panel-root {
+    border-color: var(--primary, #2563eb);
+    background-color: color-mix(in srgb, var(--primary, #2563eb) 6%, transparent);
+    box-shadow: 0 6px 24px -4px color-mix(in srgb, var(--primary, #2563eb) 14%, transparent);
+}
+
+.filepond--root:hover .filepond--drop-label svg {
+    transform: scale(1.08);
+}
+
+.filepond--root[data-drop-active="true"] .filepond--panel-root {
+    border-color: var(--primary, #2563eb);
+    border-style: solid;
+    background-color: color-mix(in srgb, var(--primary, #2563eb) 12%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary, #2563eb) 20%, transparent);
+}
+
+/* Drop Label & Action Typography */
+.filepond--root .filepond--drop-label {
+    min-height: 8.5rem;
+    color: var(--muted-foreground, #64748b);
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s ease;
+    pointer-events: auto;
+}
+
+.filepond--root .filepond--drop-label svg {
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filepond--root .filepond--drop-label label {
+    cursor: pointer;
+    pointer-events: auto;
+    width: 100%;
+}
+
+.filepond--root .filepond--label-action {
+    color: var(--primary, #2563eb);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+    transition: color 0.15s ease, opacity 0.15s ease;
+}
+
+.filepond--root .filepond--label-action:hover {
+    opacity: 0.85;
+}
+
+/* File Items Container */
+.filepond--root .filepond--item-panel {
+    background-color: var(--card, #ffffff);
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: var(--radius-md, 0.5rem);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+}
+
+.filepond--root [data-filepond-item-state*='error'] .filepond--item-panel {
+    background-color: color-mix(in srgb, var(--destructive, #ef4444) 10%, var(--card, #ffffff));
+    border-color: var(--destructive, #ef4444);
+}
+
+.filepond--root [data-filepond-item-state='processing-complete'] .filepond--item-panel {
+    background-color: color-mix(in srgb, #10b981 10%, var(--card, #ffffff));
+    border-color: #10b981;
+}
+
+/* File Info & Text */
+.filepond--root .filepond--file {
+    color: var(--foreground, #0f172a);
+}
+
+.filepond--root .filepond--file-info-main {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--foreground, #0f172a);
+}
+
+.filepond--root .filepond--file-info-sub {
+    font-size: 0.75rem;
+    color: var(--muted-foreground, #64748b);
+}
+
+.filepond--root .filepond--file-status {
+    color: var(--foreground, #0f172a);
+}
+
+.filepond--root .filepond--file-status-main {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--foreground, #0f172a);
+}
+
+.filepond--root .filepond--file-status-sub {
+    font-size: 0.75rem;
+    color: var(--muted-foreground, #64748b);
+}
+
+/* Action Buttons (Remove, Retry, Abort, Revert) */
+.filepond--root .filepond--file-action-button {
+    color: #ffffff !important;
+    background-color: rgba(15, 23, 42, 0.7) !important;
+    backdrop-filter: blur(4px);
+    cursor: pointer !important;
+}
+
+.filepond--root .filepond--file-action-button:hover,
+.filepond--root .filepond--file-action-button:focus {
+    box-shadow: 0 0 0 2px var(--primary, #2563eb) !important;
+}
+
+.filepond--root .filepond--action-remove-item:hover,
+.filepond--root .filepond--action-remove-item:focus {
+    background-color: var(--destructive, #ef4444) !important;
+    transform: scale(1.08);
+}
+
+/* Image Preview Styling */
+.filepond--image-preview-wrapper {
+    border-radius: var(--radius-md, 0.5rem);
+    overflow: hidden;
+}
+
+.filepond--image-preview-overlay-idle {
+    mix-blend-mode: multiply;
+}
+
+/* Progress Ring, Spinner, and Percentage Indicator */
+.filepond--root .filepond--progress-indicator {
+    color: var(--primary, #2563eb) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.filepond--root .filepond--progress-indicator svg {
+    color: var(--primary, #2563eb) !important;
+    stroke: var(--primary, #2563eb) !important;
+}
+
+.filepond--root .filepond--progress-indicator path {
+    stroke: currentColor !important;
+}
+
+/* Processing Complete Checkmark Indicator */
+.filepond--root .filepond--processing-complete-indicator {
+    color: #10b981 !important;
+    opacity: 1 !important;
+}
+
+.filepond--root .filepond--processing-complete-indicator svg {
+    color: #10b981 !important;
+    stroke: #10b981 !important;
+}
+
+.filepond--root [data-filepond-item-state='processing-complete'] .filepond--file-status-main {
+    color: #10b981 !important;
+}
+
+/* Error Message Styling */
+.filepond--root [data-filepond-item-state*='error'] .filepond--file-status-main {
+    color: var(--destructive, #ef4444) !important;
+}
+
+/* =========================================================================
+   Avatar / Circular Profile Mode
+   ========================================================================= */
+.filepond-avatar-mode .filepond--root {
+    width: 130px;
+    height: 130px;
+    margin: 0 auto;
+}
+
+.filepond-avatar-mode .filepond--panel-root {
+    border-radius: 9999px !important;
+    overflow: hidden;
+}
+
+.filepond-avatar-mode .filepond--drop-label {
+    min-height: 130px;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.75rem;
+}
+
+.filepond-avatar-mode .filepond--image-preview-wrapper {
+    border-radius: 9999px !important;
+}
+
+.filepond-avatar-mode .filepond--file-action-button {
+    cursor: pointer;
+}
+
+/* =========================================================================
+   Dark Mode Refinements
+   ========================================================================= */
+html.dark [data-vibe-filepond]:not(:has(.filepond--root)) {
+    border-color: color-mix(in srgb, var(--border, #334155) 80%, transparent);
+    background-color: color-mix(in srgb, var(--muted, #1e293b) 30%, transparent);
+}
+
+html.dark .filepond--root .filepond--panel-root {
+    background-color: color-mix(in srgb, var(--muted, #1e293b) 45%, transparent);
+    border-color: color-mix(in srgb, var(--border, #334155) 85%, transparent);
+}
+
+html.dark .filepond--root:hover .filepond--panel-root,
+html.dark .filepond--root[data-hover="true"] .filepond--panel-root {
+    border-color: var(--primary, #3b82f6);
+    background-color: color-mix(in srgb, var(--primary, #3b82f6) 10%, transparent);
+    box-shadow: 0 6px 24px -4px color-mix(in srgb, var(--primary, #3b82f6) 20%, transparent);
+}
+
+html.dark .filepond--root[data-drop-active="true"] .filepond--panel-root {
+    border-color: var(--primary, #3b82f6);
+    background-color: color-mix(in srgb, var(--primary, #3b82f6) 15%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary, #3b82f6) 25%, transparent);
+}
+
+html.dark .filepond--root .filepond--drop-label {
+    color: var(--muted-foreground, #94a3b8);
+}
+
+html.dark .filepond--root .filepond--item-panel {
+    background-color: var(--card, #1e293b);
+    border-color: var(--border, #334155);
+}
+
+html.dark .filepond--root .filepond--file {
+    color: var(--foreground, #f8fafc);
+}
+
+html.dark .filepond--root .filepond--file-info-main {
+    color: var(--foreground, #f8fafc);
+}
+
+html.dark .filepond--root .filepond--file-info-sub {
+    color: var(--muted-foreground, #94a3b8);
+}
+
+html.dark .filepond--root .filepond--file-status {
+    color: var(--foreground, #f8fafc);
+}
+
+html.dark .filepond--root .filepond--file-status-main {
+    color: var(--foreground, #f8fafc);
+}
+
+html.dark .filepond--root .filepond--file-status-sub {
+    color: var(--muted-foreground, #94a3b8);
+}
+
+html.dark .filepond--root .filepond--progress-indicator {
+    color: var(--primary, #3b82f6) !important;
+}
+
+html.dark .filepond--root .filepond--progress-indicator svg {
+    color: var(--primary, #3b82f6) !important;
+    stroke: var(--primary, #3b82f6) !important;
+}
+
+html.dark .filepond--root .filepond--processing-complete-indicator {
+    color: #34d399 !important;
+}
+
+html.dark .filepond--root .filepond--processing-complete-indicator svg {
+    color: #34d399 !important;
+    stroke: #34d399 !important;
+}
+
+html.dark .filepond--root [data-filepond-item-state='processing-complete'] .filepond--file-status-main {
+    color: #34d399 !important;
+}
+
+html.dark .filepond--root [data-filepond-item-state*='error'] .filepond--item-panel {
+    background-color: color-mix(in srgb, var(--destructive, #ef4444) 15%, var(--card, #1e293b));
+    border-color: var(--destructive, #ef4444);
+}
+
+html.dark .filepond--root [data-filepond-item-state='processing-complete'] .filepond--item-panel {
+    background-color: color-mix(in srgb, #10b981 15%, var(--card, #1e293b));
+    border-color: #10b981;
+}
