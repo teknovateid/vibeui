@@ -1,5 +1,30 @@
-export function vibeForm(formId, expireHours, storageType) {
+export function vibeForm(config = {}) {
+    let formId = null;
+    let expireHours = 24;
+    let storageType = 'session';
+    let isAjax = true;
+    let saveToStorage = false;
+
+    if (typeof config === 'string') {
+        formId = config;
+        expireHours = arguments[1] || 24;
+        storageType = arguments[2] || 'session';
+        isAjax = arguments[3] !== undefined ? Boolean(arguments[3]) : true;
+        saveToStorage = true;
+    } else if (typeof config === 'object' && config !== null) {
+        formId = config.id || null;
+        expireHours = config.expireHours || 24;
+        storageType = config.storageType || 'session';
+        isAjax = config.ajax !== undefined ? Boolean(config.ajax) : true;
+        saveToStorage = Boolean(config.saveToStorage);
+    }
+
     return {
+        id: formId,
+        loading: false,
+        submitted: false,
+        error: null,
+        response: null,
         storageKey: (window.VIBE_PREFIX || 'vibe') + '-form',
 
         getStorageEngine() {
@@ -7,16 +32,121 @@ export function vibeForm(formId, expireHours, storageType) {
         },
 
         init() {
-            this.restoreFromStorage();
+            if (saveToStorage && formId) {
+                this.restoreFromStorage();
 
-            // Re-restore data when a sheet or modal opens, 
-            // to override Livewire's $this->reset() if the form is inside them
-            window.addEventListener('open-sheet', () => {
-                setTimeout(() => this.restoreFromStorage(), 100);
-            });
-            window.addEventListener('open-modal', () => {
-                setTimeout(() => this.restoreFromStorage(), 100);
-            });
+                // Re-restore data when a sheet or modal opens, 
+                // to override Livewire's $this->reset() if the form is inside them
+                window.addEventListener('open-sheet', () => {
+                    setTimeout(() => this.restoreFromStorage(), 100);
+                });
+                window.addEventListener('open-modal', () => {
+                    setTimeout(() => this.restoreFromStorage(), 100);
+                });
+            }
+        },
+
+        async handleSubmit(event) {
+            if (!isAjax) {
+                if (saveToStorage) {
+                    this.clearStorage();
+                }
+                return; // Let standard browser submit proceed
+            }
+
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const form = this.$el;
+            const action = form.getAttribute('action') || window.location.href;
+            const method = (form.getAttribute('method') || 'POST').toUpperCase();
+            const formData = new FormData(form);
+
+            // Extract CSRF token
+            let csrfToken = null;
+            const csrfInput = form.querySelector('input[name="_token"]');
+            if (csrfInput) {
+                csrfToken = csrfInput.value;
+            } else {
+                const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+                if (metaCsrf) {
+                    csrfToken = metaCsrf.getAttribute('content');
+                }
+            }
+
+            this.loading = true;
+            this.error = null;
+
+            // Trigger submit events
+            const submitDetail = { form, id: formId, formData };
+            window.dispatchEvent(new CustomEvent('vibe-form-submit', { detail: submitDetail }));
+            form.dispatchEvent(new CustomEvent('vibe-submit', { detail: submitDetail }));
+
+            try {
+                const headers = {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                };
+                if (csrfToken) {
+                    headers['X-CSRF-TOKEN'] = csrfToken;
+                }
+
+                let fetchOptions = {
+                    method: method === 'GET' ? 'GET' : 'POST',
+                    headers: headers,
+                };
+
+                let targetUrl = action;
+                if (method === 'GET') {
+                    const params = new URLSearchParams(formData).toString();
+                    targetUrl = action + (action.includes('?') ? '&' : '?') + params;
+                } else {
+                    fetchOptions.body = formData;
+                }
+
+                const res = await fetch(targetUrl, fetchOptions);
+                const contentType = res.headers.get('content-type') || '';
+                let data = null;
+
+                if (contentType.includes('application/json')) {
+                    data = await res.json();
+                } else {
+                    const text = await res.text();
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        data = { text: text };
+                    }
+                }
+
+                if (!res.ok) {
+                    throw { response: res, data };
+                }
+
+                this.loading = false;
+                this.submitted = true;
+                this.response = data;
+
+                if (saveToStorage) {
+                    this.clearStorage();
+                }
+
+                // Dispatch success events with payload
+                const successDetail = { form, id: formId, data, response: res };
+                window.dispatchEvent(new CustomEvent('vibe-form-success', { detail: successDetail }));
+                window.dispatchEvent(new CustomEvent('vibe-form-submitted', { detail: successDetail }));
+                form.dispatchEvent(new CustomEvent('vibe-success', { detail: successDetail }));
+
+            } catch (err) {
+                this.loading = false;
+                this.error = err.data || err;
+
+                const errorDetail = { form, id: formId, error: this.error, response: err.response };
+                window.dispatchEvent(new CustomEvent('vibe-form-error', { detail: errorDetail }));
+                form.dispatchEvent(new CustomEvent('vibe-error', { detail: errorDetail }));
+            }
         },
 
         getStorageData() {
@@ -32,13 +162,10 @@ export function vibeForm(formId, expireHours, storageType) {
         },
 
         saveToStorage(formEl) {
-            // Extract form data
             const formData = new FormData(formEl);
             const dataObj = {};
 
-            // Don't save livewire internal fields
             for (let [key, value] of formData.entries()) {
-                // Skip files, livewire internals, csrf
                 if (value instanceof File || key.startsWith('_') || key === 'components') continue;
                 dataObj[key] = value;
             }
@@ -70,7 +197,6 @@ export function vibeForm(formId, expireHours, storageType) {
             let storageArray = this.getStorageData();
             const now = new Date().getTime();
 
-            // Clean up expired items globally while we are at it
             let cleanedArray = storageArray.filter(item => item.expiredAt && item.expiredAt > now);
             if (cleanedArray.length !== storageArray.length) {
                 this.setStorageData(cleanedArray);
@@ -82,10 +208,7 @@ export function vibeForm(formId, expireHours, storageType) {
             if (myData && myData.data) {
                 setTimeout(() => {
                     Object.entries(myData.data).forEach(([key, value]) => {
-                        // Handle input arrays e.g. name="hobbies[]"
-                        const inputName = key.endsWith('[]') ? key : key;
-                        const input = this.$el.querySelector(`[name="${inputName}"]`);
-
+                        const input = this.$el.querySelector(`[name="${key}"]`);
                         if (input && input.value !== value) {
                             input.value = value;
                             input.dispatchEvent(new Event('input', { bubbles: true }));

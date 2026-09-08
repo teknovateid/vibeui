@@ -7,7 +7,12 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/', 'docs.index')->name('index');
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
-    Route::get('/form', [FormController::class, 'index'])->name('form.index');
+   
+    Route::prefix('form')->name('form.')->group(function () {
+        Route::get('/', [FormController::class, 'index'])->name('index');
+        Route::post('/', [FormController::class, 'store'])->name('store');
+    });
+
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
     Route::view('/select', 'docs.select.index')->name('select.index');

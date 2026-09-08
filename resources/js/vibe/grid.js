@@ -446,15 +446,16 @@ export function vibeGrid(config = {}) {
 }
 
 // Auto-register in Alpine when available
+function registerVibeGrid() {
+    if (typeof window !== 'undefined' && window.Alpine && typeof window.Alpine.data === 'function') {
+        window.Alpine.data('vibeGrid', vibeGrid);
+    }
+}
+
 if (typeof window !== 'undefined') {
     window.vibeGrid = vibeGrid;
-    if (window.Alpine) {
-        window.Alpine.data('vibeGrid', vibeGrid);
-    } else {
-        document.addEventListener('alpine:init', () => {
-            if (window.Alpine) {
-                window.Alpine.data('vibeGrid', vibeGrid);
-            }
-        });
-    }
+    registerVibeGrid();
+    document.addEventListener('alpine:init', registerVibeGrid);
+    document.addEventListener('livewire:init', registerVibeGrid);
+    window.dispatchEvent(new CustomEvent('vibe-grid-ready'));
 }

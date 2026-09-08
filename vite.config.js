@@ -119,6 +119,7 @@ export default defineConfig({
                 'resources/css/vibe/chart.css',
                 'resources/js/vibe/chart.js',
                 'resources/js/vibe/form.js',
+                'resources/js/vibe/grid.js',
             ],
             refresh: true,
             fonts: [

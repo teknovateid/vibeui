@@ -33,6 +33,40 @@
                 </div>
             </div>
 
+            <div
+                x-data="{
+                    submittedData: {{ json_encode(session('submitted_data', null)) }},
+                    submittedAt: '{{ session('submitted_at', '') }}',
+                    init() {
+                        window.addEventListener('vibe-form-submitted', (e) => {
+                            const resData = e.detail?.data || {};
+                            this.submittedData = resData.submitted_data || resData;
+                            this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
+                        });
+                    }
+                }"
+            >
+                <template x-if="submittedData">
+                    <div class="p-4 rounded-xl border border-success/30 bg-success/10 text-foreground flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                        <div class="flex items-center gap-2.5">
+                            <span class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-success/20 text-success">
+                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6 9 17l-5-5" />
+                                </svg>
+                            </span>
+                            <div>
+                                <p class="text-xs font-semibold text-foreground">Pengujian Form (AJAX / Fetch) Berhasil Diposting ke FormController!</p>
+                                <p class="text-[11px] text-muted-foreground">Waktu: <span class="font-mono" x-text="submittedAt"></span> • <span x-text="Object.keys(submittedData || {}).length"></span> fields diterima via JSON (tanpa refresh)</p>
+                            </div>
+                        </div>
+                        <vibe:button @click="$dispatch('open-modal', 'form-submission-modal')" variant="outline" size="sm" class="shrink-0 text-xs">
+                            Lihat Modal $request->all()
+                        </vibe:button>
+                    </div>
+                </template>
+            </div>
+
+
             {{-- 1. Basic Usage --}}
             <section id="penggunaan-dasar" class="space-y-4">
                 <div class="space-y-1">
@@ -44,7 +78,7 @@
 
                 <vibe:preview :title="__('docs/form.basic_usage.preview_title')">
                     <vibe:preview.code>
-                        <vibe:form class="space-y-4 max-w-lg mx-auto" action="#" method="POST">
+                        <vibe:form class="space-y-4 max-w-lg mx-auto" action="{{ route('docs.form.store') }}" method="POST">
                             @csrf
 
                             <vibe:input name="full_name" label="{{ __('docs/form.basic_usage.name_label') }}" placeholder="{{ __('docs/form.basic_usage.name_placeholder') }}" required />
@@ -59,14 +93,15 @@
                             </div>
 
                             <div class="pt-2">
-                                <vibe:button type="button" variant="primary" class="w-full sm:w-auto">
+                                <vibe:button type="submit" variant="primary" class="w-full sm:w-auto">
                                     {{ __('docs/form.basic_usage.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl mx-auto p-4 sm:p-6">
-                        <vibe:form class="space-y-4" action="#" method="POST">
+                        <vibe:form class="space-y-4" action="{{ route('docs.form.store') }}" method="POST">
+                            @csrf
                             <vibe:input name="demo_full_name" label="{{ __('docs/form.basic_usage.name_label') }}" placeholder="{{ __('docs/form.basic_usage.name_placeholder') }}" />
 
                             <vibe:input type="email" name="demo_email" label="{{ __('docs/form.basic_usage.email_label') }}" placeholder="{{ __('docs/form.basic_usage.email_placeholder') }}" />
@@ -79,7 +114,7 @@
                             </div>
 
                             <div class="pt-2 flex items-center justify-end">
-                                <vibe:button type="button" variant="primary">
+                                <vibe:button type="submit" variant="primary">
                                     {{ __('docs/form.basic_usage.submit_btn') }}
                                 </vibe:button>
                             </div>
@@ -142,7 +177,8 @@
                             </div>
                         </div>
 
-                        <vibe:form id="demo-checkout-session-form" :save-to-storage="true" storage-type="session" class="space-y-4">
+                        <vibe:form id="demo-checkout-session-form" :save-to-storage="true" storage-type="session" action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                            @csrf
                             <vibe:input name="demo_card_holder" label="{{ __('docs/form.session_storage.card_holder') }}" placeholder="Alex Morgan" />
 
                             <vibe:input name="demo_card_number" label="{{ __('docs/form.session_storage.card_number') }}" placeholder="TX-2026-9812-4410" />
@@ -205,7 +241,8 @@
                             <span>{{ __('docs/form.local_storage.hint') }}</span>
                         </div>
 
-                        <vibe:form id="demo-article-draft-form" :save-to-storage="true" storage-type="local" :expire-hours="48" class="space-y-4">
+                        <vibe:form id="demo-article-draft-form" :save-to-storage="true" storage-type="local" :expire-hours="48" action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                            @csrf
                             <vibe:input name="demo_article_title" label="{{ __('docs/form.local_storage.article_title') }}" placeholder="{{ __('docs/form.local_storage.article_placeholder') }}" />
 
                             <div class="space-y-1.5">
@@ -284,7 +321,8 @@
                         </vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-3xl mx-auto p-4 sm:p-6">
-                        <vibe:form class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <vibe:form class="grid grid-cols-1 md:grid-cols-2 gap-4" action="{{ route('docs.form.store') }}" method="POST">
+                            @csrf
                             <vibe:input name="demo_first_name" label="{{ __('docs/form.grid_layout.first_name') }}" placeholder="Alex" />
 
                             <vibe:input name="demo_last_name" label="{{ __('docs/form.grid_layout.last_name') }}" placeholder="Morgan" />
@@ -301,8 +339,8 @@
                             </div>
 
                             <div class="col-span-1 md:col-span-2 flex items-center justify-end gap-3 pt-2">
-                                <vibe:button type="button" variant="outline">{{ __('docs/form.grid_layout.cancel_btn') }}</vibe:button>
-                                <vibe:button type="button" variant="primary">{{ __('docs/form.grid_layout.save_btn') }}</vibe:button>
+                                <vibe:button type="reset" variant="outline">{{ __('docs/form.grid_layout.cancel_btn') }}</vibe:button>
+                                <vibe:button type="submit" variant="primary">{{ __('docs/form.grid_layout.save_btn') }}</vibe:button>
                             </div>
                         </vibe:form>
                     </div>
@@ -347,28 +385,31 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-xl mx-auto p-4 sm:p-6">
                         <vibe:card>
-                            <vibe:card.header>
-                                <vibe:card.title>{{ __('docs/form.card_form.card_title') }}</vibe:card.title>
-                                <vibe:card.description>{{ __('docs/form.card_form.card_desc') }}</vibe:card.description>
-                            </vibe:card.header>
+                            <vibe:form id="demo-card-form" action="{{ route('docs.form.store') }}" method="POST">
+                                @csrf
+                                <vibe:card.header>
+                                    <vibe:card.title>{{ __('docs/form.card_form.card_title') }}</vibe:card.title>
+                                    <vibe:card.description>{{ __('docs/form.card_form.card_desc') }}</vibe:card.description>
+                                </vibe:card.header>
 
-                            <vibe:card.content>
-                                <vibe:form class="space-y-4">
-                                    <vibe:input name="demo_username" label="{{ __('docs/form.card_form.username') }}" placeholder="alexmorgan" value="alexmorgan" />
+                                <vibe:card.content>
+                                    <div class="space-y-4">
+                                        <vibe:input name="demo_username" label="{{ __('docs/form.card_form.username') }}" placeholder="alexmorgan" value="alexmorgan" />
 
-                                    <div class="space-y-1.5">
-                                        <label for="demo_bio" class="block text-xs font-semibold text-foreground select-none">
-                                            {{ __('docs/form.card_form.bio') }}
-                                        </label>
-                                        <textarea id="demo_bio" name="demo_bio" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}"></textarea>
+                                        <div class="space-y-1.5">
+                                            <label for="demo_bio" class="block text-xs font-semibold text-foreground select-none">
+                                                {{ __('docs/form.card_form.bio') }}
+                                            </label>
+                                            <textarea id="demo_bio" name="demo_bio" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}"></textarea>
+                                        </div>
                                     </div>
-                                </vibe:form>
-                            </vibe:card.content>
+                                </vibe:card.content>
 
-                            <vibe:card.footer class="flex justify-end gap-2">
-                                <vibe:button variant="outline">Batal</vibe:button>
-                                <vibe:button variant="primary">{{ __('docs/form.card_form.save_changes') }}</vibe:button>
-                            </vibe:card.footer>
+                                <vibe:card.footer class="flex justify-end gap-2">
+                                    <vibe:button type="reset" variant="outline">Batal</vibe:button>
+                                    <vibe:button type="submit" variant="primary">{{ __('docs/form.card_form.save_changes') }}</vibe:button>
+                                </vibe:card.footer>
+                            </vibe:form>
                         </vibe:card>
                     </div>
                 </vibe:preview>
@@ -495,4 +536,111 @@
         </aside>
 
     </div>
+
+    {{-- Modal Hasil Testing $request->all() --}}
+    <div
+        x-data="{
+            submittedData: {{ json_encode(session('submitted_data', null)) }},
+            submittedAt: '{{ session('submitted_at', '') }}',
+            init() {
+                window.addEventListener('vibe-form-submitted', (e) => {
+                    const detail = e.detail || {};
+                    const resData = detail.data || {};
+                    if (resData.submitted_data) {
+                        this.submittedData = resData.submitted_data;
+                        this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
+                    } else if (resData) {
+                        this.submittedData = resData;
+                        this.submittedAt = new Date().toLocaleTimeString();
+                    }
+                    this.$dispatch('open-modal', 'form-submission-modal');
+                });
+            }
+        }"
+    >
+        <vibe:modal id="form-submission-modal" :show="session()->has('submitted_data')" maxWidth="2xl">
+            <div class="space-y-5">
+                {{-- Header Modal --}}
+                <div class="flex items-start gap-3">
+                    <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-success/15 text-success">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 6 9 17l-5-5" />
+                        </svg>
+                    </span>
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-lg font-bold text-foreground">Form Berhasil Diposting (via JS / AJAX)</h3>
+                            <vibe:badge variant="success" size="sm">200 OK • No Refresh</vibe:badge>
+                        </div>
+                        <p class="text-xs text-muted-foreground leading-relaxed">
+                            Data formulir diterima oleh <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground font-semibold">FormController::store()</code> pada pukul <span class="font-mono text-foreground font-semibold" x-text="submittedAt || '{{ session('submitted_at', '') }}'"></span> tanpa reload halaman.
+                        </p>
+                    </div>
+                </div>
+
+                {{-- JSON View --}}
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="m18 16 4-4-4-4" />
+                                <path d="m6 8-4 4 4 4" />
+                                <path d="m14.5 4-5 16" />
+                            </svg>
+                            Payload $request->all() (JSON)
+                        </span>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]" x-text="`${Object.keys(submittedData || {}).length} Fields`"></vibe:badge>
+                    </div>
+                    <div class="relative">
+                        <pre class="bg-muted/80 border border-border p-4 rounded-xl text-xs font-mono overflow-x-auto text-foreground max-h-56 leading-relaxed vibe-scrollbar"><code x-text="JSON.stringify(submittedData, null, 2)">{{ json_encode(session('submitted_data'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</code></pre>
+                    </div>
+                </div>
+
+                {{-- Table View --}}
+                <div class="space-y-2">
+                    <span class="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                        <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect width="18" height="18" x="3" y="3" rx="2" />
+                            <path d="M3 9h18" />
+                            <path d="M3 15h18" />
+                            <path d="M9 3v18" />
+                        </svg>
+                        Ringkasan Data Masukan
+                    </span>
+                    <div class="rounded-xl border border-border overflow-hidden max-h-48 overflow-y-auto vibe-scrollbar">
+                        <table class="w-full text-xs text-left">
+                            <thead class="bg-muted/50 border-b border-border text-muted-foreground font-semibold uppercase sticky top-0">
+                                <tr>
+                                    <th class="px-3 py-2">Nama Field</th>
+                                    <th class="px-3 py-2">Nilai Masukan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <template x-for="(val, key) in (submittedData || {})" :key="key">
+                                    <tr class="hover:bg-muted/20 transition-colors">
+                                        <td class="px-3 py-2 font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></td>
+                                        <td class="px-3 py-2 font-mono text-muted-foreground break-all">
+                                            <span x-show="key === '_token'" class="text-muted-foreground/60 italic">(CSRF Token Valid)</span>
+                                            <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? 'kosong / null' : val)"></span>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- Footer Modal --}}
+                <div class="flex items-center justify-between pt-4 border-t border-border">
+                    <p class="text-[11px] text-muted-foreground">
+                        Data di atas dikembalikan secara asinkron (AJAX / Fetch) dari FormController.
+                    </p>
+                    <vibe:button type="button" variant="primary" size="sm" @click="close">
+                        Tutup Modal
+                    </vibe:button>
+                </div>
+            </div>
+        </vibe:modal>
+    </div>
 </x-docs.layouts.sidebar>
+
