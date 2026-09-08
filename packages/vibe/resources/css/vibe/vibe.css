@@ -412,3 +412,57 @@ html.vibe-theme-switching *::after {
     cursor: not-allowed;
     pointer-events: none;
 }
+
+/* =========================================================================
+   Vibe UI - Responsive Grid System
+   ========================================================================= */
+
+/* Mobile view (< 640px): Stacks into a clean 1-column layout */
+@media (max-width: 639px) {
+    [data-vibe-grid].vibe-grid-responsive {
+        grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    }
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item] {
+        grid-column: span 1 / span 1 !important;
+        grid-row: auto !important;
+    }
+    [data-vibe-grid].vibe-grid-responsive [data-resize-handle] {
+        display: none !important;
+    }
+}
+
+/* Tablet view (640px to 1023px): 2-column layout */
+@media (min-width: 640px) and (max-width: 1023px) {
+    [data-vibe-grid].vibe-grid-responsive {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    /* Default items take 1 column (half-width) */
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item] {
+        grid-column: span 1 / span 1 !important;
+    }
+    /* Large cards (desktop colSpan >= 5) take full-width (2 columns) */
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="5"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="6"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="7"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="8"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="9"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="10"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="11"],
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item][data-col-span="12"] {
+        grid-column: span 2 / span 2 !important;
+    }
+    [data-vibe-grid].vibe-grid-responsive [data-resize-handle] {
+        display: none !important;
+    }
+}
+
+/* Desktop view (>= 1024px): Full multi-column grid with dynamic resize/drag */
+@media (min-width: 1024px) {
+    [data-vibe-grid].vibe-grid-responsive {
+        grid-template-columns: repeat(var(--grid-cols, 12), minmax(0, 1fr));
+    }
+    [data-vibe-grid].vibe-grid-responsive > [data-grid-item] {
+        grid-column: span var(--vibe-col-span, 4) / span var(--vibe-col-span, 4);
+        grid-row: span var(--vibe-row-span, 1) / span var(--vibe-row-span, 1);
+    }
+}

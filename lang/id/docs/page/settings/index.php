@@ -1,0 +1,113 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Settings Page Language Lines (Indonesian)
+    |--------------------------------------------------------------------------
+    */
+    'title' => 'Pengaturan Akun & Tampilan',
+    'subtitle' => 'Kelola preferensi profil, kustomisasi tema antarmuka secara live, dan setelan keamanan Anda.',
+    'breadcrumb' => [
+        'home' => 'Beranda',
+        'pages' => 'Halaman',
+        'settings' => 'Pengaturan',
+    ],
+    'tabs' => [
+        'profile' => [
+            'label' => 'Profil & Akun',
+            'desc' => 'Perbarui informasi profil pribadi dan preferensi umum akun Anda.',
+        ],
+        'appearance' => [
+            'label' => 'Tampilan & Tema',
+            'desc' => 'Kustomisasi warna aksen, mode tema, radius sudut, dan timpa nilai app.css secara langsung.',
+        ],
+        'notifications' => [
+            'label' => 'Notifikasi',
+            'desc' => 'Tentukan kapan dan bagaimana Anda menerima pemberitahuan dari sistem.',
+        ],
+        'security' => [
+            'label' => 'Keamanan',
+            'desc' => 'Jaga keamanan akun Anda dengan kata sandi yang kuat dan autentikasi dua faktor.',
+        ],
+    ],
+    'profile' => [
+        'avatar_title' => 'Foto Profil',
+        'avatar_desc' => 'Format JPG, GIF, atau PNG. Ukuran maksimal 2MB.',
+        'change_avatar' => 'Ganti Foto',
+        'remove_avatar' => 'Hapus',
+        'name' => 'Nama Lengkap',
+        'name_placeholder' => 'Masukkan nama lengkap',
+        'username' => 'Username',
+        'username_placeholder' => 'username_anda',
+        'email' => 'Alamat Email',
+        'email_placeholder' => 'nama@domain.com',
+        'bio' => 'Bio Singkat',
+        'bio_placeholder' => 'Tuliskan deskripsi singkat mengenai diri atau peran Anda...',
+        'timezone' => 'Zona Waktu',
+        'language' => 'Bahasa Sistem',
+        'save_btn' => 'Simpan Perubahan',
+    ],
+    'appearance' => [
+        'theme_mode_title' => 'Mode Antarmuka',
+        'theme_mode_desc' => 'Pilih gaya kontras tampilan yang paling nyaman untuk mata Anda.',
+        'modes' => [
+            'light' => 'Terang (Light)',
+            'dark' => 'Gelap (Dark)',
+            'system' => 'Sistem (Otomatis)',
+        ],
+        'primary_color_title' => 'Warna Aksen Utama (--primary)',
+        'primary_color_desc' => 'Menimpa token warna primer yang digunakan pada tombol utama, badge, dan elemen aktif.',
+        'custom_color' => 'Warna Kustom (HEX)',
+        'radius_title' => 'Radius Sudut Komponen (--radius)',
+        'radius_desc' => 'Sesuaikan tingkat kelengkungan sudut untuk card, input, dan tombol.',
+        'radius_options' => [
+            'none' => '0 (Tajam / Sharp)',
+            'sm' => '0.25rem (Kompak)',
+            'md' => '0.5rem (Standar Vibe UI)',
+            'lg' => '0.75rem (Lembut / Smooth)',
+            'full' => '1rem (Membulat / Rounded)',
+        ],
+        'font_title' => 'Tipografi Font Sans (--font-sans)',
+        'font_desc' => 'Pilih font keluarga sans-serif yang digunakan di seluruh antarmuka.',
+        'preview_title' => 'Pratinjau Langsung Komponen (Live Preview)',
+        'preview_desc' => 'Komponen di bawah ini langsung merefleksikan perubahan warna dan radius secara instan.',
+        'export_title' => 'Salin Kode untuk app.css',
+        'export_desc' => 'Gunakan cuplikan CSS di bawah ini untuk menimpa nilai secara permanen di resources/css/vibe/app.css.',
+        'copy_css' => 'Salin Kode CSS',
+        'copied' => 'Berhasil Disalin!',
+        'reset_btn' => 'Kembalikan ke Default app.css',
+        'save_btn' => 'Simpan Preferensi Tema',
+        'toast_saved' => 'Tema berhasil disimpan dan aktif di seluruh aplikasi!',
+        'toast_reset' => 'Pengaturan tampilan telah dikembalikan ke default app.css.',
+    ],
+    'notifications' => [
+        'email_title' => 'Notifikasi Melalui Email',
+        'email_desc' => 'Pilih jenis email pemberitahuan yang ingin Anda terima.',
+        'security_alerts' => 'Peringatan Keamanan',
+        'security_alerts_desc' => 'Notifikasi saat ada aktivitas login mencurigakan atau perubahan kata sandi.',
+        'order_updates' => 'Pembaruan Transaksi & Pesanan',
+        'order_updates_desc' => 'Laporan instan saat ada pesanan baru, pembayaran diverifikasi, atau refund.',
+        'weekly_digest' => 'Ringkasan Kinerja Mingguan',
+        'weekly_digest_desc' => 'Ringkasan analitik penjualan dan tren performa toko setiap Senin pagi.',
+        'push_title' => 'Notifikasi Web & Browser',
+        'push_desc' => 'Kirim notifikasi langsung ke desktop atau perangkat seluler Anda.',
+        'sound_effects' => 'Efek Suara Sistem',
+        'sound_effects_desc' => 'Putar nada audio saat menerima notifikasi baru atau menyelesaikan aksi penting.',
+        'save_btn' => 'Simpan Preferensi Notifikasi',
+    ],
+    'security' => [
+        'password_title' => 'Ubah Kata Sandi',
+        'password_desc' => 'Pastikan akun Anda menggunakan kata sandi yang panjang dan acak untuk tetap aman.',
+        'current_password' => 'Kata Sandi Saat Ini',
+        'new_password' => 'Kata Sandi Baru',
+        'confirm_password' => 'Konfirmasi Kata Sandi Baru',
+        'update_password_btn' => 'Perbarui Kata Sandi',
+        'two_factor_title' => 'Autentikasi Dua Faktor (2FA)',
+        'two_factor_desc' => 'Tambahkan lapisan keamanan ekstra ke akun Anda menggunakan aplikasi autentikator.',
+        'enable_2fa' => 'Aktifkan 2FA',
+        'sessions_title' => 'Sesi Perangkat Aktif',
+        'sessions_desc' => 'Perangkat yang saat ini sedang masuk ke akun Anda.',
+        'logout_other_devices' => 'Keluar dari Perangkat Lain',
+    ],
+];

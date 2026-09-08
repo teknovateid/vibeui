@@ -3,6 +3,7 @@
     'id' => null,
     'cols' => 12,
     'gap' => '4',
+    'responsive' => true,
     'persist' => true,
     'resizable' => true,
     'reorderable' => true,
@@ -19,6 +20,11 @@
         '8', 'gap-8' => 'gap-8',
         default => 'gap-4',
     };
+
+    $responsiveClass = $responsive ? 'vibe-grid-responsive' : '';
+    $colsClass = $responsive 
+        ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-{$cols}" 
+        : "grid-cols-{$cols}";
 @endphp
 
 @pushOnce('head', 'vibe-grid')
@@ -28,7 +34,8 @@
 <div
     id="{{ $gridId }}"
     data-vibe-grid
-    {{ $attributes->twMerge(['class' => "w-full grid grid-cols-{$cols} {$gapClass} relative transition-all duration-150"]) }}
+    style="--grid-cols: {{ $cols }};"
+    {{ $attributes->twMerge(['class' => "w-full grid {$colsClass} {$gapClass} relative transition-all duration-150 {$responsiveClass}"]) }}
     x-data="typeof window.vibeGrid === 'function' ? window.vibeGrid({
         id: '{{ $gridId }}',
         cols: {{ (int) $cols }},

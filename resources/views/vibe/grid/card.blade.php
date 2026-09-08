@@ -86,7 +86,7 @@
         @drop.prevent="onDrop('{{ $cardId }}', $event)"
     @endif
     {{ $attributes->twMerge(['class' => "group relative flex flex-col rounded-xl text-card-foreground {$variantClasses} overflow-hidden min-h-[120px] select-text"]) }}
-    style="grid-column: span {{ $colSpan }}; grid-row: span {{ $rowSpan }};"
+    style="--vibe-col-span: {{ $colSpan }}; --vibe-row-span: {{ $rowSpan }}; grid-column: span var(--vibe-col-span, {{ $colSpan }}); grid-row: span var(--vibe-row-span, {{ $rowSpan }});"
 >
     {{-- Live Resize Floating Pill Indicator --}}
     <div
@@ -246,13 +246,14 @@
         </div>
     @endif
 
-    {{-- Resize Grabber Handle — icon visible on hover only --}}
+    {{-- Resize Grabber Handle — icon visible on hover only on desktop --}}
     @if ($resizable)
         <div
+            data-resize-handle
             @mousedown.stop.prevent="startResize('{{ $cardId }}', $event, $el.closest('[data-grid-item]'))"
             @touchstart.stop.prevent="startResize('{{ $cardId }}', $event, $el.closest('[data-grid-item]'))"
             title="Tarik sudut untuk mengubah ukuran kartu"
-            class="absolute bottom-0 right-0 size-10 cursor-se-resize flex items-end justify-end p-2.5 text-muted-foreground/0 group-hover:text-muted-foreground/35 hover:text-primary! hover:bg-primary/10 rounded-tl-xl transition-all select-none z-20 group/resize touch-none"
+            class="hidden lg:flex absolute bottom-0 right-0 size-10 cursor-se-resize items-end justify-end p-2.5 text-muted-foreground/0 group-hover:text-muted-foreground/35 hover:text-primary! hover:bg-primary/10 rounded-tl-xl transition-all select-none z-20 group/resize touch-none"
         >
             <svg class="size-3.5 pointer-events-none group-hover/resize:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="21" y1="15" x2="15" y2="21" />

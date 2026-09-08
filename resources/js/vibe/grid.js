@@ -190,18 +190,21 @@ export function vibeGrid(config = {}) {
                 }
             });
 
-            // Set gridColumn directly on each item
+            // Set gridColumn directly on each item with responsive CSS variable support
             for (let id in this.spans) {
                 let el = this.getItemEl(id);
                 if (el) {
-                    el.style.gridColumn = 'span ' + this.spans[id].col;
-                    el.style.gridRow = 'span ' + this.spans[id].row;
+                    el.style.setProperty('--vibe-col-span', this.spans[id].col);
+                    el.style.setProperty('--vibe-row-span', this.spans[id].row);
+                    el.style.gridColumn = 'span var(--vibe-col-span, ' + this.spans[id].col + ')';
+                    el.style.gridRow = 'span var(--vibe-row-span, ' + this.spans[id].row + ')';
                 }
             }
         },
 
         // --- Drag & Drop 1-to-1 Card Swap ---
         startDrag(id, e) {
+            if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
             if (!this.isItemReorderable(id)) return;
             this.draggingId = id;
             if (e.dataTransfer) {
@@ -285,8 +288,9 @@ export function vibeGrid(config = {}) {
             this.dragOverId = null;
         },
 
-        // --- Fluid Corner Drag-to-Resize ---
+        // --- Real-Time Drag-to-Resize ---
         startResize(id, e, cardEl) {
+            if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
             if (e.button !== undefined && e.button !== 0) return;
             if (!this.isItemResizable(id)) return;
             let item = this.spans[id];
@@ -377,7 +381,10 @@ export function vibeGrid(config = {}) {
             // Dead zone: ignore micro-movements under 4px
             if (Math.abs(deltaX) < 4) {
                 let el = this.resizing.el || this.getItemEl(this.resizing.id);
-                if (el) el.style.gridColumn = 'span ' + this.resizing.startCols;
+                if (el) {
+                    el.style.setProperty('--vibe-col-span', this.resizing.startCols);
+                    el.style.gridColumn = 'span var(--vibe-col-span, ' + this.resizing.startCols + ')';
+                }
                 if (this.spans[this.resizing.id]) this.spans[this.resizing.id].col = this.resizing.startCols;
                 this.previewCols = this.resizing.startCols;
                 return;
@@ -401,7 +408,8 @@ export function vibeGrid(config = {}) {
             // Use the stored element reference for instant DOM update
             let el = this.resizing.el || this.getItemEl(this.resizing.id);
             if (el) {
-                el.style.gridColumn = 'span ' + calculatedCols;
+                el.style.setProperty('--vibe-col-span', calculatedCols);
+                el.style.gridColumn = 'span var(--vibe-col-span, ' + calculatedCols + ')';
             }
         },
 

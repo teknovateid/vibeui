@@ -1,0 +1,113 @@
+<?php
+
+return [
+    /*
+    |--------------------------------------------------------------------------
+    | Settings Page Language Lines (English)
+    |--------------------------------------------------------------------------
+    */
+    'title' => 'Account & Appearance Settings',
+    'subtitle' => 'Manage your profile preferences, customize theme tokens live, and configure security settings.',
+    'breadcrumb' => [
+        'home' => 'Home',
+        'pages' => 'Pages',
+        'settings' => 'Settings',
+    ],
+    'tabs' => [
+        'profile' => [
+            'label' => 'Profile & Account',
+            'desc' => 'Update your personal profile information and general account preferences.',
+        ],
+        'appearance' => [
+            'label' => 'Appearance & Theme',
+            'desc' => 'Customize accent colors, theme mode, border radius, and override app.css values live.',
+        ],
+        'notifications' => [
+            'label' => 'Notifications',
+            'desc' => 'Choose when and how you want to receive system alerts and email updates.',
+        ],
+        'security' => [
+            'label' => 'Security',
+            'desc' => 'Keep your account secure with a strong password and two-factor authentication.',
+        ],
+    ],
+    'profile' => [
+        'avatar_title' => 'Profile Picture',
+        'avatar_desc' => 'JPG, GIF or PNG. 2MB max.',
+        'change_avatar' => 'Change Photo',
+        'remove_avatar' => 'Remove',
+        'name' => 'Full Name',
+        'name_placeholder' => 'Enter your full name',
+        'username' => 'Username',
+        'username_placeholder' => 'your_username',
+        'email' => 'Email Address',
+        'email_placeholder' => 'name@domain.com',
+        'bio' => 'Short Bio',
+        'bio_placeholder' => 'Write a short description about yourself or your role...',
+        'timezone' => 'Timezone',
+        'language' => 'System Language',
+        'save_btn' => 'Save Changes',
+    ],
+    'appearance' => [
+        'theme_mode_title' => 'Interface Mode',
+        'theme_mode_desc' => 'Choose the theme contrast that is easiest on your eyes.',
+        'modes' => [
+            'light' => 'Light',
+            'dark' => 'Dark',
+            'system' => 'System (Auto)',
+        ],
+        'primary_color_title' => 'Primary Accent Color (--primary)',
+        'primary_color_desc' => 'Overrides the primary color token used across buttons, badges, and active elements.',
+        'custom_color' => 'Custom Color (HEX)',
+        'radius_title' => 'Component Corner Radius (--radius)',
+        'radius_desc' => 'Adjust the border radius curvature across cards, inputs, and buttons.',
+        'radius_options' => [
+            'none' => '0 (Sharp)',
+            'sm' => '0.25rem (Compact)',
+            'md' => '0.5rem (Vibe UI Default)',
+            'lg' => '0.75rem (Smooth)',
+            'full' => '1rem (Rounded)',
+        ],
+        'font_title' => 'Typography Sans Font (--font-sans)',
+        'font_desc' => 'Select the sans-serif font family applied across the user interface.',
+        'preview_title' => 'Live Component Preview',
+        'preview_desc' => 'These components immediately reflect your color and radius modifications in real-time.',
+        'export_title' => 'Export Code for app.css',
+        'export_desc' => 'Use the CSS snippet below to permanently override the theme tokens in resources/css/vibe/app.css.',
+        'copy_css' => 'Copy CSS Code',
+        'copied' => 'Copied to Clipboard!',
+        'reset_btn' => 'Reset to app.css Defaults',
+        'save_btn' => 'Save Theme Preferences',
+        'toast_saved' => 'Theme preferences saved and active across the application!',
+        'toast_reset' => 'Appearance settings have been reset to default app.css values.',
+    ],
+    'notifications' => [
+        'email_title' => 'Email Notifications',
+        'email_desc' => 'Select what kinds of email notifications you would like to receive.',
+        'security_alerts' => 'Security Alerts',
+        'security_alerts_desc' => 'Notifications regarding suspicious login attempts or password changes.',
+        'order_updates' => 'Orders & Transaction Updates',
+        'order_updates_desc' => 'Instant alerts for new orders, payment verifications, or refund requests.',
+        'weekly_digest' => 'Weekly Performance Digest',
+        'weekly_digest_desc' => 'Summary of store sales performance and trends every Monday morning.',
+        'push_title' => 'Browser & Web Push',
+        'push_desc' => 'Send push notifications directly to your desktop or mobile device.',
+        'sound_effects' => 'System Sound Effects',
+        'sound_effects_desc' => 'Play subtle audio chimes when receiving alerts or completing key actions.',
+        'save_btn' => 'Save Notification Preferences',
+    ],
+    'security' => [
+        'password_title' => 'Update Password',
+        'password_desc' => 'Ensure your account is using a long, random password to stay secure.',
+        'current_password' => 'Current Password',
+        'new_password' => 'New Password',
+        'confirm_password' => 'Confirm New Password',
+        'update_password_btn' => 'Update Password',
+        'two_factor_title' => 'Two-Factor Authentication (2FA)',
+        'two_factor_desc' => 'Add an extra layer of security to your account using an authenticator app.',
+        'enable_2fa' => 'Enable 2FA',
+        'sessions_title' => 'Active Browser Sessions',
+        'sessions_desc' => 'Devices that are currently logged in to your account.',
+        'logout_other_devices' => 'Log Out Other Devices',
+    ],
+];
