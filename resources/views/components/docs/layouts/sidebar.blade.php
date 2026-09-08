@@ -9,7 +9,7 @@
 
 <x-docs.layouts.base>
     <div class="flex h-screen overflow-hidden relative">
-        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none border-none" :resizable="true" behavior="minify" minSize="150" minifiedSize="80" :persist="true">
+        <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="bg-sidebar text-sidebar-foreground border-r border-sidebar-border absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="150" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
@@ -37,15 +37,15 @@
 
                 <vibe:dropdown keyboard class="w-full px-3 minified:px-0">
                     <x-slot:trigger>
-                        <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-card text-card-foreground border border-border hover:bg-accent hover:text-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
+                        <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/50 text-sidebar-foreground border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
                             <div class="flex items-center gap-2 min-w-0">
                                 <div class="relative flex shrink-0 ">
                                     <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=64&h=64&auto=format&fit=crop" alt="Masum Parvej" />
-                                    <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-background"></span>
+                                    <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-sidebar"></span>
                                 </div>
 
                                 <div class="flex flex-col text-left min-w-0 minified:hidden ">
-                                    <span class="text-xs font-semibold text-foreground truncate leading-tight">Masum Parvej</span>
+                                    <span class="text-xs font-semibold text-sidebar-foreground truncate leading-tight">Masum Parvej</span>
                                     <span class="text-[10px] text-muted-foreground truncate leading-tight mt-0.5"><!--email_off-->masum@hugeicons.com<!--/email_off--></span>
                                 </div>
                             </div>
@@ -171,7 +171,7 @@
         </vibe:sheet>
 
         <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
-            <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" class="border-none shadow-none" size="sm">
+            <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" class="bg-header text-header-foreground border-b border-header-border shadow-none" size="sm">
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
@@ -183,6 +183,27 @@
                 </vibe:header.heading>
 
                 <vibe:header.actions class="items-center h-full relative gap-1.5">
+                    <!-- Search Trigger Button -->
+                    <vibe:button type="button" 
+                            @click="$dispatch('open-modal', 'global-search-modal')" 
+                            class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" 
+                            title="Pencarian Cepat (⌘K / Ctrl+K)">
+                        <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <span class="inline-block font-normal">{{ __('docs/sidebar.search') }}</span>
+                        <kbd class="hidden md:inline-flex items-center gap-0.5 text-[10px] font-mono font-medium text-muted-foreground bg-background/80 px-1.5 py-0.5 rounded-full border border-border/80 shadow-2xs">
+                            <span class="text-xs">⌘</span>K
+                        </kbd>
+                    </vibe:button>
+                    <vibe:button variant="ghost" class="p-2 sm:hidden rounded-full" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </vibe:button>
+
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {
@@ -284,4 +305,6 @@
             </vibe:sheet.footer>
         </vibe:sheet>
     </div>
+
+    <x-docs.partials.search-modal />
 </x-docs.layouts.base>

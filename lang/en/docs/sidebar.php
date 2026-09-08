@@ -59,4 +59,5 @@ return [
         'feedback' => 'Feedback',
         'logout' => 'Log Out',
     ],
+    'search' => 'Search...',
 ];

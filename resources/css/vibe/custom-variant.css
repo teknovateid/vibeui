@@ -99,8 +99,8 @@ header[data-variant="sticky"][data-scrolled="false"] {
 }
 
 header[data-variant="sticky"][data-scrolled="true"]:not([data-custom-scrolled="true"]) {
-    background-color: color-mix(in srgb, var(--background) 80%, transparent) !important;
+    background-color: color-mix(in srgb, var(--header) 80%, transparent) !important;
     backdrop-filter: blur(12px) !important;
     -webkit-backdrop-filter: blur(12px) !important;
-    border-bottom-color: color-mix(in srgb, var(--border) 80%, transparent) !important;
+    border-bottom-color: color-mix(in srgb, var(--header-border) 80%, transparent) !important;
 }

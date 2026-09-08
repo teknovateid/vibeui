@@ -60,8 +60,10 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::get('/dashboard/{view}',[DashboardPageController::class,'show'])->name('dashboard.show');
     Route::view('/settings', 'docs.settings.index')->name('settings.index');
+    Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');
 
 });
+
 
 
 Route::view('/', 'docs.index');

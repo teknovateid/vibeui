@@ -27,9 +27,28 @@ document.addEventListener("DOMContentLoaded", function () {
             preventDefault: true,
         },
         {
-            name: "Focus Search",
+            name: "Focus Search (Ctrl+/)",
             keys: ["Control", "/"],
             action: function (event) {
+                window.dispatchEvent(new CustomEvent("open-modal", { detail: "global-search-modal" }));
+                window.dispatchEvent(new CustomEvent("open-search-modal"));
+            },
+            preventDefault: true,
+        },
+        {
+            name: "Focus Search (Ctrl+K)",
+            keys: ["Control", "k"],
+            action: function (event) {
+                window.dispatchEvent(new CustomEvent("open-modal", { detail: "global-search-modal" }));
+                window.dispatchEvent(new CustomEvent("open-search-modal"));
+            },
+            preventDefault: true,
+        },
+        {
+            name: "Focus Search (Cmd+K)",
+            keys: ["Meta", "k"],
+            action: function (event) {
+                window.dispatchEvent(new CustomEvent("open-modal", { detail: "global-search-modal" }));
                 window.dispatchEvent(new CustomEvent("open-search-modal"));
             },
             preventDefault: true,

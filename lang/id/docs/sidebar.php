@@ -60,4 +60,5 @@ return [
         'feedback' => 'Umpan Balik',
         'logout' => 'Keluar',
     ],
+    'search' => 'Cari...',
 ];
