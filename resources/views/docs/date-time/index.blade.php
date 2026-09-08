@@ -49,22 +49,10 @@
 
                 <vibe:preview :title="__('docs/date-time.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    name="birth_date"
-    label="{{ __('docs/date-time.basic_usage.birth_label') }}"
-    placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}"
-    description="Pilih tanggal lahir untuk melengkapi profil pengguna."
-    clearable
-/>
+                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" description="Pilih tanggal lahir untuk melengkapi profil pengguna." clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time
-                            name="birth_date"
-                            label="{{ __('docs/date-time.basic_usage.birth_label') }}"
-                            placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}"
-                            description="Pilih tanggal lahir untuk melengkapi profil pengguna."
-                            clearable
-                        />
+                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" description="Pilih tanggal lahir untuk melengkapi profil pengguna." clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -89,20 +77,10 @@
 
                 <vibe:preview :title="__('docs/date-time.fast_jump.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    name="archive_date"
-    label="Arsip Dokumen Lampau"
-    value="1998-05-21"
-    clearable
-/>
+                        <vibe:date-time name="archive_date" label="Arsip Dokumen Lampau" value="1998-05-21" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time
-                            name="archive_date"
-                            label="Arsip Dokumen Lampau"
-                            value="1998-05-21"
-                            clearable
-                        />
+                        <vibe:date-time name="archive_date" label="Arsip Dokumen Lampau" value="1998-05-21" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -118,28 +96,10 @@
 
                 <vibe:preview :title="__('docs/date-time.range_presets.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    type="range"
-    name="transaction_period"
-    startName="start_date"
-    endName="end_date"
-    label="{{ __('docs/date-time.range_presets.period_label') }}"
-    :presets="true"
-    :dualMonth="true"
-    clearable
-/>
+                        <vibe:date-time type="range" name="transaction_period" startName="start_date" endName="end_date" label="{{ __('docs/date-time.range_presets.period_label') }}" :presets="true" :dualMonth="true" clearable />
                     </vibe:preview.code>
                     <div class="max-w-md mx-auto p-4 space-y-4">
-                        <vibe:date-time
-                            type="range"
-                            name="transaction_period"
-                            startName="start_date"
-                            endName="end_date"
-                            label="{{ __('docs/date-time.range_presets.period_label') }}"
-                            :presets="true"
-                            :dualMonth="true"
-                            clearable
-                        />
+                        <vibe:date-time type="range" name="transaction_period" startName="start_date" endName="end_date" label="{{ __('docs/date-time.range_presets.period_label') }}" :presets="true" :dualMonth="true" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -155,24 +115,10 @@
 
                 <vibe:preview :title="__('docs/date-time.datetime.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    type="datetime"
-    name="publish_schedule"
-    label="{{ __('docs/date-time.datetime.schedule_label') }}"
-    :time24="true"
-    minuteStep="5"
-    clearable
-/>
+                        <vibe:date-time type="datetime" name="publish_schedule" label="{{ __('docs/date-time.datetime.schedule_label') }}" :time24="true" minuteStep="5" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time
-                            type="datetime"
-                            name="publish_schedule"
-                            label="{{ __('docs/date-time.datetime.schedule_label') }}"
-                            :time24="true"
-                            minuteStep="5"
-                            clearable
-                        />
+                        <vibe:date-time type="datetime" name="publish_schedule" label="{{ __('docs/date-time.datetime.schedule_label') }}" :time24="true" minuteStep="5" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -188,30 +134,10 @@
 
                 <vibe:preview :title="__('docs/date-time.datetime_range.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    type="datetime-range"
-    name="event_schedule"
-    startName="event_start"
-    endName="event_end"
-    label="{{ __('docs/date-time.datetime_range.event_period_label') }}"
-    :presets="true"
-    :dualMonth="true"
-    :time24="true"
-    clearable
-/>
+                        <vibe:date-time type="datetime-range" name="event_schedule" startName="event_start" endName="event_end" label="{{ __('docs/date-time.datetime_range.event_period_label') }}" :presets="true" :dualMonth="true" :time24="true" clearable />
                     </vibe:preview.code>
                     <div class="max-w-md mx-auto p-4 space-y-4">
-                        <vibe:date-time
-                            type="datetime-range"
-                            name="event_schedule"
-                            startName="event_start"
-                            endName="event_end"
-                            label="{{ __('docs/date-time.datetime_range.event_period_label') }}"
-                            :presets="true"
-                            :dualMonth="true"
-                            :time24="true"
-                            clearable
-                        />
+                        <vibe:date-time type="datetime-range" name="event_schedule" startName="event_start" endName="event_end" label="{{ __('docs/date-time.datetime_range.event_period_label') }}" :presets="true" :dualMonth="true" :time24="true" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -227,40 +153,16 @@
 
                 <vibe:preview :title="__('docs/date-time.time_only.preview_title')">
                     <vibe:preview.code>
-{{-- Format 24 Jam --}}
-<vibe:date-time
-    type="time"
-    name="opening_time"
-    label="{{ __('docs/date-time.time_only.opening_label') }}"
-    value="08:30"
-    :time24="true"
-/>
+                        {{-- Format 24 Jam --}}
+                        <vibe:date-time type="time" name="opening_time" label="{{ __('docs/date-time.time_only.opening_label') }}" value="08:30" :time24="true" />
 
-{{-- Format 12 Jam AM/PM --}}
-<vibe:date-time
-    type="time"
-    name="closing_time"
-    label="{{ __('docs/date-time.time_only.closing_label') }}"
-    value="09:00 PM"
-    :time24="false"
-/>
+                        {{-- Format 12 Jam AM/PM --}}
+                        <vibe:date-time type="time" name="closing_time" label="{{ __('docs/date-time.time_only.closing_label') }}" value="09:00 PM" :time24="false" />
                     </vibe:preview.code>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg mx-auto p-4">
-                        <vibe:date-time
-                            type="time"
-                            name="opening_time"
-                            label="{{ __('docs/date-time.time_only.opening_label') }}"
-                            value="08:30"
-                            :time24="true"
-                        />
+                        <vibe:date-time type="time" name="opening_time" label="{{ __('docs/date-time.time_only.opening_label') }}" value="08:30" :time24="true" />
 
-                        <vibe:date-time
-                            type="time"
-                            name="closing_time"
-                            label="{{ __('docs/date-time.time_only.closing_label') }}"
-                            value="09:00 PM"
-                            :time24="false"
-                        />
+                        <vibe:date-time type="time" name="closing_time" label="{{ __('docs/date-time.time_only.closing_label') }}" value="09:00 PM" :time24="false" />
                     </div>
                 </vibe:preview>
             </section>
@@ -276,30 +178,10 @@
 
                 <vibe:preview :title="__('docs/date-time.time_range.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    type="time-range"
-    name="working_shift"
-    startName="shift_start"
-    endName="shift_end"
-    label="{{ __('docs/date-time.time_range.shift_label') }}"
-    value="08:00 - 17:00"
-    :time24="true"
-    minuteStep="15"
-    clearable
-/>
+                        <vibe:date-time type="time-range" name="working_shift" startName="shift_start" endName="shift_end" label="{{ __('docs/date-time.time_range.shift_label') }}" value="08:00 - 17:00" :time24="true" minuteStep="15" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time
-                            type="time-range"
-                            name="working_shift"
-                            startName="shift_start"
-                            endName="shift_end"
-                            label="{{ __('docs/date-time.time_range.shift_label') }}"
-                            value="08:00 - 17:00"
-                            :time24="true"
-                            minuteStep="15"
-                            clearable
-                        />
+                        <vibe:date-time type="time-range" name="working_shift" startName="shift_start" endName="shift_end" label="{{ __('docs/date-time.time_range.shift_label') }}" value="08:00 - 17:00" :time24="true" minuteStep="15" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -315,20 +197,10 @@
 
                 <vibe:preview :title="__('docs/date-time.multiple.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    type="multiple"
-    name="leave_days"
-    label="{{ __('docs/date-time.multiple.holidays_label') }}"
-    clearable
-/>
+                        <vibe:date-time type="multiple" name="leave_days" label="{{ __('docs/date-time.multiple.holidays_label') }}" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time
-                            type="multiple"
-                            name="leave_days"
-                            label="{{ __('docs/date-time.multiple.holidays_label') }}"
-                            clearable
-                        />
+                        <vibe:date-time type="multiple" name="leave_days" label="{{ __('docs/date-time.multiple.holidays_label') }}" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -344,26 +216,18 @@
 
                 <vibe:preview :title="__('docs/date-time.inline.preview_title')">
                     <vibe:preview.code>
-<vibe:date-time
-    :inline="true"
-    name="booking_slot"
-    :markers="[
-        date('Y-m-12') => 'emerald',
-        date('Y-m-15') => 'primary',
-        date('Y-m-22') => 'rose',
-    ]"
-/>
+                        <vibe:date-time :inline="true" name="booking_slot" :markers="[
+                            date('Y-m-12') => 'emerald',
+                            date('Y-m-15') => 'primary',
+                            date('Y-m-22') => 'rose',
+                        ]" />
                     </vibe:preview.code>
                     <div class="max-w-md mx-auto p-4">
-                        <vibe:date-time
-                            :inline="true"
-                            name="booking_slot"
-                            :markers="[
-                                date('Y-m-12') => 'emerald',
-                                date('Y-m-15') => 'primary',
-                                date('Y-m-22') => 'rose'
-                            ]"
-                        />
+                        <vibe:date-time :inline="true" name="booking_slot" :markers="[
+                            date('Y-m-12') => 'emerald',
+                            date('Y-m-15') => 'primary',
+                            date('Y-m-22') => 'rose'
+                        ]" />
                     </div>
                 </vibe:preview>
             </section>
@@ -386,27 +250,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $propsList = [
-                                ['type / mode', 'string', "'single'", "Mode picker: `'single'`, `'datetime'`, `'range'`, `'datetime-range'`, `'time'`, `'time-range'`, `'multiple'`, atau `'month'`."],
-                                ['name', 'string|null', 'null', 'Nama input form untuk disubmit ke controller backend.'],
-                                ['startName', 'string|null', 'null', 'Nama input form khusus untuk tanggal mulai pada mode range (dual input output).'],
-                                ['endName', 'string|null', 'null', 'Nama input form khusus untuk tanggal selesai pada mode range (dual input output).'],
-                                ['label', 'string|null', 'null', 'Label teks di atas input field.'],
-                                ['presets', 'bool|array', 'false', 'Menampilkan shortcut rentang tanggal populer (*Hari Ini, 7 Hari Terakhir, dll*).'],
-                                ['time24', 'bool', 'true', 'Format 24 jam (`true`) atau format 12 jam dengan switch AM/PM (`false`).'],
-                                ['minuteStep', 'int', '1', 'Kelipatan pilihan menit pada time selector (misal 5, 10, atau 15).'],
-                                ['showSeconds', 'bool', 'false', 'Menampilkan input pemilihan detik.'],
-                                ['dualMonth', 'bool', 'false', 'Menampilkan 2 bulan sekaligus berdampingan pada layar desktop untuk mode range.'],
-                                ['inline', 'bool', 'false', 'Menampilkan kalender langsung tertanam di halaman tanpa floating popover.'],
-                                ['clearable', 'bool', 'true', 'Menampilkan tombol silang untuk mengosongkan nilai yang sudah dipilih.'],
-                                ['minDate', 'string|null', 'null', 'Batas tanggal paling awal yang dapat dipilih (format `YYYY-MM-DD`).'],
-                                ['maxDate', 'string|null', 'null', 'Batas tanggal paling akhir yang dapat dipilih (format `YYYY-MM-DD`).'],
-                                ['disabledDates', 'array', '[]', 'Daftar tanggal tertentu yang dinonaktifkan / tidak bisa dipilih.'],
-                                ['disabledDaysOfWeek', 'array', '[]', 'Hari dalam sepekan yang dinonaktifkan (misal `[0, 6]` untuk akhir pekan).'],
-                                ['markers', 'array', '[]', 'Array asosiatif tanggal ke warna status dot penanda (`primary`, `emerald`, `rose`, `amber`).'],
-                                ['locale', 'string|null', 'app()->getLocale()', "Bahasa antarmuka kalender: `'id'` (Indonesia) atau `'en'` (Inggris)."],
-                                ['firstDayOfWeek', 'int', '1', 'Hari pertama dalam seminggu: `1` (Senin) atau `0` (Minggu).'],
-                            ];
+                            $propsList = [['type / mode', 'string', "'single'", "Mode picker: `'single'`, `'datetime'`, `'range'`, `'datetime-range'`, `'time'`, `'time-range'`, `'multiple'`, atau `'month'`."], ['name', 'string|null', 'null', 'Nama input form untuk disubmit ke controller backend.'], ['startName', 'string|null', 'null', 'Nama input form khusus untuk tanggal mulai pada mode range (dual input output).'], ['endName', 'string|null', 'null', 'Nama input form khusus untuk tanggal selesai pada mode range (dual input output).'], ['label', 'string|null', 'null', 'Label teks di atas input field.'], ['presets', 'bool|array', 'false', 'Menampilkan shortcut rentang tanggal populer (*Hari Ini, 7 Hari Terakhir, dll*).'], ['time24', 'bool', 'true', 'Format 24 jam (`true`) atau format 12 jam dengan switch AM/PM (`false`).'], ['minuteStep', 'int', '1', 'Kelipatan pilihan menit pada time selector (misal 5, 10, atau 15).'], ['showSeconds', 'bool', 'false', 'Menampilkan input pemilihan detik.'], ['dualMonth', 'bool', 'false', 'Menampilkan 2 bulan sekaligus berdampingan pada layar desktop untuk mode range.'], ['inline', 'bool', 'false', 'Menampilkan kalender langsung tertanam di halaman tanpa floating popover.'], ['clearable', 'bool', 'true', 'Menampilkan tombol silang untuk mengosongkan nilai yang sudah dipilih.'], ['minDate', 'string|null', 'null', 'Batas tanggal paling awal yang dapat dipilih (format `YYYY-MM-DD`).'], ['maxDate', 'string|null', 'null', 'Batas tanggal paling akhir yang dapat dipilih (format `YYYY-MM-DD`).'], ['disabledDates', 'array', '[]', 'Daftar tanggal tertentu yang dinonaktifkan / tidak bisa dipilih.'], ['disabledDaysOfWeek', 'array', '[]', 'Hari dalam sepekan yang dinonaktifkan (misal `[0, 6]` untuk akhir pekan).'], ['markers', 'array', '[]', 'Array asosiatif tanggal ke warna status dot penanda (`primary`, `emerald`, `rose`, `amber`).'], ['locale', 'string|null', 'app()->getLocale()', "Bahasa antarmuka kalender: `'id'` (Indonesia) atau `'en'` (Inggris)."], ['firstDayOfWeek', 'int', '1', 'Hari pertama dalam seminggu: `1` (Senin) atau `0` (Minggu).']];
                         @endphp
                         @foreach ($propsList as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -434,101 +278,39 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
-    @csrf
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
+                            @csrf
 
-    {{-- Single Date --}}
-    <vibe:date-time
-        name="birth_date"
-        label="Tanggal Lahir"
-        placeholder="Pilih tanggal lahir..."
-        clearable
-    />
+                            {{-- Single Date --}}
+                            <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
 
-    {{-- Date Range with startName & endName --}}
-    <vibe:date-time
-        type="range"
-        name="vacation_period"
-        startName="vacation_start"
-        endName="vacation_end"
-        label="Periode Cuti / Liburan (Range)"
-        :presets="true"
-        :dualMonth="true"
-        clearable
-    />
+                            {{-- Date Range with startName & endName --}}
+                            <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
 
-    {{-- DateTime --}}
-    <vibe:date-time
-        type="datetime"
-        name="consultation_schedule"
-        label="Jadwal Konsultasi (DateTime)"
-        :time24="true"
-        minuteStep="15"
-        clearable
-    />
+                            {{-- DateTime --}}
+                            <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
 
-    {{-- Time Range --}}
-    <vibe:date-time
-        type="time-range"
-        name="operational_hours"
-        startName="open_time"
-        endName="close_time"
-        label="Jam Operasional Layanan (Time Range)"
-        value="09:00 - 18:00"
-        :time24="true"
-        minuteStep="30"
-        clearable
-    />
+                            {{-- Time Range --}}
+                            <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
 
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </vibe:preview.code>
                     <div class="max-w-lg mx-auto p-4">
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
                             @csrf
 
-                            <vibe:date-time
-                                name="birth_date"
-                                label="Tanggal Lahir"
-                                placeholder="Pilih tanggal lahir..."
-                                clearable
-                            />
+                            <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
 
-                            <vibe:date-time
-                                type="range"
-                                name="vacation_period"
-                                startName="vacation_start"
-                                endName="vacation_end"
-                                label="Periode Cuti / Liburan (Range)"
-                                :presets="true"
-                                :dualMonth="true"
-                                clearable
-                            />
+                            <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
 
-                            <vibe:date-time
-                                type="datetime"
-                                name="consultation_schedule"
-                                label="Jadwal Konsultasi (DateTime)"
-                                :time24="true"
-                                minuteStep="15"
-                                clearable
-                            />
+                            <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
 
-                            <vibe:date-time
-                                type="time-range"
-                                name="operational_hours"
-                                startName="open_time"
-                                endName="close_time"
-                                label="Jam Operasional Layanan (Time Range)"
-                                value="09:00 - 18:00"
-                                :time24="true"
-                                minuteStep="30"
-                                clearable
-                            />
+                            <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
 
                             <div class="pt-2 flex items-center gap-3">
                                 <vibe:button type="submit" variant="primary">
@@ -538,7 +320,6 @@
                         </vibe:form>
                     </div>
                 </vibe:preview>
-                @include('docs.partials.form-result-banner')
             </section>
 
         </div>

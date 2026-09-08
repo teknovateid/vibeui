@@ -445,7 +445,6 @@
                         </vibe:form>
                     </div>
                 </vibe:preview>
-                @include('docs.partials.form-result-banner')
             </section>
 
         </div>

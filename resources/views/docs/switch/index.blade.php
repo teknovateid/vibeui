@@ -222,7 +222,6 @@
                         </vibe:form>
                     </div>
                 </vibe:preview>
-                @include('docs.partials.form-result-banner')
             </section>
 
             {{-- 5. Props Reference --}}

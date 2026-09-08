@@ -80,19 +80,19 @@
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.single_tab') }}</h3>
                     <vibe:preview :title="__('docs/select.selected_methods.single_tab')" minHeight="300px">
                         <vibe:preview.code>
-{{-- Metode 1: Prop value pada <vibe:select> (Single) --}}
-<vibe:select name="status" label="{{ __('docs/select.selected_methods.method1_label') }}" value="active">
-    <vibe:select.option value="draft">Draft</vibe:select.option>
-    <vibe:select.option value="active">Active</vibe:select.option>
-    <vibe:select.option value="archived">Archived</vibe:select.option>
-</vibe:select>
+                            {{-- Metode 1: Prop value pada <vibe:select> (Single) --}}
+                            <vibe:select name="status" label="{{ __('docs/select.selected_methods.method1_label') }}" value="active">
+                                <vibe:select.option value="draft">Draft</vibe:select.option>
+                                <vibe:select.option value="active">Active</vibe:select.option>
+                                <vibe:select.option value="archived">Archived</vibe:select.option>
+                            </vibe:select>
 
-{{-- Metode 2: Atribut selected pada <vibe:select.option> (Single) --}}
-<vibe:select name="department" label="{{ __('docs/select.selected_methods.method2_label') }}">
-    <vibe:select.option value="engineering">Engineering</vibe:select.option>
-    <vibe:select.option value="design" selected>Product Design</vibe:select.option>
-    <vibe:select.option value="marketing">Marketing</vibe:select.option>
-</vibe:select>
+                            {{-- Metode 2: Atribut selected pada <vibe:select.option> (Single) --}}
+                            <vibe:select name="department" label="{{ __('docs/select.selected_methods.method2_label') }}">
+                                <vibe:select.option value="engineering">Engineering</vibe:select.option>
+                                <vibe:select.option value="design" selected>Product Design</vibe:select.option>
+                                <vibe:select.option value="marketing">Marketing</vibe:select.option>
+                            </vibe:select>
                         </vibe:preview.code>
 
                         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
@@ -132,21 +132,21 @@
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.multi_tab') }}</h3>
                     <vibe:preview :title="__('docs/select.selected_methods.multi_tab')" minHeight="320px">
                         <vibe:preview.code>
-{{-- Metode 1: Prop :value array pada <vibe:select multiple> --}}
-<vibe:select name="frontend" label="{{ __('docs/select.selected_methods.multi_method1_label') }}" multiple :value="['react', 'vue']">
-    <vibe:select.option value="react">React</vibe:select.option>
-    <vibe:select.option value="vue">Vue.js</vibe:select.option>
-    <vibe:select.option value="svelte">Svelte</vibe:select.option>
-    <vibe:select.option value="angular">Angular</vibe:select.option>
-</vibe:select>
+                            {{-- Metode 1: Prop :value array pada <vibe:select multiple> --}}
+                            <vibe:select name="frontend" label="{{ __('docs/select.selected_methods.multi_method1_label') }}" multiple :value="['react', 'vue']">
+                                <vibe:select.option value="react">React</vibe:select.option>
+                                <vibe:select.option value="vue">Vue.js</vibe:select.option>
+                                <vibe:select.option value="svelte">Svelte</vibe:select.option>
+                                <vibe:select.option value="angular">Angular</vibe:select.option>
+                            </vibe:select>
 
-{{-- Metode 2: Atribut selected pada beberapa <vibe:select.option> (Multiple) --}}
-<vibe:select name="backend" label="{{ __('docs/select.selected_methods.multi_method2_label') }}" multiple>
-    <vibe:select.option value="php" selected>PHP</vibe:select.option>
-    <vibe:select.option value="laravel" selected>Laravel</vibe:select.option>
-    <vibe:select.option value="nodejs">Node.js</vibe:select.option>
-    <vibe:select.option value="python">Python</vibe:select.option>
-</vibe:select>
+                            {{-- Metode 2: Atribut selected pada beberapa <vibe:select.option> (Multiple) --}}
+                            <vibe:select name="backend" label="{{ __('docs/select.selected_methods.multi_method2_label') }}" multiple>
+                                <vibe:select.option value="php" selected>PHP</vibe:select.option>
+                                <vibe:select.option value="laravel" selected>Laravel</vibe:select.option>
+                                <vibe:select.option value="nodejs">Node.js</vibe:select.option>
+                                <vibe:select.option value="python">Python</vibe:select.option>
+                            </vibe:select>
                         </vibe:preview.code>
 
                         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
@@ -541,7 +541,7 @@
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.searchable_title') }}</h3>
                     <vibe:preview :title="__('docs/select.multiple.searchable_title')" minHeight="340px">
                         <vibe:preview.code>
-                            <vibe:select name="tech_stack" label="{{ __('docs/select.multiple.searchable_label') }}" placeholder="{{ __('docs/select.multiple.searchable_placeholder') }}" multiple  keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
+                            <vibe:select name="tech_stack" label="{{ __('docs/select.multiple.searchable_label') }}" placeholder="{{ __('docs/select.multiple.searchable_placeholder') }}" multiple keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
                                 <vibe:select.option value="docker">Docker</vibe:select.option>
                                 <vibe:select.option value="k8s">Kubernetes</vibe:select.option>
                                 <vibe:select.option value="redis">Redis Cache</vibe:select.option>
@@ -692,36 +692,36 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
-    @csrf
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
+                            @csrf
 
-    <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
-        <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
-        <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
-        <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
-    </vibe:select>
+                            <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
+                                <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
+                                <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
+                                <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
+                            </vibe:select>
 
-    <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
-        <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
-        <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
-        <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
-        <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
-    </vibe:select>
+                            <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
+                                <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
+                                <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
+                                <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
+                                <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
+                            </vibe:select>
 
-    <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
-        <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
-        <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
-        <vibe:select.option value="react">React.js</vibe:select.option>
-        <vibe:select.option value="tailwind" selected>Tailwind CSS</vibe:select.option>
-        <vibe:select.option value="flutter">Flutter SDK</vibe:select.option>
-    </vibe:select>
+                            <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
+                                <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
+                                <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
+                                <vibe:select.option value="react">React.js</vibe:select.option>
+                                <vibe:select.option value="tailwind" selected>Tailwind CSS</vibe:select.option>
+                                <vibe:select.option value="flutter">Flutter SDK</vibe:select.option>
+                            </vibe:select>
 
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </vibe:preview.code>
                     <div class="max-w-lg mx-auto p-4">
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
@@ -756,7 +756,6 @@
                         </vibe:form>
                     </div>
                 </vibe:preview>
-                @include('docs.partials.form-result-banner')
             </section>
 
         </div>
@@ -770,4 +769,6 @@
 
     {{-- Reusable Modal Pengujian $request->all() --}}
     @include('docs.partials.form-test-modal')
+
+
 </x-docs.layouts.sidebar>
