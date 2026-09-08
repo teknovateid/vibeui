@@ -7,7 +7,7 @@
     'name' => null,
     'description' => null,
     'size' => 'md', // sm, md, lg, xl
-    'variant' => 'outline', // outline, filled, flush, ghost, accent
+    'variant' => 'primary', // primary, outline, filled, flush, ghost
     'info' => null,
     'error' => null,
     'errorName' => null,
@@ -16,6 +16,8 @@
     'trailingIcon' => null,
     'prefix' => null,
     'suffix' => null,
+    'disabled' => false,
+    'readonly' => false,
 ])
 
 @php
@@ -26,48 +28,102 @@
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
     $errorMessage = ($error && !is_bool($error)) ? $error : ($errorKey ? $errors->first($errorKey) : null);
 
+    $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
+    $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
+
     $hasLeading = isset($icon) || !empty($prefix);
     $hasTrailing = isset($trailingIcon) || !empty($suffix);
 
-    $baseClasses = 'block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 read-only:bg-muted/20 read-only:cursor-default';
+    // Outer control box classes (holds border, background, focus ring, rounded, height)
+    $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
 
-    $sizeClasses = match ($size) {
-        'sm' => 'h-8 text-xs rounded-md ' . ($hasLeading ? 'pl-8 ' : 'px-3 ') . ($hasTrailing ? 'pr-8' : ''),
-        'md' => 'h-9 text-sm rounded-lg ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
-        'lg' => 'h-10 text-sm rounded-lg ' . ($hasLeading ? 'pl-10 ' : 'px-4 ') . ($hasTrailing ? 'pr-10' : ''),
-        'xl' => 'h-11 text-base rounded-xl ' . ($hasLeading ? 'pl-11 ' : 'px-5 ') . ($hasTrailing ? 'pr-11' : ''),
-        default => 'h-9 text-sm rounded-lg ' . ($hasLeading ? 'pl-9 ' : 'px-3.5 ') . ($hasTrailing ? 'pr-9' : ''),
+    $sizeControlClasses = match ($size) {
+        'sm' => 'h-8 text-xs rounded-md',
+        'md' => 'h-9 text-sm rounded-lg',
+        'lg' => 'h-10 text-sm rounded-lg',
+        'xl' => 'h-11 text-base rounded-xl',
+        default => 'h-9 text-sm rounded-lg',
     };
 
     if ($variant === 'flush') {
-        $sizeClasses = match ($size) {
-            'sm' => 'h-8 text-xs px-0 rounded-none ' . ($hasLeading ? 'pl-7 ' : '') . ($hasTrailing ? 'pr-7' : ''),
-            'md' => 'h-9 text-sm px-0 rounded-none ' . ($hasLeading ? 'pl-8 ' : '') . ($hasTrailing ? 'pr-8' : ''),
-            'lg' => 'h-10 text-sm px-0 rounded-none ' . ($hasLeading ? 'pl-9 ' : '') . ($hasTrailing ? 'pr-9' : ''),
-            'xl' => 'h-11 text-base px-0 rounded-none ' . ($hasLeading ? 'pl-10 ' : '') . ($hasTrailing ? 'pr-10' : ''),
-            default => 'h-9 text-sm px-0 rounded-none ' . ($hasLeading ? 'pl-8 ' : '') . ($hasTrailing ? 'pr-8' : ''),
+        $sizeControlClasses = match ($size) {
+            'sm' => 'h-8 text-xs rounded-none px-0',
+            'md' => 'h-9 text-sm rounded-none px-0',
+            'lg' => 'h-10 text-sm rounded-none px-0',
+            'xl' => 'h-11 text-base rounded-none px-0',
+            default => 'h-9 text-sm rounded-none px-0',
         };
     }
 
-    $variantClasses = match ($variant) {
+    $variantControlClasses = match ($variant) {
         'filled' => $hasError 
-            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus-visible:bg-background focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+            ? 'bg-destructive/10 border border-destructive focus-within:bg-background focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
+            : 'bg-muted/60 border border-transparent hover:bg-muted/80 focus-within:bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
         'flush' => $hasError 
-            ? 'border-b border-destructive text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:border-destructive focus-visible:ring-0' 
-            : 'border-b border-input text-foreground bg-transparent focus-visible:border-ring focus-visible:ring-0',
+            ? 'border-b border-destructive bg-transparent focus-within:border-destructive focus-within:ring-0' 
+            : 'border-b border-input bg-transparent focus-within:border-primary focus-within:ring-0',
         'ghost' => $hasError 
-            ? 'border-transparent text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'border-transparent text-foreground bg-transparent hover:bg-muted/40 focus-visible:bg-transparent focus-visible:ring-2 focus-visible:ring-ring/20',
-        'accent' => $hasError 
-            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-accent/15 border border-accent/40 text-foreground placeholder:text-muted-foreground hover:bg-accent/25 focus-visible:bg-background focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/25',
+            ? 'border-transparent text-destructive bg-transparent focus-within:ring-2 focus-within:ring-destructive/20' 
+            : 'border-transparent bg-transparent hover:bg-muted/40 focus-within:bg-transparent focus-within:ring-2 focus-within:ring-primary/20',
+        'outline' => $hasError 
+            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
+            : 'border border-input bg-background shadow-2xs focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
+        'primary' => $hasError 
+            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
+            : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
         default => $hasError 
-            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
+            : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
     };
 
-    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
+    $stateControlClasses = '';
+    if ($isDisabled) {
+        $stateControlClasses = 'opacity-50 pointer-events-none bg-muted/40 cursor-not-allowed';
+    } elseif ($isReadonly) {
+        $stateControlClasses = 'bg-muted/20 cursor-default';
+    }
+
+    $controlClasses = trim("{$baseControlClasses} {$sizeControlClasses} {$variantControlClasses} {$stateControlClasses}");
+
+    // Padding for addons and input
+    if ($variant === 'flush') {
+        $leadingPadding = 'pl-0 pr-1.5';
+        $trailingPadding = 'pr-0 pl-1.5';
+        $inputPadding = 'px-0';
+    } else {
+        $leadingPadding = match ($size) {
+            'sm' => 'pl-2.5 pr-1.5',
+            'lg' => 'pl-3.5 pr-2',
+            'xl' => 'pl-4 pr-2.5',
+            default => 'pl-3 pr-1.5',
+        };
+        $trailingPadding = match ($size) {
+            'sm' => 'pr-2.5 pl-1.5',
+            'lg' => 'pr-3.5 pr-2',
+            'xl' => 'pr-4 pl-2.5',
+            default => 'pr-3 pl-1.5',
+        };
+        $inputPadding = ($hasLeading ? 'pl-0 ' : match ($size) {
+            'sm' => 'pl-2.5 ',
+            'lg' => 'pl-4 ',
+            'xl' => 'pl-5 ',
+            default => 'pl-3.5 ',
+        }) . ($hasTrailing ? 'pr-0' : match ($size) {
+            'sm' => 'pr-2.5',
+            'lg' => 'pr-4',
+            'xl' => 'pr-5',
+            default => 'pr-3.5',
+        });
+    }
+
+    $inputFontSize = match ($size) {
+        'sm' => 'text-xs',
+        'xl' => 'text-base',
+        default => 'text-sm',
+    };
+
+    $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';
+    $inputClasses = trim("w-full flex-1 min-w-0 h-full bg-transparent border-0 py-0 focus:outline-none focus:ring-0 {$inputFontSize} {$inputPadding} {$inputTextColor} disabled:pointer-events-none read-only:cursor-default");
 
     // Compute ARIA describedby IDs
     $describedBy = [];
@@ -96,13 +152,14 @@
         <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
     @endif
 
-    <div class="relative flex items-center">
+    <div {{ $attributes->only('class')->twMerge(['class' => $controlClasses]) }} onclick="if (!event.target.closest('button, a, input')) this.querySelector('input')?.focus()">
         @if ($hasLeading)
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-muted-foreground text-xs [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
+            <div class="flex items-center {{ $leadingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
                 @if (isset($icon))
                     <span class="size-4 flex items-center justify-center shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">{{ $icon }}</span>
-                @elseif (!empty($prefix))
-                    <span class="font-medium text-muted-foreground select-none">{{ $prefix }}</span>
+                @endif
+                @if (!empty($prefix))
+                    <span class="font-medium text-xs {{ $size === 'xl' ? 'text-sm' : '' }} select-none">{{ $prefix }}</span>
                 @endif
             </div>
         @endif
@@ -113,15 +170,18 @@
             name="{{ $name }}"
             @if ($hasError) aria-invalid="true" @endif
             @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif
-            {{ $attributes->twMerge(['class' => $compiledClasses]) }}
+            @if ($isDisabled) disabled @endif
+            @if ($isReadonly) readonly @endif
+            {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}
         >
 
         @if ($hasTrailing)
-            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-muted-foreground text-xs [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
+            <div class="flex items-center {{ $trailingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
+                @if (!empty($suffix))
+                    <span class="font-medium text-xs {{ $size === 'xl' ? 'text-sm' : '' }} select-none">{{ $suffix }}</span>
+                @endif
                 @if (isset($trailingIcon))
                     <span class="size-4 flex items-center justify-center shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">{{ $trailingIcon }}</span>
-                @elseif (!empty($suffix))
-                    <span class="font-medium text-muted-foreground select-none">{{ $suffix }}</span>
                 @endif
             </div>
         @endif

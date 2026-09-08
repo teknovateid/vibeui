@@ -31,7 +31,7 @@
     'presets' => false,
     'dualMonth' => false,
     'size' => 'md',
-    'variant' => 'outline',
+    'variant' => 'primary', // primary, outline
     'error' => null,
     'errorName' => null,
     'required' => false,
@@ -73,6 +73,18 @@
         'lg' => 'h-10 text-sm rounded-lg pl-10 pr-9',
         'xl' => 'h-11 text-base rounded-xl pl-11 pr-10',
         default => 'h-9 text-sm rounded-lg pl-9 pr-9',
+    };
+
+    $variantClasses = match ($variant) {
+        'outline' => $hasError 
+            ? 'border border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs hover:border-ring/50 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+        'primary' => $hasError 
+            ? 'border border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs hover:border-primary/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
+        default => $hasError 
+            ? 'border border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs hover:border-primary/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
     };
 
     $iconSize = match ($size) {
@@ -227,7 +239,7 @@
                 placeholder="{{ $inputPlaceholder }}"
                 @if ($disabled) disabled @endif
                 @if ($readonly) readonly @endif
-                class="block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 cursor-pointer {{ $sizeClasses }} {{ $hasError ? 'border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' : 'border border-input bg-background text-foreground shadow-2xs hover:border-ring/50 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20' }}"
+                class="block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 cursor-pointer {{ $sizeClasses }} {{ $variantClasses }}"
             />
 
             {{-- Trailing Actions: Clear button & Chevron --}}

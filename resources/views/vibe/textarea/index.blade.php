@@ -7,7 +7,7 @@
     'rows' => 3,
     'placeholder' => null,
     'size' => 'md', // sm, md, lg, xl
-    'variant' => 'outline', // outline, filled, flush, ghost, accent
+    'variant' => 'primary', // primary, outline, filled, flush, ghost
     'autoResize' => false,
     'showCount' => false,
     'maxlength' => null,
@@ -47,19 +47,22 @@
     $variantClasses = match ($variant) {
         'filled' => $hasError 
             ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus-visible:bg-background focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+            : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
         'flush' => $hasError 
             ? 'border-b border-destructive text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:border-destructive focus-visible:ring-0' 
-            : 'border-b border-input text-foreground bg-transparent focus-visible:border-ring focus-visible:ring-0',
+            : 'border-b border-input text-foreground bg-transparent focus-visible:border-primary focus-visible:ring-0',
         'ghost' => $hasError 
             ? 'border-transparent text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'border-transparent text-foreground bg-transparent hover:bg-muted/40 focus-visible:bg-transparent focus-visible:ring-2 focus-visible:ring-ring/20',
-        'accent' => $hasError 
-            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-accent/15 border border-accent/40 text-foreground placeholder:text-muted-foreground hover:bg-accent/25 focus-visible:bg-background focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/25',
-        default => $hasError 
+            : 'border-transparent text-foreground bg-transparent hover:bg-muted/40 focus-visible:bg-transparent focus-visible:ring-2 focus-visible:ring-primary/20',
+        'outline' => $hasError 
             ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
             : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+        'primary' => $hasError 
+            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
+        default => $hasError 
+            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
     };
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
