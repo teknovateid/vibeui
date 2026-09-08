@@ -373,6 +373,65 @@
                 </vibe:table>
             </section>
 
+            {{-- Form Submission Test Section --}}
+            <section id="uji-coba-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai berbagai variasi input langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat form dikirimkan, modal akan otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> yang diterima oleh backend.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
+    @csrf
+
+    <vibe:input name="username" label="Nama Pengguna" placeholder="johndoe" value="johndoe" required />
+
+    <vibe:input type="email" name="email" label="Alamat Email" placeholder="john@example.com" value="john@example.com" required />
+
+    <vibe:input type="password" name="password" label="Kata Sandi" value="secret123" />
+
+    <vibe:input name="phone" label="Nomor Telepon" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
+
+    <vibe:input name="budget" label="Estimasi Anggaran" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                            @csrf
+
+                            <vibe:input name="username" label="Nama Pengguna" placeholder="johndoe" value="johndoe" required />
+
+                            <vibe:input type="email" name="email" label="Alamat Email" placeholder="john@example.com" value="john@example.com" required />
+
+                            <vibe:input type="password" name="password" label="Kata Sandi" value="secret123" />
+
+                            <vibe:input name="phone" label="Nomor Telepon" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
+
+                            <vibe:input name="budget" label="Estimasi Anggaran" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
         </div>
 
         <aside class="col-span-12 order-1 md:order-2 md:col-span-3 w-full md:sticky md:top-6 group-has-[header.sticky]/docs:md:top-20">
@@ -380,4 +439,7 @@
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

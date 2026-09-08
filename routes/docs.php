@@ -20,6 +20,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/radio', 'docs.radio.index')->name('radio.index');
     Route::view('/switch', 'docs.switch.index')->name('switch.index');
     Route::view('/range', 'docs.range.index')->name('range.index');
+    Route::view('/date-time', 'docs.date-time.index')->name('date-time.index');
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
     Route::view('/badge', 'docs.badge.index')->name('badge.index');

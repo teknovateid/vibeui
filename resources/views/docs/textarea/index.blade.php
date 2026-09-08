@@ -125,7 +125,82 @@
                 </vibe:preview>
             </section>
 
-            {{-- 4. Props Reference --}}
+            {{-- 4. Form Testing ($request->all()) --}}
+            <section id="pengujian-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai berbagai variasi textarea langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
+    @csrf
+
+    <vibe:textarea 
+        name="feedback_summary" 
+        label="Ringkasan Masukan" 
+        placeholder="Tuliskan ringkasan pengalaman Anda di sini..." 
+        rows="2"
+        required
+    />
+
+    <vibe:textarea 
+        name="detailed_notes" 
+        label="Catatan Lengkap (Auto-Resize & Counter)" 
+        placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." 
+        :autoResize="true"
+        :showCount="true"
+        :maxlength="300"
+        rows="3"
+    />
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                            @csrf
+
+                            <vibe:textarea 
+                                name="feedback_summary" 
+                                label="Ringkasan Masukan" 
+                                placeholder="Tuliskan ringkasan pengalaman Anda di sini..." 
+                                rows="2"
+                                required
+                            />
+
+                            <vibe:textarea 
+                                name="detailed_notes" 
+                                label="Catatan Lengkap (Auto-Resize & Counter)" 
+                                placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." 
+                                :autoResize="true"
+                                :showCount="true"
+                                :maxlength="300"
+                                rows="3"
+                            />
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
+            {{-- 5. Props Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/textarea.props.title') }}</h2>
@@ -182,4 +257,7 @@
             <vibe:toc selector="#docs-content" />
         </aside>
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

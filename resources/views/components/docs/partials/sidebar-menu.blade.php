@@ -131,6 +131,16 @@
             {{ __('docs/sidebar.nav.range') }}
         </vibe:nav.item>
 
+        <!-- Date & Time -->
+        <vibe:nav.item href="{{ route('docs.date-time.index') }}" :active="request()->routeIs('docs.date-time.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/><path d="M12 14v3l2 1"/>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.date-time') }}
+        </vibe:nav.item>
+
         <!-- Button -->
         <vibe:nav.item href="{{ route('docs.button.index') }}" :active="request()->routeIs('docs.button.*')">
             <x-slot:icon>

@@ -18,6 +18,7 @@ return [
         'radio' => 'Radio',
         'switch' => 'Switch',
         'range' => 'Range Slider',
+        'date-time' => 'Date & Time',
         'button' => 'Button',
         'dropdown' => 'Dropdown',
         'badge' => 'Badge',

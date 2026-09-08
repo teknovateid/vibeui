@@ -138,7 +138,94 @@
                 </vibe:preview>
             </section>
 
-            {{-- 4. Props Reference --}}
+            {{-- 4. Form Testing ($request->all()) --}}
+            <section id="pengujian-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai switch (boolean toggle & pengaturan fitur) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
+    @csrf
+
+    <vibe:switch 
+        name="push_notifications" 
+        label="Notifikasi Push" 
+        description="Terima pembaruan penting secara real-time"
+        checked 
+    />
+
+    <vibe:switch 
+        name="auto_backup" 
+        label="Pencadangan Otomatis" 
+        description="Sinkronisasi data ke cloud setiap 24 jam"
+        variant="success"
+        labelPlacement="justify"
+        checked 
+    />
+
+    <vibe:switch 
+        name="marketing_emails" 
+        label="Email Promo & Buletin" 
+        description="Dapatkan tips mingguan dan info penawaran menarik"
+        variant="accent"
+        labelPlacement="justify"
+    />
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                            @csrf
+
+                            <vibe:switch 
+                                name="push_notifications" 
+                                label="Notifikasi Push" 
+                                description="Terima pembaruan penting secara real-time"
+                                checked 
+                            />
+
+                            <vibe:switch 
+                                name="auto_backup" 
+                                label="Pencadangan Otomatis" 
+                                description="Sinkronisasi data ke cloud setiap 24 jam"
+                                variant="success"
+                                labelPlacement="justify"
+                                checked 
+                            />
+
+                            <vibe:switch 
+                                name="marketing_emails" 
+                                label="Email Promo & Buletin" 
+                                description="Dapatkan tips mingguan dan info penawaran menarik"
+                                variant="accent"
+                                labelPlacement="justify"
+                            />
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
+            {{-- 5. Props Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/switch.props.title') }}</h2>
@@ -214,4 +301,7 @@
             <vibe:toc selector="#docs-content" />
         </aside>
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

@@ -678,6 +678,87 @@
                 </div>
             </section>
 
+            {{-- Form Submission Test Section --}}
+            <section id="uji-coba-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai komponen select (single select, searchable, dan multi-select) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan hasil <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
+    @csrf
+
+    <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
+        <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
+        <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
+        <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
+    </vibe:select>
+
+    <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
+        <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
+        <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
+        <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
+        <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
+    </vibe:select>
+
+    <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
+        <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
+        <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
+        <vibe:select.option value="react">React.js</vibe:select.option>
+        <vibe:select.option value="tailwind" selected>Tailwind CSS</vibe:select.option>
+        <vibe:select.option value="flutter">Flutter SDK</vibe:select.option>
+    </vibe:select>
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                            @csrf
+
+                            <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
+                                <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
+                                <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
+                                <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
+                            </vibe:select>
+
+                            <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
+                                <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
+                                <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
+                                <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
+                                <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
+                            </vibe:select>
+
+                            <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
+                                <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
+                                <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
+                                <vibe:select.option value="react">React.js</vibe:select.option>
+                                <vibe:select.option value="tailwind" selected>Tailwind CSS</vibe:select.option>
+                                <vibe:select.option value="flutter">Flutter SDK</vibe:select.option>
+                            </vibe:select>
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
         </div>
 
         {{-- Aside Table of Contents --}}
@@ -686,4 +767,7 @@
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

@@ -352,7 +352,102 @@
                 </vibe:preview>
             </section>
 
-            {{-- 7. Props Reference Table --}}
+            {{-- 7. Form Testing ($request->all()) --}}
+            <section id="pengujian-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai slider range (volume, harga, persentase) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
+    @csrf
+
+    <vibe:range
+        name="volume"
+        label="{{ __('docs/range.basic_usage.volume_label') }}"
+        :value="60"
+        :showValue="true"
+        valueSuffix="%"
+    />
+
+    <vibe:range
+        name="price_max"
+        label="Harga Maksimum"
+        :min="100000"
+        :max="5000000"
+        :step="50000"
+        :value="1500000"
+        :showValue="true"
+        valuePrefix="Rp "
+    />
+
+    <vibe:range
+        name="storage_quota"
+        label="Kuota Penyimpanan"
+        :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']"
+        :value="50"
+        :showValue="true"
+        valueSuffix=" GB"
+    />
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                            @csrf
+
+                            <vibe:range
+                                name="volume"
+                                :label="__('docs/range.basic_usage.volume_label')"
+                                :value="60"
+                                :showValue="true"
+                                valueSuffix="%"
+                            />
+
+                            <vibe:range
+                                name="price_max"
+                                label="Harga Maksimum"
+                                :min="100000"
+                                :max="5000000"
+                                :step="50000"
+                                :value="1500000"
+                                :showValue="true"
+                                valuePrefix="Rp "
+                            />
+
+                            <vibe:range
+                                name="storage_quota"
+                                label="Kuota Penyimpanan"
+                                :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']"
+                                :value="50"
+                                :showValue="true"
+                                valueSuffix=" GB"
+                            />
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
+            {{-- 8. Props Reference Table --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.props.title') }}</h2>
@@ -412,4 +507,7 @@
             <vibe:toc selector="#docs-content" />
         </aside>
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

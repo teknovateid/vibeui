@@ -330,6 +330,124 @@
                 </div>
             </section>
 
+            {{-- Form Submission Test Section --}}
+            <section id="uji-coba-form" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok checkbox array (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">notifications[]</code>) ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Form Testing Sandbox">
+                    <vibe:preview.code>
+<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
+    @csrf
+
+    {{-- Single Boolean Checkbox --}}
+    <vibe:checkbox
+        name="agree_terms"
+        value="1"
+        label="Saya menyetujui syarat & ketentuan layanan"
+        description="Wajib dicentang sebelum melanjutkan pendaftaran"
+        checked
+    />
+
+    {{-- Array Checkbox Group --}}
+    <vibe:checkbox.group
+        label="Saluran Notifikasi (Array)"
+        description="Pilih kanal komunikasi yang diinginkan"
+    >
+        <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
+        <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
+        <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+    </vibe:checkbox.group>
+
+    {{-- Card Style Checkboxes --}}
+    <div class="space-y-2">
+        <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <vibe:checkbox
+                variant="card"
+                name="addons[]"
+                value="cloud_backup"
+                label="Cloud Backup 100GB"
+                description="Pencadangan otomatis setiap malam"
+                checked
+            />
+            <vibe:checkbox
+                variant="card"
+                name="addons[]"
+                value="priority_support"
+                label="Prioritas Support 24/7"
+                description="Respon tiket di bawah 15 menit"
+            />
+        </div>
+    </div>
+
+    <div class="pt-2 flex items-center gap-3">
+        <vibe:button type="submit" variant="primary">
+            Kirim Form & Uji $request->all()
+        </vibe:button>
+    </div>
+</vibe:form>
+                    </vibe:preview.code>
+                    <div class="max-w-lg mx-auto p-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                            @csrf
+
+                            <vibe:checkbox
+                                name="agree_terms"
+                                value="1"
+                                label="Saya menyetujui syarat & ketentuan layanan"
+                                description="Wajib dicentang sebelum melanjutkan pendaftaran"
+                                checked
+                            />
+
+                            <vibe:checkbox.group
+                                label="Saluran Notifikasi (Array)"
+                                description="Pilih kanal komunikasi yang diinginkan"
+                            >
+                                <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
+                                <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
+                                <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+                            </vibe:checkbox.group>
+
+                            <div class="space-y-2">
+                                <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <vibe:checkbox
+                                        variant="card"
+                                        name="addons[]"
+                                        value="cloud_backup"
+                                        label="Cloud Backup 100GB"
+                                        description="Pencadangan otomatis setiap malam"
+                                        checked
+                                    />
+                                    <vibe:checkbox
+                                        variant="card"
+                                        name="addons[]"
+                                        value="priority_support"
+                                        label="Prioritas Support 24/7"
+                                        description="Respon tiket di bawah 15 menit"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="pt-2 flex items-center gap-3">
+                                <vibe:button type="submit" variant="primary">
+                                    Kirim Form & Uji $request->all()
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+                @include('docs.partials.form-result-banner')
+            </section>
+
         </div>
 
         {{-- Table of Contents --}}
@@ -337,4 +455,7 @@
             <vibe:toc selector="#docs-content" />
         </aside>
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>

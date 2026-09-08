@@ -112,7 +112,7 @@
             id="{{ $modalId }}"
             x-show="open"
             x-cloak
-            {{ $attributes->twMerge(['class' => 'vibe-modal-container fixed inset-0 z-50 overflow-y-auto']) }}
+            {{ $attributes->twMerge(['class' => 'vibe-modal-container fixed inset-0 z-60 overflow-y-auto']) }}
             aria-labelledby="modal-title" 
             role="dialog" 
             aria-modal="true"
