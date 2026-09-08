@@ -47,7 +47,7 @@ return [
             'placeholder' => 'Placeholder text displayed when the textarea is empty.',
             'rows' => 'Initial visible height specified in number of text rows.',
             'size' => 'Text and padding sizing: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, or <code>\'xl\'</code>.',
-            'variant' => 'Visual style variant: <code>\'outline\'</code>, <code>\'filled\'</code>, <code>\'flush\'</code>, <code>\'ghost\'</code>, or <code>\'accent\'</code>.',
+            'variant' => 'Visual style variant: <code>\'primary\'</code>, <code>\'outline\'</code>, <code>\'filled\'</code>, <code>\'flush\'</code>, or <code>\'ghost\'</code>.',
             'autoResize' => 'Automatically recalculates and expands textarea height based on user typing.',
             'showCount' => 'Displays live character length badge at the top right corner.',
             'maxlength' => 'Maximum allowed characters, rendered in the counter (e.g. 0/150).',

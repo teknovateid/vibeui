@@ -22,7 +22,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['outline', 'filled', 'flush', 'ghost', 'accent'] as $v)
+                    @foreach (['primary', 'outline', 'filled', 'flush', 'ghost'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -62,7 +62,10 @@
 
                 <vibe:preview :title="__('docs/input.variants.preview_title')">
                     <vibe:preview.code>
-{{-- outline (default) --}}
+{{-- primary (default) --}}
+<vibe:input label="{{ __('docs/input.variants.primary.label') }}" placeholder="{{ __('docs/input.variants.primary.placeholder') }}" />
+
+{{-- outline --}}
 <vibe:input variant="outline" label="{{ __('docs/input.variants.outline.label') }}" placeholder="{{ __('docs/input.variants.outline.placeholder') }}" />
 
 {{-- filled --}}
@@ -73,16 +76,13 @@
 
 {{-- ghost --}}
 <vibe:input variant="ghost" label="{{ __('docs/input.variants.ghost.label') }}" placeholder="{{ __('docs/input.variants.ghost.placeholder') }}" />
-
-{{-- accent --}}
-<vibe:input variant="accent" label="{{ __('docs/input.variants.accent.label') }}" placeholder="{{ __('docs/input.variants.accent.placeholder') }}" />
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
+                        <vibe:input variant="primary" :label="__('docs/input.variants.primary.label')" :placeholder="__('docs/input.variants.primary.placeholder')" />
                         <vibe:input variant="outline" :label="__('docs/input.variants.outline.label')" :placeholder="__('docs/input.variants.outline.placeholder')" />
                         <vibe:input variant="filled" :label="__('docs/input.variants.filled.label')" :placeholder="__('docs/input.variants.filled.placeholder')" />
                         <vibe:input variant="flush" :label="__('docs/input.variants.flush.label')" :placeholder="__('docs/input.variants.flush.placeholder')" />
                         <vibe:input variant="ghost" :label="__('docs/input.variants.ghost.label')" :placeholder="__('docs/input.variants.ghost.placeholder')" />
-                        <vibe:input variant="accent" :label="__('docs/input.variants.accent.label')" :placeholder="__('docs/input.variants.accent.placeholder')" />
                     </div>
                 </vibe:preview>
             </section>
@@ -193,7 +193,7 @@
 </vibe:input>
 
 <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
-<vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
+<vibe:input class="rounded-full" variant="outline" label="Outline Pill" placeholder="Rounded outline..." />
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input class="rounded-full" label="Search" :placeholder="__('docs/input.pill.placeholder')">
@@ -205,7 +205,7 @@
                             </x-slot:icon>
                         </vibe:input>
                         <vibe:input class="rounded-full" variant="filled" label="Filled Pill" placeholder="Rounded filled..." />
-                        <vibe:input class="rounded-full" variant="accent" label="Accent Pill" placeholder="Rounded accent..." />
+                        <vibe:input class="rounded-full" variant="outline" label="Outline Pill" placeholder="Rounded outline..." />
                     </div>
                 </vibe:preview>
             </section>
@@ -331,7 +331,7 @@
                                 ['name', 'string', 'null', 'HTML name attribute. Automatically extracted from wire:model if omitted.'],
                                 ['type', 'string', "'text'", 'HTML input type: text, email, password, number, url, tel, etc.'],
                                 ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Input height and text size.'],
-                                ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", 'Visual style variant.'],
+                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", 'Visual style variant.'],
                                 ['description', 'string', 'null', 'Small helper text below the label, before the input.'],
                                 ['info', 'string', 'null', 'Helper note below the input. Hidden when error exists.'],
                                 ['error', 'string|bool', 'null', 'Custom error message or boolean to trigger error state.'],

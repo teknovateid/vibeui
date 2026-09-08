@@ -20,9 +20,13 @@ return [
         'title' => 'Varian Tampilan',
         'desc' => 'Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> mengontrol gaya visual input. Tersedia 5 pilihan untuk berbagai konteks desain.',
         'preview_title' => 'Varian Tampilan Input',
+        'primary' => [
+            'label' => 'Primary (Bawaan)',
+            'placeholder' => 'Varian default dengan ring fokus utama...',
+        ],
         'outline' => [
-            'label' => 'Outline (Bawaan)',
-            'placeholder' => 'Varian default dengan garis batas...',
+            'label' => 'Outline',
+            'placeholder' => 'Varian garis batas netral...',
         ],
         'filled' => [
             'label' => 'Filled (Terisi)',
@@ -35,10 +39,6 @@ return [
         'ghost' => [
             'label' => 'Ghost (Transparan)',
             'placeholder' => 'Transparan tanpa border...',
-        ],
-        'accent' => [
-            'label' => 'Accent (Aksen)',
-            'placeholder' => 'Warna latar aksen lembut...',
         ],
     ],
 

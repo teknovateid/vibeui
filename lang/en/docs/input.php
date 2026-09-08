@@ -20,9 +20,13 @@ return [
         'title' => 'Visual Variants',
         'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop controls the visual style of the input. 5 choices are available for various design contexts.',
         'preview_title' => 'Input Visual Variants',
+        'primary' => [
+            'label' => 'Primary (Default)',
+            'placeholder' => 'Default variant with primary focus ring...',
+        ],
         'outline' => [
-            'label' => 'Outline (Default)',
-            'placeholder' => 'Default variant with border...',
+            'label' => 'Outline',
+            'placeholder' => 'Neutral border variant...',
         ],
         'filled' => [
             'label' => 'Filled',
@@ -35,10 +39,6 @@ return [
         'ghost' => [
             'label' => 'Ghost',
             'placeholder' => 'Transparent background...',
-        ],
-        'accent' => [
-            'label' => 'Accent',
-            'placeholder' => 'Soft accent color...',
         ],
     ],
 

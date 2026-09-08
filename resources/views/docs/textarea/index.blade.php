@@ -22,7 +22,7 @@
 
                 {{-- Quick Props Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['outline', 'filled', 'flush', 'ghost', 'accent'] as $v)
+                    @foreach (['primary', 'outline', 'filled', 'flush', 'ghost'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -225,7 +225,7 @@
                                 ['placeholder', 'string', 'null', __('docs/textarea.props.items.placeholder')],
                                 ['rows', 'int', '3', __('docs/textarea.props.items.rows')],
                                 ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/textarea.props.items.size')],
-                                ['variant', "'outline'|'filled'|'flush'|'ghost'|'accent'", "'outline'", __('docs/textarea.props.items.variant')],
+                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/textarea.props.items.variant')],
                                 ['autoResize', 'bool', 'false', __('docs/textarea.props.items.autoResize')],
                                 ['showCount', 'bool', 'false', __('docs/textarea.props.items.showCount')],
                                 ['maxlength', 'int', 'null', __('docs/textarea.props.items.maxlength')],

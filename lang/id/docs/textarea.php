@@ -47,7 +47,7 @@ return [
             'placeholder' => 'Teks petunjuk yang tampil saat textarea masih kosong.',
             'rows' => 'Jumlah baris tinggi default textarea.',
             'size' => 'Ukuran teks dan ruang padding: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, atau <code>\'xl\'</code>.',
-            'variant' => 'Varian tampilan visual: <code>\'outline\'</code>, <code>\'filled\'</code>, <code>\'flush\'</code>, <code>\'ghost\'</code>, atau <code>\'accent\'</code>.',
+            'variant' => 'Varian tampilan visual: <code>\'primary\'</code>, <code>\'outline\'</code>, <code>\'filled\'</code>, <code>\'flush\'</code>, atau <code>\'ghost\'</code>.',
             'autoResize' => 'Menyesuaikan tinggi textarea secara otomatis mengikuti panjang baris yang diketik.',
             'showCount' => 'Menampilkan badge penghitung jumlah karakter realtime di pojok kanan atas.',
             'maxlength' => 'Batas jumlah karakter maksimal yang diperbolehkan (misal: 0/150).',

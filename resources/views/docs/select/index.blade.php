@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['outline', 'filled', 'flush', 'ghost', 'accent'] as $v)
+                    @foreach (['primary', 'outline', 'filled', 'flush', 'ghost'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -316,8 +316,14 @@
 
                 <vibe:preview :title="__('docs/select.variants.preview_title')" minHeight="320px">
                     <vibe:preview.code>
-                        {{-- outline (default) --}}
-                        <vibe:select variant="outline" label="Outline" placeholder="Varian outline (default)...">
+                        {{-- primary (default) --}}
+                        <vibe:select label="Primary" placeholder="Varian primary (default)...">
+                            <vibe:select.option value="1">Opsi Satu</vibe:select.option>
+                            <vibe:select.option value="2">Opsi Dua</vibe:select.option>
+                        </vibe:select>
+
+                        {{-- outline --}}
+                        <vibe:select variant="outline" label="Outline" placeholder="Varian outline...">
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
@@ -339,15 +345,14 @@
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
-
-                        {{-- accent --}}
-                        <vibe:select variant="accent" label="Accent" placeholder="Varian accent...">
+                    </vibe:preview.code>
+                    <div class="w-full max-w-sm space-y-4">
+                        <vibe:select label="Primary" placeholder="Varian primary (default)...">
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
-                    </vibe:preview.code>
-                    <div class="w-full max-w-sm space-y-4">
-                        <vibe:select variant="outline" label="Outline" placeholder="Varian outline (default)...">
+
+                        <vibe:select variant="outline" label="Outline" placeholder="Varian outline...">
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
@@ -363,11 +368,6 @@
                         </vibe:select>
 
                         <vibe:select variant="ghost" label="Ghost" placeholder="Varian ghost...">
-                            <vibe:select.option value="1">Opsi Satu</vibe:select.option>
-                            <vibe:select.option value="2">Opsi Dua</vibe:select.option>
-                        </vibe:select>
-
-                        <vibe:select variant="accent" label="Accent" placeholder="Varian accent...">
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
@@ -616,7 +616,7 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $selectProps = [['label', 'string', 'null', 'Label teks di atas komponen select.'], ['name', 'string', 'null', 'Nama atribut form (otomatis fallback ke wire:model).'], ['id', 'string', 'null', 'ID elemen unik untuk aksesibilitas.'], ['placeholder', 'string', '"Pilih opsi..."', 'Teks placeholder saat belum ada item terpilih.'], ['placement', 'string', '"auto"', 'Arah dropdown popover: "auto" (dinamis cerdas), "bottom", atau "top".'], ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi penuh tombol keyboard (Up, Down, Enter, Space, Escape) seperti pada komponen dropdown.'], ['size', 'string', '"md"', 'Ukuran: "sm" (32px), "md" (36px), "lg" (40px), "xl" (44px).'], ['variant', 'string', '"outline"', 'Gaya: "outline", "filled", "flush", "ghost", "accent".'], ['searchable', 'bool', 'false', 'Menampilkan kolom filter pencarian real-time.'], ['searchPlaceholder', 'string', '"Cari opsi..."', 'Placeholder pada kotak pencarian.'], ['disabled', 'bool', 'false', 'Menonaktifkan seluruh komponen select.'], ['error', 'string', 'null', 'Pesan error validasi manual.'], ['errorName', 'string', 'null', 'Kunci error bag spesifik di $errors.'], ['description', 'string', 'null', 'Teks keterangan bantuan di bawah label.'], ['info', 'string', 'null', 'Teks bantuan informasi di bawah select.'], ['wrapperClass', 'string', 'null', 'Class kustom untuk pembungkus kontainer terluar.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan lebih dari satu opsi (array value). Ditampilkan dalam bentuk chips yang dapat dihapus.'], ['min', 'int', 'null', 'Jumlah minimum opsi yang wajib dipilih pada mode multiple.'], ['max', 'int', 'null', 'Jumlah maksimum opsi yang dapat dipilih pada mode multiple. Opsi lain otomatis terkunci saat batas tercapai.']];
+                                $selectProps = [['label', 'string', 'null', 'Label teks di atas komponen select.'], ['name', 'string', 'null', 'Nama atribut form (otomatis fallback ke wire:model).'], ['id', 'string', 'null', 'ID elemen unik untuk aksesibilitas.'], ['placeholder', 'string', '"Pilih opsi..."', 'Teks placeholder saat belum ada item terpilih.'], ['placement', 'string', '"auto"', 'Arah dropdown popover: "auto" (dinamis cerdas), "bottom", atau "top".'], ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi penuh tombol keyboard (Up, Down, Enter, Space, Escape) seperti pada komponen dropdown.'], ['size', 'string', '"md"', 'Ukuran: "sm" (32px), "md" (36px), "lg" (40px), "xl" (44px).'], ['variant', 'string', '"primary"', 'Gaya: "primary", "outline", "filled", "flush", "ghost".'], ['searchable', 'bool', 'false', 'Menampilkan kolom filter pencarian real-time.'], ['searchPlaceholder', 'string', '"Cari opsi..."', 'Placeholder pada kotak pencarian.'], ['disabled', 'bool', 'false', 'Menonaktifkan seluruh komponen select.'], ['error', 'string', 'null', 'Pesan error validasi manual.'], ['errorName', 'string', 'null', 'Kunci error bag spesifik di $errors.'], ['description', 'string', 'null', 'Teks keterangan bantuan di bawah label.'], ['info', 'string', 'null', 'Teks bantuan informasi di bawah select.'], ['wrapperClass', 'string', 'null', 'Class kustom untuk pembungkus kontainer terluar.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan lebih dari satu opsi (array value). Ditampilkan dalam bentuk chips yang dapat dihapus.'], ['min', 'int', 'null', 'Jumlah minimum opsi yang wajib dipilih pada mode multiple.'], ['max', 'int', 'null', 'Jumlah maksimum opsi yang dapat dipilih pada mode multiple. Opsi lain otomatis terkunci saat batas tercapai.']];
                             @endphp
                             @foreach ($selectProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>

@@ -6,7 +6,7 @@
     'name' => null,
     'description' => null,
     'size' => 'md', // sm, md, lg, xl
-    'variant' => 'outline', // outline, filled, flush, ghost, accent
+    'variant' => 'primary', // primary, outline, filled, flush, ghost
     'placeholder' => null,
     'searchable' => false,
     'searchPlaceholder' => null,
@@ -34,7 +34,7 @@
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
     $errorMessage = ($error && !is_bool($error)) ? $error : ($errorKey ? $errors->first($errorKey) : null);
 
-    $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
+    $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus:outline-none focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
     $sizeClasses = match ($size) {
         'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs rounded-md pl-3 pr-8 gap-1.5',
@@ -56,20 +56,44 @@
 
     $variantClasses = match ($variant) {
         'filled' => $hasError 
-            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus-visible:bg-background focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus:bg-background focus:border-destructive focus:ring-2 focus:ring-destructive/20 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus:bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
         'flush' => $hasError 
-            ? 'border-b border-destructive text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:border-destructive focus-visible:ring-0' 
-            : 'border-b border-input text-foreground bg-transparent focus-visible:border-ring focus-visible:ring-0',
+            ? 'border-b border-destructive text-destructive placeholder:text-destructive/50 bg-transparent focus:border-destructive focus:ring-0 focus-visible:border-destructive focus-visible:ring-0' 
+            : 'border-b border-input text-foreground bg-transparent focus:border-primary focus:ring-0 focus-visible:border-primary focus-visible:ring-0',
         'ghost' => $hasError 
-            ? 'border-transparent text-destructive placeholder:text-destructive/50 bg-transparent focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'border-transparent text-foreground bg-transparent hover:bg-muted/40 focus-visible:bg-transparent focus-visible:ring-2 focus-visible:ring-ring/20',
-        'accent' => $hasError 
-            ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'bg-accent/15 border border-accent/40 text-foreground hover:bg-accent/25 focus-visible:bg-background focus-visible:border-accent focus-visible:ring-2 focus-visible:ring-accent/25',
+            ? 'border-transparent text-destructive placeholder:text-destructive/50 bg-transparent focus:ring-2 focus:ring-destructive/20 focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border-transparent text-foreground bg-transparent hover:bg-muted/40 focus:bg-transparent focus:ring-2 focus:ring-primary/20 focus-visible:bg-transparent focus-visible:ring-2 focus-visible:ring-primary/20',
+        'outline' => $hasError 
+            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus:border-destructive focus:ring-2 focus:ring-destructive/20 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs focus:border-ring focus:ring-2 focus:ring-ring/20 focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+        'primary' => $hasError 
+            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus:border-destructive focus:ring-2 focus:ring-destructive/20 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
         default => $hasError 
-            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
-            : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20',
+            ? 'border border-destructive bg-background text-destructive placeholder:text-destructive/50 focus:border-destructive focus:ring-2 focus:ring-destructive/20 focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
+            : 'border border-input bg-background text-foreground shadow-2xs focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
+    };
+
+    $activeOpenClasses = match ($variant) {
+        'filled' => $hasError 
+            ? 'bg-background !border-destructive ring-2 ring-destructive/20' 
+            : 'bg-background !border-primary ring-2 ring-primary/20',
+        'flush' => $hasError 
+            ? '!border-destructive ring-0' 
+            : '!border-primary ring-0',
+        'ghost' => $hasError 
+            ? 'ring-2 ring-destructive/20' 
+            : 'ring-2 ring-primary/20',
+        'outline' => $hasError 
+            ? '!border-destructive ring-2 ring-destructive/20' 
+            : '!border-ring ring-2 ring-ring/20',
+        'primary' => $hasError 
+            ? '!border-destructive ring-2 ring-destructive/20' 
+            : '!border-primary ring-2 ring-primary/20',
+        default => $hasError 
+            ? '!border-destructive ring-2 ring-destructive/20' 
+            : '!border-primary ring-2 ring-primary/20',
     };
 
     $chevronSize = match ($size) {
@@ -457,6 +481,7 @@
             @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif
             aria-haspopup="listbox"
             :aria-expanded="open"
+            :class="open ? '{{ $activeOpenClasses }}' : ''"
             @if ($keyboard)
                 @keydown.down.stop.prevent="if (!open) { toggle(); } else { focusNext($event); }"
                 @keydown.up.stop.prevent="if (!open) { toggle(); } else { focusPrevious($event); }"
@@ -518,7 +543,7 @@
             <div class="pointer-events-none absolute inset-y-0 {{ $chevronRightPosition }} flex items-center text-muted-foreground">
                 <svg 
                     class="{{ $chevronSize }} shrink-0 transition-transform duration-200" 
-                    :class="{ 'rotate-180 text-foreground': open }" 
+                    :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" 
                     xmlns="http://www.w3.org/2000/svg" 
                     viewBox="0 0 24 24" 
                     fill="none" 
@@ -559,7 +584,7 @@
                             x-model="search"
                             type="text"
                             placeholder="{{ $searchPlaceholder }}"
-                            class="w-full h-8 pl-8 pr-7 text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring transition-colors"
+                            class="w-full h-8 pl-8 pr-7 text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
                             @keydown.escape.stop="close()"
                             @if ($keyboard)
                                 @keydown.down.stop.prevent="focusNext($event)"
