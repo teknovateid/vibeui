@@ -322,7 +322,7 @@
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-40 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-60 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -419,7 +419,7 @@
                 default => '-right-3 top-4',
             };
         @endphp
-        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-30 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
+        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-60 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
             '-right-3 top-4': position === 'left',
             '-left-3 top-4': position === 'right',
             '-bottom-3 left-1/2 -translate-x-1/2': position === 'top',
@@ -438,12 +438,6 @@
 
     <!-- Resize Handle -->
     @if ($resizable)
-        {{--
-            Hit area dibuat lebih lebar (w-5/h-5) agar mudah diklik/disentuh bahkan saat sheet size=0.
-            overflow-visible pada parent sheet sudah memastikan handle tidak terclip.
-            Garis visual (inner div) tampil saat hover pada desktop atau saat resizing.
-            z-index diatur ke z-20 agar berada di bawah dropdown/popover body (z-50) pada sheet.
-        --}}
         <div
             @mousedown.prevent="startResize($event)"
             @touchstart.prevent="startResize($event)"

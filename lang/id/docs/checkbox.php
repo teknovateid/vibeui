@@ -1,0 +1,105 @@
+<?php
+
+return [
+    'title' => 'Checkbox',
+    'badge' => 'Komponen',
+    'group' => 'Form & Input',
+    'description' => 'Komponen checkbox yang dapat disesuaikan untuk pemilihan opsi tunggal maupun jamak. Mendukung state checked, unchecked, indeterminate, varian card interaktif, ukuran berbeda, serta checkbox group.',
+
+    'basic_usage' => [
+        'title' => 'Penggunaan Dasar',
+        'desc' => 'Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:checkbox&gt;</code> dengan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">label</code> dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code>.',
+        'preview_title' => 'Checkbox Standar',
+        'label' => 'Saya menyetujui syarat dan ketentuan',
+        'desc_text' => 'Anda harus menyetujui kebijakan privasi kami sebelum melanjutkan.',
+    ],
+
+    'indeterminate' => [
+        'title' => 'State Indeterminate',
+        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">indeterminate="true"</code> untuk menampilkan status pemilihan sebagian (misal: "Pilih Semua").',
+        'preview_title' => 'Indeterminate Checkbox',
+        'label' => 'Pilih semua modul (3 dari 5 terpilih)',
+    ],
+
+    'sizes' => [
+        'title' => 'Ukuran',
+        'desc' => 'Tersedia dalam 3 ukuran: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code> (default), dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>.',
+        'preview_title' => 'Ukuran Checkbox',
+        'sm' => 'Ukuran Kecil (sm)',
+        'md' => 'Ukuran Sedang (md - Default)',
+        'lg' => 'Ukuran Besar (lg)',
+    ],
+
+    'card' => [
+        'title' => 'Varian Card (Pilihan Berbentuk Kartu)',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk membuat kartu pilihan interaktif yang elegan. Anda juga dapat menyembunyikan kotak centang dengan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'preview_title' => 'Checkbox Card',
+        'opt1_title' => 'Notifikasi Email',
+        'opt1_desc' => 'Terima rangkuman mingguan dan laporan aktivitas sistem langsung ke inbox Anda.',
+        'opt2_title' => 'Autentikasi Dua Langkah (2FA)',
+        'opt2_desc' => 'Tingkatkan keamanan akun dengan verifikasi kode OTP setiap kali login.',
+        'card_hidden_title' => 'Card Tanpa Indikator Checkbox',
+        'card_hidden_desc' => 'Tampilan kartu pilihan yang bersih tanpa kotak centang dengan menambahkan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'hidden1_title' => 'Paket Pro',
+        'hidden1_desc' => 'Analitik tingkat lanjut, dukungan prioritas, dan integrasi custom domain.',
+        'hidden2_title' => 'Paket Enterprise',
+        'hidden2_desc' => 'Infrastruktur khusus, dukungan telepon 24/7, dan SLA khusus.',
+    ],
+
+    'checkbox_group' => [
+        'title' => 'Checkbox Group',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:checkbox.group&gt;</code> untuk membungkus beberapa checkbox dengan satu label grup dan pesan error terpadu.',
+        'preview_title' => 'Checkbox Group dengan Layout Grid',
+        'group_label' => 'Pilih Keahlian Utama',
+        'group_desc' => 'Pilih satu atau lebih teknologi yang Anda kuasai.',
+    ],
+
+    'props' => [
+        'title' => 'Referensi Props Checkbox',
+        'desc' => 'Daftar lengkap properti dan atribut konfigurasi untuk komponen <code class="font-mono text-xs text-foreground">&lt;vibe:checkbox&gt;</code>.',
+        'columns' => [
+            'prop' => 'Prop',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+        'items' => [
+            'name' => 'Nama form input. Otomatis terikat jika menggunakan <code>wire:model</code>.',
+            'id' => 'ID unik elemen HTML input checkbox untuk menghubungkan <code>label</code>.',
+            'value' => 'Nilai yang dikirimkan form saat checkbox dalam kondisi tercentang.',
+            'label' => 'Teks label utama yang tampil di samping checkbox atau di dalam kartu.',
+            'description' => 'Teks bantuan / penjelasan tambahan di bawah label utama.',
+            'checked' => 'Status awal apakah checkbox dalam kondisi terpilih (checked).',
+            'indeterminate' => 'Menampilkan garis minus horizontal untuk status pemilihan sebagian (misal: "Pilih Semua").',
+            'size' => 'Ukuran kotak centang dan teks: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
+            'variant' => 'Varian gaya visual: <code>\'primary\'</code>, <code>\'accent\'</code>, atau <code>\'card\'</code>.',
+            'indicator' => 'Mengontrol visibilitas kotak centang. Set ke <code>false</code> untuk kartu pilihan tanpa kotak centang.',
+            'hideIndicator' => 'Atribut boolean alternatif untuk menyembunyikan kotak centang pada varian card.',
+            'info' => 'Teks catatan bantuan kecil di bawah komponen checkbox.',
+            'error' => 'Pesan error kustom atau flag boolean untuk memicu styling merah destructive.',
+            'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk deteksi error otomatis.',
+            'disabled' => 'Atribut HTML standar untuk menonaktifkan interaksi dan memudarkan komponen.',
+            'wrapperClass' => 'Kelas CSS tambahan untuk elemen kontainer pembungkus terluar.',
+        ],
+    ],
+
+    'group_props' => [
+        'title' => 'Referensi Props Checkbox Group',
+        'desc' => 'Daftar properti yang tersedia untuk pembungkus <code class="font-mono text-xs text-foreground">&lt;vibe:checkbox.group&gt;</code>.',
+        'columns' => [
+            'prop' => 'Prop',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+        'items' => [
+            'label' => 'Judul fieldset legend untuk kelompok pilihan checkbox.',
+            'description' => 'Teks penjelasan tambahan di bawah judul grup.',
+            'orientation' => 'Orientasi tata letak checkbox: <code>\'vertical\'</code>, <code>\'horizontal\'</code>, atau <code>\'grid\'</code>.',
+            'columns' => 'Jumlah kolom saat orientasi diset ke <code>\'grid\'</code>: <code>2</code>, <code>3</code>, atau <code>4</code>.',
+            'required' => 'Menambahkan tanda bintang merah (*) sebagai penanda wajib diisi.',
+            'error' => 'Pesan error kustom yang tampil di bawah seluruh kelompok checkbox.',
+            'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk validasi tingkat grup.',
+        ],
+    ],
+];

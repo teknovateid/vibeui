@@ -5,7 +5,7 @@
         ['name' => __('docs/instalation.title'), 'url' => '/docs/instalation']
     ]" />
 
-    <div class="mx-auto max-w-6xl space-y-10">
+    <div class="mx-auto w-full max-w-7xl">
         <!-- Page Header -->
         <div class="space-y-2">
 

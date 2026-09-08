@@ -8,7 +8,12 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
     Route::view('/form', 'docs.form.index')->name('form.index');
     Route::view('/input', 'docs.input.index')->name('input.index');
+    Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
     Route::view('/select', 'docs.select.index')->name('select.index');
+    Route::view('/checkbox', 'docs.checkbox.index')->name('checkbox.index');
+    Route::view('/radio', 'docs.radio.index')->name('radio.index');
+    Route::view('/switch', 'docs.switch.index')->name('switch.index');
+    Route::view('/range', 'docs.range.index')->name('range.index');
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
     Route::view('/badge', 'docs.badge.index')->name('badge.index');

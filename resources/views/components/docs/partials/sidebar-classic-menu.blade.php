@@ -68,6 +68,16 @@
             {{ __('docs/sidebar.nav.input') }}
         </vibe:nav.item>
 
+        <!-- Textarea -->
+        <vibe:nav.item href="{{ route('docs.textarea.index') }}" :active="request()->routeIs('docs.textarea.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.textarea') }}
+        </vibe:nav.item>
+
         <!-- Select -->
         <vibe:nav.item href="{{ route('docs.select.index') }}" :active="request()->routeIs('docs.select.index')">
             <x-slot:icon>
@@ -77,6 +87,50 @@
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.select') }}
+        </vibe:nav.item>
+
+        <!-- Checkbox -->
+        <vibe:nav.item href="{{ route('docs.checkbox.index') }}" :active="request()->routeIs('docs.checkbox.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
+                    <path d="m9 12 2 2 4-4"></path>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.checkbox') }}
+        </vibe:nav.item>
+
+        <!-- Radio -->
+        <vibe:nav.item href="{{ route('docs.radio.index') }}" :active="request()->routeIs('docs.radio.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="9"></circle>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.radio') }}
+        </vibe:nav.item>
+
+        <!-- Switch -->
+        <vibe:nav.item href="{{ route('docs.switch.index') }}" :active="request()->routeIs('docs.switch.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="12" x="2" y="6" rx="6" ry="6"></rect>
+                    <circle cx="16" cy="12" r="2"></circle>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.switch') }}
+        </vibe:nav.item>
+
+        <!-- Range Slider -->
+        <vibe:nav.item href="{{ route('docs.range.index') }}" :active="request()->routeIs('docs.range.index')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="4" x2="20" y1="12" y2="12"></line>
+                    <circle cx="14" cy="12" r="3"></circle>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.range') }}
         </vibe:nav.item>
 
         <!-- Button -->

@@ -6,7 +6,7 @@
 
 
 
-    <div>
+    <div class="mx-auto w-full max-w-7xl">
         <div class="mb-6 flex justify-end rounded-full">
             <vibe:button @click="$dispatch('open-modal', 'test-modal')">
                 {{ __('docs/index.demo.open_modal_btn') }}

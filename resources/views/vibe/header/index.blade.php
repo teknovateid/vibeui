@@ -13,7 +13,7 @@
     $hasCustomClasses = !empty($scrolledClass) || !empty($unscrolledClass);
 
     $baseClasses = $isSticky
-        ? 'flex items-center justify-between shrink-0 text-foreground border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,box-shadow] duration-200' . (!$hasCustomClasses ? ' data-[scrolled=true]:bg-background/80 data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:border-border/80' : '')
+        ? 'flex items-center justify-between shrink-0 text-foreground border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,box-shadow] duration-200' . (!$hasCustomClasses ? ' data-[scrolled=true]:bg-background/80 data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:border-border/80 data-[scrolled=true]:shadow-2xs' : '')
         : 'flex items-center justify-between shrink-0 bg-card text-card-foreground border-b border-border';
 
     $variantClasses = match ($variant) {

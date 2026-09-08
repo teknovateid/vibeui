@@ -1,0 +1,92 @@
+<?php
+
+return [
+    'title' => 'Radio',
+    'badge' => 'Komponen',
+    'group' => 'Form & Input',
+    'description' => 'Komponen tombol radio untuk memilih satu opsi dari beberapa pilihan. Mendukung varian lingkaran standar, varian card interaktif, ukuran berbeda, dan navigasi grup.',
+
+    'basic_usage' => [
+        'title' => 'Penggunaan Dasar',
+        'desc' => 'Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:radio&gt;</code> di dalam <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:radio.group&gt;</code>.',
+        'preview_title' => 'Radio Group Standar',
+        'plan_label' => 'Paket Berlangganan',
+        'plan_desc' => 'Pilih siklus penagihan akun Anda.',
+        'opt1' => 'Bulanan (Tagihan setiap bulan)',
+        'opt2' => 'Tahunan (Hemat 20% dengan penagihan tahunan)',
+        'opt3' => 'Seumur Hidup (Akses selamanya dengan satu kali bayar)',
+    ],
+
+    'sizes' => [
+        'title' => 'Ukuran',
+        'desc' => 'Tersedia dalam ukuran <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>.',
+        'preview_title' => 'Ukuran Radio Button',
+        'sm' => 'Ukuran Kecil (sm)',
+        'md' => 'Ukuran Sedang (md - Default)',
+        'lg' => 'Ukuran Besar (lg)',
+    ],
+
+    'card' => [
+        'title' => 'Varian Radio Card',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk menampilkan opsi sebagai kartu yang dapat dipilih secara intuitif. Anda juga dapat menyembunyikan lingkaran radio dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'preview_title' => 'Radio Card Selection',
+        'card1_title' => 'Paket Pengembang (Developer)',
+        'card1_desc' => 'Cocok untuk proyek pribadi dan eksperimen teknologi dengan batas 10.000 request/hari.',
+        'card2_title' => 'Paket Bisnis (Team)',
+        'card2_desc' => 'Dukungan tim tak terbatas, integrasi analitik mendalam, dan response time 99.9% SLA.',
+        'card_hidden_title' => 'Card Tanpa Indikator Radio',
+        'card_hidden_desc' => 'Kartu pilihan tanpa lingkaran radio menggunakan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'hidden1_title' => 'Penagihan Bulanan',
+        'hidden1_desc' => 'Rp 190.000 ditagih setiap bulan. Batalkan kapan saja.',
+        'hidden2_title' => 'Penagihan Tahunan',
+        'hidden2_desc' => 'Rp 150.000/bln ditagih tahunan. Hemat 20%.',
+    ],
+
+    'props' => [
+        'title' => 'Referensi Props Radio',
+        'desc' => 'Daftar lengkap properti dan atribut konfigurasi untuk komponen <code class="font-mono text-xs text-foreground">&lt;vibe:radio&gt;</code>.',
+        'columns' => [
+            'prop' => 'Prop',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+        'items' => [
+            'name' => 'Nama form input. Diwariskan dari group atau ditentukan langsung.',
+            'id' => 'ID unik elemen HTML input radio untuk menghubungkan <code>label</code>.',
+            'value' => 'Nilai yang dikirimkan saat opsi radio ini dipilih.',
+            'label' => 'Teks label utama di samping lingkaran radio atau di dalam kartu.',
+            'description' => 'Teks panduan / keterangan tambahan di bawah label utama.',
+            'checked' => 'Status awal apakah opsi radio ini dalam kondisi terpilih.',
+            'size' => 'Ukuran lingkaran radio dan teks: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
+            'variant' => 'Varian gaya visual: <code>\'default\'</code>, <code>\'card\'</code>, atau <code>\'accent\'</code>.',
+            'indicator' => 'Mengontrol visibilitas lingkaran radio. Set ke <code>false</code> untuk kartu pilihan tanpa dot.',
+            'hideIndicator' => 'Atribut boolean alternatif untuk menyembunyikan lingkaran dot radio pada varian card.',
+            'error' => 'Pesan error kustom atau flag boolean untuk memicu styling merah destructive.',
+            'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk deteksi error otomatis.',
+            'disabled' => 'Atribut HTML standar untuk menonaktifkan interaksi dan memudarkan komponen.',
+            'wrapperClass' => 'Kelas CSS tambahan untuk elemen kontainer pembungkus terluar.',
+        ],
+    ],
+
+    'group_props' => [
+        'title' => 'Referensi Props Radio Group',
+        'desc' => 'Daftar properti yang tersedia untuk pembungkus <code class="font-mono text-xs text-foreground">&lt;vibe:radio.group&gt;</code>.',
+        'columns' => [
+            'prop' => 'Prop',
+            'type' => 'Tipe',
+            'default' => 'Default',
+            'desc' => 'Deskripsi',
+        ],
+        'items' => [
+            'label' => 'Judul fieldset legend untuk kelompok pilihan radio.',
+            'name' => 'Nama input default yang diterapkan ke seluruh opsi radio di dalam grup.',
+            'description' => 'Teks panduan tambahan di bawah judul grup.',
+            'orientation' => 'Orientasi tata letak radio: <code>\'vertical\'</code>, <code>\'horizontal\'</code>, atau <code>\'grid\'</code>.',
+            'columns' => 'Jumlah kolom saat orientasi diset ke <code>\'grid\'</code>: <code>2</code>, <code>3</code>, atau <code>4</code>.',
+            'required' => 'Menambahkan tanda bintang merah (*) sebagai penanda wajib diisi.',
+            'error' => 'Pesan error kustom yang tampil di bawah seluruh kelompok radio.',
+            'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk validasi tingkat grup.',
+        ],
+    ],
+];

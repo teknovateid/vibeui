@@ -78,22 +78,28 @@
 
     <vibe:tabs.panel name="profile">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.profile_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.profile_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.rows.profile_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.rows.profile_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 
     <vibe:tabs.panel name="account">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.account_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.account_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.rows.account_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.rows.account_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 
     <vibe:tabs.panel name="billing">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.billing_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.billing_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.rows.billing_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.rows.billing_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 </vibe:tabs>
@@ -126,22 +132,28 @@
 
                             <vibe:tabs.panel name="profile">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.profile_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.profile_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.rows.profile_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.rows.profile_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
 
                             <vibe:tabs.panel name="account">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.account_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.account_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.rows.account_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.rows.account_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
 
                             <vibe:tabs.panel name="billing">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.rows.billing_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.rows.billing_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.rows.billing_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.rows.billing_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
                         </vibe:tabs>
@@ -193,29 +205,37 @@
 
     <vibe:tabs.panel name="general">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.general_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.general_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.cols.general_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.cols.general_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 
     <vibe:tabs.panel name="security">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.security_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.security_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.cols.security_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.cols.security_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 
     <vibe:tabs.panel name="notifications">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.notif_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.notif_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.cols.notif_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.cols.notif_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 
     <vibe:tabs.panel name="integrations">
         <vibe:card>
-            <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.integrations_title') }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.integrations_desc') }}</p>
+            <vibe:card.header>
+                <vibe:card.title>{{ __('docs/tabs.cols.integrations_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.cols.integrations_desc') }}</vibe:card.description>
+            </vibe:card.header>
         </vibe:card>
     </vibe:tabs.panel>
 </vibe:tabs>
@@ -255,29 +275,37 @@
 
                             <vibe:tabs.panel name="general">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.general_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.general_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.cols.general_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.cols.general_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
 
                             <vibe:tabs.panel name="security">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.security_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.security_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.cols.security_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.cols.security_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
 
                             <vibe:tabs.panel name="notifications">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.notif_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.notif_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.cols.notif_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.cols.notif_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
 
                             <vibe:tabs.panel name="integrations">
                                 <vibe:card>
-                                    <h3 class="font-semibold text-base text-foreground">{{ __('docs/tabs.cols.integrations_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground mt-1">{{ __('docs/tabs.cols.integrations_desc') }}</p>
+                                    <vibe:card.header>
+                                        <vibe:card.title>{{ __('docs/tabs.cols.integrations_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/tabs.cols.integrations_desc') }}</vibe:card.description>
+                                    </vibe:card.header>
                                 </vibe:card>
                             </vibe:tabs.panel>
                         </vibe:tabs>
@@ -285,7 +313,421 @@
                 </vibe:preview>
             </section>
 
-            {{-- 3. Varian Gaya Visual --}}
+            {{-- 3. Integrasi Komponen Card (Card Tabs) --}}
+            <section id="integrasi-card" class="space-y-10">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.card.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/tabs.card.desc') !!}
+                    </p>
+                </div>
+
+                {{-- 3.1 Card dengan Tabs Baris (Layout Rows) --}}
+                <div class="space-y-3">
+                    <div class="space-y-1">
+                        <h3 id="card-layout-rows" class="text-lg font-semibold text-foreground">{{ __('docs/tabs.card.rows_title') }}</h3>
+                        <p class="text-sm text-muted-foreground">{!! __('docs/tabs.card.rows_desc') !!}</p>
+                    </div>
+
+                    <vibe:preview :title="__('docs/tabs.card.rows_preview_title')">
+                        <vibe:preview.code>
+<vibe:card class="w-full max-w-2xl mx-auto border border-border shadow-xs">
+    <vibe:card.header>
+        <div class="flex items-center justify-between">
+            <div>
+                <vibe:card.title>{{ __('docs/tabs.card.rows_header_title') }}</vibe:card.title>
+                <vibe:card.description>{{ __('docs/tabs.card.rows_header_desc') }}</vibe:card.description>
+            </div>
+            <vibe:badge variant="primary" class="rounded-full">Pro</vibe:badge>
+        </div>
+    </vibe:card.header>
+
+    <vibe:tabs default="profile" layout="rows" variant="pill">
+        <vibe:tabs.list class="mb-4">
+            <vibe:tabs.tab name="profile">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.rows_tab_profile') }}
+            </vibe:tabs.tab>
+            <vibe:tabs.tab name="password">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.rows_tab_password') }}
+            </vibe:tabs.tab>
+            <vibe:tabs.tab name="notifications" badge="2" badgeVariant="secondary">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.rows_tab_notifications') }}
+            </vibe:tabs.tab>
+        </vibe:tabs.list>
+
+        {{-- Panel 1: Profile --}}
+        <vibe:tabs.panel name="profile">
+            <vibe:card.content class="p-0 space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <vibe:input :label="__('docs/tabs.card.rows_profile_name')" value="Fahril Rizqy" />
+                    <vibe:input :label="__('docs/tabs.card.rows_profile_email')" type="email" value="fahril@teknovate.id" />
+                </div>
+                <vibe:input :label="__('docs/tabs.card.rows_profile_bio')" value="Lead Frontend Engineer & UI Architect" />
+            </vibe:card.content>
+            <vibe:card.footer class="px-0 mt-6">
+                <vibe:button variant="outline" size="sm">{{ __('docs/tabs.card.rows_cancel_btn') }}</vibe:button>
+                <vibe:button size="sm">{{ __('docs/tabs.card.rows_save_btn') }}</vibe:button>
+            </vibe:card.footer>
+        </vibe:tabs.panel>
+
+        {{-- Panel 2: Password --}}
+        <vibe:tabs.panel name="password">
+            <vibe:card.content class="p-0 space-y-4">
+                <vibe:input :label="__('docs/tabs.card.rows_password_current')" type="password" placeholder="••••••••" />
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <vibe:input :label="__('docs/tabs.card.rows_password_new')" type="password" placeholder="••••••••" />
+                    <vibe:input :label="__('docs/tabs.card.rows_password_confirm')" type="password" placeholder="••••••••" />
+                </div>
+            </vibe:card.content>
+            <vibe:card.footer class="px-0 mt-6">
+                <vibe:button variant="outline" size="sm">{{ __('docs/tabs.card.rows_cancel_btn') }}</vibe:button>
+                <vibe:button size="sm">{{ __('docs/tabs.card.rows_password_btn') }}</vibe:button>
+            </vibe:card.footer>
+        </vibe:tabs.panel>
+
+        {{-- Panel 3: Notifications --}}
+        <vibe:tabs.panel name="notifications">
+            <vibe:card.content class="p-0 space-y-4 divide-y divide-border/60">
+                <div class="pt-1">
+                    <vibe:switch :label="__('docs/tabs.card.rows_notif_email_label')" :description="__('docs/tabs.card.rows_notif_email_desc')" labelPlacement="justify" :checked="true" />
+                </div>
+                <div class="pt-4">
+                    <vibe:switch :label="__('docs/tabs.card.rows_notif_marketing_label')" :description="__('docs/tabs.card.rows_notif_marketing_desc')" labelPlacement="justify" :checked="false" />
+                </div>
+            </vibe:card.content>
+            <vibe:card.footer class="px-0 mt-6">
+                <vibe:button size="sm">{{ __('docs/tabs.card.rows_save_btn') }}</vibe:button>
+            </vibe:card.footer>
+        </vibe:tabs.panel>
+    </vibe:tabs>
+</vibe:card>
+                        </vibe:preview.code>
+
+                        <div class="p-6 w-full flex justify-center">
+                            <vibe:card class="w-full max-w-2xl border border-border shadow-xs">
+                                <vibe:card.header>
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <vibe:card.title>{{ __('docs/tabs.card.rows_header_title') }}</vibe:card.title>
+                                            <vibe:card.description>{{ __('docs/tabs.card.rows_header_desc') }}</vibe:card.description>
+                                        </div>
+                                        <vibe:badge variant="primary" class="rounded-full">Pro</vibe:badge>
+                                    </div>
+                                </vibe:card.header>
+
+                                <vibe:tabs default="profile" layout="rows" variant="pill">
+                                    <vibe:tabs.list class="mb-4">
+                                        <vibe:tabs.tab name="profile">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.rows_tab_profile') }}
+                                        </vibe:tabs.tab>
+                                        <vibe:tabs.tab name="password">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.rows_tab_password') }}
+                                        </vibe:tabs.tab>
+                                        <vibe:tabs.tab name="notifications" badge="2" badgeVariant="secondary">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.rows_tab_notifications') }}
+                                        </vibe:tabs.tab>
+                                    </vibe:tabs.list>
+
+                                    {{-- Panel 1: Profile --}}
+                                    <vibe:tabs.panel name="profile">
+                                        <vibe:card.content class="p-0 space-y-4">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <vibe:input :label="__('docs/tabs.card.rows_profile_name')" value="Fahril Rizqy" />
+                                                <vibe:input :label="__('docs/tabs.card.rows_profile_email')" type="email" value="fahril@teknovate.id" />
+                                            </div>
+                                            <vibe:input :label="__('docs/tabs.card.rows_profile_bio')" value="Lead Frontend Engineer & UI Architect" />
+                                        </vibe:card.content>
+                                        <vibe:card.footer class="px-0 mt-6">
+                                            <vibe:button variant="outline" size="sm">{{ __('docs/tabs.card.rows_cancel_btn') }}</vibe:button>
+                                            <vibe:button size="sm">{{ __('docs/tabs.card.rows_save_btn') }}</vibe:button>
+                                        </vibe:card.footer>
+                                    </vibe:tabs.panel>
+
+                                    {{-- Panel 2: Password --}}
+                                    <vibe:tabs.panel name="password">
+                                        <vibe:card.content class="p-0 space-y-4">
+                                            <vibe:input :label="__('docs/tabs.card.rows_password_current')" type="password" placeholder="••••••••" />
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <vibe:input :label="__('docs/tabs.card.rows_password_new')" type="password" placeholder="••••••••" />
+                                                <vibe:input :label="__('docs/tabs.card.rows_password_confirm')" type="password" placeholder="••••••••" />
+                                            </div>
+                                        </vibe:card.content>
+                                        <vibe:card.footer class="px-0 mt-6">
+                                            <vibe:button variant="outline" size="sm">{{ __('docs/tabs.card.rows_cancel_btn') }}</vibe:button>
+                                            <vibe:button size="sm">{{ __('docs/tabs.card.rows_password_btn') }}</vibe:button>
+                                        </vibe:card.footer>
+                                    </vibe:tabs.panel>
+
+                                    {{-- Panel 3: Notifications --}}
+                                    <vibe:tabs.panel name="notifications">
+                                        <vibe:card.content class="p-0 space-y-4 divide-y divide-border/60">
+                                            <div class="pt-1">
+                                                <vibe:switch :label="__('docs/tabs.card.rows_notif_email_label')" :description="__('docs/tabs.card.rows_notif_email_desc')" labelPlacement="justify" :checked="true" />
+                                            </div>
+                                            <div class="pt-4">
+                                                <vibe:switch :label="__('docs/tabs.card.rows_notif_marketing_label')" :description="__('docs/tabs.card.rows_notif_marketing_desc')" labelPlacement="justify" :checked="false" />
+                                            </div>
+                                        </vibe:card.content>
+                                        <vibe:card.footer class="px-0 mt-6">
+                                            <vibe:button size="sm">{{ __('docs/tabs.card.rows_save_btn') }}</vibe:button>
+                                        </vibe:card.footer>
+                                    </vibe:tabs.panel>
+                                </vibe:tabs>
+                            </vibe:card>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- 3.2 Card dengan Tabs Kolom (Layout Cols) --}}
+                <div class="space-y-3">
+                    <div class="space-y-1">
+                        <h3 id="card-layout-cols" class="text-lg font-semibold text-foreground">{{ __('docs/tabs.card.cols_title') }}</h3>
+                        <p class="text-sm text-muted-foreground">{!! __('docs/tabs.card.cols_desc') !!}</p>
+                    </div>
+
+                    <vibe:preview :title="__('docs/tabs.card.cols_preview_title')">
+                        <vibe:preview.code>
+<vibe:card class="w-full max-w-3xl mx-auto p-0 overflow-hidden border border-border shadow-xs">
+    <div class="p-6 border-b border-border bg-muted/20">
+        <div class="flex items-center justify-between">
+            <div>
+                <vibe:card.title>{{ __('docs/tabs.card.cols_header_title') }}</vibe:card.title>
+                <vibe:card.description class="mt-1">{{ __('docs/tabs.card.cols_header_desc') }}</vibe:card.description>
+            </div>
+            <vibe:badge variant="outline" class="font-mono text-xs">team_slug</vibe:badge>
+        </div>
+    </div>
+
+    <vibe:tabs default="general" layout="cols" variant="underline" class="gap-0">
+        {{-- Left Sidebar Tabs --}}
+        <vibe:tabs.list class="w-full md:w-56 p-4 border-r border-border bg-muted/10 shrink-0 gap-1">
+            <vibe:tabs.tab name="general" class="w-full justify-start text-xs font-semibold">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.cols_tab_general') }}
+            </vibe:tabs.tab>
+
+            <vibe:tabs.tab name="members" badge="8" badgeVariant="secondary" class="w-full justify-start text-xs font-semibold">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.cols_tab_members') }}
+            </vibe:tabs.tab>
+
+            <vibe:tabs.tab name="billing" class="w-full justify-start text-xs font-semibold">
+                <x-slot:icon>
+                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                </x-slot:icon>
+                {{ __('docs/tabs.card.cols_tab_billing') }}
+            </vibe:tabs.tab>
+        </vibe:tabs.list>
+
+        {{-- Right Content Panels --}}
+        <div class="flex-1 min-w-0">
+            {{-- General Panel --}}
+            <vibe:tabs.panel name="general" class="p-6">
+                <vibe:card.content class="p-0 space-y-4">
+                    <vibe:input :label="__('docs/tabs.card.cols_general_name')" value="Teknovate Labs" />
+                    <vibe:input :label="__('docs/tabs.card.cols_general_slug')" prefix="https://app.teknovate.id/" value="teknovate-labs" />
+                    <vibe:input :label="__('docs/tabs.card.cols_general_desc_field')" value="Divisi riset dan pengembangan teknologi antarmuka modern." />
+                </vibe:card.content>
+                <vibe:card.footer class="p-0 pt-6 mt-6 border-t border-border/60">
+                    <vibe:button size="sm">{{ __('docs/tabs.card.cols_save_workspace') }}</vibe:button>
+                </vibe:card.footer>
+            </vibe:tabs.panel>
+
+            {{-- Members Panel --}}
+            <vibe:tabs.panel name="members" class="p-6">
+                <vibe:card.content class="p-0 space-y-3">
+                    <div class="flex items-center justify-between pb-2 border-b border-border/60">
+                        <span class="text-xs font-medium text-muted-foreground">8 Anggota Aktif</span>
+                        <vibe:button size="xs" variant="outline">{{ __('docs/tabs.card.cols_invite_btn') }}</vibe:button>
+                    </div>
+                    <div class="flex items-center justify-between py-2 text-xs">
+                        <div class="flex items-center gap-2.5">
+                            <vibe:avatar size="sm" initials="FR" />
+                            <div>
+                                <p class="font-medium text-foreground">Fahril Rizqy</p>
+                                <p class="text-muted-foreground text-[11px]">fahril@teknovate.id</p>
+                            </div>
+                        </div>
+                        <vibe:badge size="xs" variant="primary">{{ __('docs/tabs.card.cols_member_1_role') }}</vibe:badge>
+                    </div>
+                    <div class="flex items-center justify-between py-2 text-xs border-t border-border/40">
+                        <div class="flex items-center gap-2.5">
+                            <vibe:avatar size="sm" initials="AL" />
+                            <div>
+                                <p class="font-medium text-foreground">Ahmad Luthfi</p>
+                                <p class="text-muted-foreground text-[11px]">luthfi@teknovate.id</p>
+                            </div>
+                        </div>
+                        <vibe:badge size="xs" variant="secondary">{{ __('docs/tabs.card.cols_member_2_role') }}</vibe:badge>
+                    </div>
+                </vibe:card.content>
+            </vibe:tabs.panel>
+
+            {{-- Billing Panel --}}
+            <vibe:tabs.panel name="billing" class="p-6">
+                <vibe:card.content class="p-0 space-y-4">
+                    <div class="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
+                        <div class="flex items-center justify-between">
+                            <span class="font-semibold text-sm text-foreground">{{ __('docs/tabs.card.cols_plan_title') }}</span>
+                            <vibe:badge variant="primary" size="xs">Aktif</vibe:badge>
+                        </div>
+                        <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/tabs.card.cols_plan_desc') }}</p>
+                    </div>
+                    <div class="space-y-1 text-xs">
+                        <div class="flex justify-between text-muted-foreground">
+                            <span>Kapasitas Penyimpanan</span>
+                            <span class="font-medium text-foreground">18.4 GB / 50 GB</span>
+                        </div>
+                        <div class="w-full h-2 rounded-full bg-muted overflow-hidden">
+                            <div class="h-full bg-primary rounded-full" style="width: 36.8%;"></div>
+                        </div>
+                    </div>
+                </vibe:card.content>
+                <vibe:card.footer class="p-0 pt-6 mt-6 border-t border-border/60">
+                    <vibe:button size="sm" variant="outline">{{ __('docs/tabs.card.cols_upgrade_btn') }}</vibe:button>
+                </vibe:card.footer>
+            </vibe:tabs.panel>
+        </div>
+    </vibe:tabs>
+</vibe:card>
+                        </vibe:preview.code>
+
+                        <div class="p-6 w-full flex justify-center">
+                            <vibe:card class="w-full max-w-3xl border border-border shadow-xs p-0 overflow-hidden">
+                                <div class="p-6 border-b border-border bg-muted/20">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <vibe:card.title>{{ __('docs/tabs.card.cols_header_title') }}</vibe:card.title>
+                                            <vibe:card.description class="mt-1">{{ __('docs/tabs.card.cols_header_desc') }}</vibe:card.description>
+                                        </div>
+                                        <vibe:badge variant="outline" class="font-mono text-xs">team_slug</vibe:badge>
+                                    </div>
+                                </div>
+
+                                <vibe:tabs default="general" layout="cols" variant="underline" class="gap-0">
+                                    {{-- Left Sidebar Tabs --}}
+                                    <vibe:tabs.list class="w-full md:w-56 p-4 border-r border-border bg-muted/10 shrink-0 gap-1">
+                                        <vibe:tabs.tab name="general" class="w-full justify-start text-xs font-semibold">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="7" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.cols_tab_general') }}
+                                        </vibe:tabs.tab>
+
+                                        <vibe:tabs.tab name="members" badge="8" badgeVariant="secondary" class="w-full justify-start text-xs font-semibold">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.cols_tab_members') }}
+                                        </vibe:tabs.tab>
+
+                                        <vibe:tabs.tab name="billing" class="w-full justify-start text-xs font-semibold">
+                                            <x-slot:icon>
+                                                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/></svg>
+                                            </x-slot:icon>
+                                            {{ __('docs/tabs.card.cols_tab_billing') }}
+                                        </vibe:tabs.tab>
+                                    </vibe:tabs.list>
+
+                                    {{-- Right Content Panels --}}
+                                    <div class="flex-1 min-w-0">
+                                        {{-- General Panel --}}
+                                        <vibe:tabs.panel name="general" class="p-6">
+                                            <vibe:card.content class="p-0 space-y-4">
+                                                <vibe:input :label="__('docs/tabs.card.cols_general_name')" value="Teknovate Labs" />
+                                                <vibe:input :label="__('docs/tabs.card.cols_general_slug')" prefix="https://app.teknovate.id/" value="teknovate-labs" />
+                                                <vibe:input :label="__('docs/tabs.card.cols_general_desc_field')" value="Divisi riset dan pengembangan teknologi antarmuka modern." />
+                                            </vibe:card.content>
+                                            <vibe:card.footer class="p-0 pt-6 mt-6 border-t border-border/60">
+                                                <vibe:button size="sm">{{ __('docs/tabs.card.cols_save_workspace') }}</vibe:button>
+                                            </vibe:card.footer>
+                                        </vibe:tabs.panel>
+
+                                        {{-- Members Panel --}}
+                                        <vibe:tabs.panel name="members" class="p-6">
+                                            <vibe:card.content class="p-0 space-y-3">
+                                                <div class="flex items-center justify-between pb-2 border-b border-border/60">
+                                                    <span class="text-xs font-medium text-muted-foreground">8 Anggota Aktif</span>
+                                                    <vibe:button size="xs" variant="outline">{{ __('docs/tabs.card.cols_invite_btn') }}</vibe:button>
+                                                </div>
+                                                <div class="flex items-center justify-between py-2 text-xs">
+                                                    <div class="flex items-center gap-2.5">
+                                                        <vibe:avatar size="sm" initials="FR" />
+                                                        <div>
+                                                            <p class="font-medium text-foreground">Fahril Rizqy</p>
+                                                            <p class="text-muted-foreground text-[11px]">fahril@teknovate.id</p>
+                                                        </div>
+                                                    </div>
+                                                    <vibe:badge size="xs" variant="primary">{{ __('docs/tabs.card.cols_member_1_role') }}</vibe:badge>
+                                                </div>
+                                                <div class="flex items-center justify-between py-2 text-xs border-t border-border/40">
+                                                    <div class="flex items-center gap-2.5">
+                                                        <vibe:avatar size="sm" initials="AL" />
+                                                        <div>
+                                                            <p class="font-medium text-foreground">Ahmad Luthfi</p>
+                                                            <p class="text-muted-foreground text-[11px]">luthfi@teknovate.id</p>
+                                                        </div>
+                                                    </div>
+                                                    <vibe:badge size="xs" variant="secondary">{{ __('docs/tabs.card.cols_member_2_role') }}</vibe:badge>
+                                                </div>
+                                            </vibe:card.content>
+                                        </vibe:tabs.panel>
+
+                                        {{-- Billing Panel --}}
+                                        <vibe:tabs.panel name="billing" class="p-6">
+                                            <vibe:card.content class="p-0 space-y-4">
+                                                <div class="rounded-xl border border-primary/20 bg-primary/5 p-4 space-y-2">
+                                                    <div class="flex items-center justify-between">
+                                                        <span class="font-semibold text-sm text-foreground">{{ __('docs/tabs.card.cols_plan_title') }}</span>
+                                                        <vibe:badge variant="primary" size="xs">Aktif</vibe:badge>
+                                                    </div>
+                                                    <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/tabs.card.cols_plan_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-1 text-xs">
+                                                    <div class="flex justify-between text-muted-foreground">
+                                                        <span>Kapasitas Penyimpanan</span>
+                                                        <span class="font-medium text-foreground">18.4 GB / 50 GB</span>
+                                                    </div>
+                                                    <div class="w-full h-2 rounded-full bg-muted overflow-hidden">
+                                                        <div class="h-full bg-primary rounded-full" style="width: 36.8%;"></div>
+                                                    </div>
+                                                </div>
+                                            </vibe:card.content>
+                                            <vibe:card.footer class="p-0 pt-6 mt-6 border-t border-border/60">
+                                                <vibe:button size="sm" variant="outline">{{ __('docs/tabs.card.cols_upgrade_btn') }}</vibe:button>
+                                            </vibe:card.footer>
+                                        </vibe:tabs.panel>
+                                    </div>
+                                </vibe:tabs>
+                            </vibe:card>
+                        </div>
+                    </vibe:preview>
+                </div>
+            </section>
+
+            {{-- 4. Varian Gaya Visual --}}
             <section id="varian-gaya" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.variants.title') }}</h2>
@@ -370,8 +812,8 @@
                 </div>
             </section>
 
-            {{-- 4. Tab dengan Ikon SVG & Badge --}}
-            <section id="ikon-dan-badge" class="space-y-4">
+            {{-- 5. Tab dengan Ikon SVG & Badge --}}
+            <section id="ikon-badge" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.icons.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
@@ -472,7 +914,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 5. Tab Lebar Penuh (Fitted) --}}
+            {{-- 6. Tab Lebar Penuh (Fitted) --}}
             <section id="tab-lebar-penuh" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.fitted.title') }}</h2>
@@ -506,7 +948,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 6. Persistensi LocalStorage --}}
+            {{-- 7. Persistensi LocalStorage --}}
             <section id="persistensi-tabs" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.persist.title') }}</h2>
@@ -606,7 +1048,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 7. Integrasi Livewire & URL Sync --}}
+            {{-- 8. Integrasi Livewire & URL Sync --}}
             <section id="integrasi-livewire" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.livewire.title') }}</h2>
@@ -717,7 +1159,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 8. Inspirasi Desain Kustom (Custom Class) --}}
+            {{-- 9. Inspirasi Desain Kustom (Custom Class) --}}
             <section id="desain-kustom" class="space-y-10">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.custom.title') }}</h2>
@@ -1421,7 +1863,7 @@ print(completion.choices[0].message.content)</code></pre>
                 </div>
             </section>
 
-            {{-- 9. Referensi Properti & API --}}
+            {{-- 10. Referensi Properti & API --}}
             <section id="referensi-api" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/tabs.props.title') }}</h2>
