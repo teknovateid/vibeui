@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardPageController;
 use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,6 +47,9 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
         return view('docs.chart.index', compact('monthlyMetrics', 'categoryMetrics'));
     })->name('chart.index');
+
+    Route::get('/dashboard/{view}',[DashboardPageController::class,'show'])->name('dashboard.show');
+
 });
 
 

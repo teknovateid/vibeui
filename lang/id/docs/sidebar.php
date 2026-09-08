@@ -5,6 +5,7 @@ return [
         'get_started' => 'MULAI',
         'components' => 'KOMPONEN',
         'pages' => 'HALAMAN',
+        'dashboard' => 'Dashboard eCommerce',
     ],
 
     'nav' => [
@@ -40,6 +41,7 @@ return [
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',
         'chart' => 'Chart',
+        'dashboard' => 'dashboard',
     ],
 
     'notifications' => [

@@ -4,7 +4,8 @@ return [
     'groups' => [
         'get_started' => 'GET STARTED',
         'components' => 'COMPONENTS',
-        'pages' => 'PAGES'
+        'pages' => 'PAGES',
+        'dashboard' => 'eCommerce Dashboard',
     ],
 
     'nav' => [
