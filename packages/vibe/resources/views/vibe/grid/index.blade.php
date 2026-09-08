@@ -21,7 +21,7 @@
     };
 @endphp
 
-@pushOnce('body', 'vibe-grid')
+@pushOnce('head', 'vibe-grid')
     @vite(['resources/js/vibe/grid.js'])
 @endPushOnce
 
@@ -58,15 +58,14 @@
                 if (typeof window.vibeGrid === 'function') {
                     isBound = true;
                     clearInterval(timer);
-                    Object.assign(self, window.vibeGrid({
-                        id: '{{ $gridId }}',
-                        cols: {{ (int) $cols }},
-                        persist: {{ $persist ? 'true' : 'false' }},
-                        resizable: {{ $resizable ? 'true' : 'false' }},
-                        reorderable: {{ $reorderable ? 'true' : 'false' }},
-                        storageKey: '{{ $storageKey ?: '' }}'
-                    }));
-                    self.init();
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
+                        var el = self.$el;
+                        if (typeof window.Alpine.destroyTree === 'function') {
+                            try { window.Alpine.destroyTree(el); } catch (e) {}
+                        }
+                        delete el._x_dataStack;
+                        window.Alpine.initTree(el);
+                    }
                 }
             };
 
@@ -75,7 +74,7 @@
                 if (typeof window.vibeGrid === 'function') {
                     bindGrid();
                 }
-            }, 30);
+            }, 25);
             setTimeout(function() { clearInterval(timer); }, 3000);
         },
         onDragOver() {},

@@ -991,5 +991,6 @@ if (typeof window !== 'undefined') {
     registerVibeDateTime();
     document.addEventListener('alpine:init', registerVibeDateTime);
     document.addEventListener('livewire:init', registerVibeDateTime);
+    document.addEventListener('livewire:navigated', registerVibeDateTime);
     window.dispatchEvent(new CustomEvent('vibe-date-time-ready'));
 }

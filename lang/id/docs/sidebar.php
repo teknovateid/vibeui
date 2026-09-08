@@ -4,6 +4,7 @@ return [
     'groups' => [
         'get_started' => 'MULAI',
         'components' => 'KOMPONEN',
+        'pages' => 'HALAMAN',
     ],
 
     'nav' => [

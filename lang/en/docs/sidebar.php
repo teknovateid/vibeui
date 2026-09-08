@@ -4,6 +4,7 @@ return [
     'groups' => [
         'get_started' => 'GET STARTED',
         'components' => 'COMPONENTS',
+        'pages' => 'PAGES'
     ],
 
     'nav' => [

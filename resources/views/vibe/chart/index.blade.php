@@ -61,7 +61,7 @@
     $configJson = !empty($finalConfig) ? json_encode($finalConfig, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) : '{}';
 @endphp
 
-@pushOnce('body', 'vibe-chart')
+@pushOnce('head', 'vibe-chart')
     @vite(['resources/css/vibe/chart.css', 'resources/js/vibe/chart.js'])
 @endPushOnce
 
@@ -80,17 +80,23 @@
             }
         },
         init() {
-            window.addEventListener('vibe-chart-ready', () => {
-                let instance = window.vibeChart({{ $configJson }});
-                Object.assign(this, instance);
-                this.$nextTick(() => {
-                    this.renderChart();
-                    this.setupThemeListener();
-                });
-                if (typeof this.$cleanup === 'function') {
-                    this.$cleanup(() => this.destroy());
+            var self = this;
+            var bindChart = function() {
+                if (typeof window.vibeChart !== 'undefined') {
+                    clearInterval(timer);
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
+                        var el = self.$el;
+                        if (typeof window.Alpine.destroyTree === 'function') {
+                            try { window.Alpine.destroyTree(el); } catch (e) {}
+                        }
+                        delete el._x_dataStack;
+                        window.Alpine.initTree(el);
+                    }
                 }
-            }, { once: true });
+            };
+            window.addEventListener('vibe-chart-ready', bindChart, { once: true });
+            var timer = setInterval(bindChart, 25);
+            setTimeout(function() { clearInterval(timer); }, 3000);
         }
     }"
 >

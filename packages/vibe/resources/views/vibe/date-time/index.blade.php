@@ -109,11 +109,12 @@
     ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 @endphp
 
-@pushOnce('body', 'vibe-date-time')
+@pushOnce('head', 'vibe-date-time')
     @vite(['resources/js/vibe/date-time.js'])
 @endPushOnce
 
 <div
+    data-vibe-date-time
     class="w-full space-y-1.5 text-left {{ $attributes->get('class') }}"
     x-data="typeof window.vibeDateTime === 'function' ? window.vibeDateTime({{ $configJson }}) : {
         id: '{{ $dtId }}',
@@ -149,9 +150,14 @@
                 if (typeof window.vibeDateTime === 'function') {
                     isBound = true;
                     clearInterval(timer);
-                    var inst = window.vibeDateTime({{ $configJson }});
-                    Object.defineProperties(self, Object.getOwnPropertyDescriptors(inst));
-                    self.init();
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
+                        var el = self.$el;
+                        if (typeof window.Alpine.destroyTree === 'function') {
+                            try { window.Alpine.destroyTree(el); } catch (e) {}
+                        }
+                        delete el._x_dataStack;
+                        window.Alpine.initTree(el);
+                    }
                 }
             };
             window.addEventListener('vibe-date-time-ready', bindDt, { once: true });
@@ -159,7 +165,7 @@
                 if (typeof window.vibeDateTime === 'function') {
                     bindDt();
                 }
-            }, 30);
+            }, 25);
             setTimeout(function() { clearInterval(timer); }, 3000);
         },
         prevMonth() {}, nextMonth() {}, prevDecade() {}, nextDecade() {},

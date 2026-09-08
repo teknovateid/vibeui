@@ -1926,7 +1926,7 @@ BLADE;
     </div>
 
     {{-- Script for standalone demos --}}
-    @push('body')
+    @push('head')
         <script>
             (function() {
                 window.initMethod4Demo = () => {

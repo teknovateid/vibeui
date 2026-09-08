@@ -53,7 +53,7 @@
     @endif
 </vibe:button>
 
-@pushOnce('body', 'vibe-confirm-delete-handler')
+@pushOnce('head', 'vibe-confirm-delete-handler')
     <script>
         if (typeof window.vibeConfirmDelete === 'undefined') {
             window.vibeConfirmDelete = function(target, callback) {

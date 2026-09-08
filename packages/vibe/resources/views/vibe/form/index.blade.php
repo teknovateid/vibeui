@@ -8,7 +8,7 @@
     'expireHours' => 24,
 ])
 
-@pushOnce('body', 'vibe-form')
+@pushOnce('head', 'vibe-form')
     @vite(['resources/js/vibe/form.js'])
 @endPushOnce
 
@@ -28,23 +28,23 @@
             var self = this;
             var bindForm = function() {
                 if (typeof window.vibeForm === 'function') {
-                    Object.assign(self, window.vibeForm({
-                        id: '{{ $id }}',
-                        ajax: {{ $ajax ? 'true' : 'false' }},
-                        saveToStorage: {{ ($saveToStorage && $id) ? 'true' : 'false' }},
-                        storageType: '{{ $storageType }}',
-                        expireHours: {{ $expireHours }}
-                    }));
-                    self.init();
+                    clearInterval(timer);
+                    if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
+                        var el = self.$el;
+                        if (typeof window.Alpine.destroyTree === 'function') {
+                            try { window.Alpine.destroyTree(el); } catch (e) {}
+                        }
+                        delete el._x_dataStack;
+                        window.Alpine.initTree(el);
+                    }
                 }
             };
             window.addEventListener('vibe-form-ready', bindForm, { once: true });
             var timer = setInterval(function() {
                 if (typeof window.vibeForm === 'function') {
-                    clearInterval(timer);
                     bindForm();
                 }
-            }, 40);
+            }, 25);
             setTimeout(function() { clearInterval(timer); }, 3000);
         },
         handleSubmit(e) {
