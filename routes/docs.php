@@ -49,6 +49,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     })->name('chart.index');
 
     Route::get('/dashboard/{view}',[DashboardPageController::class,'show'])->name('dashboard.show');
+    Route::view('/settings', 'docs.settings.index')->name('settings.index');
 
 });
 
