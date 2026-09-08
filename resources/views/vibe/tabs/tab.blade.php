@@ -53,8 +53,8 @@
     ]) }}
     x-bind:class="{
         {{-- Layout 2 Baris (Horizontal / Rows) --}}
-        'bg-white text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50 dark:bg-white/15 dark:text-white dark:ring-white/20': layout === 'rows' && variant === 'pill' && activeTab === '{{ $name }}',
-        'text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'rows' && variant === 'pill' && activeTab === '{{ $name }}',
+        'text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
 
         'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent px-3 pb-2.5 pt-2 hover:bg-transparent': layout === 'rows' && variant === 'underline' && activeTab === '{{ $name }}',
         'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 pb-2.5 pt-2 font-medium hover:bg-transparent': layout === 'rows' && variant === 'underline' && activeTab !== '{{ $name }}',
@@ -63,14 +63,18 @@
         '{{ $inactiveBtnClasses }} font-medium rounded-lg': layout === 'rows' && variant === 'button' && activeTab !== '{{ $name }}',
 
         {{-- Layout 2 Kolom (Vertical / Cols) --}}
-        'w-full justify-start text-left bg-white text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50 dark:bg-white/15 dark:text-white dark:ring-white/20': layout === 'cols' && variant === 'pill' && activeTab === '{{ $name }}',
-        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 rounded-lg font-medium': layout === 'cols' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'w-full justify-start text-left bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'cols' && variant === 'pill' && activeTab === '{{ $name }}',
+        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': layout === 'cols' && variant === 'pill' && activeTab !== '{{ $name }}',
 
         'w-full justify-start text-left border-r-2 border-primary text-foreground font-semibold -mr-px rounded-none bg-transparent px-3 py-2 hover:bg-transparent': layout === 'cols' && variant === 'underline' && activeTab === '{{ $name }}',
         'w-full justify-start text-left border-r-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 py-2 font-medium hover:bg-transparent': layout === 'cols' && variant === 'underline' && activeTab !== '{{ $name }}',
 
         'w-full justify-start text-left {{ $activeBtnClasses }} font-medium rounded-lg': layout === 'cols' && variant === 'button' && activeTab === '{{ $name }}',
         'w-full justify-start text-left {{ $inactiveBtnClasses }} font-medium rounded-lg': layout === 'cols' && variant === 'button' && activeTab !== '{{ $name }}',
+
+        {{-- Layout Sidebar --}}
+        'w-full justify-start text-left bg-accent text-accent-foreground font-semibold rounded-lg shadow-2xs': variant === 'sidebar' && activeTab === '{{ $name }}',
+        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': variant === 'sidebar' && activeTab !== '{{ $name }}',
     }"
 >
     @if (isset($icon))

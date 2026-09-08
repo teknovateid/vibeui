@@ -28,6 +28,7 @@
         'flex flex-col gap-1 p-1.5 bg-muted rounded-xl border border-border/40 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'pill',
         'flex flex-col border-r border-border w-full md:w-60 shrink-0': layout === 'cols' && variant === 'underline',
         'flex flex-col gap-2 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'button',
+        'flex flex-col border-b md:border-b-0 md:border-r border-border w-full md:w-60 shrink-0 self-stretch p-3.5 gap-1': variant === 'sidebar',
         '*:flex-1 w-full': {{ $isFitted ? 'true' : 'false' }}
     }"
 >

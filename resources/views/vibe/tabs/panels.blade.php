@@ -5,7 +5,7 @@
         'class' => 'vibe-tabs-panels w-full'
     ]) }}
     :class="{
-        'flex-1 min-w-0': layout === 'cols'
+        'flex-1 min-w-0': layout === 'cols' || variant === 'sidebar'
     }"
 >
     {{ $slot }}

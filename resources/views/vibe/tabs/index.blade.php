@@ -5,7 +5,7 @@
     'default' => null,
     'layout' => 'rows', // 'rows' (2 baris: list di atas, panel di bawah) atau 'cols' (2 kolom: list di kiri, panel di kanan)
     'orientation' => null, // alias: 'horizontal' (rows), 'vertical' (cols)
-    'variant' => 'pill', // 'pill', 'underline', 'button'
+    'variant' => 'pill', // 'pill', 'underline', 'button', 'sidebar'
     'size' => 'md', // 'sm', 'md', 'lg'
     'persist' => false,
     'id' => null,
@@ -13,14 +13,17 @@
 ])
 
 @php
-    $isCols = in_array($layout, ['cols', 'columns', '2-cols', 'vertical']) || $orientation === 'vertical';
+    $isSidebar = $variant === 'sidebar';
+    $isCols = in_array($layout, ['cols', 'columns', '2-cols', 'vertical']) || $orientation === 'vertical' || $isSidebar;
     $normalizedLayout = $isCols ? 'cols' : 'rows';
     $tabId = $id ?? uniqid('tabs-');
     $initialTab = $selected ?? $default ?? '';
     
-    $layoutClasses = $isCols 
-        ? 'flex flex-col md:flex-row gap-6 w-full items-start' 
-        : 'flex flex-col gap-4 w-full';
+    $layoutClasses = match(true) {
+        $isSidebar => 'flex flex-col md:flex-row w-full items-stretch gap-0',
+        $isCols => 'flex flex-col md:flex-row gap-6 w-full items-start',
+        default => 'flex flex-col gap-4 w-full',
+    };
 @endphp
 
 <div 
