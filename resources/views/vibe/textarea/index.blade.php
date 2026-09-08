@@ -65,7 +65,20 @@
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
 @endphp
 
-<div class="{{ $wrapperClass }}">
+<div class="{{ $wrapperClass }}" x-data="{
+    count: 0,
+    init() {
+        this.count = this.$refs.textarea ? this.$refs.textarea.value.length : 0;
+        if ({{ $autoResize ? 'true' : 'false' }}) {
+            this.$nextTick(() => this.resize());
+        }
+    },
+    resize() {
+        if (!{{ $autoResize ? 'true' : 'false' }}) return;
+        this.$refs.textarea.style.height = 'auto';
+        this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight + 2) + 'px';
+    }
+}">
     {{-- Top Label & Character Counter --}}
     @if ($label || ($showCount && $maxlength))
         <div class="flex items-center justify-between mb-1.5 select-none">
@@ -80,7 +93,7 @@
 
             @if ($showCount && $maxlength)
                 <span class="text-[11px] font-mono text-muted-foreground ml-auto" id="{{ $id }}-counter">
-                    <span x-data x-text="$el.closest('div.{{ $wrapperClass ?? 'space-y-0' }}')?.querySelector('textarea')?.value?.length || 0">0</span>/{{ $maxlength }}
+                    <span x-text="count">0</span>/{{ $maxlength }}
                 </span>
             @endif
         </div>
@@ -90,20 +103,7 @@
         <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
     @endif
 
-    <div class="relative" x-data="{
-        count: 0,
-        init() {
-            this.count = this.$refs.textarea ? this.$refs.textarea.value.length : 0;
-            if ({{ $autoResize ? 'true' : 'false' }}) {
-                this.$nextTick(() => this.resize());
-            }
-        },
-        resize() {
-            if (!{{ $autoResize ? 'true' : 'false' }}) return;
-            this.$refs.textarea.style.height = 'auto';
-            this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight + 2) + 'px';
-        }
-    }">
+    <div class="relative">
         <textarea
             x-ref="textarea"
             id="{{ $id }}"
