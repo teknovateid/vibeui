@@ -34,7 +34,7 @@
                 class="px-2 py-1 rounded-md text-foreground hover:bg-accent transition-colors cursor-pointer font-semibold flex items-center gap-1.5"
             >
                 <span x-text="currentYear"></span>
-                <span class="text-xs font-normal text-muted-foreground" x-text="'(' + (dict.selectMonth || 'Pilih Bulan') + ')'"></span>
+                <span class="text-xs font-normal text-muted-foreground" x-text="'(' + (dict.selectMonth || 'Select Month') + ')'"></span>
                 <svg class="size-3 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m6 9 6 6 6-6"/>
                 </svg>
@@ -44,7 +44,7 @@
         <template x-if="viewMode === 'years'">
             <div class="px-2 py-1 text-foreground font-semibold flex items-center gap-1">
                 <span x-text="yearsStart + ' — ' + (yearsStart + 11)"></span>
-                <span class="text-xs font-normal text-muted-foreground" x-text="'(' + (dict.selectYear || 'Pilih Tahun') + ')'"></span>
+                <span class="text-xs font-normal text-muted-foreground" x-text="'(' + (dict.selectYear || 'Select Year') + ')'"></span>
             </div>
         </template>
     </div>
@@ -55,7 +55,7 @@
             type="button"
             @click="viewMode === 'days' ? prevMonth() : (viewMode === 'months' ? currentYear-- : prevDecade())"
             class="size-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
-            aria-label="Sebelumnya"
+            :aria-label="dict.previous || 'Previous'"
         >
             <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m15 18-6-6 6-6"/>
@@ -66,7 +66,7 @@
             type="button"
             @click="viewMode === 'days' ? nextMonth() : (viewMode === 'months' ? currentYear++ : nextDecade())"
             class="size-7 flex items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
-            aria-label="Berikutnya"
+            :aria-label="dict.next || 'Next'"
         >
             <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m9 18 6-6-6-6"/>

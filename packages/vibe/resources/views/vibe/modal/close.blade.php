@@ -4,7 +4,7 @@
     type="button"
     variant="ghost"
     size="icon-sm"
-    aria-label="{{ __('vibe/modal.close') ?? 'Tutup' }}"
+    aria-label="{{ __('vibe/modal.close') }}"
     @click="close()"
     {{ $attributes->twMerge(['class' => 'text-muted-foreground hover:text-foreground cursor-pointer rounded-lg']) }}
 >

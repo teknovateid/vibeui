@@ -3,14 +3,18 @@
 @props([
     'variant' => 'ghost',
     'size' => 'md',
-    'title' => 'Hapus Data?',
-    'message' => 'Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.',
-    'confirmText' => 'Ya, Hapus',
-    'cancelText' => 'Batal',
+    'title' => null,
+    'message' => null,
+    'confirmText' => null,
+    'cancelText' => null,
     'action' => null,
 ])
 
 @php
+    $title = $title ?? __('vibe/button.delete_title');
+    $message = $message ?? __('vibe/button.delete_message');
+    $confirmText = $confirmText ?? __('vibe/button.delete_confirm');
+    $cancelText = $cancelText ?? __('vibe/button.delete_cancel');
     $wireClick = $attributes->wire('click')->value();
     $buttonAttributes = $attributes->whereDoesntStartWith('wire:click');
     $isGhost = $variant === 'ghost';

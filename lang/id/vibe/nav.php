@@ -7,4 +7,5 @@ return [
     'history' => 'Riwayat',
     'clear_history' => 'Hapus Riwayat',
     'no_history' => 'Belum ada riwayat halaman.',
+    'remove_from_history' => 'Hapus dari riwayat',
 ];

@@ -15,4 +15,12 @@ return [
     'export' => 'Ekspor',
     'columns' => 'Kolom',
     'selected' => ':count item dipilih',
+    'loading' => 'Memuat data...',
+    'empty_description' => 'Coba sesuaikan kata kunci pencarian atau filter Anda untuk menemukan apa yang Anda cari.',
+    'clear_search' => 'Hapus pencarian',
+    'reset_filter' => 'Reset Filter',
+    'select_page_or_all' => 'Pilih halaman ini atau semua data',
+    'select_this_page' => 'Pilih halaman ini',
+    'select_all' => 'Pilih semua',
+    'deselect_all' => 'Batalkan pilihan',
 ];

@@ -51,8 +51,8 @@
                     <button
                         type="button"
                         class="flex items-center justify-center size-4 rounded text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors focus-visible:outline-none cursor-pointer"
-                        title="{{ __('Pilih halaman ini atau semua data') }}"
-                        aria-label="{{ __('Pilih halaman ini atau semua data') }}"
+                        title="{{ __('vibe/datatable.select_page_or_all') }}"
+                        aria-label="{{ __('vibe/datatable.select_page_or_all') }}"
                     >
                         <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m6 9 6 6 6-6"/>
@@ -68,7 +68,7 @@
                                 <rect width="18" height="18" x="3" y="3" rx="2"/>
                                 <path d="M9 12h6"/>
                             </svg>
-                            <span>{{ __('Pilih halaman ini') }}</span>
+                            <span>{{ __('vibe/datatable.select_this_page') }}</span>
                         </span>
                         <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground" x-text="paginationCurrentCount"></span>
                     </vibe:dropdown.item>
@@ -80,7 +80,7 @@
                                 <rect width="18" height="18" x="3" y="3" rx="2"/>
                                 <path d="m9 12 2 2 4-4"/>
                             </svg>
-                            <span>{{ __('Pilih semua') }}</span>
+                            <span>{{ __('vibe/datatable.select_all') }}</span>
                         </span>
                         <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-muted text-muted-foreground" x-text="paginationTotalItemCount"></span>
                     </vibe:dropdown.item>
@@ -95,7 +95,7 @@
                                     <path d="m15 9-6 6"/>
                                     <path d="m9 9 6 6"/>
                                 </svg>
-                                <span>{{ __('Batalkan pilihan') }}</span>
+                                <span>{{ __('vibe/datatable.deselect_all') }}</span>
                             </vibe:dropdown.item>
                         </div>
                     </template>

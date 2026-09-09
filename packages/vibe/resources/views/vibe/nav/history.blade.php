@@ -196,7 +196,7 @@
                     var delBtn = document.createElement('button');
                     delBtn.type = 'button';
                     delBtn.setAttribute('data-history-delete', 'true');
-                    delBtn.title = 'Remove from history';
+                    delBtn.title = '{{ __('vibe/nav.remove_from_history') }}';
                     delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-accent text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
                     delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
                     

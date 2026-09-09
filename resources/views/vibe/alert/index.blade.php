@@ -379,10 +379,10 @@
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
     " class="fixed inset-0 z-100 flex pointer-events-none" id="vibe-alert-container" :class="getPositionClasses()">
-    <div class="hidden" x-init="@if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/toast.success') }}' }); @endif
-    @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/toast.error') }}' }); @endif
-    @if (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: '{{ __('vibe/toast.warning') }}' }); @endif
-    @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/toast.info') }}' }); @endif"></div>
+    <div class="hidden" x-init="@if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/alert.success') }}' }); @endif
+    @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/alert.error') }}' }); @endif
+    @if (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: '{{ __('vibe/alert.warning') }}' }); @endif
+    @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/alert.info') }}' }); @endif"></div>
 
     <!-- Backdrop -->
     <div x-show="alerts.some(a => a.blocking || (a.blur && a.blur !== false && a.blur !== 'none'))" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" @click="closeOutsideAlerts()" style="display: none; z-index: -1;"></div>
@@ -393,7 +393,7 @@
             <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready && canCloseOutside(alert)) remove(alert.id)" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
                 <div class="p-5 sm:p-6 flex flex-col" :class="getAlignClasses(alert)">
                     <div class="flex size-16 items-center justify-center rounded-full mb-4" :class="typeClasses[alert.type] || typeClasses.info" x-html="alert.icon || icons[alert.type] || icons.info"></div>
-                    <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? 'Error' : (alert.type === 'success' ? 'Berhasil' : 'Pemberitahuan'))"></h3>
+                    <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? '{{ __('vibe/alert.error') }}' : (alert.type === 'success' ? '{{ __('vibe/alert.success') }}' : '{{ __('vibe/alert.notice') }}'))"></h3>
                     <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed" x-text="alert.message"></p>
                 </div>
 

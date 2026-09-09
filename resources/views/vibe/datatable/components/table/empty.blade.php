@@ -13,10 +13,10 @@
                 </svg>
             </div>
             <h3 class="text-sm font-semibold text-foreground">
-                {{ $this->getEmptyMessage() ?: 'No records found' }}
+                {{ $this->getEmptyMessage() ?: __('vibe/datatable.no_records') }}
             </h3>
             <p class="mt-1 text-xs text-muted-foreground max-w-sm">
-                Try adjusting your search terms or filters to find what you are looking for.
+                {{ __('vibe/datatable.empty_description') }}
             </p>
         </div>
     </td>

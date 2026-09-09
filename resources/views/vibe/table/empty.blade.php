@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'title' => 'Tidak ada data ditemukan',
+    'title' =>  __('vibe/table.no_data'),
     'description' => null,
     'colspan' => 100,
 ])

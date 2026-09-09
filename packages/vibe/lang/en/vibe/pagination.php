@@ -7,4 +7,6 @@ return [
     'to' => 'to',
     'of' => 'of',
     'results' => 'results',
+    'navigation' => 'Pagination Navigation',
+    'goto_page' => 'Go to page :page',
 ];

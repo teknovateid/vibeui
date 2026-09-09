@@ -140,11 +140,11 @@
                         'text-muted-foreground hover:text-foreground hover:bg-background/40 font-medium': tab !== 'preview'
                     }"
                     class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-all duration-150 {{ $tab === 'preview' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground hover:bg-background/40 font-medium' }}"
-                    aria-label="Tampilkan live preview"
+                    aria-label="{{ __('vibe/preview.show_preview') }}"
                 >
                     <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
-                        <circle cx="12" cy="12" r="3" />
+                        <circle cx="12" cy="3" r="3" />
                     </svg>
                     <span>{{ __('vibe/preview.preview') }}</span>
                 </button>
@@ -165,7 +165,7 @@
                         'text-muted-foreground hover:text-foreground hover:bg-background/40 font-medium': tab !== 'code'
                     }"
                     class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-all duration-150 {{ $tab === 'code' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground hover:bg-background/40 font-medium' }}"
-                    aria-label="Tampilkan kode sumber"
+                    aria-label="{{ __('vibe/preview.show_code') }}"
                 >
                     <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="16 18 22 12 16 6" />
@@ -203,8 +203,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': viewport !== '100%'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '100%' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Desktop (100%)"
-                        aria-label="Tampilan desktop 100%"
+                        title="{{ __('vibe/preview.desktop_view') }}"
+                        aria-label="{{ __('vibe/preview.desktop_view') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="20" height="14" x="2" y="3" rx="2" />
@@ -223,8 +223,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': viewport !== '768px'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '768px' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Tablet (768px)"
-                        aria-label="Tampilan tablet 768px"
+                        title="{{ __('vibe/preview.tablet_view') }}"
+                        aria-label="{{ __('vibe/preview.tablet_view') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="18" height="14" x="3" y="5" rx="2" ry="2" />
@@ -242,8 +242,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': viewport !== '375px'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '375px' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Mobile (375px)"
-                        aria-label="Tampilan mobile 375px"
+                        title="{{ __('vibe/preview.mobile_view') }}"
+                        aria-label="{{ __('vibe/preview.mobile_view') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
@@ -271,8 +271,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': canvasTheme !== 'auto'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'auto' ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Mode Otomatis (Mengikuti tema web)"
-                        aria-label="Mode tema otomatis"
+                        title="{{ __('vibe/preview.theme_auto') }}"
+                        aria-label="{{ __('vibe/preview.theme_auto') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="20" height="14" x="2" y="3" rx="2" />
@@ -291,8 +291,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': canvasTheme !== 'light'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'light' ? 'bg-background text-amber-500 shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Uji Canvas Mode Terang"
-                        aria-label="Uji mode terang"
+                        title="{{ __('vibe/preview.theme_light') }}"
+                        aria-label="{{ __('vibe/preview.theme_light') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="4" />
@@ -310,8 +310,8 @@
                             'text-muted-foreground hover:text-foreground hover:bg-background/40': canvasTheme !== 'dark'
                         }"
                         class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'dark' ? 'bg-background text-indigo-400 shadow-xs' : 'text-muted-foreground hover:text-foreground hover:bg-background/40' }}"
-                        title="Uji Canvas Mode Gelap"
-                        aria-label="Uji mode gelap"
+                        title="{{ __('vibe/preview.theme_dark') }}"
+                        aria-label="{{ __('vibe/preview.theme_dark') }}"
                     >
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />

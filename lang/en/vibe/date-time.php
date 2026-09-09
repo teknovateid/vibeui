@@ -60,6 +60,8 @@ return [
     'selectTime' => 'Select Time',
     'selectMonth' => 'Select Month',
     'selectYear' => 'Select Year',
+    'previous' => 'Previous',
+    'next' => 'Next',
     'multipleSelected' => ':count dates selected',
     'placeholders' => [
         'date' => 'Select date',
