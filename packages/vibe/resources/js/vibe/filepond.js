@@ -29,6 +29,214 @@ if (FilePond && typeof FilePond.registerPlugin === 'function') {
 window.FilePond = FilePond;
 
 /**
+ * Global lightbox modal for viewing full-size image previews
+ */
+function openImageLightbox(src, title) {
+    let backdrop = document.getElementById('vibe-filepond-lightbox');
+    if (!backdrop) {
+        backdrop = document.createElement('div');
+        backdrop.id = 'vibe-filepond-lightbox';
+        backdrop.className = 'filepond--lightbox-backdrop';
+        backdrop.innerHTML = `
+            <button type="button" class="filepond--lightbox-close" title="Tutup" aria-label="Tutup">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="filepond--lightbox-content">
+                <img class="filepond--lightbox-img" src="" alt="" />
+                <div class="filepond--lightbox-caption"></div>
+            </div>
+        `;
+        document.body.appendChild(backdrop);
+
+        const closeBtn = backdrop.querySelector('.filepond--lightbox-close');
+        const close = () => {
+            backdrop.classList.remove('active');
+            setTimeout(() => {
+                backdrop.style.display = 'none';
+            }, 250);
+        };
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            close();
+        });
+
+        backdrop.addEventListener('click', (e) => {
+            if (e.target === backdrop || e.target.classList.contains('filepond--lightbox-close')) {
+                close();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && backdrop.classList.contains('active')) {
+                close();
+            }
+        });
+    }
+
+    const img = backdrop.querySelector('.filepond--lightbox-img');
+    const cap = backdrop.querySelector('.filepond--lightbox-caption');
+    img.src = src;
+    img.alt = title || 'Image preview';
+    cap.textContent = title || '';
+
+    backdrop.style.display = 'flex';
+    requestAnimationFrame(() => {
+        backdrop.classList.add('active');
+    });
+}
+
+/**
+ * Attaches modern preview thumbnail for images or document icon with badge for other files
+ */
+function attachCustomFileIcon(item) {
+    if (!item) return;
+
+    const findItemEl = () => {
+        if (item.element && item.element.querySelector) return item.element;
+        if (item.id) {
+            return document.getElementById(`filepond--item-${item.id}`) ||
+                   document.querySelector(`#filepond--item-${item.id}`) ||
+                   document.querySelector(`[data-filepond-item-id="${item.id}"]`);
+        }
+        return null;
+    };
+
+    const formatBytes = (bytes, decimals = 1) => {
+        if (!+bytes) return '0 B';
+        const k = 1024;
+        const dm = decimals < 0 ? 0 : decimals;
+        const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    };
+
+    const render = () => {
+        const itemEl = findItemEl();
+        if (!itemEl) return;
+
+        // Skip avatar mode since it has its own circular layout
+        const rootEl = itemEl.closest('.filepond--root');
+        if (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle'))) {
+            return;
+        }
+
+        const fileWrapper = itemEl.querySelector('.filepond--file');
+        if (!fileWrapper || fileWrapper.querySelector('.filepond--custom-file-icon')) return;
+
+        const file = item.file;
+        const name = (file && file.name) ? file.name : (item.filename || '');
+        const ext = (name.split('.').pop() || '').toUpperCase();
+        const isImage = (file && file.type && file.type.startsWith('image/')) ||
+                        ['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'SVG', 'AVIF'].includes(ext);
+
+        // Ensure filename and size text are visible
+        const infoMain = itemEl.querySelector('.filepond--file-info-main');
+        if (infoMain && !infoMain.textContent.trim() && name) {
+            infoMain.textContent = name;
+        }
+        const infoSub = itemEl.querySelector('.filepond--file-info-sub');
+        if (infoSub && !infoSub.textContent.trim() && file && file.size) {
+            infoSub.textContent = formatBytes(file.size);
+        }
+
+        let iconContainer = document.createElement('div');
+        iconContainer.className = 'filepond--custom-file-icon';
+
+        if (isImage) {
+            // Determine image source URL
+            let imgUrl = null;
+            if (file instanceof Blob || file instanceof File) {
+                try {
+                    imgUrl = URL.createObjectURL(file);
+                } catch (e) {
+                    imgUrl = null;
+                }
+            } else if (typeof item.source === 'string' && item.source.length > 0) {
+                imgUrl = item.source;
+            } else if (typeof item.file === 'string' && item.file.length > 0) {
+                imgUrl = item.file;
+            }
+
+            if (imgUrl) {
+                iconContainer.classList.add('filepond--thumbnail-preview-container');
+                iconContainer.setAttribute('title', 'Klik untuk melihat pratinjau penuh');
+                iconContainer.innerHTML = `
+                    <div class="filepond--thumbnail-wrapper">
+                        <img src="${imgUrl}" alt="${name}" class="filepond--thumbnail-img" />
+                        <div class="filepond--thumbnail-overlay">
+                            <svg class="filepond--thumbnail-zoom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="11" y1="8" x2="11" y2="14"></line>
+                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+
+                const imgEl = iconContainer.querySelector('.filepond--thumbnail-img');
+                imgEl.onerror = () => {
+                    // Fallback to badge icon if image decoding fails
+                    const fallback = document.createElement('div');
+                    fallback.className = 'filepond--custom-file-icon';
+                    fallback.innerHTML = `
+                        <div class="filepond--doc-icon-wrapper">
+                            <svg class="filepond--doc-sheet-svg" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 4C2 2.89543 2.89543 2 4 2H19.5858C20.1163 2 20.625 2.21071 21 2.58579L29.4142 11C29.7893 11.375 30 11.8837 30 12.4142V34C30 35.1046 29.1046 36 28 36H4C2.89543 36 2 35.1046 2 34V4Z" class="filepond--doc-sheet-bg" stroke="currentColor" stroke-width="1.75"/>
+                                <path d="M19 2V10C19 11.1046 19.8954 12 21 12H29" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                            </svg>
+                            <span class="filepond--ext-badge filepond-badge-img">${ext.slice(0, 4) || 'IMG'}</span>
+                        </div>
+                    `;
+                    iconContainer.replaceWith(fallback);
+                };
+
+                iconContainer.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openImageLightbox(imgUrl, name);
+                });
+
+                fileWrapper.prepend(iconContainer);
+                return;
+            }
+        }
+
+        // Non-image or fallback: Document Sheet Icon with Colored Badge
+        let badgeClass = 'filepond-badge-generic';
+        if (['PDF'].includes(ext)) badgeClass = 'filepond-badge-pdf';
+        else if (['DOC', 'DOCX', 'TXT', 'RTF', 'ODT'].includes(ext)) badgeClass = 'filepond-badge-doc';
+        else if (['XLS', 'XLSX', 'CSV', 'ODS'].includes(ext)) badgeClass = 'filepond-badge-sheet';
+        else if (['PPT', 'PPTX', 'KEY'].includes(ext)) badgeClass = 'filepond-badge-pres';
+        else if (['ZIP', 'RAR', '7Z', 'TAR', 'GZ'].includes(ext)) badgeClass = 'filepond-badge-zip';
+        else if (['MP4', 'MOV', 'AVI', 'MKV', 'WEBM'].includes(ext)) badgeClass = 'filepond-badge-video';
+        else if (['MP3', 'WAV', 'OGG', 'FLAC', 'AAC'].includes(ext)) badgeClass = 'filepond-badge-audio';
+        else if (['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'SVG'].includes(ext)) badgeClass = 'filepond-badge-img';
+
+        iconContainer.innerHTML = `
+            <div class="filepond--doc-icon-wrapper">
+                <svg class="filepond--doc-sheet-svg" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2 4C2 2.89543 2.89543 2 4 2H19.5858C20.1163 2 20.625 2.21071 21 2.58579L29.4142 11C29.7893 11.375 30 11.8837 30 12.4142V34C30 35.1046 29.1046 36 28 36H4C2.89543 36 2 35.1046 2 34V4Z" class="filepond--doc-sheet-bg" stroke="currentColor" stroke-width="1.75"/>
+                    <path d="M19 2V10C19 11.1046 19.8954 12 21 12H29" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+                </svg>
+                <span class="filepond--ext-badge ${badgeClass}">${ext.slice(0, 4) || 'FILE'}</span>
+            </div>
+        `;
+
+        fileWrapper.prepend(iconContainer);
+    };
+
+    render();
+    setTimeout(render, 30);
+    setTimeout(render, 100);
+    setTimeout(render, 250);
+    setTimeout(render, 500);
+}
+
+/**
  * Alpine.js FilePond Component Factory
  */
 export function vibeFilepond(config = {}) {
@@ -40,6 +248,11 @@ export function vibeFilepond(config = {}) {
         init() {
             this.input = this.$refs.input || this.$el.querySelector('input[type="file"]');
             if (!this.input) return;
+
+            // Strip any accidental sr-only class from input element so FilePond does not inherit it
+            if (this.input.classList && this.input.classList.contains('sr-only')) {
+                this.input.classList.remove('sr-only');
+            }
 
             if (FilePond && typeof FilePond.find === 'function') {
                 const existing = FilePond.find(this.input);
@@ -58,20 +271,31 @@ export function vibeFilepond(config = {}) {
 
             this.pond = FilePond.create(this.input, pondOptions);
 
-            // Scoped click listener ensuring clicking anywhere on the drop panel triggers file dialog
-            this._clickHandler = (e) => {
-                if (e.target.closest('button, a, .filepond--file-action-button, .filepond--action-remove-item, .filepond--action-retry-item-processing, .filepond--action-abort-item-processing, .filepond--action-revert-item-processing')) {
-                    return;
-                }
-                if (e.target.tagName === 'INPUT' && e.target.type === 'file') {
-                    return;
-                }
-                if (this.pond && typeof this.pond.browse === 'function') {
-                    e.preventDefault();
-                    this.pond.browse();
-                }
-            };
-            this.$el.addEventListener('click', this._clickHandler);
+            // Remove server-side fallback dropzone now that FilePond is mounted
+            const fallbackEl = this.$el ? this.$el.querySelector('.filepond--fallback-dropzone') : null;
+            if (fallbackEl) {
+                fallbackEl.remove();
+            }
+
+            // Preload demo/mock files if provided (useful for docs & showcase without network calls)
+            if (config.demoFiles && Array.isArray(config.demoFiles) && config.demoFiles.length > 0) {
+                config.demoFiles.forEach(df => {
+                    const name = typeof df === 'string' ? df : (df.name || 'my-cv.pdf');
+                    const size = (df && df.size) ? df.size : 122880; // 120 KB
+                    const type = (df && df.type) ? df.type : (name.endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream');
+
+                    try {
+                        const dummyBuffer = new Uint8Array(Math.min(size, 1024));
+                        const blob = new Blob([dummyBuffer], { type });
+                        const mockFile = new File([blob], name, { type, lastModified: Date.now() });
+                        Object.defineProperty(mockFile, 'size', { value: size });
+
+                        this.pond.addFile(mockFile);
+                    } catch (e) {
+                        console.warn('[VibeFilepond] Could not load demo file', e);
+                    }
+                });
+            }
 
             // Safe teardown when element is detached (Livewire SPA wire:navigate)
             this._cleanupHandler = () => {
@@ -86,9 +310,6 @@ export function vibeFilepond(config = {}) {
         },
 
         destroy() {
-            if (this._clickHandler && this.$el) {
-                this.$el.removeEventListener('click', this._clickHandler);
-            }
             if (this._cleanupHandler) {
                 document.removeEventListener('livewire:navigating', this._cleanupHandler);
             }
@@ -103,6 +324,7 @@ export function vibeFilepond(config = {}) {
         buildPondOptions(cfg, self) {
             const options = {
                 credits: false,
+                className: cfg.className || '',
                 allowMultiple: Boolean(cfg.multiple),
                 maxFiles: cfg.maxFiles ? parseInt(cfg.maxFiles, 10) : null,
                 disabled: Boolean(cfg.disabled),
@@ -153,11 +375,15 @@ export function vibeFilepond(config = {}) {
                 files: this.resolveInitialFiles(cfg.existingFiles),
 
                 // Callbacks & Events
+                oninitfile: (item) => {
+                    attachCustomFileIcon(item);
+                },
                 onaddfile: (err, item) => {
                     if (err) {
                         self.$dispatch('vibe-filepond-error', { error: err, item });
                         return;
                     }
+                    attachCustomFileIcon(item);
                     self.$dispatch('vibe-filepond-addfile', { item: item.file });
                 },
                 onremovefile: (err, item) => {
@@ -215,6 +441,8 @@ export function vibeFilepond(config = {}) {
                         };
 
                         const xhrPresign = new XMLHttpRequest();
+                        let xhrUpload = null;
+
                         xhrPresign.open('POST', cfg.presignUrl, true);
                         xhrPresign.setRequestHeader('Content-Type', 'application/json');
                         xhrPresign.setRequestHeader('Accept', 'application/json');
@@ -236,7 +464,19 @@ export function vibeFilepond(config = {}) {
                                         uploadUrl = uploadUrl.url || uploadUrl.upload_url || uploadUrl.presigned_url;
                                     }
 
-                                    const fileKey = response.key || response.path || response.file_key || file.name;
+                                    let fileKey = response.key || response.path || response.file_key;
+                                    if (!fileKey && uploadUrl && typeof uploadUrl === 'string') {
+                                        try {
+                                            const parsedUrl = new URL(uploadUrl);
+                                            const rawPath = decodeURIComponent(parsedUrl.pathname).replace(/^\//, '');
+                                            const pathParts = rawPath.split('/');
+                                            fileKey = pathParts.length > 1 ? pathParts.slice(1).join('/') : rawPath;
+                                        } catch (e) {
+                                            fileKey = file.name;
+                                        }
+                                    }
+                                    if (!fileKey) fileKey = file.name;
+
                                     const method = response.method || cfg.presignMethod || 'PUT';
 
                                     if (!uploadUrl || typeof uploadUrl !== 'string') {
@@ -246,10 +486,10 @@ export function vibeFilepond(config = {}) {
                                     }
 
                                     // Upload direct to Cloud
-                                    const xhrUpload = new XMLHttpRequest();
+                                    xhrUpload = new XMLHttpRequest();
                                     xhrUpload.open(method, uploadUrl, true);
 
-                                    // Set Content-Type for PUT
+                                    // Set Content-Type for PUT if required
                                     if (method.toUpperCase() === 'PUT' && file.type) {
                                         xhrUpload.setRequestHeader('Content-Type', file.type);
                                     }
@@ -293,11 +533,6 @@ export function vibeFilepond(config = {}) {
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                     };
 
-                                    abort(() => {
-                                        xhrUpload.abort();
-                                        window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-abort'));
-                                    });
-
                                     xhrUpload.send(file);
                                 } catch (e) {
                                     error('Error parsing presigned JSON: ' + e.message);
@@ -311,11 +546,18 @@ export function vibeFilepond(config = {}) {
                             error('Network error requesting presigned URL');
                         };
 
-                        abort(() => {
-                            xhrPresign.abort();
-                        });
-
                         xhrPresign.send(JSON.stringify(requestPayload));
+
+                        return {
+                            abort: () => {
+                                if (xhrUpload) {
+                                    xhrUpload.abort();
+                                }
+                                xhrPresign.abort();
+                                abort();
+                                window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-abort'));
+                            }
+                        };
                     },
 
                     revert: (uniqueFileId, load, error) => {

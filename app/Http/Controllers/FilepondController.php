@@ -18,6 +18,18 @@ class FilepondController extends Controller
         return view('docs.filepond.index');
     }
 
+    public function requestTest(Request $request){
+        $data = $request->all();
+        $timestamp=now();
+
+
+        return response()->json([
+            'status' => 'success',
+            'request' => $data,
+            'timestamp' => $timestamp
+        ]);
+    }
+
     public function presigned(Request $request)
     {
         $request->validate([
@@ -26,7 +38,7 @@ class FilepondController extends Controller
             'size' => ['nullable', 'integer'],
         ]);
 
-        $url = Storage::temporaryUploadUrl('tmp/presigned/',now()->addMinutes(15));
+        $url = Storage::temporaryUploadUrl('public/presigned/' . ($request->filename ?? Str::random(10)), now()->addMinutes(15));
 
         return response()->json([
             'url' => $url,

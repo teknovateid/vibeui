@@ -40,15 +40,40 @@
 
                 <vibe:preview :title="__('docs/filepond.basic_usage.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:filepond name="document" label="{{ __('docs/filepond.basic_usage.label') }}" description="{{ __('docs/filepond.basic_usage.description') }}" />
+                        <\vibe:filepond name="document" />
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:filepond name="document" :label="__('docs/filepond.basic_usage.label')" :description="__('docs/filepond.basic_usage.description')" />
+                        <vibe:filepond name="document" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- 2. Multiple Files & Image Preview --}}
+            {{-- 2. Tampilan Berkas Terunggah (Uploaded File Card) --}}
+            <section id="tampilan-berkas" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Tampilan Berkas Terunggah (Card Preview)</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Ketika berkas dipilih atau diunggah pengguna, berkas ditampilkan dalam bentuk kartu modern terpisah di bawah dropzone. Kartu dilengkapi ikon berkas terlipat, badge format berwarna (<code class="text-xs font-mono text-primary font-semibold">PDF</code> merah, <code class="text-xs font-mono text-primary font-semibold">DOCX</code> biru, <code class="text-xs font-mono text-primary font-semibold">ZIP</code> ungu, dll.), ukuran berkas, serta tombol hapus melingkar.
+                    </p>
+                </div>
+
+                <vibe:preview title="Pratinjau Kartu Berkas (my-cv.pdf)">
+                    <vibe:preview.code>
+                        <\vibe:filepond
+                            name="cv_preview"
+                            demo
+                        />
+                    </vibe:preview.code>
+                    <div class="w-full max-w-lg">
+                        <vibe:filepond
+                            name="cv_preview"
+                            demo
+                        />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 3. Multiple Files & Image Preview --}}
             <section id="multiple-preview" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.multiple_preview.title') }}</h2>
@@ -109,6 +134,64 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
                         <vibe:filepond name="attachment" :label="__('docs/filepond.validation.label')" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 5. Kustomisasi Tampilan & Konten --}}
+            <section id="kustomisasi-dropzone" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Kustomisasi Tampilan & Konten Dropzone</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Anda dapat menyesuaikan judul dropzone (<code class="text-xs font-mono text-primary font-semibold">title</code>), teks keterangan format (<code class="text-xs font-mono text-primary font-semibold">subtitle</code> / <code class="text-xs font-mono text-primary font-semibold">hint</code>), label tombol (<code class="text-xs font-mono text-primary font-semibold">browse-label</code>), ikon (<code class="text-xs font-mono text-primary font-semibold">icon</code>), maupun varian tampilan (<code class="text-xs font-mono text-primary font-semibold">variant="compact"</code> atau <code class="text-xs font-mono text-primary font-semibold">:dashed="false"</code>).
+                    </p>
+                </div>
+
+                <vibe:preview title="Dropzone dengan Judul & Tombol Kustom">
+                    <vibe:preview.code>
+                        <\vibe:filepond
+                            name="resume"
+                            label="Unggah Berkas Lamaran"
+                            title="Tarik & Letakkan Berkas Lamaran (CV)"
+                            subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
+                            browse-label="Pilih CV Saya"
+                            accepted-file-types="application/pdf, .doc, .docx"
+                            max-file-size="15MB"
+                        />
+                    </vibe:preview.code>
+                    <div class="w-full max-w-xl">
+                        <vibe:filepond
+                            name="resume"
+                            label="Unggah Berkas Lamaran"
+                            title="Tarik & Letakkan Berkas Lamaran (CV)"
+                            subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
+                            browse-label="Pilih CV Saya"
+                            accepted-file-types="application/pdf, .doc, .docx"
+                            max-file-size="15MB"
+                        />
+                    </div>
+                </vibe:preview>
+
+                <vibe:preview title="Varian Compact (Tampilan Ringkas Horizontal)">
+                    <vibe:preview.code>
+                        <\vibe:filepond
+                            name="quick_attachment"
+                            label="Lampiran Singkat"
+                            variant="compact"
+                            title="Lampirkan Dokumen Pendukung"
+                            subtitle="Semua format dokumen diizinkan (maks. 10MB)"
+                            browse-label="Jelajahi"
+                        />
+                    </vibe:preview.code>
+                    <div class="w-full max-w-xl">
+                        <vibe:filepond
+                            name="quick_attachment"
+                            label="Lampiran Singkat"
+                            variant="compact"
+                            title="Lampirkan Dokumen Pendukung"
+                            subtitle="Semua format dokumen diizinkan (maks. 10MB)"
+                            browse-label="Jelajahi"
+                        />
                     </div>
                 </vibe:preview>
             </section>
@@ -438,6 +521,13 @@
                         @php
                             $filepondProps = [
                                 ['name', 'string', 'null', 'Nama field input (otomatis diambil dari `wire:model` jika ada).'],
+                                ['title', 'string', 'null', 'Kustomisasi judul dropzone (default: "Choose a file or drag & drop it here").'],
+                                ['subtitle', 'string', 'null', 'Kustomisasi keterangan format dan ukuran (otomatis dihitung jika kosong).'],
+                                ['browse-label', 'string', 'null', 'Teks tombol pemilih berkas (default: "Browse File").'],
+                                ['icon', 'string', '"cloud"', 'Pilihan ikon dropzone (`cloud`, `upload`, `folder`, atau SVG string).'],
+                                ['variant', 'string', '"default"', 'Varian layout: `"default"` (lengkap), `"compact"` (horizontal), atau `"avatar"`.'],
+                                ['dashed', 'bool', 'true', 'Garis batas putus-putus (`true`) atau garis padat (`false`).'],
+                                ['drop-height', 'string', 'null', 'Tinggi minimal kustom dropzone, contoh: `"16rem"`, `"250px"`.'],
                                 ['multiple', 'bool', 'false', 'Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.'],
                                 ['max-files', 'int', 'null', 'Batas maksimal jumlah berkas yang dapat diunggah bersamaan.'],
                                 ['max-file-size', 'string', 'null', 'Batas ukuran per berkas, contoh: `"2MB"`, `"500KB"`.'],
@@ -448,7 +538,9 @@
                                 ['presign-url', 'string', 'null', 'Endpoint backend untuk mendapatkan URL presigned cloud storage.'],
                                 ['presign-method', 'string', '"PUT"', 'HTTP method pengunggahan langsung ke cloud storage.'],
                                 ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'],
-                                ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).']
+                                ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).'],
+                                ['demo', 'bool', 'false', 'Menampilkan contoh berkas simulasi (mock file) secara langsung tanpa perlu upload.'],
+                                ['demo-files', 'array', '[]', 'Daftar nama berkas simulasi untuk demonstrasi tampilan kartu berkas.']
                             ];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])
