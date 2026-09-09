@@ -40,16 +40,28 @@
         const list = [];
         for (const [key, val] of Object.entries(this.submittedData)) {
             if (key === '_token') continue;
-            const strVal = typeof val === 'string' ? val : (Array.isArray(val) ? val.join(', ') : JSON.stringify(val));
             const isS3 = typeof val === 'string' && (val.includes('public/presigned/') || val.includes('s3') || val.includes('storage'));
+            const isUploadedFile = typeof val === 'object' && val !== null && val.type === 'UploadedFile (Multipart)';
             const isMultiple = Array.isArray(val);
+
+            let strVal = '';
+            if (typeof val === 'string') {
+                strVal = val;
+            } else if (isUploadedFile) {
+                strVal = `${val.original_name} (${val.size}, ${val.mime_type})`;
+            } else if (Array.isArray(val)) {
+                strVal = val.map(v => typeof v === 'object' && v !== null && v.original_name ? `${v.original_name} (${v.size})` : (typeof v === 'string' ? v : JSON.stringify(v))).join(', ');
+            } else {
+                strVal = JSON.stringify(val);
+            }
+
             list.push({
                 key,
                 value: strVal,
                 isS3,
                 isMultiple,
                 raw: val,
-                type: isS3 ? 'Cloud S3 Key' : (isMultiple ? 'Multiple Files Array' : 'File Identifier / Value')
+                type: isS3 ? 'Cloud S3 Key' : (isUploadedFile ? 'Multipart UploadedFile' : (isMultiple ? 'Multiple Files Array' : 'Field Value'))
             });
         }
         return list;

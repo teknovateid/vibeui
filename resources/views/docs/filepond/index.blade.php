@@ -40,10 +40,25 @@
 
                 <vibe:preview :title="__('docs/filepond.basic_usage.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:filepond name="document" />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond name="document" label="Unggah Dokumen" />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Form (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:filepond name="document" />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond name="document" label="Unggah Dokumen" />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Form (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -59,16 +74,33 @@
 
                 <vibe:preview title="Pratinjau Kartu Berkas (my-cv.pdf)">
                     <vibe:preview.code>
-                        <\vibe:filepond
-                            name="cv_preview"
-                            demo
-                        />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond
+                                name="cv_preview"
+                                label="Curriculum Vitae"
+                                demo
+                            />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Form (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:filepond
-                            name="cv_preview"
-                            demo
-                        />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond
+                                name="cv_preview"
+                                label="Curriculum Vitae"
+                                demo
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Form (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -84,10 +116,25 @@
 
                 <vibe:preview :title="__('docs/filepond.multiple_preview.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:filepond name="photos" label="{{ __('docs/filepond.multiple_preview.label') }}" description="{{ __('docs/filepond.multiple_preview.description') }}" multiple max-files="5" accepted-file-types="image/*" />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond name="photos" label="{{ __('docs/filepond.multiple_preview.label') }}" description="{{ __('docs/filepond.multiple_preview.description') }}" multiple max-files="5" accepted-file-types="image/*" />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Multiple Foto (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:filepond name="photos" :label="__('docs/filepond.multiple_preview.label')" :description="__('docs/filepond.multiple_preview.description')" multiple max-files="5" accepted-file-types="image/*" />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond name="photos" :label="__('docs/filepond.multiple_preview.label')" :description="__('docs/filepond.multiple_preview.description')" multiple max-files="5" accepted-file-types="image/*" />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Multiple Foto (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -103,18 +150,32 @@
 
                 <vibe:preview :title="__('docs/filepond.avatar_mode.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:filepond name="avatar" label="{{ __('docs/filepond.avatar_mode.label') }}" description="{{ __('docs/filepond.avatar_mode.description') }}" avatar accepted-file-types="image/png, image/jpeg" />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="w-full max-w-sm flex flex-col items-center justify-center p-6 rounded-2xl border border-border/80 bg-muted/20 backdrop-blur-xs text-center space-y-4">
+                            <\vibe:filepond name="avatar" label="{{ __('docs/filepond.avatar_mode.label') }}" description="{{ __('docs/filepond.avatar_mode.description') }}" avatar accepted-file-types="image/png, image/jpeg" />
+                            <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                <span>PNG, JPEG maks 2MB · Rasio 1:1</span>
+                            </div>
+                            <\vibe:button type="submit" variant="primary" size="sm">
+                                Simpan Avatar (Test Request)
+                            </\vibe:button>
+                        </\vibe:form>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm flex flex-col items-center justify-center p-6 rounded-2xl border border-border/80 bg-muted/20 backdrop-blur-xs text-center space-y-3">
-                        <vibe:filepond name="avatar" :label="__('docs/filepond.avatar_mode.label')" :description="__('docs/filepond.avatar_mode.description')" avatar accepted-file-types="image/png, image/jpeg" />
-                        <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground pt-1">
-                            <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" y1="16" x2="12" y2="12"/>
-                                <line x1="12" y1="8" x2="12.01" y2="8"/>
-                            </svg>
-                            <span>PNG, JPEG maks 2MB · Rasio 1:1</span>
-                        </div>
+                    <div class="w-full max-w-sm">
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="flex flex-col items-center justify-center p-6 rounded-2xl border border-border/80 bg-muted/20 backdrop-blur-xs text-center space-y-4">
+                            <vibe:filepond name="avatar" :label="__('docs/filepond.avatar_mode.label')" :description="__('docs/filepond.avatar_mode.description')" avatar accepted-file-types="image/png, image/jpeg" />
+                            <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                                <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="16" x2="12" y2="12"/>
+                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
+                                </svg>
+                                <span>PNG, JPEG maks 2MB · Rasio 1:1</span>
+                            </div>
+                            <vibe:button type="submit" variant="primary" size="sm">
+                                <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                Simpan Avatar (Test Request)
+                            </vibe:button>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -130,10 +191,25 @@
 
                 <vibe:preview :title="__('docs/filepond.validation.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:filepond name="attachment" label="{{ __('docs/filepond.validation.label') }}" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond name="attachment" label="{{ __('docs/filepond.validation.label') }}" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Lampiran (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:filepond name="attachment" :label="__('docs/filepond.validation.label')" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond name="attachment" :label="__('docs/filepond.validation.label')" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Lampiran (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -149,49 +225,79 @@
 
                 <vibe:preview title="Dropzone dengan Judul & Tombol Kustom">
                     <vibe:preview.code>
-                        <\vibe:filepond
-                            name="resume"
-                            label="Unggah Berkas Lamaran"
-                            title="Tarik & Letakkan Berkas Lamaran (CV)"
-                            subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
-                            browse-label="Pilih CV Saya"
-                            accepted-file-types="application/pdf, .doc, .docx"
-                            max-file-size="15MB"
-                        />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond
+                                name="resume"
+                                label="Unggah Berkas Lamaran"
+                                title="Tarik & Letakkan Berkas Lamaran (CV)"
+                                subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
+                                browse-label="Pilih CV Saya"
+                                accepted-file-types="application/pdf, .doc, .docx"
+                                max-file-size="15MB"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim CV (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl">
-                        <vibe:filepond
-                            name="resume"
-                            label="Unggah Berkas Lamaran"
-                            title="Tarik & Letakkan Berkas Lamaran (CV)"
-                            subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
-                            browse-label="Pilih CV Saya"
-                            accepted-file-types="application/pdf, .doc, .docx"
-                            max-file-size="15MB"
-                        />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond
+                                name="resume"
+                                label="Unggah Berkas Lamaran"
+                                title="Tarik & Letakkan Berkas Lamaran (CV)"
+                                subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
+                                browse-label="Pilih CV Saya"
+                                accepted-file-types="application/pdf, .doc, .docx"
+                                max-file-size="15MB"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim CV (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
 
                 <vibe:preview title="Varian Compact (Tampilan Ringkas Horizontal)">
                     <vibe:preview.code>
-                        <\vibe:filepond
-                            name="quick_attachment"
-                            label="Lampiran Singkat"
-                            variant="compact"
-                            title="Lampirkan Dokumen Pendukung"
-                            subtitle="Semua format dokumen diizinkan (maks. 10MB)"
-                            browse-label="Jelajahi"
-                        />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond
+                                name="quick_attachment"
+                                label="Lampiran Singkat"
+                                variant="compact"
+                                title="Lampirkan Dokumen Pendukung"
+                                subtitle="Semua format dokumen diizinkan (maks. 10MB)"
+                                browse-label="Jelajahi"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Lampiran (Test Request)
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl">
-                        <vibe:filepond
-                            name="quick_attachment"
-                            label="Lampiran Singkat"
-                            variant="compact"
-                            title="Lampirkan Dokumen Pendukung"
-                            subtitle="Semua format dokumen diizinkan (maks. 10MB)"
-                            browse-label="Jelajahi"
-                        />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond
+                                name="quick_attachment"
+                                label="Lampiran Singkat"
+                                variant="compact"
+                                title="Lampirkan Dokumen Pendukung"
+                                subtitle="Semua format dokumen diizinkan (maks. 10MB)"
+                                browse-label="Jelajahi"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Lampiran (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -208,7 +314,14 @@
                 <vibe:preview :title="__('docs/filepond.presigned.preview_title')">
                     <vibe:preview.code>
                         {{-- Frontend Blade Component --}}
-                        <\vibe:filepond name="cloud_file" label="{{ __('docs/filepond.presigned.label') }}" description="{{ __('docs/filepond.presigned.description') }}" presign-url="{{ route('docs.filepond.presigned') }}" presign-method="PUT" max-file-size="500MB" />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" class="space-y-3">
+                            <\vibe:filepond name="cloud_file" label="{{ __('docs/filepond.presigned.label') }}" description="{{ __('docs/filepond.presigned.description') }}" presign-url="{{ route('docs.filepond.presigned') }}" presign-method="PUT" max-file-size="500MB" />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Kirim Kunci S3 ke Controller
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl space-y-4">
                         {{-- Cloud Service Pill Banner --}}
@@ -225,7 +338,7 @@
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-semibold text-foreground">Direct Cloud Upload (Presigned URL)</span>
                                         <vibe:badge variant="success" size="xs" class="rounded-full">
-                                            ● S3 / R2 PUT
+                                             S3 / R2 PUT
                                         </vibe:badge>
                                     </div>
                                     <p class="text-[11px] text-muted-foreground">Berkas dikirim langsung ke object storage tanpa membebani memori PHP server.</p>
@@ -233,14 +346,22 @@
                             </div>
                         </div>
 
-                        {{-- Standalone Presigned FilePond Instance --}}
-                        <vibe:filepond
-                            name="cloud_file"
-                            :label="__('docs/filepond.presigned.label')"
-                            :description="__('docs/filepond.presigned.description')"
-                            presign-url="{{ route('docs.filepond.presigned') }}"
-                            max-file-size="500MB"
-                        />
+                        {{-- Standalone Presigned FilePond Form Instance --}}
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" class="space-y-3">
+                            <vibe:filepond
+                                name="cloud_file"
+                                :label="__('docs/filepond.presigned.label')"
+                                :description="__('docs/filepond.presigned.description')"
+                                presign-url="{{ route('docs.filepond.presigned') }}"
+                                max-file-size="500MB"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    Kirim Kunci S3 ke Controller (Test Request)
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
 
                         {{-- Real-Time Cloud Upload Monitor Card --}}
                         <vibe:card

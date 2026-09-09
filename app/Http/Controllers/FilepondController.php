@@ -18,15 +18,40 @@ class FilepondController extends Controller
         return view('docs.filepond.index');
     }
 
-    public function requestTest(Request $request){
-        $data = $request->all();
-        $timestamp=now();
+    public function requestTest(Request $request)
+    {
+        $all = $request->all();
+        $formatted = [];
 
+        foreach ($all as $key => $value) {
+            if ($value instanceof \Illuminate\Http\UploadedFile) {
+                $formatted[$key] = [
+                    'original_name' => $value->getClientOriginalName(),
+                    'mime_type' => $value->getClientMimeType(),
+                    'size' => $value->getSize() . ' bytes (' . round($value->getSize() / 1024, 1) . ' KB)',
+                    'type' => 'UploadedFile (Multipart)',
+                ];
+            } elseif (is_array($value)) {
+                $formatted[$key] = array_map(function ($item) {
+                    if ($item instanceof \Illuminate\Http\UploadedFile) {
+                        return [
+                            'original_name' => $item->getClientOriginalName(),
+                            'mime_type' => $item->getClientMimeType(),
+                            'size' => $item->getSize() . ' bytes (' . round($item->getSize() / 1024, 1) . ' KB)',
+                            'type' => 'UploadedFile (Multipart)',
+                        ];
+                    }
+                    return $item;
+                }, $value);
+            } else {
+                $formatted[$key] = $value;
+            }
+        }
 
         return response()->json([
             'status' => 'success',
-            'request' => $data,
-            'timestamp' => $timestamp
+            'request' => $formatted,
+            'timestamp' => now()
         ]);
     }
 

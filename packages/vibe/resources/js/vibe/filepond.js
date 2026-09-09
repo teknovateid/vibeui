@@ -379,6 +379,9 @@ export function vibeFilepond(config = {}) {
                 // File encode (base64)
                 allowFileEncode: Boolean(cfg.encode),
 
+                // Native form file sync (syncs FilePond files to native file input for form POST)
+                storeAsFile: (cfg.storeAsFile !== undefined) ? Boolean(cfg.storeAsFile) : (!cfg.server && !cfg.presignUrl && !cfg.wireModel),
+
                 // Avatar / Circle styling
                 stylePanelLayout: cfg.avatar ? 'compact circle' : (cfg.panelLayout || null),
                 styleLoadIndicatorPosition: cfg.avatar ? 'center bottom' : (cfg.loadIndicatorPosition || 'right'),
