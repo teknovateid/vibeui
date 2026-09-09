@@ -744,67 +744,257 @@
     border-radius: 9999px !important;
     overflow: hidden !important;
     background-color: color-mix(in srgb, var(--muted) 45%, transparent) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    position: relative !important;
+    cursor: pointer !important;
+}
+
+.filepond-avatar-mode .filepond--root:hover,
+.filepond-avatar-mode .filepond--root[data-hover="true"],
+.filepond-fallback-avatar:hover {
+    border-color: var(--primary) !important;
+    background-color: color-mix(in srgb, var(--primary) 6%, transparent) !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 12%, transparent) !important;
+}
+
+/* When a file is loaded in avatar mode, use a clean solid ring border */
+.filepond-avatar-mode:has(.filepond--item) .filepond--root,
+.filepond-avatar-mode .filepond--root:has(.filepond--item),
+.filepond-avatar-mode.filepond--root:has(.filepond--item) {
+    border-style: solid !important;
+    border-color: var(--border) !important;
+    border-width: 2px !important;
+    background-color: transparent !important;
+}
+
+/* Hide drop-label completely when a file is loaded in avatar mode */
+.filepond-avatar-mode:has(.filepond--item) .filepond--drop-label,
+.filepond-avatar-mode .filepond--root:has(.filepond--item) .filepond--drop-label,
+.filepond-avatar-mode.filepond--root:has(.filepond--item) .filepond--drop-label,
+.filepond-avatar-mode .filepond--root[data-files="1"] .filepond--drop-label {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .filepond-avatar-mode .filepond--drop-label {
-    width: 130px !important;
-    height: 130px !important;
-    min-height: 130px !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
     border: none !important;
     background-color: transparent !important;
-    padding: 0.5rem !important;
+    padding: 0 !important;
+    margin: 0 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     text-align: center !important;
     font-size: 0.75rem !important;
     border-radius: 9999px !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    z-index: 5 !important;
+}
+
+.filepond-avatar-mode .filepond--drop-label label {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    border-radius: 9999px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.filepond-avatar-mode .filepond--drop-label * {
+    cursor: pointer !important;
+}
+
+/* Avatar Mode Action Label Override (Prevents button wrapping & oversized box) */
+.filepond-avatar-mode .filepond--label-action,
+.filepond-fallback-avatar .filepond--label-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.2rem 0.65rem !important;
+    font-size: 0.6875rem !important; /* 11px */
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+    border-radius: 9999px !important;
+    border: 1px solid var(--border) !important;
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    white-space: nowrap !important;
+    transform: none !important;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.filepond-avatar-mode .filepond--label-action:hover,
+.filepond-fallback-avatar .filepond--label-action:hover {
+    background-color: var(--muted) !important;
+    border-color: var(--border) !important;
+    color: var(--primary) !important;
+    transform: translateY(-1px) !important;
 }
 
 .filepond-avatar-mode .filepond--list-scroller {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    margin: 0 !important;
+    inset: 0 !important;
+    width: 100% !important;
     height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     border-radius: 9999px !important;
+    overflow: hidden !important;
+    z-index: 10 !important;
+}
+
+.filepond-avatar-mode .filepond--list {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 9999px !important;
+    overflow: hidden !important;
+    list-style: none !important;
 }
 
 .filepond-avatar-mode .filepond--item {
     position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    margin: 0 !important;
+    inset: 0 !important;
+    width: 100% !important;
     height: 100% !important;
-    min-height: 130px !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     border-radius: 9999px !important;
+    overflow: hidden !important;
 }
 
 .filepond-avatar-mode .filepond--file-wrapper {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
     height: 100% !important;
-    min-height: 130px !important;
+    min-height: 100% !important;
     border: none !important;
     background: transparent !important;
     border-radius: 9999px !important;
     box-shadow: none !important;
-}
-
-.filepond-avatar-mode .filepond--file {
-    height: 100% !important;
-    min-height: 130px !important;
+    margin: 0 !important;
     padding: 0 !important;
 }
 
-.filepond-avatar-mode .filepond--image-preview-wrapper {
+.filepond-avatar-mode .filepond--file {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
     border-radius: 9999px !important;
+    overflow: hidden !important;
 }
 
+/* Image Preview in Avatar Mode MUST be visible and fill the circular avatar */
+.filepond-avatar-mode .filepond--image-preview-wrapper {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 9999px !important;
+    overflow: hidden !important;
+    z-index: 1 !important;
+    background: transparent !important;
+}
+
+.filepond-avatar-mode .filepond--image-preview {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 9999px !important;
+    overflow: hidden !important;
+    background: transparent !important;
+}
+
+.filepond-avatar-mode .filepond--image-clip {
+    border-radius: 9999px !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+.filepond-avatar-mode .filepond--image-canvas {
+    border-radius: 9999px !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+.filepond-avatar-mode .filepond--image-preview-overlay {
+    display: none !important;
+}
+
+/* Hide file info text (filename, size) & status in avatar mode */
+.filepond-avatar-mode .filepond--file-info,
+.filepond-avatar-mode .filepond--file-info-main,
+.filepond-avatar-mode .filepond--file-info-sub,
+.filepond-avatar-mode .filepond--file-status,
+.filepond-avatar-mode .filepond--custom-file-icon {
+    display: none !important;
+}
+
+/* Action button (remove photo) in avatar mode */
 .filepond-avatar-mode .filepond--file-action-button {
     cursor: pointer !important;
+    z-index: 30 !important;
+}
+
+.filepond-avatar-mode .filepond--action-remove-item {
+    position: absolute !important;
+    bottom: 8px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 9999px !important;
+    background-color: rgba(15, 23, 42, 0.75) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    opacity: 0.9 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.filepond-avatar-mode .filepond--action-remove-item:hover {
+    opacity: 1 !important;
+    background-color: rgba(220, 38, 38, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.9) !important;
+    transform: translateX(-50%) scale(1.12) !important;
 }
 
 /* =========================================================================

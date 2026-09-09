@@ -86,7 +86,7 @@
     };
 
     if ($isAvatar) {
-        $resolvedLabelIdle = $fpLang('label_avatar_idle', '<div class="flex flex-col items-center justify-center gap-1.5 p-2 pointer-events-none"><svg class="size-7 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="filepond--label-action text-[11px] font-semibold text-primary pointer-events-auto cursor-pointer">Pilih Foto</span></div>');
+        $resolvedLabelIdle = $fpLang('label_avatar_idle', '<div class="w-full h-full flex flex-col items-center justify-center gap-2 p-2 select-none cursor-pointer"><div class="size-9 rounded-full bg-muted/70 border border-border/60 flex items-center justify-center text-muted-foreground"><svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="filepond--label-action text-[11px] font-semibold text-primary cursor-pointer">Pilih Foto</span></div>');
     } else {
         // Resolve Icon SVG
         $iconSvg = '';
