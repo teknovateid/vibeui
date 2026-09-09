@@ -15,4 +15,12 @@ return [
     'export' => 'Export',
     'columns' => 'Columns',
     'selected' => ':count items selected',
+    'loading' => 'Loading data...',
+    'empty_description' => 'Try adjusting your search terms or filters to find what you are looking for.',
+    'clear_search' => 'Clear search',
+    'reset_filter' => 'Reset Filter',
+    'select_page_or_all' => 'Select this page or all data',
+    'select_this_page' => 'Select this page',
+    'select_all' => 'Select all',
+    'deselect_all' => 'Deselect all',
 ];

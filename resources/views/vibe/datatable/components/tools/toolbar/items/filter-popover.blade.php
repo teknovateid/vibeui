@@ -26,7 +26,7 @@
                 type="button"
                 class="text-xs font-medium text-destructive hover:underline cursor-pointer focus:outline-none transition-colors"
             >
-                Reset Filter
+                {{ __('vibe/datatable.reset_filter') }}
             </button>
         @endif
     </div>

@@ -15,7 +15,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
 
 <div>
     @if ($paginator->hasPages())
-        <nav role="navigation" aria-label="Pagination Navigation" class="flex items-center justify-between">
+        <nav role="navigation" aria-label="{{ __('vibe/pagination.navigation') }}" class="flex items-center justify-between">
             <div class="flex justify-between flex-1 sm:hidden">
                 @if ($paginator->onFirstPage())
                     <vibe:button class="px-2" disabled>
@@ -78,7 +78,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                                     @if ($page == $paginator->currentPage())
                                         <vibe:button size="sm" variant="primary" wire:key="paginator-{{ $paginator->getPageName() }}-page{{ $page }}">{{ $page }}</vibe:button>
                                     @else
-                                        <vibe:button size="sm" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:key="paginator-{{ $paginator->getPageName() }}-page{{ $page }}" aria-label="{{ __('Go to page :page', ['page' => $page]) }}">{{ $page }}</vibe:button>
+                                        <vibe:button size="sm" wire:click="gotoPage({{ $page }}, '{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:key="paginator-{{ $paginator->getPageName() }}-page{{ $page }}" aria-label="{{ __('vibe/pagination.goto_page', ['page' => $page]) }}">{{ $page }}</vibe:button>
                                     @endif
                                 @endforeach
                             @endif

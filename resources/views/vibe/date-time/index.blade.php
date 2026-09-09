@@ -8,8 +8,8 @@
     'label' => null,
     'description' => null,
     'placeholder' => null,
-    'startPlaceholder' => 'Tanggal Mulai',
-    'endPlaceholder' => 'Tanggal Selesai',
+    'startPlaceholder' => null,
+    'endPlaceholder' => null,
     'type' => 'single', // single, datetime, range, datetime-range, multiple, time, month
     'mode' => null,
     'value' => null,
@@ -67,6 +67,8 @@
         default => $placeholders['date'],
     };
     $inputPlaceholder = $placeholder ?? $defaultPlaceholder;
+    $startPlaceholder = $startPlaceholder ?? ($placeholders['start'] ?? 'Start Date');
+    $endPlaceholder = $endPlaceholder ?? ($placeholders['end'] ?? 'End Date');
 
     $sizeClasses = match ($size) {
         'sm' => 'h-8 text-xs rounded-md pl-8 pr-8',

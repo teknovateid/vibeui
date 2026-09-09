@@ -60,6 +60,8 @@ return [
     'selectTime' => 'Pilih Jam',
     'selectMonth' => 'Pilih Bulan',
     'selectYear' => 'Pilih Tahun',
+    'previous' => 'Sebelumnya',
+    'next' => 'Berikutnya',
     'multipleSelected' => ':count tanggal terpilih',
     'placeholders' => [
         'date' => 'Pilih tanggal',
