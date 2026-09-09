@@ -24,35 +24,40 @@ class FilepondController extends Controller
         $formatted = [];
 
         foreach ($all as $key => $value) {
-            if ($value instanceof \Illuminate\Http\UploadedFile) {
-                $formatted[$key] = [
-                    'original_name' => $value->getClientOriginalName(),
-                    'mime_type' => $value->getClientMimeType(),
-                    'size' => $value->getSize() . ' bytes (' . round($value->getSize() / 1024, 1) . ' KB)',
-                    'type' => 'UploadedFile (Multipart)',
-                ];
-            } elseif (is_array($value)) {
-                $formatted[$key] = array_map(function ($item) {
-                    if ($item instanceof \Illuminate\Http\UploadedFile) {
-                        return [
-                            'original_name' => $item->getClientOriginalName(),
-                            'mime_type' => $item->getClientMimeType(),
-                            'size' => $item->getSize() . ' bytes (' . round($item->getSize() / 1024, 1) . ' KB)',
-                            'type' => 'UploadedFile (Multipart)',
-                        ];
-                    }
-                    return $item;
-                }, $value);
-            } else {
-                $formatted[$key] = $value;
-            }
+            $formatted[$key] = $this->formatRequestValue($value);
         }
 
         return response()->json([
             'status' => 'success',
             'request' => $formatted,
-            'timestamp' => now()
+            'timestamp' => now()->toIso8601String(),
         ]);
+    }
+
+    /**
+     * Format request payload values, converting UploadedFile instances to readable file metadata.
+     */
+    protected function formatRequestValue($value)
+    {
+        if ($value instanceof \Illuminate\Http\UploadedFile) {
+            $bytes = $value->getSize();
+            $size = $bytes >= 1048576
+                ? round($bytes / 1048576, 2) . ' MB'
+                : round($bytes / 1024, 1) . ' KB';
+
+            return [
+                'original_name' => $value->getClientOriginalName(),
+                'mime_type' => $value->getClientMimeType(),
+                'size' => $size,
+                'type' => 'UploadedFile (Multipart)',
+            ];
+        }
+
+        if (is_array($value)) {
+            return array_map([$this, 'formatRequestValue'], $value);
+        }
+
+        return $value;
     }
 
     public function store(Request $request)
@@ -68,10 +73,20 @@ class FilepondController extends Controller
             'size' => ['nullable', 'integer'],
         ]);
 
-        $url = Storage::temporaryUploadUrl('public/presigned/' . ($request->filename ?? Str::random(10)), now()->addMinutes(15));
+        $rawFilename = $request->filename ?? Str::random(10);
+        $extension = pathinfo($rawFilename, PATHINFO_EXTENSION);
+        $hashedName = hash('sha256', $rawFilename . microtime()) . ($extension ? '.' . $extension : '');
+
+        $url = Storage::temporaryUploadUrl(
+            'public/presigned/' . $hashedName,
+            now()->addMinutes(15)
+        );
+
+        // $url = Storage::temporaryUploadUrl('public/presigned/' . ($request->filename ?? Str::random(10)), now()->addMinutes(15));
 
         return response()->json([
             'url' => $url,
+            // 'full-url' => Storage::url($url),
             'method' => 'PUT',
         ]);
     }

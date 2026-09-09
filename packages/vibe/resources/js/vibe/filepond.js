@@ -119,8 +119,9 @@ function attachCustomFileIcon(item) {
         if (!itemEl) return;
 
         // Skip avatar mode since it has its own circular layout
+        const wrapper = itemEl.closest('.filepond-avatar-mode') || itemEl.closest('[data-vibe-filepond].filepond-avatar-mode');
         const rootEl = itemEl.closest('.filepond--root');
-        if (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle'))) {
+        if (wrapper || (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle')))) {
             return;
         }
 
@@ -278,6 +279,19 @@ export function vibeFilepond(config = {}) {
 
             this.pond = FilePond.create(this.input, pondOptions);
 
+            // In avatar mode, ensure the root element has avatar class and clicking anywhere in the circle opens file picker
+            if (config.avatar && this.pond.element) {
+                this.pond.element.classList.add('filepond-avatar-mode');
+                this.pond.element.addEventListener('click', (e) => {
+                    if (e.target.closest('.filepond--file-action-button') || e.target.closest('.filepond--action-remove-item')) {
+                        return;
+                    }
+                    if (this.pond && this.pond.getFiles().length === 0) {
+                        this.pond.browse();
+                    }
+                });
+            }
+
             // Remove server-side fallback dropzone now that FilePond is mounted
             const fallbackEl = this.$el ? this.$el.querySelector('.filepond--fallback-dropzone') : null;
             if (fallbackEl) {
@@ -361,16 +375,16 @@ export function vibeFilepond(config = {}) {
 
                 // Image features
                 allowImagePreview: cfg.imagePreview !== false,
-                imagePreviewHeight: cfg.imagePreviewHeight ? parseInt(cfg.imagePreviewHeight, 10) : null,
-                imagePreviewMinHeight: cfg.imagePreviewMinHeight ? parseInt(cfg.imagePreviewMinHeight, 10) : null,
-                imagePreviewMaxHeight: cfg.imagePreviewMaxHeight ? parseInt(cfg.imagePreviewMaxHeight, 10) : null,
+                imagePreviewHeight: cfg.imagePreviewHeight ? parseInt(cfg.imagePreviewHeight, 10) : (cfg.avatar ? 130 : null),
+                imagePreviewMinHeight: cfg.imagePreviewMinHeight ? parseInt(cfg.imagePreviewMinHeight, 10) : (cfg.avatar ? 130 : null),
+                imagePreviewMaxHeight: cfg.imagePreviewMaxHeight ? parseInt(cfg.imagePreviewMaxHeight, 10) : (cfg.avatar ? 130 : null),
 
                 allowImageCrop: Boolean(cfg.imageCrop || cfg.imageCropAspectRatio || cfg.avatar),
                 imageCropAspectRatio: cfg.avatar ? '1:1' : (cfg.imageCropAspectRatio || null),
 
-                allowImageResize: Boolean(cfg.imageResize || cfg.imageResizeTargetWidth || cfg.imageResizeTargetHeight),
-                imageResizeTargetWidth: cfg.imageResizeTargetWidth ? parseInt(cfg.imageResizeTargetWidth, 10) : null,
-                imageResizeTargetHeight: cfg.imageResizeTargetHeight ? parseInt(cfg.imageResizeTargetHeight, 10) : null,
+                allowImageResize: Boolean(cfg.imageResize || cfg.imageResizeTargetWidth || cfg.imageResizeTargetHeight || cfg.avatar),
+                imageResizeTargetWidth: cfg.avatar ? 260 : (cfg.imageResizeTargetWidth ? parseInt(cfg.imageResizeTargetWidth, 10) : null),
+                imageResizeTargetHeight: cfg.avatar ? 260 : (cfg.imageResizeTargetHeight ? parseInt(cfg.imageResizeTargetHeight, 10) : null),
                 imageResizeMode: cfg.imageResizeMode || 'cover',
 
                 allowImageTransform: Boolean(cfg.imageTransform || cfg.imageCrop || cfg.imageResize || cfg.avatar),

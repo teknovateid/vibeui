@@ -47,7 +47,6 @@ export function vibeForm(config = {}) {
         },
 
         async handleSubmit(event) {
-            console.log('vibeForm: handleSubmit triggered!', formId);
             if (!isAjax) {
                 if (saveToStorage) {
                     this.clearStorage();
@@ -61,7 +60,6 @@ export function vibeForm(config = {}) {
             }
 
             if (this.loading) {
-                console.log('vibeForm: aborted because loading is true');
                 return;
             }
 
@@ -99,8 +97,6 @@ export function vibeForm(config = {}) {
                     headers['X-CSRF-TOKEN'] = csrfToken;
                 }
 
-                console.log('vibeForm: formData ready', Object.fromEntries(formData.entries()));
-
                 let fetchOptions = {
                     method: method === 'GET' ? 'GET' : 'POST',
                     headers: headers,
@@ -114,9 +110,7 @@ export function vibeForm(config = {}) {
                     fetchOptions.body = formData;
                 }
 
-                console.log('vibeForm: executing fetch to', targetUrl, fetchOptions);
                 const res = await fetch(targetUrl, fetchOptions);
-                console.log('vibeForm: fetch returned', res.status);
                 const contentType = res.headers.get('content-type') || '';
                 let data = null;
 
@@ -142,8 +136,7 @@ export function vibeForm(config = {}) {
                 if (saveToStorage) {
                     this.clearStorage();
                 }
-
-                console.log('vibeForm: success! dispatching events');
+                
                 // Dispatch success events with payload
                 const successDetail = { form, id: formId, data, response: res };
                 window.dispatchEvent(new CustomEvent('vibe-form-success', { detail: successDetail }));

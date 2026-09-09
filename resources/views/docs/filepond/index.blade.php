@@ -54,7 +54,10 @@
                             <vibe:filepond name="document" label="Unggah Dokumen" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Form (Test Request)
                                 </vibe:button>
                             </div>
@@ -75,11 +78,7 @@
                 <vibe:preview title="Pratinjau Kartu Berkas (my-cv.pdf)">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <\vibe:filepond
-                                name="cv_preview"
-                                label="Curriculum Vitae"
-                                demo
-                            />
+                            <\vibe:filepond name="cv_preview" label="Curriculum Vitae" demo />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
                                     Kirim Form (Test Request)
@@ -89,14 +88,13 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <vibe:filepond
-                                name="cv_preview"
-                                label="Curriculum Vitae"
-                                demo
-                            />
+                            <vibe:filepond name="cv_preview" label="Curriculum Vitae" demo />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Form (Test Request)
                                 </vibe:button>
                             </div>
@@ -130,7 +128,10 @@
                             <vibe:filepond name="photos" :label="__('docs/filepond.multiple_preview.label')" :description="__('docs/filepond.multiple_preview.description')" multiple max-files="5" accepted-file-types="image/*" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Multiple Foto (Test Request)
                                 </vibe:button>
                             </div>
@@ -150,31 +151,27 @@
 
                 <vibe:preview :title="__('docs/filepond.avatar_mode.preview_title')">
                     <vibe:preview.code>
-                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="w-full max-w-sm flex flex-col items-center justify-center p-6 rounded-2xl border border-border/80 bg-muted/20 backdrop-blur-xs text-center space-y-4">
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-xs mx-auto text-center">
                             <\vibe:filepond name="avatar" label="{{ __('docs/filepond.avatar_mode.label') }}" description="{{ __('docs/filepond.avatar_mode.description') }}" avatar accepted-file-types="image/png, image/jpeg" />
-                            <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                                <span>PNG, JPEG maks 2MB · Rasio 1:1</span>
+                            <div class="flex justify-center">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    Simpan Avatar (Test Request)
+                                </\vibe:button>
                             </div>
-                            <\vibe:button type="submit" variant="primary" size="sm">
-                                Simpan Avatar (Test Request)
-                            </\vibe:button>
                         </\vibe:form>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
-                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="flex flex-col items-center justify-center p-6 rounded-2xl border border-border/80 bg-muted/20 backdrop-blur-xs text-center space-y-4">
+                    <div class="w-full max-w-xs mx-auto">
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-4 text-center">
                             <vibe:filepond name="avatar" :label="__('docs/filepond.avatar_mode.label')" :description="__('docs/filepond.avatar_mode.description')" avatar accepted-file-types="image/png, image/jpeg" />
-                            <div class="flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                                <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <line x1="12" y1="16" x2="12" y2="12"/>
-                                    <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                </svg>
-                                <span>PNG, JPEG maks 2MB · Rasio 1:1</span>
+                            <div class="flex justify-center">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
+                                    Simpan Avatar (Test Request)
+                                </vibe:button>
                             </div>
-                            <vibe:button type="submit" variant="primary" size="sm">
-                                <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                                Simpan Avatar (Test Request)
-                            </vibe:button>
                         </vibe:form>
                     </div>
                 </vibe:preview>
@@ -205,7 +202,10 @@
                             <vibe:filepond name="attachment" :label="__('docs/filepond.validation.label')" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Lampiran (Test Request)
                                 </vibe:button>
                             </div>
@@ -226,15 +226,7 @@
                 <vibe:preview title="Dropzone dengan Judul & Tombol Kustom">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <\vibe:filepond
-                                name="resume"
-                                label="Unggah Berkas Lamaran"
-                                title="Tarik & Letakkan Berkas Lamaran (CV)"
-                                subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
-                                browse-label="Pilih CV Saya"
-                                accepted-file-types="application/pdf, .doc, .docx"
-                                max-file-size="15MB"
-                            />
+                            <\vibe:filepond name="resume" label="Unggah Berkas Lamaran" title="Tarik & Letakkan Berkas Lamaran (CV)" subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB" browse-label="Pilih CV Saya" accepted-file-types="application/pdf, .doc, .docx" max-file-size="15MB" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
                                     Kirim CV (Test Request)
@@ -244,18 +236,13 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-xl">
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <vibe:filepond
-                                name="resume"
-                                label="Unggah Berkas Lamaran"
-                                title="Tarik & Letakkan Berkas Lamaran (CV)"
-                                subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB"
-                                browse-label="Pilih CV Saya"
-                                accepted-file-types="application/pdf, .doc, .docx"
-                                max-file-size="15MB"
-                            />
+                            <vibe:filepond name="resume" label="Unggah Berkas Lamaran" title="Tarik & Letakkan Berkas Lamaran (CV)" subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB" browse-label="Pilih CV Saya" accepted-file-types="application/pdf, .doc, .docx" max-file-size="15MB" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim CV (Test Request)
                                 </vibe:button>
                             </div>
@@ -266,14 +253,7 @@
                 <vibe:preview title="Varian Compact (Tampilan Ringkas Horizontal)">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <\vibe:filepond
-                                name="quick_attachment"
-                                label="Lampiran Singkat"
-                                variant="compact"
-                                title="Lampirkan Dokumen Pendukung"
-                                subtitle="Semua format dokumen diizinkan (maks. 10MB)"
-                                browse-label="Jelajahi"
-                            />
+                            <\vibe:filepond name="quick_attachment" label="Lampiran Singkat" variant="compact" title="Lampirkan Dokumen Pendukung" subtitle="Semua format dokumen diizinkan (maks. 10MB)" browse-label="Jelajahi" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
                                     Kirim Lampiran (Test Request)
@@ -283,17 +263,13 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-xl">
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <vibe:filepond
-                                name="quick_attachment"
-                                label="Lampiran Singkat"
-                                variant="compact"
-                                title="Lampirkan Dokumen Pendukung"
-                                subtitle="Semua format dokumen diizinkan (maks. 10MB)"
-                                browse-label="Jelajahi"
-                            />
+                            <vibe:filepond name="quick_attachment" label="Lampiran Singkat" variant="compact" title="Lampirkan Dokumen Pendukung" subtitle="Semua format dokumen diizinkan (maks. 10MB)" browse-label="Jelajahi" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Lampiran (Test Request)
                                 </vibe:button>
                             </div>
@@ -329,16 +305,16 @@
                             <div class="flex items-center gap-3">
                                 <div class="p-2 rounded-lg bg-primary/10 text-primary">
                                     <svg class="size-4.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 2.5 8.242"/>
-                                        <path d="M12 12v9"/>
-                                        <path d="m16 16-4-4-4 4"/>
+                                        <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 0 1 2.5 8.242" />
+                                        <path d="M12 12v9" />
+                                        <path d="m16 16-4-4-4 4" />
                                     </svg>
                                 </div>
                                 <div class="space-y-0.5">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-semibold text-foreground">Direct Cloud Upload (Presigned URL)</span>
                                         <vibe:badge variant="success" size="xs" class="rounded-full">
-                                             S3 / R2 PUT
+                                            S3 / R2 PUT
                                         </vibe:badge>
                                     </div>
                                     <p class="text-[11px] text-muted-foreground">Berkas dikirim langsung ke object storage tanpa membebani memori PHP server.</p>
@@ -348,84 +324,68 @@
 
                         {{-- Standalone Presigned FilePond Form Instance --}}
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" class="space-y-3">
-                            <vibe:filepond
-                                name="cloud_file"
-                                :label="__('docs/filepond.presigned.label')"
-                                :description="__('docs/filepond.presigned.description')"
-                                presign-url="{{ route('docs.filepond.presigned') }}"
-                                max-file-size="500MB"
-                            />
+                            <vibe:filepond name="cloud_file" :label="__('docs/filepond.presigned.label')" :description="__('docs/filepond.presigned.description')" presign-url="{{ route('docs.filepond.presigned') }}" max-file-size="500MB" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
-                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
                                     Kirim Kunci S3 ke Controller (Test Request)
                                 </vibe:button>
                             </div>
                         </vibe:form>
 
                         {{-- Real-Time Cloud Upload Monitor Card --}}
-                        <vibe:card
-                            class="p-3.5 space-y-2.5 text-xs shadow-xs transition-all"
-                            x-data="{
-                                state: 'idle',
-                                fileName: '',
-                                fileSize: '',
-                                progress: 0,
-                                s3Key: '',
-                                errorMessage: '',
-                                formatBytes(bytes) {
-                                    if (!bytes || bytes === 0) return '0 B';
-                                    const k = 1024;
-                                    const sizes = ['B', 'KB', 'MB', 'GB'];
-                                    const i = Math.floor(Math.log(bytes) / Math.log(k));
-                                    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-                                }
-                            }"
-                            @vibe-filepond-presigned-start.window="
+                        {{-- <vibe:card class="p-3.5 space-y-2.5 text-xs shadow-xs transition-all" x-data="{
+                            state: 'idle',
+                            fileName: '',
+                            fileSize: '',
+                            progress: 0,
+                            s3Key: '',
+                            errorMessage: '',
+                            formatBytes(bytes) {
+                                if (!bytes || bytes === 0) return '0 B';
+                                const k = 1024;
+                                const sizes = ['B', 'KB', 'MB', 'GB'];
+                                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                                return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+                            }
+                        }" @vibe-filepond-presigned-start.window="
                                 state = 'uploading';
                                 fileName = $event.detail.name;
                                 fileSize = formatBytes($event.detail.size);
                                 progress = 0;
                                 s3Key = '';
                                 errorMessage = '';
-                            "
-                            @vibe-filepond-presigned-progress.window="
+                            " @vibe-filepond-presigned-progress.window="
                                 state = 'uploading';
                                 progress = $event.detail.percentage || 0;
-                            "
-                            @vibe-filepond-presigned-success.window="
+                            " @vibe-filepond-presigned-success.window="
                                 state = 'success';
                                 progress = 100;
                                 s3Key = $event.detail.key;
-                            "
-                            @vibe-filepond-presigned-error.window="
+                            " @vibe-filepond-presigned-error.window="
                                 state = 'error';
                                 errorMessage = $event.detail.error || 'Gagal mengunggah berkas';
-                            "
-                            @vibe-filepond-presigned-revert.window="
+                            " @vibe-filepond-presigned-revert.window="
                                 state = 'idle';
                                 progress = 0;
                                 s3Key = '';
-                            "
-                        >
-                            {{-- State Header --}}
+                            ">
                             <div class="flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-2">
                                     <span class="relative flex size-2">
-                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
-                                            :class="{
-                                                'bg-success': state === 'idle' || state === 'success',
-                                                'bg-primary': state === 'uploading',
-                                                'bg-destructive': state === 'error'
-                                            }"
-                                        ></span>
-                                        <span class="relative inline-flex rounded-full size-2"
-                                            :class="{
-                                                'bg-success': state === 'idle' || state === 'success',
-                                                'bg-primary': state === 'uploading',
-                                                'bg-destructive': state === 'destructive'
-                                            }"
-                                        ></span>
+                                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" :class="{
+                                            'bg-success': state === 'idle' || state === 'success',
+                                            'bg-primary': state === 'uploading',
+                                            'bg-destructive': state === 'error'
+                                        }"></span>
+                                        <span class="relative inline-flex rounded-full size-2" :class="{
+                                            'bg-success': state === 'idle' || state === 'success',
+                                            'bg-primary': state === 'uploading',
+                                            'bg-destructive': state === 'destructive'
+                                        }"></span>
                                     </span>
                                     <span class="font-semibold text-foreground">Status Sinkronisasi Cloud:</span>
                                 </div>
@@ -433,7 +393,7 @@
                                 <template x-if="state === 'idle'">
                                     <span class="inline-flex items-center gap-1 font-medium text-muted-foreground text-[11px]">
                                         <svg class="size-3.5 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M20 6 9 17l-5-5"/>
+                                            <path d="M20 6 9 17l-5-5" />
                                         </svg>
                                         Siap mengunggah langsung ke storage
                                     </span>
@@ -442,7 +402,7 @@
                                 <template x-if="state === 'uploading'">
                                     <span class="inline-flex items-center gap-1.5 font-semibold text-primary text-[11px]">
                                         <svg class="size-3.5 animate-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
+                                            <path d="M21 12a9 9 0 1 1-6.219-8.56" />
                                         </svg>
                                         Mengunggah direct PUT... <span class="font-mono" x-text="progress + '%'"></span>
                                     </span>
@@ -451,7 +411,7 @@
                                 <template x-if="state === 'success'">
                                     <span class="inline-flex items-center gap-1 font-semibold text-success text-[11px]">
                                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <polyline points="20 6 9 17 4 12"/>
+                                            <polyline points="20 6 9 17 4 12" />
                                         </svg>
                                         Tersimpan di Cloud Bucket
                                     </span>
@@ -461,8 +421,6 @@
                                     <span class="inline-flex items-center gap-1 font-semibold text-destructive text-[11px]" x-text="errorMessage"></span>
                                 </template>
                             </div>
-
-                            {{-- Live Progress Bar when uploading --}}
                             <div x-show="state === 'uploading'" x-transition class="space-y-1 pt-1">
                                 <div class="w-full bg-muted rounded-full h-2 overflow-hidden p-0.5">
                                     <div class="bg-linear-to-r from-primary to-success h-full rounded-full transition-all duration-150" :style="'width: ' + progress + '%'"></div>
@@ -472,8 +430,6 @@
                                     <span x-text="progress + '%'"></span>
                                 </div>
                             </div>
-
-                            {{-- S3 Key Result Card when upload succeeds --}}
                             <div x-show="state === 'success'" x-transition class="p-2.5 rounded-lg bg-success/10 border border-success/20 text-success space-y-1.5">
                                 <div class="flex items-center justify-between text-[11px] font-medium">
                                     <span>Cloud Object Key (Disimpan di Form):</span>
@@ -481,7 +437,10 @@
                                 </div>
                                 <div class="font-mono text-[11px] break-all select-all font-semibold bg-background/50 p-2 rounded border border-success/20" x-text="s3Key"></div>
                             </div>
-                        </vibe:card>
+                        </vibe:card> --}}
+
+
+                        
                     </div>
                 </vibe:preview>
 
@@ -533,8 +492,8 @@
 
                 <div class="p-3.5 rounded-xl border border-primary/25 bg-primary/5 flex items-start gap-3 text-xs text-muted-foreground leading-relaxed">
                     <svg class="size-4 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-                        <path d="m9 12 2 2 4-4"/>
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                        <path d="m9 12 2 2 4-4" />
                     </svg>
                     <div>
                         <strong class="text-foreground font-semibold">Proteksi Unggahan Aktif (<code class="font-mono text-[11px] text-primary">protect-upload="true"</code>):</strong>
@@ -651,32 +610,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $filepondProps = [
-                                ['name', 'string', 'null', 'Nama field input (otomatis diambil dari `wire:model` jika ada).'],
-                                ['title', 'string', 'null', 'Kustomisasi judul dropzone (default: "Choose a file or drag & drop it here").'],
-                                ['subtitle', 'string', 'null', 'Kustomisasi keterangan format dan ukuran (otomatis dihitung jika kosong).'],
-                                ['browse-label', 'string', 'null', 'Teks tombol pemilih berkas (default: "Browse File").'],
-                                ['icon', 'string', '"cloud"', 'Pilihan ikon dropzone (`cloud`, `upload`, `folder`, atau SVG string).'],
-                                ['variant', 'string', '"default"', 'Varian layout: `"default"` (lengkap), `"compact"` (horizontal), atau `"avatar"`.'],
-                                ['dashed', 'bool', 'true', 'Garis batas putus-putus (`true`) atau garis padat (`false`).'],
-                                ['drop-height', 'string', 'null', 'Tinggi minimal kustom dropzone, contoh: `"16rem"`, `"250px"`.'],
-                                ['multiple', 'bool', 'false', 'Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.'],
-                                ['max-files', 'int', 'null', 'Batas maksimal jumlah berkas yang dapat diunggah bersamaan.'],
-                                ['max-file-size', 'string', 'null', 'Batas ukuran per berkas, contoh: `"2MB"`, `"500KB"`.'],
-                                ['accepted-file-types', 'string | array', 'null', 'Filter format mime berkas, contoh: `"image/*, application/pdf"`.'],
-                                ['avatar', 'bool', 'false', 'Mengaktifkan mode lingkaran compact 1:1 untuk foto profil.'],
-                                ['image-crop', 'bool', 'false', 'Mengaktifkan fitur pemotongan gambar otomatis/manual.'],
-                                ['image-crop-aspect-ratio', 'string', 'null', 'Rasio aspek pemotongan gambar, contoh: `"1:1"`, `"16:9"`.'],
-                                ['presign-url', 'string', 'null', 'Endpoint backend untuk mendapatkan URL presigned cloud storage.'],
-                                ['presign-method', 'string', '"PUT"', 'HTTP method pengunggahan langsung ke cloud storage.'],
-                                ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'],
-                                ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).'],
-                                ['demo', 'bool', 'false', 'Menampilkan contoh berkas simulasi (mock file) secara langsung tanpa perlu upload.'],
-                                ['demo-files', 'array', '[]', 'Daftar nama berkas simulasi untuk demonstrasi tampilan kartu berkas.'],
-                                ['protect-upload', 'bool', 'false', 'Mencegah submit form dan navigasi saat berkas masih diunggah dengan konfirmasi &lt;vibe:alert&gt; serta peringatan penutupan tab (`beforeunload`).'],
-                                ['protect-title', 'string', 'null', 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").'],
-                                ['protect-message', 'string', 'null', 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.']
-                            ];
+                            $filepondProps = [['name', 'string', 'null', 'Nama field input (otomatis diambil dari `wire:model` jika ada).'], ['title', 'string', 'null', 'Kustomisasi judul dropzone (default: "Choose a file or drag & drop it here").'], ['subtitle', 'string', 'null', 'Kustomisasi keterangan format dan ukuran (otomatis dihitung jika kosong).'], ['browse-label', 'string', 'null', 'Teks tombol pemilih berkas (default: "Browse File").'], ['icon', 'string', '"cloud"', 'Pilihan ikon dropzone (`cloud`, `upload`, `folder`, atau SVG string).'], ['variant', 'string', '"default"', 'Varian layout: `"default"` (lengkap), `"compact"` (horizontal), atau `"avatar"`.'], ['dashed', 'bool', 'true', 'Garis batas putus-putus (`true`) atau garis padat (`false`).'], ['drop-height', 'string', 'null', 'Tinggi minimal kustom dropzone, contoh: `"16rem"`, `"250px"`.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.'], ['max-files', 'int', 'null', 'Batas maksimal jumlah berkas yang dapat diunggah bersamaan.'], ['max-file-size', 'string', 'null', 'Batas ukuran per berkas, contoh: `"2MB"`, `"500KB"`.'], ['accepted-file-types', 'string | array', 'null', 'Filter format mime berkas, contoh: `"image/*, application/pdf"`.'], ['avatar', 'bool', 'false', 'Mengaktifkan mode lingkaran compact 1:1 untuk foto profil.'], ['image-crop', 'bool', 'false', 'Mengaktifkan fitur pemotongan gambar otomatis/manual.'], ['image-crop-aspect-ratio', 'string', 'null', 'Rasio aspek pemotongan gambar, contoh: `"1:1"`, `"16:9"`.'], ['presign-url', 'string', 'null', 'Endpoint backend untuk mendapatkan URL presigned cloud storage.'], ['presign-method', 'string', '"PUT"', 'HTTP method pengunggahan langsung ke cloud storage.'], ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'], ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).'], ['demo', 'bool', 'false', 'Menampilkan contoh berkas simulasi (mock file) secara langsung tanpa perlu upload.'], ['demo-files', 'array', '[]', 'Daftar nama berkas simulasi untuk demonstrasi tampilan kartu berkas.'], ['protect-upload', 'bool', 'false', 'Mencegah submit form dan navigasi saat berkas masih diunggah dengan konfirmasi &lt;vibe:alert&gt; serta peringatan penutupan tab (`beforeunload`).'], ['protect-title', 'string', 'null', 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").'], ['protect-message', 'string', 'null', 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.']];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
