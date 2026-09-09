@@ -37,6 +37,21 @@
             </x-slot:icon>
             {{ __('docs/sidebar.nav.directories') }}
         </vibe:nav.item>
+
+        <!-- Design System (Color Rules) -->
+        <vibe:nav.item href="{{ route('docs.design-system.index') }}" :active="request()->routeIs('docs.design-system.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="13.5" cy="6.5" r="2.5"/>
+                    <circle cx="19.5" cy="15.5" r="2.5"/>
+                    <circle cx="6.5" cy="15.5" r="2.5"/>
+                    <path d="M13.5 9 A7 7 0 0 1 19.5 13"/>
+                    <path d="M13.5 9 A7 7 0 0 0 6.5 13"/>
+                    <path d="M6.5 18 L13 21 L19.5 18"/>
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.design_system') }}
+        </vibe:nav.item>
     </vibe:nav.label>
 
 

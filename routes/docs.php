@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/', 'docs.index')->name('index');
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
+    Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
    
     Route::prefix('form')->name('form.')->group(function () {

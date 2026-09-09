@@ -12,6 +12,7 @@ return [
         'docs' => 'Docs',
         'instalation' => 'Instalation',
         'directories' => 'Directories',
+        'design_system' => 'Color Design System',
         'form' => 'Form',
         'input' => 'Input',
         'textarea' => 'Textarea',

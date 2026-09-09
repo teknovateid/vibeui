@@ -12,6 +12,7 @@ return [
         'docs' => 'Dokumentasi',
         'instalation' => 'Instalasi',
         'directories' => 'Direktori',
+        'design_system' => 'Desain Sistem Warna',
         'form' => 'Form',
         'input' => 'Input',
         'textarea' => 'Textarea',
