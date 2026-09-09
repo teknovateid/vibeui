@@ -125,6 +125,9 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             // Add to menu
             $menuPath = resource_path("views/components/{$path}/partials/{$chosenLayout}-menu.blade.php");
             $stubPath = __DIR__ . "/../../stubs/Partials/{$chosenLayout}/item.blade.php";
+            if (!File::exists($stubPath)) {
+                $stubPath = __DIR__ . "/../../stubs/Partials/sidebar/item.blade.php";
+            }
             
             if (File::exists($menuPath) && File::exists($stubPath)) {
                 $menuContent = File::get($menuPath);
@@ -172,6 +175,14 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 // We want to keep the chosen layout's menu
                 if ($filename !== "{$chosenLayout}-menu.blade.php") {
                     File::delete($file->getPathname());
+                }
+            }
+
+            // If layout is topbar, clean up optional directory as topbar does not use optional drawer/modal
+            if ($chosenLayout === 'topbar') {
+                $optionalPath = $partialsPath . '/optional';
+                if (File::isDirectory($optionalPath)) {
+                    File::deleteDirectory($optionalPath);
                 }
             }
         }

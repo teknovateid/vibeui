@@ -234,8 +234,8 @@
             </main>
         </div>
 
-       <x-docs.partials.notification-sheet/>
+        <x-docs.partials.optional.notification-sheet />
     </div>
 
-    <x-docs.partials.search-modal />
+    <x-docs.partials.optional.search-modal />
 </x-docs.layouts.base>
