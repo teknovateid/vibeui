@@ -4,7 +4,7 @@ return [
     'title' => 'Range Slider',
     'badge' => 'Komponen',
     'group' => 'Form & Input',
-    'description' => 'Komponen slider rentang angka (range input) yang disempurnakan dengan active filled track, indikator nilai live, kustomisasi step, serta dukungan drag dan sentuhan mobile.',
+    'description' => 'Komponen slider rentang angka (range input) yang disempurnakan dengan active filled track, indikator nilai live, kustomisasi step, varian warna semantik, serta dukungan checkpoint diskrit dan sentuhan mobile.',
 
     'basic_usage' => [
         'title' => 'Penggunaan Dasar',
@@ -16,17 +16,33 @@ return [
 
     'value_display' => [
         'title' => 'Indikator Nilai Live & Prefix/Suffix',
-        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:showValue="true"</code> untuk menampilkan badge nilai live, serta <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valuePrefix</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valueSuffix</code>.',
+        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:showValue="true"</code> untuk menampilkan badge nilai live di sudut kanan atas, serta <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valuePrefix</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valueSuffix</code> untuk memformat satuan unit.',
         'preview_title' => 'Slider dengan Nilai Live',
         'budget_label' => 'Anggaran Bulanan',
-        'zoom_label' => 'Skala Zoom',
+        'zoom_label' => 'Skala Zoom Layar',
     ],
 
-    'steps' => [
-        'title' => 'Step & Min/Max Marks',
-        'desc' => 'Atur kelipatan angka dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code>, serta tampilkan batas bawah/atas dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">minLabel</code> dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">maxLabel</code>.',
-        'preview_title' => 'Slider dengan Step Tertentu',
-        'capacity_label' => 'Kapasitas Penyimpanan Cloud',
+    'variants' => [
+        'title' => 'Varian Warna Semantik',
+        'desc' => 'Mendukung berbagai varian tema warna aktif melalui prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code>: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Koleksi Varian Warna',
+        'primary_label' => 'Primary (Default Theme)',
+        'secondary_label' => 'Secondary',
+        'success_label' => 'Success (Kapasitas Optimal / Hemat)',
+        'warning_label' => 'Warning (Ambang Batas Peringatan)',
+        'danger_label' => 'Danger / Destructive (Kritis)',
+        'info_label' => 'Info (Informasi / Pengaturan Sistem)',
+        'accent_label' => 'Accent (Aksen Ungu Premium)',
+    ],
+
+    'sizes' => [
+        'title' => 'Ukuran Komponen (Sizes)',
+        'desc' => 'Tersedia 4 pilihan ukuran track dan thumb melalui prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">size</code>: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code> (standar), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">xl</code>.',
+        'preview_title' => 'Variasi Ukuran Slider',
+        'sm_label' => 'Ukuran Kecil (sm - Track 4px, Thumb 14px)',
+        'md_label' => 'Ukuran Standar (md - Track 6px, Thumb 16px)',
+        'lg_label' => 'Ukuran Besar (lg - Track 8px, Thumb 20px)',
+        'xl_label' => 'Ukuran Ekstra Besar (xl - Track 10px, Thumb 24px)',
     ],
 
     'marks_continuous' => [
@@ -45,6 +61,22 @@ return [
         'storage_desc' => 'Pilih paket kuota diskrit yang tersedia. Slider hanya dapat berpindah ke checkpoint.',
     ],
 
+    'checkpoints_flexible' => [
+        'title' => 'Checkpoint Fleksibel (Nilai Antara + Loncat Cepat)',
+        'desc' => 'Tambahkan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:strict="false"</code> pada slider <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:checkpoints</code> untuk mendapatkan keduanya: <strong>tombol checkpoint untuk loncat langsung</strong> ke tier yang tersedia, sementara slider tetap <strong>bebas memilih posisi di antara tier</strong>. Checkpoint berbasis string didistribusikan merata. Ini kebalikan dari mode <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">strict</code>.',
+        'preview_title' => 'Slider Tingkat Performa (Checkpoint + Nilai Antara)',
+        'bandwidth_label' => 'Tingkat Performa Server',
+        'bandwidth_desc' => 'Tier tersedia: Hemat, Ringan, Normal, Tinggi, Maks. Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih nilai di antaranya.',
+    ],
+
+    'steps' => [
+        'title' => 'Step, Batas Rentang & Tick Marks',
+        'desc' => 'Atur interval kelipatan pergeseran nilai dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code>. Anda juga dapat menampilkan batas bawah/atas dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">minLabel</code> dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">maxLabel</code>, atau mengaktifkan titik-titik pembagi otomatis dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:marks="true"</code>.',
+        'preview_title' => 'Step dan Pembagian Nilai',
+        'capacity_label' => 'Kapasitas Penyimpanan (Step 10 GB dengan Min/Max Label)',
+        'rating_label' => 'Skala Kepuasan Layanan (Step 1 dengan :marks="true")',
+    ],
+
     'marks' => [
         'title' => 'Titik Poin Otomatis (:marks="true")',
         'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:marks="true"</code> untuk otomatis menampilkan titik-titik pembagi (tick marks) pada track berdasarkan nilai <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code>.',
@@ -52,9 +84,21 @@ return [
         'rating_label' => 'Skala Kepuasan Layanan (1 - 5 Bintang)',
     ],
 
+    'states' => [
+        'title' => 'Status Komponen (Disabled, Readonly, Info & Error)',
+        'desc' => 'Slider mendukung teks bantuan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, mode hanya-baca <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">readonly</code>, status nonaktif <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code>, serta penanganan validasi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code> dengan aksen track dan pesan error berikon.',
+        'preview_title' => 'Variasi Status Komponen',
+        'info_label' => 'Sensitivitas Sensor (Dengan Teks Info)',
+        'info_text' => 'Nilai 50% direkomendasikan untuk stabilitas sensor optimal.',
+        'readonly_label' => 'Pemakaian Kuota Bulanan (Readonly)',
+        'disabled_label' => 'Alokasi Bandwidth Cadangan (Disabled)',
+        'error_label' => 'Batas Penggunaan CPU Server (Error)',
+        'error_msg' => 'Beban CPU tidak boleh melebihi ambang batas toleransi sistem (75%).',
+    ],
+
     'sizes_status' => [
         'title' => 'Ukuran, Status Disabled & Validasi Error',
-        'desc' => 'Tersedia 3 pilihan ukuran (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>), dukungan status native <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code>, serta penanganan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code> validasi dengan aksen warna merah pada track.',
+        'desc' => 'Tersedia 4 pilihan ukuran, dukungan status native disabled, readonly, serta penanganan error validasi dengan aksen warna merah pada track.',
         'preview_title' => 'Variasi Ukuran dan Status',
         'sm_label' => 'Ukuran Kecil (sm)',
         'md_label' => 'Ukuran Standar (md)',
@@ -85,15 +129,18 @@ return [
             'marks' => 'Array titik pembagi visual (misal <code>[2 => \'2 GB\', 4 => \'4 GB\']</code>) atau boolean <code>true</code> untuk pembagian otomatis. Memungkinkan pemilihan nilai di antara titik.',
             'checkpoints' => 'Array opsi diskrit (misal: <code>[\'10 GB\', \'20 GB\', \'30 GB\']</code>). Secara default mengunci pergeseran slider hanya ke titik checkpoint.',
             'strict' => 'Kontrol penguncian ketat: jika <code>true</code>, pengguna hanya bisa memilih checkpoint (tidak bisa memilih nilai antara). Jika <code>false</code>, pengguna bebas memilih nilai di antaranya.',
-            'size' => 'Ukuran track dan thumb slider: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
+            'size' => 'Ukuran track dan thumb slider: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, atau <code>\'xl\'</code>.',
+            'variant' => 'Varian tema warna aktif slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, atau <code>\'accent\'</code>.',
             'showValue' => 'Menampilkan badge realtime nilai yang sedang aktif di sebelah kanan atas label.',
             'valuePrefix' => 'Teks awalan pada badge nilai live (contoh: <code>$</code> atau <code>Rp</code>).',
             'valueSuffix' => 'Teks akhiran/satuan pada badge nilai live (contoh: <code>GB</code>, <code>%</code>, <code>★</code>).',
             'minLabel' => 'Label teks kustom untuk batas bawah di bawah slider. Default menampilkan angka <code>min</code>.',
             'maxLabel' => 'Label teks kustom untuk batas atas di bawah slider. Default menampilkan angka <code>max</code>.',
+            'info' => 'Teks informasi pembantu di bawah slider (hanya tampil jika tidak ada error).',
             'error' => 'Pesan string error kustom atau boolean untuk memicu styling track merah.',
             'errorName' => 'Kunci error validasi Laravel <code>$errors</code> jika berbeda dari atribut <code>name</code>.',
             'disabled' => 'Atribut HTML native untuk menonaktifkan slider dan tombol loncat checkpoint.',
+            'readonly' => 'Mengunci slider dalam mode hanya-baca sehingga nilai tidak dapat diubah.',
             'wrapperClass' => 'Class CSS tambahan untuk elemen kontainer pembungkus terluar.',
         ],
     ],

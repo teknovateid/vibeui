@@ -2,7 +2,6 @@
 
 @props([
     'variant' => 'default',
-    'padding' => null,
 ])
 
 @php
@@ -15,15 +14,7 @@
         default => 'bg-card border border-border shadow-2xs',
     };
 
-    $paddingClasses = match ($padding) {
-        'none', '0' => 'p-0',
-        'sm' => 'p-4',
-        'lg' => 'p-8',
-        'xl' => 'p-10',
-        default => ($padding ? (is_numeric($padding) ? "p-{$padding}" : $padding) : 'p-6'),
-    };
-
-    $classes = "text-card-foreground rounded-xl {$variantClasses} {$paddingClasses}";
+    $classes = "text-card-foreground rounded-xl p-4 {$variantClasses}";
 @endphp
 
 <div {{ $attributes->twMerge(['class' => $classes]) }}>

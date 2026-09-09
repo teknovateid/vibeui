@@ -441,8 +441,8 @@
         actionItems: {{ Js::from($quickActions) }},
         searchApiUrl: '{{ route('docs.search.query') }}'
     })" @open-modal.window="if ($event.detail === 'global-search-modal' || (Array.isArray($event.detail) && $event.detail[0] === 'global-search-modal')) { onModalOpen(); }" @open-search-modal.window="onModalOpen();" class="flex flex-col">
-        <vibe:modal.header class="p-0 gap-0 border-b border-border/80 font-normal">
-            <div class="relative flex items-center px-4 sm:px-5 py-3.5 sm:py-4 bg-muted/10">
+        <vibe:modal.header class="p-0 gap-0 border-b border-border font-normal">
+            <div class="relative flex items-center px-4 sm:px-5 py-3 sm:py-3.5 bg-card">
                 <vibe:input variant="ghost" size="lg" x-ref="searchInput" x-model="query" @input="onQueryInput()" @keydown.down.prevent="nextItem()" @keydown.up.prevent="prevItem()" @keydown.enter.prevent="selectActiveItem()" @keydown.tab.prevent="cycleFilter()" @keydown.escape.prevent="$dispatch('close-modal', 'global-search-modal')" placeholder="{{ __('docs/search.placeholder') }}" autocomplete="off" spellcheck="false">
                     <x-slot:icon>
                         <template x-if="isLoadingDb">
@@ -459,7 +459,7 @@
                         </template>
                     </x-slot:icon>
                     <x-slot:trailingIcon>
-                        <button x-show="query.length > 0" x-cloak type="button" @click="clearSearch()" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer" title="{{ __('docs/search.clear_search') }}">
+                        <button x-show="query.length > 0" x-cloak type="button" @click="clearSearch()" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer" title="{{ __('docs/search.clear_search') }}">
                             <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="18" y1="6" x2="6" y2="18"></line>
                                 <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -470,11 +470,11 @@
             </div>
 
             {{-- Filter Category Pills --}}
-            <div class="flex items-center gap-1.5 px-4 sm:px-5 py-2 border-t border-border/50 overflow-x-auto vibe-scrollbar bg-muted/20 text-xs select-none">
+            <div class="flex items-center gap-1.5 px-4 sm:px-5 py-2 border-t border-border/60 overflow-x-auto vibe-scrollbar bg-muted/40 text-xs select-none">
                 <template x-for="filter in filterOptions" :key="filter.id">
                     <button type="button" @click="setFilter(filter.id)" class="px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150 shrink-0 cursor-pointer flex items-center gap-1.5" :class="activeFilter === filter.id ?
                         'bg-primary text-primary-foreground shadow-2xs font-semibold' :
-                        'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'">
+                        'bg-secondary text-secondary-foreground hover:bg-accent hover:text-accent-foreground border border-border/40'">
                         <span x-text="filter.label"></span>
                         <span x-show="filter.count !== null" x-text="filter.count" class="text-[10px] px-1.5 py-0.2 rounded-full font-mono" :class="activeFilter === filter.id ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-background/80 text-muted-foreground'"></span>
                     </button>
@@ -489,23 +489,23 @@
                 <div class="flex flex-col gap-1">
                     <template x-for="(item, index) in filteredItems" :key="item.id || index">
                         <div :data-index="index" @click="selectItem(item)" @mouseenter="selectedIndex = index" class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-150 group/search-item" :class="selectedIndex === index ?
-                            'bg-accent/80 text-accent-foreground shadow-2xs ring-1 ring-border/80' :
-                            'text-foreground/80 hover:bg-accent/40 hover:text-foreground'">
+                            'bg-accent text-accent-foreground shadow-2xs ring-1 ring-border/80' :
+                            'text-foreground/80 hover:bg-accent hover:text-foreground'">
                             {{-- Icon container --}}
                             <div class="shrink-0 size-9 rounded-lg flex items-center justify-center transition-colors border" :class="selectedIndex === index ?
-                                'bg-primary/15 text-primary border-primary/25 shadow-2xs' :
-                                'bg-muted/60 text-muted-foreground border-border/40 group-hover/search-item:bg-muted group-hover/search-item:text-foreground'">
+                                'bg-primary text-primary-foreground border-primary shadow-2xs' :
+                                'bg-muted text-muted-foreground border-border/60 group-hover/search-item:bg-accent group-hover/search-item:text-foreground'">
                                 <span x-html="renderIcon(item.icon, item.category)"></span>
                             </div>
 
                             {{-- Text Info --}}
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs sm:text-sm font-semibold truncate tracking-tight" :class="selectedIndex === index ? 'text-foreground font-bold' : 'text-foreground'" x-text="item.title"></span>
+                                    <span class="text-xs sm:text-sm font-semibold truncate tracking-tight" :class="selectedIndex === index ? 'text-accent-foreground font-bold' : 'text-foreground'" x-text="item.title"></span>
 
                                     {{-- Sub category or section tag --}}
                                     <template x-if="item.subCategory || item.section">
-                                        <span class="text-[10px] px-1.5 py-0.2 rounded-md font-medium shrink-0 bg-muted/80 text-muted-foreground border border-border/50" x-text="item.subCategory || item.section"></span>
+                                        <span class="text-[10px] px-1.5 py-0.2 rounded-md font-medium shrink-0 bg-muted text-muted-foreground border border-border/60" x-text="item.subCategory || item.section"></span>
                                     </template>
                                 </div>
 
@@ -533,7 +533,7 @@
             {{-- Empty State --}}
             <template x-if="filteredItems.length === 0">
                 <div class="py-12 px-4 text-center flex flex-col items-center justify-center">
-                    <div class="size-12 rounded-full bg-muted/70 flex items-center justify-center text-muted-foreground mb-3 shadow-inner">
+                    <div class="size-12 rounded-full bg-muted flex items-center justify-center text-muted-foreground mb-3 shadow-inner border border-border/60">
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -555,23 +555,23 @@
         </vibe:modal.content>
 
         {{-- Modal Footer: Keyboard Controls & Hint --}}
-        <vibe:modal.footer class="justify-between px-4 sm:px-5 py-2.5 text-[11px] select-none">
-            <div class="flex items-center gap-3">
+        <vibe:modal.footer class="justify-between px-4 sm:px-5 py-2.5 text-[11px] select-none border-t border-border bg-card">
+            <div class="flex items-center gap-3 text-muted-foreground">
                 <span class="flex items-center gap-1">
-                    <kbd class="font-mono bg-background/50 px-1 py-0.5">↑</kbd>
-                    <kbd class="font-mono bg-background/50 px-1 py-0.5">↓</kbd>
+                    <kbd class="font-mono bg-muted text-muted-foreground border border-border/70 rounded px-1.5 py-0.5 text-[10px]">↑</kbd>
+                    <kbd class="font-mono bg-muted text-muted-foreground border border-border/70 rounded px-1.5 py-0.5 text-[10px]">↓</kbd>
                     <span>{{ __('docs/search.footer.navigation') }}</span>
                 </span>
                 <span class="flex items-center gap-1">
-                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">↵</kbd>
+                    <kbd class="font-mono bg-muted text-muted-foreground border border-border/70 rounded px-1.5 py-0.5 text-[10px]">↵</kbd>
                     <span>{{ __('docs/search.footer.select') }}</span>
                 </span>
                 <span class="hidden sm:flex items-center gap-1">
-                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">Tab</kbd>
+                    <kbd class="font-mono bg-muted text-muted-foreground border border-border/70 rounded px-1.5 py-0.5 text-[10px]">Tab</kbd>
                     <span>{{ __('docs/search.footer.category') }}</span>
                 </span>
                 <span class="hidden sm:flex items-center gap-1">
-                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">ESC</kbd>
+                    <kbd class="font-mono bg-muted text-muted-foreground border border-border/70 rounded px-1.5 py-0.5 text-[10px]">ESC</kbd>
                     <span>{{ __('docs/search.footer.close') }}</span>
                 </span>
             </div>
@@ -965,21 +965,21 @@
             getCategoryBadgeClass(category) {
                 switch (category) {
                     case 'Menu':
-                        return 'bg-primary/15 text-primary border border-primary/25';
+                        return 'bg-secondary text-secondary-foreground border border-border/60';
                     case 'Database':
-                        return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
+                        return 'bg-success/15 text-success border border-success/25';
                     case 'Riwayat':
                     case 'History':
-                        return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20';
+                        return 'bg-warning/15 text-warning border border-warning/25';
                     case 'Disematkan':
                     case 'Pinned':
-                        return 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20';
+                        return 'bg-info/15 text-info border border-info/25';
                     case 'Aksi':
                     case 'Action':
                     case 'Actions':
-                        return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20';
+                        return 'bg-primary/10 text-primary border border-primary/20';
                     default:
-                        return 'bg-muted text-muted-foreground border border-border';
+                        return 'bg-muted text-muted-foreground border border-border/60';
                 }
             },
 

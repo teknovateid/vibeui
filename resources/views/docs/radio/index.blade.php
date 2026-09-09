@@ -43,22 +43,14 @@
 
                 <vibe:preview :title="__('docs/radio.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:radio.group 
-    name="billing" 
-    label="{{ __('docs/radio.basic_usage.plan_label') }}" 
-    description="{{ __('docs/radio.basic_usage.plan_desc') }}"
->
-    <vibe:radio name="billing" value="monthly" label="{{ __('docs/radio.basic_usage.opt1') }}" checked />
-    <vibe:radio name="billing" value="yearly" label="{{ __('docs/radio.basic_usage.opt2') }}" />
-    <vibe:radio name="billing" value="lifetime" label="{{ __('docs/radio.basic_usage.opt3') }}" />
-</vibe:radio.group>
+                        <vibe:radio.group name="billing" label="{{ __('docs/radio.basic_usage.plan_label') }}" description="{{ __('docs/radio.basic_usage.plan_desc') }}">
+                            <vibe:radio name="billing" value="monthly" label="{{ __('docs/radio.basic_usage.opt1') }}" checked />
+                            <vibe:radio name="billing" value="yearly" label="{{ __('docs/radio.basic_usage.opt2') }}" />
+                            <vibe:radio name="billing" value="lifetime" label="{{ __('docs/radio.basic_usage.opt3') }}" />
+                        </vibe:radio.group>
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:radio.group 
-                            name="billing_demo" 
-                            :label="__('docs/radio.basic_usage.plan_label')" 
-                            :description="__('docs/radio.basic_usage.plan_desc')"
-                        >
+                        <vibe:radio.group name="billing_demo" :label="__('docs/radio.basic_usage.plan_label')" :description="__('docs/radio.basic_usage.plan_desc')">
                             <vibe:radio name="billing_demo" value="monthly" :label="__('docs/radio.basic_usage.opt1')" checked />
                             <vibe:radio name="billing_demo" value="yearly" :label="__('docs/radio.basic_usage.opt2')" />
                             <vibe:radio name="billing_demo" value="lifetime" :label="__('docs/radio.basic_usage.opt3')" />
@@ -78,9 +70,9 @@
 
                 <vibe:preview :title="__('docs/radio.sizes.preview_title')">
                     <vibe:preview.code>
-<vibe:radio name="demo_size" value="sm" size="sm" label="{{ __('docs/radio.sizes.sm') }}" checked />
-<vibe:radio name="demo_size" value="md" size="md" label="{{ __('docs/radio.sizes.md') }}" />
-<vibe:radio name="demo_size" value="lg" size="lg" label="{{ __('docs/radio.sizes.lg') }}" />
+                        <vibe:radio name="demo_size" value="sm" size="sm" label="{{ __('docs/radio.sizes.sm') }}" checked />
+                        <vibe:radio name="demo_size" value="md" size="md" label="{{ __('docs/radio.sizes.md') }}" />
+                        <vibe:radio name="demo_size" value="lg" size="lg" label="{{ __('docs/radio.sizes.lg') }}" />
                     </vibe:preview.code>
                     <div class="flex flex-col gap-3">
                         <vibe:radio name="demo_size_live" value="sm" size="sm" :label="__('docs/radio.sizes.sm')" checked />
@@ -101,40 +93,14 @@
 
                 <vibe:preview :title="__('docs/radio.card.preview_title')">
                     <vibe:preview.code>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <vibe:radio 
-        variant="card" 
-        name="plan_card" 
-        value="dev" 
-        label="{{ __('docs/radio.card.card1_title') }}" 
-        description="{{ __('docs/radio.card.card1_desc') }}" 
-        checked 
-    />
-    <vibe:radio 
-        variant="card" 
-        name="plan_card" 
-        value="business" 
-        label="{{ __('docs/radio.card.card2_title') }}" 
-        description="{{ __('docs/radio.card.card2_desc') }}" 
-    />
-</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <vibe:radio variant="card" name="plan_card" value="dev" label="{{ __('docs/radio.card.card1_title') }}" description="{{ __('docs/radio.card.card1_desc') }}" checked />
+                            <vibe:radio variant="card" name="plan_card" value="business" label="{{ __('docs/radio.card.card2_title') }}" description="{{ __('docs/radio.card.card2_desc') }}" />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <vibe:radio 
-                            variant="card" 
-                            name="plan_card_live" 
-                            value="dev" 
-                            :label="__('docs/radio.card.card1_title')" 
-                            :description="__('docs/radio.card.card1_desc')" 
-                            checked 
-                        />
-                        <vibe:radio 
-                            variant="card" 
-                            name="plan_card_live" 
-                            value="business" 
-                            :label="__('docs/radio.card.card2_title')" 
-                            :description="__('docs/radio.card.card2_desc')" 
-                        />
+                        <vibe:radio variant="card" name="plan_card_live" value="dev" :label="__('docs/radio.card.card1_title')" :description="__('docs/radio.card.card1_desc')" checked />
+                        <vibe:radio variant="card" name="plan_card_live" value="business" :label="__('docs/radio.card.card2_title')" :description="__('docs/radio.card.card2_desc')" />
                     </div>
                 </vibe:preview>
 
@@ -145,44 +111,14 @@
 
                 <vibe:preview :title="__('docs/radio.card.card_hidden_title')">
                     <vibe:preview.code>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <vibe:radio 
-        variant="card" 
-        hide-indicator 
-        name="billing_cycle" 
-        value="monthly" 
-        label="{{ __('docs/radio.card.hidden1_title') }}" 
-        description="{{ __('docs/radio.card.hidden1_desc') }}" 
-    />
-    <vibe:radio 
-        variant="card" 
-        hide-indicator 
-        name="billing_cycle" 
-        value="annual" 
-        label="{{ __('docs/radio.card.hidden2_title') }}" 
-        description="{{ __('docs/radio.card.hidden2_desc') }}" 
-        checked 
-    />
-</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <vibe:radio variant="card" hide-indicator name="billing_cycle" value="monthly" label="{{ __('docs/radio.card.hidden1_title') }}" description="{{ __('docs/radio.card.hidden1_desc') }}" />
+                            <vibe:radio variant="card" hide-indicator name="billing_cycle" value="annual" label="{{ __('docs/radio.card.hidden2_title') }}" description="{{ __('docs/radio.card.hidden2_desc') }}" checked />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <vibe:radio 
-                            variant="card" 
-                            hide-indicator 
-                            name="billing_cycle_live" 
-                            value="monthly" 
-                            :label="__('docs/radio.card.hidden1_title')" 
-                            :description="__('docs/radio.card.hidden1_desc')" 
-                        />
-                        <vibe:radio 
-                            variant="card" 
-                            hide-indicator 
-                            name="billing_cycle_live" 
-                            value="annual" 
-                            :label="__('docs/radio.card.hidden2_title')" 
-                            :description="__('docs/radio.card.hidden2_desc')" 
-                            checked 
-                        />
+                        <vibe:radio variant="card" hide-indicator name="billing_cycle_live" value="monthly" :label="__('docs/radio.card.hidden1_title')" :description="__('docs/radio.card.hidden1_desc')" />
+                        <vibe:radio variant="card" hide-indicator name="billing_cycle_live" value="annual" :label="__('docs/radio.card.hidden2_title')" :description="__('docs/radio.card.hidden2_desc')" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -205,22 +141,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $radioProps = [
-                                ['name', 'string', 'null', __('docs/radio.props.items.name')],
-                                ['id', 'string', 'auto', __('docs/radio.props.items.id')],
-                                ['value', 'string', 'null', __('docs/radio.props.items.value')],
-                                ['label', 'string', 'null', __('docs/radio.props.items.label')],
-                                ['description', 'string', 'null', __('docs/radio.props.items.description')],
-                                ['checked', 'bool', 'false', __('docs/radio.props.items.checked')],
-                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')],
-                                ['variant', "'default'|'card'|'accent'", "'default'", __('docs/radio.props.items.variant')],
-                                ['indicator', 'bool', 'true', __('docs/radio.props.items.indicator')],
-                                ['hideIndicator', 'bool', 'false', __('docs/radio.props.items.hideIndicator')],
-                                ['error', 'string|bool', 'null', __('docs/radio.props.items.error')],
-                                ['errorName', 'string', 'null', __('docs/radio.props.items.errorName')],
-                                ['disabled', 'bool', 'false', __('docs/radio.props.items.disabled')],
-                                ['wrapperClass', 'string', 'null', __('docs/radio.props.items.wrapperClass')],
-                            ];
+                            $radioProps = [['name', 'string', 'null', __('docs/radio.props.items.name')], ['id', 'string', 'auto', __('docs/radio.props.items.id')], ['value', 'string', 'null', __('docs/radio.props.items.value')], ['label', 'string', 'null', __('docs/radio.props.items.label')], ['description', 'string', 'null', __('docs/radio.props.items.description')], ['checked', 'bool', 'false', __('docs/radio.props.items.checked')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')], ['variant', "'default'|'card'|'accent'", "'default'", __('docs/radio.props.items.variant')], ['indicator', 'bool', 'true', __('docs/radio.props.items.indicator')], ['hideIndicator', 'bool', 'false', __('docs/radio.props.items.hideIndicator')], ['error', 'string|bool', 'null', __('docs/radio.props.items.error')], ['errorName', 'string', 'null', __('docs/radio.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/radio.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/radio.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($radioProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -251,16 +172,7 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $groupProps = [
-                                    ['label', 'string', 'null', __('docs/radio.group_props.items.label')],
-                                    ['name', 'string', 'null', __('docs/radio.group_props.items.name')],
-                                    ['description', 'string', 'null', __('docs/radio.group_props.items.description')],
-                                    ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/radio.group_props.items.orientation')],
-                                    ['columns', '2|3|4', '2', __('docs/radio.group_props.items.columns')],
-                                    ['required', 'bool', 'false', __('docs/radio.group_props.items.required')],
-                                    ['error', 'string|bool', 'null', __('docs/radio.group_props.items.error')],
-                                    ['errorName', 'string', 'null', __('docs/radio.group_props.items.errorName')],
-                                ];
+                                $groupProps = [['label', 'string', 'null', __('docs/radio.group_props.items.label')], ['name', 'string', 'null', __('docs/radio.group_props.items.name')], ['description', 'string', 'null', __('docs/radio.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/radio.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/radio.group_props.items.columns')], ['required', 'bool', 'false', __('docs/radio.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/radio.group_props.items.error')], ['errorName', 'string', 'null', __('docs/radio.group_props.items.errorName')]];
                             @endphp
                             @foreach ($groupProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -276,7 +188,7 @@
             </section>
 
             {{-- Form Submission Test Section --}}
-            <section id="uji-coba-form" class="space-y-4">
+            <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
@@ -289,109 +201,68 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
-    @csrf
-
-    {{-- Radio Group Standar --}}
-    <vibe:radio.group
-        name="membership_tier"
-        label="Tingkat Keanggotaan"
-        description="Pilih level akses akun yang sesuai kebutuhan"
-    >
-        <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
-        <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
-        <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
-    </vibe:radio.group>
-
-    {{-- Radio Group Card Variant --}}
-    <vibe:radio.group
-        name="payment_gateway"
-        label="Metode Pembayaran Utama"
-        description="Pilih gerbang pembayaran favorit"
-        variant="card"
-    >
-        <vibe:radio
-            variant="card"
-            name="payment_gateway"
-            value="credit_card"
-            label="Kartu Kredit / Debit"
-            description="Visa, Mastercard, JCB instant"
-            checked
-        />
-        <vibe:radio
-            variant="card"
-            name="payment_gateway"
-            value="bank_transfer"
-            label="Virtual Account Bank"
-            description="BCA, Mandiri, BNI, BRI otomatis"
-        />
-        <vibe:radio
-            variant="card"
-            name="payment_gateway"
-            value="qris"
-            label="QRIS & E-Wallet"
-            description="GoPay, OVO, ShopeePay, Dana"
-        />
-    </vibe:radio.group>
-
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
-                    </vibe:preview.code>
-                    <div class="max-w-lg mx-auto p-4">
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
+                            <vibe:card>
+                                <vibe:card.header>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Langganan & Pembayaran</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai radio standar dan radio group card ke backend controller.</p>
+                                </vibe:card.header>
 
-                            <vibe:radio.group
-                                name="membership_tier"
-                                label="Tingkat Keanggotaan"
-                                description="Pilih level akses akun yang sesuai kebutuhan"
-                            >
-                                <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
-                                <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
-                                <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
-                            </vibe:radio.group>
+                                <vibe:card.content class="space-y-6">
+                                    {{-- Radio Group Standar --}}
+                                    <vibe:radio.group name="membership_tier" label="Tingkat Keanggotaan" description="Pilih level akses akun yang sesuai kebutuhan">
+                                        <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
+                                        <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
+                                        <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
+                                    </vibe:radio.group>
 
-                            <vibe:radio.group
-                                name="payment_gateway"
-                                label="Metode Pembayaran Utama"
-                                description="Pilih gerbang pembayaran favorit"
-                                variant="card"
-                            >
-                                <vibe:radio
-                                    variant="card"
-                                    name="payment_gateway"
-                                    value="credit_card"
-                                    label="Kartu Kredit / Debit"
-                                    description="Visa, Mastercard, JCB instant"
-                                    checked
-                                />
-                                <vibe:radio
-                                    variant="card"
-                                    name="payment_gateway"
-                                    value="bank_transfer"
-                                    label="Virtual Account Bank"
-                                    description="BCA, Mandiri, BNI, BRI otomatis"
-                                />
-                                <vibe:radio
-                                    variant="card"
-                                    name="payment_gateway"
-                                    value="qris"
-                                    label="QRIS & E-Wallet"
-                                    description="GoPay, OVO, ShopeePay, Dana"
-                                />
-                            </vibe:radio.group>
+                                    {{-- Radio Group Card Variant --}}
+                                    <vibe:radio.group name="payment_gateway" label="Metode Pembayaran Utama" description="Pilih gerbang pembayaran favorit" variant="card">
+                                        <vibe:radio variant="card" name="payment_gateway" value="credit_card" label="Kartu Kredit / Debit" description="Visa, Mastercard, JCB instant" checked />
+                                        <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" label="Virtual Account Bank" description="BCA, Mandiri, BNI, BRI otomatis" />
+                                        <vibe:radio variant="card" name="payment_gateway" value="qris" label="QRIS & E-Wallet" description="GoPay, OVO, ShopeePay, Dana" />
+                                    </vibe:radio.group>
+                                </vibe:card.content>
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim Form & Uji $request->all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
+                        </vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Langganan & Pembayaran</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai radio standar dan radio group card ke backend controller.</p>
+                            </vibe:card.header>
+
+                            <vibe:card.content class="space-y-6">
+                                <vibe:radio.group name="membership_tier" label="Tingkat Keanggotaan" description="Pilih level akses akun yang sesuai kebutuhan">
+                                    <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
+                                    <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
+                                    <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
+                                </vibe:radio.group>
+
+                                <vibe:radio.group name="payment_gateway" label="Metode Pembayaran Utama" description="Pilih gerbang pembayaran favorit" variant="card">
+                                    <vibe:radio variant="card" name="payment_gateway" value="credit_card" label="Kartu Kredit / Debit" description="Visa, Mastercard, JCB instant" checked />
+                                    <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" label="Virtual Account Bank" description="BCA, Mandiri, BNI, BRI otomatis" />
+                                    <vibe:radio variant="card" name="payment_gateway" value="qris" label="QRIS & E-Wallet" description="GoPay, OVO, ShopeePay, Dana" />
+                                </vibe:radio.group>
+                            </vibe:card.content>
+
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">
                                     Kirim Form & Uji $request->all()
                                 </vibe:button>
-                            </div>
-                        </vibe:form>
-                    </div>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
                 </vibe:preview>
             </section>
 

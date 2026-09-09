@@ -43,20 +43,10 @@
 
                 <vibe:preview :title="__('docs/textarea.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:textarea 
-    name="bio" 
-    label="{{ __('docs/textarea.basic_usage.bio_label') }}" 
-    placeholder="{{ __('docs/textarea.basic_usage.bio_placeholder') }}" 
-    rows="3" 
-/>
+                        <vibe:textarea name="bio" label="{{ __('docs/textarea.basic_usage.bio_label') }}" placeholder="{{ __('docs/textarea.basic_usage.bio_placeholder') }}" rows="3" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:textarea 
-                            name="bio" 
-                            :label="__('docs/textarea.basic_usage.bio_label')" 
-                            :placeholder="__('docs/textarea.basic_usage.bio_placeholder')" 
-                            rows="3" 
-                        />
+                        <vibe:textarea name="bio" :label="__('docs/textarea.basic_usage.bio_label')" :placeholder="__('docs/textarea.basic_usage.bio_placeholder')" rows="3" />
                     </div>
                 </vibe:preview>
             </section>
@@ -72,22 +62,10 @@
 
                 <vibe:preview :title="__('docs/textarea.autoresize.preview_title')">
                     <vibe:preview.code>
-<vibe:textarea 
-    name="notes" 
-    label="{{ __('docs/textarea.autoresize.feedback_label') }}" 
-    placeholder="{{ __('docs/textarea.autoresize.feedback_placeholder') }}" 
-    :autoResize="true" 
-    rows="2" 
-/>
+                        <vibe:textarea name="notes" label="{{ __('docs/textarea.autoresize.feedback_label') }}" placeholder="{{ __('docs/textarea.autoresize.feedback_placeholder') }}" :autoResize="true" rows="2" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:textarea 
-                            name="notes" 
-                            :label="__('docs/textarea.autoresize.feedback_label')" 
-                            :placeholder="__('docs/textarea.autoresize.feedback_placeholder')" 
-                            :autoResize="true" 
-                            rows="2" 
-                        />
+                        <vibe:textarea name="notes" :label="__('docs/textarea.autoresize.feedback_label')" :placeholder="__('docs/textarea.autoresize.feedback_placeholder')" :autoResize="true" rows="2" />
                     </div>
                 </vibe:preview>
             </section>
@@ -103,24 +81,10 @@
 
                 <vibe:preview :title="__('docs/textarea.counter.preview_title')">
                     <vibe:preview.code>
-<vibe:textarea 
-    name="tweet" 
-    label="{{ __('docs/textarea.counter.tweet_label') }}" 
-    placeholder="{{ __('docs/textarea.counter.tweet_placeholder') }}" 
-    :maxlength="150" 
-    :showCount="true" 
-    rows="3" 
-/>
+                        <vibe:textarea name="tweet" label="{{ __('docs/textarea.counter.tweet_label') }}" placeholder="{{ __('docs/textarea.counter.tweet_placeholder') }}" :maxlength="150" :showCount="true" rows="3" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:textarea 
-                            name="tweet" 
-                            :label="__('docs/textarea.counter.tweet_label')" 
-                            :placeholder="__('docs/textarea.counter.tweet_placeholder')" 
-                            :maxlength="150" 
-                            :showCount="true" 
-                            rows="3" 
-                        />
+                        <vibe:textarea name="tweet" :label="__('docs/textarea.counter.tweet_label')" :placeholder="__('docs/textarea.counter.tweet_placeholder')" :maxlength="150" :showCount="true" rows="3" />
                     </div>
                 </vibe:preview>
             </section>
@@ -139,63 +103,50 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4 max-w-lg mx-auto">
-    @csrf
-
-    <vibe:textarea 
-        name="feedback_summary" 
-        label="Ringkasan Masukan" 
-        placeholder="Tuliskan ringkasan pengalaman Anda di sini..." 
-        rows="2"
-        required
-    />
-
-    <vibe:textarea 
-        name="detailed_notes" 
-        label="Catatan Lengkap (Auto-Resize & Counter)" 
-        placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." 
-        :autoResize="true"
-        :showCount="true"
-        :maxlength="300"
-        rows="3"
-    />
-
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
-                    </vibe:preview.code>
-                    <div class="max-w-lg mx-auto p-4">
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
+                            <vibe:card>
+                                <vibe:card.header>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Formulir Masukan & Catatan Pengguna</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai berbagai variasi textarea langsung ke backend controller.</p>
+                                </vibe:card.header>
 
-                            <vibe:textarea 
-                                name="feedback_summary" 
-                                label="Ringkasan Masukan" 
-                                placeholder="Tuliskan ringkasan pengalaman Anda di sini..." 
-                                rows="2"
-                                required
-                            />
+                                <vibe:card.content class="space-y-4">
+                                    <vibe:textarea name="feedback_summary" label="Ringkasan Masukan" placeholder="Tuliskan ringkasan pengalaman Anda di sini..." rows="2" required />
 
-                            <vibe:textarea 
-                                name="detailed_notes" 
-                                label="Catatan Lengkap (Auto-Resize & Counter)" 
-                                placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." 
-                                :autoResize="true"
-                                :showCount="true"
-                                :maxlength="300"
-                                rows="3"
-                            />
+                                    <vibe:textarea name="detailed_notes" label="Catatan Lengkap (Auto-Resize & Counter)" placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." :autoResize="true" :showCount="true" :maxlength="300" rows="3" />
+                                </vibe:card.content>
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim Form & Uji $request->all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
+                        </vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Formulir Masukan & Catatan Pengguna</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai berbagai variasi textarea langsung ke backend controller.</p>
+                            </vibe:card.header>
+
+                            <vibe:card.content class="space-y-4">
+                                <vibe:textarea name="feedback_summary" label="Ringkasan Masukan" placeholder="Tuliskan ringkasan pengalaman Anda di sini..." rows="2" required />
+
+                                <vibe:textarea name="detailed_notes" label="Catatan Lengkap (Auto-Resize & Counter)" placeholder="Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis..." :autoResize="true" :showCount="true" :maxlength="300" rows="3" />
+                            </vibe:card.content>
+
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">
                                     Kirim Form & Uji $request->all()
                                 </vibe:button>
-                            </div>
-                        </vibe:form>
-                    </div>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
                 </vibe:preview>
             </section>
 
@@ -217,25 +168,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $textareaProps = [
-                                ['name', 'string', 'null', __('docs/textarea.props.items.name')],
-                                ['id', 'string', 'auto', __('docs/textarea.props.items.id')],
-                                ['label', 'string', 'null', __('docs/textarea.props.items.label')],
-                                ['description', 'string', 'null', __('docs/textarea.props.items.description')],
-                                ['placeholder', 'string', 'null', __('docs/textarea.props.items.placeholder')],
-                                ['rows', 'int', '3', __('docs/textarea.props.items.rows')],
-                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/textarea.props.items.size')],
-                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/textarea.props.items.variant')],
-                                ['autoResize', 'bool', 'false', __('docs/textarea.props.items.autoResize')],
-                                ['showCount', 'bool', 'false', __('docs/textarea.props.items.showCount')],
-                                ['maxlength', 'int', 'null', __('docs/textarea.props.items.maxlength')],
-                                ['info', 'string', 'null', __('docs/textarea.props.items.info')],
-                                ['error', 'string|bool', 'null', __('docs/textarea.props.items.error')],
-                                ['errorName', 'string', 'null', __('docs/textarea.props.items.errorName')],
-                                ['disabled', 'bool', 'false', __('docs/textarea.props.items.disabled')],
-                                ['readonly', 'bool', 'false', __('docs/textarea.props.items.readonly')],
-                                ['wrapperClass', 'string', 'null', __('docs/textarea.props.items.wrapperClass')],
-                            ];
+                            $textareaProps = [['name', 'string', 'null', __('docs/textarea.props.items.name')], ['id', 'string', 'auto', __('docs/textarea.props.items.id')], ['label', 'string', 'null', __('docs/textarea.props.items.label')], ['description', 'string', 'null', __('docs/textarea.props.items.description')], ['placeholder', 'string', 'null', __('docs/textarea.props.items.placeholder')], ['rows', 'int', '3', __('docs/textarea.props.items.rows')], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/textarea.props.items.size')], ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/textarea.props.items.variant')], ['autoResize', 'bool', 'false', __('docs/textarea.props.items.autoResize')], ['showCount', 'bool', 'false', __('docs/textarea.props.items.showCount')], ['maxlength', 'int', 'null', __('docs/textarea.props.items.maxlength')], ['info', 'string', 'null', __('docs/textarea.props.items.info')], ['error', 'string|bool', 'null', __('docs/textarea.props.items.error')], ['errorName', 'string', 'null', __('docs/textarea.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/textarea.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/textarea.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/textarea.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($textareaProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>

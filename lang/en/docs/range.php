@@ -16,17 +16,33 @@ return [
 
     'value_display' => [
         'title' => 'Live Value Display & Prefix/Suffix',
-        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:showValue="true"</code> to show a live value badge, along with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valuePrefix</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valueSuffix</code>.',
+        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:showValue="true"</code> to show a live value badge at the top right, along with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valuePrefix</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">valueSuffix</code> to format unit measurements.',
         'preview_title' => 'Slider with Live Value Badge',
         'budget_label' => 'Monthly Budget',
         'zoom_label' => 'Zoom Scale',
     ],
 
-    'steps' => [
-        'title' => 'Step Increments & Min/Max Marks',
-        'desc' => 'Configure step increments using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code>, and display boundary limits via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">minLabel</code> and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">maxLabel</code>.',
-        'preview_title' => 'Step Increment Slider',
-        'capacity_label' => 'Cloud Storage Capacity',
+    'variants' => [
+        'title' => 'Semantic Color Variants',
+        'desc' => 'Supports multiple active theme color variants via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Color Variant Collection',
+        'primary_label' => 'Primary (Default Theme)',
+        'secondary_label' => 'Secondary',
+        'success_label' => 'Success (Optimal Capacity / Eco Mode)',
+        'warning_label' => 'Warning (Warning Threshold)',
+        'danger_label' => 'Danger / Destructive (Critical)',
+        'info_label' => 'Info (Informational / System Settings)',
+        'accent_label' => 'Accent (Purple Accent)',
+    ],
+
+    'sizes' => [
+        'title' => 'Component Sizes',
+        'desc' => 'Available in 4 track and thumb sizes via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">size</code> prop: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">xl</code>.',
+        'preview_title' => 'Slider Size Variations',
+        'sm_label' => 'Small Size (sm - Track 4px, Thumb 14px)',
+        'md_label' => 'Default Size (md - Track 6px, Thumb 16px)',
+        'lg_label' => 'Large Size (lg - Track 8px, Thumb 20px)',
+        'xl_label' => 'Extra Large Size (xl - Track 10px, Thumb 24px)',
     ],
 
     'marks_continuous' => [
@@ -45,6 +61,22 @@ return [
         'storage_desc' => 'Discrete quota packages. The slider snaps strictly to available checkpoints.',
     ],
 
+    'checkpoints_flexible' => [
+        'title' => 'Flexible Checkpoints (Select In-Between + Click-to-Jump)',
+        'desc' => 'Add <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:strict="false"</code> on a <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:checkpoints</code> slider to enable the best of both worlds: <strong>checkpoint buttons for quick jumping</strong> to predefined tiers, while the slider itself remains <strong>free to pick any in-between position</strong>. String-based checkpoints are distributed evenly. This is the opposite of <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">strict</code> mode.',
+        'preview_title' => 'Performance Level Slider (Checkpoints + In-Between)',
+        'bandwidth_label' => 'Server Performance Level',
+        'bandwidth_desc' => 'Preset tiers: Hemat, Ringan, Normal, Tinggi, Maks. Click a tier button to jump directly, or freely slide between tiers.',
+    ],
+
+    'steps' => [
+        'title' => 'Step Increments & Boundary Limits',
+        'desc' => 'Configure step increments using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code>. You can also display boundary limits via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">minLabel</code> and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">maxLabel</code>, or enable automatic tick marks with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:marks="true"</code>.',
+        'preview_title' => 'Step Increments and Distribution',
+        'capacity_label' => 'Storage Capacity (Step 10 GB with Min/Max Labels)',
+        'rating_label' => 'Service Rating Scale (Step 1 with :marks="true")',
+    ],
+
     'marks' => [
         'title' => 'Automatic Tick Marks (:marks="true")',
         'desc' => 'Enable <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:marks="true"</code> to automatically generate visual tick marks across the track based on your <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">step</code> interval.',
@@ -52,9 +84,21 @@ return [
         'rating_label' => 'Service Satisfaction Scale (1 - 5 Stars)',
     ],
 
+    'states' => [
+        'title' => 'Component States (Disabled, Readonly, Info & Error)',
+        'desc' => 'The slider supports helpful <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code> guidance, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">readonly</code> mode, native <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> state, and validation <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code> handling with an alert icon and red track styling.',
+        'preview_title' => 'Component State Variations',
+        'info_label' => 'Sensor Sensitivity (With Info Text)',
+        'info_text' => 'A value of 50% is recommended for optimal sensor stability.',
+        'readonly_label' => 'Monthly Quota Allocation (Readonly)',
+        'disabled_label' => 'Reserve Bandwidth (Disabled)',
+        'error_label' => 'Server CPU Allocation (Error)',
+        'error_msg' => 'CPU workload cannot exceed standard baseline allocation (75%).',
+    ],
+
     'sizes_status' => [
         'title' => 'Sizes, Disabled State & Error Validation',
-        'desc' => 'Supports 3 size options (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">sm</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">md</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">lg</code>), native <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> state, and automatic destructive styling upon validation <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
+        'desc' => 'Supports 4 size options, native disabled, readonly state, and automatic destructive styling upon validation error.',
         'preview_title' => 'Size Variants and States',
         'sm_label' => 'Small Size (sm)',
         'md_label' => 'Default Size (md)',
@@ -85,15 +129,18 @@ return [
             'marks' => 'Array of landmark marks (e.g. <code>[2 => \'2 GB\', 4 => \'4 GB\']</code>) or boolean <code>true</code>. Allows picking in-between values by default.',
             'checkpoints' => 'Array of discrete choices (e.g. <code>[\'10 GB\', \'20 GB\', \'30 GB\']</code>). Strictly locks slider to predefined choices by default.',
             'strict' => 'Snap restriction mode: if <code>true</code>, slider only allows checkpoint values. If <code>false</code>, allows picking in-between values.',
-            'size' => 'Track thickness and thumb size: <code>\'sm\'</code>, <code>\'md\'</code>, or <code>\'lg\'</code>.',
+            'size' => 'Track thickness and thumb size: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, or <code>\'xl\'</code>.',
+            'variant' => 'Active color theme variant for the slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, or <code>\'accent\'</code>.',
             'showValue' => 'Renders a real-time live value badge at the top-right corner of the label.',
             'valuePrefix' => 'Prefix text/symbol displayed on the live value badge (e.g. <code>$</code>).',
             'valueSuffix' => 'Suffix unit text displayed on the live value badge (e.g. <code>GB</code>, <code>%</code>, <code>★</code>).',
             'minLabel' => 'Custom text label for the lower bound below the track. Defaults to the <code>min</code> number.',
             'maxLabel' => 'Custom text label for the upper bound below the track. Defaults to the <code>max</code> number.',
+            'info' => 'Helpful guidance text displayed below the slider (shown when no error is present).',
             'error' => 'Custom error string or boolean to trigger red destructive styling on the track.',
             'errorName' => 'Laravel validation error key in <code>$errors</code> if different from the <code>name</code> attribute.',
             'disabled' => 'Native HTML attribute to disable the slider and all checkpoint buttons.',
+            'readonly' => 'Locks the slider in read-only mode so its value cannot be manipulated.',
             'wrapperClass' => 'Additional CSS classes for the outermost container element.',
         ],
     ],

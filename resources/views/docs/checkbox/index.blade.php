@@ -45,20 +45,10 @@
 
                 <vibe:preview :title="__('docs/checkbox.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:checkbox 
-    name="terms" 
-    label="{{ __('docs/checkbox.basic_usage.label') }}" 
-    description="{{ __('docs/checkbox.basic_usage.desc_text') }}" 
-    checked 
-/>
+                        <vibe:checkbox name="terms" label="{{ __('docs/checkbox.basic_usage.label') }}" description="{{ __('docs/checkbox.basic_usage.desc_text') }}" checked />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:checkbox 
-                            name="terms" 
-                            :label="__('docs/checkbox.basic_usage.label')" 
-                            :description="__('docs/checkbox.basic_usage.desc_text')" 
-                            checked 
-                        />
+                        <vibe:checkbox name="terms" :label="__('docs/checkbox.basic_usage.label')" :description="__('docs/checkbox.basic_usage.desc_text')" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -74,18 +64,10 @@
 
                 <vibe:preview :title="__('docs/checkbox.indeterminate.preview_title')">
                     <vibe:preview.code>
-<vibe:checkbox 
-    name="select_all" 
-    :indeterminate="true" 
-    label="{{ __('docs/checkbox.indeterminate.label') }}" 
-/>
+                        <vibe:checkbox name="select_all" :indeterminate="true" label="{{ __('docs/checkbox.indeterminate.label') }}" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:checkbox 
-                            name="select_all" 
-                            :indeterminate="true" 
-                            :label="__('docs/checkbox.indeterminate.label')" 
-                        />
+                        <vibe:checkbox name="select_all" :indeterminate="true" :label="__('docs/checkbox.indeterminate.label')" />
                     </div>
                 </vibe:preview>
             </section>
@@ -101,9 +83,9 @@
 
                 <vibe:preview :title="__('docs/checkbox.sizes.preview_title')">
                     <vibe:preview.code>
-<vibe:checkbox size="sm" label="{{ __('docs/checkbox.sizes.sm') }}" checked />
-<vibe:checkbox size="md" label="{{ __('docs/checkbox.sizes.md') }}" checked />
-<vibe:checkbox size="lg" label="{{ __('docs/checkbox.sizes.lg') }}" checked />
+                        <vibe:checkbox size="sm" label="{{ __('docs/checkbox.sizes.sm') }}" checked />
+                        <vibe:checkbox size="md" label="{{ __('docs/checkbox.sizes.md') }}" checked />
+                        <vibe:checkbox size="lg" label="{{ __('docs/checkbox.sizes.lg') }}" checked />
                     </vibe:preview.code>
                     <div class="flex flex-col gap-3">
                         <vibe:checkbox size="sm" :label="__('docs/checkbox.sizes.sm')" checked />
@@ -124,36 +106,14 @@
 
                 <vibe:preview :title="__('docs/checkbox.card.preview_title')">
                     <vibe:preview.code>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <vibe:checkbox 
-        variant="card" 
-        name="opt_email" 
-        label="{{ __('docs/checkbox.card.opt1_title') }}" 
-        description="{{ __('docs/checkbox.card.opt1_desc') }}" 
-        checked 
-    />
-    <vibe:checkbox 
-        variant="card" 
-        name="opt_2fa" 
-        label="{{ __('docs/checkbox.card.opt2_title') }}" 
-        description="{{ __('docs/checkbox.card.opt2_desc') }}" 
-    />
-</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <vibe:checkbox variant="card" name="opt_email" label="{{ __('docs/checkbox.card.opt1_title') }}" description="{{ __('docs/checkbox.card.opt1_desc') }}" checked />
+                            <vibe:checkbox variant="card" name="opt_2fa" label="{{ __('docs/checkbox.card.opt2_title') }}" description="{{ __('docs/checkbox.card.opt2_desc') }}" />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <vibe:checkbox 
-                            variant="card" 
-                            name="opt_email" 
-                            :label="__('docs/checkbox.card.opt1_title')" 
-                            :description="__('docs/checkbox.card.opt1_desc')" 
-                            checked 
-                        />
-                        <vibe:checkbox 
-                            variant="card" 
-                            name="opt_2fa" 
-                            :label="__('docs/checkbox.card.opt2_title')" 
-                            :description="__('docs/checkbox.card.opt2_desc')" 
-                        />
+                        <vibe:checkbox variant="card" name="opt_email" :label="__('docs/checkbox.card.opt1_title')" :description="__('docs/checkbox.card.opt1_desc')" checked />
+                        <vibe:checkbox variant="card" name="opt_2fa" :label="__('docs/checkbox.card.opt2_title')" :description="__('docs/checkbox.card.opt2_desc')" />
                     </div>
                 </vibe:preview>
 
@@ -164,40 +124,14 @@
 
                 <vibe:preview :title="__('docs/checkbox.card.card_hidden_title')">
                     <vibe:preview.code>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-    <vibe:checkbox 
-        variant="card" 
-        hide-indicator 
-        name="plan_pro" 
-        label="{{ __('docs/checkbox.card.hidden1_title') }}" 
-        description="{{ __('docs/checkbox.card.hidden1_desc') }}" 
-        checked 
-    />
-    <vibe:checkbox 
-        variant="card" 
-        hide-indicator 
-        name="plan_ent" 
-        label="{{ __('docs/checkbox.card.hidden2_title') }}" 
-        description="{{ __('docs/checkbox.card.hidden2_desc') }}" 
-    />
-</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <vibe:checkbox variant="card" hide-indicator name="plan_pro" label="{{ __('docs/checkbox.card.hidden1_title') }}" description="{{ __('docs/checkbox.card.hidden1_desc') }}" checked />
+                            <vibe:checkbox variant="card" hide-indicator name="plan_ent" label="{{ __('docs/checkbox.card.hidden2_title') }}" description="{{ __('docs/checkbox.card.hidden2_desc') }}" />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        <vibe:checkbox 
-                            variant="card" 
-                            hide-indicator 
-                            name="plan_pro" 
-                            :label="__('docs/checkbox.card.hidden1_title')" 
-                            :description="__('docs/checkbox.card.hidden1_desc')" 
-                            checked 
-                        />
-                        <vibe:checkbox 
-                            variant="card" 
-                            hide-indicator 
-                            name="plan_ent" 
-                            :label="__('docs/checkbox.card.hidden2_title')" 
-                            :description="__('docs/checkbox.card.hidden2_desc')" 
-                        />
+                        <vibe:checkbox variant="card" hide-indicator name="plan_pro" :label="__('docs/checkbox.card.hidden1_title')" :description="__('docs/checkbox.card.hidden1_desc')" checked />
+                        <vibe:checkbox variant="card" hide-indicator name="plan_ent" :label="__('docs/checkbox.card.hidden2_title')" :description="__('docs/checkbox.card.hidden2_desc')" />
                     </div>
                 </vibe:preview>
             </section>
@@ -213,25 +147,15 @@
 
                 <vibe:preview :title="__('docs/checkbox.checkbox_group.preview_title')">
                     <vibe:preview.code>
-<vibe:checkbox.group 
-    label="{{ __('docs/checkbox.checkbox_group.group_label') }}" 
-    description="{{ __('docs/checkbox.checkbox_group.group_desc') }}" 
-    orientation="grid" 
-    :columns="2"
->
-    <vibe:checkbox name="skills[]" value="laravel" label="Laravel & PHP" checked />
-    <vibe:checkbox name="skills[]" value="tailwind" label="Tailwind CSS v4" checked />
-    <vibe:checkbox name="skills[]" value="alpine" label="Alpine.js" />
-    <vibe:checkbox name="skills[]" value="livewire" label="Livewire 3" />
-</vibe:checkbox.group>
+                        <vibe:checkbox.group label="{{ __('docs/checkbox.checkbox_group.group_label') }}" description="{{ __('docs/checkbox.checkbox_group.group_desc') }}" orientation="grid" :columns="2">
+                            <vibe:checkbox name="skills[]" value="laravel" label="Laravel & PHP" checked />
+                            <vibe:checkbox name="skills[]" value="tailwind" label="Tailwind CSS v4" checked />
+                            <vibe:checkbox name="skills[]" value="alpine" label="Alpine.js" />
+                            <vibe:checkbox name="skills[]" value="livewire" label="Livewire 3" />
+                        </vibe:checkbox.group>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
-                        <vibe:checkbox.group 
-                            :label="__('docs/checkbox.checkbox_group.group_label')" 
-                            :description="__('docs/checkbox.checkbox_group.group_desc')" 
-                            orientation="grid" 
-                            :columns="2"
-                        >
+                        <vibe:checkbox.group :label="__('docs/checkbox.checkbox_group.group_label')" :description="__('docs/checkbox.checkbox_group.group_desc')" orientation="grid" :columns="2">
                             <vibe:checkbox name="skills[]" value="laravel" label="Laravel & PHP" checked />
                             <vibe:checkbox name="skills[]" value="tailwind" label="Tailwind CSS v4" checked />
                             <vibe:checkbox name="skills[]" value="alpine" label="Alpine.js" />
@@ -259,24 +183,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $checkboxProps = [
-                                ['name', 'string', 'null', __('docs/checkbox.props.items.name')],
-                                ['id', 'string', 'auto', __('docs/checkbox.props.items.id')],
-                                ['value', 'string', "'1'", __('docs/checkbox.props.items.value')],
-                                ['label', 'string', 'null', __('docs/checkbox.props.items.label')],
-                                ['description', 'string', 'null', __('docs/checkbox.props.items.description')],
-                                ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')],
-                                ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')],
-                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')],
-                                ['variant', "'primary'|'accent'|'card'", "'primary'", __('docs/checkbox.props.items.variant')],
-                                ['indicator', 'bool', 'true', __('docs/checkbox.props.items.indicator')],
-                                ['hideIndicator', 'bool', 'false', __('docs/checkbox.props.items.hideIndicator')],
-                                ['info', 'string', 'null', __('docs/checkbox.props.items.info')],
-                                ['error', 'string|bool', 'null', __('docs/checkbox.props.items.error')],
-                                ['errorName', 'string', 'null', __('docs/checkbox.props.items.errorName')],
-                                ['disabled', 'bool', 'false', __('docs/checkbox.props.items.disabled')],
-                                ['wrapperClass', 'string', 'null', __('docs/checkbox.props.items.wrapperClass')],
-                            ];
+                            $checkboxProps = [['name', 'string', 'null', __('docs/checkbox.props.items.name')], ['id', 'string', 'auto', __('docs/checkbox.props.items.id')], ['value', 'string', "'1'", __('docs/checkbox.props.items.value')], ['label', 'string', 'null', __('docs/checkbox.props.items.label')], ['description', 'string', 'null', __('docs/checkbox.props.items.description')], ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')], ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')], ['variant', "'primary'|'accent'|'card'", "'primary'", __('docs/checkbox.props.items.variant')], ['indicator', 'bool', 'true', __('docs/checkbox.props.items.indicator')], ['hideIndicator', 'bool', 'false', __('docs/checkbox.props.items.hideIndicator')], ['info', 'string', 'null', __('docs/checkbox.props.items.info')], ['error', 'string|bool', 'null', __('docs/checkbox.props.items.error')], ['errorName', 'string', 'null', __('docs/checkbox.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/checkbox.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/checkbox.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($checkboxProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -307,15 +214,7 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $groupProps = [
-                                    ['label', 'string', 'null', __('docs/checkbox.group_props.items.label')],
-                                    ['description', 'string', 'null', __('docs/checkbox.group_props.items.description')],
-                                    ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/checkbox.group_props.items.orientation')],
-                                    ['columns', '2|3|4', '2', __('docs/checkbox.group_props.items.columns')],
-                                    ['required', 'bool', 'false', __('docs/checkbox.group_props.items.required')],
-                                    ['error', 'string|bool', 'null', __('docs/checkbox.group_props.items.error')],
-                                    ['errorName', 'string', 'null', __('docs/checkbox.group_props.items.errorName')],
-                                ];
+                                $groupProps = [['label', 'string', 'null', __('docs/checkbox.group_props.items.label')], ['description', 'string', 'null', __('docs/checkbox.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/checkbox.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/checkbox.group_props.items.columns')], ['required', 'bool', 'false', __('docs/checkbox.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/checkbox.group_props.items.error')], ['errorName', 'string', 'null', __('docs/checkbox.group_props.items.errorName')]];
                             @endphp
                             @foreach ($groupProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -331,7 +230,7 @@
             </section>
 
             {{-- Form Submission Test Section --}}
-            <section id="uji-coba-form" class="space-y-4">
+            <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
@@ -344,106 +243,77 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
-    @csrf
-
-    {{-- Single Boolean Checkbox --}}
-    <vibe:checkbox
-        name="agree_terms"
-        value="1"
-        label="Saya menyetujui syarat & ketentuan layanan"
-        description="Wajib dicentang sebelum melanjutkan pendaftaran"
-        checked
-    />
-
-    {{-- Array Checkbox Group --}}
-    <vibe:checkbox.group
-        label="Saluran Notifikasi (Array)"
-        description="Pilih kanal komunikasi yang diinginkan"
-    >
-        <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
-        <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
-        <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
-    </vibe:checkbox.group>
-
-    {{-- Card Style Checkboxes --}}
-    <div class="space-y-2">
-        <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <vibe:checkbox
-                variant="card"
-                name="addons[]"
-                value="cloud_backup"
-                label="Cloud Backup 100GB"
-                description="Pencadangan otomatis setiap malam"
-                checked
-            />
-            <vibe:checkbox
-                variant="card"
-                name="addons[]"
-                value="priority_support"
-                label="Prioritas Support 24/7"
-                description="Respon tiket di bawah 15 menit"
-            />
-        </div>
-    </div>
-
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
-                    </vibe:preview.code>
-                    <div class="max-w-lg mx-auto p-4">
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
+                            <vibe:card>
+                                <vibe:card.header>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Pilihan Layanan & Persetujuan</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok array ke backend controller.</p>
+                                </vibe:card.header>
 
-                            <vibe:checkbox
-                                name="agree_terms"
-                                value="1"
-                                label="Saya menyetujui syarat & ketentuan layanan"
-                                description="Wajib dicentang sebelum melanjutkan pendaftaran"
-                                checked
-                            />
+                                <vibe:card.content class="space-y-5">
+                                    {{-- Single Boolean Checkbox --}}
+                                    <vibe:checkbox name="agree_terms" value="1" label="Saya menyetujui syarat & ketentuan layanan" description="Wajib dicentang sebelum melanjutkan pendaftaran" checked />
 
-                            <vibe:checkbox.group
-                                label="Saluran Notifikasi (Array)"
-                                description="Pilih kanal komunikasi yang diinginkan"
-                            >
-                                <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
-                                <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
-                                <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
-                            </vibe:checkbox.group>
+                                    {{-- Array Checkbox Group --}}
+                                    <vibe:checkbox.group label="Saluran Notifikasi (Array)" description="Pilih kanal komunikasi yang diinginkan">
+                                        <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
+                                        <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
+                                        <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+                                    </vibe:checkbox.group>
 
-                            <div class="space-y-2">
-                                <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <vibe:checkbox
-                                        variant="card"
-                                        name="addons[]"
-                                        value="cloud_backup"
-                                        label="Cloud Backup 100GB"
-                                        description="Pencadangan otomatis setiap malam"
-                                        checked
-                                    />
-                                    <vibe:checkbox
-                                        variant="card"
-                                        name="addons[]"
-                                        value="priority_support"
-                                        label="Prioritas Support 24/7"
-                                        description="Respon tiket di bawah 15 menit"
-                                    />
+                                    {{-- Card Style Checkboxes --}}
+                                    <div class="space-y-2">
+                                        <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" label="Cloud Backup 100GB" description="Pencadangan otomatis setiap malam" checked />
+                                            <vibe:checkbox variant="card" name="addons[]" value="priority_support" label="Prioritas Support 24/7" description="Respon tiket di bawah 15 menit" />
+                                        </div>
+                                    </div>
+                                </vibe:card.content>
+
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim Form & Uji $request->all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
+                        </vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Pilihan Layanan & Persetujuan</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok array ke backend controller.</p>
+                            </vibe:card.header>
+
+                            <vibe:card.content class="space-y-5">
+                                <vibe:checkbox name="agree_terms" value="1" label="Saya menyetujui syarat & ketentuan layanan" description="Wajib dicentang sebelum melanjutkan pendaftaran" checked />
+
+                                <vibe:checkbox.group label="Saluran Notifikasi (Array)" description="Pilih kanal komunikasi yang diinginkan">
+                                    <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
+                                    <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
+                                    <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+                                </vibe:checkbox.group>
+
+                                <div class="space-y-2">
+                                    <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" label="Cloud Backup 100GB" description="Pencadangan otomatis setiap malam" checked />
+                                        <vibe:checkbox variant="card" name="addons[]" value="priority_support" label="Prioritas Support 24/7" description="Respon tiket di bawah 15 menit" />
+                                    </div>
                                 </div>
-                            </div>
+                            </vibe:card.content>
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">
                                     Kirim Form & Uji $request->all()
                                 </vibe:button>
-                            </div>
-                        </vibe:form>
-                    </div>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
                 </vibe:preview>
             </section>
 

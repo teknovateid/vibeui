@@ -265,7 +265,7 @@
             </section>
 
             {{-- Form Submission Test Section --}}
-            <section id="uji-coba-form" class="space-y-4">
+            <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
@@ -278,47 +278,62 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
+                            <vibe:card>
+                                <vibe:card.header>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Penjadwalan & Periode Waktu</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai date, range, datetime, dan time-range langsung ke backend controller.</p>
+                                </vibe:card.header>
 
-                            {{-- Single Date --}}
-                            <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
+                                <vibe:card.content class="space-y-4">
+                                    {{-- Single Date --}}
+                                    <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
 
-                            {{-- Date Range with startName & endName --}}
-                            <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
+                                    {{-- Date Range with startName & endName --}}
+                                    <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
 
-                            {{-- DateTime --}}
-                            <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
+                                    {{-- DateTime --}}
+                                    <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
 
-                            {{-- Time Range --}}
-                            <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                                    {{-- Time Range --}}
+                                    <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                                </vibe:card.content>
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
-                                </vibe:button>
-                            </div>
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim Form & Uji $request->all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
                         </vibe:form>
                     </vibe:preview.code>
-                    <div class="max-w-lg mx-auto p-4">
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
-                            @csrf
 
-                            <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Penjadwalan & Periode Waktu</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai date, range, datetime, dan time-range langsung ke backend controller.</p>
+                            </vibe:card.header>
 
-                            <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
+                            <vibe:card.content class="space-y-4">
+                                <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
 
-                            <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
+                                <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
 
-                            <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                                <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
+                                <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                            </vibe:card.content>
+
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">
                                     Kirim Form & Uji $request->all()
                                 </vibe:button>
-                            </div>
-                        </vibe:form>
-                    </div>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
                 </vibe:preview>
             </section>
 

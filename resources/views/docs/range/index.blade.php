@@ -25,6 +25,15 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xl</vibe:badge>
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">success</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:showValue="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">valuePrefix</vibe:badge>
@@ -35,6 +44,10 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:marks="[2, 4, ...]"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">strict / :strict="false"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">minLabel / maxLabel</vibe:badge>
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">disabled</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">readonly</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">error</vibe:badge>
                 </div>
             </div>
 
@@ -49,20 +62,10 @@
 
                 <vibe:preview :title="__('docs/range.basic_usage.preview_title')">
                     <vibe:preview.code>
-<vibe:range 
-    name="volume" 
-    label="{{ __('docs/range.basic_usage.volume_label') }}" 
-    description="{{ __('docs/range.basic_usage.volume_desc') }}" 
-    :value="60" 
-/>
+                        <vibe:range name="volume" label="{{ __('docs/range.basic_usage.volume_label') }}" description="{{ __('docs/range.basic_usage.volume_desc') }}" :value="60" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:range 
-                            name="volume" 
-                            :label="__('docs/range.basic_usage.volume_label')" 
-                            :description="__('docs/range.basic_usage.volume_desc')" 
-                            :value="60" 
-                        />
+                        <vibe:range name="volume" :label="__('docs/range.basic_usage.volume_label')" :description="__('docs/range.basic_usage.volume_desc')" :value="60" />
                     </div>
                 </vibe:preview>
             </section>
@@ -78,55 +81,81 @@
 
                 <vibe:preview :title="__('docs/range.value_display.preview_title')">
                     <vibe:preview.code>
-<div class="space-y-6">
-    <vibe:range 
-        name="budget" 
-        label="{{ __('docs/range.value_display.budget_label') }}" 
-        :showValue="true" 
-        valuePrefix="$" 
-        :min="100" 
-        :max="2500" 
-        :step="50" 
-        :value="750" 
-    />
+                        <div class="space-y-6">
+                            <vibe:range name="budget" label="{{ __('docs/range.value_display.budget_label') }}" :showValue="true" valuePrefix="$" :min="100" :max="2500" :step="50" :value="750" />
 
-    <vibe:range 
-        name="zoom" 
-        label="{{ __('docs/range.value_display.zoom_label') }}" 
-        :showValue="true" 
-        valueSuffix="%" 
-        :min="25" 
-        :max="400" 
-        :value="100" 
-    />
-</div>
+                            <vibe:range name="zoom" label="{{ __('docs/range.value_display.zoom_label') }}" :showValue="true" valueSuffix="%" :min="25" :max="400" :value="100" />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full max-w-md space-y-6">
-                        <vibe:range 
-                            name="budget_live" 
-                            :label="__('docs/range.value_display.budget_label')" 
-                            :showValue="true" 
-                            valuePrefix="$" 
-                            :min="100" 
-                            :max="2500" 
-                            :step="50" 
-                            :value="750" 
-                        />
+                        <vibe:range name="budget_live" :label="__('docs/range.value_display.budget_label')" :showValue="true" valuePrefix="$" :min="100" :max="2500" :step="50" :value="750" />
 
-                        <vibe:range 
-                            name="zoom_live" 
-                            :label="__('docs/range.value_display.zoom_label')" 
-                            :showValue="true" 
-                            valueSuffix="%" 
-                            :min="25" 
-                            :max="400" 
-                            :value="100" 
-                        />
+                        <vibe:range name="zoom_live" :label="__('docs/range.value_display.zoom_label')" :showValue="true" valueSuffix="%" :min="25" :max="400" :value="100" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- 3. Steps & Min/Max Marks --}}
+            {{-- 3. Semantic Color Variants --}}
+            <section id="varian-warna" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.variants.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/range.variants.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/range.variants.preview_title')">
+                    <vibe:preview.code>
+                        <div class="space-y-5">
+                            <vibe:range variant="primary" name="v_primary" label="{{ __('docs/range.variants.primary_label') }}" :value="65" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="secondary" name="v_secondary" label="{{ __('docs/range.variants.secondary_label') }}" :value="40" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="success" name="v_success" label="{{ __('docs/range.variants.success_label') }}" :value="55" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="warning" name="v_warning" label="{{ __('docs/range.variants.warning_label') }}" :value="72" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="danger" name="v_danger" label="{{ __('docs/range.variants.danger_label') }}" :value="88" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="info" name="v_info" label="{{ __('docs/range.variants.info_label') }}" :value="30" :showValue="true" valueSuffix="%" />
+                            <vibe:range variant="accent" name="v_accent" label="{{ __('docs/range.variants.accent_label') }}" :value="50" :showValue="true" valueSuffix="%" />
+                        </div>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md space-y-5">
+                        <vibe:range variant="primary" name="v_primary_demo" :label="__('docs/range.variants.primary_label')" :value="65" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="secondary" name="v_secondary_demo" :label="__('docs/range.variants.secondary_label')" :value="40" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="success" name="v_success_demo" :label="__('docs/range.variants.success_label')" :value="55" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="warning" name="v_warning_demo" :label="__('docs/range.variants.warning_label')" :value="72" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="danger" name="v_danger_demo" :label="__('docs/range.variants.danger_label')" :value="88" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="info" name="v_info_demo" :label="__('docs/range.variants.info_label')" :value="30" :showValue="true" valueSuffix="%" />
+                        <vibe:range variant="accent" name="v_accent_demo" :label="__('docs/range.variants.accent_label')" :value="50" :showValue="true" valueSuffix="%" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 4. Component Sizes --}}
+            <section id="ukuran-komponen" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.sizes.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/range.sizes.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/range.sizes.preview_title')">
+                    <vibe:preview.code>
+                        <div class="space-y-6">
+                            <vibe:range name="sz_sm" label="{{ __('docs/range.sizes.sm_label') }}" size="sm" :value="40" />
+                            <vibe:range name="sz_md" label="{{ __('docs/range.sizes.md_label') }}" size="md" :value="55" />
+                            <vibe:range name="sz_lg" label="{{ __('docs/range.sizes.lg_label') }}" size="lg" :value="70" />
+                            <vibe:range name="sz_xl" label="{{ __('docs/range.sizes.xl_label') }}" size="xl" :value="85" />
+                        </div>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md space-y-6">
+                        <vibe:range name="sz_sm_demo" :label="__('docs/range.sizes.sm_label')" size="sm" :value="40" />
+                        <vibe:range name="sz_md_demo" :label="__('docs/range.sizes.md_label')" size="md" :value="55" />
+                        <vibe:range name="sz_lg_demo" :label="__('docs/range.sizes.lg_label')" size="lg" :value="70" />
+                        <vibe:range name="sz_xl_demo" :label="__('docs/range.sizes.xl_label')" size="xl" :value="85" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 5. Steps & Min/Max Marks --}}
             <section id="step-dan-label" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.steps.title') }}</h2>
@@ -137,32 +166,10 @@
 
                 <vibe:preview :title="__('docs/range.steps.preview_title')">
                     <vibe:preview.code>
-<vibe:range 
-    name="storage" 
-    label="{{ __('docs/range.steps.capacity_label') }}" 
-    :showValue="true" 
-    valueSuffix=" GB" 
-    :min="10" 
-    :max="500" 
-    :step="10" 
-    :value="120" 
-    minLabel="10 GB" 
-    maxLabel="500 GB" 
-/>
+                        <vibe:range name="storage" label="{{ __('docs/range.steps.capacity_label') }}" :showValue="true" valueSuffix=" GB" :min="10" :max="500" :step="10" :value="120" minLabel="10 GB" maxLabel="500 GB" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:range 
-                            name="storage_live" 
-                            :label="__('docs/range.steps.capacity_label')" 
-                            :showValue="true" 
-                            valueSuffix=" GB" 
-                            :min="10" 
-                            :max="500" 
-                            :step="10" 
-                            :value="120" 
-                            minLabel="10 GB" 
-                            maxLabel="500 GB" 
-                        />
+                        <vibe:range name="storage_live" :label="__('docs/range.steps.capacity_label')" :showValue="true" valueSuffix=" GB" :min="10" :max="500" :step="10" :value="120" minLabel="10 GB" maxLabel="500 GB" />
                     </div>
                 </vibe:preview>
             </section>
@@ -181,33 +188,11 @@
 
                 <vibe:preview :title="__('docs/range.marks_continuous.preview_title')">
                     <vibe:preview.code>
-{{-- Slider RAM: Titik patokan pada 2 GB, 4 GB, 6 GB, 8 GB — namun pengguna tetap dapat memilih nilai tengah seperti 3 GB --}}
-<vibe:range 
-    name="ram_flexible" 
-    label="{{ __('docs/range.marks_continuous.ram_label') }}" 
-    description="{{ __('docs/range.marks_continuous.ram_desc') }}" 
-    :min="1" 
-    :max="8" 
-    :step="1" 
-    :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" 
-    valueSuffix=" GB" 
-    :value="3" 
-    :showValue="true" 
-/>
+                        {{-- Slider RAM: Titik patokan pada 2 GB, 4 GB, 6 GB, 8 GB — namun pengguna tetap dapat memilih nilai tengah seperti 3 GB --}}
+                        <vibe:range name="ram_flexible" label="{{ __('docs/range.marks_continuous.ram_label') }}" description="{{ __('docs/range.marks_continuous.ram_desc') }}" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" valueSuffix=" GB" :value="3" :showValue="true" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:range 
-                            name="ram_flexible_demo" 
-                            :label="__('docs/range.marks_continuous.ram_label')" 
-                            :description="__('docs/range.marks_continuous.ram_desc')" 
-                            :min="1" 
-                            :max="8" 
-                            :step="1" 
-                            :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" 
-                            valueSuffix=" GB" 
-                            :value="3" 
-                            :showValue="true" 
-                        />
+                        <vibe:range name="ram_flexible_demo" :label="__('docs/range.marks_continuous.ram_label')" :description="__('docs/range.marks_continuous.ram_desc')" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" valueSuffix=" GB" :value="3" :showValue="true" />
                     </div>
                 </vibe:preview>
             </section>
@@ -226,32 +211,39 @@
 
                 <vibe:preview :title="__('docs/range.checkpoints.preview_title')">
                     <vibe:preview.code>
-{{-- Paket Storage Cloud: Slider dikunci ketat (strict), tidak bisa memilih nilai di antara titik --}}
-<vibe:range 
-    name="storage_plan" 
-    label="{{ __('docs/range.checkpoints.storage_label') }}" 
-    description="{{ __('docs/range.checkpoints.storage_desc') }}" 
-    :checkpoints="['10 GB', '20 GB', '30 GB', '50 GB', '100 GB']" 
-    strict 
-    value="20 GB" 
-    :showValue="true" 
-/>
+                        {{-- Paket Storage Cloud: Slider dikunci ketat (strict), tidak bisa memilih nilai di antara titik --}}
+                        <vibe:range name="storage_plan" label="{{ __('docs/range.checkpoints.storage_label') }}" description="{{ __('docs/range.checkpoints.storage_desc') }}" :checkpoints="['10 GB', '20 GB', '30 GB', '50 GB', '100 GB']" strict value="20 GB" :showValue="true" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:range 
-                            name="storage_plan_demo" 
-                            :label="__('docs/range.checkpoints.storage_label')" 
-                            :description="__('docs/range.checkpoints.storage_desc')" 
-                            :checkpoints="['10 GB', '20 GB', '30 GB', '50 GB', '100 GB']" 
-                            strict 
-                            value="20 GB" 
-                            :showValue="true" 
-                        />
+                        <vibe:range name="storage_plan_demo" :label="__('docs/range.checkpoints.storage_label')" :description="__('docs/range.checkpoints.storage_desc')" :checkpoints="['10 GB', '20 GB', '30 GB', '50 GB', '100 GB']" strict value="20 GB" :showValue="true" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- 5. Auto Marks --}}
+            {{-- 6. Flexible Checkpoints (:strict="false") --}}
+            <section id="checkpoint-fleksibel" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.checkpoints_flexible.title') }}</h2>
+                        <vibe:badge variant="success" size="sm" class="text-[10px]">:strict="false"</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/range.checkpoints_flexible.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/range.checkpoints_flexible.preview_title')">
+                    <vibe:preview.code>
+                        {{-- Paket Bandwidth: tombol tier tersedia untuk loncat cepat, slider bebas dipilih nilai di antaranya --}}
+                        <vibe:range name="bandwidth_flex" label="{{ __('docs/range.checkpoints_flexible.bandwidth_label') }}" description="{{ __('docs/range.checkpoints_flexible.bandwidth_desc') }}" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" />
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md">
+                        <vibe:range name="bandwidth_flex_demo" :label="__('docs/range.checkpoints_flexible.bandwidth_label')" :description="__('docs/range.checkpoints_flexible.bandwidth_desc')" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 7. Auto Marks --}}
             <section id="marks-otomatis" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.marks.title') }}</h2>
@@ -262,35 +254,15 @@
 
                 <vibe:preview :title="__('docs/range.marks.preview_title')">
                     <vibe:preview.code>
-<vibe:range 
-    name="satisfaction" 
-    label="{{ __('docs/range.marks.rating_label') }}" 
-    :min="1" 
-    :max="5" 
-    :step="1" 
-    :marks="true" 
-    :value="4" 
-    :showValue="true" 
-    valueSuffix=" ★" 
-/>
+                        <vibe:range name="satisfaction" label="{{ __('docs/range.marks.rating_label') }}" :min="1" :max="5" :step="1" :marks="true" :value="4" :showValue="true" valueSuffix=" ★" />
                     </vibe:preview.code>
                     <div class="w-full max-w-md">
-                        <vibe:range 
-                            name="satisfaction_demo" 
-                            :label="__('docs/range.marks.rating_label')" 
-                            :min="1" 
-                            :max="5" 
-                            :step="1" 
-                            :marks="true" 
-                            :value="4" 
-                            :showValue="true" 
-                            valueSuffix=" ★" 
-                        />
+                        <vibe:range name="satisfaction_demo" :label="__('docs/range.marks.rating_label')" :min="1" :max="5" :step="1" :marks="true" :value="4" :showValue="true" valueSuffix=" ★" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- 6. Sizes, Status & Error --}}
+            {{-- 8. Sizes, Status & Error --}}
             <section id="ukuran-dan-status" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.sizes_status.title') }}</h2>
@@ -301,58 +273,69 @@
 
                 <vibe:preview :title="__('docs/range.sizes_status.preview_title')">
                     <vibe:preview.code>
-<div class="space-y-6">
-    {{-- Size Variations --}}
-    <vibe:range name="size_sm" label="{{ __('docs/range.sizes_status.sm_label') }}" size="sm" :value="30" />
-    <vibe:range name="size_md" label="{{ __('docs/range.sizes_status.md_label') }}" size="md" :value="50" />
-    <vibe:range name="size_lg" label="{{ __('docs/range.sizes_status.lg_label') }}" size="lg" :value="70" />
+                        <div class="space-y-6">
+                            {{-- Size Variations --}}
+                            <vibe:range name="size_sm" label="{{ __('docs/range.sizes_status.sm_label') }}" size="sm" :value="30" />
+                            <vibe:range name="size_md" label="{{ __('docs/range.sizes_status.md_label') }}" size="md" :value="50" />
+                            <vibe:range name="size_lg" label="{{ __('docs/range.sizes_status.lg_label') }}" size="lg" :value="70" />
 
-    {{-- Disabled State --}}
-    <vibe:range 
-        name="disabled_slider" 
-        label="{{ __('docs/range.sizes_status.disabled_label') }}" 
-        :value="40" 
-        :checkpoints="['10 GB', '20 GB', '50 GB']" 
-        disabled 
-    />
+                            {{-- Disabled State --}}
+                            <vibe:range name="disabled_slider" label="{{ __('docs/range.sizes_status.disabled_label') }}" :value="40" :checkpoints="['10 GB', '20 GB', '50 GB']" disabled />
 
-    {{-- Error State --}}
-    <vibe:range 
-        name="cpu_limit" 
-        label="{{ __('docs/range.sizes_status.error_label') }}" 
-        :value="85" 
-        :showValue="true" 
-        valueSuffix="%" 
-        error="{{ __('docs/range.sizes_status.error_msg') }}" 
-    />
-</div>
+                            {{-- Error State --}}
+                            <vibe:range name="cpu_limit" label="{{ __('docs/range.sizes_status.error_label') }}" :value="85" :showValue="true" valueSuffix="%" error="{{ __('docs/range.sizes_status.error_msg') }}" />
+                        </div>
                     </vibe:preview.code>
                     <div class="w-full max-w-md space-y-6">
                         <vibe:range name="size_sm_demo" :label="__('docs/range.sizes_status.sm_label')" size="sm" :value="30" />
                         <vibe:range name="size_md_demo" :label="__('docs/range.sizes_status.md_label')" size="md" :value="50" />
                         <vibe:range name="size_lg_demo" :label="__('docs/range.sizes_status.lg_label')" size="lg" :value="70" />
 
-                        <vibe:range 
-                            name="disabled_slider_demo" 
-                            :label="__('docs/range.sizes_status.disabled_label')" 
-                            :value="40" 
-                            :checkpoints="['10 GB', '20 GB', '50 GB']" 
-                            disabled 
-                        />
+                        <vibe:range name="disabled_slider_demo" :label="__('docs/range.sizes_status.disabled_label')" :value="40" :checkpoints="['10 GB', '20 GB', '50 GB']" disabled />
 
-                        <vibe:range 
-                            name="cpu_limit_demo" 
-                            :label="__('docs/range.sizes_status.error_label')" 
-                            :value="85" 
-                            :showValue="true" 
-                            valueSuffix="%" 
-                            :error="__('docs/range.sizes_status.error_msg')" 
-                        />
+                        <vibe:range name="cpu_limit_demo" :label="__('docs/range.sizes_status.error_label')" :value="85" :showValue="true" valueSuffix="%" :error="__('docs/range.sizes_status.error_msg')" />
                     </div>
                 </vibe:preview>
             </section>
 
-            {{-- 7. Form Testing ($request->all()) --}}
+            {{-- 9. Component States (Info, Readonly, Disabled, Error) --}}
+            <section id="status-komponen" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.states.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/range.states.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/range.states.preview_title')">
+                    <vibe:preview.code>
+                        <div class="space-y-6">
+                            {{-- Info helper text --}}
+                            <vibe:range name="sensor" label="{{ __('docs/range.states.info_label') }}" :value="50" :showValue="true" valueSuffix="%" info="{{ __('docs/range.states.info_text') }}" />
+
+                            {{-- Readonly --}}
+                            <vibe:range name="quota_readonly" label="{{ __('docs/range.states.readonly_label') }}" :value="73" :showValue="true" valueSuffix=" GB" readonly />
+
+                            {{-- Disabled --}}
+                            <vibe:range name="bandwidth_disabled" label="{{ __('docs/range.states.disabled_label') }}" :value="25" :showValue="true" valueSuffix=" Mbps" disabled />
+
+                            {{-- Error State --}}
+                            <vibe:range name="cpu_limit_err" label="{{ __('docs/range.states.error_label') }}" :value="85" :showValue="true" valueSuffix="%" error="{{ __('docs/range.states.error_msg') }}" />
+                        </div>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md space-y-6">
+                        <vibe:range name="sensor_demo" :label="__('docs/range.states.info_label')" :value="50" :showValue="true" valueSuffix="%" :info="__('docs/range.states.info_text')" />
+
+                        <vibe:range name="quota_readonly_demo" :label="__('docs/range.states.readonly_label')" :value="73" :showValue="true" valueSuffix=" GB" readonly />
+
+                        <vibe:range name="bandwidth_disabled_demo" :label="__('docs/range.states.disabled_label')" :value="25" :showValue="true" valueSuffix=" Mbps" disabled />
+
+                        <vibe:range name="cpu_limit_err_demo" :label="__('docs/range.states.error_label')" :value="85" :showValue="true" valueSuffix="%" :error="__('docs/range.states.error_msg')" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 10. Form Testing ($request->all()) --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -366,87 +349,70 @@
 
                 <vibe:preview title="Form Testing Sandbox">
                     <vibe:preview.code>
-<vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5 max-w-lg mx-auto">
-    @csrf
-
-    <vibe:range
-        name="volume"
-        label="{{ __('docs/range.basic_usage.volume_label') }}"
-        :value="60"
-        :showValue="true"
-        valueSuffix="%"
-    />
-
-    <vibe:range
-        name="price_max"
-        label="Harga Maksimum"
-        :min="100000"
-        :max="5000000"
-        :step="50000"
-        :value="1500000"
-        :showValue="true"
-        valuePrefix="Rp "
-    />
-
-    <vibe:range
-        name="storage_quota"
-        label="Kuota Penyimpanan"
-        :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']"
-        :value="50"
-        :showValue="true"
-        valueSuffix=" GB"
-    />
-
-    <div class="pt-2 flex items-center gap-3">
-        <vibe:button type="submit" variant="primary">
-            Kirim Form & Uji $request->all()
-        </vibe:button>
-    </div>
-</vibe:form>
-                    </vibe:preview.code>
-                    <div class="max-w-lg mx-auto p-4">
-                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="space-y-5">
+                        <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
+                            <vibe:card>
+                                <vibe:card.header>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Pengaturan Performa Server</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">Uji pengiriman semua jenis range: numerik, checkpoint strict, checkpoint fleksibel (nilai antara), dan range yang bisa dipilih langsung via tombol checkpoint.</p>
+                                </vibe:card.header>
 
-                            <vibe:range
-                                name="volume"
-                                :label="__('docs/range.basic_usage.volume_label')"
-                                :value="60"
-                                :showValue="true"
-                                valueSuffix="%"
-                            />
+                                <vibe:card.content class="space-y-6">
+                                    {{-- Range numerik biasa --}}
+                                    <vibe:range name="cpu_limit" label="Batas Penggunaan CPU" :value="70" :showValue="true" valueSuffix="%" info="Disarankan maksimal 80% untuk stabilitas sistem." />
 
-                            <vibe:range
-                                name="price_max"
-                                label="Harga Maksimum"
-                                :min="100000"
-                                :max="5000000"
-                                :step="50000"
-                                :value="1500000"
-                                :showValue="true"
-                                valuePrefix="Rp "
-                            />
+                                    {{-- Checkpoint STRICT — hanya bisa memilih titik yang tersedia --}}
+                                    <vibe:range name="storage_tier" label="Paket Penyimpanan (Strict)" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" info="Slider hanya bisa berpindah ke paket yang tersedia." />
 
-                            <vibe:range
-                                name="storage_quota"
-                                label="Kuota Penyimpanan"
-                                :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']"
-                                :value="50"
-                                :showValue="true"
-                                valueSuffix=" GB"
-                            />
+                                    {{-- Checkpoint FLEKSIBEL — bisa memilih nilai di antara checkpoint --}}
+                                    <vibe:range name="ram_alloc" label="Alokasi RAM Server (Nilai Antara Aktif)" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" info="Titik 2/4/6/8 GB tersedia, tapi Anda bebas memilih nilai di antaranya (mis. 3 GB)." variant="success" />
 
-                            <div class="pt-2 flex items-center gap-3">
-                                <vibe:button type="submit" variant="primary">
+                                    {{-- Checkpoint Fleksibel — :strict="false" dengan label string (distribusi merata, bisa pilih antar titik) --}}
+                                    <vibe:range name="bandwidth_tier" label="Tingkat Performa Server" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" info="Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih performa di antaranya." />
+                                </vibe:card.content>
+
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim Form & Uji $request->all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
+                        </vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Pengaturan Performa Server</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Uji pengiriman semua jenis range: numerik, checkpoint strict, checkpoint fleksibel (nilai antara), dan range yang bisa dipilih langsung via tombol checkpoint.</p>
+                            </vibe:card.header>
+
+                            <vibe:card.content class="space-y-6">
+                                {{-- Range numerik biasa --}}
+                                <vibe:range name="cpu_limit" label="Batas Penggunaan CPU" :value="70" :showValue="true" valueSuffix="%" info="Disarankan maksimal 80% untuk stabilitas sistem." />
+
+                                {{-- Checkpoint STRICT — hanya bisa memilih titik yang tersedia --}}
+                                <vibe:range name="storage_tier" label="Paket Penyimpanan (Strict)" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" info="Slider hanya bisa berpindah ke paket yang tersedia." />
+
+                                {{-- Checkpoint FLEKSIBEL — bisa memilih nilai di antara checkpoint --}}
+                                <vibe:range name="ram_alloc" label="Alokasi RAM Server (Nilai Antara Aktif)" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" info="Titik 2/4/6/8 GB tersedia, tapi Anda bebas memilih nilai di antaranya (mis. 3 GB)." variant="success" />
+
+                                {{-- Checkpoint Fleksibel — :strict="false" dengan label string (distribusi merata, bisa pilih antar titik) --}}
+                                <vibe:range name="bandwidth_tier" label="Tingkat Performa Server" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" info="Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih performa di antaranya." />
+                            </vibe:card.content>
+
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">
                                     Kirim Form & Uji $request->all()
                                 </vibe:button>
-                            </div>
-                        </vibe:form>
-                    </div>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
                 </vibe:preview>
             </section>
 
-            {{-- 8. Props Reference Table --}}
+            {{-- 10. Props Reference Table --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.props.title') }}</h2>
@@ -464,29 +430,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [
-                                ['name', 'string', 'null', __('docs/range.props.items.name')],
-                                ['id', 'string', 'auto', __('docs/range.props.items.id')],
-                                ['label', 'string', 'null', __('docs/range.props.items.label')],
-                                ['description', 'string', 'null', __('docs/range.props.items.description')],
-                                ['value', 'numeric|string', 'null', __('docs/range.props.items.value')],
-                                ['min', 'numeric', '0', __('docs/range.props.items.min')],
-                                ['max', 'numeric', '100', __('docs/range.props.items.max')],
-                                ['step', 'numeric', '1', __('docs/range.props.items.step')],
-                                ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')],
-                                ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')],
-                                ['strict', 'bool', 'auto', __('docs/range.props.items.strict')],
-                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/range.props.items.size')],
-                                ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')],
-                                ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')],
-                                ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')],
-                                ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')],
-                                ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')],
-                                ['error', 'string|bool', 'null', __('docs/range.props.items.error')],
-                                ['errorName', 'string', 'null', __('docs/range.props.items.errorName')],
-                                ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')],
-                                ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')],
-                            ];
+                            $props = [['name', 'string', 'null', __('docs/range.props.items.name')], ['id', 'string', 'auto', __('docs/range.props.items.id')], ['label', 'string', 'null', __('docs/range.props.items.label')], ['description', 'string', 'null', __('docs/range.props.items.description')], ['value', 'numeric|string', 'null', __('docs/range.props.items.value')], ['min', 'numeric', '0', __('docs/range.props.items.min')], ['max', 'numeric', '100', __('docs/range.props.items.max')], ['step', 'numeric', '1', __('docs/range.props.items.step')], ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')], ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')], ['strict', 'bool', 'auto', __('docs/range.props.items.strict')], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/range.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'", "'primary'", __('docs/range.props.items.variant')], ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')], ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')], ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')], ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')], ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')], ['info', 'string', 'null', __('docs/range.props.items.info')], ['error', 'string|bool', 'null', __('docs/range.props.items.error')], ['errorName', 'string', 'null', __('docs/range.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/range.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
                             <vibe:table.row>
