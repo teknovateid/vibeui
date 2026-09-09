@@ -23,7 +23,7 @@
             </button>
         </vibe:dropdown.trigger>
 
-        <vibe:dropdown.body align="right" width="56" class="max-h-72 overflow-y-auto p-1.5">
+        <vibe:dropdown.content align="right" width="56" class="max-h-72 overflow-y-auto p-1.5">
             {{-- Select All / Deselect All --}}
             <div class="border-b border-border/50 pb-1 mb-1">
                 @php($allSelected = $this->getSelectableSelectedColumns()->count() === $this->getSelectableColumns()->count())
@@ -74,6 +74,6 @@
                     </div>
                 @endforeach
             </div>
-        </vibe:dropdown.body>
+        </vibe:dropdown.content>
     </vibe:dropdown>
 </div>

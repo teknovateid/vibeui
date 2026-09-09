@@ -26,7 +26,7 @@
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
 
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
-    $errorMessage = ($error && !is_bool($error)) ? $error : ($errorKey ? $errors->first($errorKey) : null);
+    $errorMessage = $error && !is_bool($error) ? $error : ($errorKey ? $errors->first($errorKey) : null);
 
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
     $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
@@ -56,24 +56,12 @@
     }
 
     $variantControlClasses = match ($variant) {
-        'filled' => $hasError 
-            ? 'bg-destructive/10 border border-destructive focus-within:bg-background focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
-            : 'bg-muted/60 border border-transparent hover:bg-muted/80 focus-within:bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
-        'flush' => $hasError 
-            ? 'border-b border-destructive bg-transparent focus-within:border-destructive focus-within:ring-0' 
-            : 'border-b border-input bg-transparent focus-within:border-primary focus-within:ring-0',
-        'ghost' => $hasError 
-            ? 'border-transparent text-destructive bg-transparent focus-within:ring-2 focus-within:ring-destructive/20' 
-            : 'border-transparent bg-transparent hover:bg-muted/40 focus-within:bg-transparent focus-within:ring-2 focus-within:ring-primary/20',
-        'outline' => $hasError 
-            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
-            : 'border border-input bg-background shadow-2xs focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
-        'primary' => $hasError 
-            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
-            : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
-        default => $hasError 
-            ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' 
-            : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+        'filled' => $hasError ? 'bg-destructive/10 border border-destructive focus-within:bg-background focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'bg-muted/60 border border-transparent hover:bg-muted/80 focus-within:bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+        'flush' => $hasError ? 'border-b border-destructive bg-transparent focus-within:border-destructive focus-within:ring-0' : 'border-b border-input bg-transparent focus-within:border-primary focus-within:ring-0',
+        'ghost' => $hasError ? 'border-transparent text-destructive bg-transparent focus-within:ring-2 focus-within:ring-destructive/20' : 'border-transparent bg-transparent hover:bg-muted/40 focus-within:bg-transparent focus-within:ring-2 focus-within:ring-primary/20',
+        'outline' => $hasError ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'border border-input bg-background shadow-2xs focus-within:border-ring focus-within:ring-2 focus-within:ring-ring/20',
+        'primary' => $hasError ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
+        default => $hasError ? 'border border-destructive bg-background shadow-2xs focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'border border-input bg-background shadow-2xs focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
     };
 
     $stateControlClasses = '';
@@ -103,17 +91,23 @@
             'xl' => 'pr-4 pl-2.5',
             default => 'pr-3 pl-1.5',
         };
-        $inputPadding = ($hasLeading ? 'pl-0 ' : match ($size) {
-            'sm' => 'pl-2.5 ',
-            'lg' => 'pl-4 ',
-            'xl' => 'pl-5 ',
-            default => 'pl-3.5 ',
-        }) . ($hasTrailing ? 'pr-0' : match ($size) {
-            'sm' => 'pr-2.5',
-            'lg' => 'pr-4',
-            'xl' => 'pr-5',
-            default => 'pr-3.5',
-        });
+        $inputPadding =
+            ($hasLeading
+                ? 'pl-0 '
+                : match ($size) {
+                    'sm' => 'pl-2.5 ',
+                    'lg' => 'pl-4 ',
+                    'xl' => 'pl-5 ',
+                    default => 'pl-3.5 ',
+                }) .
+            ($hasTrailing
+                ? 'pr-0'
+                : match ($size) {
+                    'sm' => 'pr-2.5',
+                    'lg' => 'pr-4',
+                    'xl' => 'pr-5',
+                    default => 'pr-3.5',
+                });
     }
 
     $inputFontSize = match ($size) {
@@ -138,7 +132,7 @@
     $describedByString = !empty($describedBy) ? implode(' ', $describedBy) : null;
 @endphp
 
-<div class="{{ $wrapperClass }}">
+<div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}>
     @if ($label)
         <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none">
             {{ $label }}
@@ -164,16 +158,7 @@
             </div>
         @endif
 
-        <input
-            type="{{ $type }}"
-            id="{{ $id }}"
-            name="{{ $name }}"
-            @if ($hasError) aria-invalid="true" @endif
-            @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif
-            @if ($isDisabled) disabled @endif
-            @if ($isReadonly) readonly @endif
-            {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}
-        >
+        <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif @if ($isDisabled) disabled @endif @if ($isReadonly) readonly @endif {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}>
 
         @if ($hasTrailing)
             <div class="flex items-center {{ $trailingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
