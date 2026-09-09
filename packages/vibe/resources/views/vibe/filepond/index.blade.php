@@ -16,6 +16,7 @@
     'buttonText' => null,
     'icon' => 'cloud',
     'variant' => 'default',
+    'size' => 'md',
     'dashed' => true,
     'dropHeight' => null,
     'multiple' => false,
@@ -45,11 +46,11 @@
     'chunkUploads' => false,
     'chunkSize' => 2000000,
     'existingFiles' => [],
-    'demo' => false,
-    'demoFiles' => [],
     'disabled' => false,
     'required' => false,
     'labels' => [],
+    'panelLayout' => null,
+    'storeAsFile' => null,
     'protectUpload' => false,
     'preventUnload' => false,
     'preventNavigation' => false,
@@ -188,11 +189,14 @@
 
     $mergedLabels = array_merge($langLabels, (array) $labels);
 
-    $resolvedDemoFiles = !empty($demoFiles) ? $demoFiles : ($demo ? ['my-cv.pdf'] : []);
+
+    $size = in_array($size, ['sm', 'md', 'lg']) ? $size : 'md';
 
     $config = [
         'id' => $id,
         'name' => $name,
+        'size' => $size,
+        'hasError' => (bool) $hasError,
         'multiple' => (bool) $multiple,
         'maxFiles' => $maxFiles,
         'maxFileSize' => $maxFileSize,
@@ -219,13 +223,14 @@
         'chunkUploads' => (bool) $chunkUploads,
         'chunkSize' => $chunkSize,
         'existingFiles' => $existingFiles,
-        'demoFiles' => $resolvedDemoFiles,
         'disabled' => (bool) $isDisabled,
         'required' => (bool) $isRequired,
         'labels' => $mergedLabels,
         'wireModel' => $wireModelAttr,
         'dashed' => (bool) $dashed,
         'variant' => $variant,
+        'panelLayout' => $panelLayout,     // [FIX QA-2] Expose panelLayout prop to JS
+        'storeAsFile' => $storeAsFile,     // [FIX QA-3] Expose storeAsFile prop to JS (null = auto-detect)
         'protect' => [
             'enabled' => (bool) ($protectUpload || $preventUnload || $preventNavigation || $protectSubmit),
             'protectSubmit' => (bool) ($protectUpload || $preventUnload || $protectSubmit),
@@ -238,8 +243,6 @@
             'leaveButton' => $fpLang('protect_leave_button', 'Tinggalkan Halaman'),
         ],
     ];
-
-    $configJson = json_encode($config);
 @endphp
 
 @pushOnce('head', 'vibe-filepond-styles')
@@ -250,12 +253,12 @@
     @vite(['resources/js/vibe/filepond.js'])
 @endPushOnce
 
-<div class="{{ $wrapperClass }} {{ $isAvatar ? 'filepond-avatar-mode' : '' }} {{ $isCompact ? 'filepond-compact-mode' : '' }} {{ $dashed ? 'filepond-dashed' : 'filepond-solid' }}">
+<div class="{{ $wrapperClass }} {{ $isAvatar ? 'filepond-avatar-mode' : '' }} {{ $isCompact ? 'filepond-compact-mode' : '' }} {{ $dashed ? 'filepond-dashed' : 'filepond-solid' }} filepond-size-{{ $size }} {{ $hasError ? 'filepond-has-error' : '' }}">
     @if ($label)
         <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none cursor-pointer {{ $isAvatar ? 'text-center' : '' }}" onclick="
-                var c = document.getElementById('{{ $id }}')?.closest('[data-vibe-filepond]');
+                var c = document.getElementById('{{ $id }}-container') || document.getElementById('{{ $id }}')?.closest('[data-vibe-filepond]');
                 if (c) {
-                    var p = c._x_dataStack?.find(function(s) { return s && s.pond; })?.pond;
+                    var p = c._x_dataStack?.find(function(s) { return s && (s.pond || s.browse); });
                     if (p && typeof p.browse === 'function') {
                         event.preventDefault();
                         p.browse();
@@ -275,52 +278,80 @@
         </p>
     @endif
 
-    <div data-vibe-filepond wire:ignore x-data="{
-        pond: null,
-        init() {
-            var self = this;
-            var mount = function() {
-                if (self.pond) return;
-                if (typeof window.vibeFilepond === 'function') {
-                    var script = self.$el.querySelector('script.vibe-filepond-config');
-                    var config = script ? JSON.parse(script.textContent) : {};
-                    var comp = window.vibeFilepond(config);
-                    comp.$el = self.$el;
-                    comp.$refs = self.$refs;
-                    comp.$dispatch = self.$dispatch ? self.$dispatch.bind(self) : function(name, detail) {
-                        self.$el.dispatchEvent(new CustomEvent(name, { detail: detail, bubbles: true }));
-                    };
-                    comp.init();
-                    self.pond = comp.pond;
-                }
-            };
-    
-            if (typeof window.vibeFilepond === 'function') {
-                mount();
-            } else {
-                window.addEventListener('vibe-filepond-ready', mount, { once: true });
-                var t = setInterval(function() {
+    <div data-vibe-filepond 
+         id="{{ $id }}-container"
+         wire:ignore 
+         x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {
+            pond: null,
+            input: null,
+            isUploading: false,
+            fileCount: 0,
+            files: [],
+            hasError: {{ $hasError ? 'true' : 'false' }},
+            init() {
+                var self = this;
+                var mount = function() {
+                    if (self.pond) return;
                     if (typeof window.vibeFilepond === 'function') {
-                        clearInterval(t);
-                        mount();
+                        var comp = window.vibeFilepond(@js($config));
+                        Object.assign(self, comp);
+                        self.$el = self.$el;
+                        self.$refs = self.$refs;
+                        self.init();
                     }
-                }, 25);
-                setTimeout(function() { clearInterval(t); }, 4000);
+                };
+                if (typeof window.vibeFilepond === 'function') {
+                    mount();
+                } else {
+                    window.addEventListener('vibe-filepond-ready', mount, { once: true });
+                }
+            },
+            destroy() {
+                if (this.pond) {
+                    try { this.pond.destroy(); } catch (e) {}
+                    this.pond = null;
+                }
+            },
+            browse() {
+                if (this.pond && typeof this.pond.browse === 'function') {
+                    this.pond.browse();
+                } else {
+                    var el = document.getElementById('{{ $id }}');
+                    if (el) el.click();
+                }
+            },
+            clear() {
+                if (this.pond && typeof this.pond.removeFiles === 'function') {
+                    this.pond.removeFiles();
+                }
+            },
+            getFiles() {
+                return this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
             }
-        },
-        destroy() {
-            if (this.pond) {
-                try { this.pond.destroy(); } catch (e) {}
-                this.pond = null;
-            }
-        }
-    }" @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
-        <script type="application/json" class="vibe-filepond-config">{!! $configJson !!}</script>
-        <input x-ref="input" type="file" id="{{ $id }}" name="{{ $name ? ($multiple ? "{$name}[]" : $name) : 'file' }}" @if ($multiple) multiple @endif @if ($resolvedAccept) accept="{{ is_array($resolvedAccept) ? implode(',', $resolvedAccept) : $resolvedAccept }}" @endif @if ($isRequired) required @endif @if ($isDisabled) disabled @endif>
+        }" 
+        @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif 
+        {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
+
+        <input 
+            x-ref="input" 
+            type="file" 
+            id="{{ $id }}" 
+            name="{{ $name ? ($multiple ? "{$name}[]" : $name) : 'file' }}" 
+            @if ($multiple) multiple @endif 
+            @if ($resolvedAccept) accept="{{ is_array($resolvedAccept) ? implode(',', $resolvedAccept) : $resolvedAccept }}" @endif 
+            @if ($isRequired) required @endif 
+            @if ($isDisabled) disabled @endif
+            aria-invalid="{{ $hasError ? 'true' : 'false' }}"
+            @if ($hasError && $errorMessage) aria-describedby="{{ $id }}-error" @elseif ($description) aria-describedby="{{ $id }}-description" @endif
+        >
 
         {{-- Fallback UI before FilePond JS mounts (prevents FOUC and native input flash) --}}
         <div class="filepond--fallback-dropzone {{ $isAvatar ? 'filepond-fallback-avatar' : '' }}" onclick="document.getElementById('{{ $id }}')?.click()">
-            {!! $resolvedLabelIdle !!}
+            @if (isset($slot) && $slot->isNotEmpty())
+                {{ $slot }}
+            @else
+                {!! $resolvedLabelIdle !!}
+            @endif
         </div>
 
         {{-- Hidden container for presigned upload keys synchronization with standard forms --}}

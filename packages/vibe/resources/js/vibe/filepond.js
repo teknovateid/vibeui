@@ -89,10 +89,34 @@ function openImageLightbox(src, title) {
     });
 }
 
+// Blob URL tracking is per-instance (see _blobUrls in vibeFilepond) to prevent
+// cross-instance revocation bugs where destroying one instance breaks others.
+// [FIX BUG-4] Helper registers a URL into the given per-instance Set.
+function registerCreatedBlobUrl(url, blobUrlSet) {
+    if (url && typeof url === 'string' && url.startsWith('blob:') && blobUrlSet instanceof Set) {
+        blobUrlSet.add(url);
+    }
+    return url;
+}
+
+// [FIX WARN-1] FilePond FileStatus enum with fallback for version compatibility.
+// Using the enum prevents silent breakage if FilePond changes numeric status values.
+const FileStatus = (FilePondModule && FilePondModule.FileStatus) || {
+    INIT: 1,
+    IDLE: 2,
+    PROCESSING: 3,
+    PROCESSING_COMPLETE: 5,
+    PROCESSING_ERROR: 6,
+    LOADING: 7,
+    LOAD_ERROR: 8,
+    PROCESSING_QUEUED: 9
+};
+
 /**
  * Attaches modern preview thumbnail for images or document icon with badge for other files
  */
-function attachCustomFileIcon(item) {
+// [FIX BUG-4] Accepts per-instance blobUrlSet to avoid global Set cross-contamination
+function attachCustomFileIcon(item, blobUrlSet) {
     if (!item) return;
 
     const findItemEl = () => {
@@ -152,7 +176,7 @@ function attachCustomFileIcon(item) {
             let imgUrl = null;
             if (file instanceof Blob || file instanceof File) {
                 try {
-                    imgUrl = URL.createObjectURL(file);
+                    imgUrl = registerCreatedBlobUrl(URL.createObjectURL(file), blobUrlSet);
                 } catch (e) {
                     imgUrl = null;
                 }
@@ -165,9 +189,11 @@ function attachCustomFileIcon(item) {
             if (imgUrl) {
                 iconContainer.classList.add('filepond--thumbnail-preview-container');
                 iconContainer.setAttribute('title', 'Klik untuk melihat pratinjau penuh');
+                // [FIX QA-5] Escape filename to prevent XSS in alt attribute
+                const escapedName = name.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 iconContainer.innerHTML = `
                     <div class="filepond--thumbnail-wrapper">
-                        <img src="${imgUrl}" alt="${name}" class="filepond--thumbnail-img" />
+                        <img src="${imgUrl}" alt="${escapedName}" class="filepond--thumbnail-img" />
                         <div class="filepond--thumbnail-overlay">
                             <svg class="filepond--thumbnail-zoom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>
@@ -231,10 +257,10 @@ function attachCustomFileIcon(item) {
     };
 
     render();
-    setTimeout(render, 30);
-    setTimeout(render, 100);
-    setTimeout(render, 250);
-    setTimeout(render, 500);
+    requestAnimationFrame(() => {
+        render();
+        setTimeout(render, 60);
+    });
 }
 
 /**
@@ -246,8 +272,15 @@ export function vibeFilepond(config = {}) {
         input: null,
         uploadedKeys: [],
         activeUploads: new Set(),
+        _blobUrls: new Set(), // [FIX BUG-4] Per-instance blob URL tracking
         _isNavigatingAway: false,
         _cleanupListeners: [],
+
+        // Reactive states for Alpine
+        isUploading: false,
+        fileCount: 0,
+        files: [],
+        hasError: Boolean(config.hasError),
 
         init() {
             this.input = this.$refs.input || this.$el.querySelector('input[type="file"]');
@@ -266,6 +299,7 @@ export function vibeFilepond(config = {}) {
                 const existing = FilePond.find(this.input);
                 if (existing) {
                     this.pond = existing;
+                    this.updateReactiveState();
                     return;
                 }
             }
@@ -278,6 +312,7 @@ export function vibeFilepond(config = {}) {
             const pondOptions = this.buildPondOptions(config, self);
 
             this.pond = FilePond.create(this.input, pondOptions);
+            this.updateReactiveState();
 
             // In avatar mode, ensure the root element has avatar class and clicking anywhere in the circle opens file picker
             if (config.avatar && this.pond.element) {
@@ -287,7 +322,7 @@ export function vibeFilepond(config = {}) {
                         return;
                     }
                     if (this.pond && this.pond.getFiles().length === 0) {
-                        this.pond.browse();
+                        this.browse();
                     }
                 });
             }
@@ -301,41 +336,26 @@ export function vibeFilepond(config = {}) {
             // Setup Upload Protection (Blocks submit & navigation while uploads are in progress)
             this.setupUploadProtection(config);
 
-            // Preload demo/mock files if provided (useful for docs & showcase without network calls)
-            if (config.demoFiles && Array.isArray(config.demoFiles) && config.demoFiles.length > 0) {
-                config.demoFiles.forEach(df => {
-                    const name = typeof df === 'string' ? df : (df.name || 'my-cv.pdf');
-                    const size = (df && df.size) ? df.size : 122880; // 120 KB
-                    const type = (df && df.type) ? df.type : (name.endsWith('.pdf') ? 'application/pdf' : 'application/octet-stream');
 
-                    try {
-                        const dummyBuffer = new Uint8Array(Math.min(size, 1024));
-                        const blob = new Blob([dummyBuffer], { type });
-                        const mockFile = new File([blob], name, { type, lastModified: Date.now() });
-                        Object.defineProperty(mockFile, 'size', { value: size });
-
-                        this.pond.addFile(mockFile);
-                    } catch (e) {
-                        console.warn('[VibeFilepond] Could not load demo file', e);
-                    }
-                });
-            }
-
-            // Safe teardown when element is detached (Livewire SPA wire:navigate)
+            // [FIX WARN-4] Always destroy pond on Livewire navigation to prevent memory leaks.
+            // Previous condition was too restrictive and could leave FilePond instances alive.
             this._cleanupHandler = () => {
-                if (this._isNavigatingAway || window.__vibeFilepondBypassProtection || !this.$el || !this.$el.isConnected) {
-                    if (this.pond) {
-                        try {
-                            this.pond.destroy();
-                        } catch (e) {}
-                        this.pond = null;
-                    }
+                if (this.pond) {
+                    try {
+                        this.pond.destroy();
+                    } catch (e) {}
+                    this.pond = null;
                 }
             };
             document.addEventListener('livewire:navigating', this._cleanupHandler);
         },
 
         destroy() {
+            // [FIX BUG-4] Revoke only this instance's blob URLs — not all instances'
+            if (this._blobUrls) {
+                this._blobUrls.forEach(url => { try { URL.revokeObjectURL(url); } catch (e) {} });
+                this._blobUrls.clear();
+            }
             if (this._cleanupHandler) {
                 document.removeEventListener('livewire:navigating', this._cleanupHandler);
             }
@@ -350,6 +370,134 @@ export function vibeFilepond(config = {}) {
                     this.pond.destroy();
                 } catch (e) {}
                 this.pond = null;
+            }
+        },
+
+        // Public Programmatic API
+        browse() {
+            if (this.pond && typeof this.pond.browse === 'function') {
+                this.pond.browse();
+            } else if (this.input) {
+                this.input.click();
+            }
+        },
+
+        clear() {
+            if (this.pond && typeof this.pond.removeFiles === 'function') {
+                this.pond.removeFiles();
+            }
+            this.uploadedKeys = [];
+            this.updateHiddenInputs(config);
+            this.updateReactiveState();
+        },
+
+        removeFiles() {
+            this.clear();
+        },
+
+        getFiles() {
+            return this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
+        },
+
+        removeFile(query) {
+            if (this.pond && typeof this.pond.removeFile === 'function') {
+                this.pond.removeFile(query);
+            }
+            this.updateReactiveState();
+        },
+
+        processFiles() {
+            if (this.pond && typeof this.pond.processFiles === 'function') {
+                this.pond.processFiles();
+            }
+        },
+
+        updateReactiveState() {
+            this.isUploading = this.hasPendingUploads();
+            this.fileCount = this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles().length : 0;
+            this.files = this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
+        },
+
+        // Centralized Event Dispatcher
+        fireEvent(action, data = {}) {
+            const pondId = config.id || (this.input ? this.input.id : 'filepond');
+            const name = config.name || (this.input ? this.input.name : '');
+            const item = data.item || null;
+            const file = data.file || (item ? (item.file instanceof File ? item.file : item.file) : null);
+            const filename = data.filename || (file && file.name) || (item && item.filename) || (typeof data.file === 'string' ? data.file : '') || '';
+            const size = data.size !== undefined ? data.size : ((file && file.size) ? file.size : (item && item.fileSize ? item.fileSize : 0));
+            const type = data.type || (file && file.type) || (item && item.fileType ? item.fileType : '') || '';
+            const key = data.key || (item && item.serverId) || (typeof data.file === 'string' ? data.file : null);
+            const keys = Array.isArray(data.keys) ? data.keys : this.uploadedKeys;
+            const progress = data.progress !== undefined ? data.progress : (action === 'success' ? 100 : 0);
+            const loaded = data.loaded !== undefined ? data.loaded : Math.round((size || 0) * (progress / 100));
+            const total = data.total !== undefined ? data.total : (size || 0);
+            const error = data.error || null;
+
+            const detail = {
+                id: pondId,
+                name: name,
+                event: action, // 'add' | 'start' | 'progress' | 'success' | 'revert' | 'abort' | 'remove' | 'error'
+                file: file,
+                filename: filename,
+                size: size,
+                type: type,
+                progress: progress,
+                loaded: loaded,
+                total: total,
+                key: key,
+                keys: keys,
+                error: error,
+                item: item,
+                pond: this.pond
+            };
+
+            // 1. Unified Event: 'vibe-filepond'
+            if (this.$dispatch) {
+                this.$dispatch('vibe-filepond', detail);
+            } else if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent('vibe-filepond', { detail: detail, bubbles: true, composed: true }));
+            }
+            window.dispatchEvent(new CustomEvent('vibe-filepond', { detail: detail }));
+
+            // 2. Action Event: 'vibe-filepond:{action}'
+            if (this.$dispatch) {
+                this.$dispatch(`vibe-filepond:${action}`, detail);
+            } else if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent(`vibe-filepond:${action}`, { detail: detail, bubbles: true, composed: true }));
+            }
+            window.dispatchEvent(new CustomEvent(`vibe-filepond:${action}`, { detail: detail }));
+
+            // 3. Targeted Event: 'vibe-filepond:{id}:{action}'
+            if (this.$dispatch) {
+                this.$dispatch(`vibe-filepond:${pondId}:${action}`, detail);
+            } else if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent(`vibe-filepond:${pondId}:${action}`, { detail: detail, bubbles: true, composed: true }));
+            }
+            window.dispatchEvent(new CustomEvent(`vibe-filepond:${pondId}:${action}`, { detail: detail }));
+
+            // 4. Local shorthand: 'file-{action}'
+            if (this.$dispatch) {
+                this.$dispatch(`file-${action}`, detail);
+            } else if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent(`file-${action}`, { detail: detail, bubbles: true, composed: true }));
+            }
+
+            // 5. Backward compatibility for legacy listeners
+            if (action === 'add') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-addfile', { item: file });
+            } else if (action === 'start') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-processfilestart', { item: file });
+            } else if (action === 'success') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-processfile', { item: file });
+            } else if (action === 'abort') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-processfileabort', { item: file });
+            } else if (action === 'revert') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-processfilerevert', { item: file });
+            } else if (action === 'remove') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-removefile', { item: file });
+            } else if (action === 'error') {
+                if (this.$dispatch) this.$dispatch('vibe-filepond-error', { error: error, item: item });
             }
         },
 
@@ -394,7 +542,8 @@ export function vibeFilepond(config = {}) {
                 allowFileEncode: Boolean(cfg.encode),
 
                 // Native form file sync (syncs FilePond files to native file input for form POST)
-                storeAsFile: (cfg.storeAsFile !== undefined) ? Boolean(cfg.storeAsFile) : (!cfg.server && !cfg.presignUrl && !cfg.wireModel),
+                // [FIX QA-3] Handle null (PHP null !== JS undefined) to allow Blade prop override
+                storeAsFile: (cfg.storeAsFile !== null && cfg.storeAsFile !== undefined) ? Boolean(cfg.storeAsFile) : (!cfg.server && !cfg.presignUrl && !cfg.wireModel),
 
                 // Avatar / Circle styling
                 stylePanelLayout: cfg.avatar ? 'compact circle' : (cfg.panelLayout || null),
@@ -411,49 +560,71 @@ export function vibeFilepond(config = {}) {
 
                 // Callbacks & Events
                 oninitfile: (item) => {
-                    attachCustomFileIcon(item);
+                    attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
                 },
                 onaddfile: (err, item) => {
                     if (err) {
-                        self.$dispatch('vibe-filepond-error', { error: err, item });
+                        self.hasError = true;
+                        self.fireEvent('error', { error: err, item: item });
                         return;
                     }
-                    attachCustomFileIcon(item);
-                    self.$dispatch('vibe-filepond-addfile', { item: item.file });
+                    attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
+                    self.updateReactiveState();
+                    self.fireEvent('add', { item: item });
                 },
                 onprocessfilestart: (item) => {
                     if (item && item.id) {
                         self.activeUploads.add(item.id);
                     }
-                    self.$dispatch('vibe-filepond-processfilestart', { item: item?.file });
+                    self.updateReactiveState();
+                    self.fireEvent('start', { item: item });
+                },
+                onprocessfileprogress: (item, progress) => {
+                    const percent = Math.round((progress || 0) * 100);
+                    const fileSize = item?.fileSize || (item?.file ? item.file.size : 0);
+                    const loaded = Math.round(fileSize * (progress || 0));
+                    self.fireEvent('progress', {
+                        item: item,
+                        progress: percent,
+                        loaded: loaded,
+                        total: fileSize,
+                        filename: item?.filename || item?.file?.name,
+                        size: fileSize,
+                        file: item?.file
+                    });
                 },
                 onprocessfile: (err, item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
                     }
+                    self.updateReactiveState();
                     if (err) {
-                        self.$dispatch('vibe-filepond-error', { error: err, item });
+                        self.hasError = true;
+                        self.fireEvent('error', { error: err, item: item });
                         return;
                     }
-                    self.$dispatch('vibe-filepond-processfile', { item: item?.file });
+                    self.fireEvent('success', { item: item, key: item?.serverId, progress: 100 });
                 },
                 onprocessfileabort: (item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
                     }
-                    self.$dispatch('vibe-filepond-processfileabort', { item: item?.file });
+                    self.updateReactiveState();
+                    self.fireEvent('abort', { item: item });
                 },
                 onprocessfilerevert: (item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
                     }
-                    self.$dispatch('vibe-filepond-processfilerevert', { item: item?.file });
+                    self.updateReactiveState();
+                    self.fireEvent('revert', { item: item, key: item?.serverId });
                 },
                 onremovefile: (err, item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
                     }
-                    self.$dispatch('vibe-filepond-removefile', { item: item?.file });
+                    self.updateReactiveState();
+                    self.fireEvent('remove', { item: item });
                 }
             };
 
@@ -482,17 +653,20 @@ export function vibeFilepond(config = {}) {
         resolveServerConfig(cfg, self) {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
+
             // 1. Presigned URL Direct-to-Cloud Upload (S3, Cloudflare R2, GCS, MinIO)
             if (cfg.presignUrl) {
                 return {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
                         const uploadId = (metadata && metadata.id) ? metadata.id : (file.name + '_' + file.size + '_' + Math.random());
                         self.activeUploads.add(uploadId);
+                        self.updateReactiveState();
 
                         // Immediately activate FilePond indicator (indeterminate busy spinner)
                         progress(false, 0, 0);
 
-                        const startDetail = { name: file.name, size: file.size, type: file.type };
+                        const startDetail = { name: file.name, filename: file.name, size: file.size, type: file.type, file };
+                        self.fireEvent('start', startDetail);
                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-start', { detail: startDetail }));
                         if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-start', startDetail);
 
@@ -543,8 +717,12 @@ export function vibeFilepond(config = {}) {
 
                                     if (!uploadUrl || typeof uploadUrl !== 'string') {
                                         self.activeUploads.delete(uploadId);
-                                        error('Presigned response missing upload URL');
-                                        window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: 'Presigned response missing upload URL' } }));
+                                        self.updateReactiveState();
+                                        self.hasError = true;
+                                        const errMsg = 'Presigned response missing upload URL';
+                                        error(errMsg);
+                                        self.fireEvent('error', { error: errMsg, file });
+                                        window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                         return;
                                     }
 
@@ -567,9 +745,12 @@ export function vibeFilepond(config = {}) {
 
                                     xhrUpload.upload.onprogress = (e) => {
                                         if (e.lengthComputable) {
+                                            // [FIX BUG-5] Only call progress() — this triggers FilePond's onprocessfileprogress
+                                            // which fires fireEvent('progress'). Calling fireEvent here directly would duplicate it.
                                             progress(true, e.loaded, e.total);
+                                            // Dispatch presigned-specific legacy event only (not unified, to avoid duplication)
                                             const pct = Math.round((e.loaded / e.total) * 100);
-                                            const progressDetail = { loaded: e.loaded, total: e.total, percentage: pct, fileKey };
+                                            const progressDetail = { loaded: e.loaded, total: e.total, percentage: pct, progress: pct, fileKey, key: fileKey, filename: file.name, file };
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-progress', { detail: progressDetail }));
                                             if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-progress', progressDetail);
                                         }
@@ -577,41 +758,59 @@ export function vibeFilepond(config = {}) {
 
                                     xhrUpload.onload = () => {
                                         self.activeUploads.delete(uploadId);
+                                        self.updateReactiveState();
                                         if (xhrUpload.status >= 200 && xhrUpload.status < 300) {
                                             progress(true, file.size, file.size);
                                             load(fileKey);
-                                            self.handleUploadSuccess(fileKey, cfg);
-                                            const successDetail = { key: fileKey, url: uploadUrl.split('?')[0], isLocal: Boolean(response.is_local) };
+                                            self.handleUploadSuccess(fileKey, cfg, file);
+                                            const successDetail = { key: fileKey, url: uploadUrl.split('?')[0], isLocal: Boolean(response.is_local), filename: file.name, size: file.size, file };
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-success', { detail: successDetail }));
                                             if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-success', successDetail);
                                         } else {
+                                            self.hasError = true;
                                             const errMsg = 'Direct upload failed with HTTP ' + xhrUpload.status;
                                             error(errMsg);
+                                            self.fireEvent('error', { error: errMsg, status: xhrUpload.status, file });
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg, status: xhrUpload.status } }));
                                         }
                                     };
 
                                     xhrUpload.onerror = () => {
                                         self.activeUploads.delete(uploadId);
+                                        self.updateReactiveState();
+                                        self.hasError = true;
                                         const errMsg = 'Network error during cloud upload';
                                         error(errMsg);
+                                        self.fireEvent('error', { error: errMsg, file });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                     };
 
                                     xhrUpload.send(file);
                                 } catch (e) {
                                     self.activeUploads.delete(uploadId);
-                                    error('Error parsing presigned JSON: ' + e.message);
+                                    self.updateReactiveState();
+                                    self.hasError = true;
+                                    const errMsg = 'Error parsing presigned JSON: ' + e.message;
+                                    error(errMsg);
+                                    self.fireEvent('error', { error: errMsg, file });
                                 }
                             } else {
                                 self.activeUploads.delete(uploadId);
-                                error('Failed to fetch presigned URL: ' + xhrPresign.statusText);
+                                self.updateReactiveState();
+                                self.hasError = true;
+                                const errMsg = 'Failed to fetch presigned URL: ' + xhrPresign.statusText;
+                                error(errMsg);
+                                self.fireEvent('error', { error: errMsg, file });
                             }
                         };
 
                         xhrPresign.onerror = () => {
                             self.activeUploads.delete(uploadId);
-                            error('Network error requesting presigned URL');
+                            self.updateReactiveState();
+                            self.hasError = true;
+                            const errMsg = 'Network error requesting presigned URL';
+                            error(errMsg);
+                            self.fireEvent('error', { error: errMsg, file });
                         };
 
                         xhrPresign.send(JSON.stringify(requestPayload));
@@ -619,11 +818,13 @@ export function vibeFilepond(config = {}) {
                         return {
                             abort: () => {
                                 self.activeUploads.delete(uploadId);
+                                self.updateReactiveState();
                                 if (xhrUpload) {
                                     xhrUpload.abort();
                                 }
                                 xhrPresign.abort();
                                 abort();
+                                self.fireEvent('abort', { filename: file.name, file });
                                 window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-abort'));
                             }
                         };
@@ -642,21 +843,30 @@ export function vibeFilepond(config = {}) {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
                         const uploadId = (metadata && metadata.id) ? metadata.id : (file.name + '_' + file.size + '_' + Math.random());
                         self.activeUploads.add(uploadId);
+                        self.updateReactiveState();
+                        self.fireEvent('start', { filename: file.name, size: file.size, type: file.type, file });
+
                         self.$wire.upload(
                             cfg.wireModel,
                             file,
                             (uploadedFilename) => {
                                 self.activeUploads.delete(uploadId);
+                                self.updateReactiveState();
                                 load(uploadedFilename);
+                                self.fireEvent('success', { file: uploadedFilename, filename: uploadedFilename, key: uploadedFilename });
                                 self.$dispatch('vibe-filepond-uploaded', { file: uploadedFilename });
                             },
                             () => {
                                 self.activeUploads.delete(uploadId);
+                                self.updateReactiveState();
+                                self.hasError = true;
                                 error('Livewire upload failed');
+                                self.fireEvent('error', { error: 'Livewire upload failed', file });
                                 self.$dispatch('vibe-filepond-error', { error: 'Livewire upload failed' });
                             },
                             (event) => {
                                 progress(event.detail.progress, event.detail.progress, 100);
+                                self.fireEvent('progress', { progress: event.detail.progress, filename: file.name, file });
                             }
                         );
                     },
@@ -666,6 +876,7 @@ export function vibeFilepond(config = {}) {
                         } else {
                             load();
                         }
+                        self.fireEvent('revert', { file: filename, filename: filename, key: filename });
                         self.$dispatch('vibe-filepond-reverted', { file: filename });
                     }
                 };
@@ -692,7 +903,7 @@ export function vibeFilepond(config = {}) {
             return null;
         },
 
-        handleUploadSuccess(fileKey, cfg) {
+        handleUploadSuccess(fileKey, cfg, fileObj = null) {
             if (cfg.multiple) {
                 this.uploadedKeys.push(fileKey);
             } else {
@@ -707,8 +918,12 @@ export function vibeFilepond(config = {}) {
 
             // Update hidden inputs if present for regular forms
             this.updateHiddenInputs(cfg);
+            this.updateReactiveState();
 
-            this.$dispatch('vibe-filepond-presigned-success', { key: fileKey, keys: this.uploadedKeys });
+            // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
+            if (this.$dispatch) {
+                this.$dispatch('vibe-filepond-presigned-success', { key: fileKey, keys: this.uploadedKeys });
+            }
         },
 
         handleUploadRevert(fileKey, cfg) {
@@ -720,7 +935,12 @@ export function vibeFilepond(config = {}) {
             }
 
             this.updateHiddenInputs(cfg);
-            this.$dispatch('vibe-filepond-presigned-revert', { key: fileKey, keys: this.uploadedKeys });
+            this.updateReactiveState();
+
+            // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
+            if (this.$dispatch) {
+                this.$dispatch('vibe-filepond-presigned-revert', { key: fileKey, keys: this.uploadedKeys });
+            }
         },
 
         updateHiddenInputs(cfg) {
@@ -754,8 +974,11 @@ export function vibeFilepond(config = {}) {
                     const files = this.pond.getFiles();
                     return files.some(item => {
                         const s = item.status;
-                        // FileStatus: 1: INIT, 3: PROCESSING, 7: LOADING, 9: PROCESSING_QUEUED
-                        return s === 1 || s === 3 || s === 7 || s === 9;
+                        // [FIX WARN-1] Use FileStatus enum (version-safe) instead of hardcoded numbers
+                        return s === FileStatus.INIT ||
+                               s === FileStatus.PROCESSING ||
+                               s === FileStatus.LOADING ||
+                               s === FileStatus.PROCESSING_QUEUED;
                     });
                 } catch (e) {}
             }

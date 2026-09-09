@@ -1081,3 +1081,88 @@
     transform: scale(1.08);
 }
 
+/* =========================================================================
+   Vibe UI Error Validation State
+   ========================================================================= */
+.filepond-has-error .filepond--root .filepond--drop-label,
+.filepond-has-error .filepond--fallback-dropzone {
+    border-color: var(--destructive, #ef4444) !important;
+    background-color: color-mix(in srgb, var(--destructive, #ef4444) 5%, transparent) !important;
+}
+
+.filepond-has-error .filepond--root .filepond--drop-label:hover,
+.filepond-has-error .filepond--fallback-dropzone:hover,
+.filepond-has-error .filepond--root[data-hover="true"] .filepond--drop-label {
+    border-color: var(--destructive, #ef4444) !important;
+    background-color: color-mix(in srgb, var(--destructive, #ef4444) 9%, transparent) !important;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--destructive, #ef4444) 20%, transparent) !important;
+}
+
+/* =========================================================================
+   Vibe UI Size Variants (sm, md, lg)
+   ========================================================================= */
+/* Small Size */
+.filepond-size-sm .filepond--root .filepond--drop-label,
+.filepond-size-sm .filepond--fallback-dropzone {
+    min-height: 7.5rem !important;
+    padding: 1rem 0.75rem !important;
+}
+
+.filepond-size-sm .filepond--cloud-icon svg,
+.filepond-size-sm .filepond--custom-dropzone svg {
+    width: 2rem !important;
+    height: 2rem !important;
+}
+
+.filepond-size-sm .filepond--drop-title {
+    font-size: 0.8125rem !important;
+    margin-top: 0.25rem !important;
+}
+
+.filepond-size-sm .filepond--drop-subtitle {
+    font-size: 0.6875rem !important;
+    margin-top: 0.125rem !important;
+}
+
+.filepond-size-sm .filepond--label-action {
+    font-size: 0.75rem !important;
+    padding: 0.3rem 0.75rem !important;
+}
+
+/* Large Size */
+.filepond-size-lg .filepond--root .filepond--drop-label,
+.filepond-size-lg .filepond--fallback-dropzone {
+    min-height: 16.5rem !important;
+    padding: 2.5rem 1.5rem !important;
+}
+
+.filepond-size-lg .filepond--cloud-icon svg,
+.filepond-size-lg .filepond--custom-dropzone svg {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+}
+
+.filepond-size-lg .filepond--drop-title {
+    font-size: 1.0625rem !important;
+    margin-top: 0.625rem !important;
+}
+
+.filepond-size-lg .filepond--drop-subtitle {
+    font-size: 0.8125rem !important;
+    margin-top: 0.35rem !important;
+}
+
+/* =========================================================================
+   Vibe UI Disabled State
+   ========================================================================= */
+[data-vibe-filepond]:has(input:disabled) .filepond--root,
+[data-vibe-filepond]:has(input:disabled) .filepond--fallback-dropzone,
+.filepond--root[data-disabled="true"] .filepond--drop-label {
+    opacity: 0.55 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    filter: grayscale(0.4);
+    background-color: color-mix(in srgb, var(--muted) 70%, transparent) !important;
+}
+
+
