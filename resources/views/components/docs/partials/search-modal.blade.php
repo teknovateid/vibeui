@@ -1,32 +1,49 @@
 @php
+    $catMenu = __('docs/search.categories.menu');
+    $catAction = __('docs/search.categories.action');
+
+    $navSections = [
+        'start' => __('docs/search.sections.start'),
+        'forms' => __('docs/search.sections.forms'),
+        'ui' => __('docs/search.sections.ui'),
+        'navigation' => __('docs/search.sections.navigation'),
+        'layout' => __('docs/search.sections.layout'),
+        'data' => __('docs/search.sections.data'),
+        'feedback' => __('docs/search.sections.feedback'),
+        'extra' => __('docs/search.sections.extra'),
+        'dashboard' => __('docs/search.sections.dashboard'),
+        'settings' => __('docs/search.sections.settings'),
+        'quick_actions' => __('docs/search.sections.quick_actions'),
+    ];
+
     $menuList = [
         // Getting Started
         [
             'id' => 'menu-docs',
-            'title' => __('docs/sidebar.nav.docs') ?: 'Dokumentasi',
-            'subtitle' => 'Panduan pengantar dan konsep Vibe UI',
-            'category' => 'Menu',
-            'section' => 'Mulai',
+            'title' => __('docs/sidebar.nav.docs') ?: __('docs/search.menu_items.docs.title'),
+            'subtitle' => __('docs/search.menu_items.docs.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
             'url' => route('docs.index'),
             'icon' => 'book',
             'keywords' => 'docs start home guide pengantar panduan',
         ],
         [
             'id' => 'menu-instalation',
-            'title' => __('docs/sidebar.nav.instalation') ?: 'Instalasi',
-            'subtitle' => 'Petunjuk setup dan instalasi paket Vibe UI',
-            'category' => 'Menu',
-            'section' => 'Mulai',
+            'title' => __('docs/sidebar.nav.instalation') ?: __('docs/search.menu_items.instalation.title'),
+            'subtitle' => __('docs/search.menu_items.instalation.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
             'url' => route('docs.instalation.index'),
             'icon' => 'download',
             'keywords' => 'install setup instalasi package composer npm',
         ],
         [
             'id' => 'menu-directories',
-            'title' => __('docs/sidebar.nav.directories') ?: 'Direktori',
-            'subtitle' => 'Struktur folder dan arsitektur kode sumber',
-            'category' => 'Menu',
-            'section' => 'Mulai',
+            'title' => __('docs/sidebar.nav.directories') ?: __('docs/search.menu_items.directories.title'),
+            'subtitle' => __('docs/search.menu_items.directories.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
             'url' => route('docs.directories.index'),
             'icon' => 'folder',
             'keywords' => 'directories struktur folder file architecture',
@@ -35,100 +52,100 @@
         // Components - Forms
         [
             'id' => 'menu-form',
-            'title' => __('docs/sidebar.nav.form') ?: 'Form',
-            'subtitle' => 'Container form, validasi, dan handling input',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.form') ?: __('docs/search.menu_items.form.title'),
+            'subtitle' => __('docs/search.menu_items.form.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.form.index'),
             'icon' => 'form',
             'keywords' => 'form validation submit input grouping',
         ],
         [
             'id' => 'menu-input',
-            'title' => __('docs/sidebar.nav.input') ?: 'Input',
-            'subtitle' => 'Komponen input teks, email, password, icon',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.input') ?: __('docs/search.menu_items.input.title'),
+            'subtitle' => __('docs/search.menu_items.input.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.input.index'),
             'icon' => 'input',
             'keywords' => 'input text password field form control',
         ],
         [
             'id' => 'menu-textarea',
-            'title' => __('docs/sidebar.nav.textarea') ?: 'Textarea',
-            'subtitle' => 'Input teks multi-baris dengan auto-resize',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.textarea') ?: __('docs/search.menu_items.textarea.title'),
+            'subtitle' => __('docs/search.menu_items.textarea.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.textarea.index'),
             'icon' => 'textarea',
             'keywords' => 'textarea multi line text input note',
         ],
         [
             'id' => 'menu-select',
-            'title' => __('docs/sidebar.nav.select') ?: 'Select',
-            'subtitle' => 'Pilihan dropdown select tunggal dan ganda',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.select') ?: __('docs/search.menu_items.select.title'),
+            'subtitle' => __('docs/search.menu_items.select.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.select.index'),
             'icon' => 'select',
             'keywords' => 'select dropdown option picker choose multi',
         ],
         [
             'id' => 'menu-checkbox',
-            'title' => __('docs/sidebar.nav.checkbox') ?: 'Checkbox',
-            'subtitle' => 'Pilihan multi-opsi checkbox interaktif',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.checkbox') ?: __('docs/search.menu_items.checkbox.title'),
+            'subtitle' => __('docs/search.menu_items.checkbox.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.checkbox.index'),
             'icon' => 'check',
             'keywords' => 'checkbox check toggle multiple boolean',
         ],
         [
             'id' => 'menu-radio',
-            'title' => __('docs/sidebar.nav.radio') ?: 'Radio',
-            'subtitle' => 'Pilihan opsi tunggal radio button',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.radio') ?: __('docs/search.menu_items.radio.title'),
+            'subtitle' => __('docs/search.menu_items.radio.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.radio.index'),
             'icon' => 'radio',
             'keywords' => 'radio option choice single boolean',
         ],
         [
             'id' => 'menu-switch',
-            'title' => __('docs/sidebar.nav.switch') ?: 'Switch',
-            'subtitle' => 'Sakelar toggle on/off modern',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.switch') ?: __('docs/search.menu_items.switch.title'),
+            'subtitle' => __('docs/search.menu_items.switch.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.switch.index'),
             'icon' => 'toggle',
             'keywords' => 'switch toggle on off status boolean',
         ],
         [
             'id' => 'menu-range',
-            'title' => __('docs/sidebar.nav.range') ?: 'Range Slider',
-            'subtitle' => 'Slider pemilihan nilai numerik',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.range') ?: __('docs/search.menu_items.range.title'),
+            'subtitle' => __('docs/search.menu_items.range.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.range.index'),
             'icon' => 'slider',
             'keywords' => 'range slider number value control',
         ],
         [
             'id' => 'menu-date-time',
-            'title' => __('docs/sidebar.nav.date-time') ?: 'Date & Time',
-            'subtitle' => 'Pemilih tanggal, waktu, dan rentang tanggal',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.date-time') ?: __('docs/search.menu_items.date_time.title'),
+            'subtitle' => __('docs/search.menu_items.date_time.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.date-time.index'),
             'icon' => 'calendar',
             'keywords' => 'date time calendar picker tanggal waktu',
         ],
         [
             'id' => 'menu-filepond',
-            'title' => __('docs/sidebar.nav.filepond') ?: 'FilePond',
-            'subtitle' => 'File upload drag-and-drop dengan preview',
-            'category' => 'Menu',
-            'section' => 'Komponen Form',
+            'title' => __('docs/sidebar.nav.filepond') ?: __('docs/search.menu_items.filepond.title'),
+            'subtitle' => __('docs/search.menu_items.filepond.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
             'url' => route('docs.filepond.index'),
             'icon' => 'upload',
             'keywords' => 'filepond upload file image attachment',
@@ -137,200 +154,200 @@
         // Components - Elements & UI
         [
             'id' => 'menu-button',
-            'title' => __('docs/sidebar.nav.button') ?: 'Button',
-            'subtitle' => 'Varian tombol: primary, secondary, outline, ghost',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.button') ?: __('docs/search.menu_items.button.title'),
+            'subtitle' => __('docs/search.menu_items.button.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.button.index'),
             'icon' => 'button',
             'keywords' => 'button tombol action click cta',
         ],
         [
             'id' => 'menu-dropdown',
-            'title' => __('docs/sidebar.nav.dropdown') ?: 'Dropdown',
-            'subtitle' => 'Menu dropdown kontekstual & keyboard navigate',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.dropdown') ?: __('docs/search.menu_items.dropdown.title'),
+            'subtitle' => __('docs/search.menu_items.dropdown.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.dropdown.index'),
             'icon' => 'dropdown',
             'keywords' => 'dropdown menu context popup flyout',
         ],
         [
             'id' => 'menu-badge',
-            'title' => __('docs/sidebar.nav.badge') ?: 'Badge',
-            'subtitle' => 'Pill dan tag indikator status warna-warni',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.badge') ?: __('docs/search.menu_items.badge.title'),
+            'subtitle' => __('docs/search.menu_items.badge.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.badge.index'),
             'icon' => 'badge',
             'keywords' => 'badge tag label status pill indicator',
         ],
         [
             'id' => 'menu-avatar',
-            'title' => __('docs/sidebar.nav.avatar') ?: 'Avatar',
-            'subtitle' => 'Foto profil, inisial fallback, dan indikator aktif',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.avatar') ?: __('docs/search.menu_items.avatar.title'),
+            'subtitle' => __('docs/search.menu_items.avatar.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.avatar.index'),
             'icon' => 'user',
             'keywords' => 'avatar profile user image picture initials',
         ],
         [
             'id' => 'menu-image',
-            'title' => __('docs/sidebar.nav.image') ?: 'Image',
-            'subtitle' => 'Gambar teroptimasi dengan rasio aspek dan lazy load',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.image') ?: __('docs/search.menu_items.image.title'),
+            'subtitle' => __('docs/search.menu_items.image.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.image.index'),
             'icon' => 'image',
             'keywords' => 'image photo picture media lazyload',
         ],
         [
             'id' => 'menu-card',
-            'title' => __('docs/sidebar.nav.card') ?: 'Card',
-            'subtitle' => 'Wadah konten terstruktur dengan varian desain',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.card') ?: __('docs/search.menu_items.card.title'),
+            'subtitle' => __('docs/search.menu_items.card.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.card.index'),
             'icon' => 'card',
             'keywords' => 'card container box wrapper panel',
         ],
         [
             'id' => 'menu-grid-list',
-            'title' => __('docs/sidebar.nav.grid-list') ?: 'Grid List',
-            'subtitle' => 'Daftar item berbasis kartu grid interaktif',
-            'category' => 'Menu',
-            'section' => 'Komponen UI',
+            'title' => __('docs/sidebar.nav.grid-list') ?: __('docs/search.menu_items.grid_list.title'),
+            'subtitle' => __('docs/search.menu_items.grid_list.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
             'url' => route('docs.grid-list.index'),
             'icon' => 'grid',
             'keywords' => 'grid list collection items catalog',
         ],
         [
             'id' => 'menu-header',
-            'title' => __('docs/sidebar.nav.header') ?: 'Header',
-            'subtitle' => 'Bilah navigasi atas (sticky & default)',
-            'category' => 'Menu',
-            'section' => 'Komponen Navigasi',
+            'title' => __('docs/sidebar.nav.header') ?: __('docs/search.menu_items.header.title'),
+            'subtitle' => __('docs/search.menu_items.header.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['navigation'],
             'url' => route('docs.header.index'),
             'icon' => 'header',
             'keywords' => 'header navbar topbar sticky navigation',
         ],
         [
             'id' => 'menu-nav',
-            'title' => __('docs/sidebar.nav.nav') ?: 'Nav',
-            'subtitle' => 'Navigasi pohon, pinnable items, dan riwayat',
-            'category' => 'Menu',
-            'section' => 'Komponen Navigasi',
+            'title' => __('docs/sidebar.nav.nav') ?: __('docs/search.menu_items.nav.title'),
+            'subtitle' => __('docs/search.menu_items.nav.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['navigation'],
             'url' => route('docs.nav.index'),
             'icon' => 'nav',
             'keywords' => 'nav sidebar menu tree navigation history pinned',
         ],
         [
             'id' => 'menu-breadcrumb',
-            'title' => __('docs/sidebar.nav.breadcrumb') ?: 'Breadcrumb',
-            'subtitle' => 'Navigasi hierarki jejak halaman pengguna',
-            'category' => 'Menu',
-            'section' => 'Komponen Navigasi',
+            'title' => __('docs/sidebar.nav.breadcrumb') ?: __('docs/search.menu_items.breadcrumb.title'),
+            'subtitle' => __('docs/search.menu_items.breadcrumb.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['navigation'],
             'url' => route('docs.breadcrumb.index'),
             'icon' => 'breadcrumb',
             'keywords' => 'breadcrumb path hierarchy trail remah roti',
         ],
         [
             'id' => 'menu-table',
-            'title' => __('docs/sidebar.nav.table') ?: 'Table',
-            'subtitle' => 'Penyajian data tabel HTML sederhana dan elegan',
-            'category' => 'Menu',
-            'section' => 'Komponen Data',
+            'title' => __('docs/sidebar.nav.table') ?: __('docs/search.menu_items.table.title'),
+            'subtitle' => __('docs/search.menu_items.table.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['data'],
             'url' => route('docs.table.index'),
             'icon' => 'table',
             'keywords' => 'table tabel tabular row column cell',
         ],
         [
             'id' => 'menu-grid',
-            'title' => __('docs/sidebar.nav.grid') ?: 'Grid',
-            'subtitle' => 'Sistem tata letak kolom responsif CSS grid',
-            'category' => 'Menu',
-            'section' => 'Komponen Layout',
+            'title' => __('docs/sidebar.nav.grid') ?: __('docs/search.menu_items.grid.title'),
+            'subtitle' => __('docs/search.menu_items.grid.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['layout'],
             'url' => route('docs.grid.index'),
             'icon' => 'grid',
             'keywords' => 'grid layout responsive columns flex',
         ],
         [
             'id' => 'menu-datatable',
-            'title' => __('docs/sidebar.nav.datatable') ?: 'DataTable',
-            'subtitle' => 'Tabel canggih dengan sorting, filter, pagination',
-            'category' => 'Menu',
-            'section' => 'Komponen Data',
+            'title' => __('docs/sidebar.nav.datatable') ?: __('docs/search.menu_items.datatable.title'),
+            'subtitle' => __('docs/search.menu_items.datatable.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['data'],
             'url' => route('docs.datatable.index'),
             'icon' => 'table',
             'keywords' => 'datatable table pagination sorting search livewire user',
         ],
         [
             'id' => 'menu-alert',
-            'title' => __('docs/sidebar.nav.alert') ?: 'Alert',
-            'subtitle' => 'Pemberitahuan peringatan info, sukses, bahaya',
-            'category' => 'Menu',
-            'section' => 'Komponen Feedback',
+            'title' => __('docs/sidebar.nav.alert') ?: __('docs/search.menu_items.alert.title'),
+            'subtitle' => __('docs/search.menu_items.alert.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['feedback'],
             'url' => route('docs.alert.index'),
             'icon' => 'alert',
             'keywords' => 'alert notice warning info success danger error',
         ],
         [
             'id' => 'menu-toast',
-            'title' => __('docs/sidebar.nav.toast') ?: 'Toast',
-            'subtitle' => 'Notifikasi pop-up dinamis via JavaScript/Alpine',
-            'category' => 'Menu',
-            'section' => 'Komponen Feedback',
+            'title' => __('docs/sidebar.nav.toast') ?: __('docs/search.menu_items.toast.title'),
+            'subtitle' => __('docs/search.menu_items.toast.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['feedback'],
             'url' => route('docs.toast.index'),
             'icon' => 'toast',
             'keywords' => 'toast notification snackbar popup notify',
         ],
         [
             'id' => 'menu-modal',
-            'title' => __('docs/sidebar.nav.modal') ?: 'Modal',
-            'subtitle' => 'Dialog overlay, spotlight, dan popup konfirmasi',
-            'category' => 'Menu',
-            'section' => 'Komponen Feedback',
+            'title' => __('docs/sidebar.nav.modal') ?: __('docs/search.menu_items.modal.title'),
+            'subtitle' => __('docs/search.menu_items.modal.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['feedback'],
             'url' => route('docs.modal.index'),
             'icon' => 'modal',
             'keywords' => 'modal dialog popup lightbox overlay window',
         ],
         [
             'id' => 'menu-sheet',
-            'title' => __('docs/sidebar.nav.sheet') ?: 'Sheet',
-            'subtitle' => 'Panel laci samping geser (drawer drawer sidebar)',
-            'category' => 'Menu',
-            'section' => 'Komponen Layout',
+            'title' => __('docs/sidebar.nav.sheet') ?: __('docs/search.menu_items.sheet.title'),
+            'subtitle' => __('docs/search.menu_items.sheet.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['layout'],
             'url' => route('docs.sheet.index'),
             'icon' => 'sheet',
             'keywords' => 'sheet drawer laci slideover panel side',
         ],
         [
             'id' => 'menu-tabs',
-            'title' => __('docs/sidebar.nav.tabs') ?: 'Tabs',
-            'subtitle' => 'Peralihan panel konten berbasis tab',
-            'category' => 'Menu',
-            'section' => 'Komponen Navigasi',
+            'title' => __('docs/sidebar.nav.tabs') ?: __('docs/search.menu_items.tabs.title'),
+            'subtitle' => __('docs/search.menu_items.tabs.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['navigation'],
             'url' => route('docs.tabs.index'),
             'icon' => 'tabs',
             'keywords' => 'tabs panel pill navigation segmented switch',
         ],
         [
             'id' => 'menu-highlightjs',
-            'title' => __('docs/sidebar.nav.highlightjs') ?: 'Highlight.js',
-            'subtitle' => 'Penyorot sintaks kode dengan tema bervariasi',
-            'category' => 'Menu',
-            'section' => 'Komponen Ekstra',
+            'title' => __('docs/sidebar.nav.highlightjs') ?: __('docs/search.menu_items.highlightjs.title'),
+            'subtitle' => __('docs/search.menu_items.highlightjs.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['extra'],
             'url' => route('docs.highlightjs.index'),
             'icon' => 'code',
             'keywords' => 'highlight code syntax prism pre snippet',
         ],
         [
             'id' => 'menu-chart',
-            'title' => __('docs/sidebar.nav.chart') ?: 'Chart',
-            'subtitle' => 'Grafik batang, garis, donat, dan tren performa',
-            'category' => 'Menu',
-            'section' => 'Komponen Data',
+            'title' => __('docs/sidebar.nav.chart') ?: __('docs/search.menu_items.chart.title'),
+            'subtitle' => __('docs/search.menu_items.chart.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['data'],
             'url' => route('docs.chart.index'),
             'icon' => 'chart',
             'keywords' => 'chart graph bar line donut analytics metrik',
@@ -339,20 +356,20 @@
         // Pages
         [
             'id' => 'menu-dashboard-products',
-            'title' => 'Dashboard: Semua Produk',
-            'subtitle' => 'Ringkasan analitik penjualan, inventori, dan produk',
-            'category' => 'Menu',
-            'section' => 'Halaman Dashboard',
+            'title' => __('docs/search.menu_items.dashboard_products.title'),
+            'subtitle' => __('docs/search.menu_items.dashboard_products.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['dashboard'],
             'url' => route('docs.dashboard.show', 'index'),
             'icon' => 'dashboard',
             'keywords' => 'dashboard produk sales analytics metric order pesanan',
         ],
         [
             'id' => 'menu-settings',
-            'title' => __('docs/page/settings/index.breadcrumb.settings') ?: 'Pengaturan Tampilan',
-            'subtitle' => 'Kustomisasi tema warna, palet, sidebar, dan header',
-            'category' => 'Menu',
-            'section' => 'Halaman Pengaturan',
+            'title' => __('docs/page/settings/index.breadcrumb.settings') ?: __('docs/search.menu_items.settings.title'),
+            'subtitle' => __('docs/search.menu_items.settings.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['settings'],
             'url' => route('docs.settings.index'),
             'icon' => 'settings',
             'keywords' => 'settings pengaturan appearance tema custom sidebar header',
@@ -362,10 +379,10 @@
     $quickActions = [
         [
             'id' => 'action-toggle-theme',
-            'title' => 'Ganti Tema Gelap / Terang',
-            'subtitle' => 'Beralih antara tema Dark Mode dan Light Mode',
-            'category' => 'Aksi',
-            'section' => 'Pintasan Cepat',
+            'title' => __('docs/search.actions.theme_title'),
+            'subtitle' => __('docs/search.actions.theme_subtitle'),
+            'category' => $catAction,
+            'section' => $navSections['quick_actions'],
             'action' => 'toggleTheme',
             'icon' => 'theme',
             'shortcut' => 'Ctrl+D',
@@ -373,10 +390,10 @@
         ],
         [
             'id' => 'action-switch-language',
-            'title' => app()->getLocale() === 'id' ? 'Ganti Bahasa ke English (EN)' : 'Ganti Bahasa ke Indonesia (ID)',
-            'subtitle' => 'Ubah bahasa antarmuka aplikasi',
-            'category' => 'Aksi',
-            'section' => 'Pintasan Cepat',
+            'title' => app()->getLocale() === 'id' ? __('docs/search.actions.switch_lang_en') : __('docs/search.actions.switch_lang_id'),
+            'subtitle' => __('docs/search.actions.switch_lang_subtitle'),
+            'category' => $catAction,
+            'section' => $navSections['quick_actions'],
             'url' => route('locale.switch', app()->getLocale() === 'id' ? 'en' : 'id'),
             'icon' => 'globe',
             'shortcut' => 'Locale',
@@ -384,10 +401,10 @@
         ],
         [
             'id' => 'action-open-settings',
-            'title' => 'Kustomisasi Tampilan & Warna',
-            'subtitle' => 'Buka studio pengaturan kustom sidebar dan header',
-            'category' => 'Aksi',
-            'section' => 'Pintasan Cepat',
+            'title' => __('docs/search.actions.settings_title'),
+            'subtitle' => __('docs/search.actions.settings_subtitle'),
+            'category' => $catAction,
+            'section' => $navSections['quick_actions'],
             'url' => route('docs.settings.index'),
             'icon' => 'settings',
             'shortcut' => 'Settings',
@@ -395,10 +412,10 @@
         ],
         [
             'id' => 'action-toggle-fullscreen',
-            'title' => 'Toggle Mode Layar Penuh (Fullscreen)',
-            'subtitle' => 'Buka atau tutup tampilan layar penuh peramban',
-            'category' => 'Aksi',
-            'section' => 'Pintasan Cepat',
+            'title' => __('docs/search.actions.fullscreen_title'),
+            'subtitle' => __('docs/search.actions.fullscreen_subtitle'),
+            'category' => $catAction,
+            'section' => $navSections['quick_actions'],
             'action' => 'toggleFullscreen',
             'icon' => 'fullscreen',
             'shortcut' => 'F11',
@@ -406,10 +423,10 @@
         ],
         [
             'id' => 'action-clear-history',
-            'title' => 'Bersihkan Semua Riwayat Kunjungan',
-            'subtitle' => 'Hapus jejak riwayat halaman dari penyimpanan lokal',
-            'category' => 'Aksi',
-            'section' => 'Pintasan Cepat',
+            'title' => __('docs/search.actions.clear_history_title'),
+            'subtitle' => __('docs/search.actions.clear_history_subtitle'),
+            'category' => $catAction,
+            'section' => $navSections['quick_actions'],
             'action' => 'clearHistory',
             'icon' => 'trash',
             'shortcut' => 'Clear',
@@ -418,80 +435,77 @@
     ];
 @endphp
 
-<vibe:modal id="global-search-modal" position="top">
+<vibe:modal id="global-search-modal" position="top" maxWidth="2xl" :dismissibleButton="false">
     <div x-data="globalSearchModal({
         menuItems: {{ Js::from($menuList) }},
         actionItems: {{ Js::from($quickActions) }},
         searchApiUrl: '{{ route('docs.search.query') }}'
-    })" @keydown.window.escape="if ($parent.open) { $dispatch('close-modal', 'global-search-modal'); }" @open-modal.window="if ($event.detail === 'global-search-modal' || (Array.isArray($event.detail) && $event.detail[0] === 'global-search-modal')) { onModalOpen(); }" @open-search-modal.window="onModalOpen();" class="-mx-6 -mb-6 -mt-2 sm:mt-0 flex flex-col bg-card text-card-foreground selection:bg-primary/20">
-        {{-- Search Input Bar --}}
-        <div class="relative flex items-center border-b border-border/80 px-4 py-3 sm:py-3.5 bg-muted/20">
-            {{-- Search / Loading Icon --}}
-            <div class="shrink-0 mr-3 text-muted-foreground">
-                <template x-if="isLoadingDb">
-                    <svg class="size-5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </template>
-                <template x-if="!isLoadingDb">
-                    <svg class="size-5 text-muted-foreground/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </template>
+    })" @open-modal.window="if ($event.detail === 'global-search-modal' || (Array.isArray($event.detail) && $event.detail[0] === 'global-search-modal')) { onModalOpen(); }" @open-search-modal.window="onModalOpen();" class="flex flex-col">
+        <vibe:modal.header class="p-0 gap-0 border-b border-border/80 font-normal">
+            <div class="relative flex items-center px-4 sm:px-5 py-3.5 sm:py-4 bg-muted/10">
+                <vibe:input variant="ghost" size="lg" x-ref="searchInput" x-model="query" @input="onQueryInput()" @keydown.down.prevent="nextItem()" @keydown.up.prevent="prevItem()" @keydown.enter.prevent="selectActiveItem()" @keydown.tab.prevent="cycleFilter()" @keydown.escape.prevent="$dispatch('close-modal', 'global-search-modal')" placeholder="{{ __('docs/search.placeholder') }}" autocomplete="off" spellcheck="false">
+                    <x-slot:icon>
+                        <template x-if="isLoadingDb">
+                            <svg class="size-5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                        </template>
+                        <template x-if="!isLoadingDb">
+                            <svg class="size-5 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </template>
+                    </x-slot:icon>
+                    <x-slot:trailingIcon>
+                        <button x-show="query.length > 0" x-cloak type="button" @click="clearSearch()" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-colors cursor-pointer" title="{{ __('docs/search.clear_search') }}">
+                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </x-slot:trailingIcon>
+                </vibe:input>
             </div>
 
-            {{-- Main Search Input with Keyboard Controls --}}
-            <input x-ref="searchInput" type="text" x-model="query" @input="onQueryInput()" @keydown.down.prevent="nextItem()" @keydown.up.prevent="prevItem()" @keydown.enter.prevent="selectActiveItem()" @keydown.tab.prevent="cycleFilter()" @keydown.escape.prevent="$dispatch('close-modal', 'global-search-modal')" placeholder="{{ __('Cari menu, database, riwayat, pinned, atau aksi...') }}" class="w-full bg-transparent text-sm sm:text-base text-foreground placeholder:text-muted-foreground/60 focus:outline-hidden border-none p-0 pr-12 font-medium" autocomplete="off" spellcheck="false" />
-
-            {{-- Clear Button if query exists --}}
-            <div class="absolute right-3 flex items-center gap-1.5">
-                <button x-show="query.length > 0" x-cloak type="button" @click="clearSearch()" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors cursor-pointer" title="Hapus pencarian">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+            {{-- Filter Category Pills --}}
+            <div class="flex items-center gap-1.5 px-4 sm:px-5 py-2 border-t border-border/50 overflow-x-auto vibe-scrollbar bg-muted/20 text-xs select-none">
+                <template x-for="filter in filterOptions" :key="filter.id">
+                    <button type="button" @click="setFilter(filter.id)" class="px-2.5 py-1 rounded-full text-xs font-medium transition-all duration-150 shrink-0 cursor-pointer flex items-center gap-1.5" :class="activeFilter === filter.id ?
+                        'bg-primary text-primary-foreground shadow-2xs font-semibold' :
+                        'bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground'">
+                        <span x-text="filter.label"></span>
+                        <span x-show="filter.count !== null" x-text="filter.count" class="text-[10px] px-1.5 py-0.2 rounded-full font-mono" :class="activeFilter === filter.id ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-background/80 text-muted-foreground'"></span>
+                    </button>
+                </template>
             </div>
-        </div>
+        </vibe:modal.header>
 
-        {{-- Filter Category Pills --}}
-        <div class="flex items-center gap-1.5 px-4 py-2 border-b border-border/50 overflow-x-auto vibe-scrollbar bg-background/50 text-xs select-none">
-            <template x-for="filter in filterOptions" :key="filter.id">
-                <button type="button" @click="setFilter(filter.id)" class="px-2.5 py-1 rounded-full text-xs font-medium transition-all shrink-0 cursor-pointer flex items-center gap-1.5" :class="activeFilter === filter.id ?
-                    'bg-primary text-primary-foreground shadow-2xs font-semibold' :
-                    'bg-muted/50 text-muted-foreground hover:bg-accent hover:text-foreground'">
-                    <span x-text="filter.label"></span>
-                    <span x-show="filter.count !== null" x-text="filter.count" class="text-[10px] px-1 py-0.2 rounded-full" :class="activeFilter === filter.id ? 'bg-primary-foreground/20 text-primary-foreground' : 'bg-background/80 text-muted-foreground'"></span>
-                </button>
-            </template>
-        </div>
-
-        {{-- Results List Container --}}
-        <div x-ref="resultsContainer" class="max-h-96 sm:max-h-104 overflow-y-auto vibe-scrollbar p-2 divide-y divide-border/20">
+        {{-- Modal Content: Results List Container --}}
+        <vibe:modal.content x-ref="resultsContainer" class="p-2 sm:p-2.5 max-h-96 sm:max-h-104 space-y-1 vibe-scrollbar">
             {{-- When there are items --}}
             <template x-if="filteredItems.length > 0">
                 <div class="flex flex-col gap-1">
                     <template x-for="(item, index) in filteredItems" :key="item.id || index">
-                        <div :data-index="index" @click="selectItem(item)" @mouseenter="selectedIndex = index" class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-colors duration-150 group/search-item" :class="selectedIndex === index ?
-                            'bg-primary/10 text-foreground ring-1 ring-primary/30 dark:bg-primary/15' :
-                            'text-foreground/80 hover:bg-accent/60'">
+                        <div :data-index="index" @click="selectItem(item)" @mouseenter="selectedIndex = index" class="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all duration-150 group/search-item" :class="selectedIndex === index ?
+                            'bg-accent/80 text-accent-foreground shadow-2xs ring-1 ring-border/80' :
+                            'text-foreground/80 hover:bg-accent/40 hover:text-foreground'">
                             {{-- Icon container --}}
-                            <div class="shrink-0 size-9 rounded-lg flex items-center justify-center transition-colors" :class="selectedIndex === index ?
-                                'bg-primary text-primary-foreground shadow-xs' :
-                                'bg-muted text-muted-foreground group-hover/search-item:text-foreground group-hover/search-item:bg-muted/80'">
+                            <div class="shrink-0 size-9 rounded-lg flex items-center justify-center transition-colors border" :class="selectedIndex === index ?
+                                'bg-primary/15 text-primary border-primary/25 shadow-2xs' :
+                                'bg-muted/60 text-muted-foreground border-border/40 group-hover/search-item:bg-muted group-hover/search-item:text-foreground'">
                                 <span x-html="renderIcon(item.icon, item.category)"></span>
                             </div>
 
                             {{-- Text Info --}}
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-xs sm:text-sm font-semibold truncate tracking-tight" :class="selectedIndex === index ? 'text-primary dark:text-primary-foreground' : 'text-foreground'" x-text="item.title"></span>
+                                    <span class="text-xs sm:text-sm font-semibold truncate tracking-tight" :class="selectedIndex === index ? 'text-foreground font-bold' : 'text-foreground'" x-text="item.title"></span>
 
                                     {{-- Sub category or section tag --}}
                                     <template x-if="item.subCategory || item.section">
-                                        <span class="text-[10px] px-1.5 py-0.2 rounded-md font-medium shrink-0" :class="selectedIndex === index ? 'bg-primary/20 text-primary-foreground' : 'bg-muted text-muted-foreground'" x-text="item.subCategory || item.section"></span>
+                                        <span class="text-[10px] px-1.5 py-0.2 rounded-md font-medium shrink-0 bg-muted/80 text-muted-foreground border border-border/50" x-text="item.subCategory || item.section"></span>
                                     </template>
                                 </div>
 
@@ -526,38 +540,48 @@
                             <line x1="8" y1="11" x2="14" y2="11"></line>
                         </svg>
                     </div>
-                    <h3 class="text-sm font-semibold text-foreground">Tidak ada hasil ditemukan</h3>
-                    <p class="text-xs text-muted-foreground max-w-xs mt-1">
-                        Tidak ada kecocokan untuk kata kunci "<span class="font-medium text-foreground" x-text="query"></span>". Coba kata kunci lain atau pilih tab filter di atas.
-                    </p>
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/search.no_results.title') }}</h3>
+                    @if (app()->getLocale() === 'en')
+                        <p class="text-xs text-muted-foreground max-w-xs mt-1">
+                            No matching results for "<span class="font-medium text-foreground" x-text="query"></span>". Try another search term or switch category filters above.
+                        </p>
+                    @else
+                        <p class="text-xs text-muted-foreground max-w-xs mt-1">
+                            Tidak ada kecocokan untuk kata kunci "<span class="font-medium text-foreground" x-text="query"></span>". Coba kata kunci lain atau pilih tab filter di atas.
+                        </p>
+                    @endif
                 </div>
             </template>
-        </div>
+        </vibe:modal.content>
 
-        {{-- Footer Command Palette Hint --}}
-        <div class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-t border-border/80 text-[11px] text-muted-foreground select-none">
+        {{-- Modal Footer: Keyboard Controls & Hint --}}
+        <vibe:modal.footer class="justify-between px-4 sm:px-5 py-2.5 text-[11px] select-none">
             <div class="flex items-center gap-3">
                 <span class="flex items-center gap-1">
-                    <kbd class="font-mono bg-background px-1 py-0.5 rounded border border-border/80 shadow-2xs">↑</kbd>
-                    <kbd class="font-mono bg-background px-1 py-0.5 rounded border border-border/80 shadow-2xs">↓</kbd>
-                    <span>Navigasi</span>
+                    <kbd class="font-mono bg-background/50 px-1 py-0.5">↑</kbd>
+                    <kbd class="font-mono bg-background/50 px-1 py-0.5">↓</kbd>
+                    <span>{{ __('docs/search.footer.navigation') }}</span>
                 </span>
                 <span class="flex items-center gap-1">
-                    <kbd class="font-mono bg-background px-1.5 py-0.5 rounded border border-border/80 shadow-2xs">↵</kbd>
-                    <span>Pilih</span>
+                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">↵</kbd>
+                    <span>{{ __('docs/search.footer.select') }}</span>
                 </span>
                 <span class="hidden sm:flex items-center gap-1">
-                    <kbd class="font-mono bg-background px-1.5 py-0.5 rounded border border-border/80 shadow-2xs">Tab</kbd>
-                    <span>Kategori</span>
+                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">Tab</kbd>
+                    <span>{{ __('docs/search.footer.category') }}</span>
+                </span>
+                <span class="hidden sm:flex items-center gap-1">
+                    <kbd class="font-mono bg-background/50 px-1.5 py-0.5">ESC</kbd>
+                    <span>{{ __('docs/search.footer.close') }}</span>
                 </span>
             </div>
 
             <div class="flex items-center gap-2">
-                <span x-text="filteredItems.length + ' hasil'"></span>
+                <span x-text="filteredItems.length + ' {{ __('docs/search.footer.results') }}'"></span>
                 <span class="text-border">•</span>
-                <span class="font-medium text-foreground/80">Vibe Search</span>
+                <span class="font-medium text-foreground/80">{{ __('docs/search.footer.branding') }}</span>
             </div>
-        </div>
+        </vibe:modal.footer>
     </div>
 </vibe:modal>
 
@@ -576,36 +600,13 @@
             pinnedItems: [],
             debounceTimer: null,
 
-            filterOptions: [{
-                    id: 'all',
-                    label: 'Semua',
-                    count: null
-                },
-                {
-                    id: 'menu',
-                    label: 'Menu',
-                    count: null
-                },
-                {
-                    id: 'database',
-                    label: 'Database',
-                    count: null
-                },
-                {
-                    id: 'history',
-                    label: 'Riwayat',
-                    count: null
-                },
-                {
-                    id: 'pinned',
-                    label: 'Disematkan',
-                    count: null
-                },
-                {
-                    id: 'action',
-                    label: 'Aksi',
-                    count: null
-                },
+            filterOptions: [
+                { id: 'all', label: @js(__('docs/search.filters.all')), count: null },
+                { id: 'menu', label: @js(__('docs/search.filters.menu')), count: null },
+                { id: 'database', label: @js(__('docs/search.filters.database')), count: null },
+                { id: 'history', label: @js(__('docs/search.filters.history')), count: null },
+                { id: 'pinned', label: @js(__('docs/search.filters.pinned')), count: null },
+                { id: 'action', label: @js(__('docs/search.filters.action')), count: null },
             ],
 
             init() {
@@ -650,9 +651,9 @@
                                 .map((item, idx) => ({
                                     id: 'history-' + idx,
                                     title: item.title || item.url,
-                                    subtitle: 'Riwayat kunjungan: ' + (item.url || ''),
-                                    category: 'Riwayat',
-                                    section: 'Halaman Terakhir',
+                                    subtitle: @js(__('docs/search.history.subtitle', ['url' => ''])) + (item.url || ''),
+                                    category: @js(__('docs/search.categories.history')),
+                                    section: @js(__('docs/search.sections.recent_pages')),
                                     url: item.url,
                                     icon: 'history',
                                     keywords: (item.title || '') + ' ' + (item.url || ''),
@@ -691,9 +692,9 @@
                             pins.push({
                                 id: 'pinned-' + idx,
                                 title: title,
-                                subtitle: 'Item disematkan di navigasi',
-                                category: 'Disematkan',
-                                section: 'Favorit',
+                                subtitle: @js(__('docs/search.pinned.subtitle')),
+                                category: @js(__('docs/search.categories.pinned')),
+                                section: @js(__('docs/search.sections.favorites')),
                                 url: href,
                                 icon: 'pin',
                                 keywords: title + ' ' + href,
@@ -706,10 +707,10 @@
                         pinnedIds.forEach((pinId, idx) => {
                             pins.push({
                                 id: 'pinned-' + idx,
-                                title: 'Item ' + pinId,
-                                subtitle: 'Navigasi favorit',
-                                category: 'Disematkan',
-                                section: 'Favorit',
+                                title: @js(__('docs/search.pinned.fallback_title', ['id' => ''])) + pinId,
+                                subtitle: @js(__('docs/search.pinned.fallback_subtitle')),
+                                category: @js(__('docs/search.categories.pinned')),
+                                section: @js(__('docs/search.sections.favorites')),
                                 url: '#',
                                 icon: 'pin',
                                 keywords: pinId,
@@ -756,7 +757,7 @@
                                 id: item.id,
                                 title: item.title,
                                 subtitle: item.subtitle,
-                                category: item.category || 'Database',
+                                category: item.category || @js(__('docs/search.categories.database')),
                                 subCategory: item.subCategory,
                                 url: item.url,
                                 icon: item.icon || 'database',
@@ -801,13 +802,14 @@
                         ];
                     }
                 } else {
-                    // Query is present
+                    // Search mode across properties
                     const searchMatch = (item) => {
                         const titleMatch = item.title && item.title.toLowerCase().includes(q);
-                        const subMatch = item.subtitle && item.subtitle.toLowerCase().includes(q);
-                        const kwMatch = item.keywords && item.keywords.toLowerCase().includes(q);
-                        const secMatch = item.section && item.section.toLowerCase().includes(q);
-                        return titleMatch || subMatch || kwMatch || secMatch;
+                        const subtitleMatch = item.subtitle && item.subtitle.toLowerCase().includes(q);
+                        const keywordsMatch = item.keywords && item.keywords.toLowerCase().includes(q);
+                        const categoryMatch = item.category && item.category.toLowerCase().includes(q);
+                        const sectionMatch = item.section && item.section.toLowerCase().includes(q);
+                        return titleMatch || subtitleMatch || keywordsMatch || categoryMatch || sectionMatch;
                     };
 
                     let pool = [];
@@ -898,19 +900,13 @@
 
             scrollToSelected() {
                 this.$nextTick(() => {
-                    const container = this.$refs.resultsContainer;
-                    const activeEl = container ? container.querySelector(`[data-index="${this.selectedIndex}"]`) : null;
-                    if (activeEl && container) {
-                        const cTop = container.scrollTop;
-                        const cBottom = cTop + container.clientHeight;
-                        const eTop = activeEl.offsetTop - container.offsetTop;
-                        const eBottom = eTop + activeEl.clientHeight;
-
-                        if (eTop < cTop) {
-                            container.scrollTop = eTop;
-                        } else if (eBottom > cBottom) {
-                            container.scrollTop = eBottom - container.clientHeight;
-                        }
+                    if (!this.$refs.resultsContainer) return;
+                    const activeEl = this.$refs.resultsContainer.querySelector(`[data-index="${this.selectedIndex}"]`);
+                    if (activeEl) {
+                        activeEl.scrollIntoView({
+                            block: 'nearest',
+                            behavior: 'smooth'
+                        });
                     }
                 });
             },
@@ -949,7 +945,7 @@
                         if (window.vibeToast) {
                             window.vibeToast({
                                 type: 'success',
-                                message: 'Riwayat pencarian & halaman berhasil dibersihkan.',
+                                message: @js(__('docs/search.actions.clear_history_toast')),
                             });
                         }
                     }
@@ -969,14 +965,18 @@
             getCategoryBadgeClass(category) {
                 switch (category) {
                     case 'Menu':
-                        return 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20';
+                        return 'bg-primary/15 text-primary border border-primary/25';
                     case 'Database':
                         return 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20';
                     case 'Riwayat':
+                    case 'History':
                         return 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20';
                     case 'Disematkan':
+                    case 'Pinned':
                         return 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20';
                     case 'Aksi':
+                    case 'Action':
+                    case 'Actions':
                         return 'bg-rose-500/10 text-rose-600 dark:text-rose-400 border border-rose-500/20';
                     default:
                         return 'bg-muted text-muted-foreground border border-border';

@@ -546,7 +546,7 @@
                                                 </button>
                                             </x-slot:trigger>
 
-                                            <vibe:dropdown.body align="right" width="48">
+                                            <vibe:dropdown.content align="right" width="48">
                                                 <vibe:dropdown.item href="#">
                                                     {{ __('docs/page/dashboard/index.actions.details') }}
                                                 </vibe:dropdown.item>
@@ -557,7 +557,7 @@
                                                 <vibe:dropdown.item href="#">
                                                     {{ __('docs/page/dashboard/index.actions.contact') }}
                                                 </vibe:dropdown.item>
-                                            </vibe:dropdown.body>
+                                            </vibe:dropdown.content>
                                         </vibe:dropdown>
                                     </td>
                                 </tr>

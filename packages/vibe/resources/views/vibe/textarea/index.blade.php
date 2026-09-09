@@ -68,7 +68,7 @@
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
 @endphp
 
-<div class="{{ $wrapperClass }}" x-data="{
+<div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }} x-data="{
     count: 0,
     init() {
         this.count = this.$refs.textarea ? this.$refs.textarea.value.length : 0;

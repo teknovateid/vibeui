@@ -29,15 +29,18 @@
         </div>
 
         <vibe:modal id="test-modal">
-            <h2 class="text-xl mb-4">{{ __('docs/index.demo.modal.title') }}</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
-                {{ __('docs/index.demo.modal.content') }}
-            </p>
-
-            <div class="flex justify-end gap-3 mt-6">
+            <vibe:modal.header>
+                <span>{{ __('docs/index.demo.modal.title') }}</span>
+            </vibe:modal.header>
+            <vibe:modal.content>
+                <p class="text-muted-foreground">
+                    {{ __('docs/index.demo.modal.content') }}
+                </p>
+            </vibe:modal.content>
+            <vibe:modal.footer>
                 <vibe:button variant="ghost" @click="close">{{ __('docs/index.demo.modal.cancel_btn') }}</vibe:button>
                 <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">{{ __('docs/index.demo.modal.save_btn') }}</vibe:button>
-            </div>
+            </vibe:modal.footer>
         </vibe:modal>
     </div>
 </x-docs.layouts.sidebar>

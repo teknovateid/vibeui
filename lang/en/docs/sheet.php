@@ -9,12 +9,12 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Basic Usage',
-        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:sheet&gt;</code> component comes with semantic subcomponents: <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.header&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.body&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.footer&gt;</code>, and <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.close&gt;</code>. Control it effortlessly using Alpine events: <code class="font-mono text-xs text-foreground">$dispatch(\'toggle-sheet\', \'sheet-id\')</code>.',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:sheet&gt;</code> component comes with semantic subcomponents: <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.header&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.content&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.footer&gt;</code>, and <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.close&gt;</code>. Control it effortlessly using Alpine events: <code class="font-mono text-xs text-foreground">$dispatch(\'toggle-sheet\', \'sheet-id\')</code>.',
         'preview_title' => 'Right Side Sheet (Drawer)',
         'btn_toggle' => 'Toggle Sheet Panel',
         'btn_open' => 'Open Sheet',
         'header_title' => 'Information Details',
-        'body_text' => 'This is the content within the <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.body&gt;</code> subcomponent. This section automatically provides vertical scrolling (<code class="font-mono text-xs text-foreground">overflow-y-auto</code>) and stretches to fill the available space.',
+        'body_text' => 'This is the content within the <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.content&gt;</code> subcomponent. This section automatically provides vertical scrolling (<code class="font-mono text-xs text-foreground">overflow-y-auto</code>) and stretches to fill the available space.',
         'footer_cancel' => 'Close',
         'footer_save' => 'Save Changes',
     ],
@@ -248,7 +248,7 @@ return [
                 'desc' => 'Top area for headings, descriptions, and action icons.',
             ],
             [
-                'name' => '<vibe:sheet.body>',
+                'name' => '<vibe:sheet.content>',
                 'desc' => 'Scrollable body container (overflow-y-auto) for primary content.',
             ],
             [

@@ -52,31 +52,34 @@
 
                 <vibe:preview :title="__('docs/modal.basic_usage.preview_title')">
                     <vibe:preview.code>
-{{-- Tombol pemicu buka modal --}}
-<vibe:button @click="$dispatch('open-modal', 'demo-basic-modal')" variant="primary" size="sm">
-    {{ __('docs/modal.basic_usage.btn') }}
-</vibe:button>
+                        {{-- Tombol pemicu buka modal --}}
+                        <vibe:button @click="$dispatch('open-modal', 'demo-basic-modal')" variant="primary" size="sm">
+                            {{ __('docs/modal.basic_usage.btn') }}
+                        </vibe:button>
 
-{{-- Komponen Modal --}}
-<vibe:modal id="demo-basic-modal">
-    <div class="space-y-4">
-        <div class="space-y-1 pr-6">
-            <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.basic_usage.modal_title') }}</h3>
-            <p class="text-sm text-muted-foreground">
-                {{ __('docs/modal.basic_usage.modal_desc') }}
-            </p>
-        </div>
+                        {{-- Komponen Modal dengan Subkomponen Semantik --}}
+                        <vibe:modal id="demo-basic-modal">
+                            <vibe:modal.header>
+                                <span>{{ __('docs/modal.basic_usage.modal_title') }}</span>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.basic_usage.modal_desc') }}</p>
+                                
+                            </vibe:modal.header>
 
-        <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-            <vibe:button type="button" variant="outline" size="sm" @click="close">
-                {{ __('docs/modal.basic_usage.btn_cancel') }}
-            </vibe:button>
-            <vibe:button type="button" variant="primary" size="sm" @click="close">
-                {{ __('docs/modal.basic_usage.btn_confirm') }}
-            </vibe:button>
-        </div>
-    </div>
-</vibe:modal>
+                            <vibe:modal.content>
+                                <p class="leading-relaxed">
+                                    Struktur modal Vibe UI kini mendukung subkomponen modular yang terstruktur, rapi, dan mudah dikustomisasi.
+                                </p>
+                            </vibe:modal.content>
+
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                    {{ __('docs/modal.basic_usage.btn_cancel') }}
+                                </vibe:button>
+                                <vibe:button type="button" variant="primary" size="sm" @click="close">
+                                    {{ __('docs/modal.basic_usage.btn_confirm') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex items-center justify-center p-4">
@@ -90,30 +93,33 @@
                         </vibe:button>
 
                         <vibe:modal id="demo-basic-modal">
-                            <div class="space-y-4">
-                                <div class="space-y-1.5 pr-6">
-                                    <div class="flex items-center gap-2">
-                                        <span class="inline-flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                                            <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                                            </svg>
-                                        </span>
-                                        <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.basic_usage.modal_title') }}</h3>
-                                    </div>
-                                    <p class="text-sm text-muted-foreground leading-relaxed">
-                                        {{ __('docs/modal.basic_usage.modal_desc') }}
-                                    </p>
+                            <vibe:modal.header>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('docs/modal.basic_usage.modal_title') }}</span>
                                 </div>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.basic_usage.modal_desc') }}</p>
+                                
+                            </vibe:modal.header>
 
-                                <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
-                                        {{ __('docs/modal.basic_usage.btn_cancel') }}
-                                    </vibe:button>
-                                    <vibe:button type="button" variant="primary" size="sm" @click="close">
-                                        {{ __('docs/modal.basic_usage.btn_confirm') }}
-                                    </vibe:button>
-                                </div>
-                            </div>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground leading-relaxed">
+                                    Dialog modal berbasis <em>compound subcomponents</em> ini memiliki header, konten, dan footer yang terisolasi dengan rapi. Anda juga dapat langsung menambahkan custom styling pada dialog modal melalui atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class="..."</code>.
+                                </p>
+                            </vibe:modal.content>
+
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                    {{ __('docs/modal.basic_usage.btn_cancel') }}
+                                </vibe:button>
+                                <vibe:button type="button" variant="primary" size="sm" @click="close">
+                                    {{ __('docs/modal.basic_usage.btn_confirm') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </div>
                 </vibe:preview>
@@ -130,53 +136,46 @@
 
                 <vibe:preview :title="__('docs/modal.sizes.preview_title')">
                     <vibe:preview.code>
-{{-- 1. Small (sm) --}}
-<vibe:modal id="modal-size-sm" maxWidth="sm">
-    <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'sm']) }}</h3>
-        <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'sm']) !!}</p>
-        <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-    </div>
-</vibe:modal>
+                        {{-- 1. Small (sm) --}}
+                        <vibe:modal id="modal-size-sm" maxWidth="sm">
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'sm']) }}</h3>
+                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'sm']) !!}</p>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
+                            </div>
+                        </vibe:modal>
 
-{{-- 2. Standard (2xl - Default) --}}
-<vibe:modal id="modal-size-2xl" maxWidth="2xl">
-    <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '2xl']) }}</h3>
-        <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '2xl']) !!}</p>
-        <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-    </div>
-</vibe:modal>
+                        {{-- 2. Standard (2xl - Default) --}}
+                        <vibe:modal id="modal-size-2xl" maxWidth="2xl">
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '2xl']) }}</h3>
+                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '2xl']) !!}</p>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
+                            </div>
+                        </vibe:modal>
 
-{{-- 3. Extra Large (4xl) --}}
-<vibe:modal id="modal-size-4xl" maxWidth="4xl">
-    <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '4xl']) }}</h3>
-        <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '4xl']) !!}</p>
-        <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-    </div>
-</vibe:modal>
+                        {{-- 3. Extra Large (4xl) --}}
+                        <vibe:modal id="modal-size-4xl" maxWidth="4xl">
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '4xl']) }}</h3>
+                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '4xl']) !!}</p>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
+                            </div>
+                        </vibe:modal>
 
-{{-- 4. Full Width (full) --}}
-<vibe:modal id="modal-size-full" maxWidth="full">
-    <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'full']) }}</h3>
-        <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'full']) !!}</p>
-        <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-    </div>
-</vibe:modal>
+                        {{-- 4. Full Width (full) --}}
+                        <vibe:modal id="modal-size-full" maxWidth="full">
+                            <div class="space-y-4">
+                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'full']) }}</h3>
+                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'full']) !!}</p>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
+                            </div>
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-2 p-4">
                         @php
-                            $sizeDemos = [
-                                ['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'],
-                                ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'],
-                                ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'],
-                                ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'],
-                                ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'],
-                                ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline'],
-                            ];
+                            $sizeDemos = [['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'], ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'], ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'], ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'], ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'], ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline']];
                         @endphp
 
                         @foreach ($sizeDemos as $s)
@@ -218,29 +217,25 @@
 
                 <vibe:preview :title="__('docs/modal.positions.preview_title')">
                     <vibe:preview.code>
-{{-- 1. Posisi Atas (Top) --}}
-<vibe:modal id="modal-pos-top" position="top">
-    ...
-</vibe:modal>
+                        {{-- 1. Posisi Atas (Top) --}}
+                        <vibe:modal id="modal-pos-top" position="top">
+                            ...
+                        </vibe:modal>
 
-{{-- 2. Posisi Tengah (Center - Default) --}}
-<vibe:modal id="modal-pos-center" position="center">
-    ...
-</vibe:modal>
+                        {{-- 2. Posisi Tengah (Center - Default) --}}
+                        <vibe:modal id="modal-pos-center" position="center">
+                            ...
+                        </vibe:modal>
 
-{{-- 3. Posisi Bawah (Bottom) --}}
-<vibe:modal id="modal-pos-bottom" position="bottom">
-    ...
-</vibe:modal>
+                        {{-- 3. Posisi Bawah (Bottom) --}}
+                        <vibe:modal id="modal-pos-bottom" position="bottom">
+                            ...
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-3 p-4">
                         @php
-                            $posDemos = [
-                                ['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'],
-                                ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'],
-                                ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down'],
-                            ];
+                            $posDemos = [['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'], ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'], ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down']];
                         @endphp
 
                         @foreach ($posDemos as $pos)
@@ -279,76 +274,72 @@
 
                 <vibe:preview :title="__('docs/modal.non_dismissible.preview_title')">
                     <vibe:preview.code>
-<vibe:button @click="$dispatch('open-modal', 'modal-static-demo')" variant="destructive" size="sm">
-    {{ __('docs/modal.non_dismissible.btn') }}
-</vibe:button>
+                        <vibe:button @click="$dispatch('open-modal', 'modal-static-demo')" variant="destructive" size="sm">
+                            {{ __('docs/modal.non_dismissible.btn') }}
+                        </vibe:button>
 
-<vibe:modal id="modal-static-demo" :dismissible="false" maxWidth="md">
-    <div class="space-y-4">
-        <div class="flex items-start gap-3">
-            <div class="p-2 rounded-full bg-destructive/10 text-destructive shrink-0 mt-0.5">
-                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                    <line x1="12" y1="9" x2="12" y2="13"/>
-                    <line x1="12" y1="17" x2="12.01" y2="17"/>
-                </svg>
-            </div>
-            <div class="space-y-1">
-                <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.non_dismissible.modal_title') }}</h3>
-                <p class="text-sm text-muted-foreground leading-relaxed">
-                    {{ __('docs/modal.non_dismissible.modal_desc') }}
-                </p>
-            </div>
-        </div>
+                        <vibe:modal id="modal-static-demo" :dismissible="false" maxWidth="md">
+                            <vibe:modal.content>
+                                <div class="flex items-start gap-3">
+                                    <div class="p-2 rounded-full bg-destructive/10 text-destructive shrink-0 mt-0.5">
+                                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                            <line x1="12" y1="9" x2="12" y2="13" />
+                                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                                        </svg>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.non_dismissible.modal_title') }}</h3>
+                                        <p class="text-sm text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
+                                    </div>
+                                </div>
+                            </vibe:modal.content>
 
-        <div class="flex items-center justify-end gap-2 pt-3 border-t border-border">
-            <vibe:button type="button" variant="outline" size="sm" @click="close">
-                {{ __('docs/modal.non_dismissible.btn_cancel') }}
-            </vibe:button>
-            <vibe:button type="button" variant="destructive" size="sm" @click="close">
-                {{ __('docs/modal.non_dismissible.btn_confirm') }}
-            </vibe:button>
-        </div>
-    </div>
-</vibe:modal>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                    {{ __('docs/modal.non_dismissible.btn_cancel') }}
+                                </vibe:button>
+                                <vibe:button type="button" variant="destructive" size="sm" @click="close">
+                                    {{ __('docs/modal.non_dismissible.btn_confirm') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex items-center justify-center p-4">
                         <vibe:button @click="$dispatch('open-modal', 'modal-static-demo')" variant="destructive" size="sm">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                             </svg>
                             {{ __('docs/modal.non_dismissible.btn') }}
                         </vibe:button>
 
                         <vibe:modal id="modal-static-demo" :dismissible="false" maxWidth="md">
-                            <div class="space-y-4">
+                            <vibe:modal.content>
                                 <div class="flex items-start gap-3">
                                     <div class="p-2 rounded-full bg-destructive/10 text-destructive shrink-0 mt-0.5">
                                         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                                            <line x1="12" y1="9" x2="12" y2="13"/>
-                                            <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                            <line x1="12" y1="9" x2="12" y2="13" />
+                                            <line x1="12" y1="17" x2="12.01" y2="17" />
                                         </svg>
                                     </div>
                                     <div class="space-y-1">
                                         <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.non_dismissible.modal_title') }}</h3>
-                                        <p class="text-sm text-muted-foreground leading-relaxed">
-                                            {{ __('docs/modal.non_dismissible.modal_desc') }}
-                                        </p>
+                                        <p class="text-sm text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
                                     </div>
                                 </div>
+                            </vibe:modal.content>
 
-                                <div class="flex items-center justify-end gap-2 pt-3 border-t border-border">
-                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
-                                        {{ __('docs/modal.non_dismissible.btn_cancel') }}
-                                    </vibe:button>
-                                    <vibe:button type="button" variant="destructive" size="sm" @click="close">
-                                        {{ __('docs/modal.non_dismissible.btn_confirm') }}
-                                    </vibe:button>
-                                </div>
-                            </div>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                    {{ __('docs/modal.non_dismissible.btn_cancel') }}
+                                </vibe:button>
+                                <vibe:button type="button" variant="destructive" size="sm" @click="close">
+                                    {{ __('docs/modal.non_dismissible.btn_confirm') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </div>
                 </vibe:preview>
@@ -365,50 +356,40 @@
 
                 <vibe:preview :title="__('docs/modal.form_modal.preview_title')">
                     <vibe:preview.code>
-<vibe:button @click="$dispatch('open-modal', 'modal-form-demo')" variant="primary" size="sm">
-    {{ __('docs/modal.form_modal.btn') }}
-</vibe:button>
+                        <vibe:button @click="$dispatch('open-modal', 'modal-form-demo')" variant="primary" size="sm">
+                            {{ __('docs/modal.form_modal.btn') }}
+                        </vibe:button>
 
-<vibe:modal id="modal-form-demo" maxWidth="lg">
-    <div class="space-y-5">
-        <div class="space-y-1 pr-6">
-            <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.form_modal.modal_title') }}</h3>
-            <p class="text-sm text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
-        </div>
+                        <vibe:modal id="modal-form-demo" maxWidth="lg">
+                            <form @submit.prevent="close">
+                                <vibe:modal.header>
+                                    <span>{{ __('docs/modal.form_modal.modal_title') }}</span>
+                                    <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
+                                    
+                                </vibe:modal.header>
 
-        <form class="space-y-4" @submit.prevent="close">
-            <vibe:input 
-                name="user_name" 
-                :label="__('docs/modal.form_modal.name_label')" 
-                :placeholder="__('docs/modal.form_modal.name_placeholder')" 
-                required 
-            />
+                                <vibe:modal.content class="space-y-4">
+                                    <vibe:input name="user_name" :label="__('docs/modal.form_modal.field_name')" :placeholder="__('docs/modal.form_modal.field_name_placeholder')" required />
 
-            <vibe:input 
-                name="user_email" 
-                type="email" 
-                :label="__('docs/modal.form_modal.email_label')" 
-                :placeholder="__('docs/modal.form_modal.email_placeholder')" 
-                required 
-            />
+                                    <vibe:input name="user_email" type="email" :label="__('docs/modal.form_modal.field_email')" :placeholder="__('docs/modal.form_modal.field_email_placeholder')" required />
 
-            <vibe:select name="user_role" :label="__('docs/modal.form_modal.role_label')" :placeholder="__('docs/modal.form_modal.role_placeholder')">
-                <vibe:select.option value="admin">{{ __('docs/modal.form_modal.role_admin') }}</vibe:select.option>
-                <vibe:select.option value="editor">{{ __('docs/modal.form_modal.role_editor') }}</vibe:select.option>
-                <vibe:select.option value="user">{{ __('docs/modal.form_modal.role_user') }}</vibe:select.option>
-            </vibe:select>
+                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" placeholder="Pilih peran...">
+                                        <vibe:select.option value="admin">{{ __('docs/modal.form_modal.role_admin') }}</vibe:select.option>
+                                        <vibe:select.option value="editor">{{ __('docs/modal.form_modal.role_editor') }}</vibe:select.option>
+                                        <vibe:select.option value="viewer">{{ __('docs/modal.form_modal.role_viewer') }}</vibe:select.option>
+                                    </vibe:select>
+                                </vibe:modal.content>
 
-            <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-                <vibe:button type="button" variant="outline" size="sm" @click="close">
-                    {{ __('docs/modal.form_modal.btn_cancel') }}
-                </vibe:button>
-                <vibe:button type="submit" variant="primary" size="sm">
-                    {{ __('docs/modal.form_modal.btn_submit') }}
-                </vibe:button>
-            </div>
-        </form>
-    </div>
-</vibe:modal>
+                                <vibe:modal.footer>
+                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                        {{ __('docs/modal.form_modal.btn_cancel') }}
+                                    </vibe:button>
+                                    <vibe:button type="submit" variant="primary" size="sm">
+                                        {{ __('docs/modal.form_modal.btn_submit') }}
+                                    </vibe:button>
+                                </vibe:modal.footer>
+                            </form>
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex items-center justify-center p-4">
@@ -423,44 +404,34 @@
                         </vibe:button>
 
                         <vibe:modal id="modal-form-demo" maxWidth="lg">
-                            <div class="space-y-5">
-                                <div class="space-y-1 pr-6">
-                                    <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.form_modal.modal_title') }}</h3>
-                                    <p class="text-sm text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
-                                </div>
+                            <form @submit.prevent="close">
+                                <vibe:modal.header>
+                                    <span>{{ __('docs/modal.form_modal.modal_title') }}</span>
+                                    <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
+                                    
+                                </vibe:modal.header>
 
-                                <form class="space-y-4" @submit.prevent="close">
-                                    <vibe:input 
-                                        name="user_name" 
-                                        :label="__('docs/modal.form_modal.name_label')" 
-                                        :placeholder="__('docs/modal.form_modal.name_placeholder')" 
-                                        required 
-                                    />
+                                <vibe:modal.content class="space-y-4">
+                                    <vibe:input name="user_name" :label="__('docs/modal.form_modal.field_name')" :placeholder="__('docs/modal.form_modal.field_name_placeholder')" required />
 
-                                    <vibe:input 
-                                        name="user_email" 
-                                        type="email" 
-                                        :label="__('docs/modal.form_modal.email_label')" 
-                                        :placeholder="__('docs/modal.form_modal.email_placeholder')" 
-                                        required 
-                                    />
+                                    <vibe:input name="user_email" type="email" :label="__('docs/modal.form_modal.field_email')" :placeholder="__('docs/modal.form_modal.field_email_placeholder')" required />
 
-                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.role_label')" :placeholder="__('docs/modal.form_modal.role_placeholder')">
+                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" placeholder="Pilih peran...">
                                         <vibe:select.option value="admin">{{ __('docs/modal.form_modal.role_admin') }}</vibe:select.option>
                                         <vibe:select.option value="editor">{{ __('docs/modal.form_modal.role_editor') }}</vibe:select.option>
-                                        <vibe:select.option value="user">{{ __('docs/modal.form_modal.role_user') }}</vibe:select.option>
+                                        <vibe:select.option value="viewer">{{ __('docs/modal.form_modal.role_viewer') }}</vibe:select.option>
                                     </vibe:select>
+                                </vibe:modal.content>
 
-                                    <div class="flex items-center justify-end gap-2 pt-4 border-t border-border">
-                                        <vibe:button type="button" variant="outline" size="sm" @click="close">
-                                            {{ __('docs/modal.form_modal.btn_cancel') }}
-                                        </vibe:button>
-                                        <vibe:button type="submit" variant="primary" size="sm">
-                                            {{ __('docs/modal.form_modal.btn_submit') }}
-                                        </vibe:button>
-                                    </div>
-                                </form>
-                            </div>
+                                <vibe:modal.footer>
+                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                        {{ __('docs/modal.form_modal.btn_cancel') }}
+                                    </vibe:button>
+                                    <vibe:button type="submit" variant="primary" size="sm">
+                                        {{ __('docs/modal.form_modal.btn_submit') }}
+                                    </vibe:button>
+                                </vibe:modal.footer>
+                            </form>
                         </vibe:modal>
                     </div>
                 </vibe:preview>
@@ -477,30 +448,35 @@
 
                 <vibe:preview :title="__('docs/modal.persist.preview_title')">
                     <vibe:preview.code>
-{{-- 1. Modal dengan persistensi status: tetap terbuka saat browser direfresh jika belum ditutup --}}
-<vibe:button @click="$dispatch('open-modal', 'modal-persist-demo')" variant="outline" size="sm">
-    Buka Modal Persisten
-</vibe:button>
+                        {{-- 1. Modal dengan persistensi status: tetap terbuka saat browser direfresh jika belum ditutup --}}
+                        <vibe:button @click="$dispatch('open-modal', 'modal-persist-demo')" variant="outline" size="sm">
+                            Buka Modal Persisten
+                        </vibe:button>
 
-<vibe:modal id="modal-persist-demo" :persist="true" maxWidth="lg">
-    <div class="space-y-4">
-        <h3 class="text-lg font-semibold">{{ __('docs/modal.persist.modal_title') }}</h3>
-        <p class="text-sm text-muted-foreground">
-            {{ __('docs/modal.persist.modal_desc') }}
-        </p>
+                        <vibe:modal id="modal-persist-demo" :persist="true" maxWidth="lg">
+                            <vibe:modal.header>
+                                <span>{{ __('docs/modal.persist.modal_title') }}</span>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.persist.modal_desc') }}</p>
+                                
+                            </vibe:modal.header>
 
-        <div class="flex justify-end pt-3 border-t border-border">
-            <vibe:button type="button" variant="primary" size="sm" @click="close">
-                {{ __('docs/modal.persist.btn_understand') }}
-            </vibe:button>
-        </div>
-    </div>
-</vibe:modal>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">
+                                    Status modal disimpan otomatis di LocalStorage. Refresh browser tidak akan menghilangkan modal ini sampai Anda menutupnya.
+                                </p>
+                            </vibe:modal.content>
 
-{{-- 2. Modal pengumuman sekali tampil (langsung muncul di awal, tidak muncul lagi setelah ditutup) --}}
-<vibe:modal id="modal-announcement" :show="true" :persist="true" maxWidth="lg">
-    ...
-</vibe:modal>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="primary" size="sm" @click="close">
+                                    {{ __('docs/modal.persist.btn_understand') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
+
+                        {{-- 2. Modal pengumuman sekali tampil (langsung muncul di awal, tidak muncul lagi setelah ditutup) --}}
+                        <vibe:modal id="modal-announcement" :show="true" :persist="true" maxWidth="lg">
+                            ...
+                        </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-3 p-4" x-data="{
@@ -521,53 +497,56 @@
                     }">
                         <vibe:button @click="$dispatch('open-modal', 'modal-persist-demo')" variant="outline" size="sm">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="m3 11 18-5v12L3 14v-3z"/>
-                                <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+                                <path d="m3 11 18-5v12L3 14v-3z" />
+                                <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
                             </svg>
                             {{ __('docs/modal.persist.btn') }}
                         </vibe:button>
 
                         <vibe:button @click="resetPersist" variant="ghost" size="sm" class="text-muted-foreground hover:text-foreground">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-                                <path d="M3 3v5h5"/>
+                                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                <path d="M3 3v5h5" />
                             </svg>
                             {{ __('docs/modal.persist.reset_btn') }}
                         </vibe:button>
 
                         <vibe:modal id="modal-persist-demo" :persist="true" maxWidth="lg">
-                            <div class="space-y-4">
+                            <vibe:modal.header>
                                 <div class="flex items-center gap-2">
-                                     <span class="inline-flex size-7 items-center justify-center rounded-lg bg-info/10 text-info">
-                                         <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                             <circle cx="12" cy="12" r="10"/>
-                                             <line x1="12" y1="16" x2="12" y2="12"/>
-                                             <line x1="12" y1="8" x2="12.01" y2="8"/>
-                                         </svg>
-                                     </span>
-                                    <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.persist.modal_title') }}</h3>
+                                    <span class="inline-flex size-7 items-center justify-center rounded-lg bg-info/10 text-info">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <line x1="12" y1="16" x2="12" y2="12" />
+                                            <line x1="12" y1="8" x2="12.01" y2="8" />
+                                        </svg>
+                                    </span>
+                                    <span>{{ __('docs/modal.persist.modal_title') }}</span>
                                 </div>
-                                <p class="text-sm text-muted-foreground leading-relaxed">
-                                    {{ __('docs/modal.persist.modal_desc') }}
-                                </p>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.persist.modal_desc') }}</p>
+                                
+                            </vibe:modal.header>
+
+                            <vibe:modal.content>
                                 <div class="p-3 rounded-lg bg-muted/40 border border-border text-xs text-muted-foreground">
-                                    {!! __('docs/modal.persist.reload_tip') !!}
+                                    💡 <strong>Uji Coba:</strong> Jangan tutup modal ini, coba tekan tombol refresh browser (F5 / Ctrl+R). Modal akan otomatis tetap terbuka kembali!
                                 </div>
-                                <div class="flex items-center justify-end pt-3 border-t border-border">
-                                    <vibe:button type="button" variant="primary" size="sm" @click="close">
-                                        {{ __('docs/modal.persist.btn_understand') }}
-                                    </vibe:button>
-                                </div>
-                            </div>
+                            </vibe:modal.content>
+
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="primary" size="sm" @click="close">
+                                    {{ __('docs/modal.persist.btn_understand') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </div>
                 </vibe:preview>
 
                 <div class="p-4 rounded-xl border border-border bg-card/50 text-xs text-muted-foreground flex items-start gap-3">
                     <svg class="size-5 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="12" y1="16" x2="12" y2="12"/>
-                        <line x1="12" y1="8" x2="12.01" y2="8"/>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12.01" y2="8" />
                     </svg>
                     <div>
                         {!! __('docs/modal.persist.announcement_note') !!}
@@ -591,31 +570,31 @@
                             {{ __('docs/modal.livewire.backend_title') }}
                         </h3>
                         <vibe:preview.code>
-namespace App\Livewire;
+                            namespace App\Livewire;
 
-use Livewire\Component;
+                            use Livewire\Component;
 
-class UserManagement extends Component
-{
-    public function openCreateModal(): void
-    {
-        // Membuka modal dari backend PHP
-        $this->dispatch('open-modal', 'create-user-modal');
-    }
+                            class UserManagement extends Component
+                            {
+                            public function openCreateModal(): void
+                            {
+                            // Membuka modal dari backend PHP
+                            $this->dispatch('open-modal', 'create-user-modal');
+                            }
 
-    public function saveUser(): void
-    {
-        // Logika simpan data...
-        
-        // Menutup modal setelah berhasil
-        $this->dispatch('close-modal', 'create-user-modal');
-    }
+                            public function saveUser(): void
+                            {
+                            // Logika simpan data...
 
-    public function render()
-    {
-        return view('livewire.user-management');
-    }
-}
+                            // Menutup modal setelah berhasil
+                            $this->dispatch('close-modal', 'create-user-modal');
+                            }
+
+                            public function render()
+                            {
+                            return view('livewire.user-management');
+                            }
+                            }
                         </vibe:preview.code>
                     </div>
 
@@ -625,31 +604,36 @@ class UserManagement extends Component
                             {{ __('docs/modal.livewire.frontend_title') }}
                         </h3>
                         <vibe:preview.code>
-<div>
-    {{-- Trigger memanggil method Livewire --}}
-    <vibe:button wire:click="openCreateModal" variant="primary" size="sm">
-        Tambah Pengguna Baru
-    </vibe:button>
+                            <div>
+                                {{-- Trigger memanggil method Livewire --}}
+                                <vibe:button wire:click="openCreateModal" variant="primary" size="sm">
+                                    Tambah Pengguna Baru
+                                </vibe:button>
 
-    {{-- Modal yang siap menerima event open-modal dari Livewire --}}
-    <vibe:modal id="create-user-modal">
-        <form wire:submit="saveUser" class="space-y-4">
-            <h3 class="text-lg font-semibold text-foreground">Form Pengguna</h3>
+                                {{-- Modal yang siap menerima event open-modal dari Livewire --}}
+                                <vibe:modal id="create-user-modal">
+                                    <form wire:submit="saveUser">
+                                        <vibe:modal.header>
+                                            <span>Form Pengguna</span>
+                                            
+                                        </vibe:modal.header>
 
-            <vibe:input wire:model="name" label="Nama" required />
-            <vibe:input wire:model="email" type="email" label="Email" required />
+                                        <vibe:modal.content class="space-y-4">
+                                            <vibe:input wire:model="name" label="Nama" required />
+                                            <vibe:input wire:model="email" type="email" label="Email" required />
+                                        </vibe:modal.content>
 
-            <div class="flex justify-end gap-2 pt-4 border-t border-border">
-                <vibe:button type="button" variant="outline" size="sm" @click="close">
-                    Batal
-                </vibe:button>
-                <vibe:button type="submit" variant="primary" size="sm">
-                    Simpan
-                </vibe:button>
-            </div>
-        </form>
-    </vibe:modal>
-</div>
+                                        <vibe:modal.footer>
+                                            <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                                Batal
+                                            </vibe:button>
+                                            <vibe:button type="submit" variant="primary" size="sm">
+                                                Simpan
+                                            </vibe:button>
+                                        </vibe:modal.footer>
+                                    </form>
+                                </vibe:modal>
+                            </div>
                         </vibe:preview.code>
                     </div>
                 </div>
@@ -664,28 +648,56 @@ class UserManagement extends Component
                     </p>
                 </div>
 
-                {{-- Props Table --}}
-                <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
-                    <table class="w-full text-left text-sm">
-                        <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                            <tr>
-                                <th class="px-4 py-3">{{ __('docs/modal.props.th_prop') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/modal.props.th_type') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/modal.props.th_default') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/modal.props.th_desc') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border font-mono text-xs">
-                            @foreach (__('docs/modal.props.items') as $item)
-                                <tr class="hover:bg-muted/20 transition-colors">
-                                    <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                    <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                    <td class="px-4 py-3 text-foreground">{{ $item['default'] }}</td>
-                                    <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
+                {{-- Subcomponents Anatomy Table --}}
+                <div class="space-y-2">
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.props.subcomponents_title') }}</h3>
+                    <p class="text-sm text-muted-foreground">{{ __('docs/modal.props.subcomponents_desc') }}</p>
+
+                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs mt-2">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
+                                <tr>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_sub') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_sub_desc') }}</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="divide-y divide-border text-xs">
+                                @foreach (__('docs/modal.props.subcomponents') as $sub)
+                                    <tr class="hover:bg-muted/20 transition-colors">
+                                        <td class="px-4 py-3 font-mono font-semibold text-primary">{{ $sub['name'] }}</td>
+                                        <td class="px-4 py-3 text-muted-foreground">{{ $sub['desc'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                {{-- Props Table --}}
+                <div class="space-y-2">
+                    <h3 class="text-base font-semibold text-foreground">Daftar Properti (Props)</h3>
+                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs mt-2">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
+                                <tr>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_prop') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_type') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_default') }}</th>
+                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_desc') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border font-mono text-xs">
+                                @foreach (__('docs/modal.props.items') as $item)
+                                    <tr class="hover:bg-muted/20 transition-colors">
+                                        <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
+                                        <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
+                                        <td class="px-4 py-3 text-foreground">{{ $item['default'] }}</td>
+                                        <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 {{-- Window Events Table --}}

@@ -25,9 +25,9 @@
                 </vibe:button>
             </vibe:sheet.header>
 
-            <vibe:sheet.body id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
+            <vibe:sheet.content id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
                 <x-partials.sidebar-classic-menu />
-            </vibe:sheet.body>
+            </vibe:sheet.content>
 
             <vibe:sheet.footer class="px-0 py-3">
 
@@ -61,7 +61,7 @@
                         </div>
                     </x-slot:trigger>
 
-                    <vibe:dropdown.body align="top" width="64">
+                    <vibe:dropdown.content align="top" width="64">
                         <div class="flex flex-col gap-0.5">
                             <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -164,7 +164,7 @@
                                 Logout
                             </vibe:button>
                         </div>
-                    </vibe:dropdown.body>
+                    </vibe:dropdown.content>
                 </vibe:dropdown>
             </vibe:sheet.footer>
 
@@ -257,7 +257,7 @@
                 <vibe:sheet.close />
             </vibe:sheet.header>
 
-            <vibe:sheet.body class="p-2 divide-y divide-border">
+            <vibe:sheet.content class="p-2 divide-y divide-border">
                 <!-- Notification Item 1 -->
                 <div class="p-3 rounded-lg hover:bg-accent/60 transition-colors cursor-pointer flex flex-col gap-1">
                     <div class="flex items-center justify-between">
@@ -299,7 +299,7 @@
                         Backup harian database telah berhasil disimpan dengan aman.
                     </p>
                 </div>
-            </vibe:sheet.body>
+            </vibe:sheet.content>
 
             <vibe:sheet.footer class="p-3">
                 <vibe:button variant="outline" size="sm" class="w-full text-xs">

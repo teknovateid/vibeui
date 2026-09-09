@@ -9,12 +9,12 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Penggunaan Dasar',
-        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:sheet&gt;</code> dilengkapi dengan subkomponen semantik: <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.header&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.body&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.footer&gt;</code>, dan <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.close&gt;</code>. Untuk mengendalikannya, cukup kirimkan event Alpine: <code class="font-mono text-xs text-foreground">$dispatch(\'toggle-sheet\', \'sheet-id\')</code>.',
+        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:sheet&gt;</code> dilengkapi dengan subkomponen semantik: <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.header&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.content&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.footer&gt;</code>, dan <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.close&gt;</code>. Untuk mengendalikannya, cukup kirimkan event Alpine: <code class="font-mono text-xs text-foreground">$dispatch(\'toggle-sheet\', \'sheet-id\')</code>.',
         'preview_title' => 'Sheet Sisi Kanan (Drawer)',
         'btn_toggle' => 'Toggle Panel Sheet',
         'btn_open' => 'Buka Sheet',
         'header_title' => 'Detail Informasi',
-        'body_text' => 'Ini adalah konten di dalam subkomponen <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.body&gt;</code>. Area ini otomatis memiliki scroll vertikal (<code class="font-mono text-xs text-foreground">overflow-y-auto</code>) dan fleksibel mengisi ruang yang tersisa.',
+        'body_text' => 'Ini adalah konten di dalam subkomponen <code class="font-mono text-xs text-foreground">&lt;vibe:sheet.content&gt;</code>. Area ini otomatis memiliki scroll vertikal (<code class="font-mono text-xs text-foreground">overflow-y-auto</code>) dan fleksibel mengisi ruang yang tersisa.',
         'footer_cancel' => 'Tutup',
         'footer_save' => 'Simpan Data',
     ],
@@ -248,7 +248,7 @@ return [
                 'desc' => 'Bagian atas sheet yang memuat judul, deskripsi, atau aksi.',
             ],
             [
-                'name' => '<vibe:sheet.body>',
+                'name' => '<vibe:sheet.content>',
                 'desc' => 'Area konten utama dengan scroll vertikal otomatis (overflow-y-auto).',
             ],
             [

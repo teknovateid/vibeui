@@ -49,8 +49,8 @@
 
     {{-- Modal Hasil Testing --}}
     <vibe:modal :id="$modalId" :show="session()->has('submitted_data')" maxWidth="2xl">
-        <div class="space-y-5">
-            {{-- Header Modal --}}
+        {{-- Header Modal --}}
+        <vibe:modal.header>
             <div class="flex items-start gap-3">
                 <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-success/15 text-success">
                     <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,15 +59,18 @@
                 </span>
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h3 class="text-lg font-bold text-foreground">Form Berhasil Diposting (Controller Test)</h3>
+                        <span>Form Berhasil Diposting (Controller Test)</span>
                         <vibe:badge variant="success" size="sm">200 OK • AJAX</vibe:badge>
                     </div>
-                    <p class="text-xs text-muted-foreground leading-relaxed">
+                    <p class="text-sm font-normal text-muted-foreground">
                         Data formulir berhasil diterima oleh <code class="px-1.5 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground font-semibold">FormController::store()</code> via <code class="px-1.5 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground font-semibold">$request->all()</code> tanpa refresh halaman.
                     </p>
                 </div>
             </div>
+            <vibe:modal.close class="absolute top-4 right-4" />
+        </vibe:modal.header>
 
+        <vibe:modal.content>
             <template x-if="!submittedData || Object.keys(submittedData).length === 0">
                 <div class="py-8 text-center space-y-2 rounded-xl border border-dashed border-border bg-muted/20">
                     <p class="text-sm font-semibold text-foreground">Belum ada data formulir yang dikirim.</p>
@@ -95,73 +98,49 @@
                             class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                             :class="activeTab === 'table' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'"
                         >
-                            Ringkasan Field (<span x-text="Object.keys(submittedData || {}).length"></span>)
+                            Tabel Key-Value
                         </button>
                     </div>
 
-                    {{-- JSON View --}}
-                    <div x-show="activeTab === 'json'" class="space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
-                                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="m18 16 4-4-4-4" />
-                                    <path d="m6 8-4 4 4 4" />
-                                    <path d="m14.5 4-5 16" />
-                                </svg>
-                                Payload $request->all() (JSON)
-                            </span>
-                            <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]" x-text="`${Object.keys(submittedData || {}).length} Fields`"></vibe:badge>
-                        </div>
-                        <div class="relative">
-                            <pre class="bg-muted/80 border border-border p-4 rounded-xl text-xs font-mono overflow-x-auto text-foreground max-h-60 leading-relaxed vibe-scrollbar"><code x-text="JSON.stringify(submittedData, null, 2)">{{ json_encode(session('submitted_data'), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) }}</code></pre>
-                        </div>
+                    {{-- Tab 1: JSON Viewer --}}
+                    <div x-show="activeTab === 'json'" class="relative rounded-xl border border-border bg-background p-4 text-xs font-mono text-foreground overflow-x-auto shadow-inner max-h-72">
+                        <pre><code x-text="JSON.stringify(submittedData, null, 2)"></code></pre>
                     </div>
 
-                    {{-- Table View --}}
-                    <div x-show="activeTab === 'table'" class="space-y-2">
-                        <span class="text-xs font-semibold text-foreground uppercase tracking-wider flex items-center gap-1.5">
-                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="18" height="18" x="3" y="3" rx="2" />
-                                <path d="M3 9h18" />
-                                <path d="M3 15h18" />
-                                <path d="M9 3v18" />
-                            </svg>
-                            Tabel Field & Nilai Yang Diterima
-                        </span>
-                        <div class="rounded-xl border border-border overflow-hidden max-h-60 overflow-y-auto vibe-scrollbar">
-                            <table class="w-full text-xs text-left">
-                                <thead class="bg-muted/50 border-b border-border text-muted-foreground font-semibold uppercase sticky top-0">
-                                    <tr>
-                                        <th class="px-3 py-2">Nama Field (Key)</th>
-                                        <th class="px-3 py-2">Nilai Masukan (Value)</th>
+                    {{-- Tab 2: Table Viewer --}}
+                    <div x-show="activeTab === 'table'" class="rounded-xl border border-border overflow-hidden text-xs">
+                        <table class="w-full text-left">
+                            <thead class="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
+                                <tr>
+                                    <th class="px-3 py-2">Field (Key)</th>
+                                    <th class="px-3 py-2">Nilai (Value)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-border">
+                                <template x-for="(val, key) in (submittedData || {})" :key="key">
+                                    <tr class="hover:bg-muted/20 transition-colors">
+                                        <td class="px-3 py-2 font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></td>
+                                        <td class="px-3 py-2 font-mono text-muted-foreground break-all">
+                                            <span x-show="key === '_token'" class="text-muted-foreground/60 italic">(CSRF Token Valid)</span>
+                                            <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? 'null / kosong' : val)"></span>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody class="divide-y divide-border">
-                                    <template x-for="(val, key) in (submittedData || {})" :key="key">
-                                        <tr class="hover:bg-muted/20 transition-colors">
-                                            <td class="px-3 py-2 font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></td>
-                                            <td class="px-3 py-2 font-mono text-muted-foreground break-all">
-                                                <span x-show="key === '_token'" class="text-muted-foreground/60 italic">(CSRF Token Valid)</span>
-                                                <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? 'null / kosong' : val)"></span>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
+                                </template>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </template>
+        </vibe:modal.content>
 
-            {{-- Footer Modal --}}
-            <div class="flex items-center justify-between pt-4 border-t border-border">
-                <p class="text-[11px] text-muted-foreground">
-                    Waktu respons: <span class="font-mono text-foreground font-medium" x-text="submittedAt || '{{ session('submitted_at', '') }}'"></span>
-                </p>
-                <vibe:button type="button" variant="primary" size="sm" @click="close">
-                    Tutup Modal
-                </vibe:button>
-            </div>
-        </div>
+        {{-- Footer Modal --}}
+        <vibe:modal.footer class="justify-between">
+            <p class="text-[11px] text-muted-foreground">
+                Waktu respons: <span class="font-mono text-foreground font-medium" x-text="submittedAt || '{{ session('submitted_at', '') }}'"></span>
+            </p>
+            <vibe:button type="button" variant="primary" size="sm" @click="close">
+                Tutup Modal
+            </vibe:button>
+        </vibe:modal.footer>
     </vibe:modal>
 </div>

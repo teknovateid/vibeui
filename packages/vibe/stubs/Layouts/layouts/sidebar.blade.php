@@ -15,7 +15,7 @@
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
                     {{ substr(config('app.name'), 0, 1) }}
                 </div>
-                <vibe:button variant="ghost" class="p-2 transition-colors block minified:hidden" @click="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
+                <vibe:button variant="ghost" class="md:hidden p-2 transition-colors block minified:hidden" @click="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                     <div class="flex items-center justify-center">
                         <!-- Icon when expanded -->
                         <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
@@ -25,9 +25,9 @@
                 </vibe:button>
             </vibe:sheet.header>
 
-            <vibe:sheet.body id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
+            <vibe:sheet.content id="sidebar-menu-body" class="pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar">
                 <x-partials.sidebar-menu />
-            </vibe:sheet.body>
+            </vibe:sheet.content>
 
             <vibe:sheet.footer class="px-0 py-3">
 
@@ -61,7 +61,7 @@
                         </div>
                     </x-slot:trigger>
 
-                    <vibe:dropdown.body align="top" width="64">
+                    <vibe:dropdown.content align="top" width="64">
                         <div class="flex flex-col gap-0.5">
                             <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -164,7 +164,7 @@
                                 Logout
                             </vibe:button>
                         </div>
-                    </vibe:dropdown.body>
+                    </vibe:dropdown.content>
                 </vibe:dropdown>
             </vibe:sheet.footer>
 
@@ -173,21 +173,14 @@
         <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" class="bg-header text-header-foreground border-b border-header-border shadow-none" size="sm">
                 <vibe:header.heading class="gap-2 flex items-center">
-                    <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
+                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
                             <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M11.9426 1.25H12.0574C14.3658 1.24999 16.1748 1.24998 17.5863 1.43975C19.031 1.63399 20.1711 2.03933 21.0659 2.93414C21.9607 3.82895 22.366 4.96897 22.5603 6.41371C22.75 7.82519 22.75 9.63423 22.75 11.9426V12.0574C22.75 14.3658 22.75 16.1748 22.5603 17.5863C22.366 19.031 21.9607 20.1711 21.0659 21.0659C20.1711 21.9607 19.031 22.366 17.5863 22.5603C16.1748 22.75 14.3658 22.75 12.0574 22.75H11.9426C9.63423 22.75 7.82519 22.75 6.41371 22.5603C4.96897 22.366 3.82895 21.9607 2.93414 21.0659C2.03933 20.1711 1.63399 19.031 1.43975 17.5863C1.24998 16.1748 1.24999 14.3658 1.25 12.0574V11.9426C1.24999 9.63423 1.24998 7.82519 1.43975 6.41371C1.63399 4.96897 2.03933 3.82895 2.93414 2.93414C3.82895 2.03933 4.96897 1.63399 6.41371 1.43975C7.82519 1.24998 9.63423 1.24999 11.9426 1.25ZM6.61358 2.92637C5.33517 3.09825 4.56445 3.42514 3.9948 3.9948C3.42514 4.56445 3.09825 5.33517 2.92637 6.61358C2.75159 7.91356 2.75 9.62177 2.75 12C2.75 14.3782 2.75159 16.0864 2.92637 17.3864C3.09825 18.6648 3.42514 19.4355 3.9948 20.0052C2.05749 19.4355 20.9018 18.6648 21.0736 17.3864C21.2484 16.0864 21.25 14.3782 21.25 12C21.25 9.62177 21.2484 7.91356 21.0736 6.61358C20.9018 5.33517 20.5749 4.56445 20.0052 3.9948C19.4355 3.42514 18.6648 3.09825 17.3864 2.92637C16.0864 2.75159 14.3782 2.75 12 2.75C9.62177 2.75 7.91356 2.75159 6.61358 2.92637ZM14.0303 8.46967C14.3232 8.76256 14.3232 8.76256 14.0303 8.46967L11.5607 12L14.0303 14.4697C14.3232 14.7626 14.3232 15.2374 14.0303 15.5303C13.7374 15.8232 13.2626 15.8232 12.9697 15.5303L9.96967 12.5303C9.67678 12.2374 9.67678 11.7626 9.96967 11.4697L12.9697 8.46967C13.2626 8.17678 13.7374 8.17678 14.0303 8.46967Z" fill="currentColor" />
                             </svg>
                         </div>
                     </vibe:button>
-                </vibe:header.heading>
-
-                <vibe:header.actions class="items-center h-full relative gap-1.5">
-                    <!-- Search Trigger Button -->
-                    <vibe:button type="button" 
-                            @click="$dispatch('open-modal', 'global-search-modal')" 
-                            class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" 
-                            title="Pencarian Cepat (⌘K / Ctrl+K)">
+                    <vibe:button type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
                         <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -197,13 +190,9 @@
                             <span class="text-xs">⌘</span>K
                         </kbd>
                     </vibe:button>
-                    <vibe:button variant="ghost" class="p-2 sm:hidden rounded-full" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
-                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
-                    </vibe:button>
+                </vibe:header.heading>
 
+                <vibe:header.actions class="items-center h-full relative gap-1.5">
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {
@@ -254,7 +243,7 @@
                 <vibe:sheet.close />
             </vibe:sheet.header>
 
-            <vibe:sheet.body class="p-2 divide-y divide-border">
+            <vibe:sheet.content class="p-2 divide-y divide-border">
                 <!-- Notification Item 1 -->
                 <div class="p-3 rounded-lg hover:bg-accent/60 transition-colors cursor-pointer flex flex-col gap-1">
                     <div class="flex items-center justify-between">
@@ -296,7 +285,7 @@
                         Backup harian database telah berhasil disimpan dengan aman.
                     </p>
                 </div>
-            </vibe:sheet.body>
+            </vibe:sheet.content>
 
             <vibe:sheet.footer class="p-3">
                 <vibe:button variant="outline" size="sm" class="w-full text-xs">

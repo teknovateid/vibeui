@@ -9,7 +9,7 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Penggunaan Dasar',
-        'desc' => 'Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:dropdown&gt;</code> dengan slot <code class="font-mono text-xs text-foreground">&lt;x-slot:trigger&gt;</code> untuk elemen pemicu, dan <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.body&gt;</code> yang memuat daftar <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.item&gt;</code>.',
+        'desc' => 'Gunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:dropdown&gt;</code> dengan slot <code class="font-mono text-xs text-foreground">&lt;x-slot:trigger&gt;</code> untuk elemen pemicu, dan <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.content&gt;</code> yang memuat daftar <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.item&gt;</code>.',
         'preview_title' => 'Menu Dropdown Standar',
         'trigger_btn' => 'Pilihan Menu',
         'account' => 'Pengaturan Akun',

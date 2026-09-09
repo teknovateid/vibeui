@@ -17,7 +17,7 @@
             </button>
         </vibe:dropdown.trigger>
 
-        <vibe:dropdown.body align="right" width="min">
+        <vibe:dropdown.content align="right" width="min">
             <div class="flex flex-col gap-0.5 min-w-18">
                 @foreach ($this->getPerPageAccepted() as $item)
                     @php($isCurrent = (int)$this->perPage === (int)$item)
@@ -31,6 +31,6 @@
                     </button>
                 @endforeach
             </div>
-        </vibe:dropdown.body>
+        </vibe:dropdown.content>
     </vibe:dropdown>
 </div>

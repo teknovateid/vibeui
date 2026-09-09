@@ -9,11 +9,11 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Basic Usage',
-        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:modal&gt;</code> component with a unique <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">id</code>. Open it from any button or script by dispatching the Alpine window event <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$dispatch(\'open-modal\', \'modal-id\')</code>.',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:modal&gt;</code> component paired with semantic subcomponents: <code class="font-mono text-xs text-foreground">&lt;vibe:modal.header&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:modal.content&gt;</code>, <code class="font-mono text-xs text-foreground">&lt;vibe:modal.footer&gt;</code>, and <code class="font-mono text-xs text-foreground">&lt;vibe:modal.close&gt;</code>. Open it from any trigger by dispatching the Alpine window event <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$dispatch(\'open-modal\', \'modal-id\')</code>.',
         'preview_title' => 'Simple Modal',
         'btn' => 'Open Simple Modal',
         'modal_title' => 'Welcome to Vibe UI',
-        'modal_desc' => 'This is a standard modal dialog featuring smooth entry transitions, an elegant blurred backdrop, and a top-right dismiss button.',
+        'modal_desc' => 'This is a clean, structured modal dialog built with compound subcomponents, smooth animations, and an elegant blurred backdrop.',
         'btn_cancel' => 'Close',
         'btn_confirm' => 'Got It',
     ],
@@ -108,6 +108,28 @@ return [
     'props' => [
         'title' => 'Properties & API Reference',
         'desc' => 'List of configurable attributes and properties available for the <code class="font-mono text-xs text-foreground">&lt;vibe:modal&gt;</code> component.',
+        'subcomponents_title' => 'Modal Subcomponents Anatomy',
+        'subcomponents_desc' => 'Semantic subcomponents available to build structured, accessible modal dialogs.',
+        'th_sub' => 'Subcomponent',
+        'th_sub_desc' => 'Role & Description',
+        'subcomponents' => [
+            [
+                'name' => '<vibe:modal.header>',
+                'desc' => 'Top header bar with default vertical layout (flex-col), text-lg size, and optional divider border (border-b).',
+            ],
+            [
+                'name' => '<vibe:modal.content>',
+                'desc' => 'Main scrollable body container (overflow-y-auto) with default padding.',
+            ],
+            [
+                'name' => '<vibe:modal.footer>',
+                'desc' => 'Bottom action bar with top border (border-t) and subtle muted background.',
+            ],
+            [
+                'name' => '<vibe:modal.close>',
+                'desc' => 'Dismiss button with pre-configured Alpine close() click handler.',
+            ],
+        ],
         'th_prop' => 'Property',
         'th_type' => 'Type',
         'th_default' => 'Default',
@@ -118,12 +140,6 @@ return [
                 'type' => 'string',
                 'default' => 'uniqid()',
                 'desc' => 'Unique modal ID used for open-modal and close-modal window events.',
-            ],
-            [
-                'name' => 'show',
-                'type' => 'bool',
-                'default' => 'false',
-                'desc' => 'Whether the modal should be open immediately when the page renders.',
             ],
             [
                 'name' => 'maxWidth',
@@ -141,13 +157,25 @@ return [
                 'name' => 'dismissible',
                 'type' => 'bool',
                 'default' => 'true',
-                'desc' => 'Allows closing via the top-right cross icon and backdrop outside clicks.',
+                'desc' => 'Allows closing via outside backdrop clicks and the Escape key.',
+            ],
+            [
+                'name' => 'show',
+                'type' => 'bool',
+                'default' => 'false',
+                'desc' => 'Whether the modal should be open immediately when the page renders.',
             ],
             [
                 'name' => 'persist',
                 'type' => 'bool',
                 'default' => 'false',
                 'desc' => 'Stores modal open/close state in browser LocalStorage so the modal automatically stays open upon page refresh if not yet closed.',
+            ],
+            [
+                'name' => 'variant',
+                'type' => 'string',
+                'default' => '\'default\'',
+                'desc' => 'Card visual style variant (\'default\', \'elevated\', \'outline\', \'container\').',
             ],
         ],
         'events_title' => 'Window Events Reference (Alpine.js & Livewire)',

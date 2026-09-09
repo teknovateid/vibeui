@@ -9,7 +9,7 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Basic Usage',
-        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:dropdown&gt;</code> tag with an <code class="font-mono text-xs text-foreground">&lt;x-slot:trigger&gt;</code> slot for the triggering element, and <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.body&gt;</code> containing menu items.',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:dropdown&gt;</code> tag with an <code class="font-mono text-xs text-foreground">&lt;x-slot:trigger&gt;</code> slot for the triggering element, and <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown.content&gt;</code> containing menu items.',
         'preview_title' => 'Standard Dropdown Menu',
         'trigger_btn' => 'Options Menu',
         'account' => 'Account Settings',

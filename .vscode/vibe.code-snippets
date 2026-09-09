@@ -1,0 +1,330 @@
+{
+    "Vibe Base Tag": {
+        "prefix": "vibe",
+        "body": [
+            "<vibe:${1:component}>$0</vibe:${1:component}>"
+        ],
+        "description": "Vibe UI Component (Base)"
+    },
+    "Vibe Button": {
+        "prefix": "vibe:button",
+        "body": [
+            "<vibe:button variant=\"${1|primary,secondary,outline,ghost,surface,accent,destructive,success,warning,info,link|}\" size=\"${2|sm,md,lg,xl,icon-xs,icon-sm,icon-md,icon-lg|}\" type=\"${3|button,submit,reset|}\"${4:}>",
+            "\t$0",
+            "</vibe:button>"
+        ],
+        "description": "Vibe UI Button Component"
+    },
+    "Vibe Button Group": {
+        "prefix": "vibe:button:group",
+        "body": [
+            "<vibe:button.group orientation=\"${1|horizontal,vertical|}\"${2: variant=\"outline\"}>",
+            "\t$0",
+            "</vibe:button.group>"
+        ],
+        "description": "Vibe UI Button Group Component"
+    },
+    "Vibe Button Delete": {
+        "prefix": "vibe:button:delete",
+        "body": [
+            "<vibe:button.delete title=\"${1:Hapus Data}\" message=\"${2:Apakah Anda yakin ingin menghapus data ini?}\" action=\"${3:delete(${4:\\$id})}\"$5 />$0"
+        ],
+        "description": "Vibe UI Delete Button with Confirmation"
+    },
+    "Vibe Input": {
+        "prefix": "vibe:input",
+        "body": [
+            "<vibe:input wire:model=\"${1:name}\" type=\"${2|text,password,email,number,date,tel,search,url|}\" label=\"${3:Label}\" placeholder=\"${4:Placeholder}\" size=\"${5|sm,md,lg,xl|}\" variant=\"${6|primary,outline,filled,flush,ghost|}\"${7:} />$0"
+        ],
+        "description": "Vibe UI Input Component"
+    },
+    "Vibe Textarea": {
+        "prefix": "vibe:textarea",
+        "body": [
+            "<vibe:textarea wire:model=\"${1:description}\" label=\"${2:Keterangan}\" placeholder=\"${3:Tulis keterangan...}\" rows=\"${4:4}\"${5:} />$0"
+        ],
+        "description": "Vibe UI Textarea Component"
+    },
+    "Vibe Select": {
+        "prefix": "vibe:select",
+        "body": [
+            "<vibe:select wire:model=\"${1:selected}\" label=\"${2:Pilih Opsi}\" placeholder=\"${3:Pilih...}\"${4: searchable}>",
+            "\t<vibe:select.option value=\"${5:1}\">${6:Opsi 1}</vibe:select.option>",
+            "\t<vibe:select.option value=\"${7:2}\">${8:Opsi 2}</vibe:select.option>",
+            "\t$0",
+            "</vibe:select>"
+        ],
+        "description": "Vibe UI Select Component"
+    },
+    "Vibe Checkbox": {
+        "prefix": "vibe:checkbox",
+        "body": [
+            "<vibe:checkbox wire:model=\"${1:agree}\" label=\"${2:Saya menyetujui syarat & ketentuan}\"${3: description=\"${4:Deskripsi opsi}\"} />$0"
+        ],
+        "description": "Vibe UI Checkbox Component"
+    },
+    "Vibe Checkbox Group": {
+        "prefix": "vibe:checkbox:group",
+        "body": [
+            "<vibe:checkbox.group label=\"${1:Pilihan}\" orientation=\"${2|vertical,horizontal|}\">",
+            "\t<vibe:checkbox wire:model=\"${3:selected}\" value=\"${4:1}\" label=\"${5:Opsi 1}\" />",
+            "\t<vibe:checkbox wire:model=\"${3:selected}\" value=\"${6:2}\" label=\"${7:Opsi 2}\" />",
+            "\t$0",
+            "</vibe:checkbox.group>"
+        ],
+        "description": "Vibe UI Checkbox Group Component"
+    },
+    "Vibe Radio Group": {
+        "prefix": "vibe:radio:group",
+        "body": [
+            "<vibe:radio.group wire:model=\"${1:choice}\" label=\"${2:Pilih Salah Satu}\" orientation=\"${3|vertical,horizontal|}\">",
+            "\t<vibe:radio value=\"${4:1}\" label=\"${5:Pilihan 1}\" />",
+            "\t<vibe:radio value=\"${6:2}\" label=\"${7:Pilihan 2}\" />",
+            "\t$0",
+            "</vibe:radio.group>"
+        ],
+        "description": "Vibe UI Radio Group Component"
+    },
+    "Vibe Switch": {
+        "prefix": "vibe:switch",
+        "body": [
+            "<vibe:switch wire:model=\"${1:enabled}\" label=\"${2:Aktifkan Fitur}\"${3: description=\"${4:Penjelasan fitur}\"} />$0"
+        ],
+        "description": "Vibe UI Toggle Switch Component"
+    },
+    "Vibe DateTime": {
+        "prefix": "vibe:date-time",
+        "body": [
+            "<vibe:date-time wire:model=\"${1:date}\" label=\"${2:Tanggal}\" mode=\"${3|single,range|}\" type=\"${4|date,datetime,time|}\" format=\"${5:Y-m-d}\"${6:} />$0"
+        ],
+        "description": "Vibe UI Date and Time Picker Component"
+    },
+    "Vibe Card Full": {
+        "prefix": "vibe:card",
+        "body": [
+            "<vibe:card variant=\"${1|default,outline,ghost,flat,muted,elevated,container|}\">",
+            "\t<vibe:card.header>",
+            "\t\t<vibe:card.title>${2:Judul Kartu}</vibe:card.title>",
+            "\t\t<vibe:card.description>${3:Deskripsi ringkas kartu ini.}</vibe:card.description>",
+            "\t</vibe:card.header>",
+            "\t<vibe:card.content>",
+            "\t\t$0",
+            "\t</vibe:card.content>",
+            "\t<vibe:card.footer class=\"${4:flex justify-end gap-2}\">",
+            "\t\t<vibe:button variant=\"secondary\">${5:Batal}</vibe:button>",
+            "\t\t<vibe:button variant=\"primary\" type=\"submit\">${6:Simpan}</vibe:button>",
+            "\t</vibe:card.footer>",
+            "</vibe:card>"
+        ],
+        "description": "Vibe UI Card with Header, Content, and Footer"
+    },
+    "Vibe Card Simple": {
+        "prefix": "vibe:card:simple",
+        "body": [
+            "<vibe:card${1: variant=\"default\"}>",
+            "\t$0",
+            "</vibe:card>"
+        ],
+        "description": "Vibe UI Simple Card Component"
+    },
+    "Vibe Alert": {
+        "prefix": "vibe:alert",
+        "body": [
+            "<vibe:alert position=\"${1|center,top-right,top-left,bottom-right,bottom-left,top-center,bottom-center|}\" timeout=\"${2:3000}\"${3:} />$0"
+        ],
+        "description": "Vibe UI Alert Listener Component"
+    },
+    "Vibe Badge": {
+        "prefix": "vibe:badge",
+        "body": [
+            "<vibe:badge variant=\"${1|default,primary,secondary,outline,ghost,accent,destructive,success,warning,info|}\" size=\"${2|sm,md,lg,xl|}\"${3:}>${4:Badge}</vibe:badge>$0"
+        ],
+        "description": "Vibe UI Badge Component"
+    },
+    "Vibe Modal": {
+        "prefix": "vibe:modal",
+        "body": [
+            "<vibe:modal id=\"${1:modal-id}\" maxWidth=\"${2|sm,md,lg,xl,2xl,3xl,4xl,5xl,full|}\"${3:}>",
+            "\t<vibe:modal.header>",
+            "\t\t<h3>${4:Judul Modal}</h3>",
+            "\t\t<p class=\"text-sm font-normal text-muted-foreground\">${5:Deskripsi atau keterangan modal.}</p>",
+            "\t\t<vibe:modal.close class=\"absolute top-4 right-4\" />",
+            "\t</vibe:modal.header>",
+            "\t<vibe:modal.content>",
+            "\t\t$0",
+            "\t</vibe:modal.content>",
+            "\t<vibe:modal.footer>",
+            "\t\t<vibe:button variant=\"outline\" size=\"sm\" @click=\"close\">${6:Batal}</vibe:button>",
+            "\t\t<vibe:button variant=\"primary\" size=\"sm\">${7:Simpan}</vibe:button>",
+            "\t</vibe:modal.footer>",
+            "</vibe:modal>"
+        ],
+        "description": "Vibe UI Modal Component"
+    },
+    "Vibe Sheet": {
+        "prefix": "vibe:sheet",
+        "body": [
+            "<vibe:sheet id=\"${1:sheet-id}\" position=\"${2|left,right,top,bottom|}\" defaultSize=\"${3:350}\"${4:}>",
+            "\t<vibe:sheet.header>",
+            "\t\t<h3 class=\"text-base font-semibold\">${5:Judul Sheet}</h3>",
+            "\t\t<vibe:sheet.close />",
+            "\t</vibe:sheet.header>",
+            "\t<vibe:sheet.content>",
+            "\t\t$0",
+            "\t</vibe:sheet.content>",
+            "\t<vibe:sheet.footer>",
+            "\t\t<vibe:button variant=\"primary\" class=\"w-full\">${6:Simpan Perubahan}</vibe:button>",
+            "\t</vibe:sheet.footer>",
+            "</vibe:sheet>"
+        ],
+        "description": "Vibe UI Slide-Over Sheet Component"
+    },
+    "Vibe Dropdown": {
+        "prefix": "vibe:dropdown",
+        "body": [
+            "<vibe:dropdown align=\"${1|right,left|}\">",
+            "\t<vibe:dropdown.trigger>",
+            "\t\t<vibe:button variant=\"outline\">${2:Menu Pilihan}</vibe:button>",
+            "\t</vibe:dropdown.trigger>",
+            "\t<vibe:dropdown.content>",
+            "\t\t<vibe:dropdown.label>${3:Kelola}</vibe:dropdown.label>",
+            "\t\t<vibe:dropdown.item href=\"${4:#}\">${5:Profil}</vibe:dropdown.item>",
+            "\t\t<vibe:dropdown.item href=\"${6:#}\">${7:Pengaturan}</vibe:dropdown.item>",
+            "\t\t<vibe:dropdown.divider />",
+            "\t\t<vibe:dropdown.item variant=\"destructive\" wire:click=\"${8:logout}\">${9:Keluar}</vibe:dropdown.item>",
+            "\t</vibe:dropdown.content>",
+            "</vibe:dropdown>"
+        ],
+        "description": "Vibe UI Dropdown Menu Component"
+    },
+    "Vibe Table": {
+        "prefix": "vibe:table",
+        "body": [
+            "<vibe:table variant=\"${1|default,striped,bordered,flush|}\" hoverable>",
+            "\t<vibe:table.header>",
+            "\t\t<vibe:table.row>",
+            "\t\t\t<vibe:table.column>${2:Nama}</vibe:table.column>",
+            "\t\t\t<vibe:table.column>${3:Email}</vibe:table.column>",
+            "\t\t\t<vibe:table.column align=\"right\">${4:Aksi}</vibe:table.column>",
+            "\t\t</vibe:table.row>",
+            "\t</vibe:table.header>",
+            "\t<vibe:table.rows>",
+            "\t\t@forelse (${5:\\$items} as ${6:\\$item})",
+            "\t\t\t<vibe:table.row>",
+            "\t\t\t\t<vibe:table.cell>{{ ${6:\\$item}->${7:name} }}</vibe:table.cell>",
+            "\t\t\t\t<vibe:table.cell>{{ ${6:\\$item}->${8:email} }}</vibe:table.cell>",
+            "\t\t\t\t<vibe:table.cell align=\"right\">",
+            "\t\t\t\t\t<vibe:button size=\"sm\" variant=\"ghost\">${9:Edit}</vibe:button>",
+            "\t\t\t\t</vibe:table.cell>",
+            "\t\t\t</vibe:table.row>",
+            "\t\t@empty",
+            "\t\t\t<vibe:table.empty colspan=\"${10:3}\" title=\"${11:Belum Ada Data}\" description=\"${12:Data belum tersedia untuk ditampilkan.}\" />",
+            "\t\t@endforelse",
+            "\t</vibe:table.rows>",
+            "</vibe:table>"
+        ],
+        "description": "Vibe UI Table Structure"
+    },
+    "Vibe Tabs": {
+        "prefix": "vibe:tabs",
+        "body": [
+            "<vibe:tabs default=\"${1:tab1}\" variant=\"${2|pill,underline,button,sidebar|}\" layout=\"${3|rows,cols|}\">",
+            "\t<vibe:tabs.list>",
+            "\t\t<vibe:tabs.tab name=\"${1:tab1}\">${4:Tab 1}</vibe:tabs.tab>",
+            "\t\t<vibe:tabs.tab name=\"${5:tab2}\">${6:Tab 2}</vibe:tabs.tab>",
+            "\t</vibe:tabs.list>",
+            "\t<vibe:tabs.panels>",
+            "\t\t<vibe:tabs.panel name=\"${1:tab1}\">",
+            "\t\t\t$7",
+            "\t\t</vibe:tabs.panel>",
+            "\t\t<vibe:tabs.panel name=\"${5:tab2}\">",
+            "\t\t\t$0",
+            "\t\t</vibe:tabs.panel>",
+            "\t</vibe:tabs.panels>",
+            "</vibe:tabs>"
+        ],
+        "description": "Vibe UI Tabs Navigation & Panels"
+    },
+    "Vibe Header": {
+        "prefix": "vibe:header",
+        "body": [
+            "<vibe:header>",
+            "\t<vibe:header.heading>${1:Judul Halaman}</vibe:header.heading>",
+            "\t<vibe:header.subheading>${2:Deskripsi singkat tujuan dari halaman ini.}</vibe:header.subheading>",
+            "\t<vibe:header.actions>",
+            "\t\t<vibe:button variant=\"primary\" icon=\"${3:plus}\">${4:Tambah Data}</vibe:button>",
+            "\t</vibe:header.actions>",
+            "</vibe:header>"
+        ],
+        "description": "Vibe UI Page Header Component"
+    },
+    "Vibe Avatar": {
+        "prefix": "vibe:avatar",
+        "body": [
+            "<vibe:avatar src=\"${1:url}\" alt=\"${2:Nama Pengguna}\" size=\"${3|xs,sm,md,lg,xl|}\" shape=\"${4|circle,square|}\"${5:} />$0"
+        ],
+        "description": "Vibe UI Avatar Component"
+    },
+    "Vibe Avatar Group": {
+        "prefix": "vibe:avatar:group",
+        "body": [
+            "<vibe:avatar.group limit=\"${1:3}\" size=\"${2|sm,md,lg|}\">",
+            "\t$0",
+            "</vibe:avatar.group>"
+        ],
+        "description": "Vibe UI Stacked Avatar Group"
+    },
+    "Vibe FilePond": {
+        "prefix": "vibe:filepond",
+        "body": [
+            "<vibe:filepond wire:model=\"${1:file}\" label=\"${2:Unggah Berkas}\" acceptedFileTypes=\"['${3:image/*}']\"${4: multiple} />$0"
+        ],
+        "description": "Vibe UI FilePond Upload Component"
+    },
+    "Vibe Toast": {
+        "prefix": "vibe:toast",
+        "body": [
+            "<vibe:toast position=\"${1|bottom-right,top-right,top-left,bottom-left,top-center,bottom-center|}\" timeout=\"${2:3000}\" />$0"
+        ],
+        "description": "Vibe UI Toast Container Component"
+    },
+    "Vibe HighlightJS": {
+        "prefix": "vibe:highlightjs",
+        "body": [
+            "<vibe:highlightjs lang=\"${1:php}\" filename=\"${2:example.php}\" copyable>",
+            "${3:// Kode Anda di sini}",
+            "</vibe:highlightjs>$0"
+        ],
+        "description": "Vibe UI Code Highlight Component"
+    },
+    "Vibe Preview": {
+        "prefix": "vibe:preview",
+        "body": [
+            "<vibe:preview title=\"${1:Contoh Pratinjau}\">",
+            "\t<vibe:preview.content>",
+            "\t\t$2",
+            "\t</vibe:preview.content>",
+            "\t<vibe:preview.code lang=\"blade\">",
+            "\t\t$3",
+            "\t</vibe:preview.code>",
+            "</vibe:preview>$0"
+        ],
+        "description": "Vibe UI Component Preview Block"
+    },
+    "Vibe SEO": {
+        "prefix": "vibe:seo",
+        "body": [
+            "<vibe:seo title=\"${1:Judul Halaman}\" description=\"${2:Deskripsi meta untuk optimasi mesin pencari.}\"${3:} />$0"
+        ],
+        "description": "Vibe UI SEO Meta Tags Component"
+    },
+    "Vibe Form": {
+        "prefix": "vibe:form",
+        "body": [
+            "<vibe:form wire:submit=\"${1:save}\">",
+            "\t$0",
+            "</vibe:form>"
+        ],
+        "description": "Vibe UI Form Wrapper Component"
+    }
+}

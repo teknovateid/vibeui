@@ -1,0 +1,28 @@
+{
+  "html.customData": [
+    "./.vscode/vibe.html-data.json"
+  ],
+  "files.associations": {
+    "*.blade.php": "blade"
+  },
+  "tailwindCSS.includeLanguages": {
+    "blade": "html",
+    "php": "html"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["class[:]\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"],
+    ["class\\s*=\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"],
+    [":class\\s*=\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"],
+    ["wrapperClass\\s*=\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"],
+    ["containerClass\\s*=\\s*['\"]([^'\"]*)['\"]", "['\"]([^'\"]*)['\"]"],
+    ["@class\\(([^)]*)\\)", "['\"]([^'\"]*)['\"]"]
+  ],
+  "emmet.includeLanguages": {
+    "blade": "html"
+  },
+  "editor.quickSuggestions": {
+    "other": "on",
+    "comments": "off",
+    "strings": true
+  }
+}

@@ -56,7 +56,7 @@
         </vibe:button>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="56">
+    <vibe:dropdown.content align="right" width="56">
         <vibe:dropdown.item href="/profile">
             {{ __('docs/dropdown.basic_usage.account') }}
         </vibe:dropdown.item>
@@ -70,7 +70,7 @@
         <vibe:dropdown.item destructive>
             {{ __('docs/dropdown.basic_usage.logout') }}
         </vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex justify-center p-6">
@@ -82,7 +82,7 @@
                                 </vibe:button>
                             </x-slot:trigger>
 
-                            <vibe:dropdown.body align="right" width="56">
+                            <vibe:dropdown.content align="right" width="56">
                                 <vibe:dropdown.item href="javascript:void(0)">
                                     {{ __('docs/dropdown.basic_usage.account') }}
                                 </vibe:dropdown.item>
@@ -96,7 +96,7 @@
                                 <vibe:dropdown.item destructive>
                                     {{ __('docs/dropdown.basic_usage.logout') }}
                                 </vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
                     </div>
                 </vibe:preview>
@@ -121,7 +121,7 @@
         </vibe:button>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="64">
+    <vibe:dropdown.content align="right" width="64">
         <vibe:dropdown.label>{{ __('docs/dropdown.items_icons.header_general') }}</vibe:dropdown.label>
 
         <vibe:dropdown.item>
@@ -162,7 +162,7 @@
                 <span>{{ __('docs/dropdown.items_icons.delete') }}</span>
             </div>
         </vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex justify-center p-6">
@@ -174,7 +174,7 @@
                                 </vibe:button>
                             </x-slot:trigger>
 
-                            <vibe:dropdown.body align="right" width="64">
+                            <vibe:dropdown.content align="right" width="64">
                                 <vibe:dropdown.label>{{ __('docs/dropdown.items_icons.header_general') }}</vibe:dropdown.label>
 
                                 <vibe:dropdown.item>
@@ -215,7 +215,7 @@
                                         <span>{{ __('docs/dropdown.items_icons.delete') }}</span>
                                     </div>
                                 </vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
                     </div>
                 </vibe:preview>
@@ -237,10 +237,10 @@
     <x-slot:trigger>
         <vibe:button variant="outline">{{ __('docs/dropdown.align_width.align_left') }}</vibe:button>
     </x-slot:trigger>
-    <vibe:dropdown.body align="left" width="56">
+    <vibe:dropdown.content align="left" width="56">
         <vibe:dropdown.item>Menu 1</vibe:dropdown.item>
         <vibe:dropdown.item>Menu 2</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
 
 {{-- 2. Align Right (Default) --}}
@@ -248,10 +248,10 @@
     <x-slot:trigger>
         <vibe:button variant="outline">{{ __('docs/dropdown.align_width.align_right') }}</vibe:button>
     </x-slot:trigger>
-    <vibe:dropdown.body align="right" width="56">
+    <vibe:dropdown.content align="right" width="56">
         <vibe:dropdown.item>Menu 1</vibe:dropdown.item>
         <vibe:dropdown.item>Menu 2</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
 
 {{-- 3. Align Top --}}
@@ -259,10 +259,10 @@
     <x-slot:trigger>
         <vibe:button variant="outline">{{ __('docs/dropdown.align_width.align_top') }}</vibe:button>
     </x-slot:trigger>
-    <vibe:dropdown.body align="top" width="56">
+    <vibe:dropdown.content align="top" width="56">
         <vibe:dropdown.item>Menu 1</vibe:dropdown.item>
         <vibe:dropdown.item>Menu 2</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex flex-wrap items-center justify-center gap-6 p-6">
@@ -274,10 +274,10 @@
                                     <svg class="size-4 ml-1 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                                 </vibe:button>
                             </x-slot:trigger>
-                            <vibe:dropdown.body align="left" width="56">
+                            <vibe:dropdown.content align="left" width="56">
                                 <vibe:dropdown.item>Opsi Kiri A</vibe:dropdown.item>
                                 <vibe:dropdown.item>Opsi Kiri B</vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
 
                         {{-- Align Right --}}
@@ -288,10 +288,10 @@
                                     <svg class="size-4 ml-1 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
                                 </vibe:button>
                             </x-slot:trigger>
-                            <vibe:dropdown.body align="right" width="56">
+                            <vibe:dropdown.content align="right" width="56">
                                 <vibe:dropdown.item>Opsi Kanan A</vibe:dropdown.item>
                                 <vibe:dropdown.item>Opsi Kanan B</vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
 
                         {{-- Align Top --}}
@@ -302,10 +302,10 @@
                                     <svg class="size-4 ml-1 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
                                 </vibe:button>
                             </x-slot:trigger>
-                            <vibe:dropdown.body align="top" width="56">
+                            <vibe:dropdown.content align="top" width="56">
                                 <vibe:dropdown.item>Opsi Atas A</vibe:dropdown.item>
                                 <vibe:dropdown.item>Opsi Atas B</vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
                     </div>
                 </vibe:preview>
@@ -330,7 +330,7 @@
         </vibe:button>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="56">
+    <vibe:dropdown.content align="right" width="56">
         <vibe:dropdown.item>{{ __('docs/dropdown.submenus.dashboard') }}</vibe:dropdown.item>
 
         {{-- Submenu 1: Theme --}}
@@ -348,7 +348,7 @@
 
         <vibe:dropdown.divider />
         <vibe:dropdown.item>{{ __('docs/dropdown.submenus.notifications') }}</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex justify-center p-6">
@@ -360,7 +360,7 @@
                                 </vibe:button>
                             </x-slot:trigger>
 
-                            <vibe:dropdown.body align="right" width="56">
+                            <vibe:dropdown.content align="right" width="56">
                                 <vibe:dropdown.item>{{ __('docs/dropdown.submenus.dashboard') }}</vibe:dropdown.item>
 
                                 <vibe:dropdown.sub label="{{ __('docs/dropdown.submenus.theme') }}">
@@ -376,7 +376,7 @@
 
                                 <vibe:dropdown.divider />
                                 <vibe:dropdown.item>{{ __('docs/dropdown.submenus.notifications') }}</vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
                     </div>
                 </vibe:preview>
@@ -401,13 +401,13 @@
         </vibe:button>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="56">
+    <vibe:dropdown.content align="right" width="56">
         <vibe:dropdown.item>Item 1 (Tekan Arrow Down)</vibe:dropdown.item>
         <vibe:dropdown.item>Item 2</vibe:dropdown.item>
         <vibe:dropdown.item>Item 3</vibe:dropdown.item>
         <vibe:dropdown.divider />
         <vibe:dropdown.item>Tutup (Tekan Escape)</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex justify-center p-6">
@@ -419,13 +419,13 @@
                                 </vibe:button>
                             </x-slot:trigger>
 
-                            <vibe:dropdown.body align="right" width="56">
+                            <vibe:dropdown.content align="right" width="56">
                                 <vibe:dropdown.item>Item 1 (Tekan Arrow Down)</vibe:dropdown.item>
                                 <vibe:dropdown.item>Item 2</vibe:dropdown.item>
                                 <vibe:dropdown.item>Item 3</vibe:dropdown.item>
                                 <vibe:dropdown.divider />
                                 <vibe:dropdown.item>Tutup (Tekan Escape)</vibe:dropdown.item>
-                            </vibe:dropdown.body>
+                            </vibe:dropdown.content>
                         </vibe:dropdown>
                     </div>
                 </vibe:preview>
@@ -454,7 +454,7 @@
         </div>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="56">
+    <vibe:dropdown.content align="right" width="56">
         <div class="px-3 py-2 border-b border-border mb-1">
             <p class="text-sm font-semibold text-foreground">{{ __('docs/dropdown.custom_trigger.profile_title') }}</p>
             <p class="text-xs text-muted-foreground">{{ __('docs/dropdown.custom_trigger.profile_role') }}</p>
@@ -463,7 +463,7 @@
         <vibe:dropdown.item>{{ __('docs/dropdown.custom_trigger.billing') }}</vibe:dropdown.item>
         <vibe:dropdown.divider />
         <vibe:dropdown.item destructive>{{ __('docs/dropdown.basic_usage.logout') }}</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
 
 {{-- 2. Trigger Ikon 3-Titik (Table Row Actions) --}}
@@ -474,12 +474,12 @@
         </vibe:button>
     </x-slot:trigger>
 
-    <vibe:dropdown.body align="right" width="48">
+    <vibe:dropdown.content align="right" width="48">
         <vibe:dropdown.item>Detail</vibe:dropdown.item>
         <vibe:dropdown.item>Edit Data</vibe:dropdown.item>
         <vibe:dropdown.divider />
         <vibe:dropdown.item destructive>Hapus</vibe:dropdown.item>
-    </vibe:dropdown.body>
+    </vibe:dropdown.content>
 </vibe:dropdown>
                     </vibe:preview.code>
                     <div class="w-full flex flex-wrap items-center justify-around gap-12 p-8">
@@ -496,7 +496,7 @@
                                     </div>
                                 </x-slot:trigger>
 
-                                <vibe:dropdown.body align="left" width="56">
+                                <vibe:dropdown.content align="left" width="56">
                                     <div class="px-3 py-2 border-b border-border mb-1">
                                         <p class="text-sm font-semibold text-foreground">{{ __('docs/dropdown.custom_trigger.profile_title') }}</p>
                                         <p class="text-xs text-muted-foreground">{{ __('docs/dropdown.custom_trigger.profile_role') }}</p>
@@ -505,7 +505,7 @@
                                     <vibe:dropdown.item>{{ __('docs/dropdown.custom_trigger.billing') }}</vibe:dropdown.item>
                                     <vibe:dropdown.divider />
                                     <vibe:dropdown.item destructive>{{ __('docs/dropdown.basic_usage.logout') }}</vibe:dropdown.item>
-                                </vibe:dropdown.body>
+                                </vibe:dropdown.content>
                             </vibe:dropdown>
                             <span class="text-xs text-muted-foreground">Avatar Trigger</span>
                         </div>
@@ -519,12 +519,12 @@
                                     </vibe:button>
                                 </x-slot:trigger>
 
-                                <vibe:dropdown.body align="right" width="48">
+                                <vibe:dropdown.content align="right" width="48">
                                     <vibe:dropdown.item>Lihat Detail</vibe:dropdown.item>
                                     <vibe:dropdown.item>Edit Data</vibe:dropdown.item>
                                     <vibe:dropdown.divider />
                                     <vibe:dropdown.item destructive>Hapus Data</vibe:dropdown.item>
-                                </vibe:dropdown.body>
+                                </vibe:dropdown.content>
                             </vibe:dropdown>
                             <span class="text-xs text-muted-foreground">3-Dot Action Button</span>
                         </div>
@@ -567,8 +567,8 @@
                     </vibe:table.rows>
                 </vibe:table>
 
-                {{-- vibe:dropdown.body Props --}}
-                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:dropdown.body&gt;</p>
+                {{-- vibe:dropdown.content Props --}}
+                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:dropdown.content&gt;</p>
                 <vibe:table>
                     <vibe:table.header>
                         <vibe:table.column class="whitespace-nowrap">{{ __('docs/dropdown.props.columns.prop') }}</vibe:table.column>
@@ -664,7 +664,7 @@
                             <vibe:table.cell class="text-muted-foreground">Slot untuk menyematkan elemen pemicu terbukanya menu dropdown (tombol, avatar, teks, dll.).</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
-                            <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:dropdown.body&gt;</vibe:table.cell>
+                            <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:dropdown.content&gt;</vibe:table.cell>
                             <vibe:table.cell class="text-muted-foreground">Kontainer popover yang memuat daftar item menu, dilengkapi bayangan, border, dan transisi animasi.</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>

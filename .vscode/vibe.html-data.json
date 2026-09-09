@@ -1,0 +1,3496 @@
+{
+  "version": 1.1,
+  "tags": [
+    {
+      "name": "vibe:button",
+      "description": "Vibe UI Button Component - Komponen tombol serbaguna dengan berbagai varian estetika dan status.",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "Gaya visual tombol",
+          "values": [
+            {
+              "name": "primary",
+              "description": "Gaya tombol utama (brand primary)"
+            },
+            {
+              "name": "secondary",
+              "description": "Gaya tombol kedua"
+            },
+            {
+              "name": "outline",
+              "description": "Gaya tombol border tipis dengan latar transparan"
+            },
+            {
+              "name": "ghost",
+              "description": "Gaya tombol transparan tanpa border"
+            },
+            {
+              "name": "surface",
+              "description": "Gaya tombol permukaan kartu"
+            },
+            {
+              "name": "accent",
+              "description": "Gaya aksen kontras"
+            },
+            {
+              "name": "destructive",
+              "description": "Gaya tombol tindakan berbahaya / hapus"
+            },
+            {
+              "name": "danger",
+              "description": "Alias untuk destructive"
+            },
+            {
+              "name": "success",
+              "description": "Gaya tombol status sukses / konfirmasi"
+            },
+            {
+              "name": "warning",
+              "description": "Gaya tombol peringatan"
+            },
+            {
+              "name": "info",
+              "description": "Gaya tombol informasi"
+            },
+            {
+              "name": "link",
+              "description": "Gaya tautan teks"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "description": "Ukuran dimensi tombol",
+          "values": [
+            {
+              "name": "xs"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            },
+            {
+              "name": "icon-xs"
+            },
+            {
+              "name": "icon-sm"
+            },
+            {
+              "name": "icon-md"
+            },
+            {
+              "name": "icon-lg"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "description": "Tipe tombol HTML",
+          "values": [
+            {
+              "name": "button"
+            },
+            {
+              "name": "submit"
+            },
+            {
+              "name": "reset"
+            }
+          ]
+        },
+        {
+          "name": "href",
+          "description": "Jika diisi, tag akan dirender sebagai tautan <a>"
+        },
+        {
+          "name": "loading",
+          "description": "Menampilkan indikator spinner loading",
+          "valueSet": "v"
+        },
+        {
+          "name": "disabled",
+          "description": "Menonaktifkan tombol",
+          "valueSet": "v"
+        },
+        {
+          "name": "icon",
+          "description": "Ikon di sisi kiri tombol"
+        },
+        {
+          "name": "icon-right",
+          "description": "Ikon di sisi kanan tombol"
+        },
+        {
+          "name": "class",
+          "description": "Class utility Tailwind CSS tambahan (gunakan rounded-full untuk bentuk kapsul/pill)"
+        }
+      ]
+    },
+    {
+      "name": "vibe:button.group",
+      "description": "Vibe UI Button Group - Kelompok tombol yang saling menempel secara horizontal atau vertikal.",
+      "attributes": [
+        {
+          "name": "orientation",
+          "values": [
+            {
+              "name": "horizontal"
+            },
+            {
+              "name": "vertical"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "ghost"
+            },
+            {
+              "name": "secondary"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "xs"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "attached",
+          "description": "Apakah tombol saling menempel tanpa jarak",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:button.delete",
+      "description": "Vibe UI Delete Button - Tombol hapus dengan dialog konfirmasi bawaan.",
+      "attributes": [
+        {
+          "name": "title",
+          "description": "Judul konfirmasi penghapusan"
+        },
+        {
+          "name": "message",
+          "description": "Pesan rincian konfirmasi"
+        },
+        {
+          "name": "confirmText",
+          "description": "Teks tombol konfirmasi"
+        },
+        {
+          "name": "cancelText",
+          "description": "Teks tombol batal"
+        },
+        {
+          "name": "action",
+          "description": "Aksi wire:click atau JavaScript yang dieksekusi saat dikonfirmasi"
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "ghost"
+            },
+            {
+              "name": "destructive"
+            },
+            {
+              "name": "outline"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "xs"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "icon-xs"
+            },
+            {
+              "name": "icon-sm"
+            },
+            {
+              "name": "icon-md"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:input",
+      "description": "Vibe UI Input Component - Bidang input teks lengkap dengan label, ikon, dan penanganan error.",
+      "attributes": [
+        {
+          "name": "wire:model",
+          "description": "Livewire model binding"
+        },
+        {
+          "name": "type",
+          "values": [
+            {
+              "name": "text"
+            },
+            {
+              "name": "password"
+            },
+            {
+              "name": "email"
+            },
+            {
+              "name": "number"
+            },
+            {
+              "name": "date"
+            },
+            {
+              "name": "datetime-local"
+            },
+            {
+              "name": "time"
+            },
+            {
+              "name": "search"
+            },
+            {
+              "name": "tel"
+            },
+            {
+              "name": "url"
+            }
+          ]
+        },
+        {
+          "name": "label",
+          "description": "Label teks input"
+        },
+        {
+          "name": "placeholder",
+          "description": "Placeholder teks"
+        },
+        {
+          "name": "name",
+          "description": "Nama input field"
+        },
+        {
+          "name": "id",
+          "description": "ID atribut input"
+        },
+        {
+          "name": "description",
+          "description": "Deskripsi atau teks bantuan di bawah input"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "filled"
+            },
+            {
+              "name": "flush"
+            },
+            {
+              "name": "ghost"
+            }
+          ]
+        },
+        {
+          "name": "icon",
+          "description": "Ikon di bagian depan input"
+        },
+        {
+          "name": "trailingIcon",
+          "description": "Ikon di bagian belakang input"
+        },
+        {
+          "name": "prefix",
+          "description": "Teks prefix sebelum input"
+        },
+        {
+          "name": "suffix",
+          "description": "Teks suffix setelah input"
+        },
+        {
+          "name": "info",
+          "description": "Teks tooltip atau bantuan info"
+        },
+        {
+          "name": "error",
+          "description": "Pesan error spesifik"
+        },
+        {
+          "name": "errorName",
+          "description": "Key nama error Laravel Validation"
+        },
+        {
+          "name": "wrapperClass",
+          "description": "Class utility untuk elemen pembungkus terluar"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "readonly",
+          "valueSet": "v"
+        },
+        {
+          "name": "required",
+          "valueSet": "v"
+        },
+        {
+          "name": "class",
+          "description": "Class utility Tailwind CSS tambahan (gunakan rounded-full untuk bentuk kapsul/pill)"
+        }
+      ]
+    },
+    {
+      "name": "vibe:textarea",
+      "description": "Vibe UI Textarea Component - Bidang multi-baris teks dengan autoresize dan penghitung karakter.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "rows",
+          "values": [
+            {
+              "name": "2"
+            },
+            {
+              "name": "3"
+            },
+            {
+              "name": "4"
+            },
+            {
+              "name": "6"
+            },
+            {
+              "name": "8"
+            }
+          ]
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "filled"
+            },
+            {
+              "name": "flush"
+            }
+          ]
+        },
+        {
+          "name": "autoResize",
+          "description": "Otomatis menyesuaikan tinggi textarea sesuai teks",
+          "valueSet": "v"
+        },
+        {
+          "name": "showCount",
+          "description": "Tampilkan penghitung jumlah karakter",
+          "valueSet": "v"
+        },
+        {
+          "name": "maxlength"
+        },
+        {
+          "name": "info"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "readonly",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:select",
+      "description": "Vibe UI Select Component - Menu pilihan interaktif dengan fitur pencarian dan multi-select.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "searchable",
+          "description": "Aktifkan kolom pencarian di dalam dropdown",
+          "valueSet": "v"
+        },
+        {
+          "name": "searchPlaceholder",
+          "description": "Placeholder kolom pencarian"
+        },
+        {
+          "name": "multiple",
+          "description": "Izinkan memilih lebih dari satu opsi",
+          "valueSet": "v"
+        },
+        {
+          "name": "min",
+          "description": "Batas minimal opsi yang harus dipilih"
+        },
+        {
+          "name": "max",
+          "description": "Batas maksimal opsi yang dapat dipilih"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "filled"
+            }
+          ]
+        },
+        {
+          "name": "placement",
+          "values": [
+            {
+              "name": "auto"
+            },
+            {
+              "name": "top"
+            },
+            {
+              "name": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "options",
+          "description": "Array key-value opsi pilihan"
+        },
+        {
+          "name": "value",
+          "description": "Nilai terpilih default"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "info"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:select.group",
+      "description": "Vibe UI Select Group - Grup opsi pilihan dengan label header.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Label grup opsi"
+        }
+      ]
+    },
+    {
+      "name": "vibe:select.option",
+      "description": "Vibe UI Select Option - Item opsi pilihan di dalam select.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Nilai opsi"
+        },
+        {
+          "name": "label",
+          "description": "Teks label opsi jika tidak menggunakan slot"
+        },
+        {
+          "name": "description",
+          "description": "Deskripsi singkat di bawah label opsi"
+        },
+        {
+          "name": "icon",
+          "description": "Ikon untuk opsi"
+        },
+        {
+          "name": "avatar",
+          "description": "Gambar avatar untuk opsi"
+        },
+        {
+          "name": "selected",
+          "valueSet": "v"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:checkbox",
+      "description": "Vibe UI Checkbox Component - Kotak centang dengan dukungan status indeterminate.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "checked",
+          "valueSet": "v"
+        },
+        {
+          "name": "indeterminate",
+          "valueSet": "v"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "secondary"
+            }
+          ]
+        },
+        {
+          "name": "indicator"
+        },
+        {
+          "name": "hideIndicator",
+          "valueSet": "v"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "info"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:checkbox.group",
+      "description": "Vibe UI Checkbox Group - Wadah kumpulan checkbox tersusun rapi.",
+      "attributes": [
+        {
+          "name": "label"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "orientation",
+          "values": [
+            {
+              "name": "vertical"
+            },
+            {
+              "name": "horizontal"
+            }
+          ]
+        },
+        {
+          "name": "columns",
+          "values": [
+            {
+              "name": "1"
+            },
+            {
+              "name": "2"
+            },
+            {
+              "name": "3"
+            },
+            {
+              "name": "4"
+            }
+          ]
+        },
+        {
+          "name": "required",
+          "valueSet": "v"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:radio",
+      "description": "Vibe UI Radio Component - Pilihan radio tunggal.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "checked",
+          "valueSet": "v"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "secondary"
+            }
+          ]
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:radio.group",
+      "description": "Vibe UI Radio Group - Kelompok pilihan radio tombol tunggal.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "orientation",
+          "values": [
+            {
+              "name": "vertical"
+            },
+            {
+              "name": "horizontal"
+            }
+          ]
+        },
+        {
+          "name": "columns",
+          "values": [
+            {
+              "name": "1"
+            },
+            {
+              "name": "2"
+            },
+            {
+              "name": "3"
+            },
+            {
+              "name": "4"
+            }
+          ]
+        },
+        {
+          "name": "required",
+          "valueSet": "v"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:switch",
+      "description": "Vibe UI Switch Component - Saklar beralih (toggle) halus.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "checked",
+          "valueSet": "v"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "primary"
+            },
+            {
+              "name": "secondary"
+            },
+            {
+              "name": "success"
+            }
+          ]
+        },
+        {
+          "name": "labelPlacement",
+          "values": [
+            {
+              "name": "right"
+            },
+            {
+              "name": "left"
+            }
+          ]
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:range",
+      "description": "Vibe UI Range Slider Component - Pemilih nilai rentang geser.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "min"
+        },
+        {
+          "name": "max"
+        },
+        {
+          "name": "step"
+        },
+        {
+          "name": "value"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "showValue",
+          "valueSet": "v"
+        },
+        {
+          "name": "valuePrefix"
+        },
+        {
+          "name": "valueSuffix"
+        },
+        {
+          "name": "marks",
+          "valueSet": "v"
+        },
+        {
+          "name": "checkpoints"
+        },
+        {
+          "name": "minLabel"
+        },
+        {
+          "name": "maxLabel"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:date-time",
+      "description": "Vibe UI Date and Time Component - Pemilih tanggal dan jam kaya fitur (single/range).",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "mode",
+          "values": [
+            {
+              "name": "single"
+            },
+            {
+              "name": "range"
+            }
+          ]
+        },
+        {
+          "name": "type",
+          "values": [
+            {
+              "name": "date"
+            },
+            {
+              "name": "datetime"
+            },
+            {
+              "name": "time"
+            }
+          ]
+        },
+        {
+          "name": "format",
+          "description": "Format penyimpanan tanggal (misal Y-m-d)"
+        },
+        {
+          "name": "displayFormat",
+          "description": "Format tampilan tanggal ke pengguna"
+        },
+        {
+          "name": "time24",
+          "description": "Gunakan format waktu 24 jam",
+          "valueSet": "v"
+        },
+        {
+          "name": "showSeconds",
+          "valueSet": "v"
+        },
+        {
+          "name": "minuteStep"
+        },
+        {
+          "name": "secondStep"
+        },
+        {
+          "name": "minDate"
+        },
+        {
+          "name": "maxDate"
+        },
+        {
+          "name": "disabledDates"
+        },
+        {
+          "name": "startName"
+        },
+        {
+          "name": "endName"
+        },
+        {
+          "name": "startPlaceholder"
+        },
+        {
+          "name": "endPlaceholder"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:filepond",
+      "description": "Vibe UI FilePond Component - Integrasi pengunggah berkas FilePond modern.",
+      "attributes": [
+        {
+          "name": "wire:model"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "multiple",
+          "valueSet": "v"
+        },
+        {
+          "name": "maxFiles"
+        },
+        {
+          "name": "maxFileSize"
+        },
+        {
+          "name": "acceptedFileTypes"
+        },
+        {
+          "name": "imagePreview",
+          "valueSet": "v"
+        },
+        {
+          "name": "imageCrop",
+          "valueSet": "v"
+        },
+        {
+          "name": "imageCropAspectRatio"
+        },
+        {
+          "name": "avatar",
+          "description": "Mode crop melingkar untuk foto profil",
+          "valueSet": "v"
+        },
+        {
+          "name": "cover",
+          "description": "Mode crop rasio banner / cover",
+          "valueSet": "v"
+        },
+        {
+          "name": "server"
+        },
+        {
+          "name": "chunkUploads",
+          "valueSet": "v"
+        },
+        {
+          "name": "info"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "errorName"
+        },
+        {
+          "name": "wrapperClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:form",
+      "description": "Vibe UI Form Component - Pembungkus formulir dengan dukungan auto-save storage.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "action"
+        },
+        {
+          "name": "method",
+          "values": [
+            {
+              "name": "GET"
+            },
+            {
+              "name": "POST"
+            }
+          ]
+        },
+        {
+          "name": "wire:submit"
+        },
+        {
+          "name": "saveToStorage",
+          "valueSet": "v"
+        },
+        {
+          "name": "storageType",
+          "values": [
+            {
+              "name": "session"
+            },
+            {
+              "name": "local"
+            }
+          ]
+        },
+        {
+          "name": "expireHours"
+        },
+        {
+          "name": "ajax",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card",
+      "description": "Vibe UI Card Component - Kartu kontainer konten dengan berbagai pilihan permukaan visual.",
+      "attributes": [
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "ghost"
+            },
+            {
+              "name": "flat"
+            },
+            {
+              "name": "muted"
+            },
+            {
+              "name": "elevated"
+            },
+            {
+              "name": "container"
+            }
+          ]
+        },
+        {
+          "name": "padding",
+          "values": [
+            {
+              "name": "none"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card.header",
+      "description": "Header bagian atas pada Vibe Card",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card.title",
+      "description": "Judul utama pada Vibe Card",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card.description",
+      "description": "Deskripsi atau sub-teks pada Vibe Card",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card.content",
+      "description": "Wadah konten utama pada Vibe Card",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:card.footer",
+      "description": "Footer bagian bawah pada Vibe Card untuk tombol aksi",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:header",
+      "description": "Vibe UI Header Component - Header halaman utama dengan efek scroll responsif.",
+      "attributes": [
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "sticky"
+            },
+            {
+              "name": "floating"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "threshold"
+        },
+        {
+          "name": "scrolledClass"
+        },
+        {
+          "name": "unscrolledClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:header.heading",
+      "description": "Judul teks pada header halaman",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:header.subheading",
+      "description": "Sub-judul atau penjelasan di bawah judul header",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:header.actions",
+      "description": "Wadah tombol aksi di sisi kanan header",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:modal",
+      "description": "Vibe UI Modal Component - Kotak dialog modal responsif.",
+      "attributes": [
+        {
+          "name": "id",
+          "description": "ID unik modal untuk pemicu event buka/tutup"
+        },
+        {
+          "name": "show",
+          "description": "Status terbuka saat awal dimuat",
+          "valueSet": "v"
+        },
+        {
+          "name": "maxWidth",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            },
+            {
+              "name": "2xl"
+            },
+            {
+              "name": "3xl"
+            },
+            {
+              "name": "4xl"
+            },
+            {
+              "name": "5xl"
+            },
+            {
+              "name": "full"
+            }
+          ]
+        },
+        {
+          "name": "position",
+          "values": [
+            {
+              "name": "center"
+            },
+            {
+              "name": "top"
+            },
+            {
+              "name": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "dismissible",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "description": "Cegah tutup modal saat klik luar",
+          "valueSet": "v"
+        },
+        {
+          "name": "teleport",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:modal.header",
+      "description": "Header modal dialog (bawaan flex-col, text-lg)",
+      "attributes": [
+        {
+          "name": "class"
+        },
+        {
+          "name": "border",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:modal.content",
+      "description": "Konten utama modal dialog (scrollable)",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:modal.footer",
+      "description": "Footer aksi tombol modal dialog",
+      "attributes": [
+        {
+          "name": "class"
+        },
+        {
+          "name": "border",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:modal.close",
+      "description": "Tombol penutup modal dialog",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:sheet",
+      "description": "Vibe UI Sheet Component - Panel samping (drawer/slide-over) yang dapat diubah ukurannya.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "position",
+          "values": [
+            {
+              "name": "left"
+            },
+            {
+              "name": "right"
+            },
+            {
+              "name": "top"
+            },
+            {
+              "name": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "layout",
+          "values": [
+            {
+              "name": "relative"
+            },
+            {
+              "name": "fixed"
+            },
+            {
+              "name": "sticky"
+            },
+            {
+              "name": "absolute"
+            }
+          ]
+        },
+        {
+          "name": "behavior",
+          "values": [
+            {
+              "name": "static"
+            },
+            {
+              "name": "collapsible"
+            },
+            {
+              "name": "minify"
+            }
+          ]
+        },
+        {
+          "name": "resizable",
+          "valueSet": "v"
+        },
+        {
+          "name": "defaultSize"
+        },
+        {
+          "name": "minSize"
+        },
+        {
+          "name": "maxSize"
+        },
+        {
+          "name": "minifiedSize"
+        },
+        {
+          "name": "showToggle",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "defaultState",
+          "values": [
+            {
+              "name": "expanded"
+            },
+            {
+              "name": "collapsed"
+            }
+          ]
+        },
+        {
+          "name": "closeOnOutsideClick",
+          "valueSet": "v"
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "glass"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:sheet.header",
+      "description": "Header sheet panel",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:sheet.content",
+      "description": "Konten utama sheet panel",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:sheet.footer",
+      "description": "Footer sheet panel",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:sheet.close",
+      "description": "Tombol silang penutup sheet",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown",
+      "description": "Vibe UI Dropdown Component - Menu mengambang dengan navigasi keyboard.",
+      "attributes": [
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "right"
+            },
+            {
+              "name": "left"
+            }
+          ]
+        },
+        {
+          "name": "keyboard",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.trigger",
+      "description": "Elemen tombol pembuka dropdown",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.content",
+      "description": "Kontainer utama popover konten dropdown",
+      "attributes": [
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "right"
+            },
+            {
+              "name": "left"
+            }
+          ]
+        },
+        {
+          "name": "width"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.items",
+      "description": "Daftar kumpulan item dropdown",
+      "attributes": [
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "right"
+            },
+            {
+              "name": "left"
+            }
+          ]
+        },
+        {
+          "name": "width"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.item",
+      "description": "Item tunggal dalam menu dropdown",
+      "attributes": [
+        {
+          "name": "href"
+        },
+        {
+          "name": "type",
+          "values": [
+            {
+              "name": "button"
+            },
+            {
+              "name": "link"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "destructive"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.label",
+      "description": "Label judul seksi di dropdown",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.divider",
+      "description": "Garis pemisah horizontal pada dropdown",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.sub",
+      "description": "Sub-menu bertingkat dalam dropdown",
+      "attributes": [
+        {
+          "name": "label"
+        },
+        {
+          "name": "position",
+          "values": [
+            {
+              "name": "right"
+            },
+            {
+              "name": "left"
+            }
+          ]
+        },
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "top"
+            },
+            {
+              "name": "bottom"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.sub-trigger",
+      "description": "Tombol pemicu sub-menu dropdown",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:dropdown.sub-items",
+      "description": "Daftar item di dalam sub-menu",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:alert",
+      "description": "Vibe UI Alert Listener - Wadah penerima event alert/notifikasi interaktif.",
+      "attributes": [
+        {
+          "name": "position",
+          "values": [
+            {
+              "name": "center"
+            },
+            {
+              "name": "top-right"
+            },
+            {
+              "name": "top-left"
+            },
+            {
+              "name": "bottom-right"
+            },
+            {
+              "name": "bottom-left"
+            },
+            {
+              "name": "top-center"
+            },
+            {
+              "name": "bottom-center"
+            }
+          ]
+        },
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "center"
+            },
+            {
+              "name": "start"
+            },
+            {
+              "name": "end"
+            }
+          ]
+        },
+        {
+          "name": "timeout"
+        },
+        {
+          "name": "sound",
+          "valueSet": "v"
+        },
+        {
+          "name": "blur",
+          "values": [
+            {
+              "name": "false"
+            },
+            {
+              "name": "true"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            },
+            {
+              "name": "2xl"
+            }
+          ]
+        },
+        {
+          "name": "closeOnOutside",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:badge",
+      "description": "Vibe UI Badge Component - Label penanda status kecil.",
+      "attributes": [
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "primary"
+            },
+            {
+              "name": "secondary"
+            },
+            {
+              "name": "outline"
+            },
+            {
+              "name": "ghost"
+            },
+            {
+              "name": "accent"
+            },
+            {
+              "name": "destructive"
+            },
+            {
+              "name": "danger"
+            },
+            {
+              "name": "success"
+            },
+            {
+              "name": "warning"
+            },
+            {
+              "name": "info"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            }
+          ]
+        },
+        {
+          "name": "dot",
+          "description": "Tampilkan indikator titik warna di badge",
+          "valueSet": "v"
+        },
+        {
+          "name": "dotPulse",
+          "description": "Animasi berdenyut pada titik status",
+          "valueSet": "v"
+        },
+        {
+          "name": "icon",
+          "description": "Ikon di depan teks badge"
+        },
+        {
+          "name": "trailingIcon",
+          "description": "Ikon di belakang teks badge"
+        },
+        {
+          "name": "prefix"
+        },
+        {
+          "name": "suffix"
+        },
+        {
+          "name": "dismissible",
+          "valueSet": "v"
+        },
+        {
+          "name": "href"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:toast",
+      "description": "Vibe UI Toast Listener - Wadah penerima popup notifikasi toast cepat.",
+      "attributes": [
+        {
+          "name": "position",
+          "values": [
+            {
+              "name": "top-left"
+            },
+            {
+              "name": "top-right"
+            },
+            {
+              "name": "bottom-left"
+            },
+            {
+              "name": "bottom-right"
+            },
+            {
+              "name": "top-center"
+            },
+            {
+              "name": "bottom-center"
+            }
+          ]
+        },
+        {
+          "name": "timeout"
+        },
+        {
+          "name": "sound",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs",
+      "description": "Vibe UI Tabs Component - Sistem tab navigasi konten dengan tata letak baris atau kolom.",
+      "attributes": [
+        {
+          "name": "selected",
+          "description": "Nama tab yang sedang aktif"
+        },
+        {
+          "name": "default",
+          "description": "Nama tab default saat pertama kali dimuat"
+        },
+        {
+          "name": "layout",
+          "values": [
+            {
+              "name": "rows"
+            },
+            {
+              "name": "cols"
+            }
+          ]
+        },
+        {
+          "name": "orientation",
+          "values": [
+            {
+              "name": "horizontal"
+            },
+            {
+              "name": "vertical"
+            }
+          ]
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "pill"
+            },
+            {
+              "name": "underline"
+            },
+            {
+              "name": "button"
+            },
+            {
+              "name": "sidebar"
+            }
+          ]
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "persist",
+          "description": "Simpan tab aktif ke local storage",
+          "valueSet": "v"
+        },
+        {
+          "name": "syncUrl",
+          "description": "Sinkronkan tab aktif ke query string URL",
+          "valueSet": "v"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.list",
+      "description": "Wadah daftar tombol tab",
+      "attributes": [
+        {
+          "name": "grow",
+          "valueSet": "v"
+        },
+        {
+          "name": "fitted",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.tab",
+      "description": "Tombol tab navigasi",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "Identifier unik nama tab"
+        },
+        {
+          "name": "badge"
+        },
+        {
+          "name": "badgeVariant"
+        },
+        {
+          "name": "disabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "href"
+        },
+        {
+          "name": "variant"
+        },
+        {
+          "name": "activeVariant"
+        },
+        {
+          "name": "inactiveVariant"
+        },
+        {
+          "name": "size"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.panels",
+      "description": "Wadah seluruh panel konten tab",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.panel",
+      "description": "Panel konten untuk tab tertentu",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "Nama tab yang sesuai dengan tab tombol"
+        },
+        {
+          "name": "lazy",
+          "description": "Hanya render konten saat tab dibuka",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.item",
+      "description": "Alias untuk tab item",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:tabs.content",
+      "description": "Alias untuk wadah konten tab",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:breadcrumb",
+      "description": "Vibe UI Breadcrumb - Panduan navigasi jejak halaman.",
+      "attributes": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:breadcrumb.item",
+      "description": "Item navigasi jejak breadcrumb.",
+      "attributes": [
+        {
+          "name": "href"
+        },
+        {
+          "name": "active",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav",
+      "description": "Vibe UI Sidebar Navigation - Menu navigasi bilah samping.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "collapsed",
+          "valueSet": "v"
+        },
+        {
+          "name": "pinnable",
+          "valueSet": "v"
+        },
+        {
+          "name": "maxpin"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav.group",
+      "description": "Grup navigasi sidebar dengan collapsible accordion.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "open",
+          "valueSet": "v"
+        },
+        {
+          "name": "active",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "pinnable",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav.item",
+      "description": "Tautan item menu di navigasi sidebar.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "href"
+        },
+        {
+          "name": "active",
+          "valueSet": "v"
+        },
+        {
+          "name": "badge"
+        },
+        {
+          "name": "badgeColor"
+        },
+        {
+          "name": "collapsed",
+          "valueSet": "v"
+        },
+        {
+          "name": "pinnable",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav.label",
+      "description": "Label pemisah kategori pada navigasi sidebar.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "open",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav.history",
+      "description": "Menu riwayat halaman yang baru dibuka",
+      "attributes": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "open",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:nav.pinned",
+      "description": "Menu daftar halaman yang disematkan (pinned)",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "open",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table",
+      "description": "Vibe UI Table Component - Komponen tabel elegan dengan hover dan striping.",
+      "attributes": [
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "striped"
+            },
+            {
+              "name": "bordered"
+            },
+            {
+              "name": "flush"
+            }
+          ]
+        },
+        {
+          "name": "dense",
+          "valueSet": "v"
+        },
+        {
+          "name": "hoverable",
+          "valueSet": "v"
+        },
+        {
+          "name": "caption"
+        },
+        {
+          "name": "containerClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.header",
+      "description": "Header baris tabel (thead)",
+      "attributes": [
+        {
+          "name": "sticky",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.column",
+      "description": "Kolom judul tabel (th) dengan dukungan sortasi",
+      "attributes": [
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "left"
+            },
+            {
+              "name": "center"
+            },
+            {
+              "name": "right"
+            }
+          ]
+        },
+        {
+          "name": "sortable",
+          "valueSet": "v"
+        },
+        {
+          "name": "sorted",
+          "valueSet": "v"
+        },
+        {
+          "name": "direction",
+          "values": [
+            {
+              "name": "asc"
+            },
+            {
+              "name": "desc"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.rows",
+      "description": "Wadah kumpulan baris data tabel (tbody)",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.row",
+      "description": "Baris data tabel (tr)",
+      "attributes": [
+        {
+          "name": "clickable",
+          "valueSet": "v"
+        },
+        {
+          "name": "selected",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.cell",
+      "description": "Sel isi tabel (td)",
+      "attributes": [
+        {
+          "name": "align",
+          "values": [
+            {
+              "name": "left"
+            },
+            {
+              "name": "center"
+            },
+            {
+              "name": "right"
+            }
+          ]
+        },
+        {
+          "name": "nowrap",
+          "valueSet": "v"
+        },
+        {
+          "name": "variant",
+          "values": [
+            {
+              "name": "default"
+            },
+            {
+              "name": "muted"
+            }
+          ]
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.empty",
+      "description": "Tampilan kosong saat tabel tidak memiliki baris data",
+      "attributes": [
+        {
+          "name": "colspan"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:table.footer",
+      "description": "Footer tabel (tfoot)",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:datatable",
+      "description": "Vibe UI Livewire Datatable Wrapper",
+      "attributes": [
+        {
+          "name": "component"
+        },
+        {
+          "name": "bordered",
+          "valueSet": "v"
+        },
+        {
+          "name": "lazy",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:pagination",
+      "description": "Vibe UI Pagination - Navigasi penomoran halaman data.",
+      "attributes": [
+        {
+          "name": "paginator"
+        },
+        {
+          "name": "scrollTo"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:grid",
+      "description": "Vibe UI Grid - Tata letak grid dinamis yang dapat diatur ulang dan diubah ukuran.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "cols",
+          "values": [
+            {
+              "name": "1"
+            },
+            {
+              "name": "2"
+            },
+            {
+              "name": "3"
+            },
+            {
+              "name": "4"
+            },
+            {
+              "name": "6"
+            },
+            {
+              "name": "12"
+            }
+          ]
+        },
+        {
+          "name": "gap",
+          "values": [
+            {
+              "name": "2"
+            },
+            {
+              "name": "4"
+            },
+            {
+              "name": "6"
+            },
+            {
+              "name": "8"
+            }
+          ]
+        },
+        {
+          "name": "responsive",
+          "valueSet": "v"
+        },
+        {
+          "name": "reorderable",
+          "valueSet": "v"
+        },
+        {
+          "name": "resizable",
+          "valueSet": "v"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "storageKey"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:grid.card",
+      "description": "Kartu widget di dalam Vibe Grid",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "colSpan"
+        },
+        {
+          "name": "rowSpan"
+        },
+        {
+          "name": "minColSpan"
+        },
+        {
+          "name": "maxColSpan"
+        },
+        {
+          "name": "padding"
+        },
+        {
+          "name": "variant"
+        },
+        {
+          "name": "reorderable",
+          "valueSet": "v"
+        },
+        {
+          "name": "resizable",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:grid.item",
+      "description": "Item fleksibel dalam Vibe Grid",
+      "attributes": [
+        {
+          "name": "colSpan"
+        },
+        {
+          "name": "rowSpan"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:grid.toolbar",
+      "description": "Bilah aksi pengatur grid",
+      "attributes": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "description"
+        },
+        {
+          "name": "showReset",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:grid-list",
+      "description": "Tampilan beralih antara grid dan list",
+      "attributes": [
+        {
+          "name": "defaultLayout",
+          "values": [
+            {
+              "name": "grid"
+            },
+            {
+              "name": "list"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "vibe:avatar",
+      "description": "Vibe UI Avatar Component - Foto profil atau inisial pengguna dengan status.",
+      "attributes": [
+        {
+          "name": "src",
+          "description": "URL berkas gambar avatar"
+        },
+        {
+          "name": "alt",
+          "description": "Teks alternatif gambar"
+        },
+        {
+          "name": "initials",
+          "description": "Huruf inisial jika gambar kosong"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "xs"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "xl"
+            }
+          ]
+        },
+        {
+          "name": "shape",
+          "values": [
+            {
+              "name": "circle"
+            },
+            {
+              "name": "square"
+            }
+          ]
+        },
+        {
+          "name": "color",
+          "values": [
+            {
+              "name": "blue"
+            },
+            {
+              "name": "green"
+            },
+            {
+              "name": "red"
+            },
+            {
+              "name": "yellow"
+            },
+            {
+              "name": "purple"
+            },
+            {
+              "name": "pink"
+            }
+          ]
+        },
+        {
+          "name": "indicator",
+          "description": "Warna titik status (misal green untuk online)"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:avatar.group",
+      "description": "Vibe UI Avatar Group - Kelompok avatar bertumpuk dengan batas limit.",
+      "attributes": [
+        {
+          "name": "limit",
+          "description": "Maksimal avatar yang ditampilkan sebelum tanda +N"
+        },
+        {
+          "name": "size",
+          "values": [
+            {
+              "name": "xs"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            }
+          ]
+        },
+        {
+          "name": "overlap",
+          "description": "Tingkat tumpukan avatar"
+        },
+        {
+          "name": "total",
+          "description": "Total pengguna keseluruhan"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:image",
+      "description": "Vibe UI Image Component - Pemuat gambar cerdas dengan skeleton shimmer dan fallback.",
+      "attributes": [
+        {
+          "name": "src"
+        },
+        {
+          "name": "alt"
+        },
+        {
+          "name": "aspect",
+          "values": [
+            {
+              "name": "square"
+            },
+            {
+              "name": "video"
+            },
+            {
+              "name": "16/9"
+            },
+            {
+              "name": "4/3"
+            },
+            {
+              "name": "auto"
+            }
+          ]
+        },
+        {
+          "name": "lazy",
+          "valueSet": "v"
+        },
+        {
+          "name": "priority",
+          "valueSet": "v"
+        },
+        {
+          "name": "skeleton",
+          "valueSet": "v"
+        },
+        {
+          "name": "fallback"
+        },
+        {
+          "name": "caption"
+        },
+        {
+          "name": "imgClass"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:chart",
+      "description": "Vibe UI Chart Component - Grafik data interaktif berbasis Chart.js.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "type",
+          "values": [
+            {
+              "name": "line"
+            },
+            {
+              "name": "bar"
+            },
+            {
+              "name": "pie"
+            },
+            {
+              "name": "doughnut"
+            },
+            {
+              "name": "radar"
+            },
+            {
+              "name": "area"
+            }
+          ]
+        },
+        {
+          "name": "data",
+          "description": "Array atau JSON data grafik"
+        },
+        {
+          "name": "options",
+          "description": "Opsi konfigurasi grafik"
+        },
+        {
+          "name": "height",
+          "description": "Tinggi kanvas grafik (misal 250px)"
+        },
+        {
+          "name": "sparkline",
+          "valueSet": "v"
+        },
+        {
+          "name": "zoom",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:highlightjs",
+      "description": "Vibe UI HighlightJS - Penampil sintaks kode program dengan tombol salin otomatis.",
+      "attributes": [
+        {
+          "name": "code"
+        },
+        {
+          "name": "lang",
+          "values": [
+            {
+              "name": "php"
+            },
+            {
+              "name": "blade"
+            },
+            {
+              "name": "javascript"
+            },
+            {
+              "name": "json"
+            },
+            {
+              "name": "html"
+            },
+            {
+              "name": "css"
+            },
+            {
+              "name": "bash"
+            }
+          ]
+        },
+        {
+          "name": "language"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "filename"
+        },
+        {
+          "name": "theme",
+          "values": [
+            {
+              "name": "vibe"
+            },
+            {
+              "name": "github-dark"
+            },
+            {
+              "name": "atom-one-dark"
+            }
+          ]
+        },
+        {
+          "name": "lineNumbers",
+          "valueSet": "v"
+        },
+        {
+          "name": "lines"
+        },
+        {
+          "name": "copyable",
+          "valueSet": "v"
+        },
+        {
+          "name": "maxHeight"
+        },
+        {
+          "name": "wrap",
+          "valueSet": "v"
+        },
+        {
+          "name": "badge"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:preview",
+      "description": "Vibe UI Preview Component - Blok pratinjau komponen live beserta tab penampil kode sumber.",
+      "attributes": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "id"
+        },
+        {
+          "name": "tab",
+          "values": [
+            {
+              "name": "preview"
+            },
+            {
+              "name": "code"
+            }
+          ]
+        },
+        {
+          "name": "viewport",
+          "values": [
+            {
+              "name": "auto"
+            },
+            {
+              "name": "sm"
+            },
+            {
+              "name": "md"
+            },
+            {
+              "name": "lg"
+            },
+            {
+              "name": "full"
+            }
+          ]
+        },
+        {
+          "name": "lang",
+          "values": [
+            {
+              "name": "blade"
+            },
+            {
+              "name": "html"
+            }
+          ]
+        },
+        {
+          "name": "code"
+        },
+        {
+          "name": "theme"
+        },
+        {
+          "name": "canvasTheme"
+        },
+        {
+          "name": "pattern",
+          "valueSet": "v"
+        },
+        {
+          "name": "dots",
+          "valueSet": "v"
+        },
+        {
+          "name": "themeSwitch",
+          "valueSet": "v"
+        },
+        {
+          "name": "minHeight"
+        },
+        {
+          "name": "persist",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:preview.content",
+      "description": "Wadah tampilan live UI pada preview block",
+      "attributes": [
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:preview.code",
+      "description": "Wadah penampil kode sumber pada preview block",
+      "attributes": [
+        {
+          "name": "lang"
+        },
+        {
+          "name": "copyable",
+          "valueSet": "v"
+        },
+        {
+          "name": "lineNumbers",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:toc",
+      "description": "Vibe UI Table of Contents - Daftar isi halaman otomatis berdasarkan tag heading.",
+      "attributes": [
+        {
+          "name": "id"
+        },
+        {
+          "name": "title"
+        },
+        {
+          "name": "selector",
+          "description": "Selector area konten (default '#docs-content')"
+        },
+        {
+          "name": "levels",
+          "description": "Tingkat heading (misal 'h2, h3')"
+        },
+        {
+          "name": "offset"
+        },
+        {
+          "name": "bordered",
+          "valueSet": "v"
+        },
+        {
+          "name": "collapsible",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:toc.item",
+      "description": "Item tautan dalam Table of Contents",
+      "attributes": [
+        {
+          "name": "href"
+        },
+        {
+          "name": "depth"
+        },
+        {
+          "name": "active",
+          "valueSet": "v"
+        },
+        {
+          "name": "class"
+        }
+      ]
+    },
+    {
+      "name": "vibe:seo",
+      "description": "Vibe UI SEO Component - Generator meta tag HTML, OpenGraph, Twitter Card, dan JSON-LD Schema.",
+      "attributes": [
+        {
+          "name": "title",
+          "description": "Judul halaman"
+        },
+        {
+          "name": "titleTemplate",
+          "description": "Template judul (default '%s | Vibe UI')"
+        },
+        {
+          "name": "description",
+          "description": "Deskripsi meta untuk pencarian"
+        },
+        {
+          "name": "keywords"
+        },
+        {
+          "name": "image",
+          "description": "URL gambar thumbnail media sosial"
+        },
+        {
+          "name": "imageAlt"
+        },
+        {
+          "name": "type",
+          "values": [
+            {
+              "name": "website"
+            },
+            {
+              "name": "article"
+            }
+          ]
+        },
+        {
+          "name": "url"
+        },
+        {
+          "name": "canonical"
+        },
+        {
+          "name": "siteName"
+        },
+        {
+          "name": "robots"
+        },
+        {
+          "name": "twitterCard",
+          "values": [
+            {
+              "name": "summary_large_image"
+            },
+            {
+              "name": "summary"
+            }
+          ]
+        },
+        {
+          "name": "twitterSite"
+        },
+        {
+          "name": "twitterCreator"
+        },
+        {
+          "name": "schemaData"
+        },
+        {
+          "name": "breadcrumbs"
+        },
+        {
+          "name": "enabled",
+          "valueSet": "v"
+        },
+        {
+          "name": "favicon",
+          "valueSet": "v"
+        }
+      ]
+    },
+    {
+      "name": "vibe:seo.favicon",
+      "description": "Pemuat ikon favicon dan tema browser",
+      "attributes": [
+        {
+          "name": "themeColor"
+        },
+        {
+          "name": "msTileColor"
+        },
+        {
+          "name": "dir"
+        },
+        {
+          "name": "enabled",
+          "valueSet": "v"
+        }
+      ]
+    }
+  ],
+  "valueSets": [
+    {
+      "name": "v",
+      "values": [
+        {
+          "name": "true"
+        },
+        {
+          "name": "false"
+        }
+      ]
+    }
+  ]
+}
