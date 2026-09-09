@@ -67,7 +67,6 @@
                     </p>
                 </div>
             </div>
-            <vibe:modal.close class="absolute top-4 right-4" />
         </vibe:modal.header>
 
         <vibe:modal.content>

@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['id', 'show', 'maxWidth', 'position', 'dismissible', 'persist', 'teleport'] as $p)
+                    @foreach (['id', 'maxWidth', 'position', 'variant', 'dismissible', 'dismissibleButton', 'show', 'persist', 'teleport'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -62,7 +62,6 @@
                             <vibe:modal.header>
                                 <span>{{ __('docs/modal.basic_usage.modal_title') }}</span>
                                 <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.basic_usage.modal_desc') }}</p>
-                                
                             </vibe:modal.header>
 
                             <vibe:modal.content>
@@ -103,7 +102,6 @@
                                     <span>{{ __('docs/modal.basic_usage.modal_title') }}</span>
                                 </div>
                                 <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.basic_usage.modal_desc') }}</p>
-                                
                             </vibe:modal.header>
 
                             <vibe:modal.content>
@@ -138,44 +136,71 @@
                     <vibe:preview.code>
                         {{-- 1. Small (sm) --}}
                         <vibe:modal id="modal-size-sm" maxWidth="sm">
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'sm']) }}</h3>
-                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'sm']) !!}</p>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-                            </div>
+                            <vibe:modal.header>
+                                <span>Modal Size: sm</span>
+                                <p class="text-sm font-normal text-muted-foreground">Ukuran modal sm untuk konten ringkas.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan ukuran sm (max-w-sm).</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
 
                         {{-- 2. Standard (2xl - Default) --}}
                         <vibe:modal id="modal-size-2xl" maxWidth="2xl">
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '2xl']) }}</h3>
-                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '2xl']) !!}</p>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-                            </div>
+                            <vibe:modal.header>
+                                <span>Modal Size: 2xl (Default)</span>
+                                <p class="text-sm font-normal text-muted-foreground">Ukuran default 2xl cocok untuk sebagian besar dialog.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan ukuran standar 2xl.</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
 
                         {{-- 3. Extra Large (4xl) --}}
                         <vibe:modal id="modal-size-4xl" maxWidth="4xl">
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => '4xl']) }}</h3>
-                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => '4xl']) !!}</p>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-                            </div>
+                            <vibe:modal.header>
+                                <span>Modal Size: 4xl</span>
+                                <p class="text-sm font-normal text-muted-foreground">Ukuran luas untuk tabel atau formulir multitab.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan ukuran 4xl.</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
 
                         {{-- 4. Full Width (full) --}}
                         <vibe:modal id="modal-size-full" maxWidth="full">
-                            <div class="space-y-4">
-                                <h3 class="text-lg font-semibold">{{ __('docs/modal.sizes.modal_title', ['size' => 'full']) }}</h3>
-                                <p class="text-sm text-muted-foreground">{!! __('docs/modal.sizes.modal_desc', ['size' => 'full']) !!}</p>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.sizes.btn_close') }}</vibe:button>
-                            </div>
+                            <vibe:modal.header>
+                                <span>Modal Size: full</span>
+                                <p class="text-sm font-normal text-muted-foreground">Ukuran layar penuh untuk tampilan dashboard/editor luas.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan ukuran layar penuh.</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-2 p-4">
                         @php
-                            $sizeDemos = [['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'], ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'], ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'], ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'], ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'], ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline']];
+                            $sizeDemos = [
+                                ['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'],
+                                ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'],
+                                ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'],
+                                ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'],
+                                ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'],
+                                ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline'],
+                            ];
                         @endphp
 
                         @foreach ($sizeDemos as $s)
@@ -184,22 +209,27 @@
                             </vibe:button>
 
                             <vibe:modal id="modal-size-{{ $s['key'] }}" maxWidth="{{ $s['key'] }}">
-                                <div class="space-y-4">
-                                    <div class="space-y-1 pr-6">
-                                        <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.sizes.modal_title', ['size' => $s['key']]) }}</h3>
-                                        <p class="text-sm text-muted-foreground leading-relaxed">
-                                            {!! __('docs/modal.sizes.modal_desc', ['size' => $s['key']]) !!}
-                                        </p>
-                                    </div>
-                                    <div class="p-4 rounded-lg bg-muted/50 border border-border/60 text-xs font-mono text-muted-foreground">
+                                <vibe:modal.header>
+                                    <span>{{ __('docs/modal.sizes.modal_title', ['size' => $s['key']]) }}</span>
+                                    <p class="text-sm font-normal text-muted-foreground">
+                                        {!! __('docs/modal.sizes.modal_desc', ['size' => $s['key']]) !!}
+                                    </p>
+                                </vibe:modal.header>
+
+                                <vibe:modal.content>
+                                    <div class="p-3 rounded-lg bg-muted/50 border border-border/60 text-xs font-mono text-muted-foreground">
                                         &lt;vibe:modal id="modal-size-{{ $s['key'] }}" maxWidth="{{ $s['key'] }}"&gt;
                                     </div>
-                                    <div class="flex items-center justify-end pt-3 border-t border-border">
-                                        <vibe:button type="button" variant="outline" size="sm" @click="close">
-                                            {{ __('docs/modal.sizes.btn_close') }}
-                                        </vibe:button>
-                                    </div>
-                                </div>
+                                    <p class="text-sm text-muted-foreground leading-relaxed">
+                                        Dialog modal ini memiliki lebar maksimum <code class="font-mono text-xs font-semibold">{{ $s['key'] }}</code>. Layout isi diatur menggunakan subkomponen <code class="font-mono text-xs">&lt;vibe:modal.header&gt;</code>, <code class="font-mono text-xs">&lt;vibe:modal.content&gt;</code>, dan <code class="font-mono text-xs">&lt;vibe:modal.footer&gt;</code>.
+                                    </p>
+                                </vibe:modal.content>
+
+                                <vibe:modal.footer>
+                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                        {{ __('docs/modal.sizes.btn_close') }}
+                                    </vibe:button>
+                                </vibe:modal.footer>
                             </vibe:modal>
                         @endforeach
                     </div>
@@ -219,23 +249,54 @@
                     <vibe:preview.code>
                         {{-- 1. Posisi Atas (Top) --}}
                         <vibe:modal id="modal-pos-top" position="top">
-                            ...
+                            <vibe:modal.header>
+                                <span>Posisi Atas (Top)</span>
+                                <p class="text-sm font-normal text-muted-foreground">Modal muncul di bagian atas viewport.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan position="top".</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
 
                         {{-- 2. Posisi Tengah (Center - Default) --}}
                         <vibe:modal id="modal-pos-center" position="center">
-                            ...
+                            <vibe:modal.header>
+                                <span>Posisi Tengah (Center)</span>
+                                <p class="text-sm font-normal text-muted-foreground">Modal muncul tepat di tengah layar.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan position="center".</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
 
                         {{-- 3. Posisi Bawah (Bottom) --}}
                         <vibe:modal id="modal-pos-bottom" position="bottom">
-                            ...
+                            <vibe:modal.header>
+                                <span>Posisi Bawah (Bottom)</span>
+                                <p class="text-sm font-normal text-muted-foreground">Modal muncul di bagian bawah viewport.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Konten modal dengan position="bottom".</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </vibe:preview.code>
 
                     <div class="flex flex-wrap items-center justify-center gap-3 p-4">
                         @php
-                            $posDemos = [['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'], ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'], ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down']];
+                            $posDemos = [
+                                ['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'],
+                                ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'],
+                                ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down'],
+                            ];
                         @endphp
 
                         @foreach ($posDemos as $pos)
@@ -244,19 +305,24 @@
                             </vibe:button>
 
                             <vibe:modal id="modal-pos-{{ $pos['key'] }}" position="{{ $pos['key'] }}">
-                                <div class="space-y-4">
-                                    <div class="space-y-1 pr-6">
-                                        <h3 class="text-lg font-semibold text-foreground">{{ __('docs/modal.positions.modal_title', ['position' => $pos['key']]) }}</h3>
-                                        <p class="text-sm text-muted-foreground leading-relaxed">
-                                            {!! __('docs/modal.positions.modal_desc', ['position' => $pos['key']]) !!}
-                                        </p>
-                                    </div>
-                                    <div class="flex items-center justify-end pt-3 border-t border-border">
-                                        <vibe:button type="button" variant="outline" size="sm" @click="close">
-                                            {{ __('docs/modal.positions.btn_close') }}
-                                        </vibe:button>
-                                    </div>
-                                </div>
+                                <vibe:modal.header>
+                                    <span>{{ __('docs/modal.positions.modal_title', ['position' => $pos['key']]) }}</span>
+                                    <p class="text-sm font-normal text-muted-foreground">
+                                        {!! __('docs/modal.positions.modal_desc', ['position' => $pos['key']]) !!}
+                                    </p>
+                                </vibe:modal.header>
+
+                                <vibe:modal.content>
+                                    <p class="text-sm text-muted-foreground leading-relaxed">
+                                        Modal ini diatur menggunakan prop <code class="font-mono text-xs font-semibold">position="{{ $pos['key'] }}"</code>. Seluruh struktur rapi tersusun dalam subkomponen semantik.
+                                    </p>
+                                </vibe:modal.content>
+
+                                <vibe:modal.footer>
+                                    <vibe:button type="button" variant="outline" size="sm" @click="close">
+                                        {{ __('docs/modal.positions.btn_close') }}
+                                    </vibe:button>
+                                </vibe:modal.footer>
                             </vibe:modal>
                         @endforeach
                     </div>
@@ -278,21 +344,24 @@
                             {{ __('docs/modal.non_dismissible.btn') }}
                         </vibe:button>
 
-                        <vibe:modal id="modal-static-demo" :dismissible="false" maxWidth="md">
-                            <vibe:modal.content>
-                                <div class="flex items-start gap-3">
-                                    <div class="p-2 rounded-full bg-destructive/10 text-destructive shrink-0 mt-0.5">
-                                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                                            <line x1="12" y1="9" x2="12" y2="13" />
-                                            <line x1="12" y1="17" x2="12.01" y2="17" />
-                                        </svg>
-                                    </div>
-                                    <div class="space-y-1">
-                                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.non_dismissible.modal_title') }}</h3>
-                                        <p class="text-sm text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
-                                    </div>
+                        {{-- Modal statis tanpa close backdrop, escape, atau tombol silang X --}}
+                        <vibe:modal id="modal-static-demo" :dismissible="false" :dismissibleButton="false" maxWidth="md">
+                            <vibe:modal.header>
+                                <div class="flex items-center gap-2 text-destructive">
+                                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                        <line x1="12" y1="9" x2="12" y2="13" />
+                                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                                    </svg>
+                                    <span>{{ __('docs/modal.non_dismissible.modal_title') }}</span>
                                 </div>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
+                            </vibe:modal.header>
+
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground leading-relaxed">
+                                    Tindakan ini permanen. Pengguna harus secara eksplisit memilih salah satu tombol aksi di bawah untuk menutup dialog.
+                                </p>
                             </vibe:modal.content>
 
                             <vibe:modal.footer>
@@ -315,21 +384,23 @@
                             {{ __('docs/modal.non_dismissible.btn') }}
                         </vibe:button>
 
-                        <vibe:modal id="modal-static-demo" :dismissible="false" maxWidth="md">
-                            <vibe:modal.content>
-                                <div class="flex items-start gap-3">
-                                    <div class="p-2 rounded-full bg-destructive/10 text-destructive shrink-0 mt-0.5">
-                                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
-                                            <line x1="12" y1="9" x2="12" y2="13" />
-                                            <line x1="12" y1="17" x2="12.01" y2="17" />
-                                        </svg>
-                                    </div>
-                                    <div class="space-y-1">
-                                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.non_dismissible.modal_title') }}</h3>
-                                        <p class="text-sm text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
-                                    </div>
+                        <vibe:modal id="modal-static-demo" :dismissible="false" :dismissibleButton="false" maxWidth="md">
+                            <vibe:modal.header>
+                                <div class="flex items-center gap-2 text-destructive">
+                                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                        <line x1="12" y1="9" x2="12" y2="13" />
+                                        <line x1="12" y1="17" x2="12.01" y2="17" />
+                                    </svg>
+                                    <span>{{ __('docs/modal.non_dismissible.modal_title') }}</span>
                                 </div>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.non_dismissible.modal_desc') }}</p>
+                            </vibe:modal.header>
+
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground leading-relaxed">
+                                    Tindakan ini permanen. Mengklik backdrop luar atau menekan tombol Escape tidak akan menutup dialog ini. Tombol silang penutup (X) juga disembunyikan menggunakan <code class="font-mono text-xs font-semibold">:dismissibleButton="false"</code>.
+                                </p>
                             </vibe:modal.content>
 
                             <vibe:modal.footer>
@@ -365,7 +436,6 @@
                                 <vibe:modal.header>
                                     <span>{{ __('docs/modal.form_modal.modal_title') }}</span>
                                     <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
-                                    
                                 </vibe:modal.header>
 
                                 <vibe:modal.content class="space-y-4">
@@ -373,7 +443,7 @@
 
                                     <vibe:input name="user_email" type="email" :label="__('docs/modal.form_modal.field_email')" :placeholder="__('docs/modal.form_modal.field_email_placeholder')" required />
 
-                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" placeholder="Pilih peran...">
+                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" :placeholder="__('docs/modal.form_modal.field_role_placeholder')">
                                         <vibe:select.option value="admin">{{ __('docs/modal.form_modal.role_admin') }}</vibe:select.option>
                                         <vibe:select.option value="editor">{{ __('docs/modal.form_modal.role_editor') }}</vibe:select.option>
                                         <vibe:select.option value="viewer">{{ __('docs/modal.form_modal.role_viewer') }}</vibe:select.option>
@@ -408,7 +478,6 @@
                                 <vibe:modal.header>
                                     <span>{{ __('docs/modal.form_modal.modal_title') }}</span>
                                     <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.form_modal.modal_desc') }}</p>
-                                    
                                 </vibe:modal.header>
 
                                 <vibe:modal.content class="space-y-4">
@@ -416,7 +485,7 @@
 
                                     <vibe:input name="user_email" type="email" :label="__('docs/modal.form_modal.field_email')" :placeholder="__('docs/modal.form_modal.field_email_placeholder')" required />
 
-                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" placeholder="Pilih peran...">
+                                    <vibe:select name="user_role" :label="__('docs/modal.form_modal.field_role')" :placeholder="__('docs/modal.form_modal.field_role_placeholder')">
                                         <vibe:select.option value="admin">{{ __('docs/modal.form_modal.role_admin') }}</vibe:select.option>
                                         <vibe:select.option value="editor">{{ __('docs/modal.form_modal.role_editor') }}</vibe:select.option>
                                         <vibe:select.option value="viewer">{{ __('docs/modal.form_modal.role_viewer') }}</vibe:select.option>
@@ -457,13 +526,12 @@
                             <vibe:modal.header>
                                 <span>{{ __('docs/modal.persist.modal_title') }}</span>
                                 <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.persist.modal_desc') }}</p>
-                                
                             </vibe:modal.header>
 
                             <vibe:modal.content>
-                                <p class="text-sm text-muted-foreground">
-                                    Status modal disimpan otomatis di LocalStorage. Refresh browser tidak akan menghilangkan modal ini sampai Anda menutupnya.
-                                </p>
+                                <div class="p-3 rounded-lg bg-muted/40 border border-border text-xs text-muted-foreground">
+                                    {!! __('docs/modal.persist.reload_tip') !!}
+                                </div>
                             </vibe:modal.content>
 
                             <vibe:modal.footer>
@@ -475,7 +543,16 @@
 
                         {{-- 2. Modal pengumuman sekali tampil (langsung muncul di awal, tidak muncul lagi setelah ditutup) --}}
                         <vibe:modal id="modal-announcement" :show="true" :persist="true" maxWidth="lg">
-                            ...
+                            <vibe:modal.header>
+                                <span>Pengumuman Penting</span>
+                                <p class="text-sm font-normal text-muted-foreground">Hanya muncul satu kali di awal sesi.</p>
+                            </vibe:modal.header>
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground">Setelah ditutup, status tersimpan di LocalStorage dan tidak akan muncul kembali.</p>
+                            </vibe:modal.content>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="primary" size="sm" @click="close">Mengerti</vibe:button>
+                            </vibe:modal.footer>
                         </vibe:modal>
                     </vibe:preview.code>
 
@@ -524,12 +601,11 @@
                                     <span>{{ __('docs/modal.persist.modal_title') }}</span>
                                 </div>
                                 <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.persist.modal_desc') }}</p>
-                                
                             </vibe:modal.header>
 
                             <vibe:modal.content>
                                 <div class="p-3 rounded-lg bg-muted/40 border border-border text-xs text-muted-foreground">
-                                    💡 <strong>Uji Coba:</strong> Jangan tutup modal ini, coba tekan tombol refresh browser (F5 / Ctrl+R). Modal akan otomatis tetap terbuka kembali!
+                                    {!! __('docs/modal.persist.reload_tip') !!}
                                 </div>
                             </vibe:modal.content>
 
@@ -615,7 +691,7 @@
                                     <form wire:submit="saveUser">
                                         <vibe:modal.header>
                                             <span>Form Pengguna</span>
-                                            
+                                            <p class="text-sm font-normal text-muted-foreground">Isi data akun pengguna baru.</p>
                                         </vibe:modal.header>
 
                                         <vibe:modal.content class="space-y-4">
