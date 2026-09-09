@@ -2,179 +2,643 @@
 @import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 
 /* =========================================================================
-   Vibe UI FilePond Custom Theme
-   Tailwind CSS v4 & Vibe Design System Integration
+   Vibe UI FilePond Theme - Resilient Modern Design
+   Tailwind CSS v4 & Vibe Design System Tokens
    ========================================================================= */
 
-/* Guaranteed container dimensions preventing zero-height layout shifts */
+/* Main Container Wrapper */
 [data-vibe-filepond] {
     position: relative;
     display: block;
     width: 100%;
-    min-height: 8.5rem;
 }
 
-[data-vibe-filepond].filepond-avatar-mode {
+/* Hide native input completely before and during FilePond lifecycle (Zero FOUC) */
+[data-vibe-filepond] input[type='file']:not(.filepond--browser) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Fallback Dropzone rendered immediately server-side before JS runs (Zero FOUC, Zero Layout Shift) */
+.filepond--fallback-dropzone {
+    width: 100%;
+    min-height: 12.5rem;
+    border: 2px dashed color-mix(in srgb, var(--foreground) 20%, var(--border));
+    border-radius: var(--radius-2xl, 1.25rem);
+    background-color: color-mix(in srgb, var(--muted) 45%, transparent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem 1.25rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.25s ease, background-color 0.25s ease;
+}
+
+.filepond-solid .filepond--fallback-dropzone {
+    border-style: solid;
+}
+
+.filepond-compact-mode .filepond--fallback-dropzone {
+    min-height: 5.5rem;
+    padding: 0.75rem 1.25rem;
+}
+
+.filepond--fallback-dropzone.filepond-fallback-avatar,
+.filepond-avatar-mode .filepond--fallback-dropzone {
+    width: 130px;
+    height: 130px;
     min-height: 130px;
-    max-width: 130px;
     margin: 0 auto;
+    border-radius: 9999px;
+    padding: 0.5rem;
 }
 
-/* Fallback / Loading skeleton before FilePond mounts */
-[data-vibe-filepond]:not(:has(.filepond--root)) {
-    min-height: 8.5rem;
-    border: 1.5px dashed color-mix(in srgb, var(--border, #e2e8f0) 80%, transparent);
-    border-radius: var(--radius-xl, 1rem);
-    background-color: color-mix(in srgb, var(--muted, #f1f5f9) 30%, transparent);
+/* Once FilePond JS mounts, immediately hide the fallback */
+[data-vibe-filepond]:has(.filepond--root) .filepond--fallback-dropzone {
+    display: none !important;
+}
+
+/* FilePond Root Dropzone Box */
+.filepond--root {
+    font-family: inherit;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    contain: none !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+/* Safety: never let sr-only or utility classes collapse or clip filepond root */
+.filepond--root.sr-only,
+.filepond--root[class*='sr-only'] {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: auto !important;
+    clip: auto !important;
+    clip-path: none !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    white-space: normal !important;
+}
+
+/* Completely bypass FilePond's internal sliced scalable panel */
+.filepond--root .filepond--panel-root {
+    display: none !important;
+}
+
+/* Hide FilePond Credits */
+.filepond--credits {
+    display: none !important;
+}
+
+/* =========================================================================
+   Drop Label & Dropzone Content (The Dashed Box)
+   ========================================================================= */
+.filepond--root .filepond--drop-label {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 12.5rem !important;
+    height: auto !important;
+    border: 2px dashed color-mix(in srgb, var(--foreground) 20%, var(--border)) !important;
+    border-radius: var(--radius-2xl, 1.25rem) !important;
+    background-color: color-mix(in srgb, var(--muted) 45%, transparent) !important;
+    color: var(--foreground) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 1.75rem 1.25rem !important;
+    pointer-events: auto !important;
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    z-index: 5 !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.filepond-solid .filepond--root .filepond--drop-label {
+    border-style: solid !important;
+}
+
+/* Hover & Drag-over States */
+.filepond--root .filepond--drop-label:hover,
+.filepond--root[data-hover="true"] .filepond--drop-label {
+    border-color: var(--primary) !important;
+    background-color: color-mix(in srgb, var(--primary) 5%, transparent) !important;
+    box-shadow: 0 10px 30px -8px color-mix(in srgb, var(--primary) 15%, transparent) !important;
+}
+
+.filepond--root[data-drop-active="true"] .filepond--drop-label {
+    border-color: var(--primary) !important;
+    border-style: solid !important;
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 20%, transparent) !important;
+}
+
+.filepond-compact-mode .filepond--root .filepond--drop-label {
+    min-height: 5.5rem !important;
+    padding: 0.75rem 1.25rem !important;
+}
+
+.filepond--root .filepond--drop-label label {
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Custom Dropzone Content (Cloud Icon, Title, Subtitle, Browse Button) */
+.filepond--custom-dropzone {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    pointer-events: none;
+}
+
+.filepond--custom-dropzone .filepond--cloud-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-bottom: 0.75rem !important;
+    color: var(--foreground) !important;
+    opacity: 0.85 !important;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease, opacity 0.25s ease !important;
+}
+
+.filepond--root:hover .filepond--custom-dropzone .filepond--cloud-icon {
+    transform: translateY(-2px) scale(1.06) !important;
+    color: var(--primary) !important;
+    opacity: 1 !important;
+}
+
+.filepond--custom-dropzone .filepond--drop-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--foreground) !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.35rem !important;
+}
+
+.filepond--custom-dropzone .filepond--drop-subtitle {
+    font-size: 0.8125rem !important;
+    color: var(--muted-foreground) !important;
+    line-height: 1.4 !important;
+    margin-bottom: 1.15rem !important;
+    max-width: 28rem !important;
+}
+
+.filepond--custom-dropzone .filepond--drop-action {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: auto !important;
+}
+
+/* Browse File Action Button */
+.filepond--root .filepond--label-action {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.45rem 1.25rem !important;
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    line-height: 1.25rem !important;
+    border-radius: var(--radius-xl, 0.75rem) !important;
+    border: 1px solid var(--border) !important;
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.filepond--root .filepond--label-action:hover {
+    background-color: var(--muted) !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.08) !important;
+    transform: translateY(-1px) !important;
+}
+
+.filepond--root .filepond--label-action:active {
+    transform: translateY(0) !important;
+}
+
+/* Compact Dropzone Variant */
+.filepond--compact-dropzone {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    text-align: left !important;
+    gap: 1rem !important;
+    padding: 0.5rem 0.75rem !important;
+}
+
+.filepond--compact-dropzone .filepond--compact-left {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+}
+
+.filepond--compact-dropzone .filepond--drop-title {
+    margin-bottom: 0.125rem !important;
+    font-size: 0.875rem !important;
+}
+
+.filepond--compact-dropzone .filepond--drop-subtitle {
+    margin-bottom: 0 !important;
+    font-size: 0.75rem !important;
+}
+
+/* =========================================================================
+   File Items & Cards (Uploaded File Card Design)
+   ========================================================================= */
+.filepond--root .filepond--list-scroller {
+    position: relative !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+    transform: none !important;
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    z-index: 6 !important;
+}
+
+.filepond--root .filepond--list {
+    position: relative !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    transform: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    height: auto !important;
+    list-style: none !important;
+}
+
+.filepond--root .filepond--item {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    margin: 0.625rem 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    min-height: 4.25rem !important;
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.filepond--root .filepond--item-panel {
+    display: none !important;
+}
+
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-wrapper {
+    position: relative !important;
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    background-color: color-mix(in srgb, var(--muted) 65%, var(--card)) !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+    height: auto !important;
+    min-height: 4.25rem !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    transition: all 0.2s ease !important;
+}
+
+/* Neutralize image preview dark backgrounds and overlays on standard cards so colors stay 100% consistent across all file types */
+.filepond--root:not(.filepond-avatar-mode) .filepond--image-preview-wrapper {
+    display: none !important;
+}
+.filepond--root:not(.filepond-avatar-mode) .filepond--image-preview {
+    background: transparent !important;
+}
+.filepond--root:not(.filepond-avatar-mode) .filepond--image-preview-overlay {
+    display: none !important;
+}
+
+.filepond--root:not(.filepond-avatar-mode) .filepond--file {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 4.25rem !important;
+    padding: 0.75rem 3.25rem 0.75rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    color: var(--foreground) !important;
+    background: transparent !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    box-sizing: border-box !important;
+}
+
+.filepond--root [data-filepond-item-state*='error'] .filepond--file-wrapper {
+    background-color: color-mix(in srgb, var(--destructive) 12%, var(--card)) !important;
+    border-color: var(--destructive) !important;
+}
+
+/* Custom File Type Icon with Folded Corner and Extension Badge */
+.filepond--custom-file-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.875rem !important;
+    flex-shrink: 0 !important;
+}
+
+/* Image Preview Thumbnail Styling */
+.filepond--thumbnail-preview-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.875rem !important;
+    flex-shrink: 0 !important;
+    cursor: pointer;
+}
+
+.filepond--thumbnail-wrapper {
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-lg, 0.625rem);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.filepond--thumbnail-wrapper:hover {
+    transform: scale(1.04);
+    border-color: var(--primary);
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.12);
+}
+
+.filepond--thumbnail-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+    transition: transform 0.25s ease;
+}
+
+.filepond--thumbnail-wrapper:hover .filepond--thumbnail-img {
+    transform: scale(1.08);
+}
+
+.filepond--thumbnail-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease;
+    border-radius: inherit;
+}
+
+.filepond--thumbnail-wrapper:hover .filepond--thumbnail-overlay {
+    opacity: 1;
+}
+
+.filepond--thumbnail-zoom-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    color: #ffffff;
+    stroke-width: 2.25;
+}
+
+.filepond--doc-icon-wrapper {
+    position: relative;
+    width: 34px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.filepond--root {
-    font-family: inherit;
-    margin-bottom: 0;
-    width: 100%;
-    min-height: 8.5rem;
-    cursor: pointer;
+.filepond--doc-sheet-svg {
+    width: 32px;
+    height: 38px;
+    color: var(--muted-foreground);
+    opacity: 0.8;
 }
 
-.filepond--credits {
-    display: none !important;
+.filepond--doc-sheet-bg {
+    fill: var(--card);
 }
 
-/* Panel Background & Border */
-.filepond--root .filepond--panel-root {
-    background-color: color-mix(in srgb, var(--muted, #f1f5f9) 35%, transparent);
-    border: 1.5px dashed color-mix(in srgb, var(--border, #e2e8f0) 90%, transparent);
-    border-radius: var(--radius-xl, 1rem);
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
+.filepond--ext-badge {
+    position: absolute;
+    bottom: 2px;
+    left: -2px;
+    font-size: 8.5px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    padding: 2px 4px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
 }
 
-/* Hover & Drag-over State */
-.filepond--root:hover .filepond--panel-root,
-.filepond--root[data-hover="true"] .filepond--panel-root {
-    border-color: var(--primary, #2563eb);
-    background-color: color-mix(in srgb, var(--primary, #2563eb) 6%, transparent);
-    box-shadow: 0 6px 24px -4px color-mix(in srgb, var(--primary, #2563eb) 14%, transparent);
+/* Badge Extension Colors */
+.filepond-badge-pdf {
+    background-color: #ef4444;
+    color: #ffffff;
 }
 
-.filepond--root:hover .filepond--drop-label svg {
-    transform: scale(1.08);
+.filepond-badge-doc {
+    background-color: #3b82f6;
+    color: #ffffff;
 }
 
-.filepond--root[data-drop-active="true"] .filepond--panel-root {
-    border-color: var(--primary, #2563eb);
-    border-style: solid;
-    background-color: color-mix(in srgb, var(--primary, #2563eb) 12%, transparent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary, #2563eb) 20%, transparent);
+.filepond-badge-sheet {
+    background-color: #10b981;
+    color: #ffffff;
 }
 
-/* Drop Label & Action Typography */
-.filepond--root .filepond--drop-label {
-    min-height: 8.5rem;
-    color: var(--muted-foreground, #64748b);
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    transition: color 0.15s ease;
-    pointer-events: auto;
+.filepond-badge-pres {
+    background-color: #f59e0b;
+    color: #ffffff;
 }
 
-.filepond--root .filepond--drop-label svg {
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+.filepond-badge-zip {
+    background-color: #8b5cf6;
+    color: #ffffff;
 }
 
-.filepond--root .filepond--drop-label label {
-    cursor: pointer;
-    pointer-events: auto;
-    width: 100%;
+.filepond-badge-video {
+    background-color: #ec4899;
+    color: #ffffff;
 }
 
-.filepond--root .filepond--label-action {
-    color: var(--primary, #2563eb);
-    text-decoration: underline;
-    text-underline-offset: 3px;
-    font-weight: 600;
-    transition: color 0.15s ease, opacity 0.15s ease;
+.filepond-badge-audio {
+    background-color: #06b6d4;
+    color: #ffffff;
 }
 
-.filepond--root .filepond--label-action:hover {
-    opacity: 0.85;
+.filepond-badge-img {
+    background-color: #0ea5e9;
+    color: #ffffff;
 }
 
-/* File Items Container */
-.filepond--root .filepond--item-panel {
-    background-color: var(--card, #ffffff);
-    border: 1px solid var(--border, #e2e8f0);
-    border-radius: var(--radius-md, 0.5rem);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-}
-
-.filepond--root [data-filepond-item-state*='error'] .filepond--item-panel {
-    background-color: color-mix(in srgb, var(--destructive, #ef4444) 10%, var(--card, #ffffff));
-    border-color: var(--destructive, #ef4444);
-}
-
-.filepond--root [data-filepond-item-state='processing-complete'] .filepond--item-panel {
-    background-color: color-mix(in srgb, #10b981 10%, var(--card, #ffffff));
-    border-color: #10b981;
+.filepond-badge-generic {
+    background-color: var(--muted-foreground);
+    color: var(--background);
 }
 
 /* File Info & Text */
-.filepond--root .filepond--file {
-    color: var(--foreground, #0f172a);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-info {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    margin-right: 0.75rem !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    pointer-events: auto !important;
 }
 
-.filepond--root .filepond--file-info-main {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--foreground, #0f172a);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-info-main {
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    color: var(--foreground) !important;
+    letter-spacing: -0.01em !important;
+    line-height: 1.3 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
 }
 
-.filepond--root .filepond--file-info-sub {
-    font-size: 0.75rem;
-    color: var(--muted-foreground, #64748b);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-info-sub {
+    font-size: 0.75rem !important;
+    color: var(--muted-foreground) !important;
+    margin-top: 0.2rem !important;
+    opacity: 0.9 !important;
+    visibility: visible !important;
+    transform: none !important;
 }
 
-.filepond--root .filepond--file-status {
-    color: var(--foreground, #0f172a);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-status {
+    position: static !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-end !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+    text-align: right !important;
+    transform: none !important;
+    color: var(--foreground);
+    z-index: 5 !important;
 }
 
-.filepond--root .filepond--file-status-main {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--foreground, #0f172a);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-status-main {
+    font-size: 0.75rem !important;
+    font-weight: 500 !important;
+    color: var(--muted-foreground) !important;
 }
 
-.filepond--root .filepond--file-status-sub {
-    font-size: 0.75rem;
-    color: var(--muted-foreground, #64748b);
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-status-sub {
+    font-size: 0.75rem !important;
+    color: var(--muted-foreground) !important;
 }
 
-/* Action Buttons (Remove, Retry, Abort, Revert) */
-.filepond--root .filepond--file-action-button {
-    color: #ffffff !important;
-    background-color: rgba(15, 23, 42, 0.7) !important;
-    backdrop-filter: blur(4px);
+/* Clean Minimal Action Buttons (Remove, Retry, Abort, Revert) */
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-revert-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-load {
+    color: var(--muted-foreground) !important;
+    background-color: transparent !important;
+    border: 1px solid var(--border) !important;
+    width: 1.85rem !important;
+    height: 1.85rem !important;
+    border-radius: 9999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     cursor: pointer !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    position: absolute !important;
+    left: auto !important;
+    right: 0.875rem !important;
+    top: 50% !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    transform: translateY(-50%) !important;
+    transition: all 0.15s ease !important;
+    z-index: 10 !important;
 }
 
-.filepond--root .filepond--file-action-button:hover,
-.filepond--root .filepond--file-action-button:focus {
-    box-shadow: 0 0 0 2px var(--primary, #2563eb) !important;
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:focus {
+    background-color: var(--card) !important;
+    color: var(--foreground) !important;
+    border-color: var(--border) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-50%) scale(1.05) !important;
 }
 
-.filepond--root .filepond--action-remove-item:hover,
-.filepond--root .filepond--action-remove-item:focus {
-    background-color: var(--destructive, #ef4444) !important;
-    transform: scale(1.08);
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item:focus {
+    background-color: color-mix(in srgb, var(--destructive) 12%, var(--card)) !important;
+    color: var(--destructive) !important;
+    border-color: color-mix(in srgb, var(--destructive) 40%, transparent) !important;
+    transform: translateY(-50%) scale(1.05) !important;
+}
+
+.filepond--root .filepond--file-action-button svg {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+    stroke-width: 2 !important;
 }
 
 /* Image Preview Styling */
 .filepond--image-preview-wrapper {
-    border-radius: var(--radius-md, 0.5rem);
+    border-radius: var(--radius-lg, 0.625rem);
     overflow: hidden;
 }
 
@@ -182,64 +646,157 @@
     mix-blend-mode: multiply;
 }
 
-/* Progress Ring, Spinner, and Percentage Indicator */
-.filepond--root .filepond--progress-indicator {
-    color: var(--primary, #2563eb) !important;
-    opacity: 1 !important;
-    visibility: visible !important;
+/* Progress Ring & Spinner (Upload Progress & Preparation Load Indicator) */
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator {
+    position: absolute !important;
+    right: 1.175rem !important; /* Dead-center inside the 1.85rem button at right: 0.875rem */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    margin: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    pointer-events: none !important;
+    color: var(--primary) !important;
+    z-index: 15 !important;
 }
 
-.filepond--root .filepond--progress-indicator svg {
-    color: var(--primary, #2563eb) !important;
-    stroke: var(--primary, #2563eb) !important;
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator svg {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    display: block !important;
+    margin: auto !important;
+    color: var(--primary) !important;
+    stroke: var(--primary) !important;
+    transform-origin: center center !important;
 }
 
-.filepond--root .filepond--progress-indicator path {
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator path {
     stroke: currentColor !important;
+    stroke-width: 2 !important;
+}
+
+/* Smooth symmetrical rotation for load indicator / busy spinner during prepare */
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='busy'] .filepond--progress-indicator svg,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='load'] .filepond--progress-indicator svg {
+    animation: spin 0.85s linear infinite !important;
+}
+
+/* Hide progress indicator cleanly when processing completes */
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='processing-complete'] .filepond--progress-indicator {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 /* Processing Complete Checkmark Indicator */
-.filepond--root .filepond--processing-complete-indicator {
-    color: #10b981 !important;
-    opacity: 1 !important;
+.filepond--root:not(.filepond-avatar-mode) .filepond--processing-complete-indicator {
+    position: absolute !important;
+    right: 0.875rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: 1.85rem !important;
+    height: 1.85rem !important;
+    border-radius: 9999px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid color-mix(in srgb, var(--success) 35%, transparent) !important;
+    background-color: color-mix(in srgb, var(--success) 12%, var(--card)) !important;
+    color: var(--success) !important;
+    pointer-events: none !important;
+    z-index: 10 !important;
 }
 
-.filepond--root .filepond--processing-complete-indicator svg {
-    color: #10b981 !important;
-    stroke: #10b981 !important;
+.filepond--root:not(.filepond-avatar-mode) .filepond--processing-complete-indicator svg {
+    width: 0.875rem !important;
+    height: 0.875rem !important;
+    color: var(--success) !important;
+    stroke: var(--success) !important;
+    display: block !important;
+    margin: auto !important;
 }
 
 .filepond--root [data-filepond-item-state='processing-complete'] .filepond--file-status-main {
-    color: #10b981 !important;
+    color: var(--success) !important;
 }
 
 /* Error Message Styling */
 .filepond--root [data-filepond-item-state*='error'] .filepond--file-status-main {
-    color: var(--destructive, #ef4444) !important;
+    color: var(--destructive) !important;
 }
 
 /* =========================================================================
    Avatar / Circular Profile Mode
    ========================================================================= */
 .filepond-avatar-mode .filepond--root {
-    width: 130px;
-    height: 130px;
-    margin: 0 auto;
-}
-
-.filepond-avatar-mode .filepond--panel-root {
+    width: 130px !important;
+    height: 130px !important;
+    min-height: 130px !important;
+    margin: 0 auto !important;
+    border: 2px dashed color-mix(in srgb, var(--foreground) 20%, var(--border)) !important;
     border-radius: 9999px !important;
-    overflow: hidden;
+    overflow: hidden !important;
+    background-color: color-mix(in srgb, var(--muted) 45%, transparent) !important;
 }
 
 .filepond-avatar-mode .filepond--drop-label {
-    min-height: 130px;
-    padding: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 0.75rem;
+    width: 130px !important;
+    height: 130px !important;
+    min-height: 130px !important;
+    border: none !important;
+    background-color: transparent !important;
+    padding: 0.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    font-size: 0.75rem !important;
+    border-radius: 9999px !important;
+}
+
+.filepond-avatar-mode .filepond--list-scroller {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    border-radius: 9999px !important;
+}
+
+.filepond-avatar-mode .filepond--item {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    margin: 0 !important;
+    height: 100% !important;
+    min-height: 130px !important;
+    border-radius: 9999px !important;
+}
+
+.filepond-avatar-mode .filepond--file-wrapper {
+    height: 100% !important;
+    min-height: 130px !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 9999px !important;
+    box-shadow: none !important;
+}
+
+.filepond-avatar-mode .filepond--file {
+    height: 100% !important;
+    min-height: 130px !important;
+    padding: 0 !important;
 }
 
 .filepond-avatar-mode .filepond--image-preview-wrapper {
@@ -247,96 +804,90 @@
 }
 
 .filepond-avatar-mode .filepond--file-action-button {
-    cursor: pointer;
+    cursor: pointer !important;
 }
 
 /* =========================================================================
-   Dark Mode Refinements
+   Image Preview Lightbox Modal
    ========================================================================= */
-html.dark [data-vibe-filepond]:not(:has(.filepond--root)) {
-    border-color: color-mix(in srgb, var(--border, #334155) 80%, transparent);
-    background-color: color-mix(in srgb, var(--muted, #1e293b) 30%, transparent);
+.filepond--lightbox-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background-color: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(10px);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: zoom-out;
 }
 
-html.dark .filepond--root .filepond--panel-root {
-    background-color: color-mix(in srgb, var(--muted, #1e293b) 45%, transparent);
-    border-color: color-mix(in srgb, var(--border, #334155) 85%, transparent);
+.filepond--lightbox-backdrop.active {
+    opacity: 1;
 }
 
-html.dark .filepond--root:hover .filepond--panel-root,
-html.dark .filepond--root[data-hover="true"] .filepond--panel-root {
-    border-color: var(--primary, #3b82f6);
-    background-color: color-mix(in srgb, var(--primary, #3b82f6) 10%, transparent);
-    box-shadow: 0 6px 24px -4px color-mix(in srgb, var(--primary, #3b82f6) 20%, transparent);
+.filepond--lightbox-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: default;
 }
 
-html.dark .filepond--root[data-drop-active="true"] .filepond--panel-root {
-    border-color: var(--primary, #3b82f6);
-    background-color: color-mix(in srgb, var(--primary, #3b82f6) 15%, transparent);
-    box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary, #3b82f6) 25%, transparent);
+.filepond--lightbox-img {
+    max-width: 100%;
+    max-height: calc(88vh - 3.5rem);
+    object-fit: contain;
+    border-radius: var(--radius-xl, 0.875rem);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transform: scale(0.95);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-html.dark .filepond--root .filepond--drop-label {
-    color: var(--muted-foreground, #94a3b8);
+.filepond--lightbox-backdrop.active .filepond--lightbox-img {
+    transform: scale(1);
 }
 
-html.dark .filepond--root .filepond--item-panel {
-    background-color: var(--card, #1e293b);
-    border-color: var(--border, #334155);
+.filepond--lightbox-caption {
+    margin-top: 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+    text-align: center;
+    max-width: 80vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-html.dark .filepond--root .filepond--file {
-    color: var(--foreground, #f8fafc);
+.filepond--lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.75rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 10;
 }
 
-html.dark .filepond--root .filepond--file-info-main {
-    color: var(--foreground, #f8fafc);
+.filepond--lightbox-close:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+    transform: scale(1.08);
 }
 
-html.dark .filepond--root .filepond--file-info-sub {
-    color: var(--muted-foreground, #94a3b8);
-}
-
-html.dark .filepond--root .filepond--file-status {
-    color: var(--foreground, #f8fafc);
-}
-
-html.dark .filepond--root .filepond--file-status-main {
-    color: var(--foreground, #f8fafc);
-}
-
-html.dark .filepond--root .filepond--file-status-sub {
-    color: var(--muted-foreground, #94a3b8);
-}
-
-html.dark .filepond--root .filepond--progress-indicator {
-    color: var(--primary, #3b82f6) !important;
-}
-
-html.dark .filepond--root .filepond--progress-indicator svg {
-    color: var(--primary, #3b82f6) !important;
-    stroke: var(--primary, #3b82f6) !important;
-}
-
-html.dark .filepond--root .filepond--processing-complete-indicator {
-    color: #34d399 !important;
-}
-
-html.dark .filepond--root .filepond--processing-complete-indicator svg {
-    color: #34d399 !important;
-    stroke: #34d399 !important;
-}
-
-html.dark .filepond--root [data-filepond-item-state='processing-complete'] .filepond--file-status-main {
-    color: #34d399 !important;
-}
-
-html.dark .filepond--root [data-filepond-item-state*='error'] .filepond--item-panel {
-    background-color: color-mix(in srgb, var(--destructive, #ef4444) 15%, var(--card, #1e293b));
-    border-color: var(--destructive, #ef4444);
-}
-
-html.dark .filepond--root [data-filepond-item-state='processing-complete'] .filepond--item-panel {
-    background-color: color-mix(in srgb, #10b981 15%, var(--card, #1e293b));
-    border-color: #10b981;
-}

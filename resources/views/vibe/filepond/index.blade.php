@@ -9,6 +9,15 @@
     'error' => null,
     'errorName' => null,
     'wrapperClass' => null,
+    'title' => null,
+    'subtitle' => null,
+    'hint' => null,
+    'browseLabel' => null,
+    'buttonText' => null,
+    'icon' => 'cloud',
+    'variant' => 'default',
+    'dashed' => true,
+    'dropHeight' => null,
     'multiple' => false,
     'maxFiles' => null,
     'maxFileSize' => null,
@@ -36,6 +45,8 @@
     'chunkUploads' => false,
     'chunkSize' => 2000000,
     'existingFiles' => [],
+    'demo' => false,
+    'demoFiles' => [],
     'disabled' => false,
     'required' => false,
     'labels' => [],
@@ -55,6 +66,9 @@
 
     $resolvedAccept = $acceptedFileTypes ?? $accept;
 
+    $isAvatar = $avatar || $variant === 'avatar';
+    $isCompact = $variant === 'compact';
+
     $fpLang = function ($key, $default = '') {
         if (Lang::has("vibe/filepond.{$key}")) {
             return __("vibe/filepond.{$key}");
@@ -65,9 +79,85 @@
         return $default;
     };
 
+    if ($isAvatar) {
+        $resolvedLabelIdle = $fpLang('label_avatar_idle', '<div class="flex flex-col items-center justify-center gap-1.5 p-2 pointer-events-none"><svg class="size-7 text-muted-foreground/70" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="filepond--label-action text-[11px] font-semibold text-primary pointer-events-auto cursor-pointer">Pilih Foto</span></div>');
+    } else {
+        // Resolve Icon SVG
+        $iconSvg = '';
+        if ($icon === 'cloud' || empty($icon)) {
+            $iconSvg = '<svg class="size-11 text-foreground/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.5A5.5 5.5 0 0 1 7 5.5a5.5 5.5 0 0 1 10 2 4.5 4.5 0 0 1 1.5 8.5"/><circle cx="12" cy="15" r="3.5" fill="var(--card, #ffffff)" stroke-width="1.6"/><path d="m10.5 15 1.1 1.1 2.2-2.2" stroke-width="1.6"/></svg>';
+        } elseif ($icon === 'upload') {
+            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>';
+        } elseif ($icon === 'folder') {
+            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>';
+        } elseif ($icon !== 'none') {
+            $iconSvg = $icon;
+        }
+
+        $resolvedTitle = $title ?? $fpLang('drop_title', 'Choose a file or drag & drop it here');
+
+        $resolvedSubtitle = $subtitle ?? $hint;
+        if (!$resolvedSubtitle) {
+            $formatsStr = null;
+            if ($resolvedAccept) {
+                $formatsArr = is_array($resolvedAccept) ? $resolvedAccept : explode(',', $resolvedAccept);
+                $cleanFormats = array_unique(array_filter(array_map(function ($f) {
+                    $f = trim($f);
+                    if (str_starts_with($f, '.')) return strtoupper(substr($f, 1));
+                    if (str_contains($f, '/')) {
+                        $parts = explode('/', $f);
+                        return strtoupper(end($parts));
+                    }
+                    return strtoupper($f);
+                }, $formatsArr)));
+                if (!empty($cleanFormats)) {
+                    $formatsStr = implode(', ', array_slice($cleanFormats, 0, 4));
+                    if (count($cleanFormats) > 4) $formatsStr .= '...';
+                }
+            }
+
+            $sizeStr = $maxFileSize ? strtoupper($maxFileSize) : '50MB';
+
+            if ($formatsStr) {
+                $subTemplate = $fpLang('drop_subtitle', ':formats formats, up to :max_size');
+                $resolvedSubtitle = str_replace([':formats', ':max_size'], [$formatsStr, $sizeStr], $subTemplate);
+            } else {
+                $resolvedSubtitle = $fpLang('drop_subtitle_default', 'JPEG, PNG, PDF, and MP4 formats, up to 50MB');
+            }
+        }
+
+        $resolvedBrowse = $browseLabel ?? $buttonText ?? $fpLang('browse_button', 'Browse File');
+
+        if ($isCompact) {
+            $resolvedLabelIdle = '<div class="filepond--custom-dropzone filepond--compact-dropzone">' .
+                '<div class="filepond--compact-left">' .
+                    $iconSvg .
+                    '<div class="filepond--compact-text">' .
+                        '<div class="filepond--drop-title">' . htmlspecialchars($resolvedTitle) . '</div>' .
+                        '<div class="filepond--drop-subtitle">' . htmlspecialchars($resolvedSubtitle) . '</div>' .
+                    '</div>' .
+                '</div>' .
+                '<div class="filepond--drop-action">' .
+                    '<span class="filepond--label-action">' . htmlspecialchars($resolvedBrowse) . '</span>' .
+                '</div>' .
+            '</div>';
+        } else {
+            $resolvedLabelIdle = '<div class="filepond--custom-dropzone">' .
+                '<div class="filepond--cloud-icon">' .
+                    $iconSvg .
+                '</div>' .
+                '<div class="filepond--drop-title">' . htmlspecialchars($resolvedTitle) . '</div>' .
+                '<div class="filepond--drop-subtitle">' . htmlspecialchars($resolvedSubtitle) . '</div>' .
+                '<div class="filepond--drop-action">' .
+                    '<span class="filepond--label-action">' . htmlspecialchars($resolvedBrowse) . '</span>' .
+                '</div>' .
+            '</div>';
+        }
+    }
+
     // Load localized labels
     $langLabels = [
-        'labelIdle' => $avatar ? $fpLang('label_avatar_idle', '<span class="filepond--label-action">Pilih Foto</span>') : $fpLang('label_idle', 'Tarik & Lepas berkas atau <span class="filepond--label-action">Pilih Berkas</span>'),
+        'labelIdle' => $resolvedLabelIdle,
         'labelInvalidField' => $fpLang('label_invalid_field', 'Bidang berisi berkas tidak valid'),
         'labelFileWaitingForSize' => $fpLang('label_file_waiting_for_size', 'Menunggu ukuran berkas'),
         'labelFileSizeNotAllowed' => $fpLang('label_file_size_not_allowed', 'Ukuran berkas melebihi batas maksimal'),
@@ -92,6 +182,8 @@
 
     $mergedLabels = array_merge($langLabels, (array) $labels);
 
+    $resolvedDemoFiles = !empty($demoFiles) ? $demoFiles : ($demo ? ['my-cv.pdf'] : []);
+
     $config = [
         'id' => $id,
         'name' => $name,
@@ -113,7 +205,7 @@
         'imageResizeMode' => $imageResizeMode,
         'imageTransform' => (bool) $imageTransform,
         'imageQuality' => $imageQuality,
-        'avatar' => (bool) $avatar,
+        'avatar' => (bool) $isAvatar,
         'encode' => (bool) $encode,
         'server' => $server,
         'presignUrl' => $presignUrl,
@@ -121,13 +213,16 @@
         'chunkUploads' => (bool) $chunkUploads,
         'chunkSize' => $chunkSize,
         'existingFiles' => $existingFiles,
+        'demoFiles' => $resolvedDemoFiles,
         'disabled' => (bool) $isDisabled,
         'required' => (bool) $isRequired,
         'labels' => $mergedLabels,
         'wireModel' => $wireModelAttr,
+        'dashed' => (bool) $dashed,
+        'variant' => $variant,
     ];
 
-    $configJson = json_encode($config, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
+    $configJson = json_encode($config);
 @endphp
 
 @pushOnce('head', 'vibe-filepond-styles')
@@ -138,9 +233,9 @@
     @vite(['resources/js/vibe/filepond.js'])
 @endPushOnce
 
-<div class="{{ $wrapperClass }} {{ $avatar ? 'filepond-avatar-mode' : '' }}">
+<div class="{{ $wrapperClass }} {{ $isAvatar ? 'filepond-avatar-mode' : '' }} {{ $isCompact ? 'filepond-compact-mode' : '' }} {{ $dashed ? 'filepond-dashed' : 'filepond-solid' }}">
     @if ($label)
-        <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none cursor-pointer {{ $avatar ? 'text-center' : '' }}" onclick="
+        <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none cursor-pointer {{ $isAvatar ? 'text-center' : '' }}" onclick="
                 var c = document.getElementById('{{ $id }}')?.closest('[data-vibe-filepond]');
                 if (c) {
                     var p = c._x_dataStack?.find(function(s) { return s && s.pond; })?.pond;
@@ -158,7 +253,7 @@
     @endif
 
     @if ($description)
-        <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground {{ $avatar ? 'text-center' : '' }}">
+        <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground {{ $isAvatar ? 'text-center' : '' }}">
             {{ $description }}
         </p>
     @endif
@@ -170,7 +265,9 @@
             var mount = function() {
                 if (self.pond) return;
                 if (typeof window.vibeFilepond === 'function') {
-                    var comp = window.vibeFilepond({{ $configJson }});
+                    var script = self.$el.querySelector('script.vibe-filepond-config');
+                    var config = script ? JSON.parse(script.textContent) : {};
+                    var comp = window.vibeFilepond(config);
                     comp.$el = self.$el;
                     comp.$refs = self.$refs;
                     comp.$dispatch = self.$dispatch ? self.$dispatch.bind(self) : function(name, detail) {
@@ -200,35 +297,30 @@
                 this.pond = null;
             }
         }
-    }" onclick="
-            if (event.target.closest('button, a, .filepond--file-action-button, .filepond--action-remove-item, .filepond--action-retry-item-processing, .filepond--action-abort-item-processing, .filepond--action-revert-item-processing')) return;
-            if (event.target.tagName === 'INPUT' && event.target.type === 'file') return;
-            var p = this._x_dataStack?.find(function(s) { return s && s.pond; })?.pond;
-            if (p && typeof p.browse === 'function') {
-                event.preventDefault();
-                p.browse();
-            } else {
-                var inp = this.querySelector('input.filepond--browser') || this.querySelector('input[type=file]');
-                if (inp && event.target !== inp) inp.click();
-            }
-        " {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full cursor-pointer']) }}>
-        <input x-ref="input" type="file" id="{{ $id }}" name="{{ $name ? ($multiple ? "{$name}[]" : $name) : 'file' }}" @if ($multiple) multiple @endif @if ($resolvedAccept) accept="{{ is_array($resolvedAccept) ? implode(',', $resolvedAccept) : $resolvedAccept }}" @endif @if ($isRequired) required @endif @if ($isDisabled) disabled @endif class="sr-only">
+    }" @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
+        <script type="application/json" class="vibe-filepond-config">{!! $configJson !!}</script>
+        <input x-ref="input" type="file" id="{{ $id }}" name="{{ $name ? ($multiple ? "{$name}[]" : $name) : 'file' }}" @if ($multiple) multiple @endif @if ($resolvedAccept) accept="{{ is_array($resolvedAccept) ? implode(',', $resolvedAccept) : $resolvedAccept }}" @endif @if ($isRequired) required @endif @if ($isDisabled) disabled @endif>
+
+        {{-- Fallback UI before FilePond JS mounts (prevents FOUC and native input flash) --}}
+        <div class="filepond--fallback-dropzone {{ $isAvatar ? 'filepond-fallback-avatar' : '' }}" onclick="document.getElementById('{{ $id }}')?.click()">
+            {!! $resolvedLabelIdle !!}
+        </div>
 
         {{-- Hidden container for presigned upload keys synchronization with standard forms --}}
         <div x-ref="hiddenContainer" class="hidden"></div>
     </div>
 
     @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1 {{ $avatar ? 'justify-center' : '' }}">
+        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1 {{ $isAvatar ? 'justify-center' : '' }}">
             <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="8" y2="12" />
+                <line x1="12" y1="8" x2="12" y2="12" />
                 <line x1="12" x2="12.01" y1="16" y2="16" />
             </svg>
             <span>{{ $errorMessage }}</span>
         </p>
     @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground {{ $avatar ? 'text-center' : '' }}">
+        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground {{ $isAvatar ? 'text-center' : '' }}">
             {{ $info }}
         </p>
     @endif
