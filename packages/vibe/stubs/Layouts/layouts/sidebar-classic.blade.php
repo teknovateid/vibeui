@@ -4,7 +4,7 @@
 ])
 
 @php
-    $isHeaderSticky = ($headerVariant === 'sticky') && ($sticky !== false);
+    $isHeaderSticky = $headerVariant === 'sticky' && $sticky !== false;
 @endphp
 
 <x-layouts.base>
@@ -170,9 +170,7 @@
 
         </vibe:sheet>
 
-        <div id="docs-main-scroll" 
-             class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}"
-             style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
+        <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header :variant="$isHeaderSticky ? 'sticky' : 'default'" size="sm" class="{{ $isHeaderSticky ? '' : 'bg-transparent! border-none' }}" x-data>
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" class="p-2 hidden sidebar-minified:block sidebar-collapsed:block text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
@@ -186,10 +184,7 @@
 
                 <vibe:header.actions class="items-center h-full relative gap-1.5">
                     <!-- Search Trigger Button -->
-                    <button type="button" 
-                            @click="$dispatch('open-modal', 'global-search-modal')" 
-                            class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground bg-accent/40 hover:bg-accent/80 hover:text-foreground border border-border/60 rounded-full transition-all duration-200 cursor-pointer shadow-2xs hover:border-border mr-0.5" 
-                            title="Pencarian Cepat (⌘K / Ctrl+K)">
+                    <button type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground bg-accent/40 hover:bg-accent/80 hover:text-foreground border border-border/60 rounded-full transition-all duration-200 cursor-pointer shadow-2xs hover:border-border mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
                         <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -233,8 +228,12 @@
                     </vibe:button>
 
                     <vibe:button variant="ghost" class="p-2 relative rounded-full" @click.stop="$dispatch('toggle-sheet', 'notification-sheet')" aria-label="Toggle notifications" title="Notifications">
-                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.5" class="solar solar-bell-outline">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 1.25C7.71983 1.25 4.25004 4.71979 4.25004 9V9.7041C4.25004 10.401 4.04375 11.0824 3.65717 11.6622L2.50856 13.3851C1.17547 15.3848 2.19318 18.1028 4.51177 18.7351C5.26738 18.9412 6.02937 19.1155 6.79578 19.2581L6.79768 19.2632C7.56667 21.3151 9.62198 22.75 12 22.75C14.378 22.75 16.4333 21.3151 17.2023 19.2632L17.2042 19.2581C17.9706 19.1155 18.7327 18.9412 19.4883 18.7351C21.8069 18.1028 22.8246 15.3848 21.4915 13.3851L20.3429 11.6622C19.9563 11.0824 19.75 10.401 19.75 9.7041V9C19.75 4.71979 16.2802 1.25 12 1.25ZM15.3764 19.537C13.1335 19.805 10.8664 19.8049 8.62349 19.5369C9.33444 20.5585 10.571 21.25 12 21.25C13.4289 21.25 14.6655 20.5585 15.3764 19.537ZM5.75004 9C5.75004 5.54822 8.54826 2.75 12 2.75C15.4518 2.75 18.25 5.54822 18.25 9V9.7041C18.25 10.6972 18.544 11.668 19.0948 12.4943L20.2434 14.2172C21.0086 15.3649 20.4245 16.925 19.0936 17.288C14.4494 18.5546 9.5507 18.5546 4.90644 17.288C3.57561 16.925 2.99147 15.3649 3.75664 14.2172L4.90524 12.4943C5.45609 11.668 5.75004 10.6972 5.75004 9.7041V9Z" fill="currentColor" />
+                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path d="M0 0h24v24H0z" fill="none" />
+                            <g fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M18.7491 9.70957V9.00496C18.7491 5.13623 15.7274 2 12 2C8.27256 2 5.25087 5.13623 5.25087 9.00496V9.70957C5.25087 10.5552 5.00972 11.3818 4.5578 12.0854L3.45036 13.8095C2.43882 15.3843 3.21105 17.5249 4.97036 18.0229C9.57274 19.3257 14.4273 19.3257 19.0296 18.0229C20.789 17.5249 21.5612 15.3843 20.5496 13.8095L19.4422 12.0854C18.9903 11.3818 18.7491 10.5552 18.7491 9.70957Z" />
+                                <path stroke-linecap="round" d="M7.5 19C8.15503 20.7478 9.92246 22 12 22C14.0775 22 15.845 20.7478 16.5 19" opacity=".5" />
+                            </g>
                         </svg>
                         <span class="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full ring-2 ring-background"></span>
                     </vibe:button>

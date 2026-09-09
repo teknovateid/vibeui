@@ -50,15 +50,15 @@
     </x-slot:header>
 
     @for ($i = 1; $i <= 6; $i++)
-        <div class="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-2">
+        <vibe:grid-list.card>
             <div class="flex items-center justify-between">
                 <h4 class="font-semibold text-sm text-foreground">Modul Keamanan #{{ $i }}</h4>
                 <vibe:badge variant="outline" size="sm">v1.{{ $i }}</vibe:badge>
             </div>
-            <p class="text-xs text-muted-foreground leading-relaxed">
+            <p class="text-xs text-muted-foreground leading-relaxed mt-1">
                 Komponen modul microservice untuk otentikasi dan kontrol otorisasi pengguna.
             </p>
-        </div>
+        </vibe:grid-list.card>
     @endfor
 </vibe:grid-list>
                     </vibe:preview.code>
@@ -69,15 +69,15 @@
                             </x-slot:header>
 
                             @for ($i = 1; $i <= 6; $i++)
-                                <div class="p-4 rounded-xl border border-border bg-card shadow-2xs space-y-2">
+                                <vibe:grid-list.card>
                                     <div class="flex items-center justify-between">
                                         <h4 class="font-semibold text-sm text-foreground">Modul Keamanan #{{ $i }}</h4>
                                         <vibe:badge variant="outline" size="sm">v1.{{ $i }}</vibe:badge>
                                     </div>
-                                    <p class="text-xs text-muted-foreground leading-relaxed">
+                                    <p class="text-xs text-muted-foreground leading-relaxed mt-1">
                                         Komponen modul microservice untuk otentikasi dan kontrol otorisasi pengguna.
                                     </p>
-                                </div>
+                                </vibe:grid-list.card>
                             @endfor
                         </vibe:grid-list>
                     </div>
@@ -105,19 +105,21 @@
     </x-slot:header>
 
     @foreach (['INV-2026-001' => 'PT Surya Digital Nusantara', 'INV-2026-002' => 'CV Tekno Pratama', 'INV-2026-003' => 'PT Maju Bersama Tech'] as $code => $client)
-        <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div class="space-y-1">
-                <div class="flex items-center gap-2">
-                    <span class="font-mono text-xs font-semibold text-primary">{{ $code }}</span>
-                    <vibe:badge variant="success" size="sm" class="rounded-full">Diproses</vibe:badge>
+        <vibe:grid-list.card>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <span class="font-mono text-xs font-semibold text-primary">{{ $code }}</span>
+                        <vibe:badge variant="success" size="sm" class="rounded-full">Diproses</vibe:badge>
+                    </div>
+                    <p class="text-sm font-medium text-foreground">{{ $client }}</p>
                 </div>
-                <p class="text-sm font-medium text-foreground">{{ $client }}</p>
+                <div class="flex items-center gap-2 shrink-0">
+                    <vibe:button variant="outline" size="sm">Detail</vibe:button>
+                    <vibe:button variant="primary" size="sm">Proses</vibe:button>
+                </div>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-                <vibe:button variant="outline" size="sm">Detail</vibe:button>
-                <vibe:button variant="primary" size="sm">Proses</vibe:button>
-            </div>
-        </div>
+        </vibe:grid-list.card>
     @endforeach
 </vibe:grid-list>
                     </vibe:preview.code>
@@ -131,19 +133,21 @@
                             </x-slot:header>
 
                             @foreach (['INV-2026-001' => 'PT Surya Digital Nusantara', 'INV-2026-002' => 'CV Tekno Pratama', 'INV-2026-003' => 'PT Maju Bersama Tech'] as $code => $client)
-                                <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <div class="space-y-1">
-                                        <div class="flex items-center gap-2">
-                                            <span class="font-mono text-xs font-semibold text-primary">{{ $code }}</span>
-                                            <vibe:badge variant="success" size="sm" class="rounded-full">Diproses</vibe:badge>
+                                <vibe:grid-list.card>
+                                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="font-mono text-xs font-semibold text-primary">{{ $code }}</span>
+                                                <vibe:badge variant="success" size="sm" class="rounded-full">Diproses</vibe:badge>
+                                            </div>
+                                            <p class="text-sm font-medium text-foreground">{{ $client }}</p>
                                         </div>
-                                        <p class="text-sm font-medium text-foreground">{{ $client }}</p>
+                                        <div class="flex items-center gap-2 shrink-0">
+                                            <vibe:button variant="outline" size="sm">Detail</vibe:button>
+                                            <vibe:button variant="primary" size="sm">Proses</vibe:button>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center gap-2 shrink-0">
-                                        <vibe:button variant="outline" size="sm">Detail</vibe:button>
-                                        <vibe:button variant="primary" size="sm">Proses</vibe:button>
-                                    </div>
-                                </div>
+                                </vibe:grid-list.card>
                             @endforeach
                         </vibe:grid-list>
                     </div>
@@ -188,7 +192,7 @@
         ['name' => 'vibe-ui/icons', 'desc' => 'High performance Lucide SVG icon set with direct Blade integration.', 'stars' => '840', 'lang' => 'Blade'],
         ['name' => 'vibe-ui/docs', 'desc' => 'Official documentation portal built with interactive live previews.', 'stars' => '520', 'lang' => 'Laravel'],
     ] as $repo)
-        <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col justify-between gap-3">
+        <vibe:grid-list.card class="flex flex-col justify-between gap-3">
             <div class="space-y-1.5">
                 <div class="flex items-center justify-between">
                     <span class="font-mono text-sm font-semibold text-primary">{{ $repo['name'] }}</span>
@@ -206,7 +210,7 @@
                 </span>
                 <vibe:button variant="ghost" size="xs">Akses Repositori &rarr;</vibe:button>
             </div>
-        </div>
+        </vibe:grid-list.card>
     @endforeach
 </vibe:grid-list>
                     </vibe:preview.code>
@@ -238,7 +242,7 @@
                                 ['name' => 'vibe-ui/icons', 'desc' => 'High performance Lucide SVG icon set with direct Blade integration.', 'stars' => '840', 'lang' => 'Blade'],
                                 ['name' => 'vibe-ui/docs', 'desc' => 'Official documentation portal built with interactive live previews.', 'stars' => '520', 'lang' => 'Laravel'],
                             ] as $repo)
-                                <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col justify-between gap-3">
+                                <vibe:grid-list.card class="flex flex-col justify-between gap-3">
                                     <div class="space-y-1.5">
                                         <div class="flex items-center justify-between">
                                             <span class="font-mono text-sm font-semibold text-primary">{{ $repo['name'] }}</span>
@@ -256,7 +260,7 @@
                                         </span>
                                         <vibe:button variant="ghost" size="xs">Akses Repositori &rarr;</vibe:button>
                                     </div>
-                                </div>
+                                </vibe:grid-list.card>
                             @endforeach
                         </vibe:grid-list>
                     </div>
@@ -284,7 +288,7 @@
         ['name' => 'us-node-02', 'region' => 'N. Virginia (us-east-1)', 'cpu' => '16 vCPU', 'ram' => '64 GB', 'ssd' => '1 TB', 'status' => 'active'],
         ['name' => 'eu-node-03', 'region' => 'Frankfurt (eu-central-1)', 'cpu' => '4 vCPU', 'ram' => '16 GB', 'ssd' => '250 GB', 'status' => 'maintenance'],
     ] as $node)
-        <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col justify-between gap-4">
+        <vibe:grid-list.card class="flex flex-col justify-between gap-4">
             <div class="space-y-2">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
@@ -329,7 +333,7 @@
                     {{ __('docs/grid-list.rich_cards.view_details') }}
                 </vibe:button>
             </div>
-        </div>
+        </vibe:grid-list.card>
     @endforeach
 </vibe:grid-list>
                     </vibe:preview.code>
@@ -344,7 +348,7 @@
                                 ['name' => 'us-node-02', 'region' => 'N. Virginia (us-east-1)', 'cpu' => '16 vCPU', 'ram' => '64 GB', 'ssd' => '1 TB', 'status' => 'active'],
                                 ['name' => 'eu-node-03', 'region' => 'Frankfurt (eu-central-1)', 'cpu' => '4 vCPU', 'ram' => '16 GB', 'ssd' => '250 GB', 'status' => 'maintenance'],
                             ] as $node)
-                                <div class="p-4 rounded-xl border border-border bg-card shadow-2xs flex flex-col justify-between gap-4">
+                                <vibe:grid-list.card class="flex flex-col justify-between gap-4">
                                     <div class="space-y-2">
                                         <div class="flex items-center justify-between">
                                             <div class="flex items-center gap-2">
@@ -389,7 +393,7 @@
                                             {{ __('docs/grid-list.rich_cards.view_details') }}
                                         </vibe:button>
                                     </div>
-                                </div>
+                                </vibe:grid-list.card>
                             @endforeach
                         </vibe:grid-list>
                     </div>
@@ -455,10 +459,49 @@
                             $gridListProps = [
                                 ['id', 'string', "'default_page'", 'ID unik untuk membedakan penyimpanan preferensi layout di localStorage.'],
                                 ['defaultLayout', 'string', "'list'", "Pilihan tampilan awal jika belum ada preferensi tersimpan: `'list'` atau `'grid'`."],
-                                ['header', 'slot|null', 'null', 'Slot konten yang ditempatkan di sisi kiri atas sejajar dengan tombol toggle grid/list.'],
+                                ['title', 'string|null', 'null', 'Judul daftar yang otomatis ditampilkan di header sebelah kiri.'],
+                                ['description', 'string|null', 'null', 'Deskripsi ringkas di bawah judul header.'],
+                                ['badge', 'string|null', 'null', 'Teks lencana (menggunakan `<vibe:badge>`) di samping judul.'],
+                                ['badgeVariant', 'string', "'secondary'", 'Varian lencana badge (misal: `secondary`, `outline`, `primary`, dll).'],
+                                ['header', 'slot|null', 'null', 'Slot kustom untuk header di sisi kiri atas sejajar dengan switcher.'],
+                                ['actions', 'slot|null', 'null', 'Slot tombol aksi tambahan yang diletakkan di sebelah tombol switcher.'],
+                                ['showSwitcher', 'bool', 'true', 'Tampilkan tombol toggle Grid / List switcher (menggunakan `<vibe:button>`).'],
                             ];
                         @endphp
                         @foreach ($gridListProps as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- vibe:grid-list.card Props --}}
+                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:grid-list.card&gt; / &lt;vibe:grid-list.item&gt;</p>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/grid-list.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/grid-list.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/grid-list.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/grid-list.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $cardProps = [
+                                ['variant', 'string', "'default'", 'Varian kartu dari `<vibe:card>` (`default`, `outline`, `elevated`, `ghost`, `flat`).'],
+                                ['padding', 'string', "'sm'", 'Ukuran padding kartu (`none`, `sm`, `lg`, `xl`, default `sm`).'],
+                                ['hover', 'bool', 'true', 'Menambahkan efek transisi dan elevasi hover pada kartu.'],
+                                ['title', 'string|null', 'null', 'Judul kartu otomatis di header kartu.'],
+                                ['description', 'string|null', 'null', 'Deskripsi kartu otomatis di bawah judul.'],
+                                ['header', 'slot|null', 'null', 'Slot kustom untuk bagian atas kartu.'],
+                                ['actions', 'slot|null', 'null', 'Slot aksi di sudut kanan atas kartu.'],
+                                ['footer', 'slot|null', 'null', 'Slot footer kartu dengan garis pemisah.'],
+                            ];
+                        @endphp
+                        @foreach ($cardProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
