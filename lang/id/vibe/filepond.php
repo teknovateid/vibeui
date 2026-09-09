@@ -27,4 +27,9 @@ return [
     'label_button_retry_item_processing' => 'Coba lagi',
     'label_button_process_item' => 'Unggah',
     'label_max_files_exceeded' => 'Jumlah maksimal berkas terlampaui',
+    'protect_title' => 'Unggahan Belum Selesai',
+    'protect_submit_message' => 'Berkas Anda masih dalam proses pengunggahan. Harap tunggu hingga semua berkas selesai diunggah sebelum mengirim formulir.',
+    'protect_navigation_message' => 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?',
+    'protect_stay_button' => 'Tetap di Sini',
+    'protect_leave_button' => 'Tinggalkan Halaman',
 ];

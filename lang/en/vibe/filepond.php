@@ -27,4 +27,9 @@ return [
     'label_button_retry_item_processing' => 'Retry',
     'label_button_process_item' => 'Upload',
     'label_max_files_exceeded' => 'Maximum number of files exceeded',
+    'protect_title' => 'Upload in Progress',
+    'protect_submit_message' => 'Files are still uploading. Please wait for all files to finish uploading before submitting the form.',
+    'protect_navigation_message' => 'Files are still uploading. If you leave this page now, the upload will be cancelled. Are you sure you want to leave?',
+    'protect_stay_button' => 'Stay on Page',
+    'protect_leave_button' => 'Leave Page',
 ];

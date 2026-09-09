@@ -244,10 +244,17 @@ export function vibeFilepond(config = {}) {
         pond: null,
         input: null,
         uploadedKeys: [],
+        activeUploads: new Set(),
+        _isNavigatingAway: false,
+        _cleanupListeners: [],
 
         init() {
             this.input = this.$refs.input || this.$el.querySelector('input[type="file"]');
             if (!this.input) return;
+
+            if (typeof this.$cleanup === 'function') {
+                this.$cleanup(() => this.destroy());
+            }
 
             // Strip any accidental sr-only class from input element so FilePond does not inherit it
             if (this.input.classList && this.input.classList.contains('sr-only')) {
@@ -277,6 +284,9 @@ export function vibeFilepond(config = {}) {
                 fallbackEl.remove();
             }
 
+            // Setup Upload Protection (Blocks submit & navigation while uploads are in progress)
+            this.setupUploadProtection(config);
+
             // Preload demo/mock files if provided (useful for docs & showcase without network calls)
             if (config.demoFiles && Array.isArray(config.demoFiles) && config.demoFiles.length > 0) {
                 config.demoFiles.forEach(df => {
@@ -299,19 +309,27 @@ export function vibeFilepond(config = {}) {
 
             // Safe teardown when element is detached (Livewire SPA wire:navigate)
             this._cleanupHandler = () => {
-                if (this.pond) {
-                    try {
-                        this.pond.destroy();
-                    } catch (e) {}
-                    this.pond = null;
+                if (this._isNavigatingAway || window.__vibeFilepondBypassProtection || !this.$el || !this.$el.isConnected) {
+                    if (this.pond) {
+                        try {
+                            this.pond.destroy();
+                        } catch (e) {}
+                        this.pond = null;
+                    }
                 }
             };
-            document.addEventListener('livewire:navigating', this._cleanupHandler, { once: true });
+            document.addEventListener('livewire:navigating', this._cleanupHandler);
         },
 
         destroy() {
             if (this._cleanupHandler) {
                 document.removeEventListener('livewire:navigating', this._cleanupHandler);
+            }
+            if (Array.isArray(this._cleanupListeners)) {
+                this._cleanupListeners.forEach(fn => {
+                    try { fn(); } catch (e) {}
+                });
+                this._cleanupListeners = [];
             }
             if (this.pond) {
                 try {
@@ -386,15 +404,39 @@ export function vibeFilepond(config = {}) {
                     attachCustomFileIcon(item);
                     self.$dispatch('vibe-filepond-addfile', { item: item.file });
                 },
-                onremovefile: (err, item) => {
-                    self.$dispatch('vibe-filepond-removefile', { item: item?.file });
+                onprocessfilestart: (item) => {
+                    if (item && item.id) {
+                        self.activeUploads.add(item.id);
+                    }
+                    self.$dispatch('vibe-filepond-processfilestart', { item: item?.file });
                 },
                 onprocessfile: (err, item) => {
+                    if (item && item.id) {
+                        self.activeUploads.delete(item.id);
+                    }
                     if (err) {
                         self.$dispatch('vibe-filepond-error', { error: err, item });
                         return;
                     }
-                    self.$dispatch('vibe-filepond-processfile', { item: item.file });
+                    self.$dispatch('vibe-filepond-processfile', { item: item?.file });
+                },
+                onprocessfileabort: (item) => {
+                    if (item && item.id) {
+                        self.activeUploads.delete(item.id);
+                    }
+                    self.$dispatch('vibe-filepond-processfileabort', { item: item?.file });
+                },
+                onprocessfilerevert: (item) => {
+                    if (item && item.id) {
+                        self.activeUploads.delete(item.id);
+                    }
+                    self.$dispatch('vibe-filepond-processfilerevert', { item: item?.file });
+                },
+                onremovefile: (err, item) => {
+                    if (item && item.id) {
+                        self.activeUploads.delete(item.id);
+                    }
+                    self.$dispatch('vibe-filepond-removefile', { item: item?.file });
                 }
             };
 
@@ -427,6 +469,9 @@ export function vibeFilepond(config = {}) {
             if (cfg.presignUrl) {
                 return {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
+                        const uploadId = (metadata && metadata.id) ? metadata.id : (file.name + '_' + file.size + '_' + Math.random());
+                        self.activeUploads.add(uploadId);
+
                         // Immediately activate FilePond indicator (indeterminate busy spinner)
                         progress(false, 0, 0);
 
@@ -480,6 +525,7 @@ export function vibeFilepond(config = {}) {
                                     const method = response.method || cfg.presignMethod || 'PUT';
 
                                     if (!uploadUrl || typeof uploadUrl !== 'string') {
+                                        self.activeUploads.delete(uploadId);
                                         error('Presigned response missing upload URL');
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: 'Presigned response missing upload URL' } }));
                                         return;
@@ -513,6 +559,7 @@ export function vibeFilepond(config = {}) {
                                     };
 
                                     xhrUpload.onload = () => {
+                                        self.activeUploads.delete(uploadId);
                                         if (xhrUpload.status >= 200 && xhrUpload.status < 300) {
                                             progress(true, file.size, file.size);
                                             load(fileKey);
@@ -528,6 +575,7 @@ export function vibeFilepond(config = {}) {
                                     };
 
                                     xhrUpload.onerror = () => {
+                                        self.activeUploads.delete(uploadId);
                                         const errMsg = 'Network error during cloud upload';
                                         error(errMsg);
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
@@ -535,14 +583,17 @@ export function vibeFilepond(config = {}) {
 
                                     xhrUpload.send(file);
                                 } catch (e) {
+                                    self.activeUploads.delete(uploadId);
                                     error('Error parsing presigned JSON: ' + e.message);
                                 }
                             } else {
+                                self.activeUploads.delete(uploadId);
                                 error('Failed to fetch presigned URL: ' + xhrPresign.statusText);
                             }
                         };
 
                         xhrPresign.onerror = () => {
+                            self.activeUploads.delete(uploadId);
                             error('Network error requesting presigned URL');
                         };
 
@@ -550,6 +601,7 @@ export function vibeFilepond(config = {}) {
 
                         return {
                             abort: () => {
+                                self.activeUploads.delete(uploadId);
                                 if (xhrUpload) {
                                     xhrUpload.abort();
                                 }
@@ -571,14 +623,18 @@ export function vibeFilepond(config = {}) {
             if (cfg.wireModel && self.$wire) {
                 return {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
+                        const uploadId = (metadata && metadata.id) ? metadata.id : (file.name + '_' + file.size + '_' + Math.random());
+                        self.activeUploads.add(uploadId);
                         self.$wire.upload(
                             cfg.wireModel,
                             file,
                             (uploadedFilename) => {
+                                self.activeUploads.delete(uploadId);
                                 load(uploadedFilename);
                                 self.$dispatch('vibe-filepond-uploaded', { file: uploadedFilename });
                             },
                             () => {
+                                self.activeUploads.delete(uploadId);
                                 error('Livewire upload failed');
                                 self.$dispatch('vibe-filepond-error', { error: 'Livewire upload failed' });
                             },
@@ -669,6 +725,252 @@ export function vibeFilepond(config = {}) {
                 input.name = cfg.name;
                 input.value = this.uploadedKeys[0];
                 hiddenContainer.appendChild(input);
+            }
+        },
+
+        hasPendingUploads() {
+            if (this.activeUploads && this.activeUploads.size > 0) {
+                return true;
+            }
+            if (this.pond && typeof this.pond.getFiles === 'function') {
+                try {
+                    const files = this.pond.getFiles();
+                    return files.some(item => {
+                        const s = item.status;
+                        // FileStatus: 1: INIT, 3: PROCESSING, 7: LOADING, 9: PROCESSING_QUEUED
+                        return s === 1 || s === 3 || s === 7 || s === 9;
+                    });
+                } catch (e) {}
+            }
+            return false;
+        },
+
+        setupUploadProtection(cfg) {
+            const protect = cfg.protect;
+            if (!protect || !protect.enabled) return;
+
+            const self = this;
+
+            // 1. Form Submit Protection
+            if (protect.protectSubmit !== false) {
+                const handleSubmit = (e) => {
+                    if (self._isNavigatingAway) return;
+
+                    // Check if the submitted form contains this filepond instance
+                    const form = self.$el ? self.$el.closest('form') : null;
+                    const eventForm = e.target && e.target.tagName === 'FORM' ? e.target : e.target?.closest?.('form');
+
+                    if (form && eventForm && (form === eventForm || form.contains(e.target))) {
+                        if (self.hasPendingUploads()) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            e.stopPropagation();
+                            self.showSubmitBlockedAlert(protect);
+                            return false;
+                        }
+                    }
+                };
+
+                // Capture phase ensures we intercept before form submit / button click handlers
+                document.addEventListener('submit', handleSubmit, { capture: true });
+                this._cleanupListeners.push(() => {
+                    document.removeEventListener('submit', handleSubmit, { capture: true });
+                });
+            }
+
+            // 2. Navigation Protection (Links, Livewire, & Popstate)
+            if (protect.preventNavigation !== false) {
+                const handleLinkNavigation = (e) => {
+                    if (self._isNavigatingAway || window.__vibeFilepondBypassProtection) return;
+                    if (!self.hasPendingUploads()) return;
+
+                    const link = e.target.closest('a');
+                    if (!link) return;
+
+                    const href = link.getAttribute('href');
+                    if (!href) return;
+
+                    // Ignore anchor jumps on same page, javascript:, mailto:, tel:, new window, download
+                    if (href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+                    if (link.target && link.target !== '_self') return;
+                    if (link.hasAttribute('download')) return;
+                    if (e.button !== undefined && e.button !== 0) return;
+                    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+                    // Check if link target is current page URL (same page hash jump)
+                    try {
+                        const targetUrl = new URL(link.href, window.location.href);
+                        const currentUrl = new URL(window.location.href);
+                        if (targetUrl.origin === currentUrl.origin && targetUrl.pathname === currentUrl.pathname && targetUrl.search === currentUrl.search) {
+                            return;
+                        }
+                    } catch (err) {}
+
+                    // Intercept and prevent navigation completely
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+
+                    // Debounce alert between mousedown and click
+                    if (e.type === 'click' || !self._lastAlertTime || (Date.now() - self._lastAlertTime > 600)) {
+                        self._lastAlertTime = Date.now();
+                        self.showNavigationBlockedAlert(link.href, protect);
+                    }
+                };
+
+                // Intercept mousedown and click in capture phase (Livewire wire:navigate triggers on mousedown!)
+                document.addEventListener('mousedown', handleLinkNavigation, { capture: true });
+                document.addEventListener('click', handleLinkNavigation, { capture: true });
+                this._cleanupListeners.push(() => {
+                    document.removeEventListener('mousedown', handleLinkNavigation, { capture: true });
+                    document.removeEventListener('click', handleLinkNavigation, { capture: true });
+                });
+
+                // Keydown navigation (Enter key on focused link)
+                const handleKeyNavigation = (e) => {
+                    if (e.key === 'Enter') {
+                        handleLinkNavigation(e);
+                    }
+                };
+                document.addEventListener('keydown', handleKeyNavigation, { capture: true });
+                this._cleanupListeners.push(() => {
+                    document.removeEventListener('keydown', handleKeyNavigation, { capture: true });
+                });
+
+                // Livewire / Alpine SPA cancelable event before navigation starts (livewire:navigate & alpine:navigate)
+                const handleLivewireNavigate = (e) => {
+                    if (self._isNavigatingAway || window.__vibeFilepondBypassProtection) return;
+                    if (self.hasPendingUploads()) {
+                        // Calling preventDefault on livewire:navigate or alpine:navigate cancels the navigation!
+                        e.preventDefault();
+                        e.stopImmediatePropagation();
+
+                        let rawUrl = e.detail ? (e.detail.url || e.detail) : null;
+                        let dest = rawUrl ? (rawUrl.href || rawUrl.toString()) : null;
+
+                        if (!self._lastAlertTime || (Date.now() - self._lastAlertTime > 600)) {
+                            self._lastAlertTime = Date.now();
+                            self.showNavigationBlockedAlert(dest, protect);
+                        }
+                    }
+                };
+                document.addEventListener('livewire:navigate', handleLivewireNavigate, { capture: true });
+                document.addEventListener('alpine:navigate', handleLivewireNavigate, { capture: true });
+                this._cleanupListeners.push(() => {
+                    document.removeEventListener('livewire:navigate', handleLivewireNavigate, { capture: true });
+                    document.removeEventListener('alpine:navigate', handleLivewireNavigate, { capture: true });
+                });
+
+                // Popstate (Browser back / forward button)
+                const handlePopState = (e) => {
+                    if (self._isNavigatingAway || window.__vibeFilepondBypassProtection) return;
+                    if (self.hasPendingUploads()) {
+                        history.pushState(null, document.title, window.location.href);
+                        if (!self._lastAlertTime || (Date.now() - self._lastAlertTime > 600)) {
+                            self._lastAlertTime = Date.now();
+                            self.showNavigationBlockedAlert(null, protect);
+                        }
+                    }
+                };
+                window.addEventListener('popstate', handlePopState);
+                this._cleanupListeners.push(() => {
+                    window.removeEventListener('popstate', handlePopState);
+                });
+            }
+
+            // 3. Tab/Window Unload Protection (beforeunload)
+            if (protect.preventUnload !== false) {
+                const handleBeforeUnload = (e) => {
+                    if (self._isNavigatingAway || window.__vibeFilepondBypassProtection) return;
+                    if (self.hasPendingUploads()) {
+                        e.preventDefault();
+                        e.returnValue = '';
+                        return '';
+                    }
+                };
+
+                window.addEventListener('beforeunload', handleBeforeUnload);
+                this._cleanupListeners.push(() => {
+                    window.removeEventListener('beforeunload', handleBeforeUnload);
+                });
+            }
+        },
+
+        showSubmitBlockedAlert(protect = {}) {
+            const title = protect.title || 'Unggahan Belum Selesai';
+            const message = protect.submitMessage || 'Berkas Anda masih dalam proses pengunggahan. Harap tunggu hingga semua berkas selesai diunggah sebelum mengirim formulir.';
+            const stayBtnText = protect.stayButton || 'Mengerti';
+
+            const hasVibeAlert = Boolean(document.getElementById('vibe-alert-container') || typeof window.vibeAlert === 'function');
+
+            if (hasVibeAlert) {
+                const payload = {
+                    type: 'warning',
+                    title: title,
+                    message: message,
+                    sound: true,
+                    blocking: true,
+                    confirmButton: {
+                        text: stayBtnText
+                    }
+                };
+                if (typeof window.vibeAlert === 'function') {
+                    window.vibeAlert(payload);
+                } else {
+                    window.dispatchEvent(new CustomEvent('alert', { detail: payload }));
+                }
+            } else {
+                alert(title + '\n\n' + message);
+            }
+        },
+
+        showNavigationBlockedAlert(targetUrl, protect = {}) {
+            const self = this;
+            const title = protect.title || 'Unggahan Belum Selesai';
+            const message = protect.navigationMessage || 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?';
+            const leaveBtnText = protect.leaveButton || 'Tinggalkan Halaman';
+            const stayBtnText = protect.stayButton || 'Tetap di Sini';
+
+            const hasVibeAlert = Boolean(document.getElementById('vibe-alert-container') || typeof window.vibeAlert === 'function');
+
+            const proceed = () => {
+                window.__vibeFilepondBypassProtection = true;
+                self._isNavigatingAway = true;
+                if (targetUrl) {
+                    const dest = typeof targetUrl === 'string' ? targetUrl : (targetUrl.href || targetUrl.toString());
+                    if (dest) {
+                        window.location.href = dest;
+                        return;
+                    }
+                }
+                history.back();
+            };
+
+            if (hasVibeAlert) {
+                const payload = {
+                    type: 'confirm',
+                    title: title,
+                    message: message,
+                    sound: true,
+                    blocking: true,
+                    confirmButton: {
+                        text: leaveBtnText,
+                        class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+                        action: proceed
+                    },
+                    closeButton: {
+                        text: stayBtnText
+                    }
+                };
+                if (typeof window.vibeAlert === 'function') {
+                    window.vibeAlert(payload);
+                } else {
+                    window.dispatchEvent(new CustomEvent('alert', { detail: payload }));
+                }
+            } else {
+                if (confirm(title + '\n\n' + message)) {
+                    proceed();
+                }
             }
         }
     };

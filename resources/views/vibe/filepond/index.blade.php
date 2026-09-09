@@ -50,6 +50,12 @@
     'disabled' => false,
     'required' => false,
     'labels' => [],
+    'protectUpload' => false,
+    'preventUnload' => false,
+    'preventNavigation' => false,
+    'protectSubmit' => false,
+    'protectTitle' => null,
+    'protectMessage' => null,
 ])
 
 @php
@@ -220,6 +226,17 @@
         'wireModel' => $wireModelAttr,
         'dashed' => (bool) $dashed,
         'variant' => $variant,
+        'protect' => [
+            'enabled' => (bool) ($protectUpload || $preventUnload || $preventNavigation || $protectSubmit),
+            'protectSubmit' => (bool) ($protectUpload || $preventUnload || $protectSubmit),
+            'preventNavigation' => (bool) ($protectUpload || $preventUnload || $preventNavigation),
+            'preventUnload' => (bool) ($protectUpload || $preventUnload),
+            'title' => $protectTitle ?? $fpLang('protect_title', 'Unggahan Belum Selesai'),
+            'submitMessage' => $protectMessage ?? $fpLang('protect_submit_message', 'Berkas Anda masih dalam proses pengunggahan. Harap tunggu hingga semua berkas selesai diunggah sebelum mengirim formulir.'),
+            'navigationMessage' => $protectMessage ?? $fpLang('protect_navigation_message', 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?'),
+            'stayButton' => $fpLang('protect_stay_button', 'Tetap di Sini'),
+            'leaveButton' => $fpLang('protect_leave_button', 'Tinggalkan Halaman'),
+        ],
     ];
 
     $configJson = json_encode($config);
