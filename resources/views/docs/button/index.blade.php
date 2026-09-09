@@ -390,7 +390,7 @@
                 {{-- Example 1: Attached / Segmented Filter --}}
                 <vibe:preview :title="__('docs/button.button_group.preview_attached_title')">
                     <vibe:preview.code>
-                        <vibe:button.group>
+                        <vibe:button.group :attached="true">
                             <vibe:button variant="default">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
                             <vibe:button variant="default">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
                             <vibe:button variant="primary">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
@@ -398,7 +398,7 @@
                         </vibe:button.group>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center p-4">
-                        <vibe:button.group>
+                        <vibe:button.group :attached="true">
                             <vibe:button variant="default">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
                             <vibe:button variant="default">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
                             <vibe:button variant="primary">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
@@ -494,7 +494,7 @@
                 {{-- Example 3: Split Button with Dropdown Chevron --}}
                 <vibe:preview :title="__('docs/button.button_group.preview_split_title')">
                     <vibe:preview.code>
-                        <vibe:button.group>
+                        <vibe:button.group :attached="true">
                             <vibe:button variant="primary">
                                 <svg class="size-4 -ml-0.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -509,7 +509,7 @@
                         </vibe:button.group>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center p-4">
-                        <vibe:button.group>
+                        <vibe:button.group :attached="true">
                             <vibe:button variant="primary">
                                 <svg class="size-4 -ml-0.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -528,14 +528,14 @@
                 {{-- Example 3: Pill Style Group (rounded-full) --}}
                 <vibe:preview :title="__('docs/button.button_group.preview_pill_title')">
                     <vibe:preview.code>
-                        <vibe:button.group class="rounded-full">
+                        <vibe:button.group :attached="true" class="rounded-full">
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
                         </vibe:button.group>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center p-4">
-                        <vibe:button.group class="rounded-full">
+                        <vibe:button.group :attached="true" class="rounded-full">
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.daily') }}</vibe:button>
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.weekly') }}</vibe:button>
                             <vibe:button variant="outline">{{ __('docs/button.button_group.segmented.monthly') }}</vibe:button>
@@ -546,7 +546,7 @@
                 {{-- Example 4: Vertical Button Group --}}
                 <vibe:preview :title="__('docs/button.button_group.preview_vertical_title')">
                     <vibe:preview.code>
-                        <vibe:button.group orientation="vertical" class="w-48">
+                        <vibe:button.group :attached="true" orientation="vertical" class="w-48">
                             <vibe:button variant="default" class="w-full justify-start">
                                 {{ __('docs/button.button_group.vertical.overview') }}
                             </vibe:button>
@@ -559,7 +559,7 @@
                         </vibe:button.group>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center justify-center p-4">
-                        <vibe:button.group orientation="vertical" class="w-48">
+                        <vibe:button.group :attached="true" orientation="vertical" class="w-48">
                             <vibe:button variant="default" class="w-full justify-start">
                                 {{ __('docs/button.button_group.vertical.overview') }}
                             </vibe:button>
@@ -616,7 +616,13 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $groupProps = [['orientation', "'horizontal'|'vertical'", "'horizontal'", 'Orientasi penataan tombol di dalam grup.'], ['attached', 'bool', 'true', 'Jika true, border dan radius sudut tombol saling menempel tanpa celah.'], ['class', 'string|null', 'null', 'Kelas Tailwind tambahan (gunakan `rounded-full` untuk membuat grup membulat penuh).']];
+                            $groupProps = [
+                                ['orientation', "'horizontal'|'vertical'", "'horizontal'", 'Orientasi penataan tombol di dalam grup.'],
+                                ['attached', 'bool', 'false', 'Jika true, border dan radius sudut tombol saling menempel tanpa celah.'],
+                                ['variant', "'default'|'outline'|'surface'|'ghost'|'attached'", "'default'", 'Skema warna latar dan border track button group (default menyerupai track toolbar preview).'],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'sm'", 'Ukuran padding, gap, dan border radius track button group.'],
+                                ['class', 'string|null', 'null', 'Kelas Tailwind tambahan (gunakan `rounded-full` untuk membuat grup membulat penuh).']
+                            ];
                         @endphp
                         @foreach ($groupProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
