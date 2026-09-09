@@ -15,16 +15,16 @@
 
         <div class="gap-6 grid grid-cols-1 md:grid-cols-3">
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.total_users') }}</h3>
-                <p class="mt-2 font-bold text-3xl">1,204</p>
+                <h3 class="font-medium text-muted-foreground text-sm">{{ __('docs/index.demo.stats.total_users') }}</h3>
+                <p class="mt-2 font-bold text-3xl text-foreground">1,204</p>
             </vibe:card>
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.revenue') }}</h3>
-                <p class="mt-2 font-bold text-3xl">{{ __('docs/index.demo.stats.revenue_val') }}</p>
+                <h3 class="font-medium text-muted-foreground text-sm">{{ __('docs/index.demo.stats.revenue') }}</h3>
+                <p class="mt-2 font-bold text-3xl text-foreground">{{ __('docs/index.demo.stats.revenue_val') }}</p>
             </vibe:card>
             <vibe:card>
-                <h3 class="font-medium text-gray-700 dark:text-gray-300 text-sm">{{ __('docs/index.demo.stats.server_status') }}</h3>
-                <p class="mt-2 font-bold text-3xl">{{ __('docs/index.demo.stats.online') }}</p>
+                <h3 class="font-medium text-muted-foreground text-sm">{{ __('docs/index.demo.stats.server_status') }}</h3>
+                <p class="mt-2 font-bold text-3xl text-foreground">{{ __('docs/index.demo.stats.online') }}</p>
             </vibe:card>
         </div>
 

@@ -214,7 +214,7 @@
                                         <vibe:table.cell>{{ __('docs/table.variants.custom_domain') }}</vibe:table.cell>
                                         <vibe:table.cell align="center" variant="muted">—</vibe:table.cell>
                                         <vibe:table.cell align="center">
-                                            <svg class="size-4 text-emerald-500 mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg class="size-4 text-success mx-auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="20 6 9 17 4 12" />
                                             </svg>
                                         </vibe:table.cell>

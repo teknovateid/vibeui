@@ -3,44 +3,28 @@
     $modalId = $id ?? 'form-test-submission-modal';
 @endphp
 
-<div
-    x-data="{
-        submittedData: {{ json_encode(session('submitted_data', null)) }},
-        submittedAt: '{{ session('submitted_at', '') }}',
-        activeTab: 'json',
-        init() {
-            window.addEventListener('vibe-form-submitted', (e) => {
-                const detail = e.detail || {};
-                const resData = detail.data || {};
-                if (resData.submitted_data) {
-                    this.submittedData = resData.submitted_data;
-                    this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
-                } else if (resData) {
-                    this.submittedData = resData;
-                    this.submittedAt = new Date().toLocaleTimeString();
-                }
-                window.dispatchEvent(new CustomEvent('open-modal', { detail: '{{ $modalId }}' }));
-            });
-        }
-    }"
-    @open-modal.window="if ($event.detail === 'form-submission-modal' && '{{ $modalId }}' !== 'form-submission-modal') $dispatch('open-modal', '{{ $modalId }}')"
->
+<div x-data="{
+    submittedData: {{ json_encode(session('submitted_data', null)) }},
+    submittedAt: '{{ session('submitted_at', '') }}',
+    activeTab: 'json',
+    init() {
+        window.addEventListener('vibe-form-submitted', (e) => {
+            const detail = e.detail || {};
+            const resData = detail.data || {};
+            if (resData.submitted_data) {
+                this.submittedData = resData.submitted_data;
+                this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
+            } else if (resData) {
+                this.submittedData = resData;
+                this.submittedAt = new Date().toLocaleTimeString();
+            }
+            window.dispatchEvent(new CustomEvent('open-modal', { detail: '{{ $modalId }}' }));
+        });
+    }
+}" @open-modal.window="if ($event.detail === 'form-submission-modal' && '{{ $modalId }}' !== 'form-submission-modal') $dispatch('open-modal', '{{ $modalId }}')">
     {{-- Floating Pill Trigger (Muncul saat sudah pernah ada pengiriman form) --}}
-    <div
-        x-show="submittedData && Object.keys(submittedData).length > 0"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 translate-y-4 scale-95"
-        x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 translate-y-0 scale-100"
-        x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-        class="fixed bottom-6 right-6 z-40"
-    >
-        <button
-            type="button"
-            @click="window.dispatchEvent(new CustomEvent('open-modal', { detail: '{{ $modalId }}' }))"
-            class="flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-primary text-primary-foreground font-semibold text-xs shadow-xl hover:bg-primary/90 transition-all cursor-pointer border border-primary-foreground/20 hover:scale-105 active:scale-95"
-        >
+    <div x-show="submittedData && Object.keys(submittedData).length > 0" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 scale-100" x-transition:leave-end="opacity-0 translate-y-4 scale-95" class="fixed bottom-6 right-6 z-40">
+        <button type="button" @click="window.dispatchEvent(new CustomEvent('open-modal', { detail: '{{ $modalId }}' }))" class="flex items-center gap-2.5 px-3.5 py-2 rounded-full bg-primary text-primary-foreground font-semibold text-xs shadow-xl hover:bg-primary/90 transition-all cursor-pointer border border-primary-foreground/20 hover:scale-105 active:scale-95">
             <span class="flex size-2 rounded-full bg-success animate-pulse"></span>
             <span>Lihat Payload Controller</span>
             <span class="px-1.5 py-0.5 rounded-full bg-primary-foreground/20 text-[10px] font-mono font-bold" x-text="`${Object.keys(submittedData || {}).length} keys`"></span>
@@ -83,20 +67,10 @@
                 <div class="space-y-5">
                     {{-- Tab Switcher --}}
                     <div class="flex items-center gap-1 border-b border-border pb-1">
-                        <button
-                            type="button"
-                            @click="activeTab = 'json'"
-                            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-                            :class="activeTab === 'json' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'"
-                        >
+                        <button type="button" @click="activeTab = 'json'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" :class="activeTab === 'json' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'">
                             JSON Payload
                         </button>
-                        <button
-                            type="button"
-                            @click="activeTab = 'table'"
-                            class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-                            :class="activeTab === 'table' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'"
-                        >
+                        <button type="button" @click="activeTab = 'table'" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer" :class="activeTab === 'table' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'">
                             Tabel Key-Value
                         </button>
                     </div>
@@ -107,26 +81,24 @@
                     </div>
 
                     {{-- Tab 2: Table Viewer --}}
-                    <div x-show="activeTab === 'table'" class="rounded-xl border border-border overflow-hidden text-xs">
-                        <table class="w-full text-left">
-                            <thead class="bg-muted/50 border-b border-border text-muted-foreground font-semibold">
-                                <tr>
-                                    <th class="px-3 py-2">Field (Key)</th>
-                                    <th class="px-3 py-2">Nilai (Value)</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border">
+                    <div x-show="activeTab === 'table'" class="overflow-hidden">
+                        <vibe:table variant="bordered" dense>
+                            <vibe:table.header>
+                                <vibe:table.column class="whitespace-nowrap">Field (Key)</vibe:table.column>
+                                <vibe:table.column>Nilai (Value)</vibe:table.column>
+                            </vibe:table.header>
+                            <vibe:table.rows>
                                 <template x-for="(val, key) in (submittedData || {})" :key="key">
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-3 py-2 font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></td>
-                                        <td class="px-3 py-2 font-mono text-muted-foreground break-all">
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground break-all">
                                             <span x-show="key === '_token'" class="text-muted-foreground/60 italic">(CSRF Token Valid)</span>
                                             <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? 'null / kosong' : val)"></span>
-                                        </td>
-                                    </tr>
+                                        </vibe:table.cell>
+                                    </vibe:table.row>
                                 </template>
-                            </tbody>
-                        </table>
+                            </vibe:table.rows>
+                        </vibe:table>
                     </div>
                 </div>
             </template>

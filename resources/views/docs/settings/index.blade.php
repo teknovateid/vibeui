@@ -142,10 +142,9 @@
                                         <h2 class="text-xl font-bold tracking-tight text-foreground">
                                             {{ __('docs/page/settings/index.tabs.appearance.label') }}
                                         </h2>
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shadow-2xs">
-                                            <span class="size-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
                                             Live Engine
-                                        </span>
+                                        </vibe:badge>
                                     </div>
                                     <p class="text-xs text-muted-foreground mt-1 leading-relaxed max-w-xl">
                                         {{ __('docs/page/settings/index.tabs.appearance.desc') }}

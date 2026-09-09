@@ -59,7 +59,7 @@
             {{-- 1. Total Revenue Card --}}
             <vibe:grid.card id="kpi-revenue" title="{{ __('docs/page/dashboard/index.metrics.revenue.title') }}" description="{{ __('docs/page/dashboard/index.metrics.revenue.desc') }}" :colSpan="3" :minColSpan="2">
                 <x-slot:actions>
-                    <div class="size-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <div class="size-8 rounded-lg bg-success/10 text-success flex items-center justify-center">
                         <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="1" x2="12" y2="23" />
                             <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -72,7 +72,7 @@
                         <span class="text-2xl sm:text-3xl font-extrabold tracking-tight text-foreground">
                             Rp 284.950.000
                         </span>
-                        <vibe:badge variant="outline" size="sm" class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 font-semibold gap-1">
+                        <vibe:badge variant="success" size="sm" class="font-semibold gap-1">
                             <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="18 15 12 9 6 15" />
                             </svg>
@@ -82,7 +82,7 @@
 
                     {{-- Sparkline Curve --}}
                     <div class="h-10 w-full overflow-hidden">
-                        <svg class="w-full h-full text-emerald-500" viewBox="0 0 100 28" fill="none" preserveAspectRatio="none">
+                        <svg class="w-full h-full text-success" viewBox="0 0 100 28" fill="none" preserveAspectRatio="none">
                             <defs>
                                 <linearGradient id="revenue-grad" x1="0" y1="0" x2="0" y2="1">
                                     <stop offset="0%" stop-color="currentColor" stop-opacity="0.25" />
@@ -247,7 +247,7 @@
                                 {{ __('docs/page/dashboard/index.charts.sales_trend.revenue_legend') }}
                             </span>
                             <span class="inline-flex items-center gap-1.5 text-muted-foreground">
-                                <span class="size-2 rounded-full bg-emerald-500"></span>
+                                <span class="size-2 rounded-full bg-success"></span>
                                 {{ __('docs/page/dashboard/index.charts.sales_trend.profit_legend') }}
                             </span>
                         </div>
@@ -278,7 +278,7 @@
                                 {{-- Hover Tooltip --}}
                                 <div class="opacity-0 group-hover/bar:opacity-100 transition-opacity duration-150 absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 rounded-md bg-foreground text-background text-[10px] font-mono whitespace-nowrap shadow-lg pointer-events-none z-10">
                                     <span>Rp {{ $bar['rev'] }} jt</span>
-                                    <span class="text-emerald-400"> (Laba: Rp {{ $bar['profit'] }} jt)</span>
+                                    <span class="text-success"> (Laba: Rp {{ $bar['profit'] }} jt)</span>
                                 </div>
 
                                 {{-- Bar Pair Container --}}
@@ -286,7 +286,7 @@
                                     {{-- Gross Revenue Bar --}}
                                     <div class="w-1/2 bg-primary/30 group-hover/bar:bg-primary transition-all duration-300 rounded-t-md relative" style="height: {{ $bar['pct'] }}%"></div>
                                     {{-- Net Profit Bar --}}
-                                    <div class="w-1/2 bg-emerald-500/30 group-hover/bar:bg-emerald-500 transition-all duration-300 rounded-t-md relative" style="height: {{ round($bar['pct'] * 0.45) }}%"></div>
+                                    <div class="w-1/2 bg-success/30 group-hover/bar:bg-success transition-all duration-300 rounded-t-md relative" style="height: {{ round($bar['pct'] * 0.45) }}%"></div>
                                 </div>
 
                                 <span class="text-xs text-muted-foreground font-mono font-medium select-none">{{ $bar['m'] }}</span>
@@ -306,7 +306,7 @@
                             <span class="text-[11px] text-muted-foreground font-medium block">
                                 {{ __('docs/page/dashboard/index.charts.sales_trend.net_profit') }}
                             </span>
-                            <span class="text-sm sm:text-base font-bold text-emerald-600 dark:text-emerald-400">Rp 482 Jt (33.9%)</span>
+                            <span class="text-sm sm:text-base font-bold text-success">Rp 482 Jt (33.9%)</span>
                         </div>
                         <div>
                             <span class="text-[11px] text-muted-foreground font-medium block">
@@ -335,7 +335,7 @@
                                 'price' => 'Rp 1.450.000',
                                 'sold' => 342,
                                 'stock' => 18,
-                                'color' => 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400',
+                                'color' => 'bg-primary/10 text-primary',
                             ],
                             [
                                 'name' => 'Ultra-wide 4K Monitor 34"',
@@ -343,7 +343,7 @@
                                 'price' => 'Rp 6.890.000',
                                 'sold' => 128,
                                 'stock' => 6,
-                                'color' => 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
+                                'color' => 'bg-info/10 text-info',
                             ],
                             [
                                 'name' => 'Ergonomic Wireless Mouse X',
@@ -351,7 +351,7 @@
                                 'price' => 'Rp 450.000',
                                 'sold' => 512,
                                 'stock' => 84,
-                                'color' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+                                'color' => 'bg-success/10 text-success',
                             ],
                             [
                                 'name' => 'Desk Mat Leather Minimalist',
@@ -359,7 +359,7 @@
                                 'price' => 'Rp 180.000',
                                 'sold' => 410,
                                 'stock' => 35,
-                                'color' => 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+                                'color' => 'bg-warning/10 text-warning',
                             ],
                             [
                                 'name' => 'USB-C Hub Multiport 8-in-1',
@@ -367,7 +367,7 @@
                                 'price' => 'Rp 320.000',
                                 'sold' => 295,
                                 'stock' => 12,
-                                'color' => 'bg-rose-500/10 text-rose-600 dark:text-rose-400',
+                                'color' => 'bg-destructive/10 text-destructive',
                             ],
                         ];
                     @endphp
@@ -482,88 +482,86 @@
                         ];
                     @endphp
 
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="border-b border-border/70 bg-muted/30 text-muted-foreground font-semibold">
-                                <th class="py-2.5 px-4">{{ __('docs/page/dashboard/index.orders.columns.order_id') }}</th>
-                                <th class="py-2.5 px-4">{{ __('docs/page/dashboard/index.orders.columns.customer') }}</th>
-                                <th class="py-2.5 px-4 hidden sm:table-cell">{{ __('docs/page/dashboard/index.orders.columns.items') }}</th>
-                                <th class="py-2.5 px-4">{{ __('docs/page/dashboard/index.orders.columns.total') }}</th>
-                                <th class="py-2.5 px-4">{{ __('docs/page/dashboard/index.orders.columns.status') }}</th>
-                                <th class="py-2.5 px-4 text-right">{{ __('docs/page/dashboard/index.orders.columns.action') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border/50">
-                            @foreach ($orders as $o)
-                                <tr class="hover:bg-muted/30 transition-colors">
-                                    <td class="py-3 px-4 font-mono font-semibold text-primary">
-                                        {{ $o['id'] }}
-                                        <span class="block text-[10px] text-muted-foreground font-sans font-normal">{{ $o['date'] }}</span>
-                                    </td>
-                                    <td class="py-3 px-4">
-                                        <div class="flex items-center gap-2.5">
-                                            <vibe:avatar :initials="$o['avatar']" :color="$o['color']" size="xs" />
-                                            <div class="min-w-0">
-                                                <span class="font-medium text-foreground block truncate">{{ $o['customer'] }}</span>
-                                                <span class="text-[10px] text-muted-foreground block truncate">{{ $o['email'] }}</span>
-                                            </div>
+                <vibe:table variant="flush" dense>
+                    <vibe:table.header>
+                        <vibe:table.column>{{ __('docs/page/dashboard/index.orders.columns.order_id') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/page/dashboard/index.orders.columns.customer') }}</vibe:table.column>
+                        <vibe:table.column class="hidden sm:table-cell">{{ __('docs/page/dashboard/index.orders.columns.items') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/page/dashboard/index.orders.columns.total') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/page/dashboard/index.orders.columns.status') }}</vibe:table.column>
+                        <vibe:table.column class="text-right">{{ __('docs/page/dashboard/index.orders.columns.action') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @foreach ($orders as $o)
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-semibold text-primary whitespace-nowrap">
+                                    {{ $o['id'] }}
+                                    <span class="block text-[10px] text-muted-foreground font-sans font-normal">{{ $o['date'] }}</span>
+                                </vibe:table.cell>
+                                <vibe:table.cell>
+                                    <div class="flex items-center gap-2.5">
+                                        <vibe:avatar :initials="$o['avatar']" :color="$o['color']" size="xs" />
+                                        <div class="min-w-0">
+                                            <span class="font-medium text-foreground block truncate">{{ $o['customer'] }}</span>
+                                            <span class="text-[10px] text-muted-foreground block truncate">{{ $o['email'] }}</span>
                                         </div>
-                                    </td>
-                                    <td class="py-3 px-4 hidden sm:table-cell text-muted-foreground truncate max-w-45">
-                                        {{ $o['items'] }}
-                                    </td>
-                                    <td class="py-3 px-4 font-semibold text-foreground whitespace-nowrap">
-                                        {{ $o['total'] }}
-                                    </td>
-                                    <td class="py-3 px-4 whitespace-nowrap">
-                                        @if ($o['status'] === 'completed')
-                                            <vibe:badge variant="outline" size="sm" class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 font-medium">
-                                                {{ __('docs/page/dashboard/index.orders.status.completed') }}
-                                            </vibe:badge>
-                                        @elseif ($o['status'] === 'processing')
-                                            <vibe:badge variant="outline" size="sm" class="bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20 font-medium">
-                                                {{ __('docs/page/dashboard/index.orders.status.processing') }}
-                                            </vibe:badge>
-                                        @elseif ($o['status'] === 'pending')
-                                            <vibe:badge variant="outline" size="sm" class="bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20 font-medium">
-                                                {{ __('docs/page/dashboard/index.orders.status.pending') }}
-                                            </vibe:badge>
-                                        @else
-                                            <vibe:badge variant="outline" size="sm" class="bg-rose-500/10 text-rose-600 dark:text-rose-400 border-rose-500/20 font-medium">
-                                                {{ __('docs/page/dashboard/index.orders.status.cancelled') }}
-                                            </vibe:badge>
-                                        @endif
-                                    </td>
-                                    <td class="py-3 px-4 text-right whitespace-nowrap">
-                                        <vibe:dropdown keyboard>
-                                            <x-slot:trigger>
-                                                <button type="button" class="size-7 rounded-md hover:bg-accent flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
-                                                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                        <circle cx="12" cy="12" r="1" />
-                                                        <circle cx="19" cy="12" r="1" />
-                                                        <circle cx="5" cy="12" r="1" />
-                                                    </svg>
-                                                </button>
-                                            </x-slot:trigger>
+                                    </div>
+                                </vibe:table.cell>
+                                <vibe:table.cell class="hidden sm:table-cell text-muted-foreground truncate max-w-45">
+                                    {{ $o['items'] }}
+                                </vibe:table.cell>
+                                <vibe:table.cell class="font-semibold text-foreground whitespace-nowrap">
+                                    {{ $o['total'] }}
+                                </vibe:table.cell>
+                                <vibe:table.cell class="whitespace-nowrap">
+                                    @if ($o['status'] === 'completed')
+                                        <vibe:badge variant="success" size="sm">
+                                            {{ __('docs/page/dashboard/index.orders.status.completed') }}
+                                        </vibe:badge>
+                                    @elseif ($o['status'] === 'processing')
+                                        <vibe:badge variant="info" size="sm">
+                                            {{ __('docs/page/dashboard/index.orders.status.processing') }}
+                                        </vibe:badge>
+                                    @elseif ($o['status'] === 'pending')
+                                        <vibe:badge variant="warning" size="sm">
+                                            {{ __('docs/page/dashboard/index.orders.status.pending') }}
+                                        </vibe:badge>
+                                    @else
+                                        <vibe:badge variant="danger" size="sm">
+                                            {{ __('docs/page/dashboard/index.orders.status.cancelled') }}
+                                        </vibe:badge>
+                                    @endif
+                                </vibe:table.cell>
+                                <vibe:table.cell class="text-right whitespace-nowrap">
+                                    <vibe:dropdown keyboard>
+                                        <x-slot:trigger>
+                                            <button type="button" class="size-7 rounded-md hover:bg-accent flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                                                <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <circle cx="12" cy="12" r="1" />
+                                                    <circle cx="19" cy="12" r="1" />
+                                                    <circle cx="5" cy="12" r="1" />
+                                                </svg>
+                                            </button>
+                                        </x-slot:trigger>
 
-                                            <vibe:dropdown.content align="right" width="48">
-                                                <vibe:dropdown.item href="#">
-                                                    {{ __('docs/page/dashboard/index.actions.details') }}
-                                                </vibe:dropdown.item>
-                                                <vibe:dropdown.item href="#">
-                                                    {{ __('docs/page/dashboard/index.actions.invoice') }}
-                                                </vibe:dropdown.item>
-                                                <vibe:dropdown.divider />
-                                                <vibe:dropdown.item href="#">
-                                                    {{ __('docs/page/dashboard/index.actions.contact') }}
-                                                </vibe:dropdown.item>
-                                            </vibe:dropdown.content>
-                                        </vibe:dropdown>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                        <vibe:dropdown.content align="right" width="48">
+                                            <vibe:dropdown.item href="#">
+                                                {{ __('docs/page/dashboard/index.actions.details') }}
+                                            </vibe:dropdown.item>
+                                            <vibe:dropdown.item href="#">
+                                                {{ __('docs/page/dashboard/index.actions.invoice') }}
+                                            </vibe:dropdown.item>
+                                            <vibe:dropdown.divider />
+                                            <vibe:dropdown.item href="#">
+                                                {{ __('docs/page/dashboard/index.actions.contact') }}
+                                            </vibe:dropdown.item>
+                                        </vibe:dropdown.content>
+                                    </vibe:dropdown>
+                                </vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
                 </div>
             </vibe:grid.card>
 
@@ -589,13 +587,13 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs">
                                 <span class="font-medium text-foreground flex items-center gap-1.5">
-                                    <span class="size-2 rounded-full bg-emerald-500"></span>
+                                    <span class="size-2 rounded-full bg-success"></span>
                                     {{ __('docs/page/dashboard/index.charts.channels.organic') }}
                                 </span>
                                 <span class="font-mono text-muted-foreground font-semibold">42% (Rp 119.6 jt)</span>
                             </div>
                             <div class="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                                <div class="h-full bg-emerald-500 rounded-full" style="width: 42%"></div>
+                                <div class="h-full bg-success rounded-full" style="width: 42%"></div>
                             </div>
                         </div>
 
@@ -603,13 +601,13 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs">
                                 <span class="font-medium text-foreground flex items-center gap-1.5">
-                                    <span class="size-2 rounded-full bg-sky-500"></span>
+                                    <span class="size-2 rounded-full bg-info"></span>
                                     {{ __('docs/page/dashboard/index.charts.channels.social') }}
                                 </span>
                                 <span class="font-mono text-muted-foreground font-semibold">28% (Rp 79.8 jt)</span>
                             </div>
                             <div class="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                                <div class="h-full bg-sky-500 rounded-full" style="width: 28%"></div>
+                                <div class="h-full bg-info rounded-full" style="width: 28%"></div>
                             </div>
                         </div>
 
@@ -617,13 +615,13 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs">
                                 <span class="font-medium text-foreground flex items-center gap-1.5">
-                                    <span class="size-2 rounded-full bg-indigo-500"></span>
+                                    <span class="size-2 rounded-full bg-primary"></span>
                                     {{ __('docs/page/dashboard/index.charts.channels.direct') }}
                                 </span>
                                 <span class="font-mono text-muted-foreground font-semibold">18% (Rp 51.3 jt)</span>
                             </div>
                             <div class="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                                <div class="h-full bg-indigo-500 rounded-full" style="width: 18%"></div>
+                                <div class="h-full bg-primary rounded-full" style="width: 18%"></div>
                             </div>
                         </div>
 
@@ -631,13 +629,13 @@
                         <div class="space-y-1">
                             <div class="flex justify-between text-xs">
                                 <span class="font-medium text-foreground flex items-center gap-1.5">
-                                    <span class="size-2 rounded-full bg-amber-500"></span>
+                                    <span class="size-2 rounded-full bg-warning"></span>
                                     {{ __('docs/page/dashboard/index.charts.channels.referral') }}
                                 </span>
                                 <span class="font-mono text-muted-foreground font-semibold">12% (Rp 34.2 jt)</span>
                             </div>
                             <div class="w-full h-1.5 rounded-full bg-muted overflow-hidden">
-                                <div class="h-full bg-amber-500 rounded-full" style="width: 12%"></div>
+                                <div class="h-full bg-warning rounded-full" style="width: 12%"></div>
                             </div>
                         </div>
                     </div>
@@ -718,7 +716,7 @@
                 <div class="space-y-3.5">
                     {{-- Activity 1 --}}
                     <div class="flex items-start gap-3">
-                        <div class="size-2 rounded-full bg-emerald-500 mt-1.5 shrink-0 ring-4 ring-emerald-500/15"></div>
+                        <div class="size-2 rounded-full bg-success mt-1.5 shrink-0 ring-4 ring-success/15"></div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-semibold text-foreground truncate">
                                 Pesanan #ORD-9842 dikirim via JNE Express
@@ -731,7 +729,7 @@
 
                     {{-- Activity 2 --}}
                     <div class="flex items-start gap-3">
-                        <div class="size-2 rounded-full bg-sky-500 mt-1.5 shrink-0 ring-4 ring-sky-500/15"></div>
+                        <div class="size-2 rounded-full bg-info mt-1.5 shrink-0 ring-4 ring-info/15"></div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-semibold text-foreground truncate">
                                 Pembayaran Rp 6.890.000 berhasil diverifikasi
@@ -744,7 +742,7 @@
 
                     {{-- Activity 3 --}}
                     <div class="flex items-start gap-3">
-                        <div class="size-2 rounded-full bg-amber-500 mt-1.5 shrink-0 ring-4 ring-amber-500/15"></div>
+                        <div class="size-2 rounded-full bg-warning mt-1.5 shrink-0 ring-4 ring-warning/15"></div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-semibold text-foreground truncate">
                                 Ulasan Bintang 5 diterima dari Budi Santoso
@@ -757,7 +755,7 @@
 
                     {{-- Activity 4 --}}
                     <div class="flex items-start gap-3">
-                        <div class="size-2 rounded-full bg-indigo-500 mt-1.5 shrink-0 ring-4 ring-indigo-500/15"></div>
+                        <div class="size-2 rounded-full bg-primary mt-1.5 shrink-0 ring-4 ring-primary/15"></div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-semibold text-foreground truncate">
                                 Sinkronisasi katalog marketplace (Tokopedia & Shopee)

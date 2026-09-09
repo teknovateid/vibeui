@@ -47,7 +47,7 @@
 
                 {{-- Fitur Utama Komponen Box --}}
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="p-4 rounded-xl bg-card border border-border space-y-1.5">
+                    <vibe:card class="space-y-1.5">
                         <div class="flex items-center gap-2 text-primary font-semibold text-xs">
                             <span class="size-2 rounded-full bg-primary animate-ping"></span>
                             {{ __('docs/chart.usage.features.vite_title') }}
@@ -55,8 +55,8 @@
                         <p class="text-xs text-muted-foreground">
                             {!! __('docs/chart.usage.features.vite_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-4 rounded-xl bg-card border border-border space-y-1.5">
+                    </vibe:card>
+                    <vibe:card class="space-y-1.5">
                         <div class="flex items-center gap-2 text-primary font-semibold text-xs">
                             <span class="size-2 rounded-full bg-chart-2"></span>
                             {{ __('docs/chart.usage.features.colors_title') }}
@@ -64,8 +64,8 @@
                         <p class="text-xs text-muted-foreground">
                             {!! __('docs/chart.usage.features.colors_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-4 rounded-xl bg-card border border-border space-y-1.5">
+                    </vibe:card>
+                    <vibe:card class="space-y-1.5">
                         <div class="flex items-center gap-2 text-primary font-semibold text-xs">
                             <span class="size-2 rounded-full bg-chart-4"></span>
                             {{ __('docs/chart.usage.features.native_title') }}
@@ -73,7 +73,7 @@
                         <p class="text-xs text-muted-foreground">
                             {!! __('docs/chart.usage.features.native_desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
 
                 {{-- Sub 1: Sintaks Pemanggilan Dasar --}}
@@ -146,75 +146,75 @@
                     @php
                         $controllerLabel = __('docs/chart.database.datasets.revenue');
                         $dashboardControllerCode = <<<PHP
-namespace App\Http\Controllers;
+                        namespace App\Http\Controllers;
 
-use App\Models\SalesMetric;
-use Illuminate\View\View;
+                        use App\Models\SalesMetric;
+                        use Illuminate\View\View;
 
-class DashboardController extends Controller
-{
-    public function index(): View
-    {
-        // 1. Eloquent Query
-        \$metrics = SalesMetric::where('category', 'Semua Kategori')
-            ->orderBy('id')
-            ->get();
+                        class DashboardController extends Controller
+                        {
+                            public function index(): View
+                            {
+                                // 1. Eloquent Query
+                                \$metrics = SalesMetric::where('category', 'Semua Kategori')
+                                    ->orderBy('id')
+                                    ->get();
 
-        // 2. Map database columns to :config Chart array
-        \$salesChart = [
-            'type' => 'bar',
-            'data' => [
-                'labels' => \$metrics->pluck('month')->toArray(),
-                'datasets' => [
-                    [
-                        'label' => '{$controllerLabel}',
-                        'data' => \$metrics->pluck('revenue')->map(fn(\$v) => round(\$v / 1000000))->toArray(),
-                        'borderColor' => 'destructive',
-                        'backgroundColor' => 'destructive/20',
-                        'borderWidth' => 1.5,
-                        'borderRadius' => 6,
-                    ],
-                ],
-            ],
-        ];
+                                // 2. Map database columns to :config Chart array
+                                \$salesChart = [
+                                    'type' => 'bar',
+                                    'data' => [
+                                        'labels' => \$metrics->pluck('month')->toArray(),
+                                        'datasets' => [
+                                            [
+                                                'label' => '{$controllerLabel}',
+                                                'data' => \$metrics->pluck('revenue')->map(fn(\$v) => round(\$v / 1000000))->toArray(),
+                                                'borderColor' => 'destructive',
+                                                'backgroundColor' => 'destructive/20',
+                                                'borderWidth' => 1.5,
+                                                'borderRadius' => 6,
+                                            ],
+                                        ],
+                                    ],
+                                ];
 
-        // 3. Pass chart config to view
-        return view('dashboard', compact('salesChart'));
-    }
-}
-PHP;
+                                // 3. Pass chart config to view
+                                return view('dashboard', compact('salesChart'));
+                            }
+                        }
+                        PHP;
 
                         $bladeCardTitle = __('docs/chart.database.card_title');
                         $bladeCardDesc = strip_tags(__('docs/chart.database.card_desc'));
                         $bladeUsageCode = <<<BLADE
-<vibe:card>
-    <vibe:card.header>
-        <vibe:card.title>{$bladeCardTitle}</vibe:card.title>
-        <vibe:card.description>{$bladeCardDesc}</vibe:card.description>
-    </vibe:card.header>
-    <vibe:card.content>
-        <vibe:chart :config="\$salesChart" :height="240" />
-    </vibe:card.content>
-</vibe:card>
-BLADE;
+                        <vibe:card>
+                            <vibe:card.header>
+                                <vibe:card.title>{$bladeCardTitle}</vibe:card.title>
+                                <vibe:card.description>{$bladeCardDesc}</vibe:card.description>
+                            </vibe:card.header>
+                            <vibe:card.content>
+                                <vibe:chart :config="\$salesChart" :height="240" />
+                            </vibe:card.content>
+                        </vibe:card>
+                        BLADE;
 
                         $cardStructureCode = <<<'BLADE'
-<vibe:card>
-    <vibe:card.header>
-        <div class="flex items-center justify-between">
-            <div>
-                <vibe:card.title>{{ __('docs/chart.usage.step2_demo.card_title') }}</vibe:card.title>
-                <vibe:card.description>{{ __('docs/chart.usage.step2_demo.card_desc') }}</vibe:card.description>
-            </div>
-            <vibe:badge variant="outline" class="rounded-full">Live</vibe:badge>
-        </div>
-    </vibe:card.header>
-    <vibe:card.content>
-        {{-- Tempatkan komponen chart di dalam card.content --}}
-        <vibe:chart :config="$chartConfig" :height="240" />
-    </vibe:card.content>
-</vibe:card>
-BLADE;
+                        <vibe:card>
+                            <vibe:card.header>
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <vibe:card.title>{{ __('docs/chart.usage.step2_demo.card_title') }}</vibe:card.title>
+                                        <vibe:card.description>{{ __('docs/chart.usage.step2_demo.card_desc') }}</vibe:card.description>
+                                    </div>
+                                    <vibe:badge variant="outline" class="rounded-full">Live</vibe:badge>
+                                </div>
+                            </vibe:card.header>
+                            <vibe:card.content>
+                                {{-- Tempatkan komponen chart di dalam card.content --}}
+                                <vibe:chart :config="$chartConfig" :height="240" />
+                            </vibe:card.content>
+                        </vibe:card>
+                        BLADE;
                     @endphp
 
                     <vibe:highlightjs language="php" title="app/Http/Controllers/DashboardController.php" :code="$dashboardControllerCode" />
@@ -239,7 +239,7 @@ BLADE;
                         {!! __('docs/chart.usage.steps.step4_desc') !!}
                     </p>
 
-                    <div class="p-5 rounded-2xl bg-card border border-border space-y-4">
+                    <vibe:card class="space-y-4">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <h4 class="font-semibold text-xs uppercase tracking-wider text-muted-foreground">{{ __('docs/chart.usage.color_tokens.semantic_title') }}</h4>
@@ -250,14 +250,14 @@ BLADE;
                                     <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-destructive/10 border border-destructive/20 text-xs font-mono text-destructive">
                                         <span class="size-2 rounded-full bg-destructive"></span> destructive
                                     </span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-sky-500/10 border border-sky-500/20 text-xs font-mono text-sky-600 dark:text-sky-400">
-                                        <span class="size-2 rounded-full bg-sky-500"></span> info
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-info/10 border border-info/20 text-xs font-mono text-info">
+                                        <span class="size-2 rounded-full bg-info"></span> info
                                     </span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-xs font-mono text-emerald-600 dark:text-emerald-400">
-                                        <span class="size-2 rounded-full bg-emerald-500"></span> success
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-success/10 border border-success/20 text-xs font-mono text-success">
+                                        <span class="size-2 rounded-full bg-success"></span> success
                                     </span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-600 dark:text-amber-400">
-                                        <span class="size-2 rounded-full bg-amber-500"></span> warning
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-warning/10 border border-warning/20 text-xs font-mono text-warning">
+                                        <span class="size-2 rounded-full bg-warning"></span> warning
                                     </span>
                                 </div>
                             </div>
@@ -287,11 +287,11 @@ BLADE;
                             <p><strong class="text-foreground">{{ __('docs/chart.usage.color_tokens.slash_opacity_title') }}</strong> {!! __('docs/chart.usage.color_tokens.slash_opacity_desc') !!}</p>
                             <p><strong class="text-foreground">{{ __('docs/chart.usage.color_tokens.dark_mode_title') }}</strong> {!! __('docs/chart.usage.color_tokens.dark_mode_desc') !!}</p>
                         </div>
-                    </div>
+                    </vibe:card>
                 </div>
 
                 {{-- Sub 5: Anatomi Konfigurasi Array --}}
-                <div class="p-5 rounded-2xl bg-muted/40 border border-border text-xs space-y-2.5 leading-relaxed">
+                <div class="p-5 rounded-2xl bg-muted border border-border text-xs space-y-2.5 leading-relaxed">
                     <p class="font-semibold text-foreground text-sm">{!! __('docs/chart.usage.config_anatomy.title') !!}</p>
                     <ul class="list-disc list-inside space-y-1.5 text-muted-foreground">
                         <li><code class="text-foreground font-semibold">type</code>: {!! __('docs/chart.usage.config_anatomy.type') !!}</li>
@@ -317,7 +317,7 @@ BLADE;
 
                 {{-- 4 Metode Info Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
                             <span class="size-1.5 rounded-full bg-primary"></span>
                             {{ __('docs/chart.methods.method1_title') }}
@@ -325,8 +325,8 @@ BLADE;
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.methods.method1_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
                             <span class="size-1.5 rounded-full bg-chart-2"></span>
                             {{ __('docs/chart.methods.method2_title') }}
@@ -334,8 +334,8 @@ BLADE;
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.methods.method2_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
                             <span class="size-1.5 rounded-full bg-chart-3"></span>
                             {{ __('docs/chart.methods.method3_title') }}
@@ -343,8 +343,8 @@ BLADE;
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.methods.method3_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
                             <span class="size-1.5 rounded-full bg-chart-4"></span>
                             {{ __('docs/chart.methods.method4_title') }}
@@ -352,7 +352,7 @@ BLADE;
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.methods.method4_desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
 
                 {{-- 1 Komponen Preview Tunggal untuk 4 Metode --}}
@@ -605,7 +605,7 @@ BLADE;
                                 <div x-show="activeMethod === 4" x-cloak class="space-y-3">
                                     <div class="flex items-center justify-between text-xs text-muted-foreground pb-1 border-b border-border/40">
                                         <span>{!! __('docs/chart.methods.banners.method4') !!}</span>
-                                        <vibe:badge size="sm" variant="outline" class="bg-sky-500/10 text-sky-600 border-sky-500/20">{{ __('docs/chart.methods.banners.badge_js_api') }}</vibe:badge>
+                                        <vibe:badge size="sm" variant="info">{{ __('docs/chart.methods.banners.badge_js_api') }}</vibe:badge>
                                     </div>
                                     <div class="w-full h-60">
                                         <canvas id="canvas-pure-js-demo"></canvas>
@@ -642,31 +642,31 @@ BLADE;
                             </vibe:card.header>
                             <vibe:card.content>
                                 <vibe:chart :config="[
-                                            'type' => 'line',
-                                            'data' => [
-                                                'labels' => $monthlyMetrics->pluck('month')->toArray(),
-                                                'datasets' => [
-                                                    [
-                                                        'label' => __('docs/chart.database.datasets.revenue'),
-                                                        'data' => $monthlyMetrics->pluck('revenue')->map(fn($v) => round($v / 1000000, 1))->toArray(),
-                                                        'borderColor' => 'chart-1',
-                                                        'backgroundColor' => 'chart-1/15',
-                                                        'borderWidth' => 2,
-                                                        'fill' => true,
-                                                        'tension' => 0.4,
-                                                    ],
-                                                    [
-                                                        'label' => __('docs/chart.database.datasets.profit'),
-                                                        'data' => $monthlyMetrics->pluck('profit')->map(fn($v) => round($v / 1000000, 1))->toArray(),
-                                                        'borderColor' => 'chart-2',
-                                                        'backgroundColor' => 'chart-2/15',
-                                                        'borderWidth' => 2,
-                                                        'fill' => true,
-                                                        'tension' => 0.4,
-                                                    ],
-                                                ],
-                                            ],
-                                        ]" :height="300" />
+                                                                            'type' => 'line',
+                                                                            'data' => [
+                                                                                'labels' => $monthlyMetrics->pluck('month')->toArray(),
+                                                                                'datasets' => [
+                                                                                    [
+                                                                                        'label' => __('docs/chart.database.datasets.revenue'),
+                                                                                        'data' => $monthlyMetrics->pluck('revenue')->map(fn($v) => round($v / 1000000, 1))->toArray(),
+                                                                                        'borderColor' => 'chart-1',
+                                                                                        'backgroundColor' => 'chart-1/15',
+                                                                                        'borderWidth' => 2,
+                                                                                        'fill' => true,
+                                                                                        'tension' => 0.4,
+                                                                                    ],
+                                                                                    [
+                                                                                        'label' => __('docs/chart.database.datasets.profit'),
+                                                                                        'data' => $monthlyMetrics->pluck('profit')->map(fn($v) => round($v / 1000000, 1))->toArray(),
+                                                                                        'borderColor' => 'chart-2',
+                                                                                        'backgroundColor' => 'chart-2/15',
+                                                                                        'borderWidth' => 2,
+                                                                                        'fill' => true,
+                                                                                        'tension' => 0.4,
+                                                                                    ],
+                                                                                ],
+                                                                            ],
+                                                                        ]" :height="300" />
                             </vibe:card.content>
                         </vibe:card>
                     </vibe:preview.code>
@@ -681,38 +681,41 @@ BLADE;
                                         <vibe:card.title>{{ __('docs/chart.database.card_title') }}</vibe:card.title>
                                         <vibe:card.description>{!! __('docs/chart.database.card_desc') !!}</vibe:card.description>
                                     </div>
-                                    <vibe:badge size="sm" variant="outline" class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-medium">
+                                    <vibe:badge size="sm" variant="success" class="font-medium">
+                                        {{ __('docs/chart.methods.options.recommended_badge') }}
+                                    </vibe:badge>
+                                    <vibe:badge size="sm" variant="success" class="font-medium">
                                         {{ __('docs/chart.database.months_tracked', ['count' => $dbMonthly->count()]) }}
                                     </vibe:badge>
                                 </div>
                             </vibe:card.header>
                             <vibe:card.content>
                                 <vibe:chart :config="[
-                                                                    'type' => 'line',
-                                                                    'data' => [
-                                                                        'labels' => $dbMonthly->pluck('month')->toArray(),
-                                                                        'datasets' => [
-                                                                            [
-                                                                                'label' => __('docs/chart.database.datasets.revenue'),
-                                                                                'data' => $dbMonthly->pluck('revenue')->map(fn($v) => round($v / 1000000, 1))->toArray(),
-                                                                                'borderColor' => 'chart-1',
-                                                                                'backgroundColor' => 'chart-1/15',
-                                                                                'borderWidth' => 2,
-                                                                                'fill' => true,
-                                                                                'tension' => 0.4,
-                                                                            ],
-                                                                            [
-                                                                                'label' => __('docs/chart.database.datasets.profit'),
-                                                                                'data' => $dbMonthly->pluck('profit')->map(fn($v) => round($v / 1000000, 1))->toArray(),
-                                                                                'borderColor' => 'chart-2',
-                                                                                'backgroundColor' => 'chart-2/15',
-                                                                                'borderWidth' => 2,
-                                                                                'fill' => true,
-                                                                                'tension' => 0.4,
-                                                                            ],
-                                                                        ],
-                                                                    ],
-                                                                ]" :height="300" />
+                                                                                                    'type' => 'line',
+                                                                                                    'data' => [
+                                                                                                        'labels' => $dbMonthly->pluck('month')->toArray(),
+                                                                                                        'datasets' => [
+                                                                                                            [
+                                                                                                                'label' => __('docs/chart.database.datasets.revenue'),
+                                                                                                                'data' => $dbMonthly->pluck('revenue')->map(fn($v) => round($v / 1000000, 1))->toArray(),
+                                                                                                                'borderColor' => 'chart-1',
+                                                                                                                'backgroundColor' => 'chart-1/15',
+                                                                                                                'borderWidth' => 2,
+                                                                                                                'fill' => true,
+                                                                                                                'tension' => 0.4,
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                'label' => __('docs/chart.database.datasets.profit'),
+                                                                                                                'data' => $dbMonthly->pluck('profit')->map(fn($v) => round($v / 1000000, 1))->toArray(),
+                                                                                                                'borderColor' => 'chart-2',
+                                                                                                                'backgroundColor' => 'chart-2/15',
+                                                                                                                'borderWidth' => 2,
+                                                                                                                'fill' => true,
+                                                                                                                'tension' => 0.4,
+                                                                                                            ],
+                                                                                                        ],
+                                                                                                    ],
+                                                                                                ]" :height="300" />
                             </vibe:card.content>
                         </vibe:card>
                     </div>
@@ -891,21 +894,21 @@ BLADE;
                                 </vibe:card.header>
                                 <vibe:card.content>
                                     <vibe:chart :config="[
-                                                    'type' => 'doughnut',
-                                                    'data' => [
-                                                        'labels' => $dbCategories->pluck('category')->toArray(),
-                                                        'datasets' => [
-                                                            [
-                                                                'data' => $dbCategories->pluck('revenue')->map(fn($v) => round($v / 1000000))->toArray(),
-                                                                'backgroundColor' => ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'],
-                                                                'borderWidth' => 2,
-                                                            ],
-                                                        ],
-                                                    ],
-                                                    'options' => [
-                                                        'cutout' => '68%',
-                                                    ],
-                                                ]" :height="260" />
+                                                                                        'type' => 'doughnut',
+                                                                                        'data' => [
+                                                                                            'labels' => $dbCategories->pluck('category')->toArray(),
+                                                                                            'datasets' => [
+                                                                                                [
+                                                                                                    'data' => $dbCategories->pluck('revenue')->map(fn($v) => round($v / 1000000))->toArray(),
+                                                                                                    'backgroundColor' => ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'],
+                                                                                                    'borderWidth' => 2,
+                                                                                                ],
+                                                                                            ],
+                                                                                        ],
+                                                                                        'options' => [
+                                                                                            'cutout' => '68%',
+                                                                                        ],
+                                                                                    ]" :height="260" />
                                 </vibe:card.content>
                             </vibe:card>
 
@@ -917,18 +920,18 @@ BLADE;
                                 </vibe:card.header>
                                 <vibe:card.content>
                                     <vibe:chart :config="[
-                                                    'type' => 'pie',
-                                                    'data' => [
-                                                        'labels' => $dbCategories->pluck('category')->toArray(),
-                                                        'datasets' => [
-                                                            [
-                                                                'data' => $dbCategories->pluck('orders_count')->toArray(),
-                                                                'backgroundColor' => ['primary', 'info', 'success', 'warning', 'destructive'],
-                                                                'borderWidth' => 2,
-                                                            ],
-                                                        ],
-                                                    ],
-                                                ]" :height="260" />
+                                                                                        'type' => 'pie',
+                                                                                        'data' => [
+                                                                                            'labels' => $dbCategories->pluck('category')->toArray(),
+                                                                                            'datasets' => [
+                                                                                                [
+                                                                                                    'data' => $dbCategories->pluck('orders_count')->toArray(),
+                                                                                                    'backgroundColor' => ['primary', 'info', 'success', 'warning', 'destructive'],
+                                                                                                    'borderWidth' => 2,
+                                                                                                ],
+                                                                                            ],
+                                                                                        ],
+                                                                                    ]" :height="260" />
                                 </vibe:card.content>
                             </vibe:card>
                         </div>
@@ -945,21 +948,21 @@ BLADE;
                                 </vibe:card.header>
                                 <vibe:card.content>
                                     <vibe:chart :config="[
-                                                                            'type' => 'doughnut',
-                                                                            'data' => [
-                                                                                'labels' => $dbCategories->pluck('category')->toArray(),
-                                                                                'datasets' => [
-                                                                                    [
-                                                                                        'data' => $dbCategories->pluck('revenue')->map(fn($v) => round($v / 1000000))->toArray(),
-                                                                                        'backgroundColor' => ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'],
-                                                                                        'borderWidth' => 2,
-                                                                                    ],
-                                                                                ],
-                                                                            ],
-                                                                            'options' => [
-                                                                                'cutout' => '68%',
-                                                                            ],
-                                                                        ]" :height="260" />
+                                                                                                                'type' => 'doughnut',
+                                                                                                                'data' => [
+                                                                                                                    'labels' => $dbCategories->pluck('category')->toArray(),
+                                                                                                                    'datasets' => [
+                                                                                                                        [
+                                                                                                                            'data' => $dbCategories->pluck('revenue')->map(fn($v) => round($v / 1000000))->toArray(),
+                                                                                                                            'backgroundColor' => ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5'],
+                                                                                                                            'borderWidth' => 2,
+                                                                                                                        ],
+                                                                                                                    ],
+                                                                                                                ],
+                                                                                                                'options' => [
+                                                                                                                    'cutout' => '68%',
+                                                                                                                ],
+                                                                                                            ]" :height="260" />
                                 </vibe:card.content>
                             </vibe:card>
 
@@ -970,18 +973,18 @@ BLADE;
                                 </vibe:card.header>
                                 <vibe:card.content>
                                     <vibe:chart :config="[
-                                                                            'type' => 'pie',
-                                                                            'data' => [
-                                                                                'labels' => $dbCategories->pluck('category')->toArray(),
-                                                                                'datasets' => [
-                                                                                    [
-                                                                                        'data' => $dbCategories->pluck('orders_count')->toArray(),
-                                                                                        'backgroundColor' => ['primary', 'info', 'success', 'warning', 'destructive'],
-                                                                                        'borderWidth' => 2,
-                                                                                    ],
-                                                                                ],
-                                                                            ],
-                                                                        ]" :height="260" />
+                                                                                                                'type' => 'pie',
+                                                                                                                'data' => [
+                                                                                                                    'labels' => $dbCategories->pluck('category')->toArray(),
+                                                                                                                    'datasets' => [
+                                                                                                                        [
+                                                                                                                            'data' => $dbCategories->pluck('orders_count')->toArray(),
+                                                                                                                            'backgroundColor' => ['primary', 'info', 'success', 'warning', 'destructive'],
+                                                                                                                            'borderWidth' => 2,
+                                                                                                                        ],
+                                                                                                                    ],
+                                                                                                                ],
+                                                                                                            ]" :height="260" />
                                 </vibe:card.content>
                             </vibe:card>
                         </div>
@@ -1088,7 +1091,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.revenue_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-emerald-500 border-emerald-500/20 bg-emerald-500/10 font-semibold">+18%</vibe:badge>
+                                    <vibe:badge variant="success" size="sm" class="font-semibold">+18%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">Rp 84.250.000</div>
                                 <vibe:chart :config="[
@@ -1113,7 +1116,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.users_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-sky-500 border-sky-500/20 bg-sky-500/10 font-semibold">+8.4%</vibe:badge>
+                                    <vibe:badge variant="info" size="sm" class="font-semibold">+8.4%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">{{ __('docs/chart.sparkline.cards.users_val') }}</div>
                                 <vibe:chart :config="[
@@ -1135,7 +1138,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.bounce_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-amber-500 border-amber-500/20 bg-amber-500/10 font-semibold">-3.2%</vibe:badge>
+                                    <vibe:badge variant="warning" size="sm" class="font-semibold">-3.2%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">24.6%</div>
                                 <vibe:chart :config="[
@@ -1160,7 +1163,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.revenue_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-emerald-500 border-emerald-500/20 bg-emerald-500/10 font-semibold">+18%</vibe:badge>
+                                    <vibe:badge variant="success" size="sm" class="font-semibold">+18%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">Rp 84.250.000</div>
                                 <vibe:chart :config="[
@@ -1184,7 +1187,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.users_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-sky-500 border-sky-500/20 bg-sky-500/10 font-semibold">+8.4%</vibe:badge>
+                                    <vibe:badge variant="info" size="sm" class="font-semibold">+8.4%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">{{ __('docs/chart.sparkline.cards.users_val') }}</div>
                                 <vibe:chart :config="[
@@ -1205,7 +1208,7 @@ BLADE;
                             <vibe:card class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs text-muted-foreground font-medium">{{ __('docs/chart.sparkline.cards.bounce_title') }}</span>
-                                    <vibe:badge variant="outline" size="sm" class="text-amber-500 border-amber-500/20 bg-amber-500/10 font-semibold">-3.2%</vibe:badge>
+                                    <vibe:badge variant="warning" size="sm" class="font-semibold">-3.2%</vibe:badge>
                                 </div>
                                 <div class="text-2xl font-bold text-foreground">24.6%</div>
                                 <vibe:chart :config="[
@@ -1353,7 +1356,7 @@ BLADE;
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h2 class="text-xl font-bold text-foreground">{{ __('docs/chart.custom_tooltip.title') }}</h2>
-                        <vibe:badge size="sm" variant="outline" class="bg-amber-500/10 text-amber-600 border-amber-500/20">{{ __('docs/chart.custom_tooltip.badge') }}</vibe:badge>
+                        <vibe:badge size="sm" variant="warning">{{ __('docs/chart.custom_tooltip.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
                         {!! __('docs/chart.custom_tooltip.desc') !!}
@@ -1362,33 +1365,33 @@ BLADE;
 
                 {{-- Fitur Tooltip Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-amber-500"></span>
+                            <span class="size-1.5 rounded-full bg-warning"></span>
                             {{ __('docs/chart.custom_tooltip.features.mode_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.custom_tooltip.features.mode_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="size-1.5 rounded-full bg-success"></span>
                             {{ __('docs/chart.custom_tooltip.features.prefix_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.custom_tooltip.features.prefix_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-sky-500"></span>
+                            <span class="size-1.5 rounded-full bg-info"></span>
                             {{ __('docs/chart.custom_tooltip.features.callbacks_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.custom_tooltip.features.callbacks_desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
 
                 <vibe:preview data-toc-ignore :title="__('docs/chart.custom_tooltip.preview_title')">
@@ -1400,7 +1403,7 @@ BLADE;
                                         <vibe:card.title>{{ __('docs/chart.custom_tooltip.card_title') }}</vibe:card.title>
                                         <vibe:card.description>{{ __('docs/chart.custom_tooltip.card_desc') }}</vibe:card.description>
                                     </div>
-                                    <vibe:badge variant="outline" class="rounded-full bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                                    <vibe:badge variant="success" class="rounded-full">
                                         {{ __('docs/chart.custom_tooltip.badge_hover') }}
                                     </vibe:badge>
                                 </div>
@@ -1463,7 +1466,7 @@ BLADE;
                                         <vibe:card.title>{{ __('docs/chart.custom_tooltip.card_title') }}</vibe:card.title>
                                         <vibe:card.description>{{ __('docs/chart.custom_tooltip.card_desc') }}</vibe:card.description>
                                     </div>
-                                    <vibe:badge variant="outline" class="rounded-full bg-emerald-500/10 text-emerald-600 border-emerald-500/20">
+                                    <vibe:badge variant="success" class="rounded-full">
                                         {{ __('docs/chart.custom_tooltip.badge_hover') }}
                                     </vibe:badge>
                                 </div>
@@ -1535,42 +1538,42 @@ BLADE;
 
                 {{-- Fitur Zoom & Pan Grid --}}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-indigo-500"></span>
+                            <span class="size-1.5 rounded-full bg-primary"></span>
                             {{ __('docs/chart.zoom_pan.features.wheel_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.zoom_pan.features.wheel_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-emerald-500"></span>
+                            <span class="size-1.5 rounded-full bg-success"></span>
                             {{ __('docs/chart.zoom_pan.features.pinch_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.zoom_pan.features.pinch_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-sky-500"></span>
+                            <span class="size-1.5 rounded-full bg-info"></span>
                             {{ __('docs/chart.zoom_pan.features.pan_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.zoom_pan.features.pan_desc') !!}
                         </p>
-                    </div>
-                    <div class="p-3.5 rounded-xl bg-card border border-border space-y-1">
+                    </vibe:card>
+                    <vibe:card class="space-y-1">
                         <div class="flex items-center gap-1.5 font-semibold text-xs text-foreground">
-                            <span class="size-1.5 rounded-full bg-amber-500"></span>
+                            <span class="size-1.5 rounded-full bg-warning"></span>
                             {{ __('docs/chart.zoom_pan.features.drag_title') }}
                         </div>
                         <p class="text-[11px] text-muted-foreground leading-normal">
                             {!! __('docs/chart.zoom_pan.features.drag_desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
 
                 <vibe:preview data-toc-ignore :title="__('docs/chart.zoom_pan.preview_title')">
@@ -1691,12 +1694,7 @@ BLADE;
 
                                     {{-- Interactive Toolbar Controls --}}
                                     <div class="flex flex-wrap sm:flex-nowrap items-center justify-end gap-1.5 select-none shrink-0 sm:ml-auto">
-                                        <button
-                                            type="button"
-                                            @click="toggleDragMode()"
-                                            :class="dragSelectMode ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-input hover:bg-accent'"
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border cursor-pointer transition-all duration-150 shadow-2xs shrink-0"
-                                        >
+                                        <button type="button" @click="toggleDragMode()" :class="dragSelectMode ? 'bg-primary text-primary-foreground border-primary' : 'bg-background text-foreground border-input hover:bg-accent'" class="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-lg border cursor-pointer transition-all duration-150 shadow-2xs shrink-0">
                                             <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="4 4" stroke-width="2" />
                                             </svg>
@@ -1704,32 +1702,17 @@ BLADE;
                                         </button>
 
                                         <div class="inline-flex items-center rounded-lg border border-border bg-muted/60 p-0.5 text-xs shrink-0">
-                                            <button
-                                                type="button"
-                                                @click="zoomIn()"
-                                                class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all"
-                                                title="{{ __('docs/chart.zoom_pan.zoom_in_title') }}"
-                                            >
+                                            <button type="button" @click="zoomIn()" class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all" title="{{ __('docs/chart.zoom_pan.zoom_in_title') }}">
                                                 <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
                                                 </svg>
                                             </button>
-                                            <button
-                                                type="button"
-                                                @click="zoomOut()"
-                                                class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all"
-                                                title="{{ __('docs/chart.zoom_pan.zoom_out_title') }}"
-                                            >
+                                            <button type="button" @click="zoomOut()" class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all" title="{{ __('docs/chart.zoom_pan.zoom_out_title') }}">
                                                 <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7" />
                                                 </svg>
                                             </button>
-                                            <button
-                                                type="button"
-                                                @click="resetZoom()"
-                                                class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all"
-                                                title="{{ __('docs/chart.zoom_pan.reset_title') }}"
-                                            >
+                                            <button type="button" @click="resetZoom()" class="px-2 py-1 rounded-md text-foreground hover:bg-background hover:shadow-2xs cursor-pointer transition-all" title="{{ __('docs/chart.zoom_pan.reset_title') }}">
                                                 <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                                                 </svg>
@@ -1809,7 +1792,7 @@ BLADE;
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
                         <h2 class="text-xl font-bold text-foreground">{{ __('docs/chart.direct_js.title') }}</h2>
-                        <vibe:badge size="sm" variant="outline" class="bg-sky-500/10 text-sky-600 border-sky-500/20">{{ __('docs/chart.direct_js.badge') }}</vibe:badge>
+                        <vibe:badge size="sm" variant="info">{{ __('docs/chart.direct_js.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
                         {!! __('docs/chart.direct_js.desc') !!}
@@ -1886,22 +1869,7 @@ BLADE;
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $chartProps = [
-                                    [':config', 'array | string', 'null', __('docs/chart.props.items.config')],
-                                    [':height', 'number | string', '300', __('docs/chart.props.items.height')],
-                                    [':sparkline', 'bool', 'false', __('docs/chart.props.items.sparkline')],
-                                    [':zoom', 'bool | array', 'false', __('docs/chart.props.items.zoom')],
-                                    ['type', 'string', "'line'", __('docs/chart.props.items.type')],
-                                    [':data', 'array | string', '[]', __('docs/chart.props.items.data')],
-                                    [':options', 'array | string', '[]', __('docs/chart.props.items.options')],
-                                    ['options.plugins.tooltip', 'array', '{...}', __('docs/chart.props.items.tooltip')],
-                                    ['options.plugins.zoom', 'array', '{...}', __('docs/chart.props.items.plugin_zoom')],
-                                    ['VibeChart.zoom()', 'JavaScript API', '-', __('docs/chart.props.items.api_zoom')],
-                                    ['VibeChart.resetZoom()', 'JavaScript API', '-', __('docs/chart.props.items.api_reset')],
-                                    ['VibeChart.pan()', 'JavaScript API', '-', __('docs/chart.props.items.api_pan')],
-                                    ['VibeChart.create()', 'JavaScript API', '-', __('docs/chart.props.items.api_create')],
-                                    ['VibeChart.resolveColor()', 'JavaScript API', '-', __('docs/chart.props.items.api_resolve_color')],
-                                ];
+                                $chartProps = [[':config', 'array | string', 'null', __('docs/chart.props.items.config')], [':height', 'number | string', '300', __('docs/chart.props.items.height')], [':sparkline', 'bool', 'false', __('docs/chart.props.items.sparkline')], [':zoom', 'bool | array', 'false', __('docs/chart.props.items.zoom')], ['type', 'string', "'line'", __('docs/chart.props.items.type')], [':data', 'array | string', '[]', __('docs/chart.props.items.data')], [':options', 'array | string', '[]', __('docs/chart.props.items.options')], ['options.plugins.tooltip', 'array', '{...}', __('docs/chart.props.items.tooltip')], ['options.plugins.zoom', 'array', '{...}', __('docs/chart.props.items.plugin_zoom')], ['VibeChart.zoom()', 'JavaScript API', '-', __('docs/chart.props.items.api_zoom')], ['VibeChart.resetZoom()', 'JavaScript API', '-', __('docs/chart.props.items.api_reset')], ['VibeChart.pan()', 'JavaScript API', '-', __('docs/chart.props.items.api_pan')], ['VibeChart.create()', 'JavaScript API', '-', __('docs/chart.props.items.api_create')], ['VibeChart.resolveColor()', 'JavaScript API', '-', __('docs/chart.props.items.api_resolve_color')]];
                             @endphp
                             @foreach ($chartProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -2008,7 +1976,9 @@ BLADE;
 
                 // Lifecycle hooks untuk direct reload dan Livewire wire:navigate
                 if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', runInit, { once: true });
+                    document.addEventListener('DOMContentLoaded', runInit, {
+                        once: true
+                    });
                 } else {
                     setTimeout(runInit, 50);
                 }

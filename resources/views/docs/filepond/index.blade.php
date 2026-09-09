@@ -141,9 +141,9 @@
                                 <div class="space-y-0.5">
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs font-semibold text-foreground">Direct Cloud Upload (Presigned URL)</span>
-                                        <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                                        <vibe:badge variant="success" size="xs" class="rounded-full">
                                             ● S3 / R2 PUT
-                                        </span>
+                                        </vibe:badge>
                                     </div>
                                     <p class="text-[11px] text-muted-foreground">Berkas dikirim langsung ke object storage tanpa membebani memori PHP server.</p>
                                 </div>
@@ -160,8 +160,8 @@
                         />
 
                         {{-- Real-Time Cloud Upload Monitor Card --}}
-                        <div
-                            class="rounded-xl border border-border bg-card p-3.5 space-y-2.5 text-xs shadow-xs transition-all"
+                        <vibe:card
+                            class="p-3.5 space-y-2.5 text-xs shadow-xs transition-all"
                             x-data="{
                                 state: 'idle',
                                 fileName: '',
@@ -210,14 +210,14 @@
                                     <span class="relative flex size-2">
                                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
                                             :class="{
-                                                'bg-emerald-400': state === 'idle' || state === 'success',
+                                                'bg-success': state === 'idle' || state === 'success',
                                                 'bg-primary': state === 'uploading',
                                                 'bg-destructive': state === 'error'
                                             }"
                                         ></span>
                                         <span class="relative inline-flex rounded-full size-2"
                                             :class="{
-                                                'bg-emerald-500': state === 'idle' || state === 'success',
+                                                'bg-success': state === 'idle' || state === 'success',
                                                 'bg-primary': state === 'uploading',
                                                 'bg-destructive': state === 'destructive'
                                             }"
@@ -228,7 +228,7 @@
 
                                 <template x-if="state === 'idle'">
                                     <span class="inline-flex items-center gap-1 font-medium text-muted-foreground text-[11px]">
-                                        <svg class="size-3.5 text-emerald-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg class="size-3.5 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <path d="M20 6 9 17l-5-5"/>
                                         </svg>
                                         Siap mengunggah langsung ke storage
@@ -245,7 +245,7 @@
                                 </template>
 
                                 <template x-if="state === 'success'">
-                                    <span class="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400 text-[11px]">
+                                    <span class="inline-flex items-center gap-1 font-semibold text-success text-[11px]">
                                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                             <polyline points="20 6 9 17 4 12"/>
                                         </svg>
@@ -261,7 +261,7 @@
                             {{-- Live Progress Bar when uploading --}}
                             <div x-show="state === 'uploading'" x-transition class="space-y-1 pt-1">
                                 <div class="w-full bg-muted rounded-full h-2 overflow-hidden p-0.5">
-                                    <div class="bg-linear-to-r from-primary to-emerald-500 h-full rounded-full transition-all duration-150" :style="'width: ' + progress + '%'"></div>
+                                    <div class="bg-linear-to-r from-primary to-success h-full rounded-full transition-all duration-150" :style="'width: ' + progress + '%'"></div>
                                 </div>
                                 <div class="flex justify-between text-[11px] text-muted-foreground font-mono">
                                     <span class="truncate max-w-64" x-text="fileName + (fileSize ? ' (' + fileSize + ')' : '')"></span>
@@ -270,19 +270,19 @@
                             </div>
 
                             {{-- S3 Key Result Card when upload succeeds --}}
-                            <div x-show="state === 'success'" x-transition class="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-300 space-y-1.5">
+                            <div x-show="state === 'success'" x-transition class="p-2.5 rounded-lg bg-success/10 border border-success/20 text-success space-y-1.5">
                                 <div class="flex items-center justify-between text-[11px] font-medium">
                                     <span>Cloud Object Key (Disimpan di Form):</span>
-                                    <span class="font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-[10px] text-emerald-700 dark:text-emerald-300 font-semibold">Direct PUT Validated</span>
+                                    <vibe:badge variant="success" size="xs">Direct PUT Validated</vibe:badge>
                                 </div>
-                                <div class="font-mono text-[11px] break-all select-all font-semibold bg-background/50 p-2 rounded border border-emerald-500/20" x-text="s3Key"></div>
+                                <div class="font-mono text-[11px] break-all select-all font-semibold bg-background/50 p-2 rounded border border-success/20" x-text="s3Key"></div>
                             </div>
-                        </div>
+                        </vibe:card>
                     </div>
                 </vibe:preview>
 
                 {{-- Backend Example Alert & Code Block --}}
-                <div class="p-4 rounded-xl border border-border bg-card space-y-3">
+                <vibe:card class="space-y-3">
                     <div class="flex items-center gap-2">
                         <svg class="size-5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
@@ -315,7 +315,7 @@
                         ]);
                         }
                     </vibe:highlightjs>
-                </div>
+                </vibe:card>
             </section>
 
             {{-- 6. Form Submission & Backend Controller --}}
@@ -339,7 +339,7 @@
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
                         @if (session('success'))
-                            <div class="mb-4 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium flex items-center gap-2.5 shadow-xs">
+                            <div class="mb-4 p-3.5 rounded-xl bg-success/10 border border-success/20 text-success text-xs font-medium flex items-center gap-2.5 shadow-xs">
                                 <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
@@ -369,7 +369,7 @@
                     </p>
                 </div>
 
-                <div class="p-4 rounded-xl border border-border bg-card space-y-4">
+                <vibe:card class="space-y-4">
                     <vibe:highlightjs language="php">
                         namespace App\Livewire;
 
@@ -417,7 +417,7 @@
                         &lt;vibe:button type="submit" class="mt-4"&gt;Simpan Galeri&lt;/vibe:button&gt;
                         &lt;/form&gt;
                     </vibe:highlightjs>
-                </div>
+                </vibe:card>
             </section>
 
             {{-- 7. Props Reference Table --}}
@@ -427,92 +427,40 @@
                     <p class="text-sm text-muted-foreground">Daftar lengkap opsi konfigurasi untuk komponen &lt;vibe:filepond&gt;.</p>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-border">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-muted/50 border-b border-border text-foreground font-semibold">
-                            <tr>
-                                <th class="p-3">Prop</th>
-                                <th class="p-3">Tipe</th>
-                                <th class="p-3">Default</th>
-                                <th class="p-3">Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border text-muted-foreground">
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">name</td>
-                                <td class="p-3 font-mono">string</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Nama field input (otomatis diambil dari <code class="font-mono">wire:model</code> jika ada).</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">multiple</td>
-                                <td class="p-3 font-mono">bool</td>
-                                <td class="p-3 font-mono">false</td>
-                                <td class="p-3">Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">max-files</td>
-                                <td class="p-3 font-mono">int</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Batas maksimal jumlah berkas yang dapat diunggah bersamaan.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">max-file-size</td>
-                                <td class="p-3 font-mono">string</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Batas ukuran per berkas, contoh: <code class="font-mono">"2MB"</code>, <code class="font-mono">"500KB"</code>.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">accepted-file-types</td>
-                                <td class="p-3 font-mono">string | array</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Filter format mime berkas, contoh: <code class="font-mono">"image/*, application/pdf"</code>.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">avatar</td>
-                                <td class="p-3 font-mono">bool</td>
-                                <td class="p-3 font-mono">false</td>
-                                <td class="p-3">Mengaktifkan mode lingkaran compact 1:1 untuk foto profil.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">image-crop</td>
-                                <td class="p-3 font-mono">bool</td>
-                                <td class="p-3 font-mono">false</td>
-                                <td class="p-3">Mengaktifkan fitur pemotongan gambar otomatis/manual.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">image-crop-aspect-ratio</td>
-                                <td class="p-3 font-mono">string</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Rasio aspek pemotongan gambar, contoh: <code class="font-mono">"1:1"</code>, <code class="font-mono">"16:9"</code>.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">presign-url</td>
-                                <td class="p-3 font-mono">string</td>
-                                <td class="p-3 font-mono">null</td>
-                                <td class="p-3">Endpoint backend untuk mendapatkan URL presigned cloud storage.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">presign-method</td>
-                                <td class="p-3 font-mono">string</td>
-                                <td class="p-3 font-mono">"PUT"</td>
-                                <td class="p-3">HTTP method pengunggahan langsung ke cloud storage.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">encode</td>
-                                <td class="p-3 font-mono">bool</td>
-                                <td class="p-3 font-mono">false</td>
-                                <td class="p-3">Mengonversi berkas ke base64 string untuk form submission standar.</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-mono font-medium text-foreground">existing-files</td>
-                                <td class="p-3 font-mono">array</td>
-                                <td class="p-3 font-mono">[]</td>
-                                <td class="p-3">Daftar URL berkas awal yang sudah ada (misal untuk form edit).</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">Prop</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">Tipe</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">Default</vibe:table.column>
+                        <vibe:table.column>Keterangan</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $filepondProps = [
+                                ['name', 'string', 'null', 'Nama field input (otomatis diambil dari `wire:model` jika ada).'],
+                                ['multiple', 'bool', 'false', 'Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.'],
+                                ['max-files', 'int', 'null', 'Batas maksimal jumlah berkas yang dapat diunggah bersamaan.'],
+                                ['max-file-size', 'string', 'null', 'Batas ukuran per berkas, contoh: `"2MB"`, `"500KB"`.'],
+                                ['accepted-file-types', 'string | array', 'null', 'Filter format mime berkas, contoh: `"image/*, application/pdf"`.'],
+                                ['avatar', 'bool', 'false', 'Mengaktifkan mode lingkaran compact 1:1 untuk foto profil.'],
+                                ['image-crop', 'bool', 'false', 'Mengaktifkan fitur pemotongan gambar otomatis/manual.'],
+                                ['image-crop-aspect-ratio', 'string', 'null', 'Rasio aspek pemotongan gambar, contoh: `"1:1"`, `"16:9"`.'],
+                                ['presign-url', 'string', 'null', 'Endpoint backend untuk mendapatkan URL presigned cloud storage.'],
+                                ['presign-method', 'string', '"PUT"', 'HTTP method pengunggahan langsung ke cloud storage.'],
+                                ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'],
+                                ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).']
+                            ];
+                        @endphp
+                        @foreach ($filepondProps as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
         </div>

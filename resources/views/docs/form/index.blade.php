@@ -33,19 +33,17 @@
                 </div>
             </div>
 
-            <div
-                x-data="{
-                    submittedData: {{ json_encode(session('submitted_data', null)) }},
-                    submittedAt: '{{ session('submitted_at', '') }}',
-                    init() {
-                        window.addEventListener('vibe-form-submitted', (e) => {
-                            const resData = e.detail?.data || {};
-                            this.submittedData = resData.submitted_data || resData;
-                            this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
-                        });
-                    }
-                }"
-            >
+            <div x-data="{
+                submittedData: {{ json_encode(session('submitted_data', null)) }},
+                submittedAt: '{{ session('submitted_at', '') }}',
+                init() {
+                    window.addEventListener('vibe-form-submitted', (e) => {
+                        const resData = e.detail?.data || {};
+                        this.submittedData = resData.submitted_data || resData;
+                        this.submittedAt = resData.submitted_at || new Date().toLocaleTimeString();
+                    });
+                }
+            }">
                 <template x-if="submittedData">
                     <div class="p-4 rounded-xl border border-success/30 bg-success/10 text-foreground flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
                         <div class="flex items-center gap-2.5">
@@ -85,12 +83,7 @@
 
                             <vibe:input type="email" name="email" label="{{ __('docs/form.basic_usage.email_label') }}" placeholder="{{ __('docs/form.basic_usage.email_placeholder') }}" required />
 
-                            <div class="space-y-1.5">
-                                <label for="contact_message" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.basic_usage.message_label') }}
-                                </label>
-                                <textarea id="contact_message" name="message" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.basic_usage.message_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="message" label="{{ __('docs/form.basic_usage.message_label') }}" rows="3" placeholder="{{ __('docs/form.basic_usage.message_placeholder') }}" />
 
                             <div class="pt-2">
                                 <vibe:button type="submit" variant="primary" class="w-full sm:w-auto">
@@ -106,12 +99,7 @@
 
                             <vibe:input type="email" name="demo_email" label="{{ __('docs/form.basic_usage.email_label') }}" placeholder="{{ __('docs/form.basic_usage.email_placeholder') }}" />
 
-                            <div class="space-y-1.5">
-                                <label for="demo_contact_message" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.basic_usage.message_label') }}
-                                </label>
-                                <textarea id="demo_contact_message" name="demo_message" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.basic_usage.message_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="demo_message" label="{{ __('docs/form.basic_usage.message_label') }}" rows="3" placeholder="{{ __('docs/form.basic_usage.message_placeholder') }}" />
 
                             <div class="pt-2 flex items-center justify-end">
                                 <vibe:button type="submit" variant="primary">
@@ -140,12 +128,7 @@
 
                             <vibe:input name="card_number" label="{{ __('docs/form.session_storage.card_number') }}" placeholder="TX-2026-9812-4410" />
 
-                            <div class="space-y-1.5">
-                                <label for="checkout_notes" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.session_storage.notes') }}
-                                </label>
-                                <textarea id="checkout_notes" name="notes" rows="2" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.session_storage.notes_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="notes" label="{{ __('docs/form.session_storage.notes') }}" rows="2" placeholder="{{ __('docs/form.session_storage.notes_placeholder') }}" />
 
                             <div class="flex items-center gap-2 pt-2">
                                 <vibe:button type="submit" variant="primary">
@@ -183,12 +166,7 @@
 
                             <vibe:input name="demo_card_number" label="{{ __('docs/form.session_storage.card_number') }}" placeholder="TX-2026-9812-4410" />
 
-                            <div class="space-y-1.5">
-                                <label for="demo_checkout_notes" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.session_storage.notes') }}
-                                </label>
-                                <textarea id="demo_checkout_notes" name="demo_checkout_notes" rows="2" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.session_storage.notes_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="demo_checkout_notes" label="{{ __('docs/form.session_storage.notes') }}" rows="2" placeholder="{{ __('docs/form.session_storage.notes_placeholder') }}" />
 
                             <div class="flex items-center gap-2 pt-2">
                                 <vibe:button type="submit" variant="primary">
@@ -218,12 +196,7 @@
                         <vibe:form id="article-draft-form" :save-to-storage="true" storage-type="local" :expire-hours="48" class="space-y-4">
                             <vibe:input name="article_title" label="{{ __('docs/form.local_storage.article_title') }}" placeholder="{{ __('docs/form.local_storage.article_placeholder') }}" />
 
-                            <div class="space-y-1.5">
-                                <label for="article_content" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.local_storage.content_label') }}
-                                </label>
-                                <textarea id="article_content" name="content" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.local_storage.content_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="content" label="{{ __('docs/form.local_storage.content_label') }}" rows="3" placeholder="{{ __('docs/form.local_storage.content_placeholder') }}" />
 
                             <div class="flex items-center gap-2 pt-2">
                                 <vibe:button type="submit" variant="primary">
@@ -236,21 +209,16 @@
                         </vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl mx-auto p-4 sm:p-6 space-y-4">
-                        <div class="p-3 rounded-lg border border-border bg-card text-xs text-muted-foreground flex items-center gap-2">
+                        <vibe:card class="p-3 text-xs text-muted-foreground flex items-center gap-2">
                             <span class="size-2 rounded-full bg-success"></span>
                             <span>{{ __('docs/form.local_storage.hint') }}</span>
-                        </div>
+                        </vibe:card>
 
                         <vibe:form id="demo-article-draft-form" :save-to-storage="true" storage-type="local" :expire-hours="48" action="{{ route('docs.form.store') }}" method="POST" class="space-y-4">
                             @csrf
                             <vibe:input name="demo_article_title" label="{{ __('docs/form.local_storage.article_title') }}" placeholder="{{ __('docs/form.local_storage.article_placeholder') }}" />
 
-                            <div class="space-y-1.5">
-                                <label for="demo_article_content" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.local_storage.content_label') }}
-                                </label>
-                                <textarea id="demo_article_content" name="demo_article_content" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.local_storage.content_placeholder') }}"></textarea>
-                            </div>
+                            <vibe:textarea name="demo_article_content" label="{{ __('docs/form.local_storage.content_label') }}" rows="3" placeholder="{{ __('docs/form.local_storage.content_placeholder') }}" />
 
                             <div class="flex items-center gap-2 pt-2">
                                 <vibe:button type="submit" variant="primary">
@@ -265,9 +233,9 @@
                 </vibe:preview>
 
                 {{-- Peringatan Keamanan Local Storage --}}
-                <vibe:card class="border border-warning/40 bg-warning/15 dark:bg-warning/25">
-                    <div class="flex items-center gap-2.5 text-warning dark:text-warning-foreground font-semibold text-sm">
-                        <span class="flex size-7 items-center justify-center rounded-lg bg-warning/20 dark:bg-warning/30 text-warning dark:text-warning-foreground shrink-0">
+                <vibe:card class="border border-warning/20 bg-warning/15 dark:bg-warning/15">
+                    <div class="flex items-center gap-2.5 text-warning font-semibold mb-4">
+                        <span class="flex size-7 items-center justify-center rounded-lg bg-warning/20 dark:bg-warning/30 text-warning shrink-0">
                             <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
                                 <line x1="12" y1="9" x2="12" y2="13" />
@@ -276,10 +244,10 @@
                         </span>
                         <span>{{ __('docs/form.local_storage.security_title') }}</span>
                     </div>
-                    <p class="text-xs text-muted-foreground leading-relaxed">
+                    <p class="text-xs text-foreground leading-relaxed">
                         {!! __('docs/form.local_storage.security_desc') !!}
                     </p>
-                    <ul class="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
+                    <ul class="text-xs text-foreground space-y-1.5 list-disc list-inside">
                         <li>{!! __('docs/form.local_storage.security_points.sensitive') !!}</li>
                         <li>{!! __('docs/form.local_storage.security_points.shared_device') !!}</li>
                         <li>{!! __('docs/form.local_storage.security_points.alternative') !!}</li>
@@ -307,11 +275,8 @@
 
                             <vibe:input name="role" label="{{ __('docs/form.grid_layout.role') }}" placeholder="Frontend Engineer" />
 
-                            <div class="col-span-1 md:col-span-2 space-y-1.5">
-                                <label for="address" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.grid_layout.address') }}
-                                </label>
-                                <textarea id="address" name="address" rows="2" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.grid_layout.address_placeholder') }}"></textarea>
+                            <div class="col-span-1 md:col-span-2">
+                                <vibe:textarea name="address" label="{{ __('docs/form.grid_layout.address') }}" rows="2" placeholder="{{ __('docs/form.grid_layout.address_placeholder') }}" />
                             </div>
 
                             <div class="col-span-1 md:col-span-2 flex items-center justify-end gap-3 pt-2">
@@ -331,11 +296,8 @@
 
                             <vibe:input name="demo_role" label="{{ __('docs/form.grid_layout.role') }}" placeholder="Frontend Engineer" />
 
-                            <div class="col-span-1 md:col-span-2 space-y-1.5">
-                                <label for="demo_address" class="block text-xs font-semibold text-foreground select-none">
-                                    {{ __('docs/form.grid_layout.address') }}
-                                </label>
-                                <textarea id="demo_address" name="demo_address" rows="2" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.grid_layout.address_placeholder') }}"></textarea>
+                            <div class="col-span-1 md:col-span-2">
+                                <vibe:textarea name="demo_address" label="{{ __('docs/form.grid_layout.address') }}" rows="2" placeholder="{{ __('docs/form.grid_layout.address_placeholder') }}" />
                             </div>
 
                             <div class="col-span-1 md:col-span-2 flex items-center justify-end gap-3 pt-2">
@@ -368,12 +330,7 @@
                                 <vibe:form class="space-y-4">
                                     <vibe:input name="username" label="{{ __('docs/form.card_form.username') }}" placeholder="alexmorgan" value="alexmorgan" />
 
-                                    <div class="space-y-1.5">
-                                        <label for="bio" class="block text-xs font-semibold text-foreground select-none">
-                                            {{ __('docs/form.card_form.bio') }}
-                                        </label>
-                                        <textarea id="bio" name="bio" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}"></textarea>
-                                    </div>
+                                    <vibe:textarea name="bio" label="{{ __('docs/form.card_form.bio') }}" rows="3" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}" />
                                 </vibe:form>
                             </vibe:card.content>
 
@@ -396,12 +353,7 @@
                                     <div class="space-y-4">
                                         <vibe:input name="demo_username" label="{{ __('docs/form.card_form.username') }}" placeholder="alexmorgan" value="alexmorgan" />
 
-                                        <div class="space-y-1.5">
-                                            <label for="demo_bio" class="block text-xs font-semibold text-foreground select-none">
-                                                {{ __('docs/form.card_form.bio') }}
-                                            </label>
-                                            <textarea id="demo_bio" name="demo_bio" rows="3" class="block w-full rounded-lg border border-input bg-background px-3.5 py-2 text-sm text-foreground shadow-2xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/20 transition-colors" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}"></textarea>
-                                        </div>
+                                        <vibe:textarea name="demo_bio" label="{{ __('docs/form.card_form.bio') }}" rows="3" placeholder="{{ __('docs/form.card_form.bio_placeholder') }}" />
                                     </div>
                                 </vibe:card.content>
 
@@ -424,7 +376,7 @@
                     </p>
                 </div>
 
-                <div class="p-4 sm:p-6 rounded-xl border border-border bg-card space-y-3">
+                <vibe:card class="space-y-3">
                     <div class="flex items-center gap-3">
                         <span class="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
                             <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -439,7 +391,7 @@
                     <p class="text-xs text-muted-foreground leading-relaxed">
                         Saat <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:form&gt;</code> disematkan di dalam <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:modal&gt;</code> atau <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:sheet&gt;</code>, script otomatis mendeteksi event browser <code class="font-mono text-foreground">open-modal</code> dan <code class="font-mono text-foreground">open-sheet</code> untuk mengembalikan draf isian pengguna meskipun komponen Livewire baru saja menjalankan inisialisasi ulang.
                     </p>
-                </div>
+                </vibe:card>
             </section>
 
             {{-- 8. Props Reference --}}
@@ -540,4 +492,3 @@
     {{-- Reusable Modal Pengujian $request->all() --}}
     @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>
-

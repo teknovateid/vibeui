@@ -59,7 +59,7 @@
                                 <div class="space-y-2">
                                     <div class="flex items-baseline justify-between">
                                         <span class="text-2xl sm:text-3xl font-bold text-foreground">Rp 128.450.000</span>
-                                        <vibe:badge variant="outline" size="sm" class="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 font-medium">
+                                        <vibe:badge variant="success" size="sm" class="font-medium">
                                             +14.2%
                                         </vibe:badge>
                                     </div>
@@ -116,21 +116,21 @@
                             <vibe:grid.card id="widget-activity" title="Aktivitas Terkini" description="Pembaruan sistem & log tim" :colSpan="4">
                                 <div class="space-y-3">
                                     <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div>
+                                        <div class="size-2 rounded-full bg-success mt-1.5 shrink-0"></div>
                                         <div class="min-w-0 flex-1">
                                             <p class="font-medium text-foreground truncate">Deploy Vibe UI v2.4 Sukses</p>
                                             <p class="text-[11px] text-muted-foreground">12 menit lalu oleh Fahril</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-sky-500 mt-1.5 shrink-0"></div>
+                                        <div class="size-2 rounded-full bg-info mt-1.5 shrink-0"></div>
                                         <div class="min-w-0 flex-1">
                                             <p class="font-medium text-foreground truncate">Pesanan Baru #8912 diverifikasi</p>
                                             <p class="text-[11px] text-muted-foreground">34 menit lalu • Sistem</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
+                                        <div class="size-2 rounded-full bg-warning mt-1.5 shrink-0"></div>
                                         <div class="min-w-0 flex-1">
                                             <p class="font-medium text-foreground truncate">Backup database harian</p>
                                             <p class="text-[11px] text-muted-foreground">2 jam lalu • Otomatis</p>
@@ -150,7 +150,7 @@
                                 <div class="space-y-2">
                                     <div class="flex items-baseline justify-between">
                                         <span class="text-2xl sm:text-3xl font-bold text-foreground">Rp 128.450.000</span>
-                                        <vibe:badge variant="outline" size="sm" class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20 font-medium">
+                                        <vibe:badge variant="success" size="sm" class="font-medium">
                                             +14.2%
                                         </vibe:badge>
                                     </div>
@@ -205,29 +205,29 @@
 
                             {{-- Kartu Aktivitas Tim (col-span-4) --}}
                             <vibe:grid.card id="demo-activity" title="Aktivitas Terkini" description="Pembaruan sistem & log tim" :colSpan="4">
-                                <div class="space-y-3">
-                                    <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div>
-                                        <div class="min-w-0 flex-1">
-                                            <p class="font-medium text-foreground truncate">Deploy Vibe UI v2.4 Sukses</p>
-                                            <p class="text-[11px] text-muted-foreground">12 menit lalu oleh Fahril</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-sky-500 mt-1.5 shrink-0"></div>
-                                        <div class="min-w-0 flex-1">
-                                            <p class="font-medium text-foreground truncate">Pesanan Baru #8912 diverifikasi</p>
-                                            <p class="text-[11px] text-muted-foreground">34 menit lalu • Sistem</p>
-                                        </div>
-                                    </div>
-                                    <div class="flex items-start gap-2.5 text-xs">
-                                        <div class="size-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
-                                        <div class="min-w-0 flex-1">
-                                            <p class="font-medium text-foreground truncate">Backup database harian</p>
-                                            <p class="text-[11px] text-muted-foreground">2 jam lalu • Otomatis</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                 <div class="space-y-3">
+                                     <div class="flex items-start gap-2.5 text-xs">
+                                         <div class="size-2 rounded-full bg-success mt-1.5 shrink-0"></div>
+                                         <div class="min-w-0 flex-1">
+                                             <p class="font-medium text-foreground truncate">Deploy Vibe UI v2.4 Sukses</p>
+                                             <p class="text-[11px] text-muted-foreground">12 menit lalu oleh Fahril</p>
+                                         </div>
+                                     </div>
+                                     <div class="flex items-start gap-2.5 text-xs">
+                                         <div class="size-2 rounded-full bg-info mt-1.5 shrink-0"></div>
+                                         <div class="min-w-0 flex-1">
+                                             <p class="font-medium text-foreground truncate">Pesanan Baru #8912 diverifikasi</p>
+                                             <p class="text-[11px] text-muted-foreground">34 menit lalu • Sistem</p>
+                                         </div>
+                                     </div>
+                                     <div class="flex items-start gap-2.5 text-xs">
+                                         <div class="size-2 rounded-full bg-warning mt-1.5 shrink-0"></div>
+                                         <div class="min-w-0 flex-1">
+                                             <p class="font-medium text-foreground truncate">Backup database harian</p>
+                                             <p class="text-[11px] text-muted-foreground">2 jam lalu • Otomatis</p>
+                                         </div>
+                                     </div>
+                                 </div>
                             </vibe:grid.card>
                         </vibe:grid>
                     </div>
@@ -324,45 +324,41 @@
                 </div>
 
                 {{-- Lock modes table --}}
-                <div class="overflow-hidden rounded-xl border border-border">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="border-b border-border bg-muted/40">
-                                <th class="px-4 py-2.5 text-left font-semibold text-xs text-foreground">Mode Kunci</th>
-                                <th class="px-4 py-2.5 text-left font-semibold text-xs text-foreground">Prop yang Diset</th>
-                                <th class="px-4 py-2.5 text-left font-semibold text-xs text-foreground">Bisa Resize?</th>
-                                <th class="px-4 py-2.5 text-left font-semibold text-xs text-foreground">Bisa Dipindah?</th>
-                                <th class="px-4 py-2.5 text-left font-semibold text-xs text-foreground">Ikon Hover</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border">
-                            <tr class="bg-card hover:bg-muted/30 transition-colors">
-                                <td class="px-4 py-3 font-medium text-foreground text-xs">Kunci Posisi</td>
-                                <td class="px-4 py-3 font-mono text-xs text-primary">:reorderable="false"</td>
-                                <td class="px-4 py-3 text-xs text-emerald-500">✓ Ya</td>
-                                <td class="px-4 py-3 text-xs text-red-400">✗ Tidak</td>
-                                <td class="px-4 py-3 text-xs text-muted-foreground">Gembok + titik tengah</td>
-                            </tr>
-                            <tr class="bg-card hover:bg-muted/30 transition-colors">
-                                <td class="px-4 py-3 font-medium text-foreground text-xs">Kunci Ukuran</td>
-                                <td class="px-4 py-3 font-mono text-xs text-primary">:resizable="false"</td>
-                                <td class="px-4 py-3 text-xs text-red-400">✗ Tidak</td>
-                                <td class="px-4 py-3 text-xs text-emerald-500">✓ Ya</td>
-                                <td class="px-4 py-3 text-xs text-muted-foreground">Gembok + garis horizontal</td>
-                            </tr>
-                            <tr class="bg-card hover:bg-muted/30 transition-colors">
-                                <td class="px-4 py-3 font-medium text-foreground text-xs">Kunci Penuh</td>
-                                <td class="px-4 py-3 font-mono text-xs text-primary">:reorderable="false" :resizable="false"</td>
-                                <td class="px-4 py-3 text-xs text-red-400">✗ Tidak</td>
-                                <td class="px-4 py-3 text-xs text-red-400">✗ Tidak</td>
-                                <td class="px-4 py-3 text-xs text-muted-foreground">Gembok solid</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">Mode Kunci</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">Prop yang Diset</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">Bisa Resize?</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">Bisa Dipindah?</vibe:table.column>
+                        <vibe:table.column>Ikon Hover</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-medium text-foreground text-xs">Kunci Posisi</vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-primary whitespace-nowrap">:reorderable="false"</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-success">✓ Ya</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-destructive">✗ Tidak</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">Gembok + titik tengah</vibe:table.cell>
+                        </vibe:table.row>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-medium text-foreground text-xs">Kunci Ukuran</vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-primary whitespace-nowrap">:resizable="false"</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-destructive">✗ Tidak</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-success">✓ Ya</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">Gembok + garis horizontal</vibe:table.cell>
+                        </vibe:table.row>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-medium text-foreground text-xs">Kunci Penuh</vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-primary whitespace-nowrap">:reorderable="false" :resizable="false"</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-destructive">✗ Tidak</vibe:table.cell>
+                            <vibe:table.cell class="text-xs font-semibold text-destructive">✗ Tidak</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">Gembok solid</vibe:table.cell>
+                        </vibe:table.row>
+                    </vibe:table.rows>
+                </vibe:table>
 
-                <div class="p-3.5 rounded-xl border border-amber-500/20 bg-amber-500/5 text-xs text-foreground flex items-center gap-3">
-                    <svg class="size-5 text-amber-500 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <div class="p-3.5 rounded-xl border border-warning/20 bg-warning/10 text-xs text-foreground flex items-center gap-3">
+                    <svg class="size-5 text-warning shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                     </svg>
                     <span>{{ __('docs/grid.lock.hint') }}</span>
@@ -433,21 +429,21 @@
 
                 {{-- Storage info --}}
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div class="rounded-xl border border-border bg-card p-4 space-y-1.5">
+                    <vibe:card class="space-y-1.5">
                         <p class="text-xs font-semibold text-foreground">Alpine Store Key</p>
                         <code class="text-xs font-mono text-primary">vibeGrids</code>
                         <p class="text-[11px] text-muted-foreground">Semua grid tersimpan dalam satu store bersama.</p>
-                    </div>
-                    <div class="rounded-xl border border-border bg-card p-4 space-y-1.5">
+                    </vibe:card>
+                    <vibe:card class="space-y-1.5">
                         <p class="text-xs font-semibold text-foreground">localStorage Key</p>
                         <code class="text-xs font-mono text-primary">vibe-grids</code>
                         <p class="text-[11px] text-muted-foreground">Key aktual yang tersimpan di browser.</p>
-                    </div>
-                    <div class="rounded-xl border border-border bg-card p-4 space-y-1.5">
+                    </vibe:card>
+                    <vibe:card class="space-y-1.5">
                         <p class="text-xs font-semibold text-foreground">Expiry</p>
                         <code class="text-xs font-mono text-primary">90 hari</code>
                         <p class="text-[11px] text-muted-foreground">Data otomatis dihapus setelah 90 hari.</p>
-                    </div>
+                    </vibe:card>
                 </div>
             </section>
 

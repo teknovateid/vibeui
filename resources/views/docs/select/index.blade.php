@@ -97,10 +97,10 @@
 
                         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                             {{-- Card Metode 1 Single --}}
-                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                            <vibe:card class="space-y-2">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.method1_title') }}</span>
-                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary">value="active"</span>
+                                    <vibe:badge variant="primary" size="sm" class="font-mono text-[10px]">value="active"</vibe:badge>
                                 </div>
                                 <vibe:select name="demo_status" :label="__('docs/select.selected_methods.method1_label')" :placeholder="__('docs/select.selected_methods.method1_placeholder')" value="active">
                                     <vibe:select.option value="draft">Draft (Konsep)</vibe:select.option>
@@ -108,13 +108,13 @@
                                     <vibe:select.option value="archived">Archived (Diarsipkan)</vibe:select.option>
                                 </vibe:select>
                                 <p class="text-[11px] text-muted-foreground">Opsi "Active" otomatis terpilih melalui prop <code>value="active"</code>.</p>
-                            </div>
+                            </vibe:card>
 
                             {{-- Card Metode 2 Single --}}
-                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                            <vibe:card class="space-y-2">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.method2_title') }}</span>
-                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">&lt;option selected&gt;</span>
+                                    <vibe:badge variant="success" size="sm" class="font-mono text-[10px]">&lt;option selected&gt;</vibe:badge>
                                 </div>
                                 <vibe:select name="demo_department" :label="__('docs/select.selected_methods.method2_label')" :placeholder="__('docs/select.selected_methods.method2_placeholder')">
                                     <vibe:select.option value="engineering">Engineering</vibe:select.option>
@@ -122,7 +122,7 @@
                                     <vibe:select.option value="marketing">Marketing</vibe:select.option>
                                 </vibe:select>
                                 <p class="text-[11px] text-muted-foreground">Opsi "Product Design" otomatis terpilih melalui atribut <code>selected</code> pada option.</p>
-                            </div>
+                            </vibe:card>
                         </div>
                     </vibe:preview>
                 </div>
@@ -151,10 +151,10 @@
 
                         <div class="w-full grid grid-cols-1 sm:grid-cols-2 gap-6 items-start">
                             {{-- Card Metode 1 Multiple --}}
-                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                            <vibe:card class="space-y-2">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.multi_method1_title') }}</span>
-                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary">:value="['react', 'vue']"</span>
+                                    <vibe:badge variant="primary" size="sm" class="font-mono text-[10px]">:value="['react', 'vue']"</vibe:badge>
                                 </div>
                                 <vibe:select name="demo_frontend" :label="__('docs/select.selected_methods.multi_method1_label')" :placeholder="__('docs/select.selected_methods.multi_method1_placeholder')" multiple :value="['react', 'vue']">
                                     <vibe:select.option value="react">React</vibe:select.option>
@@ -163,13 +163,13 @@
                                     <vibe:select.option value="angular">Angular</vibe:select.option>
                                 </vibe:select>
                                 <p class="text-[11px] text-muted-foreground">Opsi "React" dan "Vue.js" terpilih melalui array binding <code>:value="['react', 'vue']"</code>.</p>
-                            </div>
+                            </vibe:card>
 
                             {{-- Card Metode 2 Multiple --}}
-                            <div class="space-y-2 p-4 rounded-xl border border-border bg-card/50">
+                            <vibe:card class="space-y-2">
                                 <div class="flex items-center justify-between gap-2">
                                     <span class="text-xs font-bold text-foreground">{{ __('docs/select.selected_methods.multi_method2_title') }}</span>
-                                    <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">multiple &lt;option selected&gt;</span>
+                                    <vibe:badge variant="success" size="sm" class="font-mono text-[10px]">multiple &lt;option selected&gt;</vibe:badge>
                                 </div>
                                 <vibe:select name="demo_backend" :label="__('docs/select.selected_methods.multi_method2_label')" :placeholder="__('docs/select.selected_methods.multi_method2_placeholder')" multiple>
                                     <vibe:select.option value="php" selected>PHP</vibe:select.option>
@@ -178,7 +178,7 @@
                                     <vibe:select.option value="python">Python</vibe:select.option>
                                 </vibe:select>
                                 <p class="text-[11px] text-muted-foreground">Opsi "PHP" dan "Laravel" otomatis terpilih berkat atribut <code>selected</code> pada masing-masing opsi.</p>
-                            </div>
+                            </vibe:card>
                         </div>
                     </vibe:preview>
                 </div>

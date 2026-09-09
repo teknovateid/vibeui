@@ -56,7 +56,7 @@
 </vibe:header>
                     </vibe:preview.code>
                     <div class="w-full p-4 sm:p-6 bg-muted/20">
-                        <div class="rounded-xl overflow-hidden border border-border shadow-2xs">
+                        <vibe:card class="p-0 overflow-hidden">
                             <vibe:header>
                                 <div>
                                     <vibe:header.heading>{{ __('docs/header.basic_usage.heading') }}</vibe:header.heading>
@@ -67,10 +67,10 @@
                                     <vibe:button variant="primary" size="sm">{{ __('docs/header.basic_usage.create_btn') }}</vibe:button>
                                 </vibe:header.actions>
                             </vibe:header>
-                            <div class="p-6 bg-card text-center text-xs text-muted-foreground">
+                            <div class="p-6 text-center text-xs text-muted-foreground">
                                 Area Konten Halaman
                             </div>
-                        </div>
+                        </vibe:card>
                     </div>
                 </vibe:preview>
             </section>
@@ -121,7 +121,7 @@
                     </vibe:preview.code>
                     <div class="w-full p-4 sm:p-6 bg-muted/20 space-y-6">
                         {{-- Small --}}
-                        <div class="rounded-xl overflow-hidden border border-border shadow-2xs">
+                        <vibe:card class="p-0 overflow-hidden">
                             <vibe:header size="sm">
                                 <div>
                                     <vibe:header.heading class="text-base">{{ __('docs/header.sizes.small_title') }}</vibe:header.heading>
@@ -132,10 +132,10 @@
                                     <vibe:button variant="outline" size="xs">Aksi</vibe:button>
                                 </vibe:header.actions>
                             </vibe:header>
-                        </div>
+                        </vibe:card>
 
                         {{-- Default --}}
-                        <div class="rounded-xl overflow-hidden border border-border shadow-2xs">
+                        <vibe:card class="p-0 overflow-hidden">
                             <vibe:header size="default">
                                 <div>
                                     <vibe:header.heading>{{ __('docs/header.sizes.default_title') }}</vibe:header.heading>
@@ -146,10 +146,10 @@
                                     <vibe:button variant="outline" size="sm">Aksi</vibe:button>
                                 </vibe:header.actions>
                             </vibe:header>
-                        </div>
+                        </vibe:card>
 
                         {{-- Large --}}
-                        <div class="rounded-xl overflow-hidden border border-border shadow-2xs">
+                        <vibe:card class="p-0 overflow-hidden">
                             <vibe:header size="lg">
                                 <div>
                                     <vibe:header.heading class="text-2xl">{{ __('docs/header.sizes.large_title') }}</vibe:header.heading>
@@ -160,7 +160,7 @@
                                     <vibe:button variant="primary" size="md">Mulai Sekarang</vibe:button>
                                 </vibe:header.actions>
                             </vibe:header>
-                        </div>
+                        </vibe:card>
                     </div>
                 </vibe:preview>
             </section>
@@ -208,7 +208,7 @@
                         {{-- Scrollable demo container 1: Default Sticky Blur --}}
                         <div class="space-y-2">
                             <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">1. Default Scrolled Blur:</span>
-                            <div class="relative h-64 overflow-y-auto rounded-xl border border-border bg-card shadow-2xs">
+                            <vibe:card class="relative h-64 overflow-y-auto p-0">
                                 <vibe:header variant="sticky">
                                     <div>
                                         <vibe:header.heading class="text-sm font-bold">{{ __('docs/header.sticky.sticky_heading') }}</vibe:header.heading>
@@ -221,7 +221,7 @@
                                 </vibe:header>
 
                                 <div class="p-6 space-y-4 text-xs text-muted-foreground">
-                                    <p class="p-3 rounded-lg bg-muted/40 font-mono text-[11px] text-foreground">
+                                    <p class="p-3 rounded-lg bg-muted font-mono text-[11px] text-foreground">
                                         💡 {!! __('docs/header.sticky.hint') !!}
                                     </p>
                                     @for ($j = 1; $j <= 8; $j++)
@@ -231,13 +231,13 @@
                                         </div>
                                     @endfor
                                 </div>
-                            </div>
+                            </vibe:card>
                         </div>
 
                         {{-- Scrollable demo container 2: Custom Scrolled Class --}}
                         <div class="space-y-2">
                             <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">2. Custom Scrolled Class (Primary Tint):</span>
-                            <div class="relative h-60 overflow-y-auto rounded-xl border border-border bg-card shadow-2xs">
+                            <vibe:card class="relative h-60 overflow-y-auto p-0">
                                 <vibe:header variant="sticky" scrolled-class="bg-primary/90 text-primary-foreground backdrop-blur-md shadow-md border-b border-primary/30">
                                     <div>
                                         <vibe:header.heading class="text-sm font-bold text-inherit">Kustomisasi Scrolled Class</vibe:header.heading>
@@ -249,7 +249,7 @@
                                 </vibe:header>
 
                                 <div class="p-6 space-y-4 text-xs text-muted-foreground">
-                                    <p class="p-3 rounded-lg bg-muted/40 font-mono text-[11px] text-foreground">
+                                    <p class="p-3 rounded-lg bg-muted font-mono text-[11px] text-foreground">
                                         🎨 Gulir kotak ini untuk melihat custom class <code class="font-bold">bg-primary/90</code> aktif saat di-scroll!
                                     </p>
                                     @for ($k = 1; $k <= 8; $k++)
@@ -259,7 +259,7 @@
                                         </div>
                                     @endfor
                                 </div>
-                            </div>
+                            </vibe:card>
                         </div>
                     </div>
                 </vibe:preview>
@@ -276,7 +276,7 @@
 
                 <vibe:preview data-toc-ignore :title="__('docs/header.rich_composition.preview_title')">
                     <vibe:preview.code>
-<div class="rounded-xl border border-border bg-card overflow-hidden shadow-2xs">
+<vibe:card class="overflow-hidden p-0">
     {{-- Breadcrumb navigasi di atas header --}}
     <div class="px-6 pt-4">
         <vibe:breadcrumb :title="false">
@@ -317,10 +317,10 @@
             </vibe:button>
         </vibe:header.actions>
     </vibe:header>
-</div>
+</vibe:card>
                     </vibe:preview.code>
                     <div class="w-full p-4 sm:p-6 bg-muted/20">
-                        <div class="rounded-xl border border-border bg-card overflow-hidden shadow-2xs">
+                        <vibe:card class="overflow-hidden p-0">
                             <div class="px-6 pt-4">
                                 <vibe:breadcrumb :title="false">
                                     <vibe:breadcrumb.item href="#">Dashboard</vibe:breadcrumb.item>
@@ -359,7 +359,7 @@
                                     </vibe:button>
                                 </vibe:header.actions>
                             </vibe:header>
-                        </div>
+                        </vibe:card>
                     </div>
                 </vibe:preview>
             </section>

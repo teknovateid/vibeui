@@ -193,14 +193,7 @@
 
                     <div class="flex flex-wrap items-center justify-center gap-2 p-4">
                         @php
-                            $sizeDemos = [
-                                ['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'],
-                                ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'],
-                                ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'],
-                                ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'],
-                                ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'],
-                                ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline'],
-                            ];
+                            $sizeDemos = [['key' => 'sm', 'label' => __('docs/modal.sizes.sm_btn'), 'variant' => 'outline'], ['key' => 'md', 'label' => __('docs/modal.sizes.md_btn'), 'variant' => 'outline'], ['key' => 'lg', 'label' => __('docs/modal.sizes.lg_btn'), 'variant' => 'outline'], ['key' => '2xl', 'label' => __('docs/modal.sizes.xl2_btn'), 'variant' => 'primary'], ['key' => '4xl', 'label' => __('docs/modal.sizes.xl4_btn'), 'variant' => 'outline'], ['key' => 'full', 'label' => __('docs/modal.sizes.full_btn'), 'variant' => 'outline']];
                         @endphp
 
                         @foreach ($sizeDemos as $s)
@@ -292,11 +285,7 @@
 
                     <div class="flex flex-wrap items-center justify-center gap-3 p-4">
                         @php
-                            $posDemos = [
-                                ['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'],
-                                ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'],
-                                ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down'],
-                            ];
+                            $posDemos = [['key' => 'top', 'label' => __('docs/modal.positions.top_btn'), 'icon' => 'arrow-up'], ['key' => 'center', 'label' => __('docs/modal.positions.center_btn'), 'icon' => 'minimize-2'], ['key' => 'bottom', 'label' => __('docs/modal.positions.bottom_btn'), 'icon' => 'arrow-down']];
                         @endphp
 
                         @foreach ($posDemos as $pos)
@@ -618,7 +607,7 @@
                     </div>
                 </vibe:preview>
 
-                <div class="p-4 rounded-xl border border-border bg-card/50 text-xs text-muted-foreground flex items-start gap-3">
+                <vibe:card class="inline-flex gap-3 text-sm">
                     <svg class="size-5 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
                         <line x1="12" y1="16" x2="12" y2="12" />
@@ -627,7 +616,7 @@
                     <div>
                         {!! __('docs/modal.persist.announcement_note') !!}
                     </div>
-                </div>
+                </vibe:card>
             </section>
 
             {{-- 7. Livewire Integration --}}
@@ -729,51 +718,43 @@
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.props.subcomponents_title') }}</h3>
                     <p class="text-sm text-muted-foreground">{{ __('docs/modal.props.subcomponents_desc') }}</p>
 
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs mt-2">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                <tr>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_sub') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_sub_desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border text-xs">
-                                @foreach (__('docs/modal.props.subcomponents') as $sub)
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-4 py-3 font-mono font-semibold text-primary">{{ $sub['name'] }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $sub['desc'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_sub') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/modal.props.th_sub_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/modal.props.subcomponents') as $sub)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $sub['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $sub['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- Props Table --}}
                 <div class="space-y-2">
                     <h3 class="text-base font-semibold text-foreground">Daftar Properti (Props)</h3>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs mt-2">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                <tr>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_prop') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_type') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border font-mono text-xs">
-                                @foreach (__('docs/modal.props.items') as $item)
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                        <td class="px-4 py-3 text-foreground">{{ $item['default'] }}</td>
-                                        <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/modal.props.th_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/modal.props.items') as $item)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $item['type'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $item['default'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $item['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- Window Events Table --}}
@@ -781,26 +762,22 @@
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/modal.props.events_title') }}</h3>
                     <p class="text-sm text-muted-foreground">{{ __('docs/modal.props.events_desc') }}</p>
 
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs mt-2">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                <tr>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_event') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_payload') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/modal.props.th_event_desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border font-mono text-xs">
-                                @foreach (__('docs/modal.props.events') as $ev)
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-4 py-3 font-semibold text-primary">{{ $ev['name'] }}</td>
-                                        <td class="px-4 py-3 text-foreground">{{ $ev['payload'] }}</td>
-                                        <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $ev['desc'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_event') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/modal.props.th_payload') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/modal.props.th_event_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/modal.props.events') as $ev)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $ev['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground text-xs whitespace-nowrap">{{ $ev['payload'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $ev['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
             </section>
 

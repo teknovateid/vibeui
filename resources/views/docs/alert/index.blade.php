@@ -496,85 +496,77 @@ vibeAlert({
                 {{-- Container Props --}}
                 <div class="space-y-2">
                     <p class="text-sm font-semibold text-foreground">&lt;vibe:alert&gt; (Container Tag Props)</p>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                        <table class="w-full text-left text-xs">
-                            <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                                <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/alert.props.columns.desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border text-muted-foreground">
-                                @php
-                                    $containerProps = [
-                                        ['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", 'Posisi penempatan default container notifikasi alert pada layar.'],
-                                        ['align', "'start'|'center'|'end'", "'center'", 'Perataan konten teks dan ikon di dalam bodi alert.'],
-                                        ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).'],
-                                        ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).'],
-                                        ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).'],
-                                        ['closeOnOutside', 'bool|null', 'null (auto)', 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).']
-                                    ];
-                                @endphp
-                                @foreach ($containerProps as [$prop, $type, $default, $desc])
-                                    <tr class="hover:bg-accent/40 transition-colors">
-                                        <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/alert.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $containerProps = [
+                                    ['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", 'Posisi penempatan default container notifikasi alert pada layar.'],
+                                    ['align', "'start'|'center'|'end'", "'center'", 'Perataan konten teks dan ikon di dalam bodi alert.'],
+                                    ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).'],
+                                    ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).'],
+                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).'],
+                                    ['closeOnOutside', 'bool|null', 'null (auto)', 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).']
+                                ];
+                            @endphp
+                            @foreach ($containerProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- Payload Parameters --}}
                 <div class="space-y-2 pt-2">
                     <p class="text-sm font-semibold text-foreground">vibeAlert(payload) & $dispatch('alert', payload)</p>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                        <table class="w-full text-left text-xs">
-                            <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                                <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/alert.props.columns.desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border text-muted-foreground">
-                                @php
-                                    $payloadParams = [
-                                        ['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.'],
-                                        ['title', 'string', 'null', 'Judul utama notifikasi alert.'],
-                                        ['message', 'string', '""', 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.'],
-                                        ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.'],
-                                        ['position', 'string', 'Inherit', 'Menimpa posisi penempatan container khusus untuk alert ini.'],
-                                        ['align', "'start'|'center'|'end'", 'Inherit', 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.'],
-                                        ['timeout', 'int|false', 'Inherit (false for confirm)', 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).'],
-                                        ['blocking', 'bool', 'false (true for confirm)', 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.'],
-                                        ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).'],
-                                        ['sound', 'bool|string', 'false', 'Menimpa preferensi efek suara saat alert muncul.'],
-                                        ['confirmButton', 'string|object', "{ text: 'Tutup' }", 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.'],
-                                        ['closeButton', 'string|object', "null ('Batal' for confirm)", 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.'],
-                                        ['buttonLayout', "'row'|'col'", 'null', 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.'],
-                                        ['closeOnOutside', 'bool', 'true (false for confirm)', 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.'],
-                                        ['id', 'string', 'null', 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.'],
-                                        ['persist', 'bool|string', 'false', 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".']
-                                    ];
-                                @endphp
-                                @foreach ($payloadParams as [$prop, $type, $default, $desc])
-                                    <tr class="hover:bg-accent/40 transition-colors">
-                                        <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/alert.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $payloadParams = [
+                                    ['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.'],
+                                    ['title', 'string', 'null', 'Judul utama notifikasi alert.'],
+                                    ['message', 'string', '""', 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.'],
+                                    ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.'],
+                                    ['position', 'string', 'Inherit', 'Menimpa posisi penempatan container khusus untuk alert ini.'],
+                                    ['align', "'start'|'center'|'end'", 'Inherit', 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.'],
+                                    ['timeout', 'int|false', 'Inherit (false for confirm)', 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).'],
+                                    ['blocking', 'bool', 'false (true for confirm)', 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.'],
+                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).'],
+                                    ['sound', 'bool|string', 'false', 'Menimpa preferensi efek suara saat alert muncul.'],
+                                    ['confirmButton', 'string|object', "{ text: 'Tutup' }", 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.'],
+                                    ['closeButton', 'string|object', "null ('Batal' for confirm)", 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.'],
+                                    ['buttonLayout', "'row'|'col'", 'null', 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.'],
+                                    ['closeOnOutside', 'bool', 'true (false for confirm)', 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.'],
+                                    ['id', 'string', 'null', 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.'],
+                                    ['persist', 'bool|string', 'false', 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".']
+                                ];
+                            @endphp
+                            @foreach ($payloadParams as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
             </section>
 

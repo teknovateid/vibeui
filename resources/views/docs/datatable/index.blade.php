@@ -50,15 +50,15 @@
 
                     @php
                         $callVibeTagCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" />
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" />
 
-{{-- {$c('blade_call_2')} --}}
-<vibe:datatable component="demo-basic-table" />
+                        {{-- {$c('blade_call_2')} --}}
+                        <vibe:datatable component="demo-basic-table" />
 
-{{-- Lazy Loading (Intersection Observer) --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" lazy />
-HTML;
+                        {{-- Lazy Loading (Intersection Observer) --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" lazy />
+                        HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callVibeTagCode" />
                 </div>
@@ -72,9 +72,9 @@ HTML;
 
                     @php
                         $callLivewireTagCode = <<<HTML
-{{-- {$c('blade_call_3')} --}}
-<livewire:demo-basic-table />
-HTML;
+                        {{-- {$c('blade_call_3')} --}}
+                        <livewire:demo-basic-table />
+                        HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callLivewireTagCode" />
                 </div>
@@ -88,12 +88,12 @@ HTML;
 
                     @php
                         $callDirectiveCode = <<<HTML
-{{-- {$c('blade_call_4')} --}}
-@livewire(\\App\\Livewire\\DemoBasicTable::class)
+                        {{-- {$c('blade_call_4')} --}}
+                        @livewire(\\App\\Livewire\\DemoBasicTable::class)
 
-{{-- Or using alias string --}}
-@livewire('demo-basic-table')
-HTML;
+                        {{-- Or using alias string --}}
+                        @livewire('demo-basic-table')
+                        HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callDirectiveCode" />
                 </div>
@@ -107,19 +107,19 @@ HTML;
 
                     @php
                         $callPropForwardCode = <<<HTML
-{{-- {$c('prop_forwarding_1')} --}}
-<vibe:datatable
-    :component="\\App\\Livewire\\DemoBasicTable::class"
-    :user-id="123"
-    status="active"
-/>
+                        {{-- {$c('prop_forwarding_1')} --}}
+                        <vibe:datatable
+                            :component="\\App\\Livewire\\DemoBasicTable::class"
+                            :user-id="123"
+                            status="active"
+                        />
 
-{{-- {$c('prop_forwarding_2')} --}}
-<vibe:datatable
-    :component="\\App\\Livewire\\DemoBasicTable::class"
-    class="p-4 border rounded-2xl bg-card"
-/>
-HTML;
+                        {{-- {$c('prop_forwarding_2')} --}}
+                        <vibe:datatable
+                            :component="\\App\\Livewire\\DemoBasicTable::class"
+                            class="p-4 border rounded-2xl bg-card"
+                        />
+                        HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callPropForwardCode" />
                 </div>
@@ -141,12 +141,12 @@ HTML;
                     @php
                         $basicComponent = \App\Livewire\DemoBasicTable::class;
                         $basicBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" />
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" />
 
-{{-- {$c('blade_call_3')} --}}
-<livewire:demo-basic-table />
-HTML;
+                        {{-- {$c('blade_call_3')} --}}
+                        <livewire:demo-basic-table />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.basic_usage.preview_title')" :center="false" :code="$basicBladeCode">
                         <div class="w-full">
@@ -164,49 +164,49 @@ HTML;
 
                     @php
                         $basicPhpCode = <<<'PHP'
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoBasicTable extends VibeDataTableComponent
-{
-    public string $tableName = 'basic_table';
+                        class DemoBasicTable extends VibeDataTableComponent
+                        {
+                            public string $tableName = 'basic_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        $this->setPrimaryKey('id');
-    }
+                                $this->setPrimaryKey('id');
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable(),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable(),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoBasicTable.php" :lineNumbers="true" :code="$basicPhpCode" />
                 </div>
@@ -228,15 +228,15 @@ PHP;
                     @php
                         $borderedComponent = \App\Livewire\DemoBorderedTable::class;
                         $borderedBladeCode = <<<HTML
-{{-- {$c('bordered_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" class="border" />
+                        {{-- {$c('bordered_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" class="border" />
 
-{{-- {$c('bordered_2')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" bordered />
+                        {{-- {$c('bordered_2')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" bordered />
 
-{{-- {$c('bordered_3')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBorderedTable::class" />
-HTML;
+                        {{-- {$c('bordered_3')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBorderedTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.bordered.preview_title')" :center="false" :code="$borderedBladeCode">
                         <div class="w-full">
@@ -254,50 +254,50 @@ HTML;
 
                     @php
                         $borderedPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoBorderedTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'bordered_table';
+                        class DemoBorderedTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'bordered_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setBorderedEnabled(); // {$c('comment_bordered_enabled')}
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setBorderedEnabled(); // {$c('comment_bordered_enabled')}
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable(),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable(),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoBorderedTable.php" :lineNumbers="true" :code="$borderedPhpCode" />
                 </div>
@@ -319,9 +319,9 @@ PHP;
                     @php
                         $columnsComponent = \App\Livewire\DemoActionsTable::class;
                         $columnsBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoActionsTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoActionsTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.columns.preview_title')" :center="false" :code="$columnsBladeCode">
                         <div class="w-full">
@@ -339,53 +339,53 @@ HTML;
 
                     @php
                         $columnsPhpCode = <<<'PHP'
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Illuminate\Support\Facades\Blade;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoActionsTable extends VibeDataTableComponent
-{
-    public string $tableName = 'actions_table';
+                        class DemoActionsTable extends VibeDataTableComponent
+                        {
+                            public string $tableName = 'actions_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        $this->setPrimaryKey('id');
-    }
+                                $this->setPrimaryKey('id');
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable(),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Status')
-                ->label(fn ($row) => $row->id % 2 === 0
-                    ? Blade::render('<vibe:badge variant="success" class="rounded-full">Active</vibe:badge>')
-                    : Blade::render('<vibe:badge variant="secondary" class="rounded-full">Inactive</vibe:badge>')
-                )
-                ->html(),
+                                    Column::make('Status')
+                                        ->label(fn ($row) => $row->id % 2 === 0
+                                            ? Blade::render('<vibe:badge variant="success" class="rounded-full">Active</vibe:badge>')
+                                            : Blade::render('<vibe:badge variant="secondary" class="rounded-full">Inactive</vibe:badge>')
+                                        )
+                                        ->html(),
 
-            Column::make('Actions')
-                ->label(fn ($row) => Blade::render('
+                                    Column::make('Actions')
+                                        ->label(fn ($row) => Blade::render('
                     <vibe:button.group variant="ghost">
                         <vibe:button size="icon-xs" variant="ghost" class="text-muted-foreground hover:text-foreground" title="Edit" wire:click="edit({{ $row->id }})">
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
@@ -393,11 +393,11 @@ class DemoActionsTable extends VibeDataTableComponent
                         <vibe:button.delete size="icon-xs" variant="ghost" wire:click="delete({{ $row->id }})" />
                     </vibe:button.group>
                 ', ['row' => $row]))
-                ->html(),
-        ];
-    }
-}
-PHP;
+                                        ->html(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoActionsTable.php" :lineNumbers="true" :code="$columnsPhpCode" />
                 </div>
@@ -419,9 +419,9 @@ PHP;
                     @php
                         $bulkComponent = \App\Livewire\DemoBulkTable::class;
                         $bulkBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoBulkTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoBulkTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.bulk_actions.preview_title')" :center="false" :code="$bulkBladeCode">
                         <div class="w-full">
@@ -439,58 +439,58 @@ HTML;
 
                     @php
                         $bulkPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoBulkTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'bulk_table';
+                        class DemoBulkTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'bulk_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setBulkActions([
-                'exportSelected' => 'Ekspor Data (CSV)',
-                'deleteSelected' => 'Hapus Terpilih',
-            ]);
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setBulkActions([
+                                        'exportSelected' => 'Ekspor Data (CSV)',
+                                        'deleteSelected' => 'Hapus Terpilih',
+                                    ]);
+                            }
 
-    public function exportSelected(): void
-    {
-        \$selectedIds = \$this->getSelected();
-        // {$c('comment_export_csv')}
-        \$this->clearSelected(); // {$c('comment_clear_selected')}
-    }
+                            public function exportSelected(): void
+                            {
+                                \$selectedIds = \$this->getSelected();
+                                // {$c('comment_export_csv')}
+                                \$this->clearSelected(); // {$c('comment_clear_selected')}
+                            }
 
-    public function deleteSelected(): void
-    {
-        \$selectedIds = \$this->getSelected();
-        // {$c('comment_delete_selected')}
-        \$this->clearSelected();
-    }
+                            public function deleteSelected(): void
+                            {
+                                \$selectedIds = \$this->getSelected();
+                                // {$c('comment_delete_selected')}
+                                \$this->clearSelected();
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')->sortable(),
-            Column::make('Name', 'name')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Created At', 'created_at')->sortable(),
-        ];
-    }
-}
-PHP;
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')->sortable(),
+                                    Column::make('Name', 'name')->sortable()->searchable(),
+                                    Column::make('Email', 'email')->sortable()->searchable(),
+                                    Column::make('Created At', 'created_at')->sortable(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoBulkTable.php" :lineNumbers="true" :code="$bulkPhpCode" />
                 </div>
@@ -512,9 +512,9 @@ PHP;
                     @php
                         $colSearchComponent = \App\Livewire\DemoColumnSearchTable::class;
                         $colSearchBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoColumnSearchTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoColumnSearchTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.column_search.preview_title')" :center="false" :code="$colSearchBladeCode">
                         <div class="w-full">
@@ -532,64 +532,64 @@ HTML;
 
                     @php
                         $colSearchPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Illuminate\Support\Facades\Blade;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoColumnSearchTable extends VibeDataTableComponent
-{
-    public string \$searchId = '';
-    public string \$searchName = '';
-    public string \$searchEmail = '';
+                        class DemoColumnSearchTable extends VibeDataTableComponent
+                        {
+                            public string \$searchId = '';
+                            public string \$searchName = '';
+                            public string \$searchEmail = '';
 
-    public string \$tableName = 'col_search_table';
+                            public string \$tableName = 'col_search_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setSecondaryHeaderStatus(true); // {$c('comment_secondary_header')}
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setSecondaryHeaderStatus(true); // {$c('comment_secondary_header')}
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query()
-            ->when(\$this->searchId, fn (Builder \$q, \$val) => \$q->whereRaw('CAST(id AS TEXT) LIKE ?', ['%' . trim(\$val) . '%']))
-            ->when(\$this->searchName, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']))
-            ->when(\$this->searchEmail, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']));
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query()
+                                    ->when(\$this->searchId, fn (Builder \$q, \$val) => \$q->whereRaw('CAST(id AS TEXT) LIKE ?', ['%' . trim(\$val) . '%']))
+                                    ->when(\$this->searchName, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']))
+                                    ->when(\$this->searchEmail, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']));
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="{$c('placeholder_id')}" class="w-20" />'))
-                ->html(),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable()
+                                        ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="{$c('placeholder_id')}" class="w-20" />'))
+                                        ->html(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="{$c('placeholder_name')}" />'))
-                ->html(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="{$c('placeholder_name')}" />'))
+                                        ->html(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="{$c('placeholder_email')}" />'))
-                ->html(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->secondaryHeader(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="{$c('placeholder_email')}" />'))
+                                        ->html(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable()
-                ->secondaryHeader(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
-                ->html(),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable()
+                                        ->secondaryHeader(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
+                                        ->html(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoColumnSearchTable.php" :lineNumbers="true" :code="$colSearchPhpCode" />
                 </div>
@@ -611,9 +611,9 @@ PHP;
                     @php
                         $footerSearchComponent = \App\Livewire\DemoFooterColumnSearchTable::class;
                         $footerSearchBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoFooterColumnSearchTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoFooterColumnSearchTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.footer_column_search.preview_title')" :center="false" :code="$footerSearchBladeCode">
                         <div class="w-full">
@@ -631,64 +631,64 @@ HTML;
 
                     @php
                         $footerSearchPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Blade;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Illuminate\Support\Facades\Blade;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoFooterColumnSearchTable extends VibeDataTableComponent
-{
-    public string \$searchId = '';
-    public string \$searchName = '';
-    public string \$searchEmail = '';
+                        class DemoFooterColumnSearchTable extends VibeDataTableComponent
+                        {
+                            public string \$searchId = '';
+                            public string \$searchName = '';
+                            public string \$searchEmail = '';
 
-    public string \$tableName = 'footer_col_search_table';
+                            public string \$tableName = 'footer_col_search_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setFooterStatus(true); // {$c('comment_footer_status')}
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setFooterStatus(true); // {$c('comment_footer_status')}
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query()
-            ->when(\$this->searchId, fn (Builder \$q, \$val) => \$q->whereRaw('CAST(id AS TEXT) LIKE ?', ['%' . trim(\$val) . '%']))
-            ->when(\$this->searchName, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']))
-            ->when(\$this->searchEmail, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']));
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query()
+                                    ->when(\$this->searchId, fn (Builder \$q, \$val) => \$q->whereRaw('CAST(id AS TEXT) LIKE ?', ['%' . trim(\$val) . '%']))
+                                    ->when(\$this->searchName, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']))
+                                    ->when(\$this->searchEmail, fn (Builder \$q, \$val) => \$q->whereRaw('LOWER(email) LIKE ?', ['%' . strtolower(trim(\$val)) . '%']));
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="{$c('placeholder_id')}" class="w-20" />'))
-                ->html(),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable()
+                                        ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchId" placeholder="{$c('placeholder_id')}" class="w-20" />'))
+                                        ->html(),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="{$c('placeholder_name')}" />'))
-                ->html(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchName" placeholder="{$c('placeholder_name')}" />'))
+                                        ->html(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="{$c('placeholder_email')}" />'))
-                ->html(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->footer(fn () => Blade::render('<vibe:input size="sm" wire:model.live.debounce.300ms="searchEmail" placeholder="{$c('placeholder_email')}" />'))
+                                        ->html(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable()
-                ->footer(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
-                ->html(),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable()
+                                        ->footer(fn () => Blade::render('<span class="text-xs text-muted-foreground">-</span>'))
+                                        ->html(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoFooterColumnSearchTable.php" :lineNumbers="true" :code="$footerSearchPhpCode" />
                 </div>
@@ -710,9 +710,9 @@ PHP;
                     @php
                         $filterComponent = \App\Livewire\DemoFilterTable::class;
                         $filterBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoFilterTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoFilterTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.filters.preview_title')" :center="false" :code="$filterBladeCode">
                         <div class="w-full">
@@ -730,59 +730,59 @@ HTML;
 
                     @php
                         $filterPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Rappasoft\LaravelLivewireTables\Views\Filters\SelectFilter;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoFilterTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'filter_table';
+                        class DemoFilterTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'filter_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id');
-    }
+                                \$this->setPrimaryKey('id');
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function filters(): array
-    {
-        return [
-            SelectFilter::make('Domain Email', 'domain_email')
-                ->options([
-                    '' => '{$c('filter_all_domains')}',
-                    'example.com' => '@example.com',
-                    'example.org' => '@example.org',
-                    'example.net' => '@example.net',
-                ])
-                ->filter(function (Builder \$builder, string \$value) {
-                    if (\$value) {
-                        \$builder->where('email', 'like', '%' . \$value);
-                    }
-                }),
-        ];
-    }
+                            public function filters(): array
+                            {
+                                return [
+                                    SelectFilter::make('Domain Email', 'domain_email')
+                                        ->options([
+                                            '' => '{$c('filter_all_domains')}',
+                                            'example.com' => '@example.com',
+                                            'example.org' => '@example.org',
+                                            'example.net' => '@example.net',
+                                        ])
+                                        ->filter(function (Builder \$builder, string \$value) {
+                                            if (\$value) {
+                                                \$builder->where('email', 'like', '%' . \$value);
+                                            }
+                                        }),
+                                ];
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')->sortable(),
-            Column::make('Name', 'name')->sortable()->searchable(),
-            Column::make('Email', 'email')->sortable()->searchable(),
-            Column::make('Created At', 'created_at')->sortable(),
-        ];
-    }
-}
-PHP;
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')->sortable(),
+                                    Column::make('Name', 'name')->sortable()->searchable(),
+                                    Column::make('Email', 'email')->sortable()->searchable(),
+                                    Column::make('Created At', 'created_at')->sortable(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoFilterTable.php" :lineNumbers="true" :code="$filterPhpCode" />
                 </div>
@@ -804,9 +804,9 @@ PHP;
                     @php
                         $footerComponent = \App\Livewire\DemoFooterTable::class;
                         $footerBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoFooterTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoFooterTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.footer_calc.preview_title')" :center="false" :code="$footerBladeCode">
                         <div class="w-full">
@@ -824,52 +824,52 @@ HTML;
 
                     @php
                         $footerPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoFooterTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'footer_table';
+                        class DemoFooterTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'footer_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setFooterStatus(true); // {$c('comment_footer_status')}
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setFooterStatus(true); // {$c('comment_footer_status')}
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query();
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn (\$rows) => 'Total: ' . \$rows->count()),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable()
+                                        ->footer(fn (\$rows) => 'Total: ' . \$rows->count()),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable()
-                ->footer(fn () => '-'),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable()
+                                        ->footer(fn () => '-'),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoFooterTable.php" :lineNumbers="true" :code="$footerPhpCode" />
                 </div>
@@ -891,9 +891,9 @@ PHP;
                     @php
                         $headerFooterComponent = \App\Livewire\DemoHeaderFooterTable::class;
                         $headerFooterBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoHeaderFooterTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoHeaderFooterTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.header_as_footer.preview_title')" :center="false" :code="$headerFooterBladeCode">
                         <div class="w-full">
@@ -911,53 +911,53 @@ HTML;
 
                     @php
                         $headerFooterPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoHeaderFooterTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'header_footer_table';
+                        class DemoHeaderFooterTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'header_footer_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setFooterStatus(true)
-            ->setUseHeaderAsFooterStatus(true); // {$c('comment_header_as_footer')}
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setFooterStatus(true)
+                                    ->setUseHeaderAsFooterStatus(true); // {$c('comment_header_as_footer')}
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query()->select(['id', 'name', 'email', 'created_at']);
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query()->select(['id', 'name', 'email', 'created_at']);
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn (\$rows) => 'Total: ' . \$rows->count() . ' User'),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable()
+                                        ->footer(fn (\$rows) => 'Total: ' . \$rows->count() . ' User'),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable()
-                ->footer(fn () => 'Summary'),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable()
+                                        ->footer(fn () => 'Summary'),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable(),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable(),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoHeaderFooterTable.php" :lineNumbers="true" :code="$headerFooterPhpCode" />
                 </div>
@@ -979,9 +979,9 @@ PHP;
                     @php
                         $perfComponent = \App\Livewire\DemoPerformanceTable::class;
                         $perfBladeCode = <<<HTML
-{{-- {$c('blade_call_1')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoPerformanceTable::class" />
-HTML;
+                        {{-- {$c('blade_call_1')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoPerformanceTable::class" />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.performance.preview_title')" :center="false" :code="$perfBladeCode">
                         <div class="w-full">
@@ -999,57 +999,57 @@ HTML;
 
                     @php
                         $perfPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class DemoPerformanceTable extends VibeDataTableComponent
-{
-    public string \$tableName = 'perf_table';
+                        class DemoPerformanceTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'perf_table';
 
-    public function configure(): void
-    {
-        parent::configure();
+                            public function configure(): void
+                            {
+                                parent::configure();
 
-        \$this->setPrimaryKey('id')
-            ->setDefaultSort('id', 'asc')
-            ->setPerPageAccepted([25, 50, 100, 250]) // {$c('comment_large_dataset')}
-            ->setDefaultPerPage(50)
-            ->setSearchDebounce(300)
-            ->setFooterStatus(true);
-    }
+                                \$this->setPrimaryKey('id')
+                                    ->setDefaultSort('id', 'asc')
+                                    ->setPerPageAccepted([25, 50, 100, 250]) // {$c('comment_large_dataset')}
+                                    ->setDefaultPerPage(50)
+                                    ->setSearchDebounce(300)
+                                    ->setFooterStatus(true);
+                            }
 
-    public function builder(): Builder
-    {
-        return User::query()->select(['id', 'name', 'email', 'created_at']);
-    }
+                            public function builder(): Builder
+                            {
+                                return User::query()->select(['id', 'name', 'email', 'created_at']);
+                            }
 
-    public function columns(): array
-    {
-        return [
-            Column::make('ID', 'id')
-                ->sortable()
-                ->footer(fn (\$rows) => 'Halaman: ' . \$rows->count()),
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')
+                                        ->sortable()
+                                        ->footer(fn (\$rows) => 'Halaman: ' . \$rows->count()),
 
-            Column::make('Name', 'name')
-                ->sortable()
-                ->searchable()
-                ->footer(fn () => 'Total: ' . number_format(User::count()) . ' Data'),
+                                    Column::make('Name', 'name')
+                                        ->sortable()
+                                        ->searchable()
+                                        ->footer(fn () => 'Total: ' . number_format(User::count()) . ' Data'),
 
-            Column::make('Email', 'email')
-                ->sortable()
-                ->searchable(),
+                                    Column::make('Email', 'email')
+                                        ->sortable()
+                                        ->searchable(),
 
-            Column::make('Created At', 'created_at')
-                ->sortable()
-                ->format(fn (\$val) => \$val ? \$val->format('d M Y H:i') : '-'),
-        ];
-    }
-}
-PHP;
+                                    Column::make('Created At', 'created_at')
+                                        ->sortable()
+                                        ->format(fn (\$val) => \$val ? \$val->format('d M Y H:i') : '-'),
+                                ];
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoPerformanceTable.php" :lineNumbers="true" :code="$perfPhpCode" />
                 </div>
@@ -1071,12 +1071,12 @@ PHP;
                     @php
                         $lazyComponent = \App\Livewire\DemoLazyTable::class;
                         $lazyBladeCode = <<<HTML
-{{-- {$c('blade_call_lazy')} --}}
-<vibe:datatable :component="\\App\\Livewire\\DemoLazyTable::class" lazy />
+                        {{-- {$c('blade_call_lazy')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\DemoLazyTable::class" lazy />
 
-{{-- {$c('blade_call_native_lazy')} --}}
-<livewire:demo-lazy-table lazy />
-HTML;
+                        {{-- {$c('blade_call_native_lazy')} --}}
+                        <livewire:demo-lazy-table lazy />
+                        HTML;
                     @endphp
                     <vibe:preview :title="__('docs/datatable.lazy_loading.preview_title')" :center="false" :code="$lazyBladeCode">
                         <div class="w-full">
@@ -1090,15 +1090,15 @@ HTML;
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.lazy_loading.syntax_title') }}</h3>
                     @php
                         $lazyUsageCode = <<<HTML
-{{-- {$c('blade_call_lazy')} --}}
-<vibe:datatable :component="\\App\\Livewire\\UserTable::class" lazy />
+                        {{-- {$c('blade_call_lazy')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\UserTable::class" lazy />
 
-{{-- {$c('blade_call_binding')} --}}
-<vibe:datatable :component="\\App\\Livewire\\UserTable::class" :lazy="\$isLazy" />
+                        {{-- {$c('blade_call_binding')} --}}
+                        <vibe:datatable :component="\\App\\Livewire\\UserTable::class" :lazy="\$isLazy" />
 
-{{-- {$c('blade_call_native_lazy')} --}}
-<livewire:user-table lazy />
-HTML;
+                        {{-- {$c('blade_call_native_lazy')} --}}
+                        <livewire:user-table lazy />
+                        HTML;
                     @endphp
                     <vibe:highlightjs language="blade" title="resources/views/users.blade.php" :lineNumbers="true" :code="$lazyUsageCode" />
                 </div>
@@ -1107,33 +1107,39 @@ HTML;
                 <div id="keuntungan-lazy" class="space-y-3">
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.lazy_loading.benefits_title') }}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                        <vibe:card class="space-y-1.5">
                             <div class="flex items-center gap-2 text-primary font-semibold text-sm">
-                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                </svg>
                                 <span>{{ __('docs/datatable.lazy_loading.card_1_title') }}</span>
                             </div>
                             <p class="text-xs text-muted-foreground leading-relaxed">
                                 {!! __('docs/datatable.lazy_loading.benefit_1') !!}
                             </p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                        </vibe:card>
+                        <vibe:card class="space-y-1.5">
                             <div class="flex items-center gap-2 text-primary font-semibold text-sm">
-                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
                                 <span>{{ __('docs/datatable.lazy_loading.card_2_title') }}</span>
                             </div>
                             <p class="text-xs text-muted-foreground leading-relaxed">
                                 {!! __('docs/datatable.lazy_loading.benefit_2') !!}
                             </p>
-                        </div>
-                        <div class="p-4 rounded-xl border border-border bg-card text-card-foreground shadow-2xs space-y-1.5">
+                        </vibe:card>
+                        <vibe:card class="space-y-1.5">
                             <div class="flex items-center gap-2 text-primary font-semibold text-sm">
-                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                                <svg class="size-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                                </svg>
                                 <span>{{ __('docs/datatable.lazy_loading.card_3_title') }}</span>
                             </div>
                             <p class="text-xs text-muted-foreground leading-relaxed">
                                 {!! __('docs/datatable.lazy_loading.benefit_3') !!}
                             </p>
-                        </div>
+                        </vibe:card>
                     </div>
                 </div>
 
@@ -1145,31 +1151,31 @@ HTML;
                     </p>
                     @php
                         $placeholderPhpCode = <<<PHP
-namespace App\Livewire;
+                        namespace App\Livewire;
 
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
-class UserTable extends VibeDataTableComponent
-{
-    // ... configure() & columns() ...
+                        class UserTable extends VibeDataTableComponent
+                        {
+                            // ... configure() & columns() ...
 
-    /**
-     * {$c('comment_placeholder')}
-     */
-    public function placeholder(): string
-    {
-        return <<<'HTML'
-        <div class="w-full p-8 flex items-center justify-center space-x-3 rounded-xl border border-border bg-card animate-pulse text-muted-foreground">
-            <svg class="size-5 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span class="text-sm font-medium">{$c('loading_text')}</span>
-        </div>
-        HTML;
-    }
-}
-PHP;
+                            /**
+                             * {$c('comment_placeholder')}
+                             */
+                            public function placeholder(): string
+                            {
+                                return <<<'HTML'
+                                <div class="w-full p-8 flex items-center justify-center space-x-3 rounded-xl border border-border bg-card animate-pulse text-muted-foreground">
+                                    <svg class="size-5 animate-spin text-primary" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span class="text-sm font-medium">{$c('loading_text')}</span>
+                                </div>
+                                HTML;
+                            }
+                        }
+                        PHP;
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/UserTable.php" :lineNumbers="true" :code="$placeholderPhpCode" />
                 </div>

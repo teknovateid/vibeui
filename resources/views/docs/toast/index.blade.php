@@ -327,44 +327,44 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {{-- 1. JavaScript Helper --}}
-                    <div class="space-y-2 p-4 rounded-xl border border-border bg-card">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">1</span>
                             <span class="text-sm font-semibold text-foreground">JavaScript vibeToast</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Global function invocation.</p>
                         <vibe:highlightjs language="javascript" :lineNumbers="false" :code="$jsHelperSnippet" />
-                    </div>
+                    </vibe:card>
 
                     {{-- 2. Alpine.js Dispatch --}}
-                    <div class="space-y-2 p-4 rounded-xl border border-border bg-card">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">2</span>
                             <span class="text-sm font-semibold text-foreground">Alpine.js $dispatch</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Alpine event dispatch.</p>
                         <vibe:highlightjs language="html" :lineNumbers="false" :code="$alpineSnippet" />
-                    </div>
+                    </vibe:card>
 
                     {{-- 3. Laravel Flash Session --}}
-                    <div class="space-y-2 p-4 rounded-xl border border-border bg-card">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">3</span>
                             <span class="text-sm font-semibold text-foreground">Laravel Flash Session</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Controller session flash.</p>
                         <vibe:highlightjs language="php" :lineNumbers="false" :code="$laravelSnippet" />
-                    </div>
+                    </vibe:card>
 
                     {{-- 4. Livewire Event Dispatch --}}
-                    <div class="space-y-2 p-4 rounded-xl border border-border bg-card">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">4</span>
                             <span class="text-sm font-semibold text-foreground">Livewire Component</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Livewire event dispatch.</p>
                         <vibe:highlightjs language="php" :lineNumbers="false" :code="$livewireSnippet" />
-                    </div>
+                    </vibe:card>
                 </div>
             </section>
 
@@ -380,72 +380,65 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                 {{-- Container Props --}}
                 <div class="space-y-2">
                     <p class="text-sm font-semibold text-foreground">&lt;vibe:toast&gt; (Container Tag Props)</p>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                        <table class="w-full text-left text-xs">
-                            <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                                <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/toast.props.columns.desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border text-muted-foreground">
-                                @php
-                                    $containerProps = [
-                                        ['position', "'bottom-right'|'bottom-left'|'top-right'|'top-left'|'top-center'|'bottom-center'", "'bottom-right'", 'Posisi penempatan default container tumpukan toast pada layar.'],
-                                        ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk toast persisten).'],
-                                        ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).']
-                                    ];
-                                @endphp
-                                @foreach ($containerProps as [$prop, $type, $default, $desc])
-                                    <tr class="hover:bg-accent/40 transition-colors">
-                                        <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/toast.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $containerProps = [
+                                    ['position', "'bottom-right'|'bottom-left'|'top-right'|'top-left'|'top-center'|'bottom-center'", "'bottom-right'", 'Posisi penempatan default container tumpukan toast pada layar.'],
+                                    ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk toast persisten).'],
+                                    ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).']
+                                ];
+                            @endphp
+                            @foreach ($containerProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- Payload Parameters --}}
                 <div class="space-y-2 pt-2">
                     <p class="text-sm font-semibold text-foreground">vibeToast(payload) & $dispatch('toast', payload)</p>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                        <table class="w-full text-left text-xs">
-                            <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                                <tr>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.prop') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.type') }}</th>
-                                    <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/toast.props.columns.default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/toast.props.columns.desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border text-muted-foreground">
-                                @php
-                                    $payloadParams = [
-                                        ['type', "'success'|'error'|'warning'|'info'", "'info'", 'Jenis status notifikasi toast yang menentukan palet warna, badge, dan ikon otomatis.'],
-                                        ['title', 'string', 'null', 'Judul utama notifikasi toast (opsional).'],
-                                        ['message', 'string', '""', 'Pesan deskripsi lengkap toast yang ingin disampaikan kepada pengguna.'],
-                                        ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon bawaan status.'],
-                                        ['timeout', 'int|false', 'Inherit (3000)', 'Menimpa durasi auto-dismiss (false agar toast tetap terbuka hingga tombol close diklik).'],
-                                        ['sound', 'bool|string', 'Inherit (false)', 'Menimpa preferensi efek suara saat toast muncul (true atau URL string audio).']
-                                    ];
-                                @endphp
-                                @foreach ($payloadParams as [$prop, $type, $default, $desc])
-                                    <tr class="hover:bg-accent/40 transition-colors">
-                                        <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</td>
-                                        <td class="px-4 py-3 font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $desc }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/toast.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $payloadParams = [
+                                    ['type', "'success'|'error'|'warning'|'info'", "'info'", 'Jenis status notifikasi toast yang menentukan palet warna, badge, dan ikon otomatis.'],
+                                    ['title', 'string', 'null', 'Judul utama notifikasi toast (opsional).'],
+                                    ['message', 'string', '""', 'Pesan deskripsi lengkap toast yang ingin disampaikan kepada pengguna.'],
+                                    ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon bawaan status.'],
+                                    ['timeout', 'int|false', 'Inherit (3000)', 'Menimpa durasi auto-dismiss (false agar toast tetap terbuka hingga tombol close diklik).'],
+                                    ['sound', 'bool|string', 'Inherit (false)', 'Menimpa preferensi efek suara saat toast muncul (true atau URL string audio).']
+                                ];
+                            @endphp
+                            @foreach ($payloadParams as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
                 </div>
             </section>
 

@@ -449,7 +449,7 @@
 
                                     {{-- Panel 3: Notifications --}}
                                     <vibe:tabs.panel name="notifications" class="p-6 pt-4 space-y-3">
-                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-card/60 hover:bg-muted/20 transition-colors">
+                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-muted transition-colors">
                                             <div class="space-y-0.5 pr-4">
                                                 <p class="text-sm font-medium text-foreground">{{ __('docs/tabs.card.rows_notif_email_label') }}</p>
                                                 <p class="text-xs text-muted-foreground">{{ __('docs/tabs.card.rows_notif_email_desc') }}</p>
@@ -457,7 +457,7 @@
                                             <vibe:switch id="notif-email-switch" :checked="true" />
                                         </div>
 
-                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-card/60 hover:bg-muted/20 transition-colors">
+                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-muted transition-colors">
                                             <div class="space-y-0.5 pr-4">
                                                 <p class="text-sm font-medium text-foreground">{{ __('docs/tabs.card.rows_notif_marketing_label') }}</p>
                                                 <p class="text-xs text-muted-foreground">{{ __('docs/tabs.card.rows_notif_marketing_desc') }}</p>
@@ -548,7 +548,7 @@
 
                                     {{-- Panel 3: Notifications --}}
                                     <vibe:tabs.panel name="notifications" class="p-6 pt-4 space-y-3">
-                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-card/60 hover:bg-muted/20 transition-colors">
+                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-muted transition-colors">
                                             <div class="space-y-0.5 pr-4">
                                                 <p class="text-sm font-medium text-foreground">{{ __('docs/tabs.card.rows_notif_email_label') }}</p>
                                                 <p class="text-xs text-muted-foreground">{{ __('docs/tabs.card.rows_notif_email_desc') }}</p>
@@ -556,7 +556,7 @@
                                             <vibe:switch id="demo-notif-email-switch" :checked="true" />
                                         </div>
 
-                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-card/60 hover:bg-muted/20 transition-colors">
+                                        <div class="flex items-center justify-between p-4 rounded-xl border border-border bg-muted transition-colors">
                                             <div class="space-y-0.5 pr-4">
                                                 <p class="text-sm font-medium text-foreground">{{ __('docs/tabs.card.rows_notif_marketing_label') }}</p>
                                                 <p class="text-xs text-muted-foreground">{{ __('docs/tabs.card.rows_notif_marketing_desc') }}</p>
@@ -1328,10 +1328,9 @@
                                     <vibe:card class="rounded-2xl border border-border/70 shadow-sm p-6 space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs font-medium text-muted-foreground">Aktif Sekarang</span>
-                                            <span class="flex items-center gap-1.5 text-xs text-emerald-500 font-medium">
-                                                <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
                                                 Live
-                                            </span>
+                                            </vibe:badge>
                                         </div>
                                         <h4 class="font-bold text-lg text-foreground">{{ __('docs/tabs.custom.floating_analytics_title') }}</h4>
                                         <p class="text-sm text-muted-foreground leading-relaxed">{{ __('docs/tabs.custom.floating_analytics_desc') }}</p>
@@ -1382,10 +1381,9 @@
                                     <vibe:card class="rounded-2xl border border-border/70 shadow-sm p-6 space-y-4">
                                         <div class="flex items-center justify-between">
                                             <span class="text-xs font-medium text-muted-foreground">Aktif Sekarang</span>
-                                            <span class="flex items-center gap-1.5 text-xs text-emerald-500 font-medium">
-                                                <span class="size-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                                            <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
                                                 Live
-                                            </span>
+                                            </vibe:badge>
                                         </div>
                                         <h4 class="font-bold text-lg text-foreground">{{ __('docs/tabs.custom.floating_analytics_title') }}</h4>
                                         <p class="text-sm text-muted-foreground leading-relaxed">{{ __('docs/tabs.custom.floating_analytics_desc') }}</p>
@@ -1487,7 +1485,7 @@
                                         </div>
                                         <div class="rounded-lg border border-border/80 p-3 bg-muted/20 flex items-center justify-between text-xs font-mono">
                                             <span class="text-foreground truncate">https://api.github.com/webhook/ci-pipeline</span>
-                                            <vibe:badge size="xs" variant="outline" class="text-emerald-600 dark:text-emerald-400">Active</vibe:badge>
+                                            <vibe:badge size="xs" variant="success">Active</vibe:badge>
                                         </div>
                                     </vibe:tabs.panel>
                                 </vibe:tabs>
@@ -1498,7 +1496,7 @@
                             <vibe:card class="p-0 overflow-hidden border border-border/80 shadow-xs">
                                 <vibe:tabs default="general" layout="rows" variant="underline">
                                     {{-- Integrated Card Header Bar with Border-b --}}
-                                    <div class="border-b border-border bg-muted/40 px-5 pt-3.5 flex flex-wrap items-center justify-between gap-4">
+                                    <div class="border-b border-border bg-muted px-5 pt-3.5 flex flex-wrap items-center justify-between gap-4">
                                         <div class="flex items-center gap-2.5">
                                             <span class="font-semibold text-sm text-foreground">Project Settings</span>
                                             <vibe:badge variant="outline" size="xs" class="text-[10px] font-mono">v2.4.0</vibe:badge>
@@ -1566,7 +1564,7 @@
                                         </div>
                                         <div class="rounded-lg border border-border/80 p-3 bg-muted/20 flex items-center justify-between text-xs font-mono">
                                             <span class="text-foreground truncate">https://api.github.com/webhook/ci-pipeline</span>
-                                            <vibe:badge size="xs" variant="outline" class="text-emerald-600 dark:text-emerald-400">Active</vibe:badge>
+                                            <vibe:badge size="xs" variant="success">Active</vibe:badge>
                                         </div>
                                     </vibe:tabs.panel>
                                 </vibe:tabs>
@@ -1678,7 +1676,7 @@
                                                 <span class="font-semibold block text-foreground">Autentikasi Dua Langkah (2FA)</span>
                                                 <span class="text-muted-foreground">Status saat ini: Aktif melalui Google Authenticator</span>
                                             </div>
-                                            <vibe:badge variant="outline" size="xs" class="text-emerald-500">Enabled</vibe:badge>
+                                            <vibe:badge variant="success" size="xs">Enabled</vibe:badge>
                                         </div>
                                     </vibe:card>
                                 </vibe:tabs.panel>
@@ -1780,7 +1778,7 @@
                                                 <span class="font-semibold block text-foreground">Autentikasi Dua Langkah (2FA)</span>
                                                 <span class="text-muted-foreground">Status saat ini: Aktif melalui Google Authenticator</span>
                                             </div>
-                                            <vibe:badge variant="outline" size="xs" class="text-emerald-500">Enabled</vibe:badge>
+                                            <vibe:badge variant="success" size="xs">Enabled</vibe:badge>
                                         </div>
                                     </vibe:card>
                                 </vibe:tabs.panel>
@@ -1820,7 +1818,7 @@
                                     </div>
 
                                     {{-- Monospace Terminal Code Panels --}}
-                                    <vibe:tabs.panel name="curl" class="pt-4 font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed">
+                                    <vibe:tabs.panel name="curl" class="pt-4 font-mono text-xs text-success overflow-x-auto leading-relaxed">
                                         <pre><code>curl https://api.vibeui.com/v1/chat/completions \
   -H "Authorization: Bearer $VIBE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -1882,7 +1880,7 @@ print(completion.choices[0].message.content)</code></pre>
                                     </div>
 
                                     {{-- Monospace Terminal Code Panels --}}
-                                    <vibe:tabs.panel name="curl" class="pt-4 font-mono text-xs text-emerald-400 overflow-x-auto leading-relaxed">
+                                    <vibe:tabs.panel name="curl" class="pt-4 font-mono text-xs text-success overflow-x-auto leading-relaxed">
                                         <pre><code>curl https://api.vibeui.com/v1/chat/completions \
   -H "Authorization: Bearer $VIBE_API_KEY" \
   -H "Content-Type: application/json" \
@@ -2022,105 +2020,89 @@ print(completion.choices[0].message.content)</code></pre>
                 {{-- <vibe:tabs> Table --}}
                 <div class="space-y-2">
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/tabs.props.tabs_title') }}</h3>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                <tr>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_prop') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_type') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border font-mono text-xs">
-                                @foreach (__('docs/tabs.props.tabs_items') as $item)
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                        <td class="px-4 py-3 text-foreground">{{ $item['default'] }}</td>
-                                        <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/tabs.props.th_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/tabs.props.tabs_items') as $item)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $item['type'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $item['default'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $item['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- <vibe:tabs.tab> Table --}}
                 <div class="space-y-2 pt-2">
                     <h3 class="text-base font-semibold text-foreground">{{ __('docs/tabs.props.tab_title') }}</h3>
-                    <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
-                        <table class="w-full text-left text-sm">
-                            <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                <tr>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_prop') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_type') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_default') }}</th>
-                                    <th class="px-4 py-3">{{ __('docs/tabs.props.th_desc') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-border font-mono text-xs">
-                                @foreach (__('docs/tabs.props.tab_items') as $item)
-                                    <tr class="hover:bg-muted/20 transition-colors">
-                                        <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                        <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                        <td class="px-4 py-3 text-foreground">{{ $item['default'] }}</td>
-                                        <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/tabs.props.th_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/tabs.props.tab_items') as $item)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $item['type'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $item['default'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $item['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
 
                 {{-- <vibe:tabs.list> & <vibe:tabs.panel> Table --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                     <div class="space-y-2">
                         <h3 class="text-base font-semibold text-foreground">{{ __('docs/tabs.props.list_title') }}</h3>
-                        <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                    <tr>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_prop') }}</th>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_type') }}</th>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_desc') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-border font-mono text-xs">
-                                    @foreach (__('docs/tabs.props.list_items') as $item)
-                                        <tr class="hover:bg-muted/20 transition-colors">
-                                            <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                            <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                            <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_prop') }}</vibe:table.column>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_type') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/tabs.props.th_desc') }}</vibe:table.column>
+                            </vibe:table.header>
+                            <vibe:table.rows>
+                                @foreach (__('docs/tabs.props.list_items') as $item)
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item['name'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $item['type'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $item['desc'] }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                @endforeach
+                            </vibe:table.rows>
+                        </vibe:table>
                     </div>
 
                     <div class="space-y-2">
                         <h3 class="text-base font-semibold text-foreground">{{ __('docs/tabs.props.panel_title') }}</h3>
-                        <div class="overflow-x-auto rounded-xl border border-border bg-card shadow-2xs">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground border-b border-border">
-                                    <tr>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_prop') }}</th>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_type') }}</th>
-                                        <th class="px-4 py-3">{{ __('docs/tabs.props.th_desc') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-border font-mono text-xs">
-                                    @foreach (__('docs/tabs.props.panel_items') as $item)
-                                        <tr class="hover:bg-muted/20 transition-colors">
-                                            <td class="px-4 py-3 font-semibold text-primary">{{ $item['name'] }}</td>
-                                            <td class="px-4 py-3 text-muted-foreground">{{ $item['type'] }}</td>
-                                            <td class="px-4 py-3 font-sans text-xs text-muted-foreground">{{ $item['desc'] }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                        <vibe:table>
+                            <vibe:table.header>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_prop') }}</vibe:table.column>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/tabs.props.th_type') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/tabs.props.th_desc') }}</vibe:table.column>
+                            </vibe:table.header>
+                            <vibe:table.rows>
+                                @foreach (__('docs/tabs.props.panel_items') as $item)
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item['name'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $item['type'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $item['desc'] }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                @endforeach
+                            </vibe:table.rows>
+                        </vibe:table>
                     </div>
                 </div>
             </section>

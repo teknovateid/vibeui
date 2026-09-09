@@ -87,7 +87,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">views/vibe/</span>
                             <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.blade_views.structure_card.title') }}</span>
@@ -95,9 +95,9 @@
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             {!! __('docs/directories.blade_views.structure_card.desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
 
-                    <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-primary/10 text-primary font-mono text-xs font-bold">@@props([...])</span>
                             <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.blade_views.props_card.title') }}</span>
@@ -105,7 +105,7 @@
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             {!! __('docs/directories.blade_views.props_card.desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
             </section>
 
@@ -118,30 +118,27 @@
                     </p>
                 </div>
 
-                <div class="overflow-x-auto rounded-xl border border-border bg-card text-card-foreground">
-                    <table class="w-full text-left text-xs">
-                        <thead class="border-b border-border bg-muted/60 text-foreground font-semibold">
-                            <tr>
-                                <th class="px-4 py-3 whitespace-nowrap">{{ __('docs/directories.css_styling.columns.file') }}</th>
-                                <th class="px-4 py-3">{{ __('docs/directories.css_styling.columns.desc') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-border text-muted-foreground">
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">app.css</td>
-                                <td class="px-4 py-3">{!! __('docs/directories.css_styling.rows.app') !!}</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">custom-variant.css</td>
-                                <td class="px-4 py-3">{!! __('docs/directories.css_styling.rows.variant') !!}</td>
-                            </tr>
-                            <tr class="hover:bg-accent/40 transition-colors">
-                                <td class="px-4 py-3 font-mono font-bold text-foreground whitespace-nowrap">highlightjs.css</td>
-                                <td class="px-4 py-3">{!! __('docs/directories.css_styling.rows.highlight') !!}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/directories.css_styling.columns.file') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/directories.css_styling.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $cssFiles = [
+                                ['app.css', __('docs/directories.css_styling.rows.app')],
+                                ['custom-variant.css', __('docs/directories.css_styling.rows.variant')],
+                                ['highlightjs.css', __('docs/directories.css_styling.rows.highlight')]
+                            ];
+                        @endphp
+                        @foreach ($cssFiles as [$file, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $file }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
             {{-- ─── 4. Skrip JavaScript ─── --}}
@@ -154,7 +151,7 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-muted text-foreground font-mono text-xs font-bold">theme.js</span>
                             <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.js_assets.theme_card.title') }}</span>
@@ -162,9 +159,9 @@
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             {!! __('docs/directories.js_assets.theme_card.desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
 
-                    <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-2">
+                    <vibe:card class="space-y-2">
                         <div class="flex items-center gap-2">
                             <span class="p-1.5 rounded-lg bg-muted text-foreground font-mono text-xs font-bold">highlightjs.js</span>
                             <span class="text-sm font-semibold text-foreground">{{ __('docs/directories.js_assets.highlight_card.title') }}</span>
@@ -172,7 +169,7 @@
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             {!! __('docs/directories.js_assets.highlight_card.desc') !!}
                         </p>
-                    </div>
+                    </vibe:card>
                 </div>
             </section>
 
@@ -185,7 +182,7 @@
                     </p>
                 </div>
 
-                <div class="p-4 rounded-xl border border-border bg-card text-card-foreground space-y-3">
+                <vibe:card class="space-y-3">
                     <p class="text-xs text-muted-foreground">
                         {{ __('docs/directories.localization.card_desc') }}
                     </p>
@@ -199,7 +196,7 @@
                         <span class="p-2 rounded-lg bg-muted border border-border text-foreground">vibe/sheet.php</span>
                         <span class="p-2 rounded-lg bg-muted border border-border text-foreground">vibe/toast.php</span>
                     </div>
-                </div>
+                </vibe:card>
             </section>
 
             {{-- ─── 6. File Konfigurasi ─── --}}

@@ -131,23 +131,23 @@
                         <vibe:switch labelPlacement="left" label="{{ __('docs/switch.placement.left_label') }}" checked />
 
                         {{-- 3. Justify Placement (Settings Row inside Card) --}}
-                        <div class="w-full max-w-md divide-y divide-border rounded-xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                        <vibe:card class="w-full max-w-md divide-y divide-border space-y-4">
                             <vibe:switch labelPlacement="justify" name="push_notif" label="{{ __('docs/switch.placement.notif_title') }}" description="{{ __('docs/switch.placement.notif_desc') }}" checked />
                             <div class="pt-4">
                                 <vibe:switch labelPlacement="justify" name="auto_dark" variant="success" label="{{ __('docs/switch.placement.dark_title') }}" description="{{ __('docs/switch.placement.dark_desc') }}" />
                             </div>
-                        </div>
+                        </vibe:card>
                     </vibe:preview.code>
                     <div class="flex flex-col gap-5 w-full max-w-md">
                         <vibe:switch labelPlacement="right" :label="__('docs/switch.placement.right_label')" checked />
                         <vibe:switch labelPlacement="left" :label="__('docs/switch.placement.left_label')" checked />
 
-                        <div class="w-full divide-y divide-border rounded-xl border border-border bg-card p-4 space-y-4 shadow-2xs">
+                        <vibe:card class="w-full divide-y divide-border space-y-4">
                             <vibe:switch labelPlacement="justify" name="push_notif_demo" :label="__('docs/switch.placement.notif_title')" :description="__('docs/switch.placement.notif_desc')" checked />
                             <div class="pt-4">
                                 <vibe:switch labelPlacement="justify" name="auto_dark_demo" variant="success" :label="__('docs/switch.placement.dark_title')" :description="__('docs/switch.placement.dark_desc')" />
                             </div>
-                        </div>
+                        </vibe:card>
                     </div>
                 </vibe:preview>
             </section>
