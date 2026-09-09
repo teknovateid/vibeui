@@ -30,6 +30,11 @@ class FilepondController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        return $this->requestTest($request);
+    }
+
     public function presigned(Request $request)
     {
         $request->validate([

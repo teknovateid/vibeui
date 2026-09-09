@@ -404,21 +404,32 @@
             {{-- 6. Form Submission & Backend Controller --}}
             <section id="form-controller" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Form Submission & Controller (Store)</h2>
+                    <h2 class="text-xl font-bold text-foreground">Form Submission & Controller ($request->all())</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen &lt;vibe:filepond&gt; dapat digunakan di dalam form reguler dan diposting langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FilepondController@store</code>.
+                        Komponen &lt;vibe:filepond&gt; dapat digunakan di dalam formulir dan diposting langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FilepondController@requestTest</code>. Saat form dikirim, modal pengujian otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> dan kunci berkas secara real-time.
                     </p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-primary/25 bg-primary/5 flex items-start gap-3 text-xs text-muted-foreground leading-relaxed">
+                    <svg class="size-4 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                        <path d="m9 12 2 2 4-4"/>
+                    </svg>
+                    <div>
+                        <strong class="text-foreground font-semibold">Proteksi Unggahan Aktif (<code class="font-mono text-[11px] text-primary">protect-upload="true"</code>):</strong>
+                        Jika pengguna menekan tombol submit atau mencoba berpindah halaman sementara berkas masih dalam proses upload, Vibe UI akan secara otomatis mencegat aksi tersebut dan menampilkan peringatan/konfirmasi <code class="font-mono text-[11px]">&lt;vibe:alert&gt;</code> serta mengaktifkan dialog proteksi penutupan tab peramban.
+                    </div>
                 </div>
 
                 <vibe:preview title="Pengujian Form Submit Berkas">
                     <vibe:preview.code>
-                        <form action="{{ route('docs.filepond.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                            @csrf
-                            <\vibe:filepond name="document_submission" label="Pilih Berkas" description="Berkas akan diunggah dan diproses oleh FilepondController@store" required />
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+                            <\vibe:input name="title" label="Judul Dokumen" placeholder="Masukkan judul..." value="Dokumen Perjanjian 2026" required />
+                            <\vibe:filepond name="document_submission" label="Pilih Berkas" description="Berkas akan diunggah ke storage lalu kuncinya dikirim ke controller" presign-url="{{ route('docs.filepond.presigned') }}" protect-upload="true" required />
                             <vibe:button type="submit" variant="primary">
                                 Unggah & Kirim Form
                             </vibe:button>
-                        </form>
+                        </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
                         @if (session('success'))
@@ -430,15 +441,15 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('docs.filepond.store') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card space-y-4 shadow-xs">
-                            @csrf
-                            <vibe:filepond name="document_submission" label="Pilih Berkas" description="Berkas akan diunggah dan diproses oleh FilepondController@store" required />
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="p-4 sm:p-5 rounded-2xl border border-border/80 bg-card space-y-4 shadow-xs">
+                            <vibe:input name="title" label="Judul Dokumen" placeholder="Masukkan judul..." value="Dokumen Perjanjian 2026" required />
+                            <vibe:filepond name="document_submission" label="Pilih Berkas" description="Berkas akan diunggah ke storage lalu kuncinya dikirim ke controller" presign-url="{{ route('docs.filepond.presigned') }}" protect-upload="true" required />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary">
                                     Unggah & Kirim Form
                                 </vibe:button>
                             </div>
-                        </form>
+                        </vibe:form>
                     </div>
                 </vibe:preview>
             </section>
@@ -540,7 +551,10 @@
                                 ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'],
                                 ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).'],
                                 ['demo', 'bool', 'false', 'Menampilkan contoh berkas simulasi (mock file) secara langsung tanpa perlu upload.'],
-                                ['demo-files', 'array', '[]', 'Daftar nama berkas simulasi untuk demonstrasi tampilan kartu berkas.']
+                                ['demo-files', 'array', '[]', 'Daftar nama berkas simulasi untuk demonstrasi tampilan kartu berkas.'],
+                                ['protect-upload', 'bool', 'false', 'Mencegah submit form dan navigasi saat berkas masih diunggah dengan konfirmasi &lt;vibe:alert&gt; serta peringatan penutupan tab (`beforeunload`).'],
+                                ['protect-title', 'string', 'null', 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").'],
+                                ['protect-message', 'string', 'null', 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.']
                             ];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])
@@ -563,4 +577,7 @@
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() untuk FilePond --}}
+    @include('docs.partials.filepond-test-modal')
 </x-docs.layouts.sidebar>

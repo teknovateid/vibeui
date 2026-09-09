@@ -27,7 +27,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::prefix('filepond')->name('filepond.')->group(function () {
         Route::get('/', [FilepondController::class, 'index'])->name('index');
-        Route::post('/store', [FilepondController::class, 'store'])->name('store');
+        Route::post('/store', [FilepondController::class, 'requestTest'])->name('store');
+        Route::post('/request-test', [FilepondController::class, 'requestTest'])->name('request_test');
         Route::post('/presigned', [FilepondController::class, 'presigned'])->name('presigned');
         Route::put('/local-upload/{key}', [FilepondController::class, 'localUpload'])->name('local_upload');
     });
