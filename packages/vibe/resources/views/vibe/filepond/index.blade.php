@@ -197,6 +197,7 @@
         'name' => $name,
         'size' => $size,
         'hasError' => (bool) $hasError,
+        'errorMessage' => $errorMessage,
         'multiple' => (bool) $multiple,
         'maxFiles' => $maxFiles,
         'maxFileSize' => $maxFileSize,
@@ -253,18 +254,65 @@
     @vite(['resources/js/vibe/filepond.js'])
 @endPushOnce
 
-<div class="{{ $wrapperClass }} {{ $isAvatar ? 'filepond-avatar-mode' : '' }} {{ $isCompact ? 'filepond-compact-mode' : '' }} {{ $dashed ? 'filepond-dashed' : 'filepond-solid' }} filepond-size-{{ $size }} {{ $hasError ? 'filepond-has-error' : '' }}">
-    @if ($label)
-        <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none cursor-pointer {{ $isAvatar ? 'text-center' : '' }}" onclick="
-                var c = document.getElementById('{{ $id }}-container') || document.getElementById('{{ $id }}')?.closest('[data-vibe-filepond]');
-                if (c) {
-                    var p = c._x_dataStack?.find(function(s) { return s && (s.pond || s.browse); });
-                    if (p && typeof p.browse === 'function') {
-                        event.preventDefault();
-                        p.browse();
-                    }
+<div 
+    id="{{ $id }}-container"
+    data-vibe-filepond
+    {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass} " . ($isAvatar ? 'filepond-avatar-mode ' : '') . ($isCompact ? 'filepond-compact-mode ' : '') . ($dashed ? 'filepond-dashed ' : 'filepond-solid ') . "filepond-size-{$size} " . ($hasError ? 'filepond-has-error' : ''))]) }}
+    :class="{ 'filepond-has-error': hasError || Boolean(serverError) }"
+    x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {
+        pond: null,
+        input: null,
+        isUploading: false,
+        fileCount: 0,
+        files: [],
+        hasError: {{ $hasError ? 'true' : 'false' }},
+        serverError: @js($errorMessage),
+        init() {
+            var self = this;
+            var mount = function() {
+                if (self.pond) return;
+                if (typeof window.vibeFilepond === 'function') {
+                    var comp = window.vibeFilepond(@js($config));
+                    Object.assign(self, comp);
+                    self.$el = self.$el;
+                    self.$refs = self.$refs;
+                    self.init();
                 }
-            ">
+            };
+            if (typeof window.vibeFilepond === 'function') {
+                mount();
+            } else {
+                window.addEventListener('vibe-filepond-ready', mount, { once: true });
+            }
+        },
+        destroy() {
+            if (this.pond) {
+                try { this.pond.destroy(); } catch (e) {}
+                this.pond = null;
+            }
+        },
+        browse() {
+            if (this.pond && typeof this.pond.browse === 'function') {
+                this.pond.browse();
+            } else {
+                var el = document.getElementById('{{ $id }}');
+                if (el) el.click();
+            }
+        },
+        clear() {
+            this.serverError = null;
+            this.hasError = false;
+            if (this.pond && typeof this.pond.removeFiles === 'function') {
+                this.pond.removeFiles();
+            }
+        },
+        getFiles() {
+            return this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
+        }
+    }">
+
+    @if ($label)
+        <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none cursor-pointer {{ $isAvatar ? 'text-center' : '' }}" @click.prevent="browse()">
             {{ $label }}
             @if ($isRequired)
                 <span class="text-destructive font-bold ml-0.5" aria-hidden="true">*</span>
@@ -278,59 +326,9 @@
         </p>
     @endif
 
-    <div data-vibe-filepond 
-         id="{{ $id }}-container"
-         wire:ignore 
-         x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {
-            pond: null,
-            input: null,
-            isUploading: false,
-            fileCount: 0,
-            files: [],
-            hasError: {{ $hasError ? 'true' : 'false' }},
-            init() {
-                var self = this;
-                var mount = function() {
-                    if (self.pond) return;
-                    if (typeof window.vibeFilepond === 'function') {
-                        var comp = window.vibeFilepond(@js($config));
-                        Object.assign(self, comp);
-                        self.$el = self.$el;
-                        self.$refs = self.$refs;
-                        self.init();
-                    }
-                };
-                if (typeof window.vibeFilepond === 'function') {
-                    mount();
-                } else {
-                    window.addEventListener('vibe-filepond-ready', mount, { once: true });
-                }
-            },
-            destroy() {
-                if (this.pond) {
-                    try { this.pond.destroy(); } catch (e) {}
-                    this.pond = null;
-                }
-            },
-            browse() {
-                if (this.pond && typeof this.pond.browse === 'function') {
-                    this.pond.browse();
-                } else {
-                    var el = document.getElementById('{{ $id }}');
-                    if (el) el.click();
-                }
-            },
-            clear() {
-                if (this.pond && typeof this.pond.removeFiles === 'function') {
-                    this.pond.removeFiles();
-                }
-            },
-            getFiles() {
-                return this.pond && typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
-            }
-        }" 
-        @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif 
-        {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
+    <div wire:ignore 
+         @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif 
+         {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
 
         <input 
             x-ref="input" 
@@ -358,17 +356,22 @@
         <div x-ref="hiddenContainer" class="hidden"></div>
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1 {{ $isAvatar ? 'justify-center' : '' }}">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" x2="12.01" y1="16" y2="16" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground {{ $isAvatar ? 'text-center' : '' }}">
+    {{-- Error message (Blade prop or runtime JS upload/validation error) --}}
+    <p x-show="serverError"
+       role="alert"
+       id="{{ $id }}-error"
+       class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1 {{ $isAvatar ? 'justify-center' : '' }}"
+       @if (!$hasError || !$errorMessage) style="display:none" @endif>
+        <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" x2="12.01" y1="16" y2="16" />
+        </svg>
+        <span x-text="serverError">{{ $errorMessage }}</span>
+    </p>
+
+    @if ($info)
+        <p x-show="!serverError" id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground {{ $isAvatar ? 'text-center' : '' }}" @if ($hasError && $errorMessage) style="display:none" @endif>
             {{ $info }}
         </p>
     @endif

@@ -70,7 +70,7 @@ class FilepondController extends Controller
         $request->validate([
             'filename' => ['nullable', 'string'],
             'type' => ['nullable', 'string'],
-            'size' => ['nullable', 'integer'],
+            'size' => ['nullable', 'integer','max:500000'],
         ]);
 
         $rawFilename = $request->filename ?? Str::random(10);
