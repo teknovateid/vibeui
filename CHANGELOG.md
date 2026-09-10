@@ -1,6 +1,12 @@
 # Changelog
 
-All notable changes to **Vibe UI** (`teknovate/vibe-ui`) will be documented in this file.
+All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
+
+## [0.1.1] - 2026-09-10
+
+### ⚡ Performance & Refactoring
+- refactor: replace tailwind-merge-laravel with tailwind-merge-php and implement custom Blade integration and attribute bag macros (328df9e)
+
 
 ## [0.1.0] - 2026-09-10
 
