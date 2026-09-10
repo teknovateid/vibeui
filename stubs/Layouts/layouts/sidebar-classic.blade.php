@@ -11,7 +11,10 @@
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="bg-sidebar text-sidebar-foreground border-r border-sidebar-border absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
-                <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
+                <div class="flex items-center gap-2 minified:hidden truncate transition-opacity duration-300">
+                    <h1 class="text-2xl font-bold truncate">{{ config('app.name') }}</h1>
+                    <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-primary/10 text-primary shrink-0">v{{ \Teknovate\VibeUi\Vibe::version() }}</span>
+                </div>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
                     {{ substr(config('app.name'), 0, 1) }}
                 </div>

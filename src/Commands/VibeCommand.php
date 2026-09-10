@@ -3,6 +3,7 @@
 namespace Teknovate\VibeUi\Commands;
 
 use Illuminate\Console\Command;
+
 use function Laravel\Prompts\select;
 
 class VibeCommand extends Command
@@ -46,6 +47,8 @@ class VibeCommand extends Command
                 'table' => 'Create a new Livewire DataTable component',
                 'page' => 'Generate a new page inside a layout',
                 'layout' => 'Generate a layout panel',
+                'sync' => 'Synchronize resources into packages/vibe',
+                'release' => 'Create a new release (Bump version, changelog, and tag)',
                 'clean' => 'Clean unused published components',
                 'exit' => 'Exit',
             ]
@@ -53,6 +56,7 @@ class VibeCommand extends Command
 
         if ($action === 'exit') {
             $this->components->info('Goodbye!');
+
             return;
         }
 
@@ -66,6 +70,10 @@ class VibeCommand extends Command
             $this->call('vibe:layout');
         } elseif ($action === 'page') {
             $this->call('vibe:page');
+        } elseif ($action === 'sync') {
+            $this->call('vibe:sync');
+        } elseif ($action === 'release') {
+            $this->call('vibe:release');
         } elseif ($action === 'clean') {
             $this->call('vibe:clean');
         }
