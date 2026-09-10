@@ -360,7 +360,8 @@
     box-sizing: border-box !important;
 }
 
-.filepond--root [data-filepond-item-state*='error'] .filepond--file-wrapper {
+.filepond--root [data-filepond-item-state*='error'] .filepond--file-wrapper,
+.filepond--root [data-filepond-item-state*='invalid'] .filepond--file-wrapper {
     background-color: color-mix(in srgb, var(--destructive) 12%, var(--card)) !important;
     border-color: var(--destructive) !important;
 }
@@ -584,13 +585,28 @@
     color: var(--muted-foreground) !important;
 }
 
+/* Always respect hidden attribute on action buttons */
+.filepond--root .filepond--file-action-button[hidden],
+.filepond--root [hidden].filepond--file-action-button {
+    display: none !important;
+}
+
+/* Inactive transparent buttons should never capture pointer events */
+.filepond--root .filepond--file-action-button[style*='opacity: 0'],
+.filepond--root .filepond--file-action-button[style*='opacity:0'] {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+/* On validation errors (e.g. file size exceeded, invalid MIME type), hide Retry button so only Remove (X) is available */
+.filepond--root [data-filepond-item-state*='invalid'] .filepond--action-retry-item-load,
+.filepond--root [data-filepond-item-state*='invalid'] .filepond--action-retry-item-processing {
+    display: none !important;
+}
+
 /* Clean Minimal Action Buttons (Remove, Retry, Abort, Revert) */
-.filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-revert-item-processing,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-load {
+.filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button {
     color: var(--muted-foreground) !important;
     background-color: transparent !important;
     border: 1px solid var(--border) !important;
@@ -614,12 +630,36 @@
     z-index: 10 !important;
 }
 
+/* Remove button stays at the right edge */
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-revert-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-load {
+    right: 0.875rem !important;
+}
+
+/* Specific positioning for Retry action buttons: positioned to the LEFT of the Remove button with 0.4rem spacing */
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load {
+    right: 3.125rem !important;
+}
+
 .filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:hover,
 .filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:focus {
     background-color: var(--card) !important;
     color: var(--foreground) !important;
     border-color: var(--border) !important;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    transform: translateY(-50%) scale(1.05) !important;
+}
+
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing:focus,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load:focus {
+    background-color: color-mix(in srgb, var(--primary) 12%, var(--card)) !important;
+    color: var(--primary) !important;
+    border-color: color-mix(in srgb, var(--primary) 40%, transparent) !important;
     transform: translateY(-50%) scale(1.05) !important;
 }
 
@@ -632,9 +672,26 @@
 }
 
 .filepond--root .filepond--file-action-button svg {
-    width: 0.875rem !important;
-    height: 0.875rem !important;
-    stroke-width: 2 !important;
+    width: 1.15rem !important;
+    height: 1.15rem !important;
+    max-width: 1.15rem !important;
+    max-height: 1.15rem !important;
+    stroke-width: 2.25 !important;
+    display: block !important;
+}
+
+/* Fallback scaling if FilePond's default 26x26 icon with large whitespace padding is used */
+.filepond--root .filepond--file-action-button svg[viewBox='0 0 26 26'] {
+    width: 1.6rem !important;
+    height: 1.6rem !important;
+    max-width: 1.6rem !important;
+    max-height: 1.6rem !important;
+}
+
+/* Extra right padding during error/invalid states when action buttons may be paired */
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--file,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--file {
+    padding-right: 5.5rem !important;
 }
 
 /* Image Preview Styling */
@@ -996,6 +1053,37 @@
     background-color: rgba(220, 38, 38, 0.9) !important;
     border-color: rgba(255, 255, 255, 0.9) !important;
     transform: translateX(-50%) scale(1.12) !important;
+}
+
+.filepond-avatar-mode .filepond--action-retry-item-processing,
+.filepond-avatar-mode .filepond--action-retry-item-load {
+    position: absolute !important;
+    bottom: 8px !important;
+    right: 8px !important;
+    left: auto !important;
+    transform: none !important;
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 9999px !important;
+    background-color: rgba(15, 23, 42, 0.75) !important;
+    color: #ffffff !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+    backdrop-filter: blur(6px) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    opacity: 0.9 !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.filepond-avatar-mode .filepond--action-retry-item-processing:hover,
+.filepond-avatar-mode .filepond--action-retry-item-load:hover {
+    opacity: 1 !important;
+    background-color: rgba(37, 99, 235, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.9) !important;
+    transform: scale(1.12) !important;
 }
 
 /* =========================================================================
