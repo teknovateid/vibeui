@@ -33,7 +33,20 @@ class LayoutCommand extends Command implements PromptsForMissingInput
      */
     public function handle(): void
     {
-        $path = str()->slug($this->argument('path'));
+        $rawPath = trim((string) $this->argument('path'));
+        $path = str()->slug($rawPath);
+
+        if (empty($path)) {
+            $this->components->error('The layout path is required and cannot be empty.');
+
+            return;
+        }
+
+        if (in_array($path, ['components', 'vibe'])) {
+            $this->components->error("The layout path '{$path}' is reserved. Please choose another name.");
+
+            return;
+        }
 
         $layoutsDir = __DIR__.'/../../stubs/Layouts/layouts';
         $layoutFiles = glob($layoutsDir.'/*.blade.php');
@@ -294,8 +307,21 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             return;
         }
 
-        if (! $input->getArgument('path')) {
-            $path = text('What is the name of the layout path you want to generate?', 'admin');
+        $rawPath = (string) $input->getArgument('path');
+
+        if (empty(trim($rawPath))) {
+            $path = text(
+                label: 'What is the name of the layout path you want to generate?',
+                placeholder: 'e.g. admin',
+                required: 'The layout path is required.',
+                validate: fn (string $value) => match (true) {
+                    empty(trim($value)) => 'The layout path is required.',
+                    empty(str()->slug(trim($value))) => 'The layout path must contain valid alphanumeric characters.',
+                    in_array(str()->slug(trim($value)), ['components', 'vibe']) => 'The layout path "'.str()->slug(trim($value)).'" is reserved. Please choose another name.',
+                    default => null,
+                }
+            );
+
             $input->setArgument('path', $path);
         }
     }
