@@ -296,11 +296,18 @@ export function vibeFilepond(config = {}) {
                 this.input.classList.remove('sr-only');
             }
 
+            // Sync config.name if input's name was changed externally (e.g. by dynamic-form auto-namespacing)
+            if (this.input && this.input.name && this.input.name !== config.name) {
+                config.name = this.input.name.replace(/\[\]$/, '');
+            }
+
             if (FilePond && typeof FilePond.find === 'function') {
                 const existing = FilePond.find(this.input);
                 if (existing) {
                     this.pond = existing;
                     this.updateReactiveState();
+                    const existingFallback = this.$el ? this.$el.querySelector('.filepond--fallback-dropzone') : null;
+                    if (existingFallback) existingFallback.remove();
                     return;
                 }
             }
@@ -392,6 +399,24 @@ export function vibeFilepond(config = {}) {
             this.uploadedKeys = [];
             this.updateHiddenInputs(config);
             this.updateReactiveState();
+        },
+
+        setName(newName) {
+            if (!newName) return;
+            const cleanName = newName.replace(/\[\]$/, '');
+            config.name = cleanName;
+            if (this.input) {
+                this.input.name = config.multiple ? `${cleanName}[]` : cleanName;
+            }
+            if (this.pond && typeof this.pond.setOptions === 'function') {
+                this.pond.setOptions({ name: cleanName });
+            }
+            if (this.$el) {
+                this.$el.querySelectorAll('input').forEach(inp => {
+                    const isMultiple = inp.getAttribute('name')?.endsWith('[]');
+                    inp.setAttribute('name', isMultiple ? `${cleanName}[]` : cleanName);
+                });
+            }
         },
 
         removeFiles() {
@@ -545,6 +570,7 @@ export function vibeFilepond(config = {}) {
 
         buildPondOptions(cfg, self) {
             const options = {
+                name: cfg.name || (self.input ? self.input.name : null),
                 credits: false,
                 className: cfg.className || '',
                 allowMultiple: Boolean(cfg.multiple),

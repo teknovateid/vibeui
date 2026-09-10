@@ -940,6 +940,27 @@ export function vibeDateTime(config = {}) {
             return '';
         },
 
+        set formValue(val) {
+            this.setValue(val);
+        },
+
+        setValue(val) {
+            if (!val) {
+                this.clear();
+                return;
+            }
+            this.parseInitialValue(val);
+            if (this.selectedDate) {
+                this.currentMonth = this.selectedDate.getMonth();
+                this.currentYear = this.selectedDate.getFullYear();
+            } else if (this.rangeStart) {
+                this.currentMonth = this.rangeStart.getMonth();
+                this.currentYear = this.rangeStart.getFullYear();
+            }
+            this.updateInputDisplay();
+            this.dispatchChange();
+        },
+
         dispatchChange() {
             const detail = {
                 id: this.id,

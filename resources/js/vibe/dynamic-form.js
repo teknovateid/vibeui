@@ -11,11 +11,13 @@ export function vibeDynamicForm(config = {}) {
         min: config.min !== undefined && config.min !== null ? parseInt(config.min, 10) : 1,
         max: config.max !== undefined && config.max !== null ? parseInt(config.max, 10) : null,
         variant: config.variant || 'card',
+        locale: config.locale || 'id',
+        i18n: config.i18n || {},
         allowReorder: config.allowReorder !== undefined ? Boolean(config.allowReorder) : true,
         allowDuplicate: config.allowDuplicate !== undefined ? Boolean(config.allowDuplicate) : true,
         collapsible: config.collapsible !== undefined ? Boolean(config.collapsible) : true,
         confirmDelete: Boolean(config.confirmDelete),
-        confirmDeleteMessage: config.confirmDeleteMessage || 'Hapus baris ini?',
+        confirmDeleteMessage: config.confirmDeleteMessage || (config.i18n?.delete_confirm || ((config.i18n?.delete_row || 'Hapus') + '?')),
         
         // Reactive state
         itemCount: 0,
@@ -38,12 +40,18 @@ export function vibeDynamicForm(config = {}) {
         },
 
         init() {
+            // Run initial reindex immediately so child components (like FilePond) see namespaced inputs upon mount
+            const initialRows = this.getRows();
+            this.itemCount = initialRows.length;
+            this.counter = initialRows.length;
+            this.reindex();
+
             this.$nextTick(() => {
                 const rows = this.getRows();
                 this.itemCount = rows.length;
                 this.counter = rows.length;
 
-                // Bind initial state
+                // Re-bind state after all child components are ready
                 this.reindex();
 
                 // If default count is specified and current rows < default
@@ -135,12 +143,19 @@ export function vibeDynamicForm(config = {}) {
 
             // 2. Generate unique component IDs for nested elements to prevent collisions
             const idMap = {};
-            const baseMatches = html.match(/\b(vibe-dt|select|input|textarea)-[a-zA-Z0-9_-]+/g) || [];
-            baseMatches.forEach(m => {
-                const base = m.replace(/-(trigger|description|error|info)$/, '');
-                if (!idMap[base]) {
-                    const prefix = base.split('-')[0];
-                    idMap[base] = prefix + '-' + Math.random().toString(36).substring(2, 9);
+            // Extract ONLY actual element IDs from id="..." or id='...' attributes (never CSS class names)
+            const idAttrMatches = Array.from(html.matchAll(/\bid=["']([^"']+)["']/g)).map(m => m[1]);
+            idAttrMatches.forEach(rawId => {
+                // Strip sub-element suffixes (e.g. -trigger, -container, -description, -error, -info, -value)
+                const base = rawId.replace(/-(container|trigger|description|error|info|value|dropdown|panel|options)$/, '');
+                
+                // Only process component IDs that contain hyphens and match component patterns
+                if (!idMap[base] && base.includes('-') && /^(vibe-dt|dt|filepond|select|input|textarea|checkbox|radio|switch|range)-/.test(base)) {
+                    // Guard: Never touch BEM class notations like filepond--fallback-dropzone
+                    if (!base.startsWith('filepond--')) {
+                        const prefix = base.startsWith('vibe-') ? base.split('-').slice(0, 2).join('-') : base.split('-')[0];
+                        idMap[base] = prefix + '-' + Math.random().toString(36).substring(2, 9) + '-' + uid;
+                    }
                 }
             });
             Object.keys(idMap).forEach(oldBase => {
@@ -179,6 +194,14 @@ export function vibeDynamicForm(config = {}) {
                 const alpineData = root._x_dataStack ? root._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(root) : null);
                 if (alpineData && 'hasVisibleOptions' in alpineData) {
                     alpineData.hasVisibleOptions = true;
+                }
+            });
+
+            // Clean up any FilePond fallback dropzones in the new row once FilePond initializes
+            newRow.querySelectorAll('[data-vibe-filepond]').forEach(fp => {
+                const fallback = fp.querySelector('.filepond--fallback-dropzone');
+                if (fallback && fp.querySelector('.filepond--root')) {
+                    fallback.remove();
                 }
             });
 
@@ -404,15 +427,18 @@ export function vibeDynamicForm(config = {}) {
 
             const body = row.querySelector('[data-dynamic-form-body]');
             const chevron = row.querySelector('[data-dynamic-form-chevron]');
+            const btn = row.querySelector('[data-action-collapse]');
             if (!body) return;
 
             const isCollapsed = body.classList.contains('hidden');
             if (isCollapsed) {
                 body.classList.remove('hidden');
                 if (chevron) chevron.classList.remove('-rotate-90');
+                if (btn) btn.setAttribute('title', this.i18n?.collapse || 'Tutup');
             } else {
                 body.classList.add('hidden');
                 if (chevron) chevron.classList.add('-rotate-90');
+                if (btn) btn.setAttribute('title', this.i18n?.expand || 'Buka');
             }
         },
 
@@ -453,7 +479,7 @@ export function vibeDynamicForm(config = {}) {
 
                 // If input has an ID that matches its flat name or isn't unique yet
                 const oldId = input.getAttribute('id');
-                if (oldId && uid && !oldId.includes('vibe-') && !oldId.includes('-' + uid)) {
+                if (oldId && uid && !oldId.includes('vibe-') && !oldId.includes('-' + uid) && !oldId.startsWith('filepond-') && !oldId.startsWith('select-') && !oldId.startsWith('dt-')) {
                     const newId = `${oldId}-${uid}`;
                     input.setAttribute('id', newId);
 
@@ -465,6 +491,40 @@ export function vibeDynamicForm(config = {}) {
 
                     const triggerLabel = row.querySelector(`label[for="${oldId}-trigger"]`);
                     if (triggerLabel) triggerLabel.setAttribute('for', `${newId}-trigger`);
+                }
+            });
+
+            // Synchronize any nested FilePond component instances with the updated row index
+            const fileponds = row.querySelectorAll('[data-vibe-filepond]');
+            fileponds.forEach(fp => {
+                const fpInput = fp.querySelector('input[type="file"]') || fp.querySelector('input');
+                const fpName = fpInput ? fpInput.getAttribute('name') : null;
+                if (fpName) {
+                    let newFpName = fpName;
+                    if (fpName.startsWith(this.name + '[')) {
+                        newFpName = fpName.replace(new RegExp(`^${this.name}\\[[^\\]]+\\]`), `${this.name}[${index}]`);
+                    } else if (!fpName.includes('[')) {
+                        newFpName = `${this.name}[${index}][${fpName}]`;
+                    }
+
+                    // Update all inputs inside FilePond container
+                    fp.querySelectorAll('input').forEach(inp => {
+                        const isMultiple = inp.getAttribute('name')?.endsWith('[]');
+                        inp.setAttribute('name', isMultiple ? `${newFpName}[]` : newFpName);
+                    });
+
+                    // Update Alpine FilePond instance if already mounted
+                    const alpineData = fp._x_dataStack ? fp._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(fp) : null);
+                    if (alpineData) {
+                        if (typeof alpineData.setName === 'function') {
+                            alpineData.setName(newFpName);
+                        } else {
+                            if (alpineData.config) alpineData.config.name = newFpName.replace(/\[\]$/, '');
+                            if (alpineData.pond && typeof alpineData.pond.setOptions === 'function') {
+                                alpineData.pond.setOptions({ name: newFpName.replace(/\[\]$/, '') });
+                            }
+                        }
+                    }
                 }
             });
         },
@@ -479,6 +539,11 @@ export function vibeDynamicForm(config = {}) {
                 // Extract field key name (e.g. experiences[0][company] -> company)
                 const match = name.match(/\[([^\]]+)\]$/);
                 const fieldKey = match ? match[1] : name;
+
+                if (input.type === 'file') {
+                    // Files cannot be extracted as plain string values
+                    return;
+                }
 
                 if (input.type === 'checkbox') {
                     values[fieldKey] = input.checked;
@@ -511,6 +576,19 @@ export function vibeDynamicForm(config = {}) {
                 const match = name.match(/\[([^\]]+)\]$/);
                 const fieldKey = match ? match[1] : name;
 
+                if (input.type === 'file') {
+                    // Reset file inputs on cloned/duplicated row
+                    try { input.value = ''; } catch (e) {}
+                    const fpRoot = input.closest('[data-vibe-filepond]');
+                    if (fpRoot) {
+                        const fpAlpine = fpRoot._x_dataStack ? fpRoot._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(fpRoot) : null);
+                        if (fpAlpine && typeof fpAlpine.clear === 'function') {
+                            fpAlpine.clear();
+                        }
+                    }
+                    return;
+                }
+
                 if (values[fieldKey] !== undefined) {
                     const val = values[fieldKey];
                     if (input.type === 'checkbox') {
@@ -525,11 +603,15 @@ export function vibeDynamicForm(config = {}) {
                         if (alpineRoot) {
                             const alpineData = alpineRoot._x_dataStack ? alpineRoot._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(alpineRoot) : null);
                             if (alpineData) {
-                                if ('value' in alpineData) {
-                                    alpineData.value = val;
-                                }
-                                if ('formValue' in alpineData) {
-                                    alpineData.formValue = val;
+                                if (typeof alpineData.setValue === 'function') {
+                                    alpineData.setValue(val);
+                                } else {
+                                    if ('value' in alpineData) {
+                                        try { alpineData.value = val; } catch (e) {}
+                                    }
+                                    if ('formValue' in alpineData) {
+                                        try { alpineData.formValue = val; } catch (e) {}
+                                    }
                                 }
                                 if ('hasVisibleOptions' in alpineData) {
                                     alpineData.hasVisibleOptions = true;
@@ -579,6 +661,9 @@ export function vibeDynamicForm(config = {}) {
                 const titleEl = row.querySelector('[data-dynamic-form-title]');
                 if (titleEl && titleEl.dataset.defaultTitle) {
                     titleEl.textContent = titleEl.dataset.defaultTitle.replace(':index', i + 1);
+                } else if (titleEl) {
+                    const templateTitle = this.i18n?.item_prefix || 'Item #:index';
+                    titleEl.textContent = templateTitle.replace(':index', i + 1);
                 }
 
                 // Update input names

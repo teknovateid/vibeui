@@ -65,7 +65,8 @@
 }
 
 /* Once FilePond JS mounts, immediately hide the fallback */
-[data-vibe-filepond]:has(.filepond--root) .filepond--fallback-dropzone {
+[data-vibe-filepond]:has(.filepond--root) .filepond--fallback-dropzone,
+[data-vibe-filepond] .filepond--root ~ .filepond--fallback-dropzone {
     display: none !important;
 }
 
