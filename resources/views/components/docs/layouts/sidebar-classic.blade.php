@@ -11,10 +11,7 @@
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet id="sidebar-menu" position="left" layout="relative" class="bg-sidebar text-sidebar-foreground border-r border-sidebar-border absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
-                <div class="flex items-center gap-2 minified:hidden truncate transition-opacity duration-300">
-                    <h1 class="text-2xl font-bold truncate">{{ config('app.name') }}</h1>
-                    <span class="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-primary/10 text-primary shrink-0">v{{ \Teknovate\VibeUi\Vibe::version() }}</span>
-                </div>
+                <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
                     {{ substr(config('app.name'), 0, 1) }}
                 </div>
@@ -172,6 +169,11 @@
                         </div>
                     </vibe:dropdown.content>
                 </vibe:dropdown>
+
+                <div class="pt-2.5 px-3 minified:px-0 flex items-center justify-between minified:justify-center text-[11px] text-muted-foreground border-t border-sidebar-border/40 mt-2">
+                    <span class="font-medium text-xs text-muted-foreground/80 minified:hidden">Vibe UI</span>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-sidebar-accent/60 text-muted-foreground font-semibold border border-sidebar-border/50">v{{ \Teknovate\VibeUi\Vibe::version() }}</span>
+                </div>
             </vibe:sheet.footer>
 
         </vibe:sheet>
