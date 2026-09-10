@@ -197,21 +197,34 @@ export function vibeDynamicForm(config = {}) {
                 }
             });
 
-            // Clean up any FilePond fallback dropzones in the new row once FilePond initializes
-            newRow.querySelectorAll('[data-vibe-filepond]').forEach(fp => {
-                const fallback = fp.querySelector('.filepond--fallback-dropzone');
-                if (fallback && fp.querySelector('.filepond--root')) {
-                    fallback.remove();
+            // Update state and reindex immediately (also updates input names via autoNamespaceInputs)
+            this.reindex();
+
+            // 5. Defer FilePond cleanup & value population to next frame so Alpine/FilePond finish mounting.
+            // This fixes the race condition where FilePond initializes before autoNamespaceInputs runs.
+            requestAnimationFrame(() => {
+                // Re-sync FilePond input names after Alpine has fully initialized the components
+                newRow.querySelectorAll('[data-vibe-filepond]').forEach(fp => {
+                    const fallback = fp.querySelector('.filepond--fallback-dropzone');
+                    if (fallback && fp.querySelector('.filepond--root')) {
+                        fallback.remove();
+                    }
+                    // Push updated name to already-mounted FilePond Alpine instance
+                    const fpInput = fp.querySelector('input[type="file"]') || fp.querySelector('input');
+                    const fpName = fpInput ? fpInput.getAttribute('name') : null;
+                    if (fpName) {
+                        const fpAlpine = fp._x_dataStack ? fp._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(fp) : null);
+                        if (fpAlpine && typeof fpAlpine.setName === 'function') {
+                            try { fpAlpine.setName(fpName.replace(/\[\]$/, '')); } catch (e) {}
+                        }
+                    }
+                });
+
+                // Populate duplicate/initial values after all components are mounted
+                if (values && typeof values === 'object') {
+                    this.populateRowValues(newRow, values);
                 }
             });
-
-            // 5. If initial/duplicate values provided, populate inputs AFTER Alpine initialized
-            if (values && typeof values === 'object') {
-                this.populateRowValues(newRow, values);
-            }
-
-            // Update state and reindex
-            this.reindex();
 
             // Smooth scroll into view if added
             if (newRow.scrollIntoView && newIndex > 0) {
@@ -603,15 +616,14 @@ export function vibeDynamicForm(config = {}) {
                         if (alpineRoot) {
                             const alpineData = alpineRoot._x_dataStack ? alpineRoot._x_dataStack[0] : (window.Alpine?.$data ? window.Alpine.$data(alpineRoot) : null);
                             if (alpineData) {
+                                // BUG-FIX: Use setValue() preferentially — it is safe for computed-property
+                                // components like vibeDateTime where direct `formValue =` assignment
+                                // triggers Alpine proxy trap errors:
+                                // "set on proxy: trap returned falsish for property 'formValue'"
                                 if (typeof alpineData.setValue === 'function') {
-                                    alpineData.setValue(val);
-                                } else {
-                                    if ('value' in alpineData) {
-                                        try { alpineData.value = val; } catch (e) {}
-                                    }
-                                    if ('formValue' in alpineData) {
-                                        try { alpineData.formValue = val; } catch (e) {}
-                                    }
+                                    try { alpineData.setValue(val); } catch (e) {}
+                                } else if ('value' in alpineData) {
+                                    try { alpineData.value = val; } catch (e) {}
                                 }
                                 if ('hasVisibleOptions' in alpineData) {
                                     alpineData.hasVisibleOptions = true;

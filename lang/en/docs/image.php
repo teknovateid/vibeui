@@ -76,10 +76,10 @@ return [
         'alt' => 'Alternative text for screen reader accessibility and SEO fallback.',
         'aspect' => 'Image aspect ratio: `"square"` (1:1), `"video"` (16:9), `"4/3"`, `"3/2"`, `"21/9"`, or other custom ratios. Can also be set via utility classes like `class="aspect-square"`.',
         'lazy' => 'Enables native browser lazy loading (`loading="lazy"` and `fetchpriority="low"`).',
-        'priority' => 'If `true`, disables lazy loading, sets `fetchpriority="high"`, and injects `<link rel="preload">` into `<head>`.',
+        'priority' => 'If `true`, disables lazy loading, sets `fetchpriority="high"`, and injects `&lt;link rel="preload"&gt;` into `&lt;head&gt;`.',
         'fallback' => 'Fallback image URL if primary image fails to load (404 or connection drop).',
         'skeleton' => 'Displays shimmer pulse placeholder animation while image downloads to avoid Cumulative Layout Shift (CLS).',
-        'caption' => 'Caption text rendered inside semantic `<figcaption>` element.',
-        'imgClass' => 'Tailwind classes applied directly to the internal `<img>` element.',
+        'caption' => 'Caption text rendered inside semantic `&lt;figcaption&gt;` element.',
+        'imgClass' => 'Tailwind classes applied directly to the internal `&lt;img&gt;` element.',
     ],
 ];

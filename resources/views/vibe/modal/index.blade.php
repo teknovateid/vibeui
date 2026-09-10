@@ -65,11 +65,13 @@
         }
 
         if (this.open) {
+            window._vibeOpenModalCount = (window._vibeOpenModalCount || 0) + 1;
             document.body.classList.add('overflow-hidden');
         }
 
         this.$watch('open', value => {
             if (value) {
+                window._vibeOpenModalCount = (window._vibeOpenModalCount || 0) + 1;
                 document.body.classList.add('overflow-hidden');
                 if (this.persist && this.modalId) {
                     if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
@@ -84,7 +86,12 @@
                     if (input) input.focus();
                 }, 100);
             } else {
-                document.body.classList.remove('overflow-hidden');
+                // BUG-FIX: Decrement counter before removing class — prevents removing
+                // overflow-hidden while another modal is still open (multi-modal scenario)
+                window._vibeOpenModalCount = Math.max(0, (window._vibeOpenModalCount || 1) - 1);
+                if (window._vibeOpenModalCount <= 0) {
+                    document.body.classList.remove('overflow-hidden');
+                }
                 if (this.persist && this.modalId) {
                     if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
                         Alpine.store('vibeModals').setOpen(this.modalId, false);
@@ -97,14 +104,20 @@
 
         if (typeof this.$cleanup === 'function') {
             this.$cleanup(() => {
-                document.body.classList.remove('overflow-hidden');
+                // Only decrement & cleanup if this modal was open when destroyed
+                if (this.open) {
+                    window._vibeOpenModalCount = Math.max(0, (window._vibeOpenModalCount || 1) - 1);
+                    if (window._vibeOpenModalCount <= 0) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                }
             });
         }
     },
 
     close() {
         this.open = false;
-        document.body.classList.remove('overflow-hidden');
+        // overflow-hidden is managed by the $watch handler via _vibeOpenModalCount counter
         if (this.persist && this.modalId) {
             if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
                 Alpine.store('vibeModals').dismiss(this.modalId);

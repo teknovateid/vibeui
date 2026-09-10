@@ -79,7 +79,7 @@
 
     // Thumb colors
     $thumbColors = match ($variant) {
-        'success', 'danger', 'destructive', 'info' => 'bg-white dark:bg-white shadow-xs',
+        'success', 'danger', 'destructive', 'info' => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-primary-foreground shadow-xs',
         'warning' => 'bg-white dark:bg-vibe-100 dark:peer-checked:bg-vibe-950 shadow-xs',
         'secondary' => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-vibe-950 shadow-xs',
         default => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-primary-foreground shadow-xs',
@@ -96,11 +96,14 @@
         <div class="relative inline-flex items-center shrink-0 {{ !$isJustify && !$isLeft ? 'mt-0.5' : '' }}">
             <input
                 type="checkbox"
+                role="switch"
                 id="{{ $id }}"
                 @if($name) name="{{ $name }}" @endif
                 value="{{ $value }}"
                 @checked($checked)
                 @disabled($isDisabled)
+                x-init="$el.setAttribute('aria-checked', $el.checked ? 'true' : 'false')"
+                @change="$el.setAttribute('aria-checked', $el.checked ? 'true' : 'false')"
                 {{ $attributes->merge(['class' => 'peer sr-only']) }}
             />
             

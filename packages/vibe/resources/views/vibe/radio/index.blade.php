@@ -73,7 +73,7 @@
     $isCard = $variant === 'card';
 @endphp
 
-<div class="{{ $wrapperClass }}">
+<div @if($wrapperClass) class="{{ $wrapperClass }}" @endif>
     @if ($isCard)
         {{-- Card Variant --}}
         <label for="{{ $id }}" class="relative flex items-start gap-3 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none {{ $hasError ? 'border-destructive/60 bg-destructive/5' : 'border-border bg-card hover:bg-muted/40 hover:border-border/80' }} has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-focus-visible:ring-2 has-focus-visible:ring-ring/20 has-disabled:opacity-50 has-disabled:pointer-events-none shadow-2xs">

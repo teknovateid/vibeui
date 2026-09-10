@@ -35,14 +35,21 @@ export function vibeForm(config = {}) {
             if (saveToStorage && formId) {
                 this.restoreFromStorage();
 
-                // Re-restore data when a sheet or modal opens, 
-                // to override Livewire's $this->reset() if the form is inside them
-                window.addEventListener('open-sheet', () => {
-                    setTimeout(() => this.restoreFromStorage(), 100);
-                });
-                window.addEventListener('open-modal', () => {
-                    setTimeout(() => this.restoreFromStorage(), 100);
-                });
+                // Re-restore data when a sheet or modal opens,
+                // to override Livewire's $this->reset() if the form is inside them.
+                // BUG-FIX: Store handlers as named references so they can be properly
+                // removed on destroy — prevents memory leak on SPA/Livewire navigation.
+                this._sheetHandler = () => setTimeout(() => this.restoreFromStorage(), 100);
+                this._modalHandler = () => setTimeout(() => this.restoreFromStorage(), 100);
+                window.addEventListener('open-sheet', this._sheetHandler);
+                window.addEventListener('open-modal', this._modalHandler);
+
+                if (typeof this.$cleanup === 'function') {
+                    this.$cleanup(() => {
+                        window.removeEventListener('open-sheet', this._sheetHandler);
+                        window.removeEventListener('open-modal', this._modalHandler);
+                    });
+                }
             }
         },
 
