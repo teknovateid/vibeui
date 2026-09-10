@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.5] - 2026-09-10
+
+### 🚀 Features
+- feat: add skip-npm option to install command, enhance dependency management, and implement dynamic Vite asset registration with feature tests. (9d83fc0)
+
+
 ## [0.1.4] - 2026-09-10
 
 ### 🚀 Features
