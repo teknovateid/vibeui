@@ -2,6 +2,19 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.2] - 2026-09-10
+
+### 🐛 Bug Fixes
+- fix(release): automate subtree split of packages/vibe on git tags for clean composer distribution (583bbc7)
+
+### ⚡ Performance & Refactoring
+- refactor: replace tailwind-merge-laravel with tailwind-merge-php and implement custom Blade integration and attribute bag macros (328df9e)
+
+### 🧰 Maintenance & Documentation
+- chore: update project configuration and upgrade dependencies to Laravel 13.x (4ec640b)
+- chore(release): v0.1.1 (66b1585)
+
+
 ## [0.1.1] - 2026-09-10
 
 ### ⚡ Performance & Refactoring
