@@ -112,12 +112,9 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                
-                
                 'resources/css/vibe/highlightjs.css',
                 'resources/css/vibe/chart.css',
                 'resources/css/vibe/filepond.css',
-                
                 'resources/js/vibe/chart.js',
                 'resources/js/vibe/date-time.js',
                 'resources/js/vibe/dynamic-form.js',

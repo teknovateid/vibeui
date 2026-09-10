@@ -3,6 +3,7 @@
 namespace Teknovate\VibeUi\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
@@ -12,7 +13,8 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'vibe:install';
+    protected $signature = 'vibe:install
+        {--skip-npm : Skip running npm install}';
 
     /**
      * The console command description.
@@ -65,44 +67,25 @@ class InstallCommand extends Command
             }
         });
 
-        // 5. Inject entry points to vite.config.js
+        // 6. Inject entry points to vite.config.js
         $this->components->task('Registering Vite entry points', function () {
             $this->registerViteAssets();
         });
 
-        // 6. Inject dependencies to package.json
+        // 7. Inject dependencies to package.json
         $this->components->task('Updating NPM dependencies', function () {
-            $packageJsonPath = base_path('package.json');
-            if (file_exists($packageJsonPath)) {
-                $packageJson = json_decode(file_get_contents($packageJsonPath), true);
-
-                if (! isset($packageJson['dependencies']['@alpinejs/persist'])) {
-                    // Ambil versi dari package.json milik Vibe UI secara dinamis
-                    $vibePackagePath = __DIR__.'/../../package.json';
-                    $alpineVersion = '^3.15.12'; // Fallback
-
-                    if (file_exists($vibePackagePath)) {
-                        $vibePackage = json_decode(file_get_contents($vibePackagePath), true);
-                        $alpineVersion = $vibePackage['dependencies']['@alpinejs/persist'] ?? $alpineVersion;
-                    }
-
-                    $packageJson['dependencies']['@alpinejs/persist'] = $alpineVersion;
-
-                    file_put_contents(
-                        $packageJsonPath,
-                        json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
-                    );
-                }
-            }
+            $this->updateNpmDependencies();
         });
 
-        // 7. Run NPM Install
-        $this->components->info('Running npm install...');
-        $process = new Process(['npm', 'install'], base_path());
-        $process->setTimeout(null);
-        $process->run(function ($type, $buffer) {
-            $this->output->write($buffer);
-        });
+        // 8. Run NPM Install
+        if (! $this->option('skip-npm')) {
+            $this->components->info('Running npm install...');
+            $process = new Process(['npm', 'install'], base_path());
+            $process->setTimeout(null);
+            $process->run(function ($type, $buffer) {
+                $this->output->write($buffer);
+            });
+        }
 
         $this->newLine();
         $this->components->info('Vibe UI has been successfully installed!');
@@ -111,32 +94,148 @@ class InstallCommand extends Command
     }
 
     /**
-     * Register Vibe UI on-demand assets in vite.config.js
+     * Update consumer package.json with dependencies from Vibe UI package.json
      */
-    protected function registerViteAssets(): void
+    public function updateNpmDependencies(?string $packageJsonPath = null, ?string $vibePackagePath = null): bool
     {
-        $vitePath = null;
-        foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
-            if (file_exists(base_path($file))) {
-                $vitePath = base_path($file);
-                break;
+        $packageJsonPath = $packageJsonPath ?: base_path('package.json');
+        if (! file_exists($packageJsonPath)) {
+            return false;
+        }
+
+        $packageJson = json_decode(file_get_contents($packageJsonPath), true) ?: [];
+
+        $vibePackagePath = $vibePackagePath ?: __DIR__.'/../../package.json';
+        $vibeDependencies = [];
+
+        if (file_exists($vibePackagePath)) {
+            $vibePackage = json_decode(file_get_contents($vibePackagePath), true) ?: [];
+            $vibeDependencies = $vibePackage['dependencies'] ?? [];
+        }
+
+        if (empty($vibeDependencies)) {
+            $vibeDependencies = [
+                '@alpinejs/persist' => '^3.15.12',
+                'chart.js' => '^4.5.1',
+                'chartjs-plugin-zoom' => '^2.2.0',
+                'filepond' => '^4.32.12',
+                'filepond-plugin-file-encode' => '^2.1.14',
+                'filepond-plugin-file-validate-size' => '^2.2.8',
+                'filepond-plugin-file-validate-type' => '^1.2.9',
+                'filepond-plugin-image-crop' => '^2.0.6',
+                'filepond-plugin-image-preview' => '^4.6.12',
+                'filepond-plugin-image-resize' => '^2.0.10',
+                'filepond-plugin-image-transform' => '^3.8.8',
+                'highlight.js' => '^11.12.0',
+            ];
+        }
+
+        if (! isset($packageJson['dependencies'])) {
+            $packageJson['dependencies'] = [];
+        }
+
+        $hasChanges = false;
+        foreach ($vibeDependencies as $name => $version) {
+            if (! isset($packageJson['dependencies'][$name])) {
+                $packageJson['dependencies'][$name] = $version;
+                $hasChanges = true;
             }
         }
 
-        if (! $vitePath) {
-            return;
+        if ($hasChanges) {
+            file_put_contents(
+                $packageJsonPath,
+                json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+            );
         }
 
-        $vibeAssets = [
-            'resources/css/vibe/highlightjs.css',
+        return $hasChanges;
+    }
+
+    /**
+     * Get list of Vibe UI on-demand assets dynamically scanned from component views,
+     * with fallback to known assets.
+     *
+     * @return array<string>
+     */
+    public function getVibeAssets(): array
+    {
+        $viewsDir = __DIR__.'/../../resources/views/vibe';
+        if (! is_dir($viewsDir)) {
+            $viewsDir = resource_path('views/vibe');
+        }
+
+        $assets = [];
+
+        if (is_dir($viewsDir)) {
+            $files = File::allFiles($viewsDir);
+            foreach ($files as $file) {
+                if (str_ends_with($file->getFilename(), '.blade.php')) {
+                    $content = $file->getContents();
+
+                    // Matches array syntax: @vite(['...', '...'])
+                    if (preg_match_all("/@vite\(\s*\[([^\]]+)\]\s*\)/", $content, $matches)) {
+                        foreach ($matches[1] as $group) {
+                            if (preg_match_all("/['\"]([^'\"]+)['\"]/", $group, $assetMatches)) {
+                                foreach ($assetMatches[1] as $asset) {
+                                    $assets[] = trim($asset);
+                                }
+                            }
+                        }
+                    }
+
+                    // Matches single string syntax: @vite('...')
+                    if (preg_match_all("/@vite\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $singleMatches)) {
+                        foreach ($singleMatches[1] as $asset) {
+                            $assets[] = trim($asset);
+                        }
+                    }
+                }
+            }
+        }
+
+        $assets = array_values(array_unique(array_filter($assets)));
+        sort($assets);
+
+        if (! empty($assets)) {
+            return $assets;
+        }
+
+        return [
             'resources/css/vibe/chart.css',
+            'resources/css/vibe/filepond.css',
+            'resources/css/vibe/highlightjs.css',
             'resources/js/vibe/chart.js',
             'resources/js/vibe/date-time.js',
+            'resources/js/vibe/dynamic-form.js',
+            'resources/js/vibe/filepond.js',
             'resources/js/vibe/form.js',
             'resources/js/vibe/grid.js',
             'resources/js/vibe/highlightjs.js',
             'resources/js/vibe/table.js',
         ];
+    }
+
+    /**
+     * Register Vibe UI on-demand assets in vite.config.js
+     */
+    public function registerViteAssets(?string $customVitePath = null): void
+    {
+        $vitePath = $customVitePath;
+        if (! $vitePath) {
+            foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
+                if (file_exists(base_path($file))) {
+                    $vitePath = base_path($file);
+                    break;
+                }
+            }
+        }
+
+        if (! $vitePath || ! file_exists($vitePath)) {
+            return;
+        }
+
+        $vibeAssets = $this->getVibeAssets();
 
         $content = file_get_contents($vitePath);
         $assetsToInject = [];
