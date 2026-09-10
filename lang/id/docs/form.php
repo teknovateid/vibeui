@@ -110,4 +110,42 @@ return [
             'desc' => 'Mekanisme Kerja',
         ],
     ],
+
+    'ajax_alert' => [
+        'success_title' => 'Pengujian Form (AJAX / Fetch) Berhasil Diposting ke FormController!',
+        'time_prefix' => 'Waktu:',
+        'fields_suffix' => 'fields diterima via JSON (tanpa refresh)',
+        'view_payload_btn' => 'Lihat Payload JSON',
+    ],
+
+    'props_items' => [
+        'id' => 'ID unik formulir. Wajib diisi jika `saveToStorage` diaktifkan sebagai kunci pembeda draf di storage.',
+        'saveToStorage' => 'Jika `true`, secara otomatis menyimpan draf isian formulir ke browser storage setiap ada ketikan.',
+        'storageType' => "Jenis penyimpanan browser: `'session'` (sessionStorage, aman & terhapus saat tab ditutup) atau `'local'` (localStorage, permanen).",
+        'expireHours' => 'Masa berlaku draf dalam hitungan jam sebelum otomatis dibersihkan saat kedaluwarsa.',
+    ],
+
+    'storage_comparison' => [
+        'title' => 'Perbandingan sessionStorage vs localStorage',
+        'columns' => [
+            'mechanism' => 'Mekanisme',
+            'location' => 'Lokasi',
+            'lifetime' => 'Masa Hidup Data',
+            'best_for' => 'Kasus Penggunaan Terbaik',
+        ],
+        'session_location' => 'Browser (sessionStorage)',
+        'session_lifetime' => 'Selama tab aktif (terhapus saat tab ditutup)',
+        'session_best_for' => 'Formulir checkout, transaksi pembayaran, form multi-langkah (wizard), data sensitif.',
+        'local_location' => 'Browser (localStorage)',
+        'local_lifetime' => 'Tetap ada meski browser ditutup (hingga expireHours)',
+        'local_best_for' => 'Draf artikel panjang, formulir profil besar, draf dokumen kerja berulang.',
+        'local_warning' => '⚠️ Hindari menyimpan kata sandi, token, atau data keuangan.',
+    ],
+
+    'features_items' => [
+        'debounce' => 'Mendeteksi ketikan dan perubahan input dengan jeda 500 milidetik sebelum menulis ke storage agar tidak membebani performa browser.',
+        'clear' => 'Menghapus draf form dari storage secara otomatis ketika form berhasil dikirimkan.',
+        'modal_sheet' => 'Memulihkan draf form secara otomatis saat modal atau slide-out drawer dibuka.',
+        'sanitize' => 'Secara otomatis menyaring dan mengabaikan file biner, token CSRF (<code class="font-mono text-xs text-foreground">_token</code>), dan state internal Livewire.',
+    ],
 ];

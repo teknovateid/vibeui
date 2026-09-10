@@ -302,8 +302,8 @@
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:input :label="__('docs/input.livewire.label').
                         ' (wire:model.live)'" :placeholder="__('docs/input.livewire.placeholder')" />
-                        <vibe:input type="email" label="Email (wire:model)" placeholder="name@email.com" info="Used for login." />
-                        <vibe:button variant="primary" class="w-full">Save Changes</vibe:button>
+                        <vibe:input type="email" :label="__('docs/input.livewire_demo.email_label') . ' (wire:model)'" placeholder="name@email.com" :info="__('docs/input.livewire_demo.email_info')" />
+                        <vibe:button variant="primary" class="w-full">{{ __('docs/input.livewire_demo.save_btn') }}</vibe:button>
                     </div>
                 </vibe:preview>
             </section>
@@ -326,7 +326,22 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [['label', 'string', 'null', 'Label text above the input.'], ['id', 'string', 'auto', 'HTML input id attribute. Default: name or uniqid().'], ['name', 'string', 'null', 'HTML name attribute. Automatically extracted from wire:model if omitted.'], ['type', 'string', "'text'", 'HTML input type: text, email, password, number, url, tel, etc.'], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Input height and text size.'], ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", 'Visual style variant.'], ['description', 'string', 'null', 'Small helper text below the label, before the input.'], ['info', 'string', 'null', 'Helper note below the input. Hidden when error exists.'], ['error', 'string|bool', 'null', 'Custom error message or boolean to trigger error state.'], ['errorName', 'string', 'null', 'Laravel validation error key if different from name (e.g. user.phone).'], ['prefix', 'string', 'null', 'Text on the left side of the input (e.g. "https://", "$").'], ['suffix', 'string', 'null', 'Text on the right side of the input (e.g. ".com", "/month").'], ['class', 'string', 'null', 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).'], ['wrapperClass', 'string', 'null', 'Extra class for the outer wrapper div.']];
+                            $props = [
+                                ['label', 'string', 'null', __('docs/input.props_items.label')],
+                                ['id', 'string', 'auto', __('docs/input.props_items.id')],
+                                ['name', 'string', 'null', __('docs/input.props_items.name')],
+                                ['type', 'string', "'text'", __('docs/input.props_items.type')],
+                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/input.props_items.size')],
+                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/input.props_items.variant')],
+                                ['description', 'string', 'null', __('docs/input.props_items.description')],
+                                ['info', 'string', 'null', __('docs/input.props_items.info')],
+                                ['error', 'string|bool', 'null', __('docs/input.props_items.error')],
+                                ['errorName', 'string', 'null', __('docs/input.props_items.errorName')],
+                                ['prefix', 'string', 'null', __('docs/input.props_items.prefix')],
+                                ['suffix', 'string', 'null', __('docs/input.props_items.suffix')],
+                                ['class', 'string', 'null', __('docs/input.props_items.class')],
+                                ['wrapperClass', 'string', 'null', __('docs/input.props_items.wrapperClass')],
+                            ];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -349,11 +364,11 @@
                     <vibe:table.rows>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground">icon</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">SVG icon on the left side (leading icon). Use <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.icon') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground">trailingIcon</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">SVG icon on the right side (trailing icon). Use <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.trailingIcon') !!}</vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>
@@ -363,35 +378,35 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
-                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.test.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">{{ __('docs/input.test.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai berbagai variasi input langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat form dikirimkan, modal akan otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> yang diterima oleh backend.
+                        {!! __('docs/input.test.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/input.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Formulir Profil & Data Akun</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai berbagai variasi input langsung ke backend controller.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/input.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/input.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-4">
-                                    <vibe:input name="username" label="Nama Pengguna" placeholder="johndoe" value="johndoe" required />
-                                    <vibe:input type="email" name="email" label="Alamat Email" placeholder="john@example.com" value="john@example.com" required />
-                                    <vibe:input type="password" name="password" label="Kata Sandi" value="secret123" />
-                                    <vibe:input name="phone" label="Nomor Telepon" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
-                                    <vibe:input name="budget" label="Estimasi Anggaran" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
+                                    <vibe:input name="username" :label="__('docs/input.test.username_label')" placeholder="johndoe" value="johndoe" required />
+                                    <vibe:input type="email" name="email" :label="__('docs/input.test.email_label')" placeholder="john@example.com" value="john@example.com" required />
+                                    <vibe:input type="password" name="password" :label="__('docs/input.test.password_label')" value="secret123" />
+                                    <vibe:input name="phone" :label="__('docs/input.test.phone_label')" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
+                                    <vibe:input name="budget" :label="__('docs/input.test.budget_label')" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/input.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -402,21 +417,21 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Formulir Profil & Data Akun</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai berbagai variasi input langsung ke backend controller.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/input.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/input.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-4">
-                                <vibe:input name="username" label="Nama Pengguna" placeholder="johndoe" value="johndoe" required />
-                                <vibe:input type="email" name="email" label="Alamat Email" placeholder="john@example.com" value="john@example.com" required />
-                                <vibe:input type="password" name="password" label="Kata Sandi" value="secret123" />
-                                <vibe:input name="phone" label="Nomor Telepon" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
-                                <vibe:input name="budget" label="Estimasi Anggaran" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
+                                <vibe:input name="username" :label="__('docs/input.test.username_label')" placeholder="johndoe" value="johndoe" required />
+                                <vibe:input type="email" name="email" :label="__('docs/input.test.email_label')" placeholder="john@example.com" value="john@example.com" required />
+                                <vibe:input type="password" name="password" :label="__('docs/input.test.password_label')" value="secret123" />
+                                <vibe:input name="phone" :label="__('docs/input.test.phone_label')" prefix="+62" placeholder="812-3456-7890" value="812-9876-5432" />
+                                <vibe:input name="budget" :label="__('docs/input.test.budget_label')" prefix="Rp" suffix=",00" placeholder="10.000.000" value="25.000.000" />
                             </vibe:card.content>
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/input.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

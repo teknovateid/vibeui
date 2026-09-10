@@ -191,43 +191,43 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
-                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/radio.test.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">{{ __('docs/radio.test.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai komponen radio dan radio group (default & card style) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                        {!! __('docs/radio.test.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/radio.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Langganan & Pembayaran</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai radio standar dan radio group card ke backend controller.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/radio.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/radio.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-6">
                                     {{-- Radio Group Standar --}}
-                                    <vibe:radio.group name="membership_tier" label="Tingkat Keanggotaan" description="Pilih level akses akun yang sesuai kebutuhan">
-                                        <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
-                                        <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
-                                        <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
+                                    <vibe:radio.group name="membership_tier" :label="__('docs/radio.test.tier_group_label')" :description="__('docs/radio.test.tier_group_desc')">
+                                        <vibe:radio name="membership_tier" value="starter" :label="__('docs/radio.test.tier_starter')" />
+                                        <vibe:radio name="membership_tier" value="professional" :label="__('docs/radio.test.tier_pro')" checked />
+                                        <vibe:radio name="membership_tier" value="enterprise" :label="__('docs/radio.test.tier_enterprise')" />
                                     </vibe:radio.group>
 
                                     {{-- Radio Group Card Variant --}}
-                                    <vibe:radio.group name="payment_gateway" label="Metode Pembayaran Utama" description="Pilih gerbang pembayaran favorit" variant="card">
-                                        <vibe:radio variant="card" name="payment_gateway" value="credit_card" label="Kartu Kredit / Debit" description="Visa, Mastercard, JCB instant" checked />
-                                        <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" label="Virtual Account Bank" description="BCA, Mandiri, BNI, BRI otomatis" />
-                                        <vibe:radio variant="card" name="payment_gateway" value="qris" label="QRIS & E-Wallet" description="GoPay, OVO, ShopeePay, Dana" />
+                                    <vibe:radio.group name="payment_gateway" :label="__('docs/radio.test.payment_group_label')" :description="__('docs/radio.test.payment_group_desc')" variant="card">
+                                        <vibe:radio variant="card" name="payment_gateway" value="credit_card" :label="__('docs/radio.test.pay_cc_label')" :description="__('docs/radio.test.pay_cc_desc')" checked />
+                                        <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" :label="__('docs/radio.test.pay_va_label')" :description="__('docs/radio.test.pay_va_desc')" />
+                                        <vibe:radio variant="card" name="payment_gateway" value="qris" :label="__('docs/radio.test.pay_qris_label')" :description="__('docs/radio.test.pay_qris_desc')" />
                                     </vibe:radio.group>
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/radio.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -238,27 +238,27 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Langganan & Pembayaran</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai radio standar dan radio group card ke backend controller.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/radio.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/radio.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-6">
-                                <vibe:radio.group name="membership_tier" label="Tingkat Keanggotaan" description="Pilih level akses akun yang sesuai kebutuhan">
-                                    <vibe:radio name="membership_tier" value="starter" label="Starter Plan (Gratis)" />
-                                    <vibe:radio name="membership_tier" value="professional" label="Professional ($29/bln)" checked />
-                                    <vibe:radio name="membership_tier" value="enterprise" label="Enterprise Custom" />
+                                <vibe:radio.group name="membership_tier" :label="__('docs/radio.test.tier_group_label')" :description="__('docs/radio.test.tier_group_desc')">
+                                    <vibe:radio name="membership_tier" value="starter" :label="__('docs/radio.test.tier_starter')" />
+                                    <vibe:radio name="membership_tier" value="professional" :label="__('docs/radio.test.tier_pro')" checked />
+                                    <vibe:radio name="membership_tier" value="enterprise" :label="__('docs/radio.test.tier_enterprise')" />
                                 </vibe:radio.group>
 
-                                <vibe:radio.group name="payment_gateway" label="Metode Pembayaran Utama" description="Pilih gerbang pembayaran favorit" variant="card">
-                                    <vibe:radio variant="card" name="payment_gateway" value="credit_card" label="Kartu Kredit / Debit" description="Visa, Mastercard, JCB instant" checked />
-                                    <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" label="Virtual Account Bank" description="BCA, Mandiri, BNI, BRI otomatis" />
-                                    <vibe:radio variant="card" name="payment_gateway" value="qris" label="QRIS & E-Wallet" description="GoPay, OVO, ShopeePay, Dana" />
+                                <vibe:radio.group name="payment_gateway" :label="__('docs/radio.test.payment_group_label')" :description="__('docs/radio.test.payment_group_desc')" variant="card">
+                                    <vibe:radio variant="card" name="payment_gateway" value="credit_card" :label="__('docs/radio.test.pay_cc_label')" :description="__('docs/radio.test.pay_cc_desc')" checked />
+                                    <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" :label="__('docs/radio.test.pay_va_label')" :description="__('docs/radio.test.pay_va_desc')" />
+                                    <vibe:radio variant="card" name="payment_gateway" value="qris" :label="__('docs/radio.test.pay_qris_label')" :description="__('docs/radio.test.pay_qris_desc')" />
                                 </vibe:radio.group>
                             </vibe:card.content>
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/radio.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

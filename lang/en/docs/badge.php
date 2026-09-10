@@ -99,4 +99,23 @@ return [
             'desc' => 'Description',
         ],
     ],
+
+    'props_items' => [
+        'variant' => 'Color scheme and visual variant of the badge.',
+        'size' => 'Height, horizontal padding, and typography sizing.',
+        'icon' => 'Leading visual icon placed on the left side.',
+        'trailingIcon' => 'Trailing visual icon placed on the right side.',
+        'prefix' => 'Prefix text before main content slot (e.g. currency symbol).',
+        'suffix' => 'Suffix text after main content slot.',
+        'dot' => 'Display status indicator dot on the left side.',
+        'dotPulse' => 'Add radar ping animation effect to the status dot.',
+        'dismissible' => 'Display interactive dismiss button on the right edge.',
+        'href' => 'When provided, automatically renders badge as an `<a wire:navigate>` hyperlink.',
+        'class' => 'Additional Tailwind classes via `twMerge` (e.g. `rounded-full` for pill style).',
+    ],
+    'slots_items' => [
+        'default' => 'Main text or child element content inside the badge.',
+        'icon' => 'Custom slot for leading SVG icon on the left.',
+        'trailingIcon' => 'Custom slot for trailing SVG icon on the right.',
+    ],
 ];

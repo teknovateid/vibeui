@@ -334,16 +334,16 @@ return Application::configure(basePath: dirname(__DIR__))
                     <vibe:table.rows>
                         @php
                             $hlProps = [
-                                ['code', 'string|null', 'null', 'String kode yang ingin disorot. Jika tidak diisi, komponen akan menggunakan isi `$slot`.'],
-                                ['language / lang', 'string|null', 'null', 'Bahasa pemrograman (e.g. `php`, `javascript`, `blade`, `bash`, `html`, `css`, `json`, `sql`).'],
-                                ['title / filename', 'string|null', 'null', 'Judul atau nama file yang ditampilkan di bilah header atas.'],
-                                ['copyable', 'bool', 'true', 'Menampilkan tombol interaktif salin kode ke clipboard dengan umpan balik visual.'],
-                                ['lineNumbers / lines', 'bool', 'false', 'Menampilkan penomoran baris unselectable di sisi kiri blok kode.'],
-                                ['badge', 'bool|string', 'true', 'Menampilkan badge bahasa di header. Dapat diisi string kustom untuk teks label badge khusus.'],
-                                ['header', 'bool|null', 'null', 'Menampilkan bilah header atas. Jika `false`, tombol salin akan tampil melayang di pojok kanan.'],
-                                ['maxHeight', 'int|string|null', 'null', 'Batasan tinggi vertikal maksimal (misal `220` atau `"300px"`).'],
-                                ['wrap', 'bool', 'false', 'Jika `true`, menerapkan word-wrap pada baris kode panjang alih-alih scroll horizontal.'],
-                                ['theme', 'string', "'vibe'", 'Skema tema warna Highlight.js (default: `vibe`).'],
+                                ['code', 'string|null', 'null', __('docs/highlightjs.props_items.code')],
+                                ['language / lang', 'string|null', 'null', __('docs/highlightjs.props_items.language')],
+                                ['title / filename', 'string|null', 'null', __('docs/highlightjs.props_items.title')],
+                                ['copyable', 'bool', 'true', __('docs/highlightjs.props_items.copyable')],
+                                ['lineNumbers / lines', 'bool', 'false', __('docs/highlightjs.props_items.lineNumbers')],
+                                ['badge', 'bool|string', 'true', __('docs/highlightjs.props_items.badge')],
+                                ['header', 'bool|null', 'null', __('docs/highlightjs.props_items.header')],
+                                ['maxHeight', 'int|string|null', 'null', __('docs/highlightjs.props_items.maxHeight')],
+                                ['wrap', 'bool', 'false', __('docs/highlightjs.props_items.wrap')],
+                                ['theme', 'string', "'vibe'", __('docs/highlightjs.props_items.theme')],
                             ];
                         @endphp
                         @foreach ($hlProps as [$prop, $type, $default, $desc])

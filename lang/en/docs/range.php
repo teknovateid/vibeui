@@ -144,4 +144,22 @@ return [
             'wrapperClass' => 'Additional CSS classes for the outermost container element.',
         ],
     ],
+
+    'test' => [
+        'title' => 'Form Testing ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Test submitting range slider values (volume, pricing, percentage) directly to <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Upon submission, a modal automatically displays the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> payload.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Server Performance Settings',
+        'card_desc' => 'Test submitting all range types: numeric, strict checkpoints, flexible checkpoints (intermediate values), and direct checkpoint button clicks.',
+        'cpu_label' => 'CPU Usage Limit',
+        'cpu_info' => 'Max 80% recommended for system stability.',
+        'storage_label' => 'Storage Tier (Strict)',
+        'storage_info' => 'Slider only snaps to available tiers.',
+        'ram_label' => 'Server RAM Allocation (Continuous Allowed)',
+        'ram_info' => 'Marks at 2/4/6/8 GB available, but intermediate values (e.g. 3 GB) can be selected freely.',
+        'bandwidth_label' => 'Server Performance Tier',
+        'bandwidth_info' => 'Click tier buttons to jump directly, or drag slider to select intermediate values.',
+        'submit_btn' => 'Submit Form & Test $request->all()',
+    ],
 ];

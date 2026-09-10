@@ -348,7 +348,7 @@
                             <vibe:nav.pinned :title="__('docs/nav.pinning.pinned_title')" :open="true" :persist="true" />
 
                             {{-- Daftar Item Navigasi yang dapat disematkan --}}
-                            <vibe:nav.label title="FITUR TERSEDIA">
+                            <vibe:nav.label :title="__('docs/nav.pinning_items.available_features')">
                                 <vibe:nav.item href="#" id="pin-item-dash">
                                     <x-slot:icon>
                                         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -368,7 +368,7 @@
                                             <path d="m19 9-5 5-4-4-3 3" />
                                         </svg>
                                     </x-slot:icon>
-                                    Analitik Performa
+                                    {{ __('docs/nav.pinning_items.perf_analytics') }}
                                 </vibe:nav.item>
 
                                 <vibe:nav.item href="#" id="pin-item-orders">
@@ -379,7 +379,7 @@
                                             <path d="M16 10a4 4 0 0 1-8 0" />
                                         </svg>
                                     </x-slot:icon>
-                                    Pesanan Masuk
+                                    {{ __('docs/nav.pinning_items.incoming_orders') }}
                                 </vibe:nav.item>
                             </vibe:nav.label>
                         </vibe:nav>
@@ -388,7 +388,7 @@
                         <vibe:nav id="nav-pinned-showcase" pinnable :maxpin="3" class="w-full max-w-xs p-2 rounded-xl border border-border bg-card shadow-2xs space-y-3">
                             <vibe:nav.pinned :title="__('docs/nav.pinning.pinned_title')" :open="true" :persist="true" />
 
-                            <vibe:nav.label title="FITUR TERSEDIA">
+                            <vibe:nav.label :title="__('docs/nav.pinning_items.available_features')">
                                 <vibe:nav.item href="#" id="pin-item-dash">
                                     <x-slot:icon>
                                         <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -408,7 +408,7 @@
                                             <path d="m19 9-5 5-4-4-3 3" />
                                         </svg>
                                     </x-slot:icon>
-                                    Analitik Performa
+                                    {{ __('docs/nav.pinning_items.perf_analytics') }}
                                 </vibe:nav.item>
 
                                 <vibe:nav.item href="#" id="pin-item-orders">
@@ -419,7 +419,7 @@
                                             <path d="M16 10a4 4 0 0 1-8 0" />
                                         </svg>
                                     </x-slot:icon>
-                                    Pesanan Masuk
+                                    {{ __('docs/nav.pinning_items.incoming_orders') }}
                                 </vibe:nav.item>
                             </vibe:nav.label>
                         </vibe:nav>
@@ -471,7 +471,7 @@
                         <vibe:table.rows>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav&gt;</vibe:table.cell>
-                                <vibe:table.cell class="text-xs text-muted-foreground">Kontainer induk navigasi yang mengelola state pinning, floating popover, dan integrasi sheet minified.</vibe:table.cell>
+                                <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/nav.subcomponents_items.root') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav.item&gt;</vibe:table.cell>
@@ -479,19 +479,19 @@
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav.group&gt;</vibe:table.cell>
-                                <vibe:table.cell class="text-xs text-muted-foreground">Kelompok menu bertingkat (accordion collapsible) yang menampung daftar sub-item navigasi.</vibe:table.cell>
+                                <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/nav.subcomponents_items.group') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav.label&gt;</vibe:table.cell>
-                                <vibe:table.cell class="text-xs text-muted-foreground">Header pemisah kategori bagian dengan kemampuan ciut/buka (*collapse/expand*) mandiri.</vibe:table.cell>
+                                <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/nav.subcomponents_items.label') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav.pinned&gt;</vibe:table.cell>
-                                <vibe:table.cell class="text-xs text-muted-foreground">Wadah dinamis yang menampilkan klon pintasan menu yang telah di-pin oleh pengguna.</vibe:table.cell>
+                                <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/nav.subcomponents_items.pinned') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:nav.history&gt;</vibe:table.cell>
-                                <vibe:table.cell class="text-xs text-muted-foreground">Wadah dinamis yang mencatat riwayat rute halaman terakhir yang diakses pengguna.</vibe:table.cell>
+                                <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/nav.subcomponents_items.history') }}</vibe:table.cell>
                             </vibe:table.row>
                         </vibe:table.rows>
                     </vibe:table>
@@ -509,7 +509,12 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navRootProps = [['id', 'string', "'sidebar-menu'", 'ID unik elemen nav untuk menyimpan preferensi di localStorage.'], ['pinnable', 'bool', 'false', 'Mengaktifkan tombol sematkan (pin) pada seluruh item navigasi di dalamnya.'], ['maxpin', 'int|null', 'null', 'Batas maksimal jumlah menu yang dapat disematkan bersamaan.'], ['collapsed', 'bool', 'false', 'Menyetel navigasi ke mode ringkas (icon-only).']];
+                                $navRootProps = [
+        ['id', 'string', "'sidebar-menu'", __('docs/nav.props_items.root.id')],
+        ['pinnable', 'bool', 'false', __('docs/nav.props_items.root.pinnable')],
+        ['maxpin', 'int|null', 'null', __('docs/nav.props_items.root.maxpin')],
+        ['collapsed', 'bool', 'false', __('docs/nav.props_items.root.collapsed')],
+    ];
                             @endphp
                             @foreach ($navRootProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -535,7 +540,14 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navItemProps = [['href', 'string', "'#'", 'Target URL tujuan link tautan.'], ['active', 'bool', 'false', 'Menandai status menu saat ini aktif dengan styling latar highlight tegas.'], ['badge', 'string|null', 'null', 'Teks label badge indikator di sebelah kanan (misal counter angka atau status).'], ['badgeColor', 'string', "'vibe'", 'Warna badge: `"success"`, `"info"`, `"destructive"`, `"warning"`, `"accent"`, atau default.'], ['pinnable', 'bool', 'false', 'Menampilkan tombol pin secara spesifik pada item ini.'], ['id', 'string|null', 'slug(label)', 'ID unik item untuk keperluan persistensi pintasan pin.']];
+                                $navItemProps = [
+        ['href', 'string', "'#'", __('docs/nav.props_items.item.href')],
+        ['active', 'bool', 'false', __('docs/nav.props_items.item.active')],
+        ['badge', 'string|null', 'null', __('docs/nav.props_items.item.badge')],
+        ['badgeColor', 'string', "'vibe'", __('docs/nav.props_items.item.badgeColor')],
+        ['pinnable', 'bool', 'false', __('docs/nav.props_items.item.pinnable')],
+        ['id', 'string|null', 'slug(label)', __('docs/nav.props_items.item.id')],
+    ];
                             @endphp
                             @foreach ($navItemProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -561,7 +573,12 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navPinnedProps = [['title', 'string', "__('vibe/nav.pinned')", 'Teks judul header accordion wadah pintasan tersemat (default: "Pinned" atau terjemahan).'], ['open', 'bool', 'true', 'Status awal apakah wadah daftar pin terbuka atau terlipat.'], ['persist', 'bool', 'true', 'Menyimpan status buka/tutup accordion wadah pin ke `localStorage`.'], ['id', 'string|null', "'_pinned'", 'Identifier unik untuk pemetaan persistensi state accordion ke browser.']];
+                                $navPinnedProps = [
+        ['title', 'string', "__('vibe/nav.pinned')", __('docs/nav.props_items.pinned.title')],
+        ['open', 'bool', 'true', __('docs/nav.props_items.pinned.open')],
+        ['persist', 'bool', 'true', __('docs/nav.props_items.pinned.persist')],
+        ['id', 'string|null', "'_pinned'", __('docs/nav.props_items.pinned.id')],
+    ];
                             @endphp
                             @foreach ($navPinnedProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -587,7 +604,14 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navGroupProps = [['title', 'string', '— (Wajib)', 'Judul kelompok menu accordion.'], ['open', 'bool', 'false', 'Status awal apakah kelompok menu dalam posisi terbuka.'], ['active', 'bool', 'false', 'Menandai kelompok aktif dan otomatis membukanya saat halaman dimuat.'], ['persist', 'bool', 'false', 'Menyimpan preferensi status buka/tutup kelompok ke `localStorage`.'], ['pinnable', 'bool', 'false', 'Mengizinkan seluruh kelompok menu disematkan sebagai pin shortcut.'], ['id', 'string|null', 'slug(title)', 'ID unik kelompok untuk pemetaan persistensi status buka/tutup.']];
+                                $navGroupProps = [
+        ['title', 'string', '— (Wajib)', __('docs/nav.props_items.group.title')],
+        ['open', 'bool', 'false', __('docs/nav.props_items.group.open')],
+        ['active', 'bool', 'false', __('docs/nav.props_items.group.active')],
+        ['persist', 'bool', 'false', __('docs/nav.props_items.group.persist')],
+        ['pinnable', 'bool', 'false', __('docs/nav.props_items.group.pinnable')],
+        ['id', 'string|null', 'slug(title)', __('docs/nav.props_items.group.id')],
+    ];
                             @endphp
                             @foreach ($navGroupProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -613,7 +637,12 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navLabelProps = [['title', 'string', '— (Wajib)', 'Teks judul header pemisah kategori bagian.'], ['open', 'bool', 'true', 'Status awal apakah daftar item di bawah label ditampilkan.'], ['persist', 'bool', 'false', 'Menyimpan preferensi status buka/tutup bagian ke `localStorage`.'], ['id', 'string|null', 'slug(title)', 'ID unik label untuk pemetaan persistensi state.']];
+                                $navLabelProps = [
+        ['title', 'string', '— (Wajib)', __('docs/nav.props_items.label.title')],
+        ['open', 'bool', 'true', __('docs/nav.props_items.label.open')],
+        ['persist', 'bool', 'false', __('docs/nav.props_items.label.persist')],
+        ['id', 'string|null', 'slug(title)', __('docs/nav.props_items.label.id')],
+    ];
                             @endphp
                             @foreach ($navLabelProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -639,7 +668,11 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $navHistoryProps = [['title', 'string', "__('vibe/nav.history')", 'Teks judul header wadah riwayat navigasi (default: "History").'], ['open', 'bool', 'true', 'Status awal apakah accordion riwayat terbuka atau terlipat.'], ['persist', 'bool', 'true', 'Menyimpan preferensi status buka/tutup riwayat ke `localStorage`.']];
+                                $navHistoryProps = [
+        ['title', 'string', "__('vibe/nav.history')", __('docs/nav.props_items.history.title')],
+        ['open', 'bool', 'true', __('docs/nav.props_items.history.open')],
+        ['persist', 'bool', 'true', __('docs/nav.props_items.history.persist')],
+    ];
                             @endphp
                             @foreach ($navHistoryProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>

@@ -66,7 +66,7 @@
 
                             <vibe:modal.content>
                                 <p class="leading-relaxed">
-                                    Struktur modal Vibe UI kini mendukung subkomponen modular yang terstruktur, rapi, dan mudah dikustomisasi.
+                                    {{ __('docs/modal.common.compound_desc_code') }}
                                 </p>
                             </vibe:modal.content>
 
@@ -106,7 +106,7 @@
 
                             <vibe:modal.content>
                                 <p class="text-sm text-muted-foreground leading-relaxed">
-                                    Dialog modal berbasis <em>compound subcomponents</em> ini memiliki header, konten, dan footer yang terisolasi dengan rapi. Anda juga dapat langsung menambahkan custom styling pada dialog modal melalui atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">class="..."</code>.
+                                    {!! __('docs/modal.common.compound_desc') !!}
                                 </p>
                             </vibe:modal.content>
 
@@ -138,13 +138,13 @@
                         <vibe:modal id="modal-size-sm" maxWidth="sm">
                             <vibe:modal.header>
                                 <span>Modal Size: sm</span>
-                                <p class="text-sm font-normal text-muted-foreground">Ukuran modal sm untuk konten ringkas.</p>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.common.sm_desc') }}</p>
                             </vibe:modal.header>
                             <vibe:modal.content>
-                                <p class="text-sm text-muted-foreground">Konten modal dengan ukuran sm (max-w-sm).</p>
+                                <p class="text-sm text-muted-foreground">{{ __('docs/modal.common.sm_content') }}</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
 
@@ -152,13 +152,13 @@
                         <vibe:modal id="modal-size-2xl" maxWidth="2xl">
                             <vibe:modal.header>
                                 <span>Modal Size: 2xl (Default)</span>
-                                <p class="text-sm font-normal text-muted-foreground">Ukuran default 2xl cocok untuk sebagian besar dialog.</p>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.common.default_desc') }}</p>
                             </vibe:modal.header>
                             <vibe:modal.content>
                                 <p class="text-sm text-muted-foreground">Konten modal dengan ukuran standar 2xl.</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
 
@@ -172,7 +172,7 @@
                                 <p class="text-sm text-muted-foreground">Konten modal dengan ukuran 4xl.</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
 
@@ -186,7 +186,7 @@
                                 <p class="text-sm text-muted-foreground">Konten modal dengan ukuran layar penuh.</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
                     </vibe:preview.code>
@@ -250,7 +250,7 @@
                                 <p class="text-sm text-muted-foreground">Konten modal dengan position="top".</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
 
@@ -264,7 +264,7 @@
                                 <p class="text-sm text-muted-foreground">Konten modal dengan position="center".</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
 
@@ -278,7 +278,7 @@
                                 <p class="text-sm text-muted-foreground">Konten modal dengan position="bottom".</p>
                             </vibe:modal.content>
                             <vibe:modal.footer>
-                                <vibe:button type="button" variant="outline" size="sm" @click="close">Tutup</vibe:button>
+                                <vibe:button type="button" variant="outline" size="sm" @click="close">{{ __('docs/modal.common.btn_close') }}</vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
                     </vibe:preview.code>

@@ -108,4 +108,22 @@ return [
             'default' => 'Slot default yang dirender tepat di dalam bulatan thumb geser (misal: ikon matahari/bulan, gembok, ceklis).',
         ],
     ],
+
+    'test' => [
+        'title' => 'Pengujian Form ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Uji coba pengiriman nilai switch (boolean toggle & pengaturan fitur) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Pengaturan Akun & Notifikasi',
+        'card_desc' => 'Uji coba pengiriman nilai boolean toggle switch langsung ke backend controller.',
+        'push_label' => 'Notifikasi Push',
+        'push_desc' => 'Terima pembaruan penting secara real-time',
+        'backup_label' => 'Pencadangan Otomatis',
+        'backup_desc' => 'Sinkronisasi data ke cloud setiap 24 jam',
+        'security_label' => 'Peringatan Keamanan Kritis',
+        'security_desc' => 'Kirim SMS darurat saat terdeteksi login baru',
+        'marketing_label' => 'Email Promo & Buletin',
+        'marketing_desc' => 'Dapatkan tips mingguan dan info penawaran menarik',
+        'submit_btn' => 'Kirim Form & Uji $request->all()',
+    ],
 ];

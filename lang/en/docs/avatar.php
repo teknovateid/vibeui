@@ -79,4 +79,22 @@ return [
             'desc' => 'Description & Usage',
         ],
     ],
+
+    'props_items' => [
+        'avatar' => [
+            'src' => 'Profile image source URL.',
+            'alt' => 'Image accessibility alt text.',
+            'initials' => 'Fallback initials text (1-3 letters) when image is unavailable.',
+            'size' => "Size options: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, or `'2xl'`.",
+            'shape' => "Avatar shape geometry: `'circle'`, `'rounded'`, or `'square'`.",
+            'indicator' => "Online presence status dot: `'online'`, `'busy'`, `'away'`, or `'offline'`.",
+            'color' => "Initials background color palette: `'blue'`, `'green'`, `'red'`, `'purple'`, `'yellow'`, `'pink'`, `'orange'` (default: secondary).",
+        ],
+        'group' => [
+            'limit' => 'Maximum visible avatars rendered before truncation.',
+            'total' => 'Total members count to compute remaining overflow counter badge (+N).',
+            'size' => "Group avatar and badge counter size: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, `'2xl'`.",
+            'overlap' => 'If `true`, applies overlapping negative spacing (-space-x-3) with border rings.',
+        ],
+    ],
 ];

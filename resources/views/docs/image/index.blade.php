@@ -323,15 +323,15 @@
                     <vibe:table.rows>
                         @php
                             $imageProps = [
-                                ['src', 'string', '— (Wajib)', 'URL sumber file gambar yang ingin ditampilkan.'],
-                                ['alt', 'string', "''", 'Teks alternatif gambar untuk aksesibilitas pembaca layar dan fallback SEO.'],
-                                ['aspect', 'string|null', 'null', 'Rasio aspek gambar: `"square"` (1:1), `"video"` (16:9), `"4/3"`, `"3/2"`, `"21/9"`, atau nilai kustom lainnya. Bisa juga ditentukan via utility class seperti `class="aspect-square"`.'],
-                                ['lazy', 'bool', 'true', 'Mengaktifkan pemuatan tunda native browser (`loading="lazy"` dan `fetchpriority="low"`).'],
-                                ['priority', 'bool', 'false', 'Jika `true`, menonaktifkan lazy loading, menyetel `fetchpriority="high"`, dan menginjeksi tag `<link rel="preload">` ke `<head>`.'],
-                                ['fallback', 'string|null', 'null', 'URL gambar cadangan jika gambar utama gagal dimuat (404 atau koneksi terputus).'],
-                                ['skeleton', 'bool', 'true', 'Menampilkan animasi placeholder shimmer pulse saat gambar sedang diunduh untuk mencegah pergeseran layout (CLS).'],
-                                ['caption', 'string|null', 'null', 'Teks keterangan gambar yang dirender di dalam tag semantik `<figcaption>`.'],
-                                ['imgClass', 'string', "'w-full h-full object-cover'", 'Kelas Tailwind khusus yang diterapkan langsung pada elemen `<img>` internal.'],
+                                ['src', 'string', '— (Wajib)', __('docs/image.props_items.src')],
+                                ['alt', 'string', "''", __('docs/image.props_items.alt')],
+                                ['aspect', 'string|null', 'null', __('docs/image.props_items.aspect')],
+                                ['lazy', 'bool', 'true', __('docs/image.props_items.lazy')],
+                                ['priority', 'bool', 'false', __('docs/image.props_items.priority')],
+                                ['fallback', 'string|null', 'null', __('docs/image.props_items.fallback')],
+                                ['skeleton', 'bool', 'true', __('docs/image.props_items.skeleton')],
+                                ['caption', 'string|null', 'null', __('docs/image.props_items.caption')],
+                                ['imgClass', 'string', "'w-full h-full object-cover'", __('docs/image.props_items.imgClass')],
                             ];
                         @endphp
                         @foreach ($imageProps as [$prop, $type, $default, $desc])

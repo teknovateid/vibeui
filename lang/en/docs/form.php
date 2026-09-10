@@ -110,4 +110,42 @@ return [
             'desc' => 'Behavior & Usage',
         ],
     ],
+
+    'ajax_alert' => [
+        'success_title' => 'Form Testing (AJAX / Fetch) Successfully Posted to FormController!',
+        'time_prefix' => 'Time:',
+        'fields_suffix' => 'fields received via JSON (no refresh)',
+        'view_payload_btn' => 'View JSON Payload',
+    ],
+
+    'props_items' => [
+        'id' => 'Unique form ID. Required if `saveToStorage` is enabled as draft storage key.',
+        'saveToStorage' => 'If `true`, automatically persists form input drafts to browser storage on every keystroke.',
+        'storageType' => "Browser storage mechanism: `'session'` (sessionStorage, secure & cleared when tab closes) or `'local'` (localStorage, persistent).",
+        'expireHours' => 'Draft expiration duration in hours before automatically cleaned up.',
+    ],
+
+    'storage_comparison' => [
+        'title' => 'sessionStorage vs localStorage Comparison',
+        'columns' => [
+            'mechanism' => 'Mechanism',
+            'location' => 'Location',
+            'lifetime' => 'Data Lifetime',
+            'best_for' => 'Best Use Cases',
+        ],
+        'session_location' => 'Browser (sessionStorage)',
+        'session_lifetime' => 'While tab is active (cleared on tab close)',
+        'session_best_for' => 'Checkout forms, payment transactions, multi-step wizards, sensitive data.',
+        'local_location' => 'Browser (localStorage)',
+        'local_lifetime' => 'Persists across browser sessions (up to expireHours)',
+        'local_best_for' => 'Long-form article drafts, large profile forms, recurring document drafts.',
+        'local_warning' => '⚠️ Avoid storing passwords, tokens, or financial data.',
+    ],
+
+    'features_items' => [
+        'debounce' => 'Debounces input changes by 500 milliseconds before writing to storage to avoid degrading browser performance.',
+        'clear' => 'Automatically deletes form drafts from storage when the form is submitted successfully.',
+        'modal_sheet' => 'Automatically restores form drafts when modal dialogs or slide-out drawers open.',
+        'sanitize' => 'Automatically sanitizes and excludes binary files, CSRF tokens (<code class="font-mono text-xs text-foreground">_token</code>), and Livewire internal state.',
+    ],
 ];

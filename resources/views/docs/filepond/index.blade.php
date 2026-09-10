@@ -44,7 +44,7 @@
                             <\vibe:filepond name="document" label="Unggah Dokumen" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Form (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_form') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -58,7 +58,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Form (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_form') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -69,19 +69,19 @@
             {{-- 2. Tampilan Berkas Terunggah (Uploaded File Card) --}}
             <section id="tampilan-berkas" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Tampilan Berkas Terunggah (Card Preview)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.card_preview.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
                         Ketika berkas dipilih atau diunggah pengguna, berkas ditampilkan dalam bentuk kartu modern terpisah di bawah dropzone. Kartu dilengkapi ikon berkas terlipat, badge format berwarna (<code class="text-xs font-mono text-primary font-semibold">PDF</code> merah, <code class="text-xs font-mono text-primary font-semibold">DOCX</code> biru, <code class="text-xs font-mono text-primary font-semibold">ZIP</code> ungu, dll.), ukuran berkas, serta tombol hapus melingkar.
                     </p>
                 </div>
 
-                <vibe:preview title="Pratinjau Kartu Berkas (my-cv.pdf)">
+                <vibe:preview :title="__('docs/filepond.card_preview.preview_title') . ' (my-cv.pdf)'">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             <\vibe:filepond name="cv_preview" label="Curriculum Vitae" demo />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Form (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_form') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -95,7 +95,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Form (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_form') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -118,7 +118,7 @@
                             <\vibe:filepond name="photos" label="{{ __('docs/filepond.multiple_preview.label') }}" description="{{ __('docs/filepond.multiple_preview.description') }}" multiple max-files="5" accepted-file-types="image/*" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Multiple Foto (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_multiple') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -132,7 +132,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Multiple Foto (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_multiple') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -155,7 +155,7 @@
                             <\vibe:filepond name="avatar" label="{{ __('docs/filepond.avatar_mode.label') }}" description="{{ __('docs/filepond.avatar_mode.description') }}" avatar accepted-file-types="image/png, image/jpeg" />
                             <div class="flex justify-center">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Simpan Avatar (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_avatar') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -169,7 +169,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Simpan Avatar (Test Request)
+                                    {{ __('docs/filepond.buttons.submit_avatar') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -192,7 +192,7 @@
                             <\vibe:filepond name="attachment" label="{{ __('docs/filepond.validation.label') }}" max-file-size="2MB" accepted-file-types="application/pdf, image/*" info="Maksimal ukuran 2MB per file" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Lampiran (Test Request)
+                                    {{ __('docs/filepond.compact.submit_btn') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -206,7 +206,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Lampiran (Test Request)
+                                    {{ __('docs/filepond.compact.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -223,13 +223,13 @@
                     </p>
                 </div>
 
-                <vibe:preview title="Dropzone dengan Judul & Tombol Kustom">
+                <vibe:preview :title="__('docs/filepond.custom_header.preview_title')">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
                             <\vibe:filepond name="resume" label="Unggah Berkas Lamaran" title="Tarik & Letakkan Berkas Lamaran (CV)" subtitle="Format PDF, DOCX, atau RTF hingga maksimal 15MB" browse-label="Pilih CV Saya" accepted-file-types="application/pdf, .doc, .docx" max-file-size="15MB" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim CV (Test Request)
+                                    {{ __('docs/filepond.validation.submit_btn') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -243,34 +243,34 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim CV (Test Request)
+                                    {{ __('docs/filepond.validation.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
                     </div>
                 </vibe:preview>
 
-                <vibe:preview title="Varian Compact (Tampilan Ringkas Horizontal)">
+                <vibe:preview :title="__('docs/filepond.compact.preview_title')">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <\vibe:filepond name="quick_attachment" label="Lampiran Singkat" variant="compact" title="Lampirkan Dokumen Pendukung" subtitle="Semua format dokumen diizinkan (maks. 10MB)" browse-label="Jelajahi" />
+                            <\vibe:filepond name="quick_attachment" :label="__('docs/filepond.compact.label')" variant="compact" :title="__('docs/filepond.compact.title')" :subtitle="__('docs/filepond.compact.subtitle')" :browse-label="__('docs/filepond.compact.browse_label')" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Lampiran (Test Request)
+                                    {{ __('docs/filepond.compact.submit_btn') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-xl">
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
-                            <vibe:filepond name="quick_attachment" label="Lampiran Singkat" variant="compact" title="Lampirkan Dokumen Pendukung" subtitle="Semua format dokumen diizinkan (maks. 10MB)" browse-label="Jelajahi" />
+                            <vibe:filepond name="quick_attachment" :label="__('docs/filepond.compact.label')" variant="compact" :title="__('docs/filepond.compact.title')" :subtitle="__('docs/filepond.compact.subtitle')" :browse-label="__('docs/filepond.compact.browse_label')" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
                                     <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Lampiran (Test Request)
+                                    {{ __('docs/filepond.compact.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -287,13 +287,13 @@
                         return el?._x_dataStack?.find(s => s && (s.pond || s.browse));
                     }
                 }" class="space-y-3">
-                    <vibe:filepond id="api-pond" name="api_pond" size="sm" label="Dropzone Ukuran Small (size='sm')" demo />
+                    <vibe:filepond id="api-pond" name="api_pond" size="sm" :label="__('docs/filepond.programmatic.label_sm')" demo />
                     <div class="flex items-center gap-2">
                         <vibe:button type="button" size="xs" variant="secondary" @click="pondRef()?.browse()">
-                            Buka Pemilih Berkas (browse)
+                            {{ __('docs/filepond.programmatic.btn_browse') }}
                         </vibe:button>
                         <vibe:button type="button" size="xs" variant="destructive" @click="pondRef()?.clear()">
-                            Bersihkan (clear)
+                            {{ __('docs/filepond.programmatic.btn_clear') }}
                         </vibe:button>
                     </div>
                 </div>
@@ -301,32 +301,32 @@
             @endphp
             <section id="kontrol-programatis" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Kontrol Programatis & Ukuran Dropzone</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.programmatic.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        FilePond menyediakan opsi ukuran <code class="text-xs font-mono text-primary font-semibold">size="sm" | "md" | "lg"</code> serta metode Alpine seperti <code class="text-xs font-mono text-primary font-semibold">browse()</code> dan <code class="text-xs font-mono text-primary font-semibold">clear()</code>.
+                        {!! __('docs/filepond.programmatic.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Kontrol Programatis Eksternal" :code="$demoProgrammaticCode">
+                <vibe:preview :title="__('docs/filepond.programmatic.preview_title')" :code="$demoProgrammaticCode">
                     <div class="w-full max-w-lg" x-data="{
                         pondRef() {
                             var el = document.getElementById('api-pond-container') || document.getElementById('api-pond')?.closest('[data-vibe-filepond]');
                             return el?._x_dataStack?.find(s => s && (s.pond || s.browse));
                         }
                     }">
-                        <vibe:filepond id="api-pond" name="api_pond" size="sm" label="Dropzone Ukuran Small (size='sm')" demo />
+                        <vibe:filepond id="api-pond" name="api_pond" size="sm" :label="__('docs/filepond.programmatic.label_sm')" demo />
                         <div class="flex items-center gap-2 mt-3">
                             <vibe:button type="button" size="xs" variant="secondary" @click="pondRef()?.browse()">
                                 <svg class="size-3.5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" />
                                 </svg>
-                                Buka Pemilih Berkas (browse)
+                                {{ __('docs/filepond.programmatic.btn_browse') }}
                             </vibe:button>
                             <vibe:button type="button" size="xs" variant="destructive" @click="pondRef()?.clear()">
                                 <svg class="size-3.5 mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                                 </svg>
-                                Bersihkan (clear)
+                                {{ __('docs/filepond.programmatic.btn_clear') }}
                             </vibe:button>
                         </div>
                     </div>
@@ -349,7 +349,7 @@
                             <\vibe:filepond protect-upload name="cloud_file" label="{{ __('docs/filepond.presigned.label') }}" description="{{ __('docs/filepond.presigned.description') }}" presign-url="{{ route('docs.filepond.presigned') }}" presign-method="PUT" max-file-size="500MB" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
-                                    Kirim Kunci S3 ke Controller
+                                    {{ __('docs/filepond.presigned.submit_btn_code') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
@@ -367,12 +367,12 @@
                                 </div>
                                 <div class="space-y-0.5">
                                     <div class="flex items-center gap-2">
-                                        <span class="text-xs font-semibold text-foreground">Direct Cloud Upload (Presigned URL)</span>
+                                        <span class="text-xs font-semibold text-foreground">{{ __('docs/filepond.presigned.pill_title') }}</span>
                                         <vibe:badge variant="success" size="xs" class="rounded-full">
                                             S3 / R2 PUT
                                         </vibe:badge>
                                     </div>
-                                    <p class="text-[11px] text-muted-foreground">Berkas dikirim langsung ke object storage tanpa membebani memori PHP server.</p>
+                                    <p class="text-[11px] text-muted-foreground">{{ __('docs/filepond.presigned.pill_desc') }}</p>
                                 </div>
                             </div>
                         </div>
@@ -386,7 +386,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Kirim Kunci S3 ke Controller (Test Request)
+                                    {{ __('docs/filepond.presigned.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -505,10 +505,10 @@
                         <svg class="size-5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
                         </svg>
-                        <h3 class="font-semibold text-sm text-foreground">Implementasi di FilepondController@presigned</h3>
+                        <h3 class="font-semibold text-sm text-foreground">{{ __('docs/filepond.presigned.backend_title') }}</h3>
                     </div>
                     <p class="text-xs text-muted-foreground leading-relaxed">
-                        Endpoint ini menerima request metadata berkas, lalu menghasilkan URL presigned upload sementara menggunakan driver S3 / Cloudflare R2:
+                        {{ __('docs/filepond.presigned.backend_desc') }}
                     </p>
 
                     <vibe:highlightjs language="php">
@@ -544,9 +544,9 @@
             {{-- 6. Form Submission & Backend Controller --}}
             <section id="form-controller" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Form Submission & Controller ($request->all())</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.form_controller.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen &lt;vibe:filepond&gt; dapat digunakan di dalam formulir dan diposting langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FilepondController@requestTest</code>. Saat form dikirim, modal pengujian otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> dan kunci berkas secara real-time.
+                        {!! __('docs/filepond.form_controller.desc') !!}
                     </p>
                 </div>
 
@@ -557,26 +557,26 @@
                         <path d="m9 12 2 2 4-4" />
                     </svg>
                     <div>
-                        <strong class="text-foreground font-semibold">Proteksi Submit Saat Upload Berlangsung (<code class="font-mono text-[11px] text-warning">protect-upload="true"</code>):</strong>
-                        Jika pengguna menekan tombol submit atau mencoba berpindah halaman sementara berkas masih dalam proses upload, Vibe UI akan secara otomatis mencegat aksi tersebut dan menampilkan dialog proteksi penutupan tab peramban.
+                        <strong class="text-foreground font-semibold">{{ __('docs/filepond.form_controller.protect_title') }} (<code class="font-mono text-[11px] text-warning">protect-upload="true"</code>):</strong>
+                        {{ __('docs/filepond.form_controller.protect_desc') }}
                     </div>
                 </div>
 
-                <vibe:preview title="Pengujian Form Submission Sederhana">
+                <vibe:preview :title="__('docs/filepond.form_controller.preview_title')">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-4 max-w-lg">
-                            <\vibe:filepond name="dokumen_test" label="Dokumen Uji Coba" max-file-size="5MB" />
+                            <\vibe:filepond name="dokumen_test" :label="__('docs/filepond.form_controller.doc_label')" max-file-size="5MB" />
 
                             <div class="flex justify-end pt-2">
                                 <\vibe:button type="submit" variant="primary">
-                                    Simpan & Uji Request
+                                    {{ __('docs/filepond.form_controller.submit_btn') }}
                                 </\vibe:button>
                             </div>
                         </\vibe:form>
                     </vibe:preview.code>
                     <div class="w-full max-w-lg">
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
-                            <vibe:filepond id="doc-test" name="dokumen_test" label="Dokumen Uji Coba" max-file-size="5MB" />
+                            <vibe:filepond id="doc-test" name="dokumen_test" :label="__('docs/filepond.form_controller.doc_label')" max-file-size="5MB" />
 
                             <div class="flex justify-end pt-2">
                                 <vibe:button type="submit" variant="primary">
@@ -584,7 +584,7 @@
                                         <path d="m22 2-7 20-4-9-9-4Z" />
                                         <path d="M22 2 11 13" />
                                     </svg>
-                                    Simpan & Uji Request
+                                    {{ __('docs/filepond.form_controller.submit_btn') }}
                                 </vibe:button>
                             </div>
                         </vibe:form>
@@ -646,7 +646,7 @@
                                 accepted-file-types="image/*"
                             />
 
-                            <vibe:button type="submit" class="mt-4">Simpan Galeri</vibe:button>
+                            <vibe:button type="submit" class="mt-4">{{ __('docs/filepond.livewire.btn_save') }}</vibe:button>
                         </form>
                         BLADE;
                     @endphp
@@ -657,68 +657,68 @@
             {{-- 8. Manajemen Event & Pelacakan Berkas (vibe-filepond) --}}
             <section id="event-filepond" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Event & Pelacakan Aksi</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.events.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen <code class="text-xs font-mono text-primary font-semibold">&lt;vibe:filepond&gt;</code> memancarkan event terpadu <code class="text-xs font-mono text-primary font-semibold">vibe-filepond</code> ke level window dan elemen. Anda dapat membedakan instans FilePond dengan memeriksa <code class="text-xs font-mono text-primary font-semibold">if ($event.detail.id === '...')</code>.
+                        {!! __('docs/filepond.events.desc') !!}
                     </p>
                 </div>
 
                 {{-- Tabel Event & Aksi --}}
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">Nilai $event.detail.event</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">Target</vibe:table.column>
-                        <vibe:table.column>Keterangan & Waktu Dipicu</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/filepond.events.table.columns.event') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/filepond.events.table.columns.target') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/filepond.events.table.columns.desc') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">add</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu saat berkas baru dipilih dari perangkat dan masuk ke antrean FilePond.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/filepond.events.table.items.add') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">start</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu ketika proses transfer/pengunggahan berkas mulai berjalan.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/filepond.events.table.items.start') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">progress</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu real-time membawa persentase pengunggahan (<code class="font-mono text-[11px]">$event.detail.progress</code> dari 0 - 100%).</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{!! __('docs/filepond.events.table.items.progress') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">success</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu ketika berkas tuntas terunggah dan kunci penyimpanan (<code class="font-mono text-[11px]">$event.detail.key</code>) telah diterima.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{!! __('docs/filepond.events.table.items.success') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">revert</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu ketika berkas yang <strong>sudah selesai diunggah dibatalkan/dihapus</strong> oleh pengguna (tombol undo).</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{!! __('docs/filepond.events.table.items.revert') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">abort</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu ketika proses upload yang <strong>sedang berlangsung</strong> dihentikan sebelum tuntas.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{!! __('docs/filepond.events.table.items.abort') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">remove</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu ketika item berkas dikeluarkan dari antrean pond.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/filepond.events.table.items.remove') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">error</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">Window & Element</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Dipicu jika berkas tidak lolos validasi ukuran/format atau server gagal menerima berkas.</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/filepond.events.table.items.error') }}</vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>
 
                 {{-- Card Struktur Payload Event --}}
                 <div class="space-y-3">
-                    <h3 class="text-base font-semibold text-foreground">1. Struktur Payload Objek (<code class="font-mono text-xs text-primary">$event.detail</code>)</h3>
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/filepond.events.payload_title') }} (<code class="font-mono text-xs text-primary">$event.detail</code>)</h3>
                     <p class="text-xs text-muted-foreground">
-                        Setiap event membawa detail payload yang seragam dan kaya informasi:
+                        {{ __('docs/filepond.events.payload_desc') }}
                     </p>
                     <vibe:card class="space-y-3 bg-muted/30">
                         <vibe:highlightjs language="javascript">
@@ -982,7 +982,7 @@ $demoLiveMonitorCode = <<<'BLADE'
 }" @vibe-filepond.window="handleEvent($event.detail)">
 
     {{-- Dropzone dengan simulasi upload untuk uji coba event --}}
-    <vibe:filepond id="demo-event-pond" name="demo_event" label="Pilih Berkas untuk Menguji Event" :presign-url="route('docs.filepond.presigned')" presign-method="PUT"/>
+    <vibe:filepond id="demo-event-pond" name="demo_event" :label="__('docs/filepond.events.drop_label')" :presign-url="route('docs.filepond.presigned')" presign-method="PUT"/>
 
     {{-- Kartu Status Real-Time & Progress Bar --}}
     <div class="p-4 rounded-xl border border-border bg-card/60 space-y-3">
@@ -1070,7 +1070,7 @@ BLADE;
                         <vibe:card class="space-y-2 p-4 text-xs">
                             <div class="font-bold text-foreground flex items-center gap-1.5">
                                 <span class="size-2 rounded-full bg-primary inline-block"></span>
-                                Pola A: Event Terpadu dengan Filter ID (Rekomendasi)
+                                {{ __('docs/filepond.patterns.pattern_a_title') }}
                             </div>
                             <p class="text-muted-foreground text-[11px]">Dengarkan satu event <code class="font-mono text-primary font-semibold">vibe-filepond</code> lalu filter ID komponen:</p>
                             <vibe:highlightjs language="blade" :code="$eventPatternACode" />
@@ -1088,7 +1088,7 @@ BLADE;
                         <vibe:card class="space-y-2 p-4 text-xs">
                             <div class="font-bold text-foreground flex items-center gap-1.5">
                                 <span class="size-2 rounded-full bg-warning inline-block"></span>
-                                Pola C: Event Lokal pada Tag Komponen
+                                {{ __('docs/filepond.patterns.pattern_c_title') }}
                             </div>
                             <p class="text-muted-foreground text-[11px]">Langsung pasang listener shorthand pada tag <code class="font-mono text-warning font-semibold">&lt;vibe:filepond&gt;</code> tanpa modifier window:</p>
                             <vibe:highlightjs language="blade" :code="$eventPatternCCode" />
@@ -1097,9 +1097,9 @@ BLADE;
                         <vibe:card class="space-y-2 p-4 text-xs">
                             <div class="font-bold text-foreground flex items-center gap-1.5">
                                 <span class="size-2 rounded-full bg-accent inline-block"></span>
-                                Pola D: Vanilla JavaScript Murni
+                                {{ __('docs/filepond.patterns.pattern_d_title') }}
                             </div>
-                            <p class="text-muted-foreground text-[11px]">Gunakan <code class="font-mono text-accent font-semibold">window.addEventListener</code> di file script JavaScript eksternal:</p>
+                            <p class="text-muted-foreground text-[11px]">{!! __('docs/filepond.patterns.pattern_d_desc') !!}</p>
                             <vibe:highlightjs language="javascript" :code="$eventPatternDCode" />
                         </vibe:card>
                     </div>
@@ -1107,31 +1107,31 @@ BLADE;
 
                 {{-- 3 Resep Kasus Nyata --}}
                 <div class="space-y-3 pt-2">
-                    <h3 class="text-base font-semibold text-foreground">3. Contoh Kasus Penggunaan Riil (Cookbook Recipes)</h3>
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/filepond.events.cookbook_title') }}</h3>
 
                     {{-- Resep 1: Pembatalan Revert --}}
                     <vibe:card class="space-y-3 p-4 text-xs border-l-4 border-l-destructive">
-                        <div class="font-bold text-foreground text-sm">Resep 1: Menangani Pembatalan Berkas yang Sudah Diunggah (<code class="font-mono text-xs text-destructive">event === 'revert'</code>)</div>
+                        <div class="font-bold text-foreground text-sm">{{ __('docs/filepond.events.recipe_1_title') }}</div>
                         <p class="text-muted-foreground leading-relaxed">
-                            Ketika pengguna menekan tombol silang / <em>undo</em> pada berkas yang sudah berhasil tersimpan di cloud storage, tangkap event <code class="font-mono text-xs text-destructive">revert</code> untuk menghapus storage key dari state formulir atau mengirim request penghapusan berkas ke server:
+                            {!! __('docs/filepond.events.recipe_1_desc') !!}
                         </p>
                         <vibe:highlightjs language="blade" :code="$recipe1Code" />
                     </vibe:card>
 
                     {{-- Resep 2: Auto-Disable Tombol Submit --}}
                     <vibe:card class="space-y-3 p-4 text-xs border-l-4 border-l-primary">
-                        <div class="font-bold text-foreground text-sm">Resep 2: Menonaktifkan Tombol Submit Selama Berkas Diunggah</div>
+                        <div class="font-bold text-foreground text-sm">{{ __('docs/filepond.events.recipe_2_title') }}</div>
                         <p class="text-muted-foreground leading-relaxed">
-                            Kunci tombol simpan saat proses transfer dimulai (<code class="font-mono text-xs text-primary">start</code>) dan buka kembali saat selesai (<code class="font-mono text-xs text-primary">success</code>), dibatalkan (<code class="font-mono text-xs text-primary">abort</code>), atau gagal (<code class="font-mono text-xs text-primary">error</code>):
+                            {!! __('docs/filepond.events.recipe_2_desc') !!}
                         </p>
                         <vibe:highlightjs language="blade" :code="$recipe2Code" />
                     </vibe:card>
 
                     {{-- Resep 3: Custom Progress Bar --}}
                     <vibe:card class="space-y-3 p-4 text-xs border-l-4 border-l-success">
-                        <div class="font-bold text-foreground text-sm">Resep 3: Bilah Kemajuan Kustom Real-Time (<code class="font-mono text-xs text-success">event === 'progress'</code>)</div>
+                        <div class="font-bold text-foreground text-sm">{{ __('docs/filepond.events.recipe_3_title') }}</div>
                         <p class="text-muted-foreground leading-relaxed">
-                            Memonitor persentase pengiriman data ke server/storage secara real-time untuk membuat visual progress bar mandiri di luar komponen:
+                            {!! __('docs/filepond.events.recipe_3_desc') !!}
                         </p>
                         <vibe:highlightjs language="blade" :code="$recipe3Code" />
                     </vibe:card>
@@ -1139,7 +1139,7 @@ BLADE;
 
                 {{-- Preview Live Monitor Event --}}
                 <div class="pt-2">
-                    <vibe:preview title="Demo Pemantauan Event Real-Time" :code="$demoLiveMonitorCode">
+                    <vibe:preview :title="__('docs/filepond.events.sandbox_title')" :code="$demoLiveMonitorCode">
                         <div class="w-full max-w-xl space-y-4" x-data="{
                             currentAction: 'idle',
                             currentFilename: '',
@@ -1208,7 +1208,7 @@ BLADE;
                         }" @vibe-filepond.window="handleEvent($event.detail)">
 
                             {{-- Dropzone dengan simulasi upload untuk uji coba event --}}
-                            <vibe:filepond id="demo-event-pond" name="demo_event" label="Pilih Berkas untuk Menguji Event" :presign-url="route('docs.filepond.presigned')" presign-method="PUT"/>
+                            <vibe:filepond id="demo-event-pond" name="demo_event" :label="__('docs/filepond.events.drop_label')" :presign-url="route('docs.filepond.presigned')" presign-method="PUT"/>
 
                             {{-- Kartu Status Real-Time & Progress Bar --}}
                             <div class="p-4 rounded-xl border border-border bg-card/60 space-y-3">
@@ -1255,7 +1255,7 @@ BLADE;
                                 <div class="space-y-1 pt-1">
                                     <div class="text-[11px] font-medium text-muted-foreground">Riwayat Event Terakhir:</div>
                                     <template x-if="logs.length === 0">
-                                        <div class="text-[11px] text-muted-foreground/70 italic py-1">Belum ada event yang tertangkap. Silakan pilih atau drop berkas di atas.</div>
+                                        <div class="text-[11px] text-muted-foreground/70 italic py-1">{{ __('docs/filepond.events.empty_events') }}</div>
                                     </template>
                                     <template x-for="(log, idx) in logs" :key="idx">
                                         <div class="flex items-center justify-between text-[11px] font-mono text-muted-foreground border-t border-border/40 py-1 gap-2">
@@ -1279,7 +1279,7 @@ BLADE;
                                 </div>
 
                                 <div class="text-[10px] text-muted-foreground/80 italic border-t border-border/40 pt-2">
-                                    💡 Tip: Klik tombol silang (x) pada berkas yang telah sukses diunggah untuk memicu event <code class="font-mono text-rose-500 font-bold">revert</code>.
+                                    {!! __('docs/filepond.events.tip') !!}
                                 </div>
                             </div>
                         </div>
@@ -1290,20 +1290,44 @@ BLADE;
             {{-- 12. Props Reference Table --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Referensi Props</h2>
-                    <p class="text-sm text-muted-foreground">Daftar lengkap opsi konfigurasi untuk komponen &lt;vibe:filepond&gt;.</p>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.props.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">{{ __('docs/filepond.props.desc') }}</p>
                 </div>
 
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">Prop</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">Tipe</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">Default</vibe:table.column>
-                        <vibe:table.column>Keterangan</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/filepond.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/filepond.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/filepond.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/filepond.props.columns.desc') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $filepondProps = [['name', 'string', 'null', 'Nama field input (otomatis diambil dari `wire:model` jika ada).'], ['size', 'string', '"md"', 'Pilihan ukuran ketinggian dropzone: `"sm"`, `"md"`, atau `"lg"`.'], ['title', 'string', 'null', 'Kustomisasi judul dropzone (default: "Choose a file or drag & drop it here").'], ['subtitle', 'string', 'null', 'Kustomisasi keterangan format dan ukuran (otomatis dihitung jika kosong).'], ['browse-label', 'string', 'null', 'Teks tombol pemilih berkas (default: "Browse File").'], ['icon', 'string', '"cloud"', 'Pilihan ikon dropzone (`cloud`, `upload`, `folder`, atau SVG string).'], ['variant', 'string', '"default"', 'Varian layout: `"default"` (lengkap), `"compact"` (horizontal), atau `"avatar"`.'], ['dashed', 'bool', 'true', 'Garis batas putus-putus (`true`) atau garis padat (`false`).'], ['drop-height', 'string', 'null', 'Tinggi minimal kustom dropzone, contoh: `"16rem"`, `"250px"`.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan dan pengunggahan banyak berkas sekaligus.'], ['max-files', 'int', 'null', 'Batas maksimal jumlah berkas yang dapat diunggah bersamaan.'], ['max-file-size', 'string', 'null', 'Batas ukuran per berkas, contoh: `"2MB"`, `"500KB"`.'], ['accepted-file-types', 'string | array', 'null', 'Filter format mime berkas, contoh: `"image/*, application/pdf"`.'], ['avatar', 'bool', 'false', 'Mengaktifkan mode lingkaran compact 1:1 untuk foto profil.'], ['image-crop', 'bool', 'false', 'Mengaktifkan fitur pemotongan gambar otomatis/manual.'], ['image-crop-aspect-ratio', 'string', 'null', 'Rasio aspek pemotongan gambar, contoh: `"1:1"`, `"16:9"`.'], ['presign-url', 'string', 'null', 'Endpoint backend untuk mendapatkan URL presigned cloud storage.'], ['presign-method', 'string', '"PUT"', 'HTTP method pengunggahan langsung ke cloud storage.'], ['encode', 'bool', 'false', 'Mengonversi berkas ke base64 string untuk form submission standar.'], ['existing-files', 'array', '[]', 'Daftar URL berkas awal yang sudah ada (misal untuk form edit).'], ['protect-upload', 'bool', 'false', 'Mencegah submit form dan navigasi saat berkas masih diunggah dengan konfirmasi &lt;vibe:alert&gt; serta peringatan penutupan tab (`beforeunload`).'], ['protect-title', 'string', 'null', 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").'], ['protect-message', 'string', 'null', 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.']];
+                            $filepondProps = [
+                            ['name', 'string', 'null', __('docs/filepond.props.items.name')],
+                            ['size', 'string', '"md"', __('docs/filepond.props.items.size')],
+                            ['title', 'string', 'null', __('docs/filepond.props.items.title')],
+                            ['subtitle', 'string', 'null', __('docs/filepond.props.items.subtitle')],
+                            ['browse-label', 'string', 'null', __('docs/filepond.props.items.browse_label')],
+                            ['icon', 'string', '"cloud"', __('docs/filepond.props.items.icon')],
+                            ['variant', 'string', '"default"', __('docs/filepond.props.items.variant')],
+                            ['dashed', 'bool', 'true', __('docs/filepond.props.items.dashed')],
+                            ['drop-height', 'string', 'null', __('docs/filepond.props.items.drop_height')],
+                            ['multiple', 'bool', 'false', __('docs/filepond.props.items.multiple')],
+                            ['max-files', 'int', 'null', __('docs/filepond.props.items.max_files')],
+                            ['max-file-size', 'string', 'null', __('docs/filepond.props.items.max_file_size')],
+                            ['accepted-file-types', 'string | array', 'null', __('docs/filepond.props.items.accepted_file_types')],
+                            ['avatar', 'bool', 'false', __('docs/filepond.props.items.avatar')],
+                            ['image-crop', 'bool', 'false', __('docs/filepond.props.items.image_crop')],
+                            ['image-crop-aspect-ratio', 'string', 'null', __('docs/filepond.props.items.image_crop_aspect_ratio')],
+                            ['presign-url', 'string', 'null', __('docs/filepond.props.items.presign_url')],
+                            ['presign-method', 'string', '"PUT"', __('docs/filepond.props.items.presign_method')],
+                            ['encode', 'bool', 'false', __('docs/filepond.props.items.encode')],
+                            ['existing-files', 'array', '[]', __('docs/filepond.props.items.existing_files')],
+                            ['protect-upload', 'bool', 'false', __('docs/filepond.props.items.protect_upload')],
+                            ['protect-title', 'string', 'null', __('docs/filepond.props.items.protect_title')],
+                            ['protect-message', 'string', 'null', __('docs/filepond.props.items.protect_message')],
+                        ];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>

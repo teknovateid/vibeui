@@ -79,4 +79,22 @@ return [
             'desc' => 'Deskripsi & Kegunaan',
         ],
     ],
+
+    'props_items' => [
+        'avatar' => [
+            'src' => 'URL foto profil gambar pengguna.',
+            'alt' => 'Teks alternatif aksesibilitas gambar.',
+            'initials' => 'Teks inisial nama (1-3 huruf) saat gambar tidak tersedia.',
+            'size' => "Pilihan ukuran: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, atau `'2xl'`.",
+            'shape' => "Geometri bentuk: `'circle'`, `'rounded'`, atau `'square'`.",
+            'indicator' => "Titik status kehadiran: `'online'`, `'busy'`, `'away'`, atau `'offline'`.",
+            'color' => "Palet warna latar inisial: `'blue'`, `'green'`, `'red'`, `'purple'`, `'yellow'`, `'pink'`, `'orange'` (default: secondary).",
+        ],
+        'group' => [
+            'limit' => 'Jumlah maksimum avatar yang ditampilkan secara kasat mata.',
+            'total' => 'Total anggota keseluruhan untuk menghitung angka sisa kuota (+N).',
+            'size' => "Ukuran avatar grup & badge counter: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, `'2xl'`.",
+            'overlap' => 'Jika `true`, menerapkan gaya saling bertumpuk (-space-x-3) dengan ring pemisah.',
+        ],
+    ],
 ];

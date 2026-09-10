@@ -233,48 +233,48 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
-                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/checkbox.test.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">{{ __('docs/checkbox.test.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok checkbox array (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">notifications[]</code>) ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                        {!! __('docs/checkbox.test.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/checkbox.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Pilihan Layanan & Persetujuan</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok array ke backend controller.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/checkbox.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/checkbox.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-5">
                                     {{-- Single Boolean Checkbox --}}
-                                    <vibe:checkbox name="agree_terms" value="1" label="Saya menyetujui syarat & ketentuan layanan" description="Wajib dicentang sebelum melanjutkan pendaftaran" checked />
+                                    <vibe:checkbox name="agree_terms" value="1" :label="__('docs/checkbox.test.agree_label')" :description="__('docs/checkbox.test.agree_desc')" checked />
 
                                     {{-- Array Checkbox Group --}}
-                                    <vibe:checkbox.group label="Saluran Notifikasi (Array)" description="Pilih kanal komunikasi yang diinginkan">
-                                        <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
-                                        <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
-                                        <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+                                    <vibe:checkbox.group :label="__('docs/checkbox.test.channels_group_label')" :description="__('docs/checkbox.test.channels_group_desc')">
+                                        <vibe:checkbox name="notifications[]" value="email" :label="__('docs/checkbox.test.channel_email')" checked />
+                                        <vibe:checkbox name="notifications[]" value="sms" :label="__('docs/checkbox.test.channel_sms')" />
+                                        <vibe:checkbox name="notifications[]" value="whatsapp" :label="__('docs/checkbox.test.channel_whatsapp')" checked />
                                     </vibe:checkbox.group>
 
                                     {{-- Card Style Checkboxes --}}
                                     <div class="space-y-2">
-                                        <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+                                        <label class="block text-xs font-semibold text-foreground">{{ __('docs/checkbox.test.addons_heading') }}</label>
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                            <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" label="Cloud Backup 100GB" description="Pencadangan otomatis setiap malam" checked />
-                                            <vibe:checkbox variant="card" name="addons[]" value="priority_support" label="Prioritas Support 24/7" description="Respon tiket di bawah 15 menit" />
+                                            <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" :label="__('docs/checkbox.test.addon_backup_label')" :description="__('docs/checkbox.test.addon_backup_desc')" checked />
+                                            <vibe:checkbox variant="card" name="addons[]" value="priority_support" :label="__('docs/checkbox.test.addon_support_label')" :description="__('docs/checkbox.test.addon_support_desc')" />
                                         </div>
                                     </div>
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/checkbox.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -285,31 +285,31 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Pilihan Layanan & Persetujuan</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai checkbox tunggal (boolean) dan kelompok array ke backend controller.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/checkbox.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/checkbox.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-5">
-                                <vibe:checkbox name="agree_terms" value="1" label="Saya menyetujui syarat & ketentuan layanan" description="Wajib dicentang sebelum melanjutkan pendaftaran" checked />
+                                <vibe:checkbox name="agree_terms" value="1" :label="__('docs/checkbox.test.agree_label')" :description="__('docs/checkbox.test.agree_desc')" checked />
 
-                                <vibe:checkbox.group label="Saluran Notifikasi (Array)" description="Pilih kanal komunikasi yang diinginkan">
-                                    <vibe:checkbox name="notifications[]" value="email" label="Notifikasi Email" checked />
-                                    <vibe:checkbox name="notifications[]" value="sms" label="Notifikasi SMS" />
-                                    <vibe:checkbox name="notifications[]" value="whatsapp" label="Notifikasi WhatsApp" checked />
+                                <vibe:checkbox.group :label="__('docs/checkbox.test.channels_group_label')" :description="__('docs/checkbox.test.channels_group_desc')">
+                                    <vibe:checkbox name="notifications[]" value="email" :label="__('docs/checkbox.test.channel_email')" checked />
+                                    <vibe:checkbox name="notifications[]" value="sms" :label="__('docs/checkbox.test.channel_sms')" />
+                                    <vibe:checkbox name="notifications[]" value="whatsapp" :label="__('docs/checkbox.test.channel_whatsapp')" checked />
                                 </vibe:checkbox.group>
 
                                 <div class="space-y-2">
-                                    <label class="block text-xs font-semibold text-foreground">Paket Addon Tambahan</label>
+                                    <label class="block text-xs font-semibold text-foreground">{{ __('docs/checkbox.test.addons_heading') }}</label>
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" label="Cloud Backup 100GB" description="Pencadangan otomatis setiap malam" checked />
-                                        <vibe:checkbox variant="card" name="addons[]" value="priority_support" label="Prioritas Support 24/7" description="Respon tiket di bawah 15 menit" />
+                                        <vibe:checkbox variant="card" name="addons[]" value="cloud_backup" :label="__('docs/checkbox.test.addon_backup_label')" :description="__('docs/checkbox.test.addon_backup_desc')" checked />
+                                        <vibe:checkbox variant="card" name="addons[]" value="priority_support" :label="__('docs/checkbox.test.addon_support_label')" :description="__('docs/checkbox.test.addon_support_desc')" />
                                     </div>
                                 </div>
                             </vibe:card.content>
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/checkbox.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

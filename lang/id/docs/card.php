@@ -85,4 +85,23 @@ return [
             'desc' => 'Deskripsi & Kegunaan',
         ],
     ],
+
+    'variants_items' => [
+        'flat_desc' => 'Latar belakang lembut tanpa garis tepi.',
+        'elevated_desc' => 'Bayangan medium untuk kartu fokus.',
+        'ghost_desc' => 'Transparan sepenuhnya tanpa garis.',
+    ],
+
+    'props_items' => [
+        'variant' => "Gaya visual kartu: `'default'`, `'outline'`, `'flat'`, `'elevated'`, atau `'ghost'`.",
+        'padding' => "Ukuran padding internal: `'none'` (p-0), `'sm'` (p-4), `'lg'` (p-8), `'xl'` (p-10), atau angka kustom. Default: `p-6`.",
+    ],
+
+    'slots_items' => [
+        'header' => 'Kontainer header kartu dengan tata letak flex vertikal dan jarak bottom bawaan.',
+        'title' => 'Elemen judul semantik kartu (<code class="font-mono text-xs text-foreground">&lt;h3&gt;</code>) dengan typography tebal dan rapat.',
+        'description' => 'Elemen deskripsi pendukung judul kartu dengan teks muted.',
+        'content' => 'Kontainer pembungkus isi konten utama kartu.',
+        'footer' => 'Bagian footer kartu yang dilengkapi garis pemisah atas dan penyusunan tombol aksi.',
+    ],
 ];

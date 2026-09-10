@@ -87,4 +87,60 @@ return [
             'desc' => 'Peran & Fungsi Utama',
         ],
     ],
+
+    'pinning_items' => [
+        'available_features' => 'FITUR TERSEDIA',
+        'perf_analytics' => 'Analitik Performa',
+        'incoming_orders' => 'Pesanan Masuk',
+    ],
+
+    'subcomponents_items' => [
+        'root' => 'Kontainer induk navigasi yang mengelola state pinning, floating popover, dan integrasi sheet minified.',
+        'group' => 'Kelompok menu bertingkat (accordion collapsible) yang menampung daftar sub-item navigasi.',
+        'label' => 'Header pemisah kategori bagian dengan kemampuan ciut/buka (*collapse/expand*) mandiri.',
+        'pinned' => 'Wadah dinamis yang menampilkan klon pintasan menu yang telah di-pin oleh pengguna.',
+        'history' => 'Wadah dinamis yang mencatat riwayat rute halaman terakhir yang diakses pengguna.',
+    ],
+
+    'props_items' => [
+        'root' => [
+            'id' => 'ID unik elemen nav untuk menyimpan preferensi di localStorage.',
+            'pinnable' => 'Mengaktifkan tombol sematkan (pin) pada seluruh item navigasi di dalamnya.',
+            'maxpin' => 'Batas maksimal jumlah menu yang dapat disematkan bersamaan.',
+            'collapsed' => 'Menyetel navigasi ke mode ringkas (icon-only).',
+        ],
+        'item' => [
+            'href' => 'Target URL tujuan link tautan.',
+            'active' => 'Menandai status menu saat ini aktif dengan styling latar highlight tegas.',
+            'badge' => 'Teks label badge indikator di sebelah kanan (misal counter angka atau status).',
+            'badgeColor' => 'Warna badge: `"success"`, `"info"`, `"destructive"`, `"warning"`, `"accent"`, atau default.',
+            'pinnable' => 'Menampilkan tombol pin secara spesifik pada item ini.',
+            'id' => 'ID unik item untuk keperluan persistensi pintasan pin.',
+        ],
+        'pinned' => [
+            'title' => 'Teks judul header accordion wadah pintasan tersemat (default: "Pinned" atau terjemahan).',
+            'open' => 'Status awal apakah wadah daftar pin terbuka atau terlipat.',
+            'persist' => 'Menyimpan status buka/tutup accordion wadah pin ke `localStorage`.',
+            'id' => 'Identifier unik untuk pemetaan persistensi state accordion ke browser.',
+        ],
+        'group' => [
+            'title' => 'Judul kelompok menu accordion.',
+            'open' => 'Status awal apakah kelompok menu dalam posisi terbuka.',
+            'active' => 'Menandai kelompok aktif dan otomatis membukanya saat halaman dimuat.',
+            'persist' => 'Menyimpan preferensi status buka/tutup kelompok ke `localStorage`.',
+            'pinnable' => 'Mengizinkan seluruh kelompok menu disematkan sebagai pin shortcut.',
+            'id' => 'ID unik kelompok untuk pemetaan persistensi status buka/tutup.',
+        ],
+        'label' => [
+            'title' => 'Teks judul header pemisah kategori bagian.',
+            'open' => 'Status awal apakah daftar item di bawah label ditampilkan.',
+            'persist' => 'Menyimpan preferensi status buka/tutup bagian ke `localStorage`.',
+            'id' => 'ID unik label untuk pemetaan persistensi state.',
+        ],
+        'history' => [
+            'title' => 'Teks judul header wadah riwayat navigasi (default: "History").',
+            'open' => 'Status awal apakah accordion riwayat terbuka atau terlipat.',
+            'persist' => 'Menyimpan preferensi status buka/tutup riwayat ke `localStorage`.',
+        ],
+    ],
 ];

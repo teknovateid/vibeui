@@ -108,4 +108,22 @@ return [
             'default' => 'Default slot rendered directly inside the circular sliding thumb (e.g. mini sun/moon icons, lock, checkmark).',
         ],
     ],
+
+    'test' => [
+        'title' => 'Form Testing ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Test submitting switch components (boolean toggle & feature settings) directly to <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Upon submission, a modal automatically displays the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> payload.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Account & Notification Settings',
+        'card_desc' => 'Test submitting boolean toggle switch values directly to the backend controller.',
+        'push_label' => 'Push Notifications',
+        'push_desc' => 'Receive important updates in real-time',
+        'backup_label' => 'Automated Backup',
+        'backup_desc' => 'Sync data to the cloud every 24 hours',
+        'security_label' => 'Critical Security Alerts',
+        'security_desc' => 'Send emergency SMS when new login detected',
+        'marketing_label' => 'Marketing Emails & Newsletters',
+        'marketing_desc' => 'Get weekly tips and attractive offers',
+        'submit_btn' => 'Submit Form & Test $request->all()',
+    ],
 ];

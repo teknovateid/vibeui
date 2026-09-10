@@ -67,4 +67,15 @@ return [
             'desc' => 'Description',
         ],
     ],
+
+    'props_items' => [
+        'breadcrumb' => [
+            'title' => 'Page title above breadcrumb navigation. Pass `false` to hide it.',
+            'class' => 'Additional Tailwind CSS classes applied to the container.',
+        ],
+        'item' => [
+            'href' => 'Destination URL. If provided, item renders as `<a wire:navigate>`. If null, renders as `<span>`.',
+            'active' => 'Marks current active page (applies semibold font and contrast styling).',
+        ],
+    ],
 ];

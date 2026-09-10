@@ -73,4 +73,12 @@ return [
             'desc' => 'Fungsi & Peran',
         ],
     ],
+
+    'props_items' => [
+        'variant' => "Variasi posisi header: `'default'` (statis normal) atau `'sticky'` (menempel di bagian atas layar dengan `sticky top-0 z-50`).",
+        'size' => "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`).",
+        'scrolledClass' => "Class utility yang ditambahkan saat header `variant=\"sticky\"` di-scroll melebihi threshold.",
+        'unscrolledClass' => "Class utility saat header `variant=\"sticky\"` di posisi paling atas (belum di-scroll).",
+        'threshold' => "Jarak scroll (dalam pixel) sebelum status scrolled aktif.",
+    ],
 ];

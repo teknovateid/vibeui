@@ -198,7 +198,7 @@
                                 <vibe:badge size="sm" variant="secondary">Flat</vibe:badge>
                             </div>
                             <h4 class="font-semibold text-sm text-foreground mb-1">{{ __('docs/card.variants.flat') }}</h4>
-                            <p class="text-xs text-muted-foreground">Latar belakang lembut tanpa garis tepi.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/card.variants_items.flat_desc') }}</p>
                         </vibe:card>
 
                         <vibe:card variant="elevated">
@@ -207,7 +207,7 @@
                                 <vibe:badge size="sm" variant="primary">Elevated</vibe:badge>
                             </div>
                             <h4 class="font-semibold text-sm text-foreground mb-1">{{ __('docs/card.variants.elevated') }}</h4>
-                            <p class="text-xs text-muted-foreground">Bayangan medium untuk kartu fokus.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/card.variants_items.elevated_desc') }}</p>
                         </vibe:card>
 
                         <vibe:card variant="ghost">
@@ -216,7 +216,7 @@
                                 <vibe:badge size="sm" variant="ghost">Ghost</vibe:badge>
                             </div>
                             <h4 class="font-semibold text-sm text-foreground mb-1">{{ __('docs/card.variants.ghost') }}</h4>
-                            <p class="text-xs text-muted-foreground">Transparan sepenuhnya tanpa garis.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/card.variants_items.ghost_desc') }}</p>
                         </vibe:card>
                     </div>
                 </vibe:preview>
@@ -368,8 +368,8 @@
                     <vibe:table.rows>
                         @php
                             $cardProps = [
-                                ['variant', 'string', "'default'", "Gaya visual kartu: `'default'`, `'outline'`, `'flat'`, `'elevated'`, atau `'ghost'`."],
-                                ['padding', 'string|null', 'null', "Ukuran padding internal: `'none'` (p-0), `'sm'` (p-4), `'lg'` (p-8), `'xl'` (p-10), atau angka kustom. Default: `p-6`."],
+                                ['variant', 'string', "'default'", __('docs/card.props_items.variant')],
+                                ['padding', 'string|null', 'null', __('docs/card.props_items.padding')],
                             ];
                         @endphp
                         @foreach ($cardProps as [$prop, $type, $default, $desc])
@@ -393,23 +393,23 @@
                     <vibe:table.rows>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:card.header&gt;</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Kontainer header kartu dengan tata letak flex vertikal dan jarak bottom bawaan.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/card.slots_items.header') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:card.title&gt;</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Elemen judul semantik kartu (<code class="font-mono text-xs text-foreground">&lt;h3&gt;</code>) dengan typography tebal dan rapat.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/card.slots_items.title') !!}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:card.description&gt;</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Elemen deskripsi pendukung judul kartu dengan teks muted.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/card.slots_items.description') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:card.content&gt;</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Kontainer pembungkus isi konten utama kartu.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/card.slots_items.content') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">&lt;vibe:card.footer&gt;</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Bagian footer kartu yang dilengkapi garis pemisah atas dan penyusunan tombol aksi.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/card.slots_items.footer') }}</vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>

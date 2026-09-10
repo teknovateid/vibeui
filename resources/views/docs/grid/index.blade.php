@@ -76,7 +76,7 @@
                                             +8.5%
                                         </vibe:badge>
                                     </div>
-                                    <p class="text-xs text-muted-foreground">1.240 pengguna baru mendaftar pekan ini</p>
+                                    <p class="text-xs text-muted-foreground">{{ __('docs/grid.cards.user_stats_desc') }}</p>
                                 </div>
                             </vibe:grid.card>
 
@@ -125,7 +125,7 @@
                                     <div class="flex items-start gap-2.5 text-xs">
                                         <div class="size-2 rounded-full bg-info mt-1.5 shrink-0"></div>
                                         <div class="min-w-0 flex-1">
-                                            <p class="font-medium text-foreground truncate">Pesanan Baru #8912 diverifikasi</p>
+                                            <p class="font-medium text-foreground truncate">{{ __('docs/grid.cards.recent_orders_desc') }}</p>
                                             <p class="text-[11px] text-muted-foreground">34 menit lalu • Sistem</p>
                                         </div>
                                     </div>
@@ -167,7 +167,7 @@
                                             +8.5%
                                         </vibe:badge>
                                     </div>
-                                    <p class="text-xs text-muted-foreground">1.240 pengguna baru mendaftar pekan ini</p>
+                                    <p class="text-xs text-muted-foreground">{{ __('docs/grid.cards.user_stats_desc') }}</p>
                                 </div>
                             </vibe:grid.card>
 
@@ -216,7 +216,7 @@
                                      <div class="flex items-start gap-2.5 text-xs">
                                          <div class="size-2 rounded-full bg-info mt-1.5 shrink-0"></div>
                                          <div class="min-w-0 flex-1">
-                                             <p class="font-medium text-foreground truncate">Pesanan Baru #8912 diverifikasi</p>
+                                             <p class="font-medium text-foreground truncate">{{ __('docs/grid.cards.recent_orders_desc') }}</p>
                                              <p class="text-[11px] text-muted-foreground">34 menit lalu • Sistem</p>
                                          </div>
                                      </div>
@@ -248,7 +248,7 @@
                         <vibe:grid id="grid-resize-demo" :resizable="true" :persist="false">
                             {{-- Kartu dengan lebar awal 6 kolom (50%), minimal 3, maksimal 12 --}}
                             <vibe:grid.card id="card-stats" title="Statistik Penjualan" :colSpan="6" :minColSpan="3" :maxColSpan="12">
-                                <p class="text-sm text-muted-foreground">Tarik handel di sudut kanan bawah kartu ini untuk mengubah lebarnya.</p>
+                                <p class="text-sm text-muted-foreground">{{ __('docs/grid.cards.resize_drag_instruction') }}</p>
                             </vibe:grid.card>
 
                             {{-- Kartu kedua dengan lebar awal 6 kolom --}}
@@ -261,7 +261,7 @@
                     <div class="w-full p-2 sm:p-4 bg-muted/20">
                         <vibe:grid id="grid-resize-preview" :resizable="true" :persist="false">
                             <vibe:grid.card id="resize-preview-1" title="Statistik Penjualan" :colSpan="6" :minColSpan="3" :maxColSpan="12">
-                                <p class="text-sm text-muted-foreground">Tarik handel di sudut kanan bawah kartu ini untuk mengubah lebarnya.</p>
+                                <p class="text-sm text-muted-foreground">{{ __('docs/grid.cards.resize_drag_instruction') }}</p>
                             </vibe:grid.card>
                             <vibe:grid.card id="resize-preview-2" title="Sumber Trafik" :colSpan="6">
                                 <p class="text-sm text-muted-foreground">Setiap kartu dapat diperlebar atau diperkecil dengan menyeret handel garis di sudut kanan bawah.</p>
@@ -284,7 +284,7 @@
                     <vibe:preview.code>
                         <vibe:grid id="grid-reorder-demo" :reorderable="true" :persist="false">
                             <vibe:grid.card id="item-a" title="Kartu A (Bisa Digeser)" :colSpan="4">
-                                <p class="text-sm text-muted-foreground">Gunakan tombol pegangan di kiri header untuk menyeret kartu ini.</p>
+                                <p class="text-sm text-muted-foreground">{{ __('docs/grid.cards.reorder_drag_instruction') }}</p>
                             </vibe:grid.card>
 
                             <vibe:grid.card id="item-b" title="Kartu B (Bisa Digeser)" :colSpan="4">
@@ -301,7 +301,7 @@
                     <div class="w-full p-2 sm:p-4 bg-muted/20">
                         <vibe:grid id="grid-reorder-preview" :reorderable="true" :persist="false">
                             <vibe:grid.card id="reorder-preview-a" title="Kartu A (Bisa Digeser)" :colSpan="4">
-                                <p class="text-sm text-muted-foreground">Gunakan tombol pegangan di kiri header untuk menyeret kartu ini.</p>
+                                <p class="text-sm text-muted-foreground">{{ __('docs/grid.cards.reorder_drag_instruction') }}</p>
                             </vibe:grid.card>
                             <vibe:grid.card id="reorder-preview-b" title="Kartu B (Bisa Digeser)" :colSpan="4">
                                 <p class="text-sm text-muted-foreground">Tukar posisi kartu ini dengan Kartu A. Kartu C di sebelahnya terkunci dan posisinya tidak dapat ditukar.</p>
@@ -497,7 +497,14 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $gridRootProps = [['id', 'string|null', 'null', 'Identifier unik untuk menyimpan konfigurasi susunan kartu ke `localStorage`.'], ['cols', 'int|string', '12', 'Jumlah total kolom dalam sistem CSS grid (standar 12 kolom dashboard).'], ['gap', 'string', "'4'", 'Jarak antar kartu (misal `"2"`, `"4"`, `"6"`).'], ['persist', 'bool', 'true', 'Mengaktifkan penyimpanan otomatis urutan dan ukuran kartu ke browser `localStorage`.'], ['resizable', 'bool', 'true', 'Mengaktifkan kemampuan drag-to-resize pada sudut kartu di dalam grid.'], ['reorderable', 'bool', 'true', 'Mengaktifkan kemampuan drag-and-drop untuk memindahkan posisi urutan kartu.'], ['storageKey', 'string|null', 'null', 'Kunci khusus untuk override penamaan key di `localStorage`.']];
+                                $gridRootProps = [
+        ['id', 'string|null', 'null', __('docs/grid.props_items.root.id')],
+        ['cols', 'int|string', '12', __('docs/grid.props_items.root.cols')],
+        ['gap', 'int|string', '4', __('docs/grid.props_items.root.gap')],
+        ['persist', 'bool', 'false', __('docs/grid.props_items.root.persist')],
+        ['reorderable', 'bool', 'true', __('docs/grid.props_items.root.reorderable')],
+        ['resizable', 'bool', 'true', __('docs/grid.props_items.root.resizable')],
+    ];
                             @endphp
                             @foreach ($gridRootProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -523,7 +530,16 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $gridCardProps = [['id / key', 'string', '— (Wajib)', 'Kunci identifikasi unik kartu yang digunakan untuk persistensi dan target drop.'], ['title', 'string|null', 'null', 'Judul teks pada header kartu widget.'], ['titleTag', 'string', "'h3'", 'Tag heading HTML untuk judul kartu (misal: "h2", "h3", "h4", "div").'], ['description', 'string|null', 'null', 'Deskripsi atau teks keterangan kecil di bawah judul kartu.'], ['colSpan', 'int|string', '4', 'Lebar awal kartu dalam kelipatan kolom grid (1 sampai 12).'], ['rowSpan', 'int|string', '1', 'Tinggi kartu dalam kelipatan baris grid.'], ['minColSpan', 'int|string', '2', 'Batas minimal lebar kolom saat kartu di-resize.'], ['maxColSpan', 'int|string', '12', 'Batas maksimal lebar kolom saat kartu di-resize.'], ['resizable', 'bool', 'true', 'Mengizinkan atau menonaktifkan handel resize pada kartu ini.'], ['reorderable', 'bool', 'true', 'Mengizinkan atau menonaktifkan tombol drag pemindahan kartu ini.'], ['variant', 'string', "'default'", 'Tampilan visual kartu: `"default"`, `"outline"`, `"flat"`, atau `"elevated"`.'], ['padding', 'string', "'default'", 'Ukuran ruang padding dalam kartu: `"none"`, `"sm"`, `"default"`, `"lg"`.']];
+                                $gridCardProps = [
+        ['id / key', 'string', '— (Wajib)', __('docs/grid.props_items.card.id')],
+        ['colSpan', 'int', '4', __('docs/grid.props_items.card.colSpan')],
+        ['minColSpan', 'int', '2', __('docs/grid.props_items.card.minColSpan')],
+        ['maxColSpan', 'int', '12', __('docs/grid.props_items.card.maxColSpan')],
+        ['reorderable', 'bool', 'true', __('docs/grid.props_items.card.reorderable')],
+        ['resizable', 'bool', 'true', __('docs/grid.props_items.card.resizable')],
+        ['title', 'string|null', 'null', __('docs/grid.props_items.card.title')],
+        ['description', 'string|null', 'null', __('docs/grid.props_items.card.description')],
+    ];
                             @endphp
                             @foreach ($gridCardProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -549,7 +565,11 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $toolbarProps = [['title', 'string|null', 'null', 'Judul dashboard atau nama bagian grid.'], ['description', 'string|null', 'null', 'Keterangan atau panduan singkat penggunaan widget grid.'], ['showReset', 'bool', 'true', 'Menampilkan tombol bawaan "Reset Layout" untuk mengembalikan tata letak semula.']];
+                                $toolbarProps = [
+        ['title', 'string|null', 'null', __('docs/grid.props_items.toolbar.title')],
+        ['description', 'string|null', 'null', __('docs/grid.props_items.toolbar.description')],
+        ['resetLabel', 'string', "'Reset Layout'", __('docs/grid.props_items.toolbar.resetLabel')],
+    ];
                             @endphp
                             @foreach ($toolbarProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>

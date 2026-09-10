@@ -390,9 +390,9 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                         <vibe:table.rows>
                             @php
                                 $containerProps = [
-                                    ['position', "'bottom-right'|'bottom-left'|'top-right'|'top-left'|'top-center'|'bottom-center'", "'bottom-right'", 'Posisi penempatan default container tumpukan toast pada layar.'],
-                                    ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk toast persisten).'],
-                                    ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).']
+                                    ['position', "'bottom-right'|'bottom-left'|'top-right'|'top-left'|'top-center'|'bottom-center'", "'bottom-right'", __('docs/toast.props_items.container.position')],
+                                    ['timeout', 'int|false', '3000', __('docs/toast.props_items.container.timeout')],
+                                    ['sound', 'bool|string', 'false', __('docs/toast.props_items.container.sound')]
                                 ];
                             @endphp
                             @foreach ($containerProps as [$prop, $type, $default, $desc])
@@ -420,12 +420,12 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                         <vibe:table.rows>
                             @php
                                 $payloadParams = [
-                                    ['type', "'success'|'error'|'warning'|'info'", "'info'", 'Jenis status notifikasi toast yang menentukan palet warna, badge, dan ikon otomatis.'],
-                                    ['title', 'string', 'null', 'Judul utama notifikasi toast (opsional).'],
-                                    ['message', 'string', '""', 'Pesan deskripsi lengkap toast yang ingin disampaikan kepada pengguna.'],
-                                    ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon bawaan status.'],
-                                    ['timeout', 'int|false', 'Inherit (3000)', 'Menimpa durasi auto-dismiss (false agar toast tetap terbuka hingga tombol close diklik).'],
-                                    ['sound', 'bool|string', 'Inherit (false)', 'Menimpa preferensi efek suara saat toast muncul (true atau URL string audio).']
+                                    ['type', "'success'|'error'|'warning'|'info'", "'info'", __('docs/toast.props_items.payload.type')],
+                                    ['title', 'string', 'null', __('docs/toast.props_items.payload.title')],
+                                    ['message', 'string', '""', __('docs/toast.props_items.payload.message')],
+                                    ['icon', 'string (HTML/SVG)', 'null', __('docs/toast.props_items.payload.icon')],
+                                    ['timeout', 'int|false', 'Inherit (3000)', __('docs/toast.props_items.payload.timeout')],
+                                    ['sound', 'bool|string', 'Inherit (false)', __('docs/toast.props_items.payload.sound')]
                                 ];
                             @endphp
                             @foreach ($payloadParams as [$prop, $type, $default, $desc])

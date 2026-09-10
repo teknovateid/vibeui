@@ -296,17 +296,17 @@
                     <vibe:table.rows>
                         @php
                             $badgeProps = [
-                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'accent'|'destructive'|'success'|'warning'|'info'", "'default'", 'Skema warna dan varian visual badge.'],
-                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Ukuran tinggi, padding horizontal, dan ukuran tipografi badge.'],
-                                ['icon', 'string|slot|null', 'null', 'Ikon visual yang disisipkan di sisi kiri (leading icon).'],
-                                ['trailingIcon', 'string|slot|null', 'null', 'Ikon visual yang disisipkan di sisi kanan (trailing icon).'],
-                                ['prefix', 'string|null', 'null', 'Teks awalan sebelum slot utama (misal simbol mata uang).'],
-                                ['suffix', 'string|null', 'null', 'Teks akhiran setelah slot utama.'],
-                                ['dot', 'bool', 'false', 'Menampilkan titik indikator status di sisi kiri.'],
-                                ['dotPulse', 'bool', 'false', 'Menambahkan efek animasi ping radar pada status dot.'],
-                                ['dismissible', 'bool', 'false', 'Menampilkan tombol hapus interaktif di sisi kanan badge.'],
-                                ['href', 'string|null', 'null', 'Jika diisi, badge otomatis dirender sebagai hyperlink `<a wire:navigate>`.'],
-                                ['class', 'string|null', 'null', 'Kelas Tailwind tambahan via `twMerge` (misal `rounded-full` untuk gaya pill).'],
+                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'accent'|'destructive'|'success'|'warning'|'info'", "'default'", __('docs/badge.props_items.variant')],
+                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/badge.props_items.size')],
+                                ['icon', 'string|slot|null', 'null', __('docs/badge.props_items.icon')],
+                                ['trailingIcon', 'string|slot|null', 'null', __('docs/badge.props_items.trailingIcon')],
+                                ['prefix', 'string|null', 'null', __('docs/badge.props_items.prefix')],
+                                ['suffix', 'string|null', 'null', __('docs/badge.props_items.suffix')],
+                                ['dot', 'bool', 'false', __('docs/badge.props_items.dot')],
+                                ['dotPulse', 'bool', 'false', __('docs/badge.props_items.dotPulse')],
+                                ['dismissible', 'bool', 'false', __('docs/badge.props_items.dismissible')],
+                                ['href', 'string|null', 'null', __('docs/badge.props_items.href')],
+                                ['class', 'string|null', 'null', __('docs/badge.props_items.class')],
                             ];
                         @endphp
                         @foreach ($badgeProps as [$prop, $type, $default, $desc])

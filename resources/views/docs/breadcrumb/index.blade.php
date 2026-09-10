@@ -233,7 +233,10 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $breadcrumbProps = [['title', 'string|bool', 'config(\'app.name\')', 'Judul halaman di atas navigasi remah roti. Berikan `false` untuk menyembunyikannya.'], ['class', 'string|null', 'null', 'Kelas Tailwind tambahan yang diterapkan pada container pembungkus.']];
+                            $breadcrumbProps = [
+                                ['title', 'string|bool', "config('app.name')", __('docs/breadcrumb.props_items.breadcrumb.title')],
+                                ['class', 'string|null', 'null', __('docs/breadcrumb.props_items.breadcrumb.class')],
+                            ];
                         @endphp
                         @foreach ($breadcrumbProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -257,7 +260,10 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $itemProps = [['href', 'string|null', 'null', 'URL tujuan. Jika diisi, item dirender sebagai `<a wire:navigate>`. Jika kosong, dirender sebagai `<span>`.'], ['active', 'bool', 'false', 'Menandakan halaman aktif saat ini (menerapkan gaya font tebal dan warna kontras).']];
+                            $itemProps = [
+                                ['href', 'string|null', 'null', __('docs/breadcrumb.props_items.item.href')],
+                                ['active', 'bool', 'false', __('docs/breadcrumb.props_items.item.active')],
+                            ];
                         @endphp
                         @foreach ($itemProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>

@@ -272,48 +272,48 @@
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            <vibe:dynamic-form name="members" label="Daftar Anggota Tim Proyek (Uji Lengkap)" description="Pengujian menyeluruh repeater dengan berbagai komponen input Vibe UI." min="1" max="4" add-text="Tambah Anggota" variant="card" :allow-reorder="true" :allow-duplicate="true">
+                            <vibe:dynamic-form name="members" :label="__('docs/dynamic-form.test_form.label')" :description="__('docs/dynamic-form.test_form.desc')" min="1" max="4" :add-text="__('docs/dynamic-form.test_form.add_member')" variant="card" :allow-reorder="true" :allow-duplicate="true">
                                 <div class="space-y-4">
                                     {{-- 1. Input, Select, Date-time --}}
                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <vibe:input name="member_name" label="Nama Lengkap" placeholder="Contoh: Budi Santoso" required />
-                                        <vibe:select name="role" label="Peran" :options="[
+                                        <vibe:input name="member_name" :label="__('docs/dynamic-form.test_form.member_name')" :placeholder="__('docs/dynamic-form.test_form.name_placeholder')" required />
+                                        <vibe:select name="role" :label="__('docs/dynamic-form.test_form.role')" :options="[
                                             'lead' => 'Project Lead',
                                             'dev' => 'Developer',
                                             'ui_ux' => 'UI/UX Designer',
                                             'qa' => 'QA Engineer'
-                                        ]" placeholder="Pilih Peran" />
-                                        <vibe:date-time name="join_date" label="Tanggal Bergabung" placeholder="Pilih tanggal" />
+                                        ]" :placeholder="__('docs/dynamic-form.test_form.role_placeholder')" />
+                                        <vibe:date-time name="join_date" :label="__('docs/dynamic-form.test_form.join_date')" :placeholder="__('docs/dynamic-form.test_form.join_placeholder')" />
                                     </div>
 
                                     {{-- 2. Textarea, Range, Switch --}}
-                                    <vibe:textarea name="notes" label="Catatan / Bio Singkat" rows="3" placeholder="Tuliskan catatan keahlian..." />
+                                    <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
                                     <div class="grid grid-cols-1 md:grid-cols-2 items-center w-full gap-4">
-                                        <vibe:range name="skill_score" label="Skor Keahlian" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
-                                        <vibe:switch name="is_remote" label="Bekerja Jarak Jauh (Remote)" description="Bekerja penuh secara remote / WFA" :checked="true" />
+                                        <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
+                                        <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
                                     </div>
 
                                     {{-- 3. Radio, Checkbox, Filepond --}}
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border/40">
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-semibold text-foreground">Tipe Kontrak</label>
+                                            <label class="block text-xs font-semibold text-foreground">{{ __('docs/dynamic-form.test_form.contract_type') }}</label>
                                             <vibe:radio name="contract_type" value="fulltime" label="Full-Time" :checked="true" />
-                                            <vibe:radio name="contract_type" value="contract" label="Kontrak (PKWT)" />
+                                            <vibe:radio name="contract_type" value="contract" :label="__('docs/dynamic-form.test_form.contract')" />
                                             <vibe:radio name="contract_type" value="freelance" label="Freelance" />
                                         </div>
                                         <div class="space-y-1.5">
-                                            <label class="block text-xs font-semibold text-foreground">Fasilitas & Akses</label>
-                                            <vibe:checkbox name="has_laptop" value="1" label="Laptop Perusahaan" :checked="true" />
-                                            <vibe:checkbox name="has_server_access" value="1" label="Akses Server Produksi" />
-                                            <vibe:checkbox name="signed_nda" value="1" label="Persetujuan NDA" :checked="true" />
+                                            <label class="block text-xs font-semibold text-foreground">{{ __('docs/dynamic-form.test_form.facilities') }}</label>
+                                            <vibe:checkbox name="has_laptop" value="1" :label="__('docs/dynamic-form.test_form.laptop')" :checked="true" />
+                                            <vibe:checkbox name="has_server_access" value="1" :label="__('docs/dynamic-form.test_form.server_access')" />
+                                            <vibe:checkbox name="signed_nda" value="1" :label="__('docs/dynamic-form.test_form.signed_nda')" :checked="true" />
                                         </div>
                                     </div>
-                                    <vibe:filepond name="avatar" label="Foto Profil / Berkas" size="sm" :imagePreview="true" />
+                                    <vibe:filepond name="avatar" :label="__('docs/dynamic-form.test_form.avatar')" size="sm" :imagePreview="true" />
                                 </div>
                             </vibe:dynamic-form>
 
                             <vibe:button type="submit" variant="primary" class="mt-4">
-                                Simpan Form & Lihat $request->all()
+                                {{ __('docs/dynamic-form.test_form.submit_btn_code') }}
                             </vibe:button>
                         </vibe:form>
                     </vibe:preview.code>
@@ -322,61 +322,61 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm font-semibold text-foreground">Form Anggota Tim Proyek (Pengujian Lengkap)</h3>
-                                <p class="text-xs text-muted-foreground">Termasuk input, select, date-time, textarea, range, switch, radio, checkbox, dan filepond. Coba tambah baris, duplikasi, ubah nilai, lalu submit untuk menguji payload array PHP di backend via AJAX.</p>
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/dynamic-form.test_form.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground">{{ __('docs/dynamic-form.test_form.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content>
-                                <vibe:dynamic-form name="members" min="1" max="4" add-text="Tambah Anggota" variant="card" :allow-reorder="true" :allow-duplicate="true">
+                                <vibe:dynamic-form name="members" min="1" max="4" :add-text="__('docs/dynamic-form.test_form.add_member')" variant="card" :allow-reorder="true" :allow-duplicate="true">
                                     <div class="space-y-4">
                                         {{-- 1. Input, Select, Date-time --}}
                                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                            <vibe:input name="member_name" label="Nama Lengkap" placeholder="Contoh: Budi Santoso" />
-                                            <vibe:select name="role" label="Peran" :options="[
+                                            <vibe:input name="member_name" :label="__('docs/dynamic-form.test_form.member_name')" :placeholder="__('docs/dynamic-form.test_form.name_placeholder')" />
+                                            <vibe:select name="role" :label="__('docs/dynamic-form.test_form.role')" :options="[
                                                 'lead' => 'Project Lead',
                                                 'dev' => 'Developer',
                                                 'ui_ux' => 'UI/UX Designer',
                                                 'qa' => 'QA Engineer'
-                                            ]" placeholder="Pilih Peran" />
-                                            <vibe:date-time name="join_date" label="Tanggal Bergabung" placeholder="Pilih tanggal" />
+                                            ]" :placeholder="__('docs/dynamic-form.test_form.role_placeholder')" />
+                                            <vibe:date-time name="join_date" :label="__('docs/dynamic-form.test_form.join_date')" :placeholder="__('docs/dynamic-form.test_form.join_placeholder')" />
                                         </div>
 
                                         {{-- 2. Textarea, Range, Switch --}}
-                                        <vibe:textarea name="notes" label="Catatan / Bio Singkat" rows="3" placeholder="Tuliskan catatan keahlian..." />
+                                        <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
                                         <div class="grid grid-cols-1 md:grid-cols-2 items-center w-full gap-4">
-                                            <vibe:range name="skill_score" label="Skor Keahlian" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
-                                            <vibe:switch name="is_remote" label="Bekerja Jarak Jauh (Remote)" description="Bekerja penuh secara remote / WFA" :checked="true" />
+                                            <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
+                                            <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
                                         </div>
 
                                         {{-- 3. Radio, Checkbox, Filepond --}}
                                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-border/40">
                                             <div class="space-y-1.5">
-                                                <label class="block text-xs font-semibold text-foreground">Tipe Kontrak</label>
+                                                <label class="block text-xs font-semibold text-foreground">{{ __('docs/dynamic-form.test_form.contract_type') }}</label>
                                                 <vibe:radio name="contract_type" value="fulltime" label="Full-Time" :checked="true" />
-                                                <vibe:radio name="contract_type" value="contract" label="Kontrak (PKWT)" />
+                                                <vibe:radio name="contract_type" value="contract" :label="__('docs/dynamic-form.test_form.contract')" />
                                                 <vibe:radio name="contract_type" value="freelance" label="Freelance" />
                                             </div>
                                             <div class="space-y-1.5">
-                                                <label class="block text-xs font-semibold text-foreground">Fasilitas & Akses</label>
-                                                <vibe:checkbox name="has_laptop" value="1" label="Laptop Perusahaan" :checked="true" />
-                                                <vibe:checkbox name="has_server_access" value="1" label="Akses Server Produksi" />
-                                                <vibe:checkbox name="signed_nda" value="1" label="Persetujuan NDA" :checked="true" />
+                                                <label class="block text-xs font-semibold text-foreground">{{ __('docs/dynamic-form.test_form.facilities') }}</label>
+                                                <vibe:checkbox name="has_laptop" value="1" :label="__('docs/dynamic-form.test_form.laptop')" :checked="true" />
+                                                <vibe:checkbox name="has_server_access" value="1" :label="__('docs/dynamic-form.test_form.server_access')" />
+                                                <vibe:checkbox name="signed_nda" value="1" :label="__('docs/dynamic-form.test_form.signed_nda')" :checked="true" />
                                             </div>
                                         </div>
-                                        <vibe:filepond name="avatar" label="Foto Profil / Berkas" size="sm" :imagePreview="true" />
+                                        <vibe:filepond name="avatar" :label="__('docs/dynamic-form.test_form.avatar')" size="sm" :imagePreview="true" />
                                     </div>
                                 </vibe:dynamic-form>
                             </vibe:card.content>
 
                             <vibe:card.footer class="flex items-center justify-between">
-                                <p class="text-xs text-muted-foreground">Payload dikirim via AJAX ke FormController::store()</p>
+                                <p class="text-xs text-muted-foreground">{{ __('docs/dynamic-form.test_form.ajax_hint') }}</p>
                                 <vibe:button type="submit" variant="primary">
                                     <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
                                         <polyline points="17 21 17 13 7 13 7 21" />
                                         <polyline points="7 3 7 8 15 8" />
                                     </svg>
-                                    <span>Simpan Form & Uji Payload</span>
+                                    <span>{{ __('docs/dynamic-form.test_form.submit_btn') }}</span>
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

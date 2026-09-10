@@ -80,7 +80,7 @@
                 @click="window.dispatchEvent(new CustomEvent('open-modal', { detail: '{{ $modalId }}' }))"
                 class="flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold text-xs shadow-xl hover:bg-primary/90 transition-all cursor-pointer border border-primary-foreground/20 hover:scale-105 active:scale-95">
             <span class="flex size-2 rounded-full bg-success animate-pulse"></span>
-            <span>Lihat Payload FilePond</span>
+            <span>{{ __('docs/test_modal.filepond_pill') }}</span>
             <span class="px-1.5 py-0.5 rounded-full bg-primary-foreground/20 text-[10px] font-mono font-bold" x-text="`${Object.keys(submittedData || {}).length} keys`"></span>
         </button>
     </div>
@@ -99,11 +99,11 @@
                 </span>
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <span class="font-semibold text-foreground">Berkas & Form Berhasil Diposting</span>
+                        <span class="font-semibold text-foreground">{{ __('docs/test_modal.filepond_success_title') }}</span>
                         <vibe:badge variant="primary" size="sm">200 OK • FilepondController</vibe:badge>
                     </div>
                     <p class="text-sm font-normal text-muted-foreground">
-                        Data formulir berhasil diterima oleh <code class="px-1.5 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground font-semibold">FilepondController::requestTest()</code> via <code class="px-1.5 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground font-semibold">$request->all()</code> tanpa refresh halaman.
+                        {!! __('docs/test_modal.filepond_success_desc') !!}
                     </p>
                 </div>
             </div>
@@ -112,9 +112,9 @@
         <vibe:modal.content>
             <template x-if="!submittedData || Object.keys(submittedData).length === 0">
                 <div class="py-8 text-center space-y-2 rounded-xl border border-dashed border-border bg-muted/20">
-                    <p class="text-sm font-semibold text-foreground">Belum ada data formulir yang dikirim.</p>
+                    <p class="text-sm font-semibold text-foreground">{{ __('docs/test_modal.empty_title') }}</p>
                     <p class="text-xs text-muted-foreground max-w-sm mx-auto">
-                        Silakan unggah berkas pada formulir pengujian di dokumentasi dan klik tombol kirim form untuk melihat data <code class="font-mono text-xs">$request->all()</code> secara langsung.
+                        {!! __('docs/test_modal.filepond_empty_desc') !!}
                     </p>
                 </div>
             </template>
@@ -127,17 +127,17 @@
                             <button type="button" @click="activeTab = 'summary'"
                                     class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                                     :class="activeTab === 'summary' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'">
-                                Ringkasan Berkas
+                                {{ __('docs/test_modal.tabs.summary') }}
                             </button>
                             <button type="button" @click="activeTab = 'json'"
                                     class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                                     :class="activeTab === 'json' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'">
-                                JSON Payload
+                                {{ __('docs/test_modal.tabs.json') }}
                             </button>
                             <button type="button" @click="activeTab = 'table'"
                                     class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
                                     :class="activeTab === 'table' ? 'bg-primary text-primary-foreground shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'">
-                                Tabel Key-Value
+                                {{ __('docs/test_modal.tabs.table') }}
                             </button>
                         </div>
 
@@ -149,7 +149,7 @@
                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                             </svg>
-                            <span x-text="copied ? 'Tersalin!' : 'Salin JSON'"></span>
+                            <span x-text="copied ? '{{ __('docs/test_modal.copied') }}' : '{{ __('docs/test_modal.copy_json') }}'"></span>
                         </button>
                     </div>
 
@@ -162,9 +162,9 @@
                                 <line x1="12" x2="12.01" y1="16" y2="16"/>
                             </svg>
                             <div class="space-y-0.5">
-                                <p class="font-semibold text-foreground">FilePond Client-to-Controller Flow Sukses</p>
+                                <p class="font-semibold text-foreground">{{ __('docs/test_modal.filepond_flow_success_title') }}</p>
                                 <p class="text-muted-foreground text-[11px] leading-relaxed">
-                                    FilePond menyuntikkan kunci penyimpanan (S3 / Cloud Object Key) atau server ID ke dalam input tersembunyi form. Saat disubmit, controller menerima kunci ini langsung di <code class="font-mono text-[10px] bg-background/50 px-1 py-0.5 rounded">$request->all()</code> untuk disimpan ke basis data.
+                                    {!! __('docs/test_modal.filepond_flow_success_desc') !!}
                                 </p>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
                                                 <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                                             </svg>
-                                            Salin
+                                            {{ __('docs/test_modal.copy') }}
                                         </button>
                                     </div>
                                     <div class="font-mono text-xs p-2 rounded-lg bg-background border border-border text-muted-foreground break-all select-all font-medium" x-text="item.value"></div>
@@ -204,17 +204,17 @@
                     <div x-show="activeTab === 'table'" class="overflow-hidden">
                         <vibe:table variant="bordered" dense>
                             <vibe:table.header>
-                                <vibe:table.column class="whitespace-nowrap">Field (Key)</vibe:table.column>
-                                <vibe:table.column>Nilai (Value)</vibe:table.column>
-                                <vibe:table.column class="whitespace-nowrap">Tipe Data</vibe:table.column>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/test_modal.table_columns.field') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/test_modal.table_columns.value') }}</vibe:table.column>
+                                <vibe:table.column class="whitespace-nowrap">{{ __('docs/test_modal.table_columns.type') }}</vibe:table.column>
                             </vibe:table.header>
                             <vibe:table.rows>
                                 <template x-for="(val, key) in (submittedData || {})" :key="key">
                                     <vibe:table.row>
                                         <vibe:table.cell class="font-mono font-semibold text-foreground whitespace-nowrap" x-text="key"></vibe:table.cell>
                                         <vibe:table.cell class="font-mono text-muted-foreground break-all">
-                                            <span x-show="key === '_token'" class="text-muted-foreground/60 italic">(CSRF Token Valid)</span>
-                                            <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? 'null / kosong' : val)"></span>
+                                            <span x-show="key === '_token'" class="text-muted-foreground/60 italic">{{ __('docs/test_modal.csrf_valid') }}</span>
+                                            <span x-show="key !== '_token'" x-text="typeof val === 'object' ? JSON.stringify(val) : (val === '' ? '{{ __('docs/test_modal.null_empty') }}' : val)"></span>
                                         </vibe:table.cell>
                                         <vibe:table.cell class="font-mono text-[11px] text-muted-foreground whitespace-nowrap">
                                             <span x-text="Array.isArray(val) ? 'Array (' + val.length + ')' : typeof val"></span>
@@ -231,10 +231,10 @@
         {{-- Footer Modal --}}
         <vibe:modal.footer class="justify-between">
             <p class="text-[11px] text-muted-foreground">
-                Waktu respons: <span class="font-mono text-foreground font-medium" x-text="submittedAt || '{{ session('submitted_at', '') }}'"></span>
+                {{ __('docs/test_modal.response_time') }} <span class="font-mono text-foreground font-medium" x-text="submittedAt || '{{ session('submitted_at', '') }}'"></span>
             </p>
             <vibe:button type="button" variant="primary" size="sm" @click="close">
-                Tutup Modal
+                {{ __('docs/test_modal.close_modal') }}
             </vibe:button>
         </vibe:modal.footer>
     </vibe:modal>

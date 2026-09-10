@@ -152,4 +152,47 @@ return [
             'desc' => 'Description',
         ],
     ],
+
+    'livewire_demo' => [
+        'email_label' => 'Email',
+        'email_info' => 'Used for login.',
+        'save_btn' => 'Save Changes',
+    ],
+
+    'props_items' => [
+        'label' => 'Label text above the input.',
+        'id' => 'HTML input id attribute. Default: name or uniqid().',
+        'name' => 'HTML name attribute. Automatically extracted from wire:model if omitted.',
+        'type' => 'HTML input type: text, email, password, number, url, tel, etc.',
+        'size' => 'Input height and text size.',
+        'variant' => 'Visual style variant.',
+        'description' => 'Small helper text below the label, before the input.',
+        'info' => 'Helper note below the input. Hidden when error exists.',
+        'error' => 'Custom error message or boolean to trigger error state.',
+        'errorName' => 'Laravel validation error key if different from name (e.g. user.phone).',
+        'prefix' => 'Text on the left side of the input (e.g. "https://", "$").',
+        'suffix' => 'Text on the right side of the input (e.g. ".com", "/month").',
+        'class' => 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).',
+        'wrapperClass' => 'Extra class for the outer wrapper div.',
+    ],
+
+    'slots_items' => [
+        'icon' => 'SVG icon on the left side (leading icon). Use <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.',
+        'trailingIcon' => 'SVG icon on the right side (trailing icon). Use <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.',
+    ],
+
+    'test' => [
+        'title' => 'Form Testing ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Test submitting various input field variants directly to <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Upon submission, a modal automatically displays the backend-received <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> payload.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Profile & Account Data Form',
+        'card_desc' => 'Test submitting various input field values directly to the backend controller.',
+        'username_label' => 'Username',
+        'email_label' => 'Email Address',
+        'password_label' => 'Password',
+        'phone_label' => 'Phone Number',
+        'budget_label' => 'Estimated Budget',
+        'submit_btn' => 'Submit Form & Test $request->all()',
+    ],
 ];

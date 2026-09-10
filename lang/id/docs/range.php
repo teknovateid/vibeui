@@ -144,4 +144,22 @@ return [
             'wrapperClass' => 'Class CSS tambahan untuk elemen kontainer pembungkus terluar.',
         ],
     ],
+
+    'test' => [
+        'title' => 'Pengujian Form ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Uji coba pengiriman nilai slider range (volume, harga, persentase) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Pengaturan Performa Server',
+        'card_desc' => 'Uji pengiriman semua jenis range: numerik, checkpoint strict, checkpoint fleksibel (nilai antara), dan range yang bisa dipilih langsung via tombol checkpoint.',
+        'cpu_label' => 'Batas Penggunaan CPU',
+        'cpu_info' => 'Disarankan maksimal 80% untuk stabilitas sistem.',
+        'storage_label' => 'Paket Penyimpanan (Strict)',
+        'storage_info' => 'Slider hanya bisa berpindah ke paket yang tersedia.',
+        'ram_label' => 'Alokasi RAM Server (Nilai Antara Aktif)',
+        'ram_info' => 'Titik 2/4/6/8 GB tersedia, tapi Anda bebas memilih nilai di antaranya (mis. 3 GB).',
+        'bandwidth_label' => 'Tingkat Performa Server',
+        'bandwidth_info' => 'Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih performa di antaranya.',
+        'submit_btn' => 'Kirim Form & Uji $request->all()',
+    ],
 ];

@@ -225,4 +225,21 @@ return [
             ],
         ],
     ],
+
+    'common' => [
+        'btn_close' => 'Tutup',
+        'btn_cancel' => 'Batal',
+        'btn_save' => 'Simpan',
+        'compound_desc_code' => 'Struktur modal Vibe UI kini mendukung subkomponen modular yang terstruktur, rapi, dan mudah dikustomisasi: <vibe:modal.header>, <vibe:modal.content>, dan <vibe:modal.footer>.',
+        'compound_desc' => 'Dialog modal berbasis compound subcomponents ini memiliki header, konten, dan footer yang terisolasi dengan rapi. Anda juga dapat langsung menambahkan custom styling pada dialog modal melalui atribut class="...".',
+        'sm_desc' => 'Ukuran modal sm untuk konten ringkas.',
+        'sm_content' => 'Konten modal dengan ukuran sm (max-w-sm).',
+        'default_desc' => 'Ukuran default 2xl cocok untuk sebagian besar dialog.',
+        'default_content' => 'Konten modal dengan ukuran default 2xl (max-w-2xl).',
+        'lg_desc' => 'Ukuran modal 5xl untuk tampilan data lebar.',
+        'lg_content' => 'Konten modal dengan ukuran 5xl (max-w-5xl).',
+        'full_desc' => 'Ukuran modal fullscreen untuk alur kerja penuh.',
+        'full_content' => 'Konten modal dengan ukuran layar penuh (w-screen h-screen).',
+        'pos_desc' => 'Modal ini diatur menggunakan prop position="{position}". Dialog akan muncul dan bertransisi dari arah tersebut.',
+    ],
 ];

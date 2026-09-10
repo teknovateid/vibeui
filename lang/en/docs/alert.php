@@ -130,4 +130,33 @@ return [
             'desc' => 'Description',
         ],
     ],
+
+    'props_items' => [
+        'container' => [
+            'position' => 'Default placement position of the alert notification container on screen.',
+            'align' => 'Content alignment of text and icons inside the alert body.',
+            'timeout' => 'Auto-dismiss delay duration in milliseconds (or false for persistent alerts).',
+            'sound' => 'Play synthesized Web Audio API chime (true) or external audio URL string.',
+            'blur' => 'Container backdrop blur intensity (e.g., "md", "lg", or true).',
+            'closeOnOutside' => 'Close alert when clicking outside (default: true for standard alerts, false for confirm).',
+        ],
+        'payload' => [
+            'type' => 'Alert status type determining background color palette, accent border, and default icon.',
+            'title' => 'Main alert title.',
+            'message' => 'Full description message communicated to the user.',
+            'icon' => 'Custom SVG icon element to replace default status icon.',
+            'position' => 'Override placement position specifically for this alert.',
+            'align' => 'Override horizontal alignment of text and icons specifically for this alert.',
+            'timeout' => 'Override auto-dismiss duration (false to keep open until user dismisses).',
+            'blocking' => 'Display dark modal overlay backdrop with blur behind alert.',
+            'blur' => 'Display backdrop with specific blur intensity ("sm", "md", "lg", "xl", true, false).',
+            'sound' => 'Override sound effect preference on alert appearance.',
+            'confirmButton' => 'Confirm button config: string text or object { text, action, class }.',
+            'closeButton' => 'Close/cancel button config: string text or object { text, action, class }.',
+            'buttonLayout' => 'Button layout direction: "col" for vertical stack or "row" for horizontal.',
+            'closeOnOutside' => 'Whether alert can be closed by clicking outside.',
+            'id' => 'Unique alert ID. Required if using persist: true.',
+            'persist' => 'Persist dismissed state so alert does not re-appear: true, string key, or "session".',
+        ],
+    ],
 ];

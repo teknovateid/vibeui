@@ -59,4 +59,18 @@ return [
             'wrapperClass' => 'Additional CSS classes for the outer container element.',
         ],
     ],
+
+    'test' => [
+        'title' => 'Form Testing ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Test submitting various textarea variants directly to <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Upon submission, a modal automatically displays the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> payload.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'User Feedback & Notes Form',
+        'card_desc' => 'Test submitting various textarea variants directly to the backend controller.',
+        'feedback_label' => 'Feedback Summary',
+        'feedback_placeholder' => 'Write a summary of your experience here...',
+        'notes_label' => 'Detailed Notes (Auto-Resize & Counter)',
+        'notes_placeholder' => 'Type longer notes, textarea height will adjust automatically...',
+        'submit_btn' => 'Submit Form & Test $request->all()',
+    ],
 ];

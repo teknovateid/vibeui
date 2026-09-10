@@ -49,10 +49,10 @@
 
                 <vibe:preview :title="__('docs/date-time.basic_usage.preview_title')">
                     <vibe:preview.code>
-                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" description="Pilih tanggal lahir untuk melengkapi profil pengguna." clearable />
+                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" :description="__('docs/date-time.basic_usage.birth_desc')" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" description="Pilih tanggal lahir untuk melengkapi profil pengguna." clearable />
+                        <vibe:date-time name="birth_date" label="{{ __('docs/date-time.basic_usage.birth_label') }}" placeholder="{{ __('docs/date-time.basic_usage.birth_placeholder') }}" :description="__('docs/date-time.basic_usage.birth_desc')" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -72,15 +72,15 @@
                         <line x1="12" y1="16" x2="12" y2="12" />
                         <line x1="12" y1="8" x2="12.01" y2="8" />
                     </svg>
-                    <span><strong>Tips Penggunaan:</strong> Klik teks bulan (misal: <em>September</em>) atau angka tahun (misal: <em>2026</em>) di bagian atas popup untuk melompat antar dekade dan bulan secara instan.</span>
+                    <span><strong>{{ __('docs/date-time.fast_jump.tip_title') }}</strong> {!! __('docs/date-time.fast_jump.tip_desc') !!}</span>
                 </div>
 
                 <vibe:preview :title="__('docs/date-time.fast_jump.preview_title')">
                     <vibe:preview.code>
-                        <vibe:date-time name="archive_date" label="Arsip Dokumen Lampau" value="1998-05-21" clearable />
+                        <vibe:date-time name="archive_date" :label="__('docs/date-time.fast_jump.archive_label')" value="1998-05-21" clearable />
                     </vibe:preview.code>
                     <div class="max-w-sm mx-auto p-4">
-                        <vibe:date-time name="archive_date" label="Arsip Dokumen Lampau" value="1998-05-21" clearable />
+                        <vibe:date-time name="archive_date" :label="__('docs/date-time.fast_jump.archive_label')" value="1998-05-21" clearable />
                     </div>
                 </vibe:preview>
             </section>
@@ -250,7 +250,27 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $propsList = [['type / mode', 'string', "'single'", "Mode picker: `'single'`, `'datetime'`, `'range'`, `'datetime-range'`, `'time'`, `'time-range'`, `'multiple'`, atau `'month'`."], ['name', 'string|null', 'null', 'Nama input form untuk disubmit ke controller backend.'], ['startName', 'string|null', 'null', 'Nama input form khusus untuk tanggal mulai pada mode range (dual input output).'], ['endName', 'string|null', 'null', 'Nama input form khusus untuk tanggal selesai pada mode range (dual input output).'], ['label', 'string|null', 'null', 'Label teks di atas input field.'], ['presets', 'bool|array', 'false', 'Menampilkan shortcut rentang tanggal populer (*Hari Ini, 7 Hari Terakhir, dll*).'], ['time24', 'bool', 'true', 'Format 24 jam (`true`) atau format 12 jam dengan switch AM/PM (`false`).'], ['minuteStep', 'int', '1', 'Kelipatan pilihan menit pada time selector (misal 5, 10, atau 15).'], ['showSeconds', 'bool', 'false', 'Menampilkan input pemilihan detik.'], ['dualMonth', 'bool', 'false', 'Menampilkan 2 bulan sekaligus berdampingan pada layar desktop untuk mode range.'], ['inline', 'bool', 'false', 'Menampilkan kalender langsung tertanam di halaman tanpa floating popover.'], ['clearable', 'bool', 'true', 'Menampilkan tombol silang untuk mengosongkan nilai yang sudah dipilih.'], ['minDate', 'string|null', 'null', 'Batas tanggal paling awal yang dapat dipilih (format `YYYY-MM-DD`).'], ['maxDate', 'string|null', 'null', 'Batas tanggal paling akhir yang dapat dipilih (format `YYYY-MM-DD`).'], ['disabledDates', 'array', '[]', 'Daftar tanggal tertentu yang dinonaktifkan / tidak bisa dipilih.'], ['disabledDaysOfWeek', 'array', '[]', 'Hari dalam sepekan yang dinonaktifkan (misal `[0, 6]` untuk akhir pekan).'], ['markers', 'array', '[]', 'Array asosiatif tanggal ke warna status dot penanda (`primary`, `emerald`, `rose`, `amber`).'], ['locale', 'string|null', 'app()->getLocale()', "Bahasa antarmuka kalender: `'id'` (Indonesia) atau `'en'` (Inggris)."], ['firstDayOfWeek', 'int', '1', 'Hari pertama dalam seminggu: `1` (Senin) atau `0` (Minggu).']];
+                            $propsList = [
+                                ['type / mode', 'string', "'single'", __('docs/date-time.props_items.type')],
+                                ['name', 'string|null', 'null', __('docs/date-time.props_items.name')],
+                                ['startName', 'string|null', 'null', __('docs/date-time.props_items.startName')],
+                                ['endName', 'string|null', 'null', __('docs/date-time.props_items.endName')],
+                                ['label', 'string|null', 'null', __('docs/date-time.props_items.label')],
+                                ['presets', 'bool|array', 'false', __('docs/date-time.props_items.presets')],
+                                ['time24', 'bool', 'true', __('docs/date-time.props_items.time24')],
+                                ['minuteStep', 'int', '1', __('docs/date-time.props_items.minuteStep')],
+                                ['showSeconds', 'bool', 'false', __('docs/date-time.props_items.showSeconds')],
+                                ['dualMonth', 'bool', 'false', __('docs/date-time.props_items.dualMonth')],
+                                ['inline', 'bool', 'false', __('docs/date-time.props_items.inline')],
+                                ['clearable', 'bool', 'true', __('docs/date-time.props_items.clearable')],
+                                ['minDate', 'string|null', 'null', __('docs/date-time.props_items.minDate')],
+                                ['maxDate', 'string|null', 'null', __('docs/date-time.props_items.maxDate')],
+                                ['disabledDates', 'array', '[]', __('docs/date-time.props_items.disabledDates')],
+                                ['disabledDaysOfWeek', 'array', '[]', __('docs/date-time.props_items.disabledDaysOfWeek')],
+                                ['markers', 'array', '[]', __('docs/date-time.props_items.markers')],
+                                ['locale', 'string|null', 'app()->getLocale()', __('docs/date-time.props_items.locale')],
+                                ['firstDayOfWeek', 'int', '1', __('docs/date-time.props_items.firstDayOfWeek')],
+                            ];
                         @endphp
                         @foreach ($propsList as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -268,41 +288,41 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
-                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/date-time.test.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">{{ __('docs/date-time.test.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai berbagai mode date-time (single date, range dengan start/end input, datetime, dan time-range) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                        {!! __('docs/date-time.test.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/date-time.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Penjadwalan & Periode Waktu</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai date, range, datetime, dan time-range langsung ke backend controller.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/date-time.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/date-time.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-4">
                                     {{-- Single Date --}}
-                                    <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
+                                    <vibe:date-time name="birth_date" :label="__('docs/date-time.test.birth_label')" :placeholder="__('docs/date-time.test.birth_placeholder')" clearable />
 
                                     {{-- Date Range with startName & endName --}}
-                                    <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
+                                    <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" :label="__('docs/date-time.test.range_label')" :presets="true" :dualMonth="true" clearable />
 
                                     {{-- DateTime --}}
-                                    <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
+                                    <vibe:date-time type="datetime" name="consultation_schedule" :label="__('docs/date-time.test.datetime_label')" :time24="true" minuteStep="15" clearable />
 
                                     {{-- Time Range --}}
-                                    <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                                    <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" :label="__('docs/date-time.test.time_range_label')" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/date-time.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -313,23 +333,23 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Penjadwalan & Periode Waktu</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai date, range, datetime, dan time-range langsung ke backend controller.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/date-time.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/date-time.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-4">
-                                <vibe:date-time name="birth_date" label="Tanggal Lahir" placeholder="Pilih tanggal lahir..." clearable />
+                                <vibe:date-time name="birth_date" :label="__('docs/date-time.test.birth_label')" :placeholder="__('docs/date-time.test.birth_placeholder')" clearable />
 
-                                <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" label="Periode Cuti / Liburan (Range)" :presets="true" :dualMonth="true" clearable />
+                                <vibe:date-time type="range" name="vacation_period" startName="vacation_start" endName="vacation_end" :label="__('docs/date-time.test.range_label')" :presets="true" :dualMonth="true" clearable />
 
-                                <vibe:date-time type="datetime" name="consultation_schedule" label="Jadwal Konsultasi (DateTime)" :time24="true" minuteStep="15" clearable />
+                                <vibe:date-time type="datetime" name="consultation_schedule" :label="__('docs/date-time.test.datetime_label')" :time24="true" minuteStep="15" clearable />
 
-                                <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" label="Jam Operasional Layanan (Time Range)" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
+                                <vibe:date-time type="time-range" name="operational_hours" startName="open_time" endName="close_time" :label="__('docs/date-time.test.time_range_label')" value="09:00 - 18:00" :time24="true" minuteStep="30" clearable />
                             </vibe:card.content>
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/date-time.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

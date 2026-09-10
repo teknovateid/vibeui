@@ -71,4 +71,28 @@ return [
             'desc' => 'Layout Behavior',
         ],
     ],
+
+    'props_items' => [
+        'grid_list' => [
+            'id' => 'Unique ID to partition layout preference persistence in localStorage.',
+            'defaultLayout' => "Initial fallback display layout if no saved preference exists: `'list'` or `'grid'`.",
+            'title' => 'List title automatically rendered on the top left header.',
+            'description' => 'Brief description rendered beneath the header title.',
+            'badge' => 'Badge text (using `<vibe:badge>`) displayed beside the title.',
+            'badgeVariant' => 'Badge visual variant (e.g. `secondary`, `outline`, `primary`, etc).',
+            'header' => 'Custom slot for header content beside the switcher on the top left.',
+            'actions' => 'Custom slot for additional action buttons placed next to the switcher.',
+            'showSwitcher' => 'Render the interactive Grid / List switcher toggle button (using `<vibe:button>`).',
+        ],
+        'card' => [
+            'variant' => 'Card visual variant from `<vibe:card>` (`default`, `outline`, `elevated`, `ghost`, `flat`).',
+            'padding' => 'Card padding size (`none`, `sm`, `lg`, `xl`, default `sm`).',
+            'hover' => 'Add smooth hover transition and elevation effect to the card.',
+            'title' => 'Card title rendered automatically in the card header.',
+            'description' => 'Card description rendered automatically below the title.',
+            'header' => 'Custom slot for top card header content.',
+            'actions' => 'Action button slot in the top right corner of the card.',
+            'footer' => 'Card footer slot with separator line.',
+        ],
+    ],
 ];

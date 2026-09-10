@@ -152,4 +152,47 @@ return [
             'desc' => 'Deskripsi',
         ],
     ],
+
+    'livewire_demo' => [
+        'email_label' => 'Email',
+        'email_info' => 'Digunakan untuk masuk log.',
+        'save_btn' => 'Simpan Perubahan',
+    ],
+
+    'props_items' => [
+        'label' => 'Teks label di atas input.',
+        'id' => 'Atribut id HTML input. Default: name atau uniqid().',
+        'name' => 'Atribut name HTML. Otomatis diekstrak dari wire:model jika dihilangkan.',
+        'type' => 'Tipe input HTML: text, email, password, number, url, tel, dll.',
+        'size' => 'Tinggi dan ukuran teks input.',
+        'variant' => 'Varian gaya visual.',
+        'description' => 'Teks petunjuk kecil di bawah label, sebelum input.',
+        'info' => 'Catatan pembantu di bawah input. Disembunyikan saat ada error.',
+        'error' => 'Pesan error kustom atau boolean untuk memicu status error.',
+        'errorName' => 'Kunci error validasi Laravel jika berbeda dari name (mis. user.phone).',
+        'prefix' => 'Teks di sisi kiri input (misal "https://", "$").',
+        'suffix' => 'Teks di sisi kanan input (misal ".com", "/bulan").',
+        'class' => 'Kelas tambahan untuk input digabungkan via twMerge (misal "rounded-full" untuk gaya pill).',
+        'wrapperClass' => 'Kelas tambahan untuk div pembungkus terluar.',
+    ],
+
+    'slots_items' => [
+        'icon' => 'Ikon SVG di sisi kiri (leading icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:icon&gt;</code>.',
+        'trailingIcon' => 'Ikon SVG di sisi kanan (trailing icon). Gunakan <code class="font-mono text-foreground">&lt;x-slot:trailingIcon&gt;</code>.',
+    ],
+
+    'test' => [
+        'title' => 'Pengujian Form ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Uji coba pengiriman nilai berbagai variasi input langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat form dikirimkan, modal akan otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code> yang diterima oleh backend.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Formulir Profil & Data Akun',
+        'card_desc' => 'Uji coba pengiriman nilai berbagai variasi input langsung ke backend controller.',
+        'username_label' => 'Nama Pengguna',
+        'email_label' => 'Alamat Email',
+        'password_label' => 'Kata Sandi',
+        'phone_label' => 'Nomor Telepon',
+        'budget_label' => 'Estimasi Anggaran',
+        'submit_btn' => 'Kirim Form & Uji $request->all()',
+    ],
 ];

@@ -60,4 +60,17 @@ return [
             'desc' => 'Behavior & Mechanism',
         ],
     ],
+
+    'props_items' => [
+        'code' => 'Code string to syntax-highlight. If empty, the component uses the `$slot` content.',
+        'language' => 'Programming language (e.g. `php`, `javascript`, `blade`, `bash`, `html`, `css`, `json`, `sql`).',
+        'title' => 'Title or filename rendered on the top header bar.',
+        'copyable' => 'Displays interactive copy button to clipboard with visual checkmark feedback.',
+        'lineNumbers' => 'Displays unselectable line numbers on the left edge of code blocks.',
+        'badge' => 'Displays language badge in header. Can be a custom string for custom label.',
+        'header' => 'Displays top header bar. If `false`, copy button floats on the top right.',
+        'maxHeight' => 'Vertical height constraint (e.g. `220` or `"300px"`).',
+        'wrap' => 'If `true`, wraps long lines of code instead of horizontal scrollbar.',
+        'theme' => 'Highlight.js color theme scheme (default: `vibe`).',
+    ],
 ];

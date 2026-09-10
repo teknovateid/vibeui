@@ -85,4 +85,23 @@ return [
             'desc' => 'Description & Usage',
         ],
     ],
+
+    'variants_items' => [
+        'flat_desc' => 'Soft subtle background without borders.',
+        'elevated_desc' => 'Medium elevation shadow for focused cards.',
+        'ghost_desc' => 'Fully transparent without borders.',
+    ],
+
+    'props_items' => [
+        'variant' => "Card visual style: `'default'`, `'outline'`, `'flat'`, `'elevated'`, or `'ghost'`.",
+        'padding' => "Internal padding sizing: `'none'` (p-0), `'sm'` (p-4), `'lg'` (p-8), `'xl'` (p-10), or custom string. Default: `p-6`.",
+    ],
+
+    'slots_items' => [
+        'header' => 'Card header container with vertical flex layout and default bottom spacing.',
+        'title' => 'Semantic title element (<code class="font-mono text-xs text-foreground">&lt;h3&gt;</code>) with bold, snug typography.',
+        'description' => 'Supporting description element beneath card title in muted text.',
+        'content' => 'Main card body content wrapper.',
+        'footer' => 'Card footer section with top divider and action button placement.',
+    ],
 ];

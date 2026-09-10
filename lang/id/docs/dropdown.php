@@ -99,4 +99,25 @@ return [
             'desc' => 'Deskripsi & Kegunaan',
         ],
     ],
+
+    'props_items' => [
+        'dropdown' => [
+            'keyboard' => 'Mengaktifkan navigasi aksesibilitas keyboard (Escape untuk keluar, panah atas/bawah untuk berpindah item, panah kanan/kiri untuk submenu).',
+        ],
+        'body' => [
+            'align' => "Posisi penyejajaran popover: `'right'`, `'left'`, `'top'`, `'top-left'`, `'top-right'`, `'top-center'`, `'bottom'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'`.",
+            'width' => "Lebar container dropdown: `'48'` (12rem), `'56'` (14rem), `'64'` (16rem), `'72'`, `'80'`, `'96'`, `'xl'`, `'2xl'`, `'min'`, atau `'full'`.",
+        ],
+        'item' => [
+            'destructive' => 'Menerapkan gaya aksi berbahaya dengan warna teks merah samar yang menjadi tegas dan berlatar belakang merah lembut saat dihover (`hover:bg-destructive/10`).',
+            'variant' => "Pilihan varian item: `'default'` atau `'destructive'`.",
+            'href' => 'Jika diisi, item dirender sebagai tautan navigasi `<a>` dengan dukungan `wire:navigate`.',
+            'type' => 'Tipe tombol ketika item tidak memiliki atribut `href`.',
+        ],
+        'sub' => [
+            'label' => 'Teks judul pemicu submenu bertingkat.',
+            'isOpen' => 'Status terbuka awal dari submenu.',
+            'position' => "Gaya penempatan: `'absolute'` (popover horizontal) atau `'relative'` (accordion bertingkat).",
+        ],
+    ],
 ];

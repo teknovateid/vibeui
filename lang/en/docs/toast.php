@@ -105,4 +105,20 @@ return [
             'desc' => 'Description',
         ],
     ],
+
+    'props_items' => [
+        'container' => [
+            'position' => 'Default stacking container position on screen.',
+            'timeout' => 'Auto-dismiss delay duration in milliseconds (or false for persistent toasts).',
+            'sound' => 'Play synthesized Web Audio API chime (true) or external audio file (string URL).',
+        ],
+        'payload' => [
+            'type' => 'Toast status type determining color palette, badge, and default icon.',
+            'title' => 'Toast title (optional).',
+            'message' => 'Full toast message description.',
+            'icon' => 'Custom SVG icon element to replace default status icon.',
+            'timeout' => 'Override auto-dismiss duration (false to keep open until manually closed).',
+            'sound' => 'Override sound effect preference when toast appears (true or audio URL string).',
+        ],
+    ],
 ];

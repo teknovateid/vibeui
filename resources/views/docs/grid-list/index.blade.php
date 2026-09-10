@@ -460,7 +460,17 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $gridListProps = [['id', 'string', "'default_page'", 'ID unik untuk membedakan penyimpanan preferensi layout di localStorage.'], ['defaultLayout', 'string', "'list'", "Pilihan tampilan awal jika belum ada preferensi tersimpan: `'list'` atau `'grid'`."], ['title', 'string|null', 'null', 'Judul daftar yang otomatis ditampilkan di header sebelah kiri.'], ['description', 'string|null', 'null', 'Deskripsi ringkas di bawah judul header.'], ['badge', 'string|null', 'null', 'Teks lencana (menggunakan `<vibe:badge>`) di samping judul.'], ['badgeVariant', 'string', "'secondary'", 'Varian lencana badge (misal: `secondary`, `outline`, `primary`, dll).'], ['header', 'slot|null', 'null', 'Slot kustom untuk header di sisi kiri atas sejajar dengan switcher.'], ['actions', 'slot|null', 'null', 'Slot tombol aksi tambahan yang diletakkan di sebelah tombol switcher.'], ['showSwitcher', 'bool', 'true', 'Tampilkan tombol toggle Grid / List switcher (menggunakan `<vibe:button>`).']];
+                            $gridListProps = [
+                            ['id', 'string', "'default_page'", __('docs/grid-list.props_items.grid_list.id')],
+                            ['defaultLayout', 'string', "'list'", __('docs/grid-list.props_items.grid_list.defaultLayout')],
+                            ['title', 'string|null', 'null', __('docs/grid-list.props_items.grid_list.title')],
+                            ['description', 'string|null', 'null', __('docs/grid-list.props_items.grid_list.description')],
+                            ['badge', 'string|null', 'null', __('docs/grid-list.props_items.grid_list.badge')],
+                            ['badgeVariant', 'string', "'secondary'", __('docs/grid-list.props_items.grid_list.badgeVariant')],
+                            ['header', 'slot|null', 'null', __('docs/grid-list.props_items.grid_list.header')],
+                            ['actions', 'slot|null', 'null', __('docs/grid-list.props_items.grid_list.actions')],
+                            ['showSwitcher', 'bool', 'true', __('docs/grid-list.props_items.grid_list.showSwitcher')],
+                        ];
                         @endphp
                         @foreach ($gridListProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -484,7 +494,16 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $cardProps = [['variant', 'string', "'default'", 'Varian kartu dari `<vibe:card>` (`default`, `outline`, `elevated`, `ghost`, `flat`).'], ['padding', 'string', "'sm'", 'Ukuran padding kartu (`none`, `sm`, `lg`, `xl`, default `sm`).'], ['hover', 'bool', 'true', 'Menambahkan efek transisi dan elevasi hover pada kartu.'], ['title', 'string|null', 'null', 'Judul kartu otomatis di header kartu.'], ['description', 'string|null', 'null', 'Deskripsi kartu otomatis di bawah judul.'], ['header', 'slot|null', 'null', 'Slot kustom untuk bagian atas kartu.'], ['actions', 'slot|null', 'null', 'Slot aksi di sudut kanan atas kartu.'], ['footer', 'slot|null', 'null', 'Slot footer kartu dengan garis pemisah.']];
+                            $cardProps = [
+                            ['variant', 'string', "'default'", __('docs/grid-list.props_items.card.variant')],
+                            ['padding', 'string', "'sm'", __('docs/grid-list.props_items.card.padding')],
+                            ['hover', 'bool', 'true', __('docs/grid-list.props_items.card.hover')],
+                            ['title', 'string|null', 'null', __('docs/grid-list.props_items.card.title')],
+                            ['description', 'string|null', 'null', __('docs/grid-list.props_items.card.description')],
+                            ['header', 'slot|null', 'null', __('docs/grid-list.props_items.card.header')],
+                            ['actions', 'slot|null', 'null', __('docs/grid-list.props_items.card.actions')],
+                            ['footer', 'slot|null', 'null', __('docs/grid-list.props_items.card.footer')],
+                        ];
                         @endphp
                         @foreach ($cardProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>

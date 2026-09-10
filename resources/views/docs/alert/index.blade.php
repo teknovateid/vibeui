@@ -506,12 +506,12 @@ vibeAlert({
                         <vibe:table.rows>
                             @php
                                 $containerProps = [
-                                    ['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", 'Posisi penempatan default container notifikasi alert pada layar.'],
-                                    ['align', "'start'|'center'|'end'", "'center'", 'Perataan konten teks dan ikon di dalam bodi alert.'],
-                                    ['timeout', 'int|false', '3000', 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).'],
-                                    ['sound', 'bool|string', 'false', 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).'],
-                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).'],
-                                    ['closeOnOutside', 'bool|null', 'null (auto)', 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).']
+                                    ['position', "'center'|'top-right'|'top-left'|'bottom-right'|'bottom-left'|'top-center'|'bottom-center'", "'center'", __('docs/alert.props_items.container.position')],
+                                    ['align', "'start'|'center'|'end'", "'center'", __('docs/alert.props_items.container.align')],
+                                    ['timeout', 'int|false', '3000', __('docs/alert.props_items.container.timeout')],
+                                    ['sound', 'bool|string', 'false', __('docs/alert.props_items.container.sound')],
+                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', __('docs/alert.props_items.container.blur')],
+                                    ['closeOnOutside', 'bool|null', 'null (auto)', __('docs/alert.props_items.container.closeOnOutside')]
                                 ];
                             @endphp
                             @foreach ($containerProps as [$prop, $type, $default, $desc])
@@ -539,22 +539,22 @@ vibeAlert({
                         <vibe:table.rows>
                             @php
                                 $payloadParams = [
-                                    ['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.'],
-                                    ['title', 'string', 'null', 'Judul utama notifikasi alert.'],
-                                    ['message', 'string', '""', 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.'],
-                                    ['icon', 'string (HTML/SVG)', 'null', 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.'],
-                                    ['position', 'string', 'Inherit', 'Menimpa posisi penempatan container khusus untuk alert ini.'],
-                                    ['align', "'start'|'center'|'end'", 'Inherit', 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.'],
-                                    ['timeout', 'int|false', 'Inherit (false for confirm)', 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).'],
-                                    ['blocking', 'bool', 'false (true for confirm)', 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.'],
-                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).'],
-                                    ['sound', 'bool|string', 'false', 'Menimpa preferensi efek suara saat alert muncul.'],
-                                    ['confirmButton', 'string|object', "{ text: 'Tutup' }", 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.'],
-                                    ['closeButton', 'string|object', "null ('Batal' for confirm)", 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.'],
-                                    ['buttonLayout', "'row'|'col'", 'null', 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.'],
-                                    ['closeOnOutside', 'bool', 'true (false for confirm)', 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.'],
-                                    ['id', 'string', 'null', 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.'],
-                                    ['persist', 'bool|string', 'false', 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".']
+                                    ['type', "'success'|'error'|'warning'|'info'|'confirm'", "'info'", __('docs/alert.props_items.payload.type')],
+                                    ['title', 'string', 'null', __('docs/alert.props_items.payload.title')],
+                                    ['message', 'string', '""', __('docs/alert.props_items.payload.message')],
+                                    ['icon', 'string (HTML/SVG)', 'null', __('docs/alert.props_items.payload.icon')],
+                                    ['position', 'string', 'Inherit', __('docs/alert.props_items.payload.position')],
+                                    ['align', "'start'|'center'|'end'", 'Inherit', __('docs/alert.props_items.payload.align')],
+                                    ['timeout', 'int|false', 'Inherit (false for confirm)', __('docs/alert.props_items.payload.timeout')],
+                                    ['blocking', 'bool', 'false (true for confirm)', __('docs/alert.props_items.payload.blocking')],
+                                    ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'Inherit (false)', __('docs/alert.props_items.payload.blur')],
+                                    ['sound', 'bool|string', 'false', __('docs/alert.props_items.payload.sound')],
+                                    ['confirmButton', 'string|object', "{ text: 'Tutup' }", __('docs/alert.props_items.payload.confirmButton')],
+                                    ['closeButton', 'string|object', "null ('Batal' for confirm)", __('docs/alert.props_items.payload.closeButton')],
+                                    ['buttonLayout', "'row'|'col'", 'null', __('docs/alert.props_items.payload.buttonLayout')],
+                                    ['closeOnOutside', 'bool', 'true (false for confirm)', __('docs/alert.props_items.payload.closeOnOutside')],
+                                    ['id', 'string', 'null', __('docs/alert.props_items.payload.id')],
+                                    ['persist', 'bool|string', 'false', __('docs/alert.props_items.payload.persist')]
                                 ];
                             @endphp
                             @foreach ($payloadParams as [$prop, $type, $default, $desc])

@@ -553,7 +553,7 @@
                     <vibe:table.rows>
                         @php
                             $dropdownProps = [
-                                ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi aksesibilitas keyboard (Escape untuk keluar, panah atas/bawah untuk berpindah item, panah kanan/kiri untuk submenu).'],
+                                ['keyboard', 'bool', 'false', __('docs/dropdown.props_items.dropdown.keyboard')],
                             ];
                         @endphp
                         @foreach ($dropdownProps as [$prop, $type, $default, $desc])
@@ -579,8 +579,8 @@
                     <vibe:table.rows>
                         @php
                             $bodyProps = [
-                                ['align', 'string', "'right'", "Posisi penyejajaran popover: `'right'`, `'left'`, `'top'`, `'top-left'`, `'top-right'`, `'top-center'`, `'bottom'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'`."],
-                                ['width', 'string', "'48'", "Lebar container dropdown: `'48'` (12rem), `'56'` (14rem), `'64'` (16rem), `'72'`, `'80'`, `'96'`, `'xl'`, `'2xl'`, `'min'`, atau `'full'`."],
+                                ['align', 'string', "'right'", __('docs/dropdown.props_items.body.align')],
+                                ['width', 'string', "'48'", __('docs/dropdown.props_items.body.width')],
                             ];
                         @endphp
                         @foreach ($bodyProps as [$prop, $type, $default, $desc])
@@ -606,10 +606,10 @@
                     <vibe:table.rows>
                         @php
                             $itemProps = [
-                                ['destructive', 'bool', 'false', 'Menerapkan gaya aksi berbahaya dengan warna teks merah samar yang menjadi tegas dan berlatar belakang merah lembut saat dihover (`hover:bg-destructive/10`).'],
-                                ['variant', 'string', "'default'", "Pilihan varian item: `'default'` atau `'destructive'`."],
-                                ['href', 'string|null', 'null', 'Jika diisi, item dirender sebagai tautan navigasi `<a>` dengan dukungan `wire:navigate`.'],
-                                ['type', 'string', "'button'", 'Tipe tombol ketika item tidak memiliki atribut `href`.'],
+                                ['destructive', 'bool', 'false', __('docs/dropdown.props_items.item.destructive')],
+                                ['variant', 'string', "'default'", __('docs/dropdown.props_items.item.variant')],
+                                ['href', 'string|null', 'null', __('docs/dropdown.props_items.item.href')],
+                                ['type', 'string', "'button'", __('docs/dropdown.props_items.item.type')],
                             ];
                         @endphp
                         @foreach ($itemProps as [$prop, $type, $default, $desc])
@@ -635,9 +635,9 @@
                     <vibe:table.rows>
                         @php
                             $subProps = [
-                                ['label', 'string', "''", 'Teks judul pemicu submenu bertingkat.'],
-                                ['isOpen', 'bool', 'false', 'Status terbuka awal dari submenu.'],
-                                ['position', 'string', "'absolute'", "Gaya penempatan: `'absolute'` (popover horizontal) atau `'relative'` (accordion bertingkat)."],
+                                ['label', 'string', "''", __('docs/dropdown.props_items.sub.label')],
+                                ['isOpen', 'bool', 'false', __('docs/dropdown.props_items.sub.isOpen')],
+                                ['position', 'string', "'absolute'", __('docs/dropdown.props_items.sub.position')],
                             ];
                         @endphp
                         @foreach ($subProps as [$prop, $type, $default, $desc])

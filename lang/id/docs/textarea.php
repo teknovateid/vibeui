@@ -59,4 +59,18 @@ return [
             'wrapperClass' => 'Kelas CSS tambahan untuk elemen kontainer pembungkus terluar.',
         ],
     ],
+
+    'test' => [
+        'title' => 'Pengujian Form ($request->all())',
+        'badge' => 'Live Controller Test',
+        'desc' => 'Uji coba pengiriman nilai berbagai variasi textarea langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.',
+        'preview_title' => 'Form Testing Sandbox',
+        'card_title' => 'Formulir Masukan & Catatan Pengguna',
+        'card_desc' => 'Uji coba pengiriman nilai berbagai variasi textarea langsung ke backend controller.',
+        'feedback_label' => 'Ringkasan Masukan',
+        'feedback_placeholder' => 'Tuliskan ringkasan pengalaman Anda di sini...',
+        'notes_label' => 'Catatan Lengkap (Auto-Resize & Counter)',
+        'notes_placeholder' => 'Ketik catatan lebih panjang, tinggi textarea akan menyesuaikan otomatis...',
+        'submit_btn' => 'Kirim Form & Uji $request->all()',
+    ],
 ];

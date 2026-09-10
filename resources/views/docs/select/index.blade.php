@@ -387,36 +387,36 @@
                 <vibe:preview :title="__('docs/select.sizes.preview_title')" minHeight="320px">
                     <vibe:preview.code>
                         <vibe:select size="sm" label="Kecil (sm - h-8)" placeholder="Ukuran sm...">
-                            <vibe:select.option value="sm1">Pilihan Kecil</vibe:select.option>
+                            <vibe:select.option value="sm1">{{ __('docs/select.demo_options.sm') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="md" label="Sedang (md - h-9)" placeholder="Ukuran md (default)...">
-                            <vibe:select.option value="md1">Pilihan Sedang</vibe:select.option>
+                            <vibe:select.option value="md1">{{ __('docs/select.demo_options.md') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="lg" label="Besar (lg - h-10)" placeholder="Ukuran lg...">
-                            <vibe:select.option value="lg1">Pilihan Besar</vibe:select.option>
+                            <vibe:select.option value="lg1">{{ __('docs/select.demo_options.lg') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="xl" label="Ekstra (xl - h-11)" placeholder="Ukuran xl...">
-                            <vibe:select.option value="xl1">Pilihan Ekstra</vibe:select.option>
+                            <vibe:select.option value="xl1">{{ __('docs/select.demo_options.xl') }}</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
                         <vibe:select size="sm" label="Kecil (sm - h-8)" placeholder="Ukuran sm...">
-                            <vibe:select.option value="sm1">Pilihan Kecil</vibe:select.option>
+                            <vibe:select.option value="sm1">{{ __('docs/select.demo_options.sm') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="md" label="Sedang (md - h-9)" placeholder="Ukuran md (default)...">
-                            <vibe:select.option value="md1">Pilihan Sedang</vibe:select.option>
+                            <vibe:select.option value="md1">{{ __('docs/select.demo_options.md') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="lg" label="Besar (lg - h-10)" placeholder="Ukuran lg...">
-                            <vibe:select.option value="lg1">Pilihan Besar</vibe:select.option>
+                            <vibe:select.option value="lg1">{{ __('docs/select.demo_options.lg') }}</vibe:select.option>
                         </vibe:select>
 
                         <vibe:select size="xl" label="Ekstra (xl - h-11)" placeholder="Ukuran xl...">
-                            <vibe:select.option value="xl1">Pilihan Ekstra</vibe:select.option>
+                            <vibe:select.option value="xl1">{{ __('docs/select.demo_options.xl') }}</vibe:select.option>
                         </vibe:select>
                     </div>
                 </vibe:preview>
@@ -443,7 +443,7 @@
                         </vibe:select>
 
                         {{-- Individual Disabled Option --}}
-                        <vibe:select name="server_slot" label="Alokasi Server" placeholder="Pilih server...">
+                        <vibe:select name="server_slot" :label="__('docs/select.demo_options.server_label')" :placeholder="__('docs/select.demo_options.server_placeholder')">
                             <vibe:select.option value="sg1" description="Latensi rendah, siap pakai">Singapore Node 1</vibe:select.option>
                             <vibe:select.option value="us1" description="Kapasitas penuh (Maintenance)" disabled>US East Node 1 (Disabled)</vibe:select.option>
                         </vibe:select>
@@ -456,7 +456,7 @@
                             <vibe:select.option value="2">Pengembangan Perangkat Lunak</vibe:select.option>
                         </vibe:select>
 
-                        <vibe:select name="server_slot" label="Alokasi Server" placeholder="Pilih server...">
+                        <vibe:select name="server_slot" :label="__('docs/select.demo_options.server_label')" :placeholder="__('docs/select.demo_options.server_placeholder')">
                             <vibe:select.option value="sg1" description="Latensi rendah, siap pakai">Singapore Node 1</vibe:select.option>
                             <vibe:select.option value="us1" description="Kapasitas penuh (Maintenance)" disabled>US East Node 1 (Disabled)</vibe:select.option>
                         </vibe:select>
@@ -616,7 +616,29 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $selectProps = [['label', 'string', 'null', 'Label teks di atas komponen select.'], ['name', 'string', 'null', 'Nama atribut form (otomatis fallback ke wire:model).'], ['id', 'string', 'null', 'ID elemen unik untuk aksesibilitas.'], ['placeholder', 'string', '"Pilih opsi..."', 'Teks placeholder saat belum ada item terpilih.'], ['placement', 'string', '"auto"', 'Arah dropdown popover: "auto" (dinamis cerdas), "bottom", atau "top".'], ['keyboard', 'bool', 'false', 'Mengaktifkan navigasi penuh tombol keyboard (Up, Down, Enter, Space, Escape) seperti pada komponen dropdown.'], ['size', 'string', '"md"', 'Ukuran: "sm" (32px), "md" (36px), "lg" (40px), "xl" (44px).'], ['variant', 'string', '"primary"', 'Gaya: "primary", "outline", "filled", "flush", "ghost".'], ['searchable', 'bool', 'false', 'Menampilkan kolom filter pencarian real-time.'], ['searchPlaceholder', 'string', '"Cari opsi..."', 'Placeholder pada kotak pencarian.'], ['disabled', 'bool', 'false', 'Menonaktifkan seluruh komponen select.'], ['error', 'string', 'null', 'Pesan error validasi manual.'], ['errorName', 'string', 'null', 'Kunci error bag spesifik di $errors.'], ['description', 'string', 'null', 'Teks keterangan bantuan di bawah label.'], ['info', 'string', 'null', 'Teks bantuan informasi di bawah select.'], ['wrapperClass', 'string', 'null', 'Class kustom untuk pembungkus kontainer terluar.'], ['multiple', 'bool', 'false', 'Mengizinkan pemilihan lebih dari satu opsi (array value). Ditampilkan dalam bentuk chips yang dapat dihapus.'], ['min', 'int', 'null', 'Jumlah minimum opsi yang wajib dipilih pada mode multiple.'], ['max', 'int', 'null', 'Jumlah maksimum opsi yang dapat dipilih pada mode multiple. Opsi lain otomatis terkunci saat batas tercapai.']];
+                                $selectProps = [
+        ['label', 'string', 'null', __('docs/select.props_items.label')],
+        ['name', 'string', 'null', __('docs/select.props_items.name')],
+        ['id', 'string', 'auto', __('docs/select.props_items.id')],
+        ['placeholder', 'string', "'Select an option...'", __('docs/select.props_items.placeholder')],
+        ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
+        ['variant', 'string', "'default'", __('docs/select.props_items.variant')],
+        ['disabled', 'bool', 'false', __('docs/select.props_items.disabled')],
+        ['readonly', 'bool', 'false', __('docs/select.props_items.readonly')],
+        ['multiple', 'bool', 'false', __('docs/select.props_items.multiple')],
+        ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
+        ['clearable', 'bool', 'false', __('docs/select.props_items.clearable')],
+        ['max', 'int|null', 'null', __('docs/select.props_items.max')],
+        ['min', 'int|null', 'null', __('docs/select.props_items.min')],
+        ['indicator', 'bool', 'true', __('docs/select.props_items.indicator')],
+        ['description', 'string', 'null', __('docs/select.props_items.description')],
+        ['info', 'string', 'null', __('docs/select.props_items.info')],
+        ['error', 'string|bool', 'null', __('docs/select.props_items.error')],
+        ['errorName', 'string', 'null', __('docs/select.props_items.errorName')],
+        ['wrapperClass', 'string', 'null', __('docs/select.props_items.wrapperClass')],
+        ['badgeVariant', 'string', "'secondary'", __('docs/select.props_items.badgeVariant')],
+        ['required', 'bool', 'false', __('docs/select.props_items.required')],
+    ];
                             @endphp
                             @foreach ($selectProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -663,7 +685,11 @@
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $optionProps = [['value', 'mixed', '—', 'Nilai data opsi yang akan disimpan ke model.'], ['label', 'string', 'null', 'Label teks tampilan (fallback ke teks slot).'], ['description', 'string', 'null', 'Keterangan subteks di bawah label opsi.'], ['avatar', 'string', 'null', 'URL gambar thumbnail avatar opsi.'], ['icon', 'string', 'null', 'String markup SVG atau ikon kustom.'], ['disabled', 'bool', 'false', 'Menonaktifkan opsi individual ini.']];
+                                $optionProps = [
+        ['value', 'string', '— (Wajib)', __('docs/select.props_items.option_value')],
+        ['disabled', 'bool', 'false', __('docs/select.props_items.option_disabled')],
+        ['selected', 'bool', 'false', __('docs/select.props_items.option_selected')],
+    ];
                             @endphp
                             @foreach ($optionProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
@@ -682,39 +708,37 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.test.title') }}</h2>
                         <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
                     </div>
-                    <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai komponen select (single select, searchable, dan multi-select) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan hasil <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
-                    </p>
+                    <p class="text-sm text-muted-foreground">{!! __('docs/select.test.desc') !!}</p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/select.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Penugasan Peran & Keahlian Tim</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai select single, searchable, dan multi-select ke backend controller.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/select.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/select.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-4">
-                                    <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
-                                        <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
-                                        <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
-                                        <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
+                                    <vibe:select name="role" :label="__('docs/select.test.role_label')" :placeholder="__('docs/select.test.role_placeholder')">
+                                        <vibe:select.option value="superadmin">{{ __('docs/select.test.role_superadmin') }}</vibe:select.option>
+                                        <vibe:select.option value="editor" selected>{{ __('docs/select.test.role_editor') }}</vibe:select.option>
+                                        <vibe:select.option value="developer">{{ __('docs/select.test.role_developer') }}</vibe:select.option>
                                     </vibe:select>
 
-                                    <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
-                                        <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
-                                        <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
-                                        <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
-                                        <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
+                                    <vibe:select name="department" :label="__('docs/select.test.dept_label')" searchable :placeholder="__('docs/select.test.dept_placeholder')">
+                                        <vibe:select.option value="engineering" selected>{{ __('docs/select.test.dept_engineering') }}</vibe:select.option>
+                                        <vibe:select.option value="design">{{ __('docs/select.test.dept_design') }}</vibe:select.option>
+                                        <vibe:select.option value="marketing">{{ __('docs/select.test.dept_marketing') }}</vibe:select.option>
+                                        <vibe:select.option value="finance">{{ __('docs/select.test.dept_finance') }}</vibe:select.option>
                                     </vibe:select>
 
-                                    <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
+                                    <vibe:select name="frameworks" :label="__('docs/select.test.frameworks_label')" multiple searchable :placeholder="__('docs/select.test.frameworks_placeholder')">
                                         <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
                                         <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
                                         <vibe:select.option value="react">React.js</vibe:select.option>
@@ -725,7 +749,7 @@
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/select.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -736,25 +760,25 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Penugasan Peran & Keahlian Tim</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji coba pengiriman nilai select single, searchable, dan multi-select ke backend controller.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/select.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/select.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-4">
-                                <vibe:select name="role" label="Pilihan Role Pengguna" placeholder="Pilih Role...">
-                                    <vibe:select.option value="superadmin">Super Administrator</vibe:select.option>
-                                    <vibe:select.option value="editor" selected>Lead Content Editor</vibe:select.option>
-                                    <vibe:select.option value="developer">Full-stack Developer</vibe:select.option>
+                                <vibe:select name="role" :label="__('docs/select.test.role_label')" :placeholder="__('docs/select.test.role_placeholder')">
+                                    <vibe:select.option value="superadmin">{{ __('docs/select.test.role_superadmin') }}</vibe:select.option>
+                                    <vibe:select.option value="editor" selected>{{ __('docs/select.test.role_editor') }}</vibe:select.option>
+                                    <vibe:select.option value="developer">{{ __('docs/select.test.role_developer') }}</vibe:select.option>
                                 </vibe:select>
 
-                                <vibe:select name="department" label="Departemen Perusahaan" searchable placeholder="Cari Departemen...">
-                                    <vibe:select.option value="engineering" selected>Teknologi & Engineering</vibe:select.option>
-                                    <vibe:select.option value="design">UI/UX & Product Design</vibe:select.option>
-                                    <vibe:select.option value="marketing">Digital Marketing</vibe:select.option>
-                                    <vibe:select.option value="finance">Keuangan & Akuntansi</vibe:select.option>
+                                <vibe:select name="department" :label="__('docs/select.test.dept_label')" searchable :placeholder="__('docs/select.test.dept_placeholder')">
+                                    <vibe:select.option value="engineering" selected>{{ __('docs/select.test.dept_engineering') }}</vibe:select.option>
+                                    <vibe:select.option value="design">{{ __('docs/select.test.dept_design') }}</vibe:select.option>
+                                    <vibe:select.option value="marketing">{{ __('docs/select.test.dept_marketing') }}</vibe:select.option>
+                                    <vibe:select.option value="finance">{{ __('docs/select.test.dept_finance') }}</vibe:select.option>
                                 </vibe:select>
 
-                                <vibe:select name="frameworks" label="Keahlian Framework (Multiple)" multiple searchable placeholder="Pilih Framework...">
+                                <vibe:select name="frameworks" :label="__('docs/select.test.frameworks_label')" multiple searchable :placeholder="__('docs/select.test.frameworks_placeholder')">
                                     <vibe:select.option value="laravel" selected>Laravel Framework</vibe:select.option>
                                     <vibe:select.option value="vue" selected>Vue.js 3</vibe:select.option>
                                     <vibe:select.option value="react">React.js</vibe:select.option>
@@ -765,7 +789,7 @@
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/select.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

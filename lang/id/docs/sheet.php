@@ -261,4 +261,17 @@ return [
             ],
         ],
     ],
+
+    'interactive' => [
+        'main_content_flexible' => 'Konten utama ini akan fleksibel menyesuaikan lebar saat panel sheet di sampingnya dibuka atau ditutup.',
+        'form_placeholder' => 'Anda dapat meletakkan formulir, daftar navigasi, rincian filter data, atau menu pengaturan di sini...',
+        'click_position_hint' => 'Klik salah satu tombol posisi di atas untuk melihat arah transisi munculnya sheet.',
+        'left_panel_flexible' => 'Area konten ini fleksibel mengikuti ukuran lebar panel di sebelah kiri.',
+        'toggle_minify_hint' => 'Klik tombol toggle di atas untuk beralih antara tampilan sidebar penuh dan mode ikon (minify).',
+        'edge_button_hint' => 'Perhatikan tombol panah bulat di tepi pembatas panel. Klik tombol tersebut untuk melipat atau membuka panel secara instan.',
+        'click_outside_tip' => '✨ Klik di luar area panel ini untuk otomatis menutupnya.',
+        'btn_close_drawer' => 'Tutup Drawer',
+        'click_outside_fold' => 'Klik di luar area panel ini untuk langsung melipatnya kembali.',
+        'click_backdrop_tip' => '🌑 Klik pada lapisan backdrop gelap di sebelah kiri drawer ini untuk menutupnya.',
+    ],
 ];

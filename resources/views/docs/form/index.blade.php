@@ -414,7 +414,12 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $formProps = [['id', 'string|null', 'null', 'ID unik formulir. Wajib diisi jika `saveToStorage` diaktifkan sebagai kunci pembeda draf di storage.'], ['saveToStorage', 'bool', 'false', 'Jika `true`, secara otomatis menyimpan draf isian formulir ke browser storage setiap ada ketikan.'], ['storageType', 'string', "'session'", "Jenis penyimpanan browser: `'session'` (sessionStorage, aman & terhapus saat tab ditutup) atau `'local'` (localStorage, permanen)."], ['expireHours', 'int', '24', 'Masa berlaku draf dalam hitungan jam sebelum otomatis dibersihkan saat kedaluwarsa.']];
+                            $formProps = [
+                                ['id', 'string|null', 'null', __('docs/form.props_items.id')],
+                                ['saveToStorage', 'bool', 'false', __('docs/form.props_items.saveToStorage')],
+                                ['storageType', 'string', "'session'", __('docs/form.props_items.storageType')],
+                                ['expireHours', 'int', '24', __('docs/form.props_items.expireHours')],
+                            ];
                         @endphp
                         @foreach ($formProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
@@ -428,26 +433,26 @@
                 </vibe:table>
 
                 {{-- Comparison Table: session vs local vs Laravel session --}}
-                <p class="text-sm font-semibold text-foreground pt-4">Perbandingan sessionStorage vs localStorage</p>
+                <p class="text-sm font-semibold text-foreground pt-4">{{ __('docs/form.storage_comparison.title') }}</p>
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">Mekanisme</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">Lokasi</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">Masa Hidup Data</vibe:table.column>
-                        <vibe:table.column>Kasus Penggunaan Terbaik</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/form.storage_comparison.columns.mechanism') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/form.storage_comparison.columns.location') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/form.storage_comparison.columns.lifetime') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.storage_comparison.columns.best_for') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">storageType="session"</vibe:table.cell>
-                            <vibe:table.cell class="font-mono text-xs text-muted-foreground">Browser (sessionStorage)</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Selama tab aktif (terhapus saat tab ditutup)</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Formulir checkout, transaksi pembayaran, form multi-langkah (wizard), data sensitif.</vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.session_location') }}</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.session_lifetime') }}</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.session_best_for') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">storageType="local"</vibe:table.cell>
-                            <vibe:table.cell class="font-mono text-xs text-muted-foreground">Browser (localStorage)</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Tetap ada meski browser ditutup (hingga expireHours)</vibe:table.cell>
-                            <vibe:table.cell class="text-xs text-muted-foreground">Draf artikel panjang, formulir profil besar, draf dokumen kerja berulang. <span class="text-warning font-medium block mt-0.5">⚠️ Hindari menyimpan kata sandi, token, atau data keuangan.</span></vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.local_location') }}</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.local_lifetime') }}</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/form.storage_comparison.local_best_for') }} <span class="text-warning font-medium block mt-0.5">{{ __('docs/form.storage_comparison.local_warning') }}</span></vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>
@@ -462,19 +467,19 @@
                     <vibe:table.rows>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">@input.debounce.500ms</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Mendeteksi ketikan dan perubahan input dengan jeda 500 milidetik sebelum menulis ke storage agar tidak membebani performa browser.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/form.features_items.debounce') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">@submit -> clearStorage()</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Menghapus draf form dari storage secara otomatis ketika form berhasil dikirimkan.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/form.features_items.clear') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">open-modal / open-sheet</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Memulihkan draf form secara otomatis saat modal atau slide-out drawer dibuka.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{{ __('docs/form.features_items.modal_sheet') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">Sanitisasi Internal</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">Secara otomatis menyaring dan mengabaikan file biner, token CSRF (<code class="font-mono text-xs text-foreground">_token</code>), dan state internal Livewire.</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/form.features_items.sanitize') !!}</vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>

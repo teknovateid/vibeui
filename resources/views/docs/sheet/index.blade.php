@@ -92,7 +92,7 @@
                             <div class="space-y-1">
                                 <h4 class="text-sm font-semibold text-foreground">Main App Workspace</h4>
                                 <p class="text-xs text-muted-foreground max-w-xs">
-                                    Konten utama ini akan fleksibel menyesuaikan lebar saat panel sheet di sampingnya dibuka atau ditutup.
+                                    {{ __('docs/sheet.interactive.main_content_flexible') }}
                                 </p>
                             </div>
                             <vibe:button @click="$dispatch('toggle-sheet', 'demo-sheet-basic')" variant="primary" size="sm">
@@ -218,7 +218,7 @@
 
                                 {{-- Main Center --}}
                                 <div class="flex-1 flex items-center justify-center p-4 text-center text-xs text-muted-foreground">
-                                    Klik salah satu tombol posisi di atas untuk melihat arah transisi munculnya sheet.
+                                    {{ __('docs/sheet.interactive.click_position_hint') }}
                                 </div>
 
                                 {{-- Right Sheet --}}
@@ -294,7 +294,7 @@
 
                             {{-- Workspace --}}
                             <div class="flex-1 flex flex-col items-center justify-center p-6 text-center text-xs text-muted-foreground">
-                                <span>Area konten ini fleksibel mengikuti ukuran lebar panel di sebelah kiri.</span>
+                                <span>{{ __('docs/sheet.interactive.left_panel_flexible') }}</span>
                             </div>
                         </div>
                     </div>
@@ -551,7 +551,7 @@
 
                             {{-- Content --}}
                             <div class="flex-1 flex items-center justify-center p-6 text-center text-xs text-muted-foreground">
-                                Klik tombol toggle di atas untuk beralih antara tampilan sidebar penuh dan mode ikon (minify).
+                                {{ __('docs/sheet.interactive.toggle_minify_hint') }}
                             </div>
                         </div>
                     </div>
@@ -654,7 +654,7 @@
                                         {{ __('docs/sheet.layouts.drawer_desc') }}
                                     </p>
                                     <div class="p-2.5 rounded bg-muted/50 border border-border text-[11px] text-muted-foreground">
-                                        ✨ Klik di luar area panel ini untuk otomatis menutupnya.
+                                        {{ __('docs/sheet.interactive.click_outside_tip') }}
                                     </div>
                                 </vibe:sheet.content>
                                 <vibe:sheet.footer class="flex justify-end">
@@ -752,7 +752,7 @@
                                     </p>
                                     <div class="p-2.5 rounded-lg bg-success/10 border border-success/20 text-success text-[11px] space-y-1">
                                         <p class="font-semibold">✓ Fitur Aktif</p>
-                                        <p>Klik di luar area panel ini untuk langsung melipatnya kembali.</p>
+                                        <p>{{ __('docs/sheet.interactive.click_outside_fold') }}</p>
                                     </div>
                                 </vibe:sheet.content>
                                 <vibe:sheet.footer class="flex justify-end">
@@ -780,7 +780,7 @@
                                         {{ __('docs/sheet.outside_click.drawer_desc') }}
                                     </p>
                                     <div class="p-2.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-[11px]">
-                                        🌑 Klik pada lapisan backdrop gelap di sebelah kiri drawer ini untuk menutupnya.
+                                        {{ __('docs/sheet.interactive.click_backdrop_tip') }}
                                     </div>
                                 </vibe:sheet.content>
                                 <vibe:sheet.footer class="flex justify-end">

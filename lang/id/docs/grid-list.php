@@ -71,4 +71,28 @@ return [
             'desc' => 'Perilaku Tata Letak',
         ],
     ],
+
+    'props_items' => [
+        'grid_list' => [
+            'id' => 'ID unik untuk membedakan penyimpanan preferensi layout di localStorage.',
+            'defaultLayout' => "Pilihan tampilan awal jika belum ada preferensi tersimpan: `'list'` atau `'grid'`.",
+            'title' => 'Judul daftar yang otomatis ditampilkan di header sebelah kiri.',
+            'description' => 'Deskripsi ringkas di bawah judul header.',
+            'badge' => 'Teks lencana (menggunakan `<vibe:badge>`) di samping judul.',
+            'badgeVariant' => 'Varian lencana badge (misal: `secondary`, `outline`, `primary`, dll).',
+            'header' => 'Slot kustom untuk header di sisi kiri atas sejajar dengan switcher.',
+            'actions' => 'Slot tombol aksi tambahan yang diletakkan di sebelah tombol switcher.',
+            'showSwitcher' => 'Tampilkan tombol toggle Grid / List switcher (menggunakan `<vibe:button>`).',
+        ],
+        'card' => [
+            'variant' => 'Varian kartu dari `<vibe:card>` (`default`, `outline`, `elevated`, `ghost`, `flat`).',
+            'padding' => 'Ukuran padding kartu (`none`, `sm`, `lg`, `xl`, default `sm`).',
+            'hover' => 'Menambahkan efek transisi dan elevasi hover pada kartu.',
+            'title' => 'Judul kartu otomatis di header kartu.',
+            'description' => 'Deskripsi kartu otomatis di bawah judul.',
+            'header' => 'Slot kustom untuk bagian atas kartu.',
+            'actions' => 'Slot aksi di sudut kanan atas kartu.',
+            'footer' => 'Slot footer kartu dengan garis pemisah.',
+        ],
+    ],
 ];

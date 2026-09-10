@@ -339,41 +339,41 @@
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
-                        <h2 class="text-xl font-bold text-foreground">Pengujian Form ($request->all())</h2>
-                        <vibe:badge variant="primary" size="sm">Live Controller Test</vibe:badge>
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/range.test.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">{{ __('docs/range.test.badge') }}</vibe:badge>
                     </div>
                     <p class="text-sm text-muted-foreground">
-                        Uji coba pengiriman nilai slider range (volume, harga, persentase) langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">FormController@store</code>. Saat disubmit, modal otomatis muncul menampilkan payload <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$request->all()</code>.
+                        {!! __('docs/range.test.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Form Testing Sandbox">
+                <vibe:preview :title="__('docs/range.test.preview_title')">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
                             <vibe:card>
                                 <vibe:card.header>
-                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">Pengaturan Performa Server</h3>
-                                    <p class="text-xs text-muted-foreground mt-0.5">Uji pengiriman semua jenis range: numerik, checkpoint strict, checkpoint fleksibel (nilai antara), dan range yang bisa dipilih langsung via tombol checkpoint.</p>
+                                    <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/range.test.card_title') }}</h3>
+                                    <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/range.test.card_desc') }}</p>
                                 </vibe:card.header>
 
                                 <vibe:card.content class="space-y-6">
                                     {{-- Range numerik biasa --}}
-                                    <vibe:range name="cpu_limit" label="Batas Penggunaan CPU" :value="70" :showValue="true" valueSuffix="%" info="Disarankan maksimal 80% untuk stabilitas sistem." />
+                                    <vibe:range name="cpu_limit" :label="__('docs/range.test.cpu_label')" :value="70" :showValue="true" valueSuffix="%" :info="__('docs/range.test.cpu_info')" />
 
                                     {{-- Checkpoint STRICT — hanya bisa memilih titik yang tersedia --}}
-                                    <vibe:range name="storage_tier" label="Paket Penyimpanan (Strict)" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" info="Slider hanya bisa berpindah ke paket yang tersedia." />
+                                    <vibe:range name="storage_tier" :label="__('docs/range.test.storage_label')" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" :info="__('docs/range.test.storage_info')" />
 
                                     {{-- Checkpoint FLEKSIBEL — bisa memilih nilai di antara checkpoint --}}
-                                    <vibe:range name="ram_alloc" label="Alokasi RAM Server (Nilai Antara Aktif)" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" info="Titik 2/4/6/8 GB tersedia, tapi Anda bebas memilih nilai di antaranya (mis. 3 GB)." variant="success" />
+                                    <vibe:range name="ram_alloc" :label="__('docs/range.test.ram_label')" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" :info="__('docs/range.test.ram_info')" variant="success" />
 
                                     {{-- Checkpoint Fleksibel — :strict="false" dengan label string (distribusi merata, bisa pilih antar titik) --}}
-                                    <vibe:range name="bandwidth_tier" label="Tingkat Performa Server" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" info="Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih performa di antaranya." />
+                                    <vibe:range name="bandwidth_tier" :label="__('docs/range.test.bandwidth_label')" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" :info="__('docs/range.test.bandwidth_info')" />
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
                                     <vibe:button class="w-full" type="submit" variant="primary">
-                                        Kirim Form & Uji $request->all()
+                                        {{ __('docs/range.test.submit_btn') }}
                                     </vibe:button>
                                 </vibe:card.footer>
                             </vibe:card>
@@ -384,27 +384,23 @@
                         @csrf
                         <vibe:card>
                             <vibe:card.header>
-                                <h3 class="text-sm sm:text-base font-semibold text-foreground">Pengaturan Performa Server</h3>
-                                <p class="text-xs text-muted-foreground mt-0.5">Uji pengiriman semua jenis range: numerik, checkpoint strict, checkpoint fleksibel (nilai antara), dan range yang bisa dipilih langsung via tombol checkpoint.</p>
+                                <h3 class="text-sm sm:text-base font-semibold text-foreground">{{ __('docs/range.test.card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('docs/range.test.card_desc') }}</p>
                             </vibe:card.header>
 
                             <vibe:card.content class="space-y-6">
-                                {{-- Range numerik biasa --}}
-                                <vibe:range name="cpu_limit" label="Batas Penggunaan CPU" :value="70" :showValue="true" valueSuffix="%" info="Disarankan maksimal 80% untuk stabilitas sistem." />
+                                <vibe:range name="cpu_limit" :label="__('docs/range.test.cpu_label')" :value="70" :showValue="true" valueSuffix="%" :info="__('docs/range.test.cpu_info')" />
 
-                                {{-- Checkpoint STRICT — hanya bisa memilih titik yang tersedia --}}
-                                <vibe:range name="storage_tier" label="Paket Penyimpanan (Strict)" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" info="Slider hanya bisa berpindah ke paket yang tersedia." />
+                                <vibe:range name="storage_tier" :label="__('docs/range.test.storage_label')" :checkpoints="['10 GB', '50 GB', '100 GB', '250 GB', '1 TB']" strict value="50 GB" :showValue="true" :info="__('docs/range.test.storage_info')" />
 
-                                {{-- Checkpoint FLEKSIBEL — bisa memilih nilai di antara checkpoint --}}
-                                <vibe:range name="ram_alloc" label="Alokasi RAM Server (Nilai Antara Aktif)" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" info="Titik 2/4/6/8 GB tersedia, tapi Anda bebas memilih nilai di antaranya (mis. 3 GB)." variant="success" />
+                                <vibe:range name="ram_alloc" :label="__('docs/range.test.ram_label')" :min="1" :max="8" :step="1" :marks="[2 => '2 GB', 4 => '4 GB', 6 => '6 GB', 8 => '8 GB']" :value="3" :showValue="true" valueSuffix=" GB" :info="__('docs/range.test.ram_info')" variant="success" />
 
-                                {{-- Checkpoint Fleksibel — :strict="false" dengan label string (distribusi merata, bisa pilih antar titik) --}}
-                                <vibe:range name="bandwidth_tier" label="Tingkat Performa Server" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" info="Klik tombol tier untuk loncat langsung, atau geser slider untuk memilih performa di antaranya." />
+                                <vibe:range name="bandwidth_tier" :label="__('docs/range.test.bandwidth_label')" :checkpoints="['Hemat', 'Ringan', 'Normal', 'Tinggi', 'Maks']" :strict="false" value="2" :showValue="true" variant="info" :info="__('docs/range.test.bandwidth_info')" />
                             </vibe:card.content>
 
                             <vibe:card.footer>
                                 <vibe:button class="w-full" type="submit" variant="primary">
-                                    Kirim Form & Uji $request->all()
+                                    {{ __('docs/range.test.submit_btn') }}
                                 </vibe:button>
                             </vibe:card.footer>
                         </vibe:card>

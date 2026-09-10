@@ -379,13 +379,13 @@
                     <vibe:table.rows>
                         @php
                             $avatarProps = [
-                                ['src', 'string|null', 'null', 'URL foto profil gambar pengguna.'],
-                                ['alt', 'string', "''", 'Teks alternatif aksesibilitas gambar.'],
-                                ['initials', 'string|null', 'null', 'Teks inisial nama (1-3 huruf) saat gambar tidak tersedia.'],
-                                ['size', 'string', "'md'", "Pilihan ukuran: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, atau `'2xl'`."],
-                                ['shape', 'string', "'circle'", "Geometri bentuk: `'circle'`, `'rounded'`, atau `'square'`."],
-                                ['indicator', 'string|null', 'null', "Titik status kehadiran: `'online'`, `'busy'`, `'away'`, atau `'offline'`."],
-                                ['color', 'string|null', 'null', "Palet warna latar inisial: `'blue'`, `'green'`, `'red'`, `'purple'`, `'yellow'`, `'pink'`, `'orange'` (default: secondary)."],
+                                ['src', 'string|null', 'null', __('docs/avatar.props_items.avatar.src')],
+                                ['alt', 'string', "''", __('docs/avatar.props_items.avatar.alt')],
+                                ['initials', 'string|null', 'null', __('docs/avatar.props_items.avatar.initials')],
+                                ['size', 'string', "'md'", __('docs/avatar.props_items.avatar.size')],
+                                ['shape', 'string', "'circle'", __('docs/avatar.props_items.avatar.shape')],
+                                ['indicator', 'string|null', 'null', __('docs/avatar.props_items.avatar.indicator')],
+                                ['color', 'string|null', 'null', __('docs/avatar.props_items.avatar.color')],
                             ];
                         @endphp
                         @foreach ($avatarProps as [$prop, $type, $default, $desc])
@@ -411,10 +411,10 @@
                     <vibe:table.rows>
                         @php
                             $groupProps = [
-                                ['limit', 'int|null', 'null', 'Jumlah maksimum avatar yang ditampilkan secara kasat mata.'],
-                                ['total', 'int|null', 'null', 'Total anggota keseluruhan untuk menghitung angka sisa kuota (+N).'],
-                                ['size', 'string', "'md'", "Ukuran avatar grup & badge counter: `'xs'`, `'sm'`, `'md'`, `'lg'`, `'xl'`, `'2xl'`."],
-                                ['overlap', 'bool', 'true', 'Jika `true`, menerapkan gaya saling bertumpuk (-space-x-3) dengan ring pemisah.'],
+                                ['limit', 'int|null', 'null', __('docs/avatar.props_items.group.limit')],
+                                ['total', 'int|null', 'null', __('docs/avatar.props_items.group.total')],
+                                ['size', 'string', "'md'", __('docs/avatar.props_items.group.size')],
+                                ['overlap', 'bool', 'true', __('docs/avatar.props_items.group.overlap')],
                             ];
                         @endphp
                         @foreach ($groupProps as [$prop, $type, $default, $desc])

@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo title="Desain Sistem Warna — Vibe UI" description="Rumus lengkap penggunaan warna semantik dalam Vibe UI: token CSS, pola variant per komponen, formula match(), dan panduan konsistensi warna di seluruh sistem." schema="techarticle" :breadcrumbs="[
+    <vibe:seo :title="__('docs/design-system.seo_title')" :description="__('docs/design-system.seo_description')" schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
         ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Desain Sistem Warna', 'url' => '/docs/design-system']
+        ['name' => __('docs/design-system.breadcrumb'), 'url' => '/docs/design-system']
     ]" />
 
     <div class="mx-auto w-full max-w-7xl grid grid-cols-12 gap-6 lg:gap-10 items-start">
@@ -11,12 +11,12 @@
             {{-- Header --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
-                    <vibe:badge variant="secondary" class="rounded-full">Desain Sistem</vibe:badge>
-                    <span class="text-xs text-muted-foreground">Panduan & Referensi</span>
+                    <vibe:badge variant="secondary" class="rounded-full">{{ __('docs/design-system.header.badge') }}</vibe:badge>
+                    <span class="text-xs text-muted-foreground">{{ __('docs/design-system.header.subtitle') }}</span>
                 </div>
-                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">Desain Sistem Warna</h1>
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-foreground">{{ __('docs/design-system.header.title') }}</h1>
                 <p class="text-base text-muted-foreground leading-relaxed max-w-3xl">
-                    Panduan lengkap tentang token warna semantik Vibe UI, rumus <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">match()</code> variant per komponen, pola penggunaan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color-mix()</code>, dan aturan konsistensi warna di seluruh sistem komponen.
+                    {!! __('docs/design-system.header.desc') !!}
                 </p>
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">--primary</vibe:badge>
@@ -37,16 +37,25 @@
             {{-- ═══════════════════════════════════════ 1. TOKEN WARNA ═══════════════════════════════════════ --}}
             <section id="token-warna" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Token Warna Semantik</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/design-system.sections.tokens.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Vibe UI menggunakan CSS Custom Properties sebagai sumber kebenaran tunggal warna. Semua komponen <strong>wajib</strong> menggunakan token ini — bukan nilai hex langsung — agar theme light/dark berfungsi otomatis.
+                        {!! __('docs/design-system.sections.tokens.desc') !!}
                     </p>
                 </div>
 
                 {{-- Palette Visual --}}
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     @php
-                        $palette = [['name' => 'primary', 'bg' => 'bg-primary', 'text' => 'text-primary-foreground', 'token' => '--primary', 'value' => '#0a0b0a / #f9fafa (dark)', 'role' => 'Aksi utama, foreground default'], ['name' => 'secondary', 'bg' => 'bg-secondary', 'text' => 'text-secondary-foreground', 'token' => '--secondary', 'value' => '#f4f5f5 / #262726 (dark)', 'role' => 'Aksi sekunder, surface muted'], ['name' => 'success', 'bg' => 'bg-success', 'text' => 'text-success-foreground', 'token' => '--success', 'value' => '#10b981', 'role' => 'Konfirmasi, selesai, hemat'], ['name' => 'warning', 'bg' => 'bg-warning', 'text' => 'text-warning-foreground', 'token' => '--warning', 'value' => '#f59e0b', 'role' => 'Peringatan, ambang batas'], ['name' => 'destructive', 'bg' => 'bg-destructive', 'text' => 'text-destructive-foreground', 'token' => '--destructive', 'value' => '#ef4444', 'role' => 'Error, bahaya, hapus'], ['name' => 'info', 'bg' => 'bg-info', 'text' => 'text-info-foreground', 'token' => '--info', 'value' => '#0ea5e9', 'role' => 'Informasi, bantuan, sistem'], ['name' => 'accent', 'bg' => 'bg-accent', 'text' => 'text-accent-foreground', 'token' => '--accent', 'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => 'Hover surface, highlight halus'], ['name' => 'muted', 'bg' => 'bg-muted', 'text' => 'text-muted-foreground', 'token' => '--muted', 'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => 'Teks sekunder, placeholder']];
+                        $palette = [
+                            ['name' => 'primary',     'bg' => 'bg-primary',     'text' => 'text-primary-foreground',     'token' => '--primary',     'value' => '#0a0b0a / #f9fafa (dark)', 'role' => __('docs/design-system.sections.tokens.palette.primary.role')],
+                            ['name' => 'secondary',   'bg' => 'bg-secondary',   'text' => 'text-secondary-foreground',   'token' => '--secondary',   'value' => '#f4f5f5 / #262726 (dark)', 'role' => __('docs/design-system.sections.tokens.palette.secondary.role')],
+                            ['name' => 'success',     'bg' => 'bg-success',     'text' => 'text-success-foreground',     'token' => '--success',     'value' => '#10b981',                  'role' => __('docs/design-system.sections.tokens.palette.success.role')],
+                            ['name' => 'warning',     'bg' => 'bg-warning',     'text' => 'text-warning-foreground',     'token' => '--warning',     'value' => '#f59e0b',                  'role' => __('docs/design-system.sections.tokens.palette.warning.role')],
+                            ['name' => 'destructive', 'bg' => 'bg-destructive', 'text' => 'text-destructive-foreground', 'token' => '--destructive', 'value' => '#ef4444',                  'role' => __('docs/design-system.sections.tokens.palette.destructive.role')],
+                            ['name' => 'info',        'bg' => 'bg-info',        'text' => 'text-info-foreground',        'token' => '--info',        'value' => '#0ea5e9',                  'role' => __('docs/design-system.sections.tokens.palette.info.role')],
+                            ['name' => 'accent',      'bg' => 'bg-accent',      'text' => 'text-accent-foreground',      'token' => '--accent',      'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => __('docs/design-system.sections.tokens.palette.accent.role')],
+                            ['name' => 'muted',       'bg' => 'bg-muted',       'text' => 'text-muted-foreground',       'token' => '--muted',       'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => __('docs/design-system.sections.tokens.palette.muted.role')],
+                        ];
                     @endphp
                     @foreach ($palette as $color)
                         <vibe:card class="overflow-hidden">
@@ -64,17 +73,29 @@
 
                 {{-- Surface Tokens Table --}}
                 <div class="space-y-3">
-                    <h3 class="text-base font-semibold text-foreground">Token Surface & Struktur</h3>
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.tokens.surface_table.title') }}</h3>
                     <vibe:table>
                         <vibe:table.header>
-                            <vibe:table.column>Token CSS</vibe:table.column>
-                            <vibe:table.column>Light</vibe:table.column>
-                            <vibe:table.column>Dark</vibe:table.column>
-                            <vibe:table.column>Kegunaan</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/design-system.sections.tokens.surface_table.columns.token') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/design-system.sections.tokens.surface_table.columns.light') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/design-system.sections.tokens.surface_table.columns.dark') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/design-system.sections.tokens.surface_table.columns.usage') }}</vibe:table.column>
                         </vibe:table.header>
                         <vibe:table.rows>
                             @php
-                                $surfaceTokens = [['--background', '#f9fafa', '#0a0b0a', 'Latar halaman utama'], ['--foreground', '#0a0b0a', '#f9fafa', 'Teks utama di atas background'], ['--card', '#ffffff', '#181918', 'Surface kartu & panel'], ['--card-foreground', '#0a0b0a', '#f9fafa', 'Teks di atas kartu'], ['--popover', '#ffffff', '#181918', 'Surface dropdown, tooltip, popover'], ['--border', '#e5e6e5', '#262726', 'Garis pembatas, outline'], ['--input', '#e5e6e5', '#262726', 'Background input kosong / track'], ['--ring', '#0a0b0a', '#a2a4a3', 'Focus ring outline'], ['--muted-foreground', '#717372', '#a2a4a3', 'Teks placeholder, hint, caption'], ['--sidebar', '#ffffff', '#121312', 'Background sidebar nav'], ['--header', '#ffffff', '#121312', 'Background header/topbar']];
+                                $surfaceTokens = [
+                                    ['--background',       '#f9fafa', '#0a0b0a', __('docs/design-system.sections.tokens.surface_table.items.background')],
+                                    ['--foreground',       '#0a0b0a', '#f9fafa', __('docs/design-system.sections.tokens.surface_table.items.foreground')],
+                                    ['--card',             '#ffffff', '#181918', __('docs/design-system.sections.tokens.surface_table.items.card')],
+                                    ['--card-foreground',  '#0a0b0a', '#f9fafa', __('docs/design-system.sections.tokens.surface_table.items.card_foreground')],
+                                    ['--popover',          '#ffffff', '#181918', __('docs/design-system.sections.tokens.surface_table.items.popover')],
+                                    ['--border',           '#e5e6e5', '#262726', __('docs/design-system.sections.tokens.surface_table.items.border')],
+                                    ['--input',            '#e5e6e5', '#262726', __('docs/design-system.sections.tokens.surface_table.items.input')],
+                                    ['--ring',             '#0a0b0a', '#a2a4a3', __('docs/design-system.sections.tokens.surface_table.items.ring')],
+                                    ['--muted-foreground', '#717372', '#a2a4a3', __('docs/design-system.sections.tokens.surface_table.items.muted_foreground')],
+                                    ['--sidebar',          '#ffffff', '#121312', __('docs/design-system.sections.tokens.surface_table.items.sidebar')],
+                                    ['--header',           '#ffffff', '#121312', __('docs/design-system.sections.tokens.surface_table.items.header')],
+                                ];
                             @endphp
                             @foreach ($surfaceTokens as [$token, $light, $dark, $usage])
                                 <vibe:table.row>
@@ -92,9 +113,9 @@
             {{-- ═══════════════════════════════════════ 2. RUMUS VARIANT ═══════════════════════════════════════ --}}
             <section id="rumus-variant" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Rumus Variant: Solid vs Soft</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/design-system.sections.formulas.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Vibe UI memakai dua formula utama untuk komponen interaktif. Pilih formula berdasarkan <strong>bobot visual</strong> yang diinginkan.
+                        {!! __('docs/design-system.sections.formulas.desc') !!}
                     </p>
                 </div>
 
@@ -102,11 +123,11 @@
                     {{-- SOLID --}}
                     <vibe:card class="overflow-hidden">
                         <vibe:card.header class="bg-primary text-primary-foreground rounded-none border-b-0 flex-row items-center justify-between gap-3">
-                            <span class="font-semibold text-sm">Formula SOLID</span>
-                            <vibe:badge variant="secondary" size="sm">Button, Switch Track, Range</vibe:badge>
+                            <span class="font-semibold text-sm">{{ __('docs/design-system.sections.formulas.solid.title') }}</span>
+                            <vibe:badge variant="secondary" size="sm">{{ __('docs/design-system.sections.formulas.solid.badge') }}</vibe:badge>
                         </vibe:card.header>
                         <vibe:card.content class="space-y-3">
-                            <p class="text-xs text-muted-foreground">Digunakan untuk elemen interaktif utama: tombol primary, track slider aktif, toggle switch.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/design-system.sections.formulas.solid.desc') }}</p>
                             <pre class="bg-muted rounded-lg p-3 text-xs font-mono text-foreground overflow-x-auto">
 'primary' => 'bg-primary text-primary-foreground hover:bg-primary/90'
 'success' => 'bg-success text-success-foreground hover:bg-success/90'
@@ -126,11 +147,11 @@
                     {{-- SOFT --}}
                     <vibe:card class="overflow-hidden">
                         <vibe:card.header class="bg-success/15 text-success border-b border-success/20 rounded-none flex-row items-center justify-between gap-3">
-                            <span class="font-semibold text-sm">Formula SOFT (Tinted)</span>
-                            <vibe:badge variant="success" size="sm">Badge, Alert, Card Highlight</vibe:badge>
+                            <span class="font-semibold text-sm">{{ __('docs/design-system.sections.formulas.soft.title') }}</span>
+                            <vibe:badge variant="success" size="sm">{{ __('docs/design-system.sections.formulas.soft.badge') }}</vibe:badge>
                         </vibe:card.header>
                         <vibe:card.content class="space-y-3">
-                            <p class="text-xs text-muted-foreground">Digunakan untuk indikator status, badge, dan highlight ringan agar tidak terlalu dominan secara visual.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/design-system.sections.formulas.soft.desc') }}</p>
                             <pre class="bg-muted rounded-lg p-3 text-xs font-mono text-foreground overflow-x-auto">
 'success' => 'bg-success/15 text-success border border-success/20'
 'warning' => 'bg-warning/15 text-warning border border-warning/20'
@@ -149,24 +170,21 @@
                 {{-- Opacity Modifier Table --}}
                 <vibe:card>
                     <vibe:card.header>
-                        <h3 class="font-semibold text-sm text-foreground">Aturan Opacity Modifier Standar</h3>
+                        <h3 class="font-semibold text-sm text-foreground">{{ __('docs/design-system.sections.formulas.opacity.title') }}</h3>
                     </vibe:card.header>
                     <vibe:card.content>
                         <vibe:table variant="flush">
                             <vibe:table.header>
-                                <vibe:table.column>Modifier</vibe:table.column>
-                                <vibe:table.column>Kegunaan</vibe:table.column>
-                                <vibe:table.column>Contoh Kelas</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.formulas.opacity.columns.modifier') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.formulas.opacity.columns.usage') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.formulas.opacity.columns.example') }}</vibe:table.column>
                             </vibe:table.header>
                             <vibe:table.rows>
-                                @php
-                                    $opacityRules = [['/90', 'Hover state tombol solid', 'hover:bg-primary/90'], ['/80', 'Hover state secondary/muted', 'hover:bg-secondary/80'], ['/15', 'Background soft badge/alert', 'bg-success/15'], ['/20', 'Border soft badge/alert', 'border-success/20'], ['/10', 'Hover overlay ghost/icon', 'hover:bg-foreground/10'], ['/25–35', 'Focus ring via color-mix()', 'color-mix(in srgb, --primary 25%, transparent)'], ['/50', 'Disabled state opacity', 'disabled:opacity-50'], ['/70', 'Teks sekunder/caption ringan', 'text-muted-foreground/70']];
-                                @endphp
-                                @foreach ($opacityRules as [$mod, $usage, $example])
+                                @foreach (__('docs/design-system.sections.formulas.opacity.items') as $rule)
                                     <vibe:table.row>
-                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $mod }}</vibe:table.cell>
-                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $usage }}</vibe:table.cell>
-                                        <vibe:table.cell class="font-mono text-muted-foreground text-xs">{{ $example }}</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $rule['mod'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $rule['usage'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground text-xs">{{ $rule['example'] }}</vibe:table.cell>
                                     </vibe:table.row>
                                 @endforeach
                             </vibe:table.rows>
@@ -178,16 +196,16 @@
             {{-- ═══════════════════════════════════════ 3. RUMUS PER KOMPONEN ═══════════════════════════════════════ --}}
             <section id="rumus-per-komponen" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Rumus Warna Per Komponen</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/design-system.sections.components.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Tabel referensi pola warna untuk setiap komponen. Semua komponen menggunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">match($variant)</code> PHP untuk men-generate class Tailwind secara bersih.
+                        {!! __('docs/design-system.sections.components.desc') !!}
                     </p>
                 </div>
 
                 {{-- BUTTON --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Button</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.button.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/button/index.blade.php</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content class="space-y-4">
@@ -206,13 +224,25 @@
                         </div>
                         <vibe:table variant="flush">
                             <vibe:table.header>
-                                <vibe:table.column>Variant</vibe:table.column>
-                                <vibe:table.column>Formula Warna</vibe:table.column>
-                                <vibe:table.column>Hover</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.components.button.columns.variant') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.components.button.columns.formula') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.components.button.columns.hover') }}</vibe:table.column>
                             </vibe:table.header>
                             <vibe:table.rows>
                                 @php
-                                    $buttonVariants = [['primary', 'bg-primary text-primary-foreground', 'hover:bg-primary/90'], ['secondary', 'bg-secondary text-secondary-foreground', 'hover:bg-secondary/80'], ['outline', 'border border-input bg-background text-foreground', 'hover:bg-accent hover:text-accent-foreground'], ['ghost', 'text-foreground', 'hover:bg-accent hover:text-accent-foreground'], ['surface', 'bg-card border border-border/80 text-card-foreground', 'hover:bg-accent/60'], ['accent', 'bg-accent text-accent-foreground border border-accent', 'hover:bg-accent/80'], ['danger', 'bg-destructive text-destructive-foreground', 'hover:bg-destructive/90'], ['success', 'bg-success text-success-foreground', 'hover:bg-success/90'], ['warning', 'bg-warning text-warning-foreground', 'hover:bg-warning/90'], ['info', 'bg-info text-info-foreground', 'hover:bg-info/90'], ['link', 'text-primary underline-offset-4', 'hover:underline']];
+                                    $buttonVariants = [
+                                        ['primary',   'bg-primary text-primary-foreground',                   'hover:bg-primary/90'],
+                                        ['secondary', 'bg-secondary text-secondary-foreground',               'hover:bg-secondary/80'],
+                                        ['outline',   'border border-input bg-background text-foreground',   'hover:bg-accent hover:text-accent-foreground'],
+                                        ['ghost',     'text-foreground',                                      'hover:bg-accent hover:text-accent-foreground'],
+                                        ['surface',   'bg-card border border-border/80 text-card-foreground', 'hover:bg-accent/60'],
+                                        ['accent',    'bg-accent text-accent-foreground border border-accent','hover:bg-accent/80'],
+                                        ['danger',    'bg-destructive text-destructive-foreground',           'hover:bg-destructive/90'],
+                                        ['success',   'bg-success text-success-foreground',                   'hover:bg-success/90'],
+                                        ['warning',   'bg-warning text-warning-foreground',                   'hover:bg-warning/90'],
+                                        ['info',      'bg-info text-info-foreground',                         'hover:bg-info/90'],
+                                        ['link',      'text-primary underline-offset-4',                      'hover:underline'],
+                                    ];
                                 @endphp
                                 @foreach ($buttonVariants as [$variant, $base, $hover])
                                     <vibe:table.row>
@@ -229,7 +259,7 @@
                 {{-- BADGE --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Badge</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.badge.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/badge/index.blade.php</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content class="space-y-4">
@@ -245,13 +275,13 @@
                             <vibe:badge variant="info">info</vibe:badge>
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Badge (Soft/Tinted — berbeda dari Button):</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.badge.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 'danger'  => 'bg-destructive/15 text-destructive border border-destructive/20'
 'success' => 'bg-success/15     text-success     border border-success/20'
 'warning' => 'bg-warning/15     text-warning     border border-warning/20'
 'info'    => 'bg-info/15        text-info        border border-info/20'</pre>
-                            <p class="text-[11px] text-muted-foreground">💡 Badge menggunakan pola <strong>soft tinted</strong> (opacity /15 background + warna teks langsung), bukan solid background seperti Button.</p>
+                            <p class="text-[11px] text-muted-foreground">{!! __('docs/design-system.sections.components.badge.note') !!}</p>
                         </div>
                     </vibe:card.content>
                 </vibe:card>
@@ -259,7 +289,7 @@
                 {{-- SWITCH --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Switch</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.switch.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/switch/index.blade.php</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content class="space-y-4">
@@ -272,7 +302,7 @@
                             <vibe:switch name="sw_a" variant="accent" label="Accent" checked />
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Track Switch (Checked State):</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.switch.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 Track inactive  => 'bg-input border-border/70'
 Track checked:
@@ -284,7 +314,7 @@ Track checked:
   'accent'  => 'peer-checked:bg-accent-foreground peer-checked:border-accent-foreground'
 
 Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
-                            <p class="text-[11px] text-muted-foreground">💡 Switch menggunakan <strong>pola SOLID</strong> pada track aktif, dengan thumb selalu <code class="font-mono">bg-background</code> untuk kontras maksimal.</p>
+                            <p class="text-[11px] text-muted-foreground">{!! __('docs/design-system.sections.components.switch.note') !!}</p>
                         </div>
                     </vibe:card.content>
                 </vibe:card>
@@ -292,7 +322,7 @@ Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
                 {{-- RANGE --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Range Slider</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.range.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/range/index.blade.php</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content class="space-y-4">
@@ -305,7 +335,7 @@ Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
                             <vibe:range name="ds_r_a" variant="accent" label="Accent" :value="50" :showValue="true" valueSuffix="%" />
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Range (CSS Custom Property via PHP match()):</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.range.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 // PHP match() menghasilkan nilai --range-active-color:
 'primary'   => 'var(--primary)'
@@ -327,18 +357,18 @@ ring:  color-mix(in srgb, var(--range-active-color) 25%, transparent)</pre>
                 {{-- INPUT GROUP --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Input, Textarea, Select, Date-Time</h3>
-                        <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">Kelompok Form</vibe:badge>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.form_group.title') }}</h3>
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">{{ __('docs/design-system.sections.components.form_group.badge') }}</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <vibe:input name="ds_i1" label="Default" placeholder="Nilai normal" />
-                            <vibe:input name="ds_i2" label="Error State" placeholder="Nilai tidak valid" error="Field ini wajib diisi." />
-                            <vibe:input name="ds_i3" label="Info State" placeholder="Nilai dengan petunjuk" info="Format: dd/mm/yyyy" />
-                            <vibe:input name="ds_i4" label="Readonly" value="Tidak bisa diubah" readonly />
+                            <vibe:input name="ds_i1" :label="__('docs/design-system.sections.components.form_group.labels.default')" :placeholder="__('docs/design-system.sections.components.form_group.labels.default_placeholder')" />
+                            <vibe:input name="ds_i2" :label="__('docs/design-system.sections.components.form_group.labels.error')" :placeholder="__('docs/design-system.sections.components.form_group.labels.error_placeholder')" :error="__('docs/design-system.sections.components.form_group.labels.error_msg')" />
+                            <vibe:input name="ds_i3" :label="__('docs/design-system.sections.components.form_group.labels.info')" :placeholder="__('docs/design-system.sections.components.form_group.labels.info_placeholder')" :info="__('docs/design-system.sections.components.form_group.labels.info_msg')" />
+                            <vibe:input name="ds_i4" :label="__('docs/design-system.sections.components.form_group.labels.readonly')" :value="__('docs/design-system.sections.components.form_group.labels.readonly_val')" readonly />
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Kelompok Form (state-based, tidak ada prop variant warna):</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.form_group.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 Normal   => border border-input bg-background
            focus: ring-2 ring-ring ring-offset-background
@@ -351,7 +381,7 @@ Info     => helper text: text-muted-foreground text-xs
 
 Disabled => opacity-50 cursor-not-allowed
 Readonly => cursor-default (tanpa opacity reduction)</pre>
-                            <p class="text-[11px] text-muted-foreground">💡 Komponen form <strong>tidak memiliki prop <code class="font-mono">variant</code> warna</strong>. Warna hanya berubah berdasarkan state: normal, error, disabled/readonly.</p>
+                            <p class="text-[11px] text-muted-foreground">{!! __('docs/design-system.sections.components.form_group.note') !!}</p>
                         </div>
                     </vibe:card.content>
                 </vibe:card>
@@ -359,12 +389,12 @@ Readonly => cursor-default (tanpa opacity reduction)</pre>
                 {{-- DROPDOWN --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Dropdown</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.dropdown.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/dropdown/</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Dropdown Item Colors:</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.dropdown.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 // Panel/Popover surface:
 bg-popover border border-border shadow-lg rounded-xl
@@ -380,7 +410,7 @@ text-popover-foreground hover:bg-accent hover:text-accent-foreground
 
 // Divider:   border-t border-border my-1
 // Disabled:  opacity-50 pointer-events-none cursor-not-allowed</pre>
-                            <p class="text-[11px] text-muted-foreground">💡 Dropdown item semantik menggunakan pola <strong>teks berwarna + background /10</strong> saat hover — formula paling ringan untuk item dalam panel kecil.</p>
+                            <p class="text-[11px] text-muted-foreground">{!! __('docs/design-system.sections.components.dropdown.note') !!}</p>
                         </div>
                     </vibe:card.content>
                 </vibe:card>
@@ -388,12 +418,12 @@ text-popover-foreground hover:bg-accent hover:text-accent-foreground
                 {{-- MODAL & SHEET --}}
                 <vibe:card>
                     <vibe:card.header class="flex-row items-center justify-between gap-3">
-                        <h3 class="text-base font-semibold text-foreground">Modal & Sheet</h3>
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/design-system.sections.components.modal_sheet.title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">vibe/modal/, sheet/</vibe:badge>
                     </vibe:card.header>
                     <vibe:card.content>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
-                            <p class="text-xs text-muted-foreground font-semibold">📐 Rumus Modal & Sheet:</p>
+                            <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.modal_sheet.formula_label') }}</p>
                             <pre class="text-xs font-mono text-foreground overflow-x-auto">
 // Overlay backdrop:
 bg-black/50 (fixed inset-0, z-50)
@@ -420,9 +450,9 @@ border-t-4 border-t-destructive</pre>
             {{-- ═══════════════════════════════════════ 4. COLOR-MIX ═══════════════════════════════════════ --}}
             <section id="formula-color-mix" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Formula <code class="text-lg">color-mix()</code> — Focus Ring & Hover Glow</h2>
+                    <h2 class="text-xl font-bold text-foreground">{!! __('docs/design-system.sections.color_mix.title') !!}</h2>
                     <p class="text-sm text-muted-foreground">
-                        CSS <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color-mix(in srgb, ...)</code> digunakan untuk membuat warna semi-transparent dari token padat — sangat berguna untuk focus ring dan active glow effects.
+                        {!! __('docs/design-system.sections.color_mix.desc') !!}
                     </p>
                 </div>
 
@@ -430,28 +460,25 @@ border-t-4 border-t-destructive</pre>
                     <vibe:card.content class="space-y-4">
                         <vibe:table variant="flush">
                             <vibe:table.header>
-                                <vibe:table.column>Formula</vibe:table.column>
-                                <vibe:table.column>Kegunaan</vibe:table.column>
-                                <vibe:table.column>Tempat digunakan</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.color_mix.columns.formula') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.color_mix.columns.usage') }}</vibe:table.column>
+                                <vibe:table.column>{{ __('docs/design-system.sections.color_mix.columns.where') }}</vibe:table.column>
                             </vibe:table.header>
                             <vibe:table.rows>
-                                @php
-                                    $colorMixRules = [['color-mix(in srgb, var(--primary) 25%, transparent)', 'Focus ring lembut tombol/input', 'Button :active ring, Input focus'], ['color-mix(in srgb, var(--range-active-color) 25%, transparent)', 'Active ring slider thumb', 'Range Slider :active state'], ['color-mix(in srgb, var(--ring) 35%, transparent)', 'Focus-visible ring utama', 'Range Slider :focus-visible'], ['color-mix(in srgb, var(--primary-foreground) 35%, transparent)', 'Shimmer beam di progress bar', 'NProgress bar ::after']];
-                                @endphp
-                                @foreach ($colorMixRules as [$formula, $usage, $where])
+                                @foreach (__('docs/design-system.sections.color_mix.items') as $cmRule)
                                     <vibe:table.row>
-                                        <vibe:table.cell class="font-mono text-foreground text-xs">{{ $formula }}</vibe:table.cell>
-                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $usage }}</vibe:table.cell>
-                                        <vibe:table.cell class="text-muted-foreground/70 text-xs">{{ $where }}</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-foreground text-xs">{{ $cmRule['formula'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground text-xs">{{ $cmRule['usage'] }}</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground/70 text-xs">{{ $cmRule['where'] }}</vibe:table.cell>
                                     </vibe:table.row>
                                 @endforeach
                             </vibe:table.rows>
                         </vibe:table>
 
                         <div class="rounded-lg bg-muted p-3 space-y-1">
-                            <p class="text-xs font-semibold text-foreground">📌 Mengapa color-mix() dan bukan opacity modifier Tailwind?</p>
+                            <p class="text-xs font-semibold text-foreground">{{ __('docs/design-system.sections.color_mix.faq_title') }}</p>
                             <p class="text-xs text-muted-foreground">
-                                Tailwind opacity modifier (<code class="font-mono">bg-primary/25</code>) hanya bekerja pada elemen bertipe <code class="font-mono">background</code>. Untuk <code class="font-mono">box-shadow</code> dan <code class="font-mono">border-color</code> yang membutuhkan warna semi-transparan dari token CSS dinamis, <code class="font-mono">color-mix()</code> adalah satu-satunya pilihan yang bekerja konsisten di semua browser modern.
+                                {!! __('docs/design-system.sections.color_mix.faq_desc') !!}
                             </p>
                         </div>
                     </vibe:card.content>
@@ -461,16 +488,16 @@ border-t-4 border-t-destructive</pre>
             {{-- ═══════════════════════════════════════ 5. DARK MODE ═══════════════════════════════════════ --}}
             <section id="aturan-dark-mode" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Aturan Dark Mode</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/design-system.sections.dark_mode.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Karena semua warna komponen menggunakan token CSS (bukan hex langsung), dark mode otomatis berfungsi hanya dengan mengganti nilai variabel CSS di root <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">.dark</code> — tanpa perlu menulis kelas <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dark:</code> per komponen.
+                        {!! __('docs/design-system.sections.dark_mode.desc') !!}
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <vibe:card>
                         <vibe:card.header>
-                            <h3 class="font-semibold text-sm text-foreground">✅ Pattern yang Benar</h3>
+                            <h3 class="font-semibold text-sm text-foreground">{{ __('docs/design-system.sections.dark_mode.correct_title') }}</h3>
                         </vibe:card.header>
                         <vibe:card.content class="space-y-3">
                             <pre class="bg-muted rounded-lg p-3 text-xs font-mono text-foreground overflow-x-auto">
@@ -479,13 +506,13 @@ border-t-4 border-t-destructive</pre>
 'bg-card border-border text-foreground'
 'text-muted-foreground'
 'hover:bg-accent'</pre>
-                            <p class="text-xs text-muted-foreground">Token ini otomatis berubah nilai saat tema berganti.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/design-system.sections.dark_mode.correct_desc') }}</p>
                         </vibe:card.content>
                     </vibe:card>
 
                     <vibe:card>
                         <vibe:card.header>
-                            <h3 class="font-semibold text-sm text-destructive">❌ Pattern yang Harus Dihindari</h3>
+                            <h3 class="font-semibold text-sm text-destructive">{{ __('docs/design-system.sections.dark_mode.avoid_title') }}</h3>
                         </vibe:card.header>
                         <vibe:card.content class="space-y-3">
                             <pre class="bg-muted rounded-lg p-3 text-xs font-mono text-foreground overflow-x-auto">
@@ -495,20 +522,20 @@ border-t-4 border-t-destructive</pre>
 
 // ❌ Hindari dark: per komponen:
 'dark:bg-gray-900 dark:text-gray-100'</pre>
-                            <p class="text-xs text-muted-foreground">Nilai literal tidak responsif terhadap perubahan tema.</p>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/design-system.sections.dark_mode.avoid_desc') }}</p>
                         </vibe:card.content>
                     </vibe:card>
                 </div>
 
                 <vibe:card>
                     <vibe:card.header>
-                        <p class="text-xs font-semibold text-foreground">📌 Pengecualian yang Diizinkan</p>
+                        <p class="text-xs font-semibold text-foreground">{{ __('docs/design-system.sections.dark_mode.exceptions_title') }}</p>
                     </vibe:card.header>
                     <vibe:card.content>
                         <ul class="text-xs text-muted-foreground space-y-1.5 list-disc list-inside">
-                            <li>Warna <code class="font-mono">bg-black/50</code> untuk backdrop overlay modal (nilai absolut yang diinginkan di kedua tema).</li>
-                            <li>Warna accent ungu/violet yang dipatok (<code class="font-mono">oklch(0.511 0.262 276.966)</code>) di range variant <code class="font-mono">accent</code> — karena token <code class="font-mono">--accent</code> di Vibe UI dipakai untuk surface hover (bukan warna ungu).</li>
-                            <li>Warna chart (<code class="font-mono">--chart-1</code> s/d <code class="font-mono">--chart-5</code>) yang dapat berbeda antara light dan dark.</li>
+                            @foreach (__('docs/design-system.sections.dark_mode.exceptions') as $exception)
+                                <li>{!! $exception !!}</li>
+                            @endforeach
                         </ul>
                     </vibe:card.content>
                 </vibe:card>
@@ -517,27 +544,24 @@ border-t-4 border-t-destructive</pre>
             {{-- ═══════════════════════════════════════ 6. PANDUAN MEMILIH VARIANT ═══════════════════════════════════════ --}}
             <section id="panduan-pemilihan" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Panduan Memilih Variant</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/design-system.sections.guidelines.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Gunakan tabel ini sebagai acuan cepat untuk memilih variant yang tepat secara semantik di setiap konteks UI.
+                        {{ __('docs/design-system.sections.guidelines.desc') }}
                     </p>
                 </div>
 
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column>Konteks / Skenario</vibe:table.column>
-                        <vibe:table.column>Variant yang Tepat</vibe:table.column>
-                        <vibe:table.column>Catatan</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/design-system.sections.guidelines.columns.context') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/design-system.sections.guidelines.columns.variant') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/design-system.sections.guidelines.columns.note') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
-                        @php
-                            $guidelines = [['Aksi utama (Submit, Save, Konfirmasi)', 'primary', 'Selalu gunakan primary untuk CTA paling penting di halaman'], ['Aksi sekunder (Cancel, Back, Reset)', 'secondary / outline', 'secondary lebih solid, outline lebih ringan'], ['Hapus / Destruktif / Tidak bisa dibatalkan', 'danger', 'Wajib danger untuk aksi permanen yang tidak bisa di-undo'], ['Berhasil / Selesai / Aktif / Hemat', 'success', 'Konfirmasi pembayaran, badge status aktif, slider kapasitas optimal'], ['Peringatan / Threshold / Hampir penuh', 'warning', 'Ambang batas penggunaan, validasi ringan, konfigurasi penting'], ['Informasi / Panduan / Bantuan sistem', 'info', 'Alert informatif, badge informasi, range parameter sistem'], ['Aksen / Premium / Fitur khusus', 'accent', 'Slider rating bintang, toggle fitur premium, highlight spesial'], ['Aksi ghost/navigasi dalam card/list', 'ghost', 'Tombol edit inline, icon action, menu konteks'], ['Surface card/panel/container', 'surface', 'Tombol yang menyatu dengan kartu, aksi belum terlalu penting']];
-                        @endphp
-                        @foreach ($guidelines as [$context, $variant, $note])
+                        @foreach (__('docs/design-system.sections.guidelines.items') as $guide)
                             <vibe:table.row>
-                                <vibe:table.cell class="text-foreground text-xs">{{ $context }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono font-bold text-foreground text-xs whitespace-nowrap">{{ $variant }}</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground text-xs">{{ $note }}</vibe:table.cell>
+                                <vibe:table.cell class="text-foreground text-xs">{{ $guide['context'] }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono font-bold text-foreground text-xs whitespace-nowrap">{{ $guide['variant'] }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground text-xs">{{ $guide['note'] }}</vibe:table.cell>
                             </vibe:table.row>
                         @endforeach
                     </vibe:table.rows>

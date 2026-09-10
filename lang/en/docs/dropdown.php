@@ -99,4 +99,25 @@ return [
             'desc' => 'Description & Purpose',
         ],
     ],
+
+    'props_items' => [
+        'dropdown' => [
+            'keyboard' => 'Enable keyboard accessibility navigation (Escape to close, up/down arrows to navigate items, right/left arrows for submenus).',
+        ],
+        'body' => [
+            'align' => "Popover alignment position: `'right'`, `'left'`, `'top'`, `'top-left'`, `'top-right'`, `'top-center'`, `'bottom'`, `'bottom-left'`, `'bottom-center'`, `'bottom-right'`.",
+            'width' => "Dropdown container width: `'48'` (12rem), `'56'` (14rem), `'64'` (16rem), `'72'`, `'80'`, `'96'`, `'xl'`, `'2xl'`, `'min'`, or `'full'`.",
+        ],
+        'item' => [
+            'destructive' => 'Apply destructive styling with subtle red text that transitions to solid destructive on hover (`hover:bg-destructive/10`).',
+            'variant' => "Item variant choice: `'default'` or `'destructive'`.",
+            'href' => 'If provided, renders item as an `<a>` navigation link supporting `wire:navigate`.',
+            'type' => 'Button type when item does not have an `href` attribute.',
+        ],
+        'sub' => [
+            'label' => 'Trigger title text for nested submenus.',
+            'isOpen' => 'Initial open state of the submenu.',
+            'position' => "Submenu positioning mode: `'absolute'` (horizontal flyout) or `'relative'` (collapsible accordion).",
+        ],
+    ],
 ];

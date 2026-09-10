@@ -44,6 +44,7 @@ return [
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',
         'chart' => 'Chart',
+        'dashboard' => 'Dashboard',
     ],
 
     'notifications' => [

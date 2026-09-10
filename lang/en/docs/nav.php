@@ -87,4 +87,60 @@ return [
             'desc' => 'Role & Responsibility',
         ],
     ],
+
+    'pinning_items' => [
+        'available_features' => 'AVAILABLE FEATURES',
+        'perf_analytics' => 'Performance Analytics',
+        'incoming_orders' => 'Incoming Orders',
+    ],
+
+    'subcomponents_items' => [
+        'root' => 'Root navigation container managing pinning state, floating popovers, and minified sheet integration.',
+        'group' => 'Collapsible accordion group hosting sub-navigation items.',
+        'label' => 'Category section header with independent collapse/expand capability.',
+        'pinned' => 'Dynamic container displaying pinned shortcut clones pinned by the user.',
+        'history' => 'Dynamic container recording recent route navigation history accessed by the user.',
+    ],
+
+    'props_items' => [
+        'root' => [
+            'id' => 'Unique nav element ID for saving preferences in localStorage.',
+            'pinnable' => 'Enable pin action buttons across all child navigation items.',
+            'maxpin' => 'Maximum number of items that can be pinned simultaneously.',
+            'collapsed' => 'Collapse navigation to compact icon-only mode.',
+        ],
+        'item' => [
+            'href' => 'Target destination URL for the link.',
+            'active' => 'Mark the item as active with bold background styling.',
+            'badge' => 'Indicator badge text on the right (e.g. numeric counter or status).',
+            'badgeColor' => 'Badge color variant: `"success"`, `"info"`, `"destructive"`, `"warning"`, `"accent"`, or default.',
+            'pinnable' => 'Display pin button specifically on this item.',
+            'id' => 'Unique item ID for pin shortcut persistence.',
+        ],
+        'pinned' => [
+            'title' => 'Header accordion title for pinned shortcut container (default: "Pinned" or translation).',
+            'open' => 'Initial open/collapsed state of the pinned shortcuts list.',
+            'persist' => 'Persist pinned accordion open/close state to `localStorage`.',
+            'id' => 'Unique identifier for mapping accordion persistence state in the browser.',
+        ],
+        'group' => [
+            'title' => 'Accordion menu group title.',
+            'open' => 'Initial open status of the menu group.',
+            'active' => 'Mark group as active and expand automatically on initial page load.',
+            'persist' => 'Save group expanded/collapsed preference to `localStorage`.',
+            'pinnable' => 'Allow entire menu group to be pinned as a shortcut.',
+            'id' => 'Unique group ID for persistence state mapping.',
+        ],
+        'label' => [
+            'title' => 'Header title text for section category separator.',
+            'open' => 'Initial visibility status of items under this section label.',
+            'persist' => 'Save section open/close preference to `localStorage`.',
+            'id' => 'Unique label ID for state persistence mapping.',
+        ],
+        'history' => [
+            'title' => 'Header title text for navigation history container (default: "History").',
+            'open' => 'Initial open/collapsed state of the history accordion.',
+            'persist' => 'Save history container open/collapsed preference to `localStorage`.',
+        ],
+    ],
 ];

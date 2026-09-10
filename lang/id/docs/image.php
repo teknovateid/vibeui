@@ -70,4 +70,16 @@ return [
             'desc' => 'Deskripsi',
         ],
     ],
+
+    'props_items' => [
+        'src' => 'URL sumber file gambar yang ingin ditampilkan.',
+        'alt' => 'Teks alternatif gambar untuk aksesibilitas pembaca layar dan fallback SEO.',
+        'aspect' => 'Rasio aspek gambar: `"square"` (1:1), `"video"` (16:9), `"4/3"`, `"3/2"`, `"21/9"`, atau nilai kustom lainnya. Bisa juga ditentukan via utility class seperti `class="aspect-square"`.',
+        'lazy' => 'Mengaktifkan pemuatan tunda native browser (`loading="lazy"` dan `fetchpriority="low"`).',
+        'priority' => 'Jika `true`, menonaktifkan lazy loading, menyetel `fetchpriority="high"`, dan menginjeksi tag `<link rel="preload">` ke `<head>`.',
+        'fallback' => 'URL gambar cadangan jika gambar utama gagal dimuat (404 atau koneksi terputus).',
+        'skeleton' => 'Menampilkan animasi placeholder shimmer pulse saat gambar sedang diunduh untuk mencegah pergeseran layout (CLS).',
+        'caption' => 'Teks keterangan gambar yang dirender di dalam tag semantik `<figcaption>`.',
+        'imgClass' => 'Kelas Tailwind khusus yang diterapkan langsung pada elemen `<img>` internal.',
+    ],
 ];

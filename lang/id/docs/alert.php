@@ -130,4 +130,33 @@ return [
             'desc' => 'Deskripsi',
         ],
     ],
+
+    'props_items' => [
+        'container' => [
+            'position' => 'Posisi penempatan default container notifikasi alert pada layar.',
+            'align' => 'Perataan konten teks dan ikon di dalam bodi alert.',
+            'timeout' => 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk alert persisten).',
+            'sound' => 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).',
+            'blur' => 'Efek blur backdrop latar belakang bawaan container (misal: "md", "lg", atau true).',
+            'closeOnOutside' => 'Menutup alert saat menekan area di luar alert (default: true untuk alert biasa, false untuk confirm).',
+        ],
+        'payload' => [
+            'type' => 'Jenis status alert yang menentukan palet warna latar, border aksen, dan ikon otomatis.',
+            'title' => 'Judul utama notifikasi alert.',
+            'message' => 'Pesan deskripsi lengkap yang ingin disampaikan kepada pengguna.',
+            'icon' => 'Kustomisasi elemen SVG ikon untuk menggantikan ikon default status.',
+            'position' => 'Menimpa posisi penempatan container khusus untuk alert ini.',
+            'align' => 'Menimpa perataan horizontal konten teks dan ikon khusus alert ini.',
+            'timeout' => 'Menimpa durasi auto-dismiss (false agar alert tetap terbuka hingga tombol ditekan).',
+            'blocking' => 'Menampilkan backdrop gelap (overlay) dengan efek blur di belakang alert.',
+            'blur' => 'Menampilkan backdrop dengan intensitas blur latar belakang tertentu ("sm", "md", "lg", "xl", true, false).',
+            'sound' => 'Menimpa preferensi efek suara saat alert muncul.',
+            'confirmButton' => 'Konfigurasi tombol konfirmasi: teks string atau objek { text, action, class }.',
+            'closeButton' => 'Konfigurasi tombol penutup/batal: teks string atau objek { text, action, class }.',
+            'buttonLayout' => 'Tata letak susunan tombol: "col" untuk bertumpuk vertikal atau "row" berdampingan.',
+            'closeOnOutside' => 'Menentukan apakah alert dapat ditutup saat pengguna menekan area di luar alert.',
+            'id' => 'ID unik alert. Wajib disertakan jika menggunakan opsi persist: true.',
+            'persist' => 'Menyimpan status penutupan alert agar tidak muncul lagi: true, key string, atau "session".',
+        ],
+    ],
 ];

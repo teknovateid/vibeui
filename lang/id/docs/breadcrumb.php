@@ -67,4 +67,15 @@ return [
             'desc' => 'Keterangan',
         ],
     ],
+
+    'props_items' => [
+        'breadcrumb' => [
+            'title' => 'Judul halaman di atas navigasi remah roti. Berikan `false` untuk menyembunyikannya.',
+            'class' => 'Kelas Tailwind tambahan yang diterapkan pada container pembungkus.',
+        ],
+        'item' => [
+            'href' => 'URL tujuan. Jika diisi, item dirender sebagai `<a wire:navigate>`. Jika kosong, dirender sebagai `<span>`.',
+            'active' => 'Menandakan halaman aktif saat ini (menerapkan gaya font tebal dan warna kontras).',
+        ],
+    ],
 ];

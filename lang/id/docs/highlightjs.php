@@ -60,4 +60,17 @@ return [
             'desc' => 'Perilaku & Mekanisme',
         ],
     ],
+
+    'props_items' => [
+        'code' => 'String kode yang ingin disorot. Jika tidak diisi, komponen akan menggunakan isi `$slot`.',
+        'language' => 'Bahasa pemrograman (e.g. `php`, `javascript`, `blade`, `bash`, `html`, `css`, `json`, `sql`).',
+        'title' => 'Judul atau nama file yang ditampilkan di bilah header atas.',
+        'copyable' => 'Menampilkan tombol interaktif salin kode ke clipboard dengan umpan balik visual.',
+        'lineNumbers' => 'Menampilkan penomoran baris unselectable di sisi kiri blok kode.',
+        'badge' => 'Menampilkan badge bahasa di header. Dapat diisi string kustom untuk teks label badge khusus.',
+        'header' => 'Menampilkan bilah header atas. Jika `false`, tombol salin akan tampil melayang di pojok kanan.',
+        'maxHeight' => 'Batasan tinggi vertikal maksimal (misal `220` atau `"300px"`).',
+        'wrap' => 'Jika `true`, menerapkan word-wrap pada baris kode panjang alih-alih scroll horizontal.',
+        'theme' => 'Skema tema warna Highlight.js (default: `vibe`).',
+    ],
 ];

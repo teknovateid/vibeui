@@ -105,4 +105,20 @@ return [
             'desc' => 'Deskripsi',
         ],
     ],
+
+    'props_items' => [
+        'container' => [
+            'position' => 'Posisi penempatan default container tumpukan toast pada layar.',
+            'timeout' => 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk toast persisten).',
+            'sound' => 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).',
+        ],
+        'payload' => [
+            'type' => 'Jenis status notifikasi toast yang menentukan palet warna, badge, dan ikon otomatis.',
+            'title' => 'Judul utama notifikasi toast (opsional).',
+            'message' => 'Pesan deskripsi lengkap toast yang ingin disampaikan kepada pengguna.',
+            'icon' => 'Kustomisasi elemen SVG ikon untuk menggantikan ikon bawaan status.',
+            'timeout' => 'Menimpa durasi auto-dismiss (false agar toast tetap terbuka hingga tombol close diklik).',
+            'sound' => 'Menimpa preferensi efek suara saat toast muncul (true atau URL string audio).',
+        ],
+    ],
 ];

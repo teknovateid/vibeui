@@ -99,4 +99,23 @@ return [
             'desc' => 'Keterangan',
         ],
     ],
+
+    'props_items' => [
+        'variant' => 'Skema warna dan varian visual badge.',
+        'size' => 'Ukuran tinggi, padding horizontal, dan ukuran tipografi badge.',
+        'icon' => 'Ikon visual yang disisipkan di sisi kiri (leading icon).',
+        'trailingIcon' => 'Ikon visual yang disisipkan di sisi kanan (trailing icon).',
+        'prefix' => 'Teks awalan sebelum slot utama (misal simbol mata uang).',
+        'suffix' => 'Teks akhiran setelah slot utama.',
+        'dot' => 'Menampilkan titik indikator status di sisi kiri.',
+        'dotPulse' => 'Menambahkan efek animasi ping radar pada status dot.',
+        'dismissible' => 'Menampilkan tombol hapus interaktif di sisi kanan badge.',
+        'href' => 'Jika diisi, badge otomatis dirender sebagai hyperlink `<a wire:navigate>`.',
+        'class' => 'Kelas Tailwind tambahan via `twMerge` (misal `rounded-full` untuk gaya pill).',
+    ],
+    'slots_items' => [
+        'default' => 'Konten teks atau elemen utama di dalam badge.',
+        'icon' => 'Slot kustom untuk menyisipkan SVG ikon di sisi kiri.',
+        'trailingIcon' => 'Slot kustom untuk menyisipkan SVG ikon di sisi kanan.',
+    ],
 ];

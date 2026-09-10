@@ -261,4 +261,17 @@ return [
             ],
         ],
     ],
+
+    'interactive' => [
+        'main_content_flexible' => 'This main content area flexibly adjusts its width when the side sheet panel is opened or closed.',
+        'form_placeholder' => 'You can place forms, navigation lists, data filter details, or settings menus here...',
+        'click_position_hint' => 'Click any position button above to observe the transition direction of the sheet.',
+        'left_panel_flexible' => 'This content area flexibly adapts to the width of the panel on the left.',
+        'toggle_minify_hint' => 'Click the toggle button above to switch between full sidebar view and icon-only (minify) mode.',
+        'edge_button_hint' => 'Notice the circular arrow button at the panel edge divider. Click it to instantly collapse or expand the panel.',
+        'click_outside_tip' => '✨ Click outside this panel area to automatically close it.',
+        'btn_close_drawer' => 'Close Drawer',
+        'click_outside_fold' => 'Click outside this panel area to immediately collapse it again.',
+        'click_backdrop_tip' => '🌑 Click on the dark backdrop layer to the left of this drawer to close it.',
+    ],
 ];
