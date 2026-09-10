@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class LayoutCommand extends Command implements PromptsForMissingInput
 {
@@ -35,17 +35,17 @@ class LayoutCommand extends Command implements PromptsForMissingInput
     {
         $path = str()->slug($this->argument('path'));
 
-        $layoutsDir = __DIR__ . '/../../stubs/Layouts/layouts';
-        $layoutFiles = glob($layoutsDir . '/*.blade.php');
+        $layoutsDir = __DIR__.'/../../stubs/Layouts/layouts';
+        $layoutFiles = glob($layoutsDir.'/*.blade.php');
         $layoutOptions = [];
-        
+
         foreach ($layoutFiles as $file) {
             $name = basename($file, '.blade.php');
             if ($name !== 'base') {
                 $layoutOptions[$name] = ucfirst($name);
             }
         }
-        
+
         if (empty($layoutOptions)) {
             $layoutOptions['sidebar'] = 'Sidebar';
         }
@@ -62,21 +62,21 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         $this->newLine();
         $list = [];
         if ($layout) {
-            $this->components->success("Layout created");
+            $this->components->success('Layout created');
             $list[] = "resources/views/{$path}";
             $list[] = "resources/views/components/{$path}";
         } else {
-            $this->components->info("Layout skipped.");
+            $this->components->info('Layout skipped.');
         }
 
         if ($route) {
-            $this->components->success("Route file created and linked in bootstrap/app.php");
+            $this->components->success('Route file created and linked in bootstrap/app.php');
             $list[] = "routes/{$path}.php";
         } else {
-            $this->components->info("Route skipped.");
+            $this->components->info('Route skipped.');
         }
 
-        if(count($list) > 0) {
+        if (count($list) > 0) {
             $this->components->bulletList($list);
         }
         $this->newLine();
@@ -84,7 +84,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
     protected function generateLayouts(string $path, string $chosenLayout): bool
     {
-        $componentsDir = __DIR__ . '/../../stubs/Layouts';
+        $componentsDir = __DIR__.'/../../stubs/Layouts';
         $destComponentsDir = resource_path("views/components/{$path}");
 
         if (File::exists($destComponentsDir)) {
@@ -104,47 +104,56 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         ];
 
         foreach ($pages as $component => $templatePath) {
-            $templateFile = __DIR__ . "/../../stubs/Templates/{$templatePath}";
-            $destView = resource_path("views/{$path}/" . str_replace('.', '/', $component) . ".blade.php");
+            $templateFile = __DIR__."/../../stubs/Templates/{$templatePath}";
+            $destView = resource_path("views/{$path}/".str_replace('.', '/', $component).'.blade.php');
 
             if (File::exists($templateFile)) {
-                $content = str_replace('[path]', $path, File::get($templateFile));
-                $titleName = str($path)->headline() . ' ' . str(str_replace('.', ' ', $component))->headline();
-                
-                $wrappedContent = "<x-{$path}.layouts.{$chosenLayout}>\n    <vibe:seo title=\"{$titleName}\" />\n" . $content . "\n</x-{$path}.layouts.{$chosenLayout}>\n";
+                $titleName = str($path)->headline().' '.str(str_replace('.', ' ', $component))->headline();
+                $content = File::get($templateFile);
+
+                if (str_contains($content, '<x-[path].layouts.')) {
+                    $wrappedContent = str_replace(
+                        ['[path]', '[style]', '[Title]'],
+                        [$path, $chosenLayout, $titleName],
+                        $content
+                    );
+                } else {
+                    $content = str_replace('[path]', $path, $content);
+                    $wrappedContent = "<x-{$path}.layouts.{$chosenLayout}>\n    <vibe:seo title=\"{$titleName}\" />\n".$content."\n</x-{$path}.layouts.{$chosenLayout}>\n";
+                }
 
                 // Ensure directory exists
                 $dir = dirname($destView);
-                if (!File::isDirectory($dir)) {
+                if (! File::isDirectory($dir)) {
                     File::makeDirectory($dir, 0755, true);
                 }
-                
+
                 File::put($destView, $wrappedContent);
             }
 
             // Add to menu
             $menuPath = resource_path("views/components/{$path}/partials/{$chosenLayout}-menu.blade.php");
-            $stubPath = __DIR__ . "/../../stubs/Partials/{$chosenLayout}/item.blade.php";
-            if (!File::exists($stubPath)) {
-                $stubPath = __DIR__ . "/../../stubs/Partials/sidebar/item.blade.php";
+            $stubPath = __DIR__."/../../stubs/Partials/{$chosenLayout}/item.blade.php";
+            if (! File::exists($stubPath)) {
+                $stubPath = __DIR__.'/../../stubs/Partials/sidebar/item.blade.php';
             }
-            
+
             if (File::exists($menuPath) && File::exists($stubPath)) {
                 $menuContent = File::get($menuPath);
-                
+
                 if (str_contains($menuContent, '</vibe:nav>')) {
                     $stub = File::get($stubPath);
                     $humanTitle = (string) str($path)->headline();
-                    
+
                     // The layout's index route is just {$path}.index
                     // The active check should exactly match {$path}.index so it doesn't stay active on all child pages
                     $stub = str_replace(
-                        ["route('[route].index')", "request()->routeIs('[route].*')", '[Title]'], 
-                        ["route('{$path}.index')", "request()->routeIs('{$path}.index')", $humanTitle], 
+                        ["route('[route].index')", "request()->routeIs('[route].*')", '[Title]'],
+                        ["route('{$path}.index')", "request()->routeIs('{$path}.index')", $humanTitle],
                         $stub
                     );
-                    
-                    $menuContent = str_replace('</vibe:nav>', $stub . "\n</vibe:nav>", $menuContent);
+
+                    $menuContent = str_replace('</vibe:nav>', $stub."\n</vibe:nav>", $menuContent);
                     File::put($menuPath, $menuContent);
                 }
             }
@@ -155,7 +164,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
     protected function cleanupUnusedLayouts(string $destDir, string $chosenLayout): void
     {
-        $layoutsPath = $destDir . '/layouts';
+        $layoutsPath = $destDir.'/layouts';
         if (File::isDirectory($layoutsPath)) {
             $files = File::files($layoutsPath);
             foreach ($files as $file) {
@@ -167,7 +176,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             }
         }
 
-        $partialsPath = $destDir . '/partials';
+        $partialsPath = $destDir.'/partials';
         if (File::isDirectory($partialsPath)) {
             $files = File::files($partialsPath);
             foreach ($files as $file) {
@@ -180,7 +189,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
             // If layout is topbar, clean up optional directory as topbar does not use optional drawer/modal
             if ($chosenLayout === 'topbar') {
-                $optionalPath = $partialsPath . '/optional';
+                $optionalPath = $partialsPath.'/optional';
                 if (File::isDirectory($optionalPath)) {
                     File::deleteDirectory($optionalPath);
                 }
@@ -194,14 +203,14 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         foreach ($files as $file) {
             if ($file->getExtension() === 'php') {
                 $content = File::get($file->getPathname());
-                
+
                 // Replace opening and closing tags
-                $content = preg_replace('/<x-layouts\./', '<x-' . $path . '.layouts.', $content);
-                $content = preg_replace('/<\/x-layouts\./', '</x-' . $path . '.layouts.', $content);
-                
-                $content = preg_replace('/<x-partials\./', '<x-' . $path . '.partials.', $content);
-                $content = preg_replace('/<\/x-partials\./', '</x-' . $path . '.partials.', $content);
-                
+                $content = preg_replace('/<x-layouts\./', '<x-'.$path.'.layouts.', $content);
+                $content = preg_replace('/<\/x-layouts\./', '</x-'.$path.'.layouts.', $content);
+
+                $content = preg_replace('/<x-partials\./', '<x-'.$path.'.partials.', $content);
+                $content = preg_replace('/<\/x-partials\./', '</x-'.$path.'.partials.', $content);
+
                 File::put($file->getPathname(), $content);
             }
         }
@@ -214,7 +223,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         $routePath = base_path("routes/{$path}.php");
-        $stubRouteContent = str_replace('[path]', $path, File::get(__DIR__ . '/../../routes/routes.php'));
+        $stubRouteContent = str_replace('[path]', $path, File::get(__DIR__.'/../../routes/routes.php'));
 
         if (File::exists($routePath)) {
             if (! $this->confirm("The route file '{$routePath}' already exists. Overwrite?", false)) {
@@ -226,20 +235,20 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
         $appPath = base_path('bootstrap/app.php');
         $appContent = File::get($appPath);
-        
+
         $searchSingle = "web: __DIR__.'/../routes/web.php',";
         $replaceSingle = "web: [\n            __DIR__.'/../routes/web.php',\n            __DIR__.'/../routes/{$path}.php',\n        ],";
-        
-        if (!str_contains($appContent, "routes/{$path}.php")) {
+
+        if (! str_contains($appContent, "routes/{$path}.php")) {
             if (str_contains($appContent, $searchSingle)) {
                 $appContent = str_replace($searchSingle, $replaceSingle, $appContent);
                 File::put($appPath, $appContent);
             } else {
                 $searchArray = "web: [\n            __DIR__.'/../routes/web.php',";
                 $replaceArray = "web: [\n            __DIR__.'/../routes/web.php',\n            __DIR__.'/../routes/{$path}.php',";
-                if (str_contains($appContent, "web: [")) {
-                     $appContent = preg_replace('/(web:\s*\[)/', "$1\n            __DIR__.'/../routes/{$path}.php',", $appContent);
-                     File::put($appPath, $appContent);
+                if (str_contains($appContent, 'web: [')) {
+                    $appContent = preg_replace('/(web:\s*\[)/', "$1\n            __DIR__.'/../routes/{$path}.php',", $appContent);
+                    File::put($appPath, $appContent);
                 }
             }
         }
@@ -250,15 +259,15 @@ class LayoutCommand extends Command implements PromptsForMissingInput
     protected function configureLivewire(string $path): bool
     {
         $configPath = base_path('config/livewire.php');
-        
-        if (!File::exists($configPath)) {
+
+        if (! File::exists($configPath)) {
             $this->call('livewire:publish', ['--config' => true]);
         }
-        
+
         if (File::exists($configPath)) {
             $content = File::get($configPath);
             $changed = false;
-            
+
             // Fix component_layout issue (Livewire default might be layouts::app)
             if (str_contains($content, "'component_layout' => 'layouts::app'")) {
                 $content = str_replace(
@@ -268,13 +277,14 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 );
                 $changed = true;
             }
-            
+
             if ($changed) {
                 File::put($configPath, $content);
+
                 return true;
             }
         }
-        
+
         return false;
     }
 
