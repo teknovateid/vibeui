@@ -8,8 +8,8 @@ use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function Laravel\Prompts\text;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class PageCommand extends Command implements PromptsForMissingInput
 {
@@ -25,8 +25,9 @@ class PageCommand extends Command implements PromptsForMissingInput
     {
         $layout = str()->slug($this->argument('layout'));
 
-        if (!File::exists(base_path("routes/{$layout}.php"))) {
+        if (! File::exists(base_path("routes/{$layout}.php"))) {
             $this->components->error("Layout group '{$layout}' does not exist! Please create a layout group first using `php artisan vibe:layout {$layout}`.");
+
             return;
         }
 
@@ -53,27 +54,36 @@ class PageCommand extends Command implements PromptsForMissingInput
 
         foreach ($actions as $action) {
             if ($isResource) {
-                $templateFile = __DIR__ . "/../../stubs/Templates/crud/resource/{$action}.blade.php";
+                $templateFile = __DIR__."/../../stubs/Templates/crud/resource/{$action}.blade.php";
             } elseif ($isBlank) {
-                $templateFile = __DIR__ . "/../../stubs/Templates/pages/blank.blade.php";
+                $templateFile = __DIR__.'/../../stubs/Templates/pages/blank.blade.php';
             } else {
-                $templateFile = __DIR__ . "/../../stubs/Templates/pages/index.blade.php";
+                $templateFile = __DIR__.'/../../stubs/Templates/pages/index.blade.php';
             }
 
             $destView = resource_path("views/{$layout}/{$name}/{$action}.blade.php");
 
             if (File::exists($templateFile)) {
-                $content = str_replace('[path]', $layout, File::get($templateFile));
-                
-                $pageTitle = str($layout)->headline() . ' - ' . str($name)->headline();
+                $pageTitle = str($layout)->headline().' - '.str($name)->headline();
                 if ($action !== 'index') {
-                    $pageTitle .= ' ' . ucfirst($action);
+                    $pageTitle .= ' '.ucfirst($action);
                 }
 
-                $wrappedContent = "<x-{$layout}.layouts.{$style}>\n    <vibe:seo title=\"{$pageTitle}\" />\n" . $content . "\n</x-{$layout}.layouts.{$style}>\n";
+                $content = File::get($templateFile);
+
+                if (str_contains($content, '<x-[path].layouts.')) {
+                    $wrappedContent = str_replace(
+                        ['[path]', '[style]', '[Title]'],
+                        [$layout, $style, $pageTitle],
+                        $content
+                    );
+                } else {
+                    $content = str_replace('[path]', $layout, $content);
+                    $wrappedContent = "<x-{$layout}.layouts.{$style}>\n    <vibe:seo title=\"{$pageTitle}\" />\n".$content."\n</x-{$layout}.layouts.{$style}>\n";
+                }
 
                 $dir = dirname($destView);
-                if (!File::isDirectory($dir)) {
+                if (! File::isDirectory($dir)) {
                     File::makeDirectory($dir, 0755, true);
                 }
 
@@ -94,16 +104,16 @@ class PageCommand extends Command implements PromptsForMissingInput
                 $routePrefix .= "        Route::view('/{id}/edit', '{$layout}.{$name}.edit')->name('edit');\n";
             }
             $routePrefix .= "    });\n";
-            
-            $groupPattern = '/(Route::prefix\([\'"]' . preg_quote($layout, '/') . '[\'"].*?group\(function\s*\(\)\s*\{)(.*?)(\n\}\);)/s';
+
+            $groupPattern = '/(Route::prefix\([\'"]'.preg_quote($layout, '/').'[\'"].*?group\(function\s*\(\)\s*\{)(.*?)(\n\}\);)/s';
             if (preg_match($groupPattern, $routeContent)) {
                 $routeContent = preg_replace_callback($groupPattern, function ($matches) use ($routePrefix) {
-                    return $matches[1] . $matches[2] . $routePrefix . $matches[3];
+                    return $matches[1].$matches[2].$routePrefix.$matches[3];
                 }, $routeContent);
             } else {
-                $lastGroupClose = strrpos($routeContent, "});");
+                $lastGroupClose = strrpos($routeContent, '});');
                 if ($lastGroupClose !== false) {
-                    $routeContent = substr_replace($routeContent, $routePrefix . "});", $lastGroupClose, 3);
+                    $routeContent = substr_replace($routeContent, $routePrefix.'});', $lastGroupClose, 3);
                 } else {
                     $routeContent .= $routePrefix;
                 }
@@ -117,25 +127,25 @@ class PageCommand extends Command implements PromptsForMissingInput
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
             $stubName = $isResource ? 'group.blade.php' : 'item.blade.php';
-            $stubPath = __DIR__ . "/../../stubs/Partials/{$style}/{$stubName}";
-            
+            $stubPath = __DIR__."/../../stubs/Partials/{$style}/{$stubName}";
+
             if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
                 $stub = File::get($stubPath);
-                
+
                 $routePrefixName = "{$layout}.{$name}";
                 $humanTitle = (string) str($name)->headline();
-                
+
                 $stub = str_replace(['[route]', '[Title]'], [$routePrefixName, $humanTitle], $stub);
-                
+
                 // Inject right before </vibe:nav>
-                $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n" . $stub . "\n$1", $menuContent);
+                $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n".$stub."\n$1", $menuContent);
                 File::put($menuPath, $menuContent);
                 $list[] = "Updated resources/views/components/{$layout}/partials/{$style}-menu.blade.php";
             }
         }
 
         $this->newLine();
-        $this->components->success("Page(s) created successfully.");
+        $this->components->success('Page(s) created successfully.');
         if (count($list) > 0) {
             $this->components->bulletList($list);
         }
@@ -151,7 +161,7 @@ class PageCommand extends Command implements PromptsForMissingInput
         if (! $input->getArgument('layout')) {
             $componentsDir = resource_path('views/components');
             $layoutGroups = [];
-            
+
             if (File::isDirectory($componentsDir)) {
                 $directories = File::directories($componentsDir);
                 foreach ($directories as $dir) {
@@ -162,16 +172,16 @@ class PageCommand extends Command implements PromptsForMissingInput
                 }
             }
 
-            if (!empty($layoutGroups)) {
+            if (! empty($layoutGroups)) {
                 $layout = select(
                     'Which layout group?',
                     $layoutGroups
                 );
             } else {
-                $this->components->error("No layout groups found! Please create a layout group first using `php artisan vibe:layout`.");
+                $this->components->error('No layout groups found! Please create a layout group first using `php artisan vibe:layout`.');
                 exit(1);
             }
-            
+
             $input->setArgument('layout', $layout);
         }
 
@@ -185,7 +195,7 @@ class PageCommand extends Command implements PromptsForMissingInput
                 'Apakah menggunakan template static atau crud?',
                 [
                     'static' => 'Template Static (Kosong / Index Biasa)',
-                    'crud'   => 'Template CRUD (Auto-generate dari Database)',
+                    'crud' => 'Template CRUD (Auto-generate dari Database)',
                 ]
             );
 
@@ -193,22 +203,22 @@ class PageCommand extends Command implements PromptsForMissingInput
                 $type = select(
                     'Pilih jenis template CRUD yang ingin digunakan:',
                     [
-                        'crud-sheet'    => 'CRUD 1 Halaman — Sheet (form di slide-over kanan)',
-                        'crud-index'    => 'CRUD 1 Halaman — Modal (form di dalam modal)',
+                        'crud-sheet' => 'CRUD 1 Halaman — Sheet (form di slide-over kanan)',
+                        'crud-index' => 'CRUD 1 Halaman — Modal (form di dalam modal)',
                         'crud-resource' => 'CRUD Terpisah — Resource (Index, Create, Edit pages)',
                     ]
                 );
 
                 $generateCrud = select('Lanjutkan auto-generate dari Database Schema?', [
                     'yes' => 'Ya, Generate sekarang',
-                    'no'  => 'Lewati (Hanya buat file kosong)'
+                    'no' => 'Lewati (Hanya buat file kosong)',
                 ], default: 'yes');
 
                 if ($generateCrud === 'yes') {
                     $this->call('vibe:crud', [
                         'layout' => $input->getArgument('layout'),
-                        'name'   => $input->getArgument('name'),
-                        '--type' => $type
+                        'name' => $input->getArgument('name'),
+                        '--type' => $type,
                     ]);
                     exit(0);
                 } else {
@@ -220,8 +230,8 @@ class PageCommand extends Command implements PromptsForMissingInput
                 $type = select(
                     'Pilih jenis template Static:',
                     [
-                        'index'    => 'Index (1 halaman dengan grid / layout standar)',
-                        'blank'    => 'Blank (1 halaman kosong)',
+                        'index' => 'Index (1 halaman dengan grid / layout standar)',
+                        'blank' => 'Blank (1 halaman kosong)',
                         'resource' => 'Resource (Index, Create, Edit kosong)',
                     ]
                 );
@@ -232,6 +242,6 @@ class PageCommand extends Command implements PromptsForMissingInput
                     $input->setOption('blank', true);
                 }
             }
-            }
         }
     }
+}
