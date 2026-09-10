@@ -4,16 +4,20 @@ Dokumen ini menjelaskan alur kerja rilis dan *versioning* untuk package **Vibe U
 
 ---
 
-## 🏗️ 1. Arsitektur Repositori Tunggal
+## 🏗️ 1. Arsitektur Repositori (Monorepo Docs & Package)
 
 ```text
 [Repositori: https://github.com/teknovateid/vibeui]
- ├── development  --> Branch koding harian seluruh tim (docs + package)
- ├── production   --> Branch rilis stabil dokumentasi web
- ├── composer.json (name: "teknovate/vibeui", type: "library")
- └── packages/vibe/ (Core Components & PHP Source Code)
+ ├── development        --> Branch koding harian seluruh tim (docs + package)
+ ├── production         --> Branch rilis stabil dokumentasi web
+ ├── composer.json      --> Aplikasi Dokumentasi (name: "laravel/laravel", type: "project")
+ │                          menggunakan path repository: "./packages/*" (@dev symlink)
+ └── packages/vibe/     --> Core Package Library (name: "teknovate/vibeui", type: "library")
            │
-           │  (Didaftarkan langsung ke Packagist)
+           │  (Otomatis di-split via git subtree pada Git Tag rilis)
+           ▼
+       [Git Tag vX.Y.Z] (Hanya berisi isi subfolder packages/vibe/)
+           │
            ▼
      [Packagist.org]
            │
@@ -21,7 +25,7 @@ Dokumen ini menjelaskan alur kerja rilis dan *versioning* untuk package **Vibe U
   composer require teknovate/vibeui
 ```
 
-Package langsung diunduh dari repositori `teknovateid/vibeui`. File-file internal dokumentasi (`app/`, `database/`, `storage/`, `frankenphp`) otomatis diabaikan saat user mengunduh via Composer berkat aturan `export-ignore` di file `.gitattributes`.
+Di repositori ini, root bertindak sebagai aplikasi dokumentasi & playground (`laravel/laravel`). Core package sesungguhnya berada di subfolder `packages/vibe/`. Ketika rilis dilakukan (`php artisan vibe:release`), sistem otomatis melakukan *subtree split* pada Git Tag rilis sehingga pengguna akhir yang mengunduh melalui Composer hanya menerima isi dari package murni tanpa file boilerplate dokumentasi (`app/`, `artisan`, `database/`, dll).
 
 ---
 
