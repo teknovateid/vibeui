@@ -79,16 +79,33 @@ class ReleaseCommand extends Command
         }
 
         // 4. Determine Current Tag & Version
-        $tagResult = Process::run('git describe --tags --abbrev=0');
-        $latestTag = $tagResult->successful() ? trim($tagResult->output()) : null;
+        $tagsResult = Process::run('git tag -l "v*" --sort=-v:refname');
+        $tags = array_values(array_filter(explode("\n", trim($tagsResult->output()))));
+        $latestTag = $tags[0] ?? null;
 
         if ($latestTag) {
             $currentVersion = ltrim($latestTag, 'v');
             $this->components->info("Latest Git Tag: <fg=green>{$latestTag}</> (v{$currentVersion})");
-            $gitLogCommand = "git log {$latestTag}..HEAD --oneline --no-merges";
         } else {
             $currentVersion = Vibe::version();
+            $latestTag = "v{$currentVersion}";
             $this->components->warn("No git tags found. Baseline version from Vibe::VERSION: <fg=green>v{$currentVersion}</>");
+        }
+
+        if (version_compare(Vibe::version(), $currentVersion, '>')) {
+            $currentVersion = Vibe::version();
+            $latestTag = "v{$currentVersion}";
+        }
+
+        // Find the last release commit in current branch to accurately diff commit logs
+        $lastReleaseCommitResult = Process::run('git log --grep="^chore(release):" -n 1 --format="%H"');
+        $lastReleaseCommit = trim($lastReleaseCommitResult->output());
+
+        if ($lastReleaseCommit) {
+            $gitLogCommand = "git log {$lastReleaseCommit}..HEAD --oneline --no-merges";
+        } elseif ($latestTag) {
+            $gitLogCommand = "git log {$latestTag}..HEAD --oneline --no-merges";
+        } else {
             $gitLogCommand = 'git log --oneline --no-merges -n 50';
         }
 
@@ -269,9 +286,16 @@ class ReleaseCommand extends Command
         $this->components->success("🎉 Release {$targetTag} created successfully!");
         $this->newLine();
 
+        if ($currentBranch === 'development') {
+            Process::run('git branch -f production development');
+        }
+
         // 12. Next Steps / Push Tag Prompt
         $this->line('To publish this release to GitHub and Packagist:');
         $this->line("  <fg=yellow>git push origin {$currentBranch}</>");
+        if ($currentBranch === 'development') {
+            $this->line('  <fg=yellow>git push origin production</>');
+        }
         $this->line("  <fg=yellow>git push origin -f {$targetTag}</>");
         $this->newLine();
 
@@ -280,11 +304,17 @@ class ReleaseCommand extends Command
                 return Process::run(['git', 'push', 'origin', $currentBranch])->successful();
             });
 
+            if ($currentBranch === 'development') {
+                $this->components->task('Pushing branch production to origin', function () {
+                    return Process::run(['git', 'push', 'origin', 'production'])->successful();
+                });
+            }
+
             $this->components->task("Pushing tag {$targetTag} to origin", function () use ($targetTag) {
                 return Process::run(['git', 'push', 'origin', '-f', $targetTag])->successful();
             });
 
-            $this->components->success("Tag {$targetTag} pushed! Packagist will now serve packages/vibe as a clean, isolated package.");
+            $this->components->success("Tag {$targetTag} pushed! Packagist and production web docs are now up to date.");
         }
 
         return self::SUCCESS;
