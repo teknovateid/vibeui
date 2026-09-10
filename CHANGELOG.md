@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.4] - 2026-09-10
+
+### 🚀 Features
+- feat: add Chart.js and FilePond dependencies and implement input validation and reserved path protection for LayoutCommand (f1a75cc)
+- feat: add localization publishing and refine asset registration logic in InstallCommand (3b327cc)
+
+
 ## [0.1.3] - 2026-09-10
 
 ### 🚀 Features
