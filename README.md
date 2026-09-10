@@ -106,6 +106,8 @@ Vibe UI menyediakan beberapa perintah konsol khusus untuk mengotomatisasi pembua
 - `php artisan vibe:layout` — Meng-*generate* struktur file *layout* dasar.
 - `php artisan vibe:page` — Meng-*generate* template halaman baru.
 - `php artisan vibe:component` — Membuat kerangka (*stub*) untuk Blade component baru.
+- `php artisan vibe:sync` — Menyinkronkan aset dari `resources/` ke folder `packages/vibe/`.
+- `php artisan vibe:release` — Otomasi versioning SemVer, update changelog, dan tagging rilis package.
 - `php artisan vibe:clean` — Membersihkan/me-reset cache spesifik milik Vibe UI.
 
 ---

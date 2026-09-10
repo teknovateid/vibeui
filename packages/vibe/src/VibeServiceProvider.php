@@ -2,18 +2,22 @@
 
 namespace Teknovate\VibeUi;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Vite;
-use Teknovate\VibeUi\Commands\LayoutCommand;
-use Teknovate\VibeUi\Commands\ComponentCommand;
-use Teknovate\VibeUi\Commands\VibeCommand;
+use Illuminate\Support\ServiceProvider;
+use Livewire\Blaze\BlazeManager;
+use Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets;
 use Teknovate\VibeUi\Commands\CleanCommand;
-use Teknovate\VibeUi\Commands\PageCommand;
+use Teknovate\VibeUi\Commands\ComponentCommand;
 use Teknovate\VibeUi\Commands\CrudCommand;
 use Teknovate\VibeUi\Commands\InstallCommand;
+use Teknovate\VibeUi\Commands\LayoutCommand;
+use Teknovate\VibeUi\Commands\PageCommand;
+use Teknovate\VibeUi\Commands\ReleaseCommand;
+use Teknovate\VibeUi\Commands\SyncCommand;
 use Teknovate\VibeUi\Commands\TableMakeCommand;
+use Teknovate\VibeUi\Commands\VibeCommand;
 
 class VibeServiceProvider extends ServiceProvider
 {
@@ -47,8 +51,8 @@ class VibeServiceProvider extends ServiceProvider
 
         // Automatically exclude theme cookie from Laravel cookie encryption so no manual app.php configuration is needed
         $prefix = config('vibe.prefix', 'vibe');
-        if (class_exists(\Illuminate\Cookie\Middleware\EncryptCookies::class)) {
-            \Illuminate\Cookie\Middleware\EncryptCookies::except([
+        if (class_exists(EncryptCookies::class)) {
+            EncryptCookies::except([
                 $prefix.'_theme',
             ]);
         }
@@ -68,8 +72,8 @@ class VibeServiceProvider extends ServiceProvider
         }
 
         // Configure Rappasoft Livewire Tables script attributes for Livewire SPA wire:navigate
-        if (class_exists(\Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets::class)) {
-            app(\Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets::class)->useRappasoftTableScriptTagAttributes([
+        if (class_exists(RappasoftFrontendAssets::class)) {
+            app(RappasoftFrontendAssets::class)->useRappasoftTableScriptTagAttributes([
                 'data-navigate-once' => 'true',
                 'onload' => 'window.VibeInitDataTable ? window.VibeInitDataTable() : null',
             ]);
@@ -328,6 +332,8 @@ class VibeServiceProvider extends ServiceProvider
                 CrudCommand::class,
                 InstallCommand::class,
                 TableMakeCommand::class,
+                SyncCommand::class,
+                ReleaseCommand::class,
             ]);
         }
     }
@@ -353,13 +359,13 @@ class VibeServiceProvider extends ServiceProvider
     protected function injectVibePrefixIntoBlaze(): void
     {
         // Silently skip if Blaze is not installed
-        if (! class_exists(\Livewire\Blaze\BlazeManager::class)) {
+        if (! class_exists(BlazeManager::class)) {
             return;
         }
 
         try {
-            /** @var \Livewire\Blaze\BlazeManager $manager */
-            $manager = app(\Livewire\Blaze\BlazeManager::class);
+            /** @var BlazeManager $manager */
+            $manager = app(BlazeManager::class);
 
             // BlazeManager creates the parser as: new Parser(new Tokenizer, ...)
             // We access the parser's tokenizer via Reflection.
@@ -442,13 +448,15 @@ class VibeServiceProvider extends ServiceProvider
         if (str_contains($string, '<vibe:preview.code')) {
             $string = preg_replace_callback('/(<vibe:preview\.code[^>]*>)(.*?)(<\/vibe:preview\.code>)/s', function ($m) {
                 $inner = preg_replace('/<(\/?)(vibe:|x-)/', '<$1\\\\$2', $m[2]);
-                return $m[1] . $inner . $m[3];
+
+                return $m[1].$inner.$m[3];
             }, $string);
         }
 
         // 3. Fast-path: If template has no @verbatim, convert directly without array allocation & preg_split
         if (! str_contains($string, '@verbatim')) {
             $string = preg_replace('/<vibe:([a-zA-Z0-9\-\.]+)/', '<x-vibe::$1', $string);
+
             return preg_replace('/<\/vibe:([a-zA-Z0-9\-\.]+)/', '</x-vibe::$1', $string);
         }
 
