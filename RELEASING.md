@@ -1,54 +1,39 @@
 # 🚀 Panduan Versioning & Rilis Vibe UI
 
-Dokumen ini menjelaskan alur kerja rilis dan *versioning* untuk package **Vibe UI** (`teknovate/vibe-ui`) menggunakan pola **Monorepo + Git Subtree Split** (standar industri yang digunakan oleh Laravel Framework dan Filament).
+Dokumen ini menjelaskan alur kerja rilis dan *versioning* untuk package **Vibe UI** (`teknovate/vibeui`) menggunakan **1 Repositori Tunggal** (`teknovateid/vibeui`).
 
 ---
 
-## 🏗️ 1. Arsitektur Repositori
+## 🏗️ 1. Arsitektur Repositori Tunggal
 
 ```text
-[Monorepo: teknovateid/vibeui]
+[Repositori: https://github.com/teknovateid/vibeui]
  ├── development  --> Branch koding harian seluruh tim (docs + package)
  ├── production   --> Branch rilis stabil dokumentasi web
- └── packages/vibe/ (Core Package)
+ ├── composer.json (name: "teknovate/vibeui", type: "library")
+ └── packages/vibe/ (Core Components & PHP Source Code)
            │
-           │ (Otomatis via GitHub Action saat push tag v*)
-           ▼
-[Distribution Repo: teknovateid/vibe-ui]
- └── main (Hanya berisi isi packages/vibe + composer.json di root)
-           │
+           │  (Didaftarkan langsung ke Packagist)
            ▼
      [Packagist.org]
            │
            ▼
-  composer require teknovate/vibe-ui
+  composer require teknovate/vibeui
 ```
+
+Package langsung diunduh dari repositori `teknovateid/vibeui`. File-file internal dokumentasi (`app/`, `database/`, `storage/`, `frankenphp`) otomatis diabaikan saat user mengunduh via Composer berkat aturan `export-ignore` di file `.gitattributes`.
 
 ---
 
-## ⚙️ 2. Persiapan Awal (One-Time Setup)
+## ⚙️ 2. Registrasi Packagist (Sekali Saja)
 
-Langkah ini hanya perlu dilakukan **satu kali**:
-
-1. **Buat Repositori Distribusi di GitHub**:
-   - Nama repositori: `teknovateid/vibe-ui`
-   - Visibilitas: Public (atau Private jika khusus internal Teknovate).
-
-2. **Buat GitHub Personal Access Token (PAT)**:
-   - Masuk ke GitHub Profile $\rightarrow$ **Settings** $\rightarrow$ **Developer settings** $\rightarrow$ **Personal access tokens** $\rightarrow$ **Fine-grained tokens** (atau *Tokens (classic)*).
-   - Berikan hak akses **Repo** (Read and Write).
-
-3. **Simpan ke GitHub Secrets di Monorepo**:
-   - Buka repositori `teknovateid/vibeui` $\rightarrow$ **Settings** $\rightarrow$ **Secrets and variables** $\rightarrow$ **Actions**.
-   - Tambahkan Secret baru bernama:
-     ```text
-     SPLIT_ACCESS_TOKEN
-     ```
-   - Masukkan nilai PAT yang tadi dibuat.
-
-4. **Kaitkan ke Packagist**:
-   - Daftarkan repositori `https://github.com/teknovateid/vibe-ui` ke [packagist.org](https://packagist.org/packages/submit).
-   - Aktifkan GitHub Webhook otomatis di Packagist agar setiap rilis tag baru langsung terupdate di Composer.
+1. Buka [packagist.org/packages/submit](https://packagist.org/packages/submit).
+2. Masukkan URL:
+   ```text
+   https://github.com/teknovateid/vibeui
+   ```
+3. Klik **Check** lalu **Submit**. Packagist akan langsung mengenali nama package **`teknovate/vibeui`**.
+4. Aktifkan **GitHub Service Hook** di pengaturan Packagist agar setiap tag baru otomatis tersinkronisasi.
 
 ---
 
@@ -68,7 +53,7 @@ Automasi rilis membaca riwayat commit untuk menentukan kenaikan versi (SemVer) d
 
 ## 🎯 4. Alur Rilis Versi Baru (Step-by-Step)
 
-Untuk merilis versi baru, Anda cukup menjalankan perintah CLI interaktif yang telah disediakan:
+Untuk merilis versi baru, Anda cukup menjalankan perintah CLI interaktif:
 
 ### Langkah 1: Jalankan Release Assistant
 ```bash
@@ -80,7 +65,7 @@ php artisan vibe:release
 1. **Validasi Status**: Memeriksa branch dan memastikan tidak ada perubahan lokal yang belum di-commit.
 2. **Auto-Sync**: Memastikan aset di `packages/vibe/` identik 100% dengan `resources/`.
 3. **Analisis Commit**: Membaca commit sejak tag terakhir dan mengelompokkannya (Features, Fixes, Improvements, Chores).
-4. **Saran Versi SemVer**: Sistem menyarankan versi berikutnya (misal `0.2.0`). Anda bisa memilih:
+4. **Saran Versi SemVer**: Sistem menyarankan versi berikutnya (misal `0.1.1`). Anda bisa memilih:
    - `recommended` (sesuai kalkulasi commit)
    - `patch`
    - `minor`
@@ -93,17 +78,14 @@ php artisan vibe:release
 ### Langkah 3: Push ke GitHub
 Setelah tag terbuat, dorong branch dan tag ke repositori:
 ```bash
-git push origin <branch>
-git push origin vX.Y.Z
+git push origin production --tags
 ```
 *(CLI akan menawarkan konfirmasi untuk langsung melakukan push otomatis jika Anda mau).*
 
-### Langkah 4: Otomatisasi GitHub Actions
-Begitu tag `vX.Y.Z` tiba di GitHub:
-- Workflow `.github/workflows/split-package.yml` otomatis aktif.
-- Mengekstrak subfolder `packages/vibe/` dan mem-push commit serta tag `vX.Y.Z` ke repositori `teknovateid/vibe-ui`.
-- Membuat rilis GitHub beserta catatan rilisnya.
-- Packagist otomatis memperbarui package sehingga user dapat langsung menjalankan `composer require teknovate/vibe-ui:^X.Y`.
+Begitu tag tiba di GitHub, Packagist otomatis mendeteksi rilis baru sehingga pengguna dapat langsung menjalankan:
+```bash
+composer require teknovate/vibeui
+```
 
 ---
 

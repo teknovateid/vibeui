@@ -36,7 +36,7 @@
             <p class="text-sm text-muted-foreground">
                 {{ __('docs/instalation.steps.step_1.desc') }}
             </p>
-            <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibe-ui" />
+            <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibeui" />
         </section>
 
         <!-- Step 2: Publish Assets & Config -->

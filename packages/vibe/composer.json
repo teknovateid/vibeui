@@ -1,5 +1,5 @@
 {
-    "name": "teknovate/vibe-ui",
+    "name": "teknovate/vibeui",
     "keywords": [
         "teknovate",
         "livewire",
@@ -10,11 +10,11 @@
         "dashboard",
         "template",
         "starter-kit",
-        "vibe-ui",
+        "vibeui",
         "vibe",
         "ui"
     ],
-    "homepage": "https://github.com/teknovateid/vibe-ui",
+    "homepage": "https://github.com/teknovateid/vibeui",
     "license": "MIT",
     "type": "library",
     "minimum-stability": "stable",

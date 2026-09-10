@@ -6699,63 +6699,6 @@
             "time": "2026-08-30T20:10:55+00:00"
         },
         {
-            "name": "teknovate/vibe-ui",
-            "version": "dev-development",
-            "dist": {
-                "type": "path",
-                "url": "./packages/vibe",
-                "reference": "34a02215e417f9e144d899315eb423dc2f4f0298"
-            },
-            "require": {
-                "gehrisandro/tailwind-merge-laravel": "^1.4",
-                "livewire/blaze": "*",
-                "livewire/livewire": "*",
-                "php": ">=8.3",
-                "rappasoft/laravel-livewire-tables": "^3.0|^4.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Teknovate\\VibeUi\\VibeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Teknovate\\VibeUi\\": "src/"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Teknovate",
-                    "email": "lab@teknovate.co.id"
-                }
-            ],
-            "homepage": "https://github.com/teknovateid/vibe-ui",
-            "keywords": [
-                "admin",
-                "dashboard",
-                "laravel",
-                "livewire",
-                "starter-kit",
-                "tailwind",
-                "teknovate",
-                "template",
-                "ui",
-                "ui",
-                "vibe",
-                "vibe-ui"
-            ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
-        },
-        {
             "name": "tijsverkoyen/css-to-inline-styles",
             "version": "v2.4.0",
             "source": {
@@ -10858,9 +10801,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "teknovate/vibe-ui": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

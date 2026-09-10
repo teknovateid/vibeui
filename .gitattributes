@@ -9,3 +9,15 @@
 /.github export-ignore
 CHANGELOG.md export-ignore
 .styleci.yml export-ignore
+/app export-ignore
+/bootstrap export-ignore
+/database export-ignore
+/routes export-ignore
+/storage export-ignore
+/tests export-ignore
+/public export-ignore
+dev-vibeui-octane.conf export-ignore
+frankenphp export-ignore
+test.php export-ignore
+phpunit.xml export-ignore
+

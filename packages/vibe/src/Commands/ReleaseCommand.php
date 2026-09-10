@@ -328,7 +328,7 @@ class ReleaseCommand extends Command
      */
     protected function prependChangelog(string $filePath, string $entry): void
     {
-        $header = "# Changelog\n\nAll notable changes to **Vibe UI** (`teknovate/vibe-ui`) will be documented in this file.\n\n";
+        $header = "# Changelog\n\nAll notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.\n\n";
 
         if (File::exists($filePath)) {
             $existing = File::get($filePath);

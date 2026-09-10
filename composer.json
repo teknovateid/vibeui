@@ -1,20 +1,29 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
-    "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "name": "teknovate/vibeui",
+    "type": "library",
+    "description": "Vibe UI - Livewire & Tailwind CSS UI Components for Laravel",
     "keywords": [
+        "teknovate",
+        "vibeui",
+        "vibe",
+        "livewire",
         "laravel",
-        "framework"
+        "tailwind",
+        "ui"
     ],
+    "homepage": "https://github.com/teknovateid/vibeui",
     "license": "MIT",
     "require": {
         "php": "^8.3",
-        "laravel/framework": "^13.17",
+        "laravel/framework": "^11.0|^12.0|^13.0",
+        "livewire/livewire": "*",
+        "livewire/blaze": "*",
+        "gehrisandro/tailwind-merge-laravel": "^1.4",
+        "rappasoft/laravel-livewire-tables": "^3.0|^4.0",
         "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.35",
-        "predis/predis": "^3.6",
-        "teknovate/vibe-ui": "@dev"
+        "predis/predis": "^3.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -27,17 +36,9 @@
         "pestphp/pest": "^5.0",
         "pestphp/pest-plugin-laravel": "^5.0"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "./packages/*",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "autoload": {
         "psr-4": {
+            "Teknovate\\VibeUi\\": "packages/vibe/src/",
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
@@ -86,6 +87,9 @@
     },
     "extra": {
         "laravel": {
+            "providers": [
+                "Teknovate\\VibeUi\\VibeServiceProvider"
+            ],
             "dont-discover": []
         }
     },
