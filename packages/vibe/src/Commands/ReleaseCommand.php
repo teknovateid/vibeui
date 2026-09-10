@@ -239,22 +239,40 @@ class ReleaseCommand extends Command
         }
         $this->components->task("Created git commit [{$commitMsg}]", fn () => true);
 
-        $tagResult = Process::run(['git', 'tag', '-a', $targetTag, '-m', "Release {$targetTag}"]);
+        // 11. Extract Subtree Split for packages/vibe
+        $splitCommit = null;
+        $this->components->task('Extracting packages/vibe subtree for release distribution', function () use (&$splitCommit) {
+            $splitResult = Process::run('git subtree split --prefix=packages/vibe HEAD');
+            if ($splitResult->failed()) {
+                return false;
+            }
+            $splitCommit = trim($splitResult->output());
+
+            return ! empty($splitCommit);
+        });
+
+        if (empty($splitCommit)) {
+            $this->components->error('Failed to extract packages/vibe subtree.');
+
+            return self::FAILURE;
+        }
+
+        $tagResult = Process::run(['git', 'tag', '-f', '-a', $targetTag, $splitCommit, '-m', "Release {$targetTag}"]);
         if ($tagResult->failed()) {
             $this->components->error('Failed to create git tag: '.$tagResult->errorOutput());
 
             return self::FAILURE;
         }
-        $this->components->task("Created git tag [{$targetTag}]", fn () => true);
+        $this->components->task("Created git tag [{$targetTag}] (isolated packages/vibe subtree)", fn () => true);
 
         $this->newLine();
         $this->components->success("🎉 Release {$targetTag} created successfully!");
         $this->newLine();
 
         // 12. Next Steps / Push Tag Prompt
-        $this->line('To publish this release to GitHub and trigger the Subtree Split workflow:');
+        $this->line('To publish this release to GitHub and Packagist:');
         $this->line("  <fg=yellow>git push origin {$currentBranch}</>");
-        $this->line("  <fg=yellow>git push origin {$targetTag}</>");
+        $this->line("  <fg=yellow>git push origin -f {$targetTag}</>");
         $this->newLine();
 
         if (confirm('Would you like to push this release and tag to origin now?', false)) {
@@ -263,10 +281,10 @@ class ReleaseCommand extends Command
             });
 
             $this->components->task("Pushing tag {$targetTag} to origin", function () use ($targetTag) {
-                return Process::run(['git', 'push', 'origin', $targetTag])->successful();
+                return Process::run(['git', 'push', 'origin', '-f', $targetTag])->successful();
             });
 
-            $this->components->success("Tag {$targetTag} pushed! GitHub Actions will now split and release packages/vibe to teknovateid/vibe-ui.");
+            $this->components->success("Tag {$targetTag} pushed! Packagist will now serve packages/vibe as a clean, isolated package.");
         }
 
         return self::SUCCESS;
