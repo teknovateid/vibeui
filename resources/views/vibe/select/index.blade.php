@@ -240,6 +240,24 @@
         }
     },
 
+    handleHiddenInput(el) {
+        if (!el) return;
+        if (this.multiple) {
+            try {
+                let p = JSON.parse(el.value);
+                if (Array.isArray(p) && JSON.stringify(p) !== JSON.stringify(this.value)) {
+                    this.value = p;
+                    this.updateSelectionFromValue();
+                }
+            } catch(e) {}
+        } else {
+            if (this.value !== el.value) {
+                this.value = el.value;
+                this.updateSelectionFromValue();
+            }
+        }
+    },
+
     updateSelectionFromValue() {
         if (this.multiple) {
             if (!Array.isArray(this.value)) {
@@ -455,9 +473,9 @@
         <template x-for="val in value" :key="val">
             <input type="hidden" name="{{ $name }}[]" :value="val" />
         </template>
-        <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" @input="try { let p = JSON.parse($el.value); if (Array.isArray(p)) { value = p; updateSelectionFromValue(); } } catch(e) {}" @change="try { let p = JSON.parse($el.value); if (Array.isArray(p)) { value = p; updateSelectionFromValue(); } } catch(e) {}" />
+        <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
     @else
-        <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="value" x-ref="hiddenInput" @input="if (value !== $el.value) { value = $el.value; updateSelectionFromValue(); }" @change="if (value !== $el.value) { value = $el.value; updateSelectionFromValue(); }" />
+        <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="value" x-ref="hiddenInput" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
     @endif
 
     {{-- Trigger & Popover Wrapper --}}
