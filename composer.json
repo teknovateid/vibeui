@@ -21,7 +21,10 @@
     "autoload": {
         "psr-4": {
             "Teknovate\\VibeUi\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "authors": [
         {
@@ -33,7 +36,7 @@
         "php": ">=8.3",
         "livewire/livewire": "*",
         "livewire/blaze": "*",
-        "gehrisandro/tailwind-merge-laravel": "^1.4",
+        "gehrisandro/tailwind-merge-php": "^1.1",
         "rappasoft/laravel-livewire-tables": "^3.0|^4.0"
     },
     "extra": {
