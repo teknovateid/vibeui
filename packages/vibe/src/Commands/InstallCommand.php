@@ -3,6 +3,7 @@
 namespace Teknovate\VibeUi\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Process;
 
 class InstallCommand extends Command
 {
@@ -37,24 +38,29 @@ class InstallCommand extends Command
             $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
         });
 
-        // 3. Inject to app.js
+        // 3. Publish Localization
+        $this->components->task('Publishing localization files', function () {
+            $this->callSilent('vendor:publish', ['--tag' => 'vibe-lang', '--force' => true]);
+        });
+
+        // 4. Inject to app.js
         $this->components->task('Registering JS assets', function () {
             $jsPath = resource_path('js/app.js');
             if (file_exists($jsPath)) {
                 $content = file_get_contents($jsPath);
-                if (!str_contains($content, "import './vibe/app'")) {
-                    file_put_contents($jsPath, $content . "\nimport './vibe/app';\n");
+                if (! str_contains($content, "import './vibe/app'")) {
+                    file_put_contents($jsPath, $content."\nimport './vibe/app';\n");
                 }
             }
         });
 
-        // 4. Inject to app.css
+        // 5. Inject to app.css
         $this->components->task('Registering CSS assets', function () {
             $cssPath = resource_path('css/app.css');
             if (file_exists($cssPath)) {
                 $content = file_get_contents($cssPath);
-                if (!str_contains($content, "@import './vibe/app.css'") && !str_contains($content, "@import \"./vibe/app.css\"")) {
-                    file_put_contents($cssPath, "@import './vibe/app.css';\n" . $content);
+                if (! str_contains($content, "@import './vibe/app.css'") && ! str_contains($content, '@import "./vibe/app.css"')) {
+                    file_put_contents($cssPath, "@import './vibe/app.css';\n".$content);
                 }
             }
         });
@@ -69,19 +75,19 @@ class InstallCommand extends Command
             $packageJsonPath = base_path('package.json');
             if (file_exists($packageJsonPath)) {
                 $packageJson = json_decode(file_get_contents($packageJsonPath), true);
-                
-                if (!isset($packageJson['dependencies']['@alpinejs/persist'])) {
+
+                if (! isset($packageJson['dependencies']['@alpinejs/persist'])) {
                     // Ambil versi dari package.json milik Vibe UI secara dinamis
                     $vibePackagePath = __DIR__.'/../../package.json';
                     $alpineVersion = '^3.15.12'; // Fallback
-                    
+
                     if (file_exists($vibePackagePath)) {
                         $vibePackage = json_decode(file_get_contents($vibePackagePath), true);
                         $alpineVersion = $vibePackage['dependencies']['@alpinejs/persist'] ?? $alpineVersion;
                     }
 
                     $packageJson['dependencies']['@alpinejs/persist'] = $alpineVersion;
-                    
+
                     file_put_contents(
                         $packageJsonPath,
                         json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
@@ -92,7 +98,7 @@ class InstallCommand extends Command
 
         // 7. Run NPM Install
         $this->components->info('Running npm install...');
-        $process = new \Symfony\Component\Process\Process(['npm', 'install'], base_path());
+        $process = new Process(['npm', 'install'], base_path());
         $process->setTimeout(null);
         $process->run(function ($type, $buffer) {
             $this->output->write($buffer);
@@ -117,7 +123,7 @@ class InstallCommand extends Command
             }
         }
 
-        if (!$vitePath) {
+        if (! $vitePath) {
             return;
         }
 
@@ -136,7 +142,7 @@ class InstallCommand extends Command
         $assetsToInject = [];
 
         foreach ($vibeAssets as $asset) {
-            if (!str_contains($content, "'{$asset}'") && !str_contains($content, "\"{$asset}\"")) {
+            if (! str_contains($content, "'{$asset}'") && ! str_contains($content, "\"{$asset}\"")) {
                 $assetsToInject[] = $asset;
             }
         }
@@ -147,7 +153,7 @@ class InstallCommand extends Command
 
         if (preg_match('/input\s*:\s*\[([^\]]*)\]/s', $content, $matches)) {
             $existing = rtrim($matches[1]);
-            if (!empty($existing) && !str_ends_with($existing, ',')) {
+            if (! empty($existing) && ! str_ends_with($existing, ',')) {
                 $existing .= ',';
             }
 
@@ -157,13 +163,13 @@ class InstallCommand extends Command
                 $indent = $indentMatch[1];
             }
 
-            $injectedLines = implode("\n", array_map(fn($asset) => "{$indent}'{$asset}',", $assetsToInject));
+            $injectedLines = implode("\n", array_map(fn ($asset) => "{$indent}'{$asset}',", $assetsToInject));
             $closingIndent = "\n            ";
             if (preg_match('/(\n\s*)$/', $matches[1], $closingMatch)) {
                 $closingIndent = $closingMatch[1];
             }
 
-            $replacement = "input: [" . $existing . "\n" . $injectedLines . $closingIndent . "]";
+            $replacement = 'input: ['.$existing."\n".$injectedLines.$closingIndent.']';
             $content = str_replace($matches[0], $replacement, $content);
             file_put_contents($vitePath, $content);
         }
