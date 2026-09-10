@@ -744,7 +744,17 @@ export function vibeFilepond(config = {}) {
                         const xhrPresign = new XMLHttpRequest();
                         let xhrUpload = null;
 
-                        xhrPresign.open('POST', cfg.presignUrl, true);
+                        let presignUrl = cfg.presignUrl;
+                        if (typeof presignUrl === 'string' && typeof window !== 'undefined' && window.location && window.location.protocol === 'https:' && presignUrl.startsWith('http:')) {
+                            try {
+                                const parsed = new URL(presignUrl, window.location.origin);
+                                if (parsed.host === window.location.host) {
+                                    presignUrl = presignUrl.replace(/^http:/, 'https:');
+                                }
+                            } catch (e) {}
+                        }
+
+                        xhrPresign.open('POST', presignUrl, true);
                         xhrPresign.setRequestHeader('Content-Type', 'application/json');
                         xhrPresign.setRequestHeader('Accept', 'application/json');
                         xhrPresign.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
