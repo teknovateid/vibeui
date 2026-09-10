@@ -120,6 +120,7 @@ export default defineConfig({
                 
                 'resources/js/vibe/chart.js',
                 'resources/js/vibe/date-time.js',
+                'resources/js/vibe/dynamic-form.js',
                 'resources/js/vibe/filepond.js',
                 'resources/js/vibe/form.js',
                 'resources/js/vibe/grid.js',

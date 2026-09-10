@@ -141,6 +141,16 @@
             'keywords' => 'date time calendar picker tanggal waktu',
         ],
         [
+            'id' => 'menu-dynamic-form',
+            'title' => __('docs/sidebar.nav.dynamic-form') ?: 'Dynamic Form',
+            'subtitle' => 'Form repeater input bertambah dinamis',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.dynamic-form.index'),
+            'icon' => 'form',
+            'keywords' => 'dynamic form repeater input bertambah add more row array',
+        ],
+        [
             'id' => 'menu-filepond',
             'title' => __('docs/sidebar.nav.filepond') ?: __('docs/search.menu_items.filepond.title'),
             'subtitle' => __('docs/search.menu_items.filepond.subtitle'),

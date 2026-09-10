@@ -24,6 +24,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/switch', 'docs.switch.index')->name('switch.index');
     Route::view('/range', 'docs.range.index')->name('range.index');
     Route::view('/date-time', 'docs.date-time.index')->name('date-time.index');
+    Route::view('/dynamic-form', 'docs.dynamic-form.index')->name('dynamic-form.index');
 
     Route::prefix('filepond')->name('filepond.')->group(function () {
         Route::get('/', [FilepondController::class, 'index'])->name('index');

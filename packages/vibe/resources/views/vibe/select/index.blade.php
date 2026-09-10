@@ -124,6 +124,25 @@
     init() {
         this.$nextTick(() => {
             let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
+            if (isEmptyValue && this.$refs.hiddenInput && this.$refs.hiddenInput.value) {
+                try {
+                    if (this.multiple) {
+                        let parsed = JSON.parse(this.$refs.hiddenInput.value);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            this.value = parsed;
+                            isEmptyValue = false;
+                        }
+                    } else {
+                        this.value = this.$refs.hiddenInput.value;
+                        isEmptyValue = false;
+                    }
+                } catch(e) {
+                    if (!this.multiple) {
+                        this.value = this.$refs.hiddenInput.value;
+                        isEmptyValue = false;
+                    }
+                }
+            }
             if (isEmptyValue && this.$refs.optionsContainer) {
                 let preselected = Array.from(this.$refs.optionsContainer.querySelectorAll('[data-selected=\'true\']'));
                 if (preselected.length > 0) {
@@ -313,7 +332,21 @@
     checkVisibility() {
         if (!this.$refs.optionsContainer) return;
         let options = Array.from(this.$refs.optionsContainer.querySelectorAll('[data-select-option]'));
-        let anyVisible = options.some(el => el.style.display !== 'none');
+        if (options.length === 0) {
+            this.hasVisibleOptions = false;
+            return;
+        }
+        let q = (this.search || '').toLowerCase().trim();
+        if (!q) {
+            this.hasVisibleOptions = true;
+            return;
+        }
+        let anyVisible = options.some(el => {
+            if (el.style.display === 'none') return false;
+            let val = (el.getAttribute('data-value') || '').toLowerCase();
+            let lbl = (el.getAttribute('data-label') || el.innerText || '').toLowerCase();
+            return val.includes(q) || lbl.includes(q);
+        });
         this.hasVisibleOptions = anyVisible;
     },
 
@@ -341,6 +374,7 @@
         this.open = !this.open;
         if (this.open) {
             this.search = '';
+            this.hasVisibleOptions = true;
             this.calculatePlacement();
             this.$nextTick(() => {
                 this.calculatePlacement();
@@ -421,9 +455,9 @@
         <template x-for="val in value" :key="val">
             <input type="hidden" name="{{ $name }}[]" :value="val" />
         </template>
-        <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" />
+        <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" @input="try { let p = JSON.parse($el.value); if (Array.isArray(p)) { value = p; updateSelectionFromValue(); } } catch(e) {}" @change="try { let p = JSON.parse($el.value); if (Array.isArray(p)) { value = p; updateSelectionFromValue(); } } catch(e) {}" />
     @else
-        <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="value" x-ref="hiddenInput" />
+        <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="value" x-ref="hiddenInput" @input="if (value !== $el.value) { value = $el.value; updateSelectionFromValue(); }" @change="if (value !== $el.value) { value = $el.value; updateSelectionFromValue(); }" />
     @endif
 
     {{-- Trigger & Popover Wrapper --}}

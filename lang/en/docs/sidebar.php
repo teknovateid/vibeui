@@ -22,6 +22,7 @@ return [
         'switch' => 'Switch',
         'range' => 'Range Slider',
         'date-time' => 'Date & Time',
+        'dynamic-form' => 'Dynamic Form',
         'filepond' => 'FilePond',
         'button' => 'Button',
         'dropdown' => 'Dropdown',
