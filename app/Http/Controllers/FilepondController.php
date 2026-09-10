@@ -67,10 +67,16 @@ class FilepondController extends Controller
 
     public function presigned(Request $request)
     {
+        $maxBytes = 50 * 1024 * 1024; // 50MB
+
         $request->validate([
             'filename' => ['nullable', 'string'],
             'type' => ['nullable', 'string'],
-            'size' => ['nullable', 'integer','max:500000'],
+            'size' => ['nullable', 'integer', 'max:' . $maxBytes],
+        ], [
+            'size.max' => app()->getLocale() === 'id'
+                ? 'Ukuran berkas tidak boleh lebih dari 50MB.'
+                : 'The file size must not be greater than 50MB.',
         ]);
 
         $rawFilename = $request->filename ?? Str::random(10);
