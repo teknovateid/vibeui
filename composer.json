@@ -19,7 +19,7 @@
         "laravel/framework": "^11.0|^12.0|^13.0",
         "livewire/livewire": "*",
         "livewire/blaze": "*",
-        "gehrisandro/tailwind-merge-laravel": "^1.4",
+        "gehrisandro/tailwind-merge-php": "^1.1",
         "rappasoft/laravel-livewire-tables": "^3.0|^4.0",
         "laravel/tinker": "^3.0",
         "league/flysystem-aws-s3-v3": "^3.35",
@@ -42,7 +42,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "packages/vibe/src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

@@ -2,12 +2,18 @@
 
 namespace Teknovate\VibeUi;
 
+require_once __DIR__.'/helpers.php';
+
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\Compilers\BladeCompiler;
+use Illuminate\View\ComponentAttributeBag;
 use Livewire\Blaze\BlazeManager;
 use Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets;
+use TailwindMerge\Contracts\TailwindMergeContract;
+use TailwindMerge\TailwindMerge;
 use Teknovate\VibeUi\Commands\CleanCommand;
 use Teknovate\VibeUi\Commands\ComponentCommand;
 use Teknovate\VibeUi\Commands\CrudCommand;
@@ -26,6 +32,27 @@ class VibeServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(
             __DIR__.'/../config/vibe.php', 'vibe'
         );
+
+        // Register TailwindMerge bindings
+        if (! $this->app->bound(TailwindMergeContract::class)) {
+            $this->app->singleton(TailwindMergeContract::class, static function ($app): TailwindMerge {
+                $factory = TailwindMerge::factory()
+                    ->withConfiguration(config('tailwind-merge', []));
+
+                try {
+                    if ($app->bound('cache')) {
+                        $factory->withCache($app->make('cache')->store());
+                    }
+                } catch (\Throwable $e) {
+                    // Ignore cache store failure (e.g. during early bootstrap or testing)
+                }
+
+                return $factory->make();
+            });
+
+            $this->app->alias(TailwindMergeContract::class, 'tailwind-merge');
+            $this->app->alias(TailwindMergeContract::class, TailwindMerge::class);
+        }
     }
 
     public function boot(): void
@@ -322,6 +349,9 @@ class VibeServiceProvider extends ServiceProvider
         // to work correctly when vibe components call other vibe components.
         $this->registerVibeAsBlazePrefixAfterBoot();
 
+        // Register TailwindMerge directives and ComponentAttributeBag macros
+        $this->registerTailwindMerge();
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 LayoutCommand::class,
@@ -476,5 +506,51 @@ class VibeServiceProvider extends ServiceProvider
         }
 
         return implode('', $parts);
+    }
+
+    /**
+     * Register TailwindMerge Blade directives and ComponentAttributeBag macros.
+     */
+    protected function registerTailwindMerge(): void
+    {
+        // 1. Blade directive: @twMerge(...)
+        $this->app->afterResolving('blade.compiler', function (BladeCompiler $bladeCompiler): void {
+            $name = config('tailwind-merge.blade_directive', 'twMerge');
+
+            if ($name !== null && ! array_key_exists($name, $bladeCompiler->getCustomDirectives())) {
+                $bladeCompiler->directive($name, fn (?string $expression): string => "<?php echo twMerge({$expression}); ?>");
+            }
+        });
+
+        // 2. ComponentAttributeBag macro: twMerge
+        if (! ComponentAttributeBag::hasMacro('twMerge')) {
+            ComponentAttributeBag::macro('twMerge', function (...$args): ComponentAttributeBag {
+                /** @var ComponentAttributeBag $this */
+                $this->offsetSet('class', resolve(TailwindMergeContract::class)->merge($args, ($this->get('class', ''))));
+
+                return $this;
+            });
+        }
+
+        // 3. ComponentAttributeBag macro: twMergeFor
+        if (! ComponentAttributeBag::hasMacro('twMergeFor')) {
+            ComponentAttributeBag::macro('twMergeFor', function (string $for, ...$args): ComponentAttributeBag {
+                /** @var ComponentAttributeBag $this */
+                $instance = resolve(TailwindMergeContract::class);
+                $attribute = 'class'.($for !== '' ? ':'.$for : '');
+                $classes = $this->get($attribute, '');
+                $this->offsetSet('class', $instance->merge($args, $classes));
+
+                return $this->only('class');
+            });
+        }
+
+        // 4. ComponentAttributeBag macro: withoutTwMergeClasses
+        if (! ComponentAttributeBag::hasMacro('withoutTwMergeClasses')) {
+            ComponentAttributeBag::macro('withoutTwMergeClasses', function (): ComponentAttributeBag {
+                /** @var ComponentAttributeBag $this */
+                return $this->whereDoesntStartWith('class:');
+            });
+        }
     }
 }
