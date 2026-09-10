@@ -31,8 +31,8 @@ return [
     ],
 
     'test_submit' => [
-        'title' => 'Pengujian Form Submit & AJAX Payload',
-        'desc' => 'Coba tambahkan beberapa baris lalu klik <b>Simpan Form</b> untuk melihat payload array yang terkirim ke server secara real-time via AJAX.',
-        'preview_title' => 'Live Demo Form Submission',
+        'title' => 'Pengujian Form Submit & AJAX Payload Lengkap',
+        'desc' => 'Uji integrasi menyeluruh repeater dengan berbagai kontrol input Vibe UI: <code>&lt;vibe:input&gt;</code>, <code>&lt;vibe:select&gt;</code>, <code>&lt;vibe:date-time&gt;</code>, <code>&lt;vibe:textarea&gt;</code>, <code>&lt;vibe:range&gt;</code>, <code>&lt;vibe:switch&gt;</code>, <code>&lt;vibe:radio&gt;</code>, <code>&lt;vibe:checkbox&gt;</code>, dan <code>&lt;vibe:filepond&gt;</code>. Klik <b>Simpan Form & Uji Payload</b> untuk melihat representasi array payload PHP di backend secara real-time via AJAX.',
+        'preview_title' => 'Live Demo Form Submission Lengkap',
     ],
 ];

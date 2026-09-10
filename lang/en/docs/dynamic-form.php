@@ -31,8 +31,8 @@ return [
     ],
 
     'test_submit' => [
-        'title' => 'Form Submission & AJAX Payload Test',
-        'desc' => 'Add some rows and click <b>Save Form</b> to preview the submitted nested array payload in real-time via AJAX.',
-        'preview_title' => 'Live Demo Form Submission',
+        'title' => 'Form Submission & Comprehensive AJAX Payload Test',
+        'desc' => 'Test comprehensive repeater integration with all Vibe UI input controls: <code>&lt;vibe:input&gt;</code>, <code>&lt;vibe:select&gt;</code>, <code>&lt;vibe:date-time&gt;</code>, <code>&lt;vibe:textarea&gt;</code>, <code>&lt;vibe:range&gt;</code>, <code>&lt;vibe:switch&gt;</code>, <code>&lt;vibe:radio&gt;</code>, <code>&lt;vibe:checkbox&gt;</code>, and <code>&lt;vibe:filepond&gt;</code>. Click <b>Save Form & Test Payload</b> to preview the submitted nested array structure via AJAX in real-time.',
+        'preview_title' => 'Live Demo Comprehensive Form Submission',
     ],
 ];

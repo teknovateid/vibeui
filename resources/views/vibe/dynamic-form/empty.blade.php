@@ -4,12 +4,20 @@
     'title' => null,
     'description' => null,
     'addText' => null,
+    'locale' => null,
 ])
 
 @php
-    $title = $title ?? __('vibe/dynamic-form.empty_title');
-    $description = $description ?? __('vibe/dynamic-form.empty_description');
-    $addText = $addText ?? __('vibe/dynamic-form.add_first_row');
+    $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
+    $rawTranslations = trans('vibe/dynamic-form', [], $resolvedLocale);
+    if (!is_array($rawTranslations)) {
+        $rawTranslations = trans('vibe::vibe/dynamic-form', [], $resolvedLocale);
+    }
+    $i18n = is_array($rawTranslations) ? $rawTranslations : [];
+
+    $title = $title ?? ($i18n['empty_title'] ?? __('vibe/dynamic-form.empty_title', [], $resolvedLocale));
+    $description = $description ?? ($i18n['empty_description'] ?? __('vibe/dynamic-form.empty_description', [], $resolvedLocale));
+    $addText = $addText ?? ($i18n['add_first_row'] ?? __('vibe/dynamic-form.add_first_row', [], $resolvedLocale));
 @endphp
 
 <div 

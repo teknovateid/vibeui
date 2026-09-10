@@ -346,7 +346,7 @@
                     <vibe:preview.code>
                         {{-- Frontend Blade Component --}}
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" class="space-y-3">
-                            <\vibe:filepond name="cloud_file" label="{{ __('docs/filepond.presigned.label') }}" description="{{ __('docs/filepond.presigned.description') }}" presign-url="{{ route('docs.filepond.presigned') }}" presign-method="PUT" max-file-size="500MB" />
+                            <\vibe:filepond protect-upload name="cloud_file" label="{{ __('docs/filepond.presigned.label') }}" description="{{ __('docs/filepond.presigned.description') }}" presign-url="{{ route('docs.filepond.presigned') }}" presign-method="PUT" max-file-size="500MB" />
                             <div class="flex justify-end pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
                                     Kirim Kunci S3 ke Controller
@@ -379,7 +379,7 @@
 
                         {{-- Standalone Presigned FilePond Form Instance --}}
                         <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" class="space-y-3">
-                            <vibe:filepond name="cloud_file" :label="__('docs/filepond.presigned.label')" :description="__('docs/filepond.presigned.description')" presign-url="{{ route('docs.filepond.presigned') }}" max-file-size="500MB" />
+                            <vibe:filepond protect-upload name="cloud_file" :label="__('docs/filepond.presigned.label')" :description="__('docs/filepond.presigned.description')" presign-url="{{ route('docs.filepond.presigned') }}" max-file-size="500MB" />
                             <div class="flex justify-end pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
                                     <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
