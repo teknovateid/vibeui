@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.3] - 2026-09-10
+
+### 🚀 Features
+- feat: improve version detection and automate production branch syncing during release (a844ab1)
+
+### ⚡ Performance & Refactoring
+- refactor: update stubs and generator commands to use layout-based wrappers with dynamic SEO and component slots (b1a0031)
+
+
 ## [0.1.2] - 2026-09-10
 
 ### 🐛 Bug Fixes
