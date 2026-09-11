@@ -594,6 +594,12 @@ export function vibeFilepond(config = {}) {
                 imagePreviewHeight: cfg.imagePreviewHeight ? parseInt(cfg.imagePreviewHeight, 10) : (cfg.avatar ? 130 : null),
                 imagePreviewMinHeight: cfg.imagePreviewMinHeight ? parseInt(cfg.imagePreviewMinHeight, 10) : (cfg.avatar ? 130 : null),
                 imagePreviewMaxHeight: cfg.imagePreviewMaxHeight ? parseInt(cfg.imagePreviewMaxHeight, 10) : (cfg.avatar ? 130 : null),
+                // Exclude SVG from raster preview plugin (prevents getImageSize hanging; custom thumbnail renderer handles SVGs)
+                imagePreviewFilterItem: (item) => {
+                    const type = item.fileType || (item.file && item.file.type) || '';
+                    const name = item.filename || (item.file && item.file.name) || '';
+                    return !/svg/i.test(type) && !/\.svg$/i.test(name);
+                },
 
                 allowImageCrop: Boolean(cfg.imageCrop || cfg.imageCropAspectRatio || cfg.avatar),
                 imageCropAspectRatio: cfg.avatar ? '1:1' : (cfg.imageCropAspectRatio || null),
@@ -605,6 +611,12 @@ export function vibeFilepond(config = {}) {
 
                 allowImageTransform: Boolean(cfg.imageTransform || cfg.imageCrop || cfg.imageResize || cfg.avatar),
                 imageTransformOutputQuality: cfg.imageQuality ? parseInt(cfg.imageQuality, 10) : null,
+                // Exclude vector SVGs from raster canvas transformations
+                imageTransformImageFilter: (file) => {
+                    const type = (file && file.type) || '';
+                    const name = (file && file.name) || '';
+                    return !/svg/i.test(type) && !/\.svg$/i.test(name);
+                },
 
                 // File encode (base64)
                 allowFileEncode: Boolean(cfg.encode),
@@ -770,7 +782,7 @@ export function vibeFilepond(config = {}) {
                         const requestPayload = {
                             filename: file.name,
                             size: file.size,
-                            type: file.type || 'application/octet-stream'
+                            type: file.type || (/\.svg$/i.test(file.name) ? 'image/svg+xml' : 'application/octet-stream')
                         };
 
                         const xhrPresign = new XMLHttpRequest();
@@ -852,8 +864,12 @@ export function vibeFilepond(config = {}) {
                                     xhrUpload.open(method, uploadUrl, true);
 
                                     // Set Content-Type for PUT if required
-                                    if (method.toUpperCase() === 'PUT' && file.type) {
-                                        xhrUpload.setRequestHeader('Content-Type', file.type);
+                                    let uploadContentType = file.type || '';
+                                    if (!uploadContentType && /\.svg$/i.test(file.name)) {
+                                        uploadContentType = 'image/svg+xml';
+                                    }
+                                    if (method.toUpperCase() === 'PUT' && uploadContentType) {
+                                        xhrUpload.setRequestHeader('Content-Type', uploadContentType);
                                     }
 
                                     // Set custom presigned headers (ignoring forbidden headers like Host)
