@@ -136,8 +136,85 @@ abstract class VibeDataTableComponent extends DataTableComponent
                         </div>
                     </div>
                 </div>
-            </div>
         </div>
+        HTML;
+    }
+
+    /**
+     * Context Menu flag.
+     * Can be set to true directly ($this->contextMenu = true) or via $this->setContextMenuEnabled().
+     */
+    public bool $contextMenu = false;
+
+    public string $contextMenuWidth = '48';
+
+    public bool $contextMenuCloseOnClick = true;
+
+    protected bool $contextMenuStatus = false;
+
+    public function setContextMenuWidth(string $width): self
+    {
+        $this->contextMenuWidth = $width;
+
+        return $this;
+    }
+
+    public function setContextMenuCloseOnClick(bool $status): self
+    {
+        $this->contextMenuCloseOnClick = $status;
+
+        return $this;
+    }
+
+    public function setContextMenuStatus(bool $status): self
+    {
+        $this->contextMenuStatus = $status;
+
+        return $this;
+    }
+
+    public function setContextMenuEnabled(): self
+    {
+        return $this->setContextMenuStatus(true);
+    }
+
+    public function setContextMenuDisabled(): self
+    {
+        return $this->setContextMenuStatus(false);
+    }
+
+    public function hasContextMenu(): bool
+    {
+        return ($this->contextMenu || $this->contextMenuStatus) && ! empty($this->contextMenu());
+    }
+
+    /**
+     * Data passed from the row to Alpine $context.data on right-click.
+     * Can be overridden by child tables to provide additional row fields.
+     */
+    public function contextData($row): array
+    {
+        return [
+            'id' => $row->{$this->getPrimaryKey()},
+        ];
+    }
+
+    /**
+     * Default context menu template.
+     * Can be overridden by child tables (similar to placeholder()).
+     */
+    public function contextMenu(): ?string
+    {
+        return <<<'HTML'
+            <vibe:context.label>
+                <span x-text="$context.data.name"></span>
+            </vibe:context.label>
+            <vibe:context.divider />
+            <vibe:context.item @click="$wire.edit($context.data.id)">
+                <svg class="size-4 mr-2 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                Edit
+            </vibe:context.item>
+            <vibe:context.item.delete wire:click="delete($context.data.id)" />
         HTML;
     }
 }

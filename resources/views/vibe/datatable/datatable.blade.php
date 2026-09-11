@@ -178,6 +178,12 @@
                 $this->getParametersForConfigurableArea('after-wrapper')
             )
 
+            @if(method_exists($this, 'hasContextMenu') && $this->hasContextMenu())
+                <vibe:context.menu id="{{ $tableName }}-context-menu" :width="$contextMenuWidth" :close-on-click="$contextMenuCloseOnClick">
+                    {!! \Illuminate\Support\Facades\Blade::render($this->contextMenu(), ['table' => $this]) !!}
+                </vibe:context.menu>
+            @endif
+
         </div>
     </div>
 </div>

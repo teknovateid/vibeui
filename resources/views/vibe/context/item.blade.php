@@ -6,9 +6,12 @@
     'destructive' => false,
     'variant' => 'default',
     'disabled' => false,
+    'closeOnClick' => true,
 ])
 
 @php
+    $closeOnClick = filter_var($closeOnClick, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
+
     $isDestructive = $destructive
         || $variant === 'destructive'
         || $variant === 'danger'
@@ -29,6 +32,7 @@
     :disabled="$disabled"
     role="menuitem"
     tabindex="-1"
+    :data-close-on-click="$closeOnClick ? 'true' : 'false'"
     {{ $attributes->twMerge(['class' => $itemClasses . ' ' . $disabledClasses]) }}
 >
     {{ $slot }}

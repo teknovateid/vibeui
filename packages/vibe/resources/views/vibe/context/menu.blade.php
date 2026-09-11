@@ -2,10 +2,29 @@
 
 @props([
     'id' => null,
+    'width' => '48',
+    'closeOnClick' => true,
 ])
 
 @php
     $contextId = $id ?? uniqid('context-');
+    $closeOnClick = filter_var($closeOnClick, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? true;
+
+    $widthClasses = match ((string) $width) {
+        '36'       => 'w-36',
+        '40'       => 'w-40',
+        '44'       => 'w-44',
+        '48', 'xs' => 'w-48',
+        '52'       => 'w-52',
+        '56', 'sm' => 'w-56',
+        '64', 'md' => 'w-64',
+        '72'       => 'w-72',
+        '80', 'lg' => 'w-80',
+        '96', 'xl' => 'w-96',
+        'min'      => 'min-w-min',
+        'auto', 'fit', 'max' => 'w-max min-w-40',
+        default    => str_starts_with((string) $width, 'w-') ? (string) $width : "w-{$width}",
+    };
 @endphp
 
 <div
@@ -17,6 +36,11 @@
         y: 0,
         data: {},
         lastOpenTime: 0,
+        closeOnClick: {{ $closeOnClick ? 'true' : 'false' }},
+
+        get $context() {
+            return { data: this.data };
+        },
 
         init() {
             // Close context menu on ANY scroll across the document or inside scrollable containers (capture: true)
@@ -42,6 +66,21 @@
 
         close() {
             this.open = false;
+        },
+
+        handleMenuClick(e) {
+            if (!this.closeOnClick) return;
+            // Ignore clicks on submenu triggers (which toggle/open the nested submenu)
+            if (e.target.closest('[data-vibe-context-sub-trigger]')) return;
+            // Ignore separator or static header clicks
+            if (e.target.closest('[role=separator], [data-vibe-context-static]')) return;
+
+            // Check if clicking an interactive item
+            const item = e.target.closest('[role=menuitem], button, a');
+            if (item && !item.hasAttribute('disabled')) {
+                if (item.getAttribute('data-close-on-click') === 'false') return;
+                this.close();
+            }
         },
 
         closeOutside() {
@@ -108,14 +147,15 @@
         x-transition:leave="transition ease-in duration-75"
         x-transition:leave-start="transform opacity-100 scale-100"
         x-transition:leave-end="transform opacity-0 scale-95"
-        :style="'position: fixed; z-index: 9999; left: ' + x + 'px; top: ' + y + 'px;'"
+        class="{{ $widthClasses }}"
+        :style="'position: fixed; z-index: 40; left: ' + x + 'px; top: ' + y + 'px;'"
         style="display: none;"
         role="menu"
         aria-orientation="vertical"
     >
         <div
-            {{ $attributes->twMerge(['class' => 'min-w-48 rounded-md shadow-lg p-1 bg-popover text-popover-foreground border border-border']) }}
-            @click="close()"
+            {{ $attributes->twMerge(['class' => 'w-full rounded-md shadow-lg p-1 bg-popover text-popover-foreground border border-border']) }}
+            @click.capture="handleMenuClick($event)"
         >
             {{ $slot }}
         </div>
