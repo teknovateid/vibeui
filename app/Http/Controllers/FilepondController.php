@@ -20,7 +20,6 @@ class FilepondController extends Controller
 
     public function requestTest(Request $request)
     {
-        dd($request);
         $all = $this->mergeInputsAndFiles($request->input(), $request->allFiles());
         $formatted = [];
 
