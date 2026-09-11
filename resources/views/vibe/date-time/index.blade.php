@@ -10,6 +10,11 @@
     'placeholder' => null,
     'startPlaceholder' => null,
     'endPlaceholder' => null,
+    'startTimeLabel' => null,
+    'endTimeLabel' => null,
+    'timeLabel' => null,
+    'startLabel' => null,
+    'endLabel' => null,
     'type' => 'single', // single, datetime, range, datetime-range, multiple, time, month
     'mode' => null,
     'value' => null,
@@ -19,8 +24,12 @@
     'minuteStep' => 1,
     'secondStep' => 1,
     'showSeconds' => false,
+    'min' => null,
+    'max' => null,
     'minDate' => null,
     'maxDate' => null,
+    'minRange' => null,
+    'maxRange' => null,
     'disabledDates' => [],
     'disabledDaysOfWeek' => [],
     'markers' => [],
@@ -40,6 +49,21 @@
 ])
 
 @php
+    $normalizeDate = function ($val) {
+        if ($val instanceof \DateTimeInterface) {
+            return $val->format('Y-m-d H:i:s');
+        }
+        if (is_array($val)) {
+            return array_map(function ($item) {
+                return $item instanceof \DateTimeInterface ? $item->format('Y-m-d H:i:s') : $item;
+            }, $val);
+        }
+        return $val;
+    };
+
+    $effectiveMinDate = $normalizeDate($minDate ?? $min);
+    $effectiveMaxDate = $normalizeDate($maxDate ?? $max);
+    $resolvedValue = $normalizeDate($value);
     $resolvedMode = $mode ?? $type;
     $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
@@ -54,6 +78,22 @@
         $rawTranslations = trans('vibe::vibe/date-time', [], $resolvedLocale);
     }
     $i18n = is_array($rawTranslations) ? $rawTranslations : [];
+
+    $effectiveStartTimeLabel = $startTimeLabel ?? $startLabel;
+    $effectiveEndTimeLabel = $endTimeLabel ?? $endLabel;
+
+    if (!isset($i18n['timeLabels']) || !is_array($i18n['timeLabels'])) {
+        $i18n['timeLabels'] = [];
+    }
+    if ($effectiveStartTimeLabel) {
+        $i18n['timeLabels']['startTime'] = $effectiveStartTimeLabel;
+    }
+    if ($effectiveEndTimeLabel) {
+        $i18n['timeLabels']['endTime'] = $effectiveEndTimeLabel;
+    }
+    if ($timeLabel) {
+        $i18n['timeLabels']['time'] = $timeLabel;
+    }
 
     $placeholders = $i18n['placeholders'] ?? [];
     $defaultPlaceholder = match($resolvedMode) {
@@ -106,8 +146,10 @@
         'minuteStep' => (int) $minuteStep,
         'secondStep' => (int) $secondStep,
         'showSeconds' => (bool) $showSeconds,
-        'minDate' => $minDate,
-        'maxDate' => $maxDate,
+        'minDate' => $effectiveMinDate,
+        'maxDate' => $effectiveMaxDate,
+        'minRange' => $minRange !== null ? (int) $minRange : null,
+        'maxRange' => $maxRange !== null ? (int) $maxRange : null,
         'disabledDates' => (array) $disabledDates,
         'disabledDaysOfWeek' => (array) $disabledDaysOfWeek,
         'markers' => (object) $markers,
@@ -119,7 +161,7 @@
         'endName' => $endName,
         'format' => $format ?: '',
         'displayFormat' => $displayFormat ?: '',
-        'value' => $value,
+        'value' => $resolvedValue,
     ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 @endphp
 
@@ -186,7 +228,7 @@
         setYear() {}, setMonth() {}, toggleViewMode() {},
         getMonthDays() { return []; },
         selectDay() {}, onDayHover() {}, selectPreset() {},
-        updateTime() {}, setTimeNow() {}, clear() {}, onManualInput() {},
+        updateTime() {}, setTimeNow() {}, stepTime() {}, onTimeInput() {}, onTimeBlur() {}, onTimeKeydown() {}, onTimeWheel() {}, onTimeFocus() {}, getTimeValue() {}, clear() {}, onManualInput() {},
         adjustPosition() {}
     }"
     @if (!$inline)
@@ -241,36 +283,48 @@
                 placeholder="{{ $inputPlaceholder }}"
                 @if ($disabled) disabled @endif
                 @if ($readonly) readonly @endif
+                {{ $attributes->whereDoesntStartWith(['wire:model'])->except(['class', 'disabled', 'readonly'])->merge([
+                    'autocomplete' => 'off',
+                    'autocorrect' => 'off',
+                    'autocapitalize' => 'off',
+                    'spellcheck' => 'false',
+                ]) }}
                 class="block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 cursor-pointer {{ $sizeClasses }} {{ $variantClasses }}"
             />
 
             {{-- Trailing Actions: Clear button & Chevron --}}
             <div class="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1">
                 @if ($clearable)
-                    <button
+                    <vibe:button
                         type="button"
+                        variant="ghost"
+                        size="icon-xs"
                         x-show="formValue"
                         x-cloak
                         @click.stop="clear()"
-                        class="size-5 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors cursor-pointer"
-                        title="Bersihkan"
+                        class="size-5 rounded-md text-muted-foreground hover:text-foreground"
+                        x-bind:title="dict.clear"
+                        x-bind:aria-label="dict.clear"
                     >
                         <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                         </svg>
-                    </button>
+                    </vibe:button>
                 @endif
 
-                <button
+                <vibe:button
                     type="button"
+                    variant="ghost"
+                    size="icon-xs"
                     @click="isOpen = !isOpen"
-                    class="size-5 flex items-center justify-center text-muted-foreground hover:text-foreground transition-transform duration-200 cursor-pointer"
-                    :class="{ 'rotate-180 text-foreground': isOpen }"
+                    class="size-5 text-muted-foreground hover:text-foreground transition-transform duration-200"
+                    x-bind:class="{ 'rotate-180 text-foreground': isOpen }"
+                    x-bind:aria-label="isOpen ? dict.clear : dict.selectDate"
                 >
                     <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m6 9 6 6 6-6"/>
                     </svg>
-                </button>
+                </vibe:button>
             </div>
 
             {{-- Popover Panel Container --}}
@@ -284,9 +338,9 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                 x-transition:leave-end="opacity-0 translate-y-1 scale-98"
-                class="absolute left-0 top-full z-50 mt-1.5 w-max max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card text-card-foreground shadow-xl overflow-hidden focus:outline-none"
+                class="absolute left-0 top-full z-40 mt-1.5 w-max max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card text-card-foreground shadow-xl overflow-hidden focus:outline-none"
             >
-                <div class="flex flex-col sm:flex-row">
+                <div class="flex flex-col sm:flex-row w-full sm:items-stretch">
                     {{-- Presets Sidebar (if enabled) --}}
                     @if ($presets)
                         @include('vibe.date-time.presets')
@@ -310,22 +364,28 @@
                         @endif
 
                         {{-- Bottom Action Bar --}}
-                        <div class="flex items-center justify-between px-3.5 py-2 border-t border-border/70 bg-muted/10 text-xs">
+                        <div class="flex items-center justify-between px-3.5 py-2 border-t border-border/70 bg-muted/20 text-xs">
                             <div class="flex items-center gap-2">
                                 @if ($clearable)
-                                    <button
+                                    <vibe:button
                                         type="button"
+                                        variant="ghost"
+                                        size="sm"
                                         @click="clear()"
-                                        class="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                                        class="text-xs font-medium text-muted-foreground hover:text-foreground px-2 h-7"
                                     >
                                         <span x-text="dict.clear"></span>
-                                    </button>
+                                    </vibe:button>
                                 @endif
 
                                 <template x-if="rangeDaysCount > 0 && (mode === 'range' || mode === 'datetime-range')">
-                                    <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
-                                        <span x-text="rangeDaysCount + ' ' + (dict.daysCountLabel || 'hari')"></span>
-                                    </span>
+                                    <vibe:badge
+                                        variant="secondary"
+                                        size="sm"
+                                        class="bg-primary/10 text-primary border border-primary/20 font-semibold"
+                                    >
+                                        <span x-text="rangeDaysCount + ' ' + (dict.daysCountLabel || '{{ __('vibe/date-time.daysCountLabel', [], $resolvedLocale) }}')"></span>
+                                    </vibe:badge>
                                 </template>
                             </div>
 
@@ -349,7 +409,7 @@
             x-ref="popover"
             class="w-full sm:w-max rounded-2xl border border-border bg-card text-card-foreground shadow-2xs overflow-hidden"
         >
-            <div class="flex flex-col sm:flex-row">
+            <div class="flex flex-col sm:flex-row w-full sm:items-stretch">
                 {{-- Presets Sidebar (if enabled) --}}
                 @if ($presets)
                     @include('vibe.date-time.presets')
@@ -373,22 +433,28 @@
                     @endif
 
                     {{-- Bottom Action Bar --}}
-                    <div class="flex items-center justify-between px-3.5 py-2 border-t border-border/70 bg-muted/10 text-xs">
+                    <div class="flex items-center justify-between px-3.5 py-2 border-t border-border/70 bg-muted/20 text-xs">
                         <div class="flex items-center gap-2">
                             @if ($clearable)
-                                <button
+                                <vibe:button
                                     type="button"
+                                    variant="ghost"
+                                    size="xs"
                                     @click="clear()"
-                                    class="text-xs font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                                    class="text-xs font-medium text-muted-foreground hover:text-foreground px-2 h-7"
                                 >
                                     <span x-text="dict.clear"></span>
-                                </button>
+                                </vibe:button>
                             @endif
 
                             <template x-if="rangeDaysCount > 0 && (mode === 'range' || mode === 'datetime-range')">
-                                <span class="inline-flex items-center px-1.5 py-0.5 rounded-md text-[11px] font-semibold bg-primary/10 text-primary border border-primary/20">
-                                    <span x-text="rangeDaysCount + ' ' + (dict.daysCountLabel || 'hari')"></span>
-                                </span>
+                                <vibe:badge
+                                    variant="secondary"
+                                    size="sm"
+                                    class="bg-primary/10 text-primary border border-primary/20 font-semibold"
+                                >
+                                    <span x-text="rangeDaysCount + ' ' + (dict.daysCountLabel || '{{ __('vibe/date-time.daysCountLabel', [], $resolvedLocale) }}')"></span>
+                                </vibe:badge>
                             </template>
                         </div>
                     </div>
