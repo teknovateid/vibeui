@@ -16,6 +16,8 @@ export function vibeDateTime(config = {}) {
         showSeconds: Boolean(config.showSeconds),
         minDate: config.minDate || null,
         maxDate: config.maxDate || null,
+        minRange: (config.minRange !== null && config.minRange !== undefined) ? parseInt(config.minRange, 10) : null,
+        maxRange: (config.maxRange !== null && config.maxRange !== undefined) ? parseInt(config.maxRange, 10) : null,
         disabledDates: Array.isArray(config.disabledDates) ? config.disabledDates : [],
         disabledDaysOfWeek: Array.isArray(config.disabledDaysOfWeek) ? config.disabledDaysOfWeek.map(Number) : [],
         markers: typeof config.markers === 'object' && config.markers !== null ? config.markers : {},
@@ -106,8 +108,16 @@ export function vibeDateTime(config = {}) {
                     seconds: 'Detik',
                     startTime: 'Waktu Mulai',
                     endTime: 'Waktu Selesai',
-                    now: 'Sekarang'
+                    now: 'Sekarang',
+                    decrementHours: 'Kurangi jam',
+                    incrementHours: 'Tambah jam',
+                    decrementMinutes: 'Kurangi menit',
+                    incrementMinutes: 'Tambah menit',
+                    decrementSeconds: 'Kurangi detik',
+                    incrementSeconds: 'Tambah detik'
                 },
+                previous: 'Sebelumnya',
+                next: 'Berikutnya',
                 clear: 'Bersihkan',
                 apply: 'Terapkan',
                 selectDate: 'Pilih Tanggal',
@@ -141,6 +151,12 @@ export function vibeDateTime(config = {}) {
             } else if (this.rangeStart) {
                 this.currentMonth = this.rangeStart.getMonth();
                 this.currentYear = this.rangeStart.getFullYear();
+            } else if (this.minDate) {
+                const minD = this.parseDateBound(this.minDate, false);
+                if (minD && minD > new Date()) {
+                    this.currentMonth = minD.getMonth();
+                    this.currentYear = minD.getFullYear();
+                }
             }
             this.yearsStart = Math.floor(this.currentYear / 12) * 12;
 
@@ -231,7 +247,24 @@ export function vibeDateTime(config = {}) {
         },
 
         // --- Navigation ---
+        canPrevMonth() {
+            if (!this.minDate) return true;
+            const minD = this.parseDateBound(this.minDate, false);
+            if (!minD) return true;
+            const prevMonthEnd = new Date(this.currentYear, this.currentMonth, 0, 23, 59, 59, 999);
+            return prevMonthEnd >= minD;
+        },
+
+        canNextMonth() {
+            if (!this.maxDate) return true;
+            const maxD = this.parseDateBound(this.maxDate, true);
+            if (!maxD) return true;
+            const nextMonthStart = new Date(this.currentYear, this.currentMonth + 1, 1, 0, 0, 0, 0);
+            return nextMonthStart <= maxD;
+        },
+
         prevMonth() {
+            if (!this.canPrevMonth()) return;
             if (this.currentMonth === 0) {
                 this.currentMonth = 11;
                 this.currentYear--;
@@ -242,6 +275,7 @@ export function vibeDateTime(config = {}) {
         },
 
         nextMonth() {
+            if (!this.canNextMonth()) return;
             if (this.currentMonth === 11) {
                 this.currentMonth = 0;
                 this.currentYear++;
@@ -260,11 +294,13 @@ export function vibeDateTime(config = {}) {
         },
 
         setYear(year) {
+            if (this.isYearDisabled(year)) return;
             this.currentYear = year;
             this.viewMode = 'months';
         },
 
         setMonth(monthIndex) {
+            if (this.isMonthDisabled(monthIndex)) return;
             this.currentMonth = monthIndex;
             this.viewMode = 'days';
         },
@@ -444,6 +480,15 @@ export function vibeDateTime(config = {}) {
                     this.rangeEnd = null;
                     this.hoverDate = null;
                 } else if (this.rangeStart && !this.rangeEnd) {
+                    if (this.isSameDay(date, this.rangeStart)) {
+                        if (this.minRange && this.minRange > 1) {
+                            this.rangeStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                            this.rangeEnd = null;
+                            this.hoverDate = null;
+                            return;
+                        }
+                    }
+
                     // Complete range
                     let end = new Date(date.getFullYear(), date.getMonth(), date.getDate());
                     if (this.mode === 'datetime-range') {
@@ -533,19 +578,58 @@ export function vibeDateTime(config = {}) {
             return time >= minTime && time <= maxTime;
         },
 
+        parseDateBound(val, isMax = false) {
+            if (!val) return null;
+            if (val instanceof Date) {
+                return isNaN(val.getTime()) ? null : val;
+            }
+            if (typeof val === 'string') {
+                const str = val.trim();
+                if (str.toLowerCase() === 'today' || str.toLowerCase() === 'now') {
+                    const now = new Date();
+                    return isMax
+                        ? new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999)
+                        : new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+                }
+                const ymdMatch = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+                if (ymdMatch) {
+                    const year = parseInt(ymdMatch[1], 10);
+                    const month = parseInt(ymdMatch[2], 10) - 1;
+                    const day = parseInt(ymdMatch[3], 10);
+                    return isMax
+                        ? new Date(year, month, day, 23, 59, 59, 999)
+                        : new Date(year, month, day, 0, 0, 0, 0);
+                }
+                const d = new Date(str);
+                return isNaN(d.getTime()) ? null : d;
+            }
+            return null;
+        },
+
+        getDayDiff(d1, d2) {
+            if (!d1 || !d2) return 0;
+            const utc1 = Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate());
+            const utc2 = Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate());
+            return Math.round(Math.abs(utc2 - utc1) / 86400000);
+        },
+
         isDateDisabled(date) {
             const time = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 
             if (this.minDate) {
-                const min = new Date(this.minDate);
-                const minTime = new Date(min.getFullYear(), min.getMonth(), min.getDate()).getTime();
-                if (time < minTime) return true;
+                const min = this.parseDateBound(this.minDate, false);
+                if (min) {
+                    const minTime = new Date(min.getFullYear(), min.getMonth(), min.getDate()).getTime();
+                    if (time < minTime) return true;
+                }
             }
 
             if (this.maxDate) {
-                const max = new Date(this.maxDate);
-                const maxTime = new Date(max.getFullYear(), max.getMonth(), max.getDate()).getTime();
-                if (time > maxTime) return true;
+                const max = this.parseDateBound(this.maxDate, true);
+                if (max) {
+                    const maxTime = new Date(max.getFullYear(), max.getMonth(), max.getDate()).getTime();
+                    if (time > maxTime) return true;
+                }
             }
 
             if (this.disabledDaysOfWeek.length > 0) {
@@ -557,6 +641,52 @@ export function vibeDateTime(config = {}) {
                 if (this.disabledDates.includes(str)) return true;
             }
 
+            // Enforce minRange and maxRange when selecting the end date of a range
+            if ((this.mode === 'range' || this.mode === 'datetime-range') && this.rangeStart && !this.rangeEnd) {
+                const isSameAsStart = this.isSameDay(date, this.rangeStart);
+                const diff = this.getDayDiff(this.rangeStart, date);
+
+                if (this.maxRange !== null && diff > this.maxRange) {
+                    return true;
+                }
+
+                if (this.minRange !== null && !isSameAsStart && diff < this.minRange) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        isMonthDisabled(monthIdx, year = this.currentYear) {
+            if (this.minDate) {
+                const minD = this.parseDateBound(this.minDate, false);
+                if (minD) {
+                    const minYear = minD.getFullYear();
+                    const minMonth = minD.getMonth();
+                    if (year < minYear || (year === minYear && monthIdx < minMonth)) return true;
+                }
+            }
+            if (this.maxDate) {
+                const maxD = this.parseDateBound(this.maxDate, true);
+                if (maxD) {
+                    const maxYear = maxD.getFullYear();
+                    const maxMonth = maxD.getMonth();
+                    if (year > maxYear || (year === maxYear && monthIdx > maxMonth)) return true;
+                }
+            }
+            return false;
+        },
+
+        isYearDisabled(year) {
+            if (this.minDate) {
+                const minD = this.parseDateBound(this.minDate, false);
+                if (minD && year < minD.getFullYear()) return true;
+            }
+            if (this.maxDate) {
+                const maxD = this.parseDateBound(this.maxDate, true);
+                if (maxD && year > maxD.getFullYear()) return true;
+            }
             return false;
         },
 
@@ -661,19 +791,31 @@ export function vibeDateTime(config = {}) {
 
             // Clamping against minDate / maxDate if set
             if (this.minDate) {
-                const minD = new Date(this.minDate);
-                const minTime = new Date(minD.getFullYear(), minD.getMonth(), minD.getDate());
-                if (start < minTime) start = new Date(minTime);
-                if (end < minTime) end = new Date(minTime);
+                const minD = this.parseDateBound(this.minDate, false);
+                if (minD) {
+                    const minTime = new Date(minD.getFullYear(), minD.getMonth(), minD.getDate());
+                    if (start < minTime) start = new Date(minTime);
+                    if (end < minTime) end = new Date(minTime);
+                }
             }
             if (this.maxDate) {
-                const maxD = new Date(this.maxDate);
-                const maxTime = new Date(maxD.getFullYear(), maxD.getMonth(), maxD.getDate());
-                if (start > maxTime) start = new Date(maxTime);
-                if (end > maxTime) end = new Date(maxTime);
+                const maxD = this.parseDateBound(this.maxDate, true);
+                if (maxD) {
+                    const maxTime = new Date(maxD.getFullYear(), maxD.getMonth(), maxD.getDate());
+                    if (start > maxTime) start = new Date(maxTime);
+                    if (end > maxTime) end = new Date(maxTime);
+                }
             }
             if (start > end) {
                 start = new Date(end);
+            }
+
+            // Clamping against maxRange if set
+            if ((this.mode === 'range' || this.mode === 'datetime-range') && this.maxRange !== null) {
+                const diff = this.getDayDiff(start, end);
+                if (diff > this.maxRange) {
+                    end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + this.maxRange);
+                }
             }
 
             if (this.mode === 'range' || this.mode === 'datetime-range') {
@@ -766,6 +908,224 @@ export function vibeDateTime(config = {}) {
             }
             this.updateInputDisplay();
             this.dispatchChange();
+        },
+
+        getTimeValue(type, field) {
+            const target = type === 'end' ? this.endTime : this.time;
+            return target && target[field] !== undefined ? target[field] : 0;
+        },
+
+        onTimeFocus(type, field, event) {
+            this._timeBuffer = '';
+            if (event.target && typeof event.target.select === 'function') {
+                event.target.select();
+            }
+        },
+
+        stepTime(type, field, delta) {
+            const target = type === 'end' ? this.endTime : this.time;
+            let current = parseInt(target[field], 10);
+            if (isNaN(current)) current = 0;
+
+            if (field === 'hours') {
+                const min = this.time24 ? 0 : 1;
+                const max = this.time24 ? 23 : 12;
+                const range = max - min + 1;
+                let next = current + delta;
+                if (next > max) {
+                    next = min + ((next - min) % range);
+                } else if (next < min) {
+                    next = max - ((min - next - 1) % range);
+                }
+                target.hours = next;
+            } else if (field === 'minutes') {
+                let next = current + delta;
+                if (next > 59) {
+                    next = next % 60;
+                } else if (next < 0) {
+                    next = 60 + (next % 60);
+                }
+                target.minutes = next;
+            } else if (field === 'seconds') {
+                let next = current + delta;
+                if (next > 59) {
+                    next = next % 60;
+                } else if (next < 0) {
+                    next = 60 + (next % 60);
+                }
+                target.seconds = next;
+            }
+
+            if (this.mode === 'datetime' && this.selectedDate) {
+                this.applyTime(this.selectedDate, this.time);
+            } else if (this.mode === 'datetime-range') {
+                if (this.rangeStart) this.applyTime(this.rangeStart, this.time);
+                if (this.rangeEnd) this.applyTime(this.rangeEnd, this.endTime);
+            }
+
+            this.updateInputDisplay();
+            this.dispatchChange();
+        },
+
+        onTimeKeydown(type, field, event, nextRef, prevRef) {
+            const key = event.key;
+
+            if (key === 'ArrowUp') {
+                event.preventDefault();
+                const step = field === 'minutes' ? (this.minuteStep || 1) : (field === 'seconds' ? (this.secondStep || 1) : 1);
+                this.stepTime(type, field, step);
+                event.target.value = String(this.getTimeValue(type, field)).padStart(2, '0');
+                this.$nextTick(() => { if (event.target && typeof event.target.select === 'function') event.target.select(); });
+                return;
+            }
+
+            if (key === 'ArrowDown') {
+                event.preventDefault();
+                const step = field === 'minutes' ? (this.minuteStep || 1) : (field === 'seconds' ? (this.secondStep || 1) : 1);
+                this.stepTime(type, field, -step);
+                event.target.value = String(this.getTimeValue(type, field)).padStart(2, '0');
+                this.$nextTick(() => { if (event.target && typeof event.target.select === 'function') event.target.select(); });
+                return;
+            }
+
+            if (key === 'ArrowRight' && nextRef) {
+                if (event.target.selectionEnd === event.target.value.length) {
+                    event.preventDefault();
+                    if (typeof nextRef.focus === 'function') {
+                        nextRef.focus();
+                        if (typeof nextRef.select === 'function') nextRef.select();
+                    }
+                    return;
+                }
+            }
+
+            if (key === 'ArrowLeft' && prevRef) {
+                if (event.target.selectionStart === 0) {
+                    event.preventDefault();
+                    if (typeof prevRef.focus === 'function') {
+                        prevRef.focus();
+                        if (typeof prevRef.select === 'function') prevRef.select();
+                    }
+                    return;
+                }
+            }
+
+            if (['Tab', 'Escape', 'Enter'].includes(key)) {
+                return;
+            }
+
+            if (key === 'Backspace' || key === 'Delete') {
+                this._timeBuffer = '';
+                return;
+            }
+
+            if (/^[0-9]$/.test(key)) {
+                event.preventDefault();
+
+                const isAllSelected = event.target.selectionStart === 0 && event.target.selectionEnd === event.target.value.length;
+                if (isAllSelected || !this._timeBuffer) {
+                    this._timeBuffer = '';
+                }
+
+                this._timeBuffer += key;
+                const digit = parseInt(key, 10);
+                const bufferVal = parseInt(this._timeBuffer, 10);
+
+                let isComplete = false;
+                let finalVal = bufferVal;
+
+                if (this._timeBuffer.length === 1) {
+                    if (field === 'hours') {
+                        if (this.time24) {
+                            if (digit >= 3) {
+                                isComplete = true;
+                                finalVal = digit;
+                            }
+                        } else {
+                            if (digit >= 2) {
+                                isComplete = true;
+                                finalVal = digit;
+                            }
+                        }
+                    } else if (field === 'minutes' || field === 'seconds') {
+                        if (digit >= 6) {
+                            isComplete = true;
+                            finalVal = digit;
+                        }
+                    }
+                } else if (this._timeBuffer.length >= 2) {
+                    isComplete = true;
+                    finalVal = bufferVal;
+                    this._timeBuffer = '';
+                }
+
+                if (isComplete) {
+                    const max = field === 'hours' ? (this.time24 ? 23 : 12) : 59;
+                    const min = field === 'hours' ? (this.time24 ? 0 : 1) : 0;
+                    finalVal = Math.max(min, Math.min(max, finalVal));
+
+                    this.updateTime(type, field, finalVal);
+                    event.target.value = String(finalVal).padStart(2, '0');
+                    this._timeBuffer = '';
+
+                    if (nextRef && typeof nextRef.focus === 'function') {
+                        this.$nextTick(() => {
+                            nextRef.focus();
+                            if (typeof nextRef.select === 'function') {
+                                nextRef.select();
+                            }
+                        });
+                    }
+                } else {
+                    event.target.value = this._timeBuffer;
+                }
+                return;
+            }
+
+            event.preventDefault();
+        },
+
+        onTimeBlur(type, field, event) {
+            let val = parseInt(event.target.value, 10);
+            if (isNaN(val)) {
+                val = this.getTimeValue(type, field);
+            }
+            const max = field === 'hours' ? (this.time24 ? 23 : 12) : 59;
+            const min = field === 'hours' ? (this.time24 ? 0 : 1) : 0;
+            val = Math.max(min, Math.min(max, val));
+
+            this.updateTime(type, field, val);
+            event.target.value = String(val).padStart(2, '0');
+            this._timeBuffer = '';
+        },
+
+        onTimeInput(type, field, event, nextRef) {
+            let val = (event.target.value || '').replace(/\D/g, '');
+            if (val.length >= 2) {
+                val = val.slice(-2);
+                const max = field === 'hours' ? (this.time24 ? 23 : 12) : 59;
+                const min = field === 'hours' ? (this.time24 ? 0 : 1) : 0;
+                let num = Math.max(min, Math.min(max, parseInt(val, 10) || 0));
+                this.updateTime(type, field, num);
+                event.target.value = String(num).padStart(2, '0');
+                if (nextRef && typeof nextRef.focus === 'function') {
+                    this.$nextTick(() => {
+                        nextRef.focus();
+                        if (typeof nextRef.select === 'function') nextRef.select();
+                    });
+                }
+            }
+        },
+
+        onTimeWheel(type, field, event) {
+            event.preventDefault();
+            const step = field === 'minutes' ? (this.minuteStep || 1) : (field === 'seconds' ? (this.secondStep || 1) : 1);
+            if (event.deltaY < 0) {
+                this.stepTime(type, field, step);
+            } else if (event.deltaY > 0) {
+                this.stepTime(type, field, -step);
+            }
+            event.target.value = String(this.getTimeValue(type, field)).padStart(2, '0');
         },
 
         // --- Formatting & Text Display ---

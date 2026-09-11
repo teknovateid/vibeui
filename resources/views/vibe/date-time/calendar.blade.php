@@ -120,10 +120,12 @@
             <button
                 type="button"
                 @click="setMonth(mIdx)"
+                :disabled="isMonthDisabled(mIdx)"
                 class="py-2.5 px-2 text-xs rounded-lg font-medium transition-colors text-center cursor-pointer"
                 :class="{
                     'bg-primary text-primary-foreground font-bold shadow-xs': currentMonth === mIdx,
-                    'hover:bg-accent text-foreground': currentMonth !== mIdx
+                    'hover:bg-accent text-foreground': currentMonth !== mIdx && !isMonthDisabled(mIdx),
+                    'opacity-25 cursor-not-allowed pointer-events-none line-through': isMonthDisabled(mIdx)
                 }"
                 x-text="mName"
             ></button>
@@ -136,10 +138,12 @@
             <button
                 type="button"
                 @click="setYear(yNum)"
+                :disabled="isYearDisabled(yNum)"
                 class="py-2.5 px-2 text-xs rounded-lg font-medium transition-colors text-center cursor-pointer font-mono"
                 :class="{
                     'bg-primary text-primary-foreground font-bold shadow-xs': currentYear === yNum,
-                    'hover:bg-accent text-foreground': currentYear !== yNum
+                    'hover:bg-accent text-foreground': currentYear !== yNum && !isYearDisabled(yNum),
+                    'opacity-25 cursor-not-allowed pointer-events-none': isYearDisabled(yNum)
                 }"
                 x-text="yNum"
             ></button>
