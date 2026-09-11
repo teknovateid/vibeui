@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.12] - 2026-09-11
+
+### 🚀 Features
+- feat: add support for preloaded files and update Filepond backend validation with 50MB limit (48c7294)
+
+### 🐛 Bug Fixes
+- fix(filepond): prevent SVG files from freezing during client-side image processing (93d5ea8)
+
+
 ## [0.1.11] - 2026-09-11
 
 ### 🐛 Bug Fixes
