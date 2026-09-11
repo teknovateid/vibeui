@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.14] - 2026-09-11
+
+### ⚡ Performance & Refactoring
+- refactor: enhance FilePond UI with improved progress indicator positioning, status state styling, and robust avatar image preview handling. (ca582d9)
+
+
 ## [0.1.13] - 2026-09-11
 
 ### 🧰 Maintenance & Documentation
