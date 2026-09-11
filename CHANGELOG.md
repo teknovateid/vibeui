@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.7] - 2026-09-11
+
+### 🚀 Features
+- feat: implement month-only mode and add support for date constraints including min/max range and disabled days of the week (67a18cb)
+
+### ⚡ Performance & Refactoring
+- refactor: scope drag handle visibility to group/header to hide drag icons by default (b0d85d3)
+- refactor: enhance drag-and-drop interactions by delegating dragging to card headers and ensuring proper event propagation handling (62c9041)
+
+
 ## [0.1.6] - 2026-09-11
 
 ### 🚀 Features
