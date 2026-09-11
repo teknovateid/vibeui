@@ -37,6 +37,12 @@ class ReleaseCommand extends Command
      */
     public function handle(): int
     {
+        if (! is_dir(base_path('packages'))) {
+            $this->components->error('This command is only available in package development environments ("packages" directory not found).');
+
+            return self::FAILURE;
+        }
+
         $this->newLine();
         $this->line(' <fg=cyan;options=bold>🚀 Vibe UI Release Assistant</>');
         $this->line(' <fg=gray>Automating SemVer bumping, changelog generation, and Git tagging</>');

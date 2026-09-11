@@ -79,3 +79,12 @@ test('vibe:install command executes successfully with --skip-npm', function () {
     $this->artisan('vibe:install', ['--skip-npm' => true])
         ->assertSuccessful();
 });
+
+test('InstallCommand::getRequiredDependencies dynamically reads from packages/vibe/package.json', function () {
+    $dependencies = InstallCommand::getRequiredDependencies();
+    $packageJsonPath = base_path('packages/vibe/package.json');
+    $vibePackage = json_decode(File::get($packageJsonPath), true);
+
+    expect($dependencies)->toBeArray();
+    expect($dependencies)->toBe($vibePackage['dependencies']);
+});

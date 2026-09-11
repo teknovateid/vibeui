@@ -353,7 +353,7 @@ class VibeServiceProvider extends ServiceProvider
         $this->registerTailwindMerge();
 
         if ($this->app->runningInConsole()) {
-            $this->commands([
+            $commands = [
                 LayoutCommand::class,
                 ComponentCommand::class,
                 VibeCommand::class,
@@ -362,9 +362,14 @@ class VibeServiceProvider extends ServiceProvider
                 CrudCommand::class,
                 InstallCommand::class,
                 TableMakeCommand::class,
-                SyncCommand::class,
-                ReleaseCommand::class,
-            ]);
+            ];
+
+            if (is_dir(base_path('packages'))) {
+                $commands[] = SyncCommand::class;
+                $commands[] = ReleaseCommand::class;
+            }
+
+            $this->commands($commands);
         }
     }
 
