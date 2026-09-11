@@ -2,6 +2,18 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.8] - 2026-09-11
+
+### 🚀 Features
+- feat: add brand logos and update documentation with project overview and feature highlights (ef22008)
+- feat: implement context menu component with documentation and multi-language support (e49e92c)
+- feat: implement $vibe magic manager for programmatic component control and add feature tests (26c7f63)
+- feat: implement Accordion component with sub-components, documentation pages, and language support (97c16ac)
+
+### ⚡ Performance & Refactoring
+- refactor: overhaul context delete item component with localized strings, unified JS handlers, and improved variant support (6f938fe)
+
+
 ## [0.1.7] - 2026-09-11
 
 ### 🚀 Features
