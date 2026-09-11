@@ -515,29 +515,171 @@
                         // App\Http\Controllers\FilepondController.php
     public function presigned(Request $request)
     {
+        // Validasi dilakukan oleh Controller di sisi backend
         $request->validate([
-            'filename' => ['nullable', 'string'],
+            'filename' => ['required', 'string'],
             'type' => ['nullable', 'string'],
-            'size' => ['nullable', 'integer'],
+            'size' => ['required', 'integer', 'max:' . (50 * 1024 * 1024)], // Maks 50MB
         ]);
 
         $rawFilename = $request->filename ?? Str::random(10);
         $extension = pathinfo($rawFilename, PATHINFO_EXTENSION);
         $hashedName = hash('sha256', $rawFilename . microtime()) . ($extension ? '.' . $extension : '');
-
-        $url = Storage::temporaryUploadUrl(
-            'public/presigned/' . $hashedName,
-            now()->addMinutes(15)
-        );
-
-        // $url = Storage::temporaryUploadUrl('public/presigned/' . ($request->filename ?? Str::random(10)), now()->addMinutes(15));
+        
+        $url = Storage::temporaryUploadUrl('public/presigned/' . $hashedName, now()->addMinutes(15));
 
         return response()->json([
             'url' => $url,
-            'method' => 'PUT',
         ]);
     }
                     </vibe:highlightjs>
+                </vibe:card>
+            </section>
+
+            {{-- 8.1. Preloaded / Existing Files (Form Edit - File Exist) --}}
+            <section id="berkas-tersimpan" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.existing_files_section.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm" class="font-mono text-[10px] rounded-full">:files</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/filepond.existing_files_section.desc') !!}
+                    </p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3 text-xs text-muted-foreground leading-relaxed">
+                    <svg class="size-4.5 text-primary shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </svg>
+                    <div>
+                        <strong class="text-foreground font-semibold">Otomatis Terintegrasi dengan Form Submit:</strong>
+                        {{ __('docs/filepond.existing_files_section.info_keys') }}
+                    </div>
+                </div>
+
+                {{-- Demo 1: Multiple Existing Files (S3 PDF & Image) --}}
+                <vibe:preview :title="__('docs/filepond.existing_files_section.preview_multiple_title')">
+                    <vibe:preview.code>
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond 
+                                name="documents" 
+                                label="Lampiran Dokumen Proyek" 
+                                description="Berkas yang tersimpan di S3/Cloud Storage dimuat secara otomatis dan dapat diunduh."
+                                :files="[
+                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png',
+                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/316ef42fba0b43f0b5fa0d9e93e5cbafee9a315bb894fbc604a0974d92dccd91.pdf',
+                                ]" 
+                                multiple 
+                            />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    {{ __('docs/filepond.existing_files_section.btn_submit') }}
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-xl">
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond 
+                                name="documents" 
+                                label="Lampiran Dokumen Proyek" 
+                                description="Berkas yang tersimpan di S3/Cloud Storage dimuat secara otomatis dan dapat diunduh."
+                                :files="[
+                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png',
+                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/316ef42fba0b43f0b5fa0d9e93e5cbafee9a315bb894fbc604a0974d92dccd91.pdf',
+                                ]" 
+                                multiple 
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
+                                    {{ __('docs/filepond.existing_files_section.btn_submit') }}
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+
+                {{-- Demo 2: Avatar Mode dengan Existing File --}}
+                <vibe:preview :title="__('docs/filepond.existing_files_section.preview_avatar_title')">
+                    <vibe:preview.code>
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond 
+                                name="avatar" 
+                                label="Foto Profil" 
+                                avatar 
+                                :files="'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png'" 
+                            />
+                            <div class="flex justify-center pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    {{ __('docs/filepond.existing_files_section.btn_submit') }}
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-sm mx-auto flex flex-col items-center">
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="w-full space-y-3">
+                            <vibe:filepond 
+                                name="avatar" 
+                                label="Foto Profil" 
+                                avatar 
+                                :files="'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png'" 
+                            />
+                            <div class="flex justify-center pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
+                                    {{ __('docs/filepond.existing_files_section.btn_submit') }}
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+
+                {{-- Panduan Penggunaan dalam Model Eloquent / Controller --}}
+                <vibe:card class="p-5 space-y-3 border-border/80">
+                    <div class="space-y-1">
+                        <h3 class="text-sm font-bold text-foreground">Implementasi Form Edit Laravel & Eloquent Model</h3>
+                        <p class="text-xs text-muted-foreground">
+                            Berikut adalah contoh praktik terbaik mengisi prop <code class="font-mono text-primary">:files</code> dari model Eloquent database:
+                        </p>
+                    </div>
+
+                    @php
+                        $editFormBladeCode = <<<'BLADE'
+{{-- resources/views/users/edit.blade.php --}}
+<vibe:form action="{{ route('profile.update', $user) }}" method="POST" enctype="multipart/form-data">
+    @method('PUT')
+
+    {{-- 1. Single File (Avatar Profil dari Cloud Storage S3 / Local) --}}
+    <vibe:filepond 
+        name="avatar" 
+        label="Foto Profil" 
+        avatar 
+        :files="$user->avatar_url" 
+    />
+
+    {{-- 2. Multiple Files (Lampiran Dokumen Proyek) --}}
+    <vibe:filepond 
+        name="attachments" 
+        label="Lampiran Berkas" 
+        :files="$project->documents->pluck('file_url')->toArray()" 
+        multiple 
+    />
+
+    <vibe:button type="submit" variant="primary">Simpan Perubahan</vibe:button>
+</vibe:form>
+BLADE;
+                    @endphp
+                    <vibe:highlightjs language="blade" :code="$editFormBladeCode" />
                 </vibe:card>
             </section>
 
@@ -1323,7 +1465,8 @@ BLADE;
                             ['presign-url', 'string', 'null', __('docs/filepond.props.items.presign_url')],
                             ['presign-method', 'string', '"PUT"', __('docs/filepond.props.items.presign_method')],
                             ['encode', 'bool', 'false', __('docs/filepond.props.items.encode')],
-                            ['existing-files', 'array', '[]', __('docs/filepond.props.items.existing_files')],
+                            ['files', 'string | array', '[]', __('docs/filepond.props.items.existing_files')],
+                            ['existing-files', 'string | array', '[]', __('docs/filepond.props.items.existing_files')],
                             ['protect-upload', 'bool', 'false', __('docs/filepond.props.items.protect_upload')],
                             ['protect-title', 'string', 'null', __('docs/filepond.props.items.protect_title')],
                             ['protect-message', 'string', 'null', __('docs/filepond.props.items.protect_message')],

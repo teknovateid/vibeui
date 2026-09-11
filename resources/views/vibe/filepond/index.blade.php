@@ -45,9 +45,11 @@
     'presignMethod' => 'PUT',
     'chunkUploads' => false,
     'chunkSize' => 2000000,
+    'files' => null,
     'existingFiles' => [],
     'disabled' => false,
     'required' => false,
+    'instantUpload' => true,
     'labels' => [],
     'panelLayout' => null,
     'storeAsFile' => null,
@@ -75,6 +77,16 @@
 
     $isAvatar = $avatar || $variant === 'avatar';
     $isCompact = $variant === 'compact';
+
+    $resolvedExistingFiles = $files ?? $existingFiles ?? [];
+    if (is_string($resolvedExistingFiles) && !empty($resolvedExistingFiles)) {
+        if (str_starts_with(trim($resolvedExistingFiles), '[') || str_starts_with(trim($resolvedExistingFiles), '{')) {
+            $decoded = json_decode($resolvedExistingFiles, true);
+            $resolvedExistingFiles = (json_last_error() === JSON_ERROR_NONE) ? $decoded : [$resolvedExistingFiles];
+        } else {
+            $resolvedExistingFiles = [$resolvedExistingFiles];
+        }
+    }
 
     $fpLang = function ($key, $default = '') {
         if (Lang::has("vibe/filepond.{$key}")) {
@@ -129,7 +141,8 @@
                 $subTemplate = $fpLang('drop_subtitle', ':formats formats, up to :max_size');
                 $resolvedSubtitle = str_replace([':formats', ':max_size'], [$formatsStr, $sizeStr], $subTemplate);
             } else {
-                $resolvedSubtitle = $fpLang('drop_subtitle_default', 'JPEG, PNG, PDF, and MP4 formats, up to 50MB');
+                $subTemplate = $fpLang('drop_subtitle_default', 'Semua jenis berkas didukung, hingga :max_size');
+                $resolvedSubtitle = str_replace(':max_size', $sizeStr, $subTemplate);
             }
         }
 
@@ -223,9 +236,10 @@
         'presignMethod' => $presignMethod,
         'chunkUploads' => (bool) $chunkUploads,
         'chunkSize' => $chunkSize,
-        'existingFiles' => $existingFiles,
+        'existingFiles' => $resolvedExistingFiles,
         'disabled' => (bool) $isDisabled,
         'required' => (bool) $isRequired,
+        'instantUpload' => (bool) $instantUpload,
         'labels' => $mergedLabels,
         'wireModel' => $wireModelAttr,
         'dashed' => (bool) $dashed,

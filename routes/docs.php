@@ -28,6 +28,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::prefix('filepond')->name('filepond.')->group(function () {
         Route::get('/', [FilepondController::class, 'index'])->name('index');
+        Route::get('/download', [FilepondController::class, 'download'])->name('download');
         Route::post('/store', [FilepondController::class, 'requestTest'])->name('store');
         Route::post('/request-test', [FilepondController::class, 'requestTest'])->name('request_test');
         Route::post('/presigned', [FilepondController::class, 'presigned'])->name('presigned');

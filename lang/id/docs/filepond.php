@@ -91,6 +91,16 @@ return [
         'submit_btn' => 'Simpan & Uji Request',
     ],
 
+    // Section: Berkas yang Sudah Ada / Form Edit (File Exist)
+    'existing_files_section' => [
+        'title' => 'Berkas Tersimpan & Form Edit (File Exist)',
+        'desc' => 'Saat membuat halaman <strong>Edit Data</strong> (misal Edit Profil, Edit Dokumen, atau Edit Produk), Anda dapat menampilkan berkas yang sudah ada sebelumnya di server atau Cloud Storage (S3) menggunakan prop <code class="text-xs font-mono text-primary font-semibold">:files="..."</code> atau <code class="text-xs font-mono text-primary font-semibold">:existing-files="..."</code>. Setiap berkas yang dimuat juga dilengkapi tombol <strong>Unduh (Download)</strong> sehingga pengguna dapat mengunduh berkas aslinya secara langsung.',
+        'preview_multiple_title' => 'Form Edit Lampiran (Dokumen PDF & Foto dari S3)',
+        'preview_avatar_title' => 'Form Edit Foto Profil (Avatar Mode dari S3)',
+        'btn_submit' => 'Simpan Perubahan (Test Request)',
+        'info_keys' => 'Berkas yang telah tersimpan otomatis disinkronkan ke dalam hidden input form, sehingga saat form disubmit data berkas lama tetap terkirim secara aman tanpa perlu diunggah ulang.',
+    ],
+
     // Section 8: Livewire
     'livewire' => [
         'title' => 'Integrasi Native Livewire v3',

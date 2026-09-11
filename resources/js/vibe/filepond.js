@@ -112,11 +112,22 @@ const FileStatus = (FilePondModule && FilePondModule.FileStatus) || {
     PROCESSING_QUEUED: 9
 };
 
+function isSameOrigin(url) {
+    if (!url || typeof url !== 'string') return false;
+    if (url.startsWith('/') && !url.startsWith('//')) return true;
+    try {
+        const parsed = new URL(url, window.location.origin);
+        return parsed.origin === window.location.origin;
+    } catch (e) {
+        return false;
+    }
+}
+
 /**
  * Attaches modern preview thumbnail for images or document icon with badge for other files
  */
 // [FIX BUG-4] Accepts per-instance blobUrlSet to avoid global Set cross-contamination
-function attachCustomFileIcon(item, blobUrlSet) {
+function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
     if (!item) return;
 
     const findItemEl = () => {
@@ -150,22 +161,256 @@ function attachCustomFileIcon(item, blobUrlSet) {
         }
 
         const fileWrapper = itemEl.querySelector('.filepond--file');
-        if (!fileWrapper || fileWrapper.querySelector('.filepond--custom-file-icon')) return;
+        if (!fileWrapper) return;
 
         const file = item.file;
-        const name = (file && file.name) ? file.name : (item.filename || '');
+        let name = (file && file.name) ? file.name : (item.filename || '');
+        if (!name && typeof item.source === 'string') {
+            try {
+                name = decodeURIComponent(item.source.split('/').pop().split('?')[0]);
+            } catch (e) {
+                name = item.source.split('/').pop().split('?')[0];
+            }
+        }
         const ext = (name.split('.').pop() || '').toUpperCase();
         const isImage = (file && file.type && file.type.startsWith('image/')) ||
                         ['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'SVG', 'AVIF'].includes(ext);
 
-        // Ensure filename and size text are visible
+        // Ensure filename is visible
         const infoMain = itemEl.querySelector('.filepond--file-info-main');
-        if (infoMain && !infoMain.textContent.trim() && name) {
+        if (infoMain && (!infoMain.textContent.trim() || infoMain.textContent === 'undefined') && name) {
             infoMain.textContent = name;
         }
+
+        // Sanitize and ensure size text is accurate (never allow NaN GB to display)
         const infoSub = itemEl.querySelector('.filepond--file-info-sub');
-        if (infoSub && !infoSub.textContent.trim() && file && file.size) {
-            infoSub.textContent = formatBytes(file.size);
+        const calculatedSize = (file && typeof file.size === 'number' && !isNaN(file.size) && file.size > 0)
+            ? file.size
+            : (item.fileSize && !isNaN(item.fileSize) && item.fileSize > 0 ? item.fileSize : 0);
+
+        if (infoSub) {
+            if (calculatedSize > 0) {
+                infoSub.textContent = formatBytes(calculatedSize);
+                infoSub.style.display = '';
+            } else if (infoSub.textContent.includes('NaN')) {
+                infoSub.textContent = '';
+            }
+
+            if (!infoSub._sanitizedObserver) {
+                infoSub._sanitizedObserver = new MutationObserver(() => {
+                    if (infoSub.textContent.includes('NaN')) {
+                        const latestFile = item.file;
+                        const latestSize = (latestFile && typeof latestFile.size === 'number' && !isNaN(latestFile.size) && latestFile.size > 0)
+                            ? latestFile.size
+                            : (item.fileSize && !isNaN(item.fileSize) && item.fileSize > 0 ? item.fileSize : 0);
+                        infoSub.textContent = latestSize > 0 ? formatBytes(latestSize) : '';
+                    }
+                });
+                infoSub._sanitizedObserver.observe(infoSub, { childList: true, characterData: true, subtree: true });
+            }
+        }
+
+        // Auto-fetch file size in background only for same-origin URLs if size is unknown
+        const remoteSource = (typeof item.source === 'string' && item.source.length > 0)
+            ? item.source
+            : (typeof item.file === 'string' ? item.file : null);
+        if (calculatedSize <= 0 && remoteSource && !item._sizeFetchStarted && isSameOrigin(remoteSource)) {
+            item._sizeFetchStarted = true;
+            fetch(remoteSource, { method: 'HEAD' })
+                .then(res => {
+                    const len = res.headers.get('content-length');
+                    if (len && +len > 0) {
+                        const bytes = +len;
+                        item.fileSize = bytes;
+                        if (item.file && typeof item.file === 'object') {
+                            item.file.size = bytes;
+                        }
+                        if (infoSub) {
+                            infoSub.textContent = formatBytes(bytes);
+                            infoSub.style.display = '';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // Inject / Update Custom Download Action Button
+        let downloadBtn = fileWrapper.querySelector('.filepond--action-download-item');
+        if (!downloadBtn) {
+            downloadBtn = document.createElement('button');
+            downloadBtn.type = 'button';
+            downloadBtn.className = 'filepond--file-action-button filepond--action-download-item';
+            downloadBtn.setAttribute('title', 'Unduh berkas');
+            downloadBtn.setAttribute('aria-label', 'Unduh berkas');
+            downloadBtn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+            `;
+
+            downloadBtn.addEventListener('click', async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                // Visual loading state on the button
+                const originalSvg = downloadBtn.innerHTML;
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = `
+                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                `;
+
+                const restoreBtn = () => {
+                    downloadBtn.disabled = false;
+                    downloadBtn.innerHTML = originalSvg;
+                };
+
+                const currentFile = item.file;
+                const dlFilename = (currentFile && currentFile.name)
+                    ? currentFile.name
+                    : (item.filename || (typeof item.source === 'string' ? decodeURIComponent(item.source.split('/').pop().split('?')[0]) : 'file'));
+
+                const triggerBlobDownload = (blobObj, filename) => {
+                    const blobUrl = URL.createObjectURL(blobObj);
+                    const a = document.createElement('a');
+                    a.href = blobUrl;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+                };
+
+                // 1. If previously downloaded blob is cached on item or in-memory File/Blob
+                if (item._downloadBlob instanceof Blob) {
+                    triggerBlobDownload(item._downloadBlob, dlFilename);
+                    restoreBtn();
+                    return;
+                }
+
+                if (currentFile instanceof Blob || currentFile instanceof File) {
+                    try {
+                        triggerBlobDownload(currentFile, dlFilename);
+                        restoreBtn();
+                        return;
+                    } catch (err) {}
+                }
+
+                // 2. Resolve remote URL from source, file, or metadata
+                const metaUrl = (typeof item.getMetadata === 'function') ? (item.getMetadata('url') || item.getMetadata('fileUrl')) : null;
+                const remoteUrl = (typeof item.source === 'string' && item.source.length > 0)
+                    ? item.source
+                    : (typeof item.file === 'string' ? item.file : (metaUrl || null));
+
+                if (remoteUrl) {
+                    let blob = null;
+
+                    // Strategy A: Bypass browser disk-cache collision with cache: 'no-store' & cache-buster
+                    try {
+                        const isS3Signed = remoteUrl.includes('X-Amz-Signature') || remoteUrl.includes('AWSAccessKeyId');
+                        const separator = remoteUrl.includes('?') ? '&' : '?';
+                        const fetchUrl = isS3Signed ? remoteUrl : `${remoteUrl}${separator}_vibe_dl=${Date.now()}`;
+                        const res = await fetch(fetchUrl, {
+                            mode: 'cors',
+                            credentials: 'omit',
+                            cache: 'no-store'
+                        });
+                        if (res.ok) {
+                            blob = await res.blob();
+                        }
+                    } catch (e) {}
+
+                    // Strategy B: Standard fetch if Strategy A didn't resolve
+                    if (!blob) {
+                        try {
+                            const res = await fetch(remoteUrl, { mode: 'cors' });
+                            if (res.ok) blob = await res.blob();
+                        } catch (e) {}
+                    }
+
+                    // Strategy C: Canvas extraction for images (only on same-origin to prevent canvas tainted CORS errors)
+                    if (!blob && isImage && isSameOrigin(remoteUrl)) {
+                        try {
+                            blob = await new Promise((resolve, reject) => {
+                                const img = new Image();
+                                img.crossOrigin = 'anonymous';
+                                img.onload = () => {
+                                    try {
+                                        const canvas = document.createElement('canvas');
+                                        canvas.width = img.naturalWidth || img.width;
+                                        canvas.height = img.naturalHeight || img.height;
+                                        const ctx = canvas.getContext('2d');
+                                        ctx.drawImage(img, 0, 0);
+                                        const mimeType = (file && file.type) || (dlFilename.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg');
+                                        canvas.toBlob((b) => {
+                                            if (b) resolve(b);
+                                            else reject(new Error('Canvas toBlob failed'));
+                                        }, mimeType);
+                                    } catch (err) {
+                                        reject(err);
+                                    }
+                                };
+                                img.onerror = reject;
+                                const separator = remoteUrl.includes('?') ? '&' : '?';
+                                img.src = `${remoteUrl}${separator}_canvas_dl=${Date.now()}`;
+                            });
+                        } catch (e) {}
+                    }
+
+                    // If any strategy succeeded in getting a blob, download it!
+                    if (blob) {
+                        item._downloadBlob = blob;
+                        triggerBlobDownload(blob, dlFilename);
+                        restoreBtn();
+                        return;
+                    }
+
+                    // Strategy D: Backend proxy download endpoint if available
+                    try {
+                        const proxyUrl = `/docs/filepond/download?url=${encodeURIComponent(remoteUrl)}&name=${encodeURIComponent(dlFilename)}`;
+                        const a = document.createElement('a');
+                        a.href = proxyUrl;
+                        a.download = dlFilename;
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                        restoreBtn();
+                        return;
+                    } catch (e) {}
+
+                    // Strategy E: Fallback anchor navigation
+                    const a = document.createElement('a');
+                    a.href = remoteUrl;
+                    a.download = dlFilename;
+                    a.target = '_blank';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                }
+
+                restoreBtn();
+            });
+
+            fileWrapper.appendChild(downloadBtn);
+        }
+
+        // Custom File Icon or Image Thumbnail
+        const existingIcon = fileWrapper.querySelector('.filepond--custom-file-icon');
+        if (existingIcon) {
+            const isThumb = existingIcon.classList.contains('filepond--thumbnail-preview-container');
+            if (isThumb && !forceUpdate) return;
+            if (!isImage && !forceUpdate) return;
+            if (isImage && (file instanceof Blob || file instanceof File)) {
+                existingIcon.remove();
+            } else if (!forceUpdate) {
+                return;
+            } else {
+                existingIcon.remove();
+            }
         }
 
         let iconContainer = document.createElement('div');
@@ -189,7 +434,6 @@ function attachCustomFileIcon(item, blobUrlSet) {
             if (imgUrl) {
                 iconContainer.classList.add('filepond--thumbnail-preview-container');
                 iconContainer.setAttribute('title', 'Klik untuk melihat pratinjau penuh');
-                // [FIX QA-5] Escape filename to prevent XSS in alt attribute
                 const escapedName = name.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 iconContainer.innerHTML = `
                     <div class="filepond--thumbnail-wrapper">
@@ -207,7 +451,7 @@ function attachCustomFileIcon(item, blobUrlSet) {
 
                 const imgEl = iconContainer.querySelector('.filepond--thumbnail-img');
                 imgEl.onerror = () => {
-                    // Fallback to badge icon if image decoding fails
+                    if (imgUrl && imgUrl.startsWith('blob:')) return;
                     const fallback = document.createElement('div');
                     fallback.className = 'filepond--custom-file-icon';
                     fallback.innerHTML = `
@@ -322,6 +566,20 @@ export function vibeFilepond(config = {}) {
             this.pond = FilePond.create(this.input, pondOptions);
             this.updateReactiveState();
 
+            // Initialize uploadedKeys from preloaded/existing files for Livewire & Alpine state
+            const initialKeys = [];
+            if (typeof config.existingFiles === 'string' && config.existingFiles.trim()) {
+                initialKeys.push(config.existingFiles.trim());
+            } else if (Array.isArray(config.existingFiles)) {
+                config.existingFiles.forEach(f => {
+                    if (typeof f === 'string' && f.trim()) initialKeys.push(f.trim());
+                    else if (f && typeof f === 'object') initialKeys.push(f.source || f.url || f.key || '');
+                });
+            }
+            if (initialKeys.length > 0) {
+                this.uploadedKeys = [...new Set(initialKeys.filter(Boolean))];
+            }
+
             // In avatar mode, ensure the root element has avatar class and clicking anywhere in the circle opens file picker
             if (config.avatar && this.pond.element) {
                 this.pond.element.classList.add('filepond-avatar-mode');
@@ -409,7 +667,7 @@ export function vibeFilepond(config = {}) {
                 this.input.name = config.multiple ? `${cleanName}[]` : cleanName;
             }
             if (this.pond && typeof this.pond.setOptions === 'function') {
-                this.pond.setOptions({ name: cleanName });
+                this.pond.setOptions({ name: config.multiple ? `${cleanName}[]` : cleanName });
             }
             if (this.$el) {
                 this.$el.querySelectorAll('input').forEach(inp => {
@@ -569,14 +827,20 @@ export function vibeFilepond(config = {}) {
         },
 
         buildPondOptions(cfg, self) {
+            const rawName = cfg.name || (self.input ? self.input.name : null);
+            const baseName = rawName ? rawName.replace(/\[\]$/, '') : null;
+            const resolvedName = baseName ? (cfg.multiple ? `${baseName}[]` : baseName) : null;
+
             const options = {
-                name: cfg.name || (self.input ? self.input.name : null),
+                name: resolvedName,
                 credits: false,
                 className: cfg.className || '',
                 allowMultiple: Boolean(cfg.multiple),
                 maxFiles: cfg.maxFiles ? parseInt(cfg.maxFiles, 10) : null,
                 disabled: Boolean(cfg.disabled),
                 required: Boolean(cfg.required),
+                // Disable FilePond's native destructive auto-remove on abort/cancel
+                instantUpload: false,
 
                 // File validation
                 allowFileSizeValidation: Boolean(cfg.maxFileSize || cfg.minFileSize || cfg.maxTotalFileSize),
@@ -590,7 +854,11 @@ export function vibeFilepond(config = {}) {
                     : (cfg.acceptedFileTypes ? cfg.acceptedFileTypes.split(',').map(s => s.trim()) : null),
 
                 // Image features
-                allowImagePreview: cfg.imagePreview !== false,
+                // Native FilePond image preview plugin is ONLY needed for avatar circular mode.
+                // Standard filepond cards already use attachCustomFileIcon with clean <img> thumbnails and lightbox zoom modal.
+                // Setting allowImagePreview to true for standard cards causes FilePond to compute canvas dimensions
+                // inside hidden 0x0 wrapper elements, which hangs the upload pipeline for raster images.
+                allowImagePreview: Boolean(cfg.avatar),
                 imagePreviewHeight: cfg.imagePreviewHeight ? parseInt(cfg.imagePreviewHeight, 10) : (cfg.avatar ? 130 : null),
                 imagePreviewMinHeight: cfg.imagePreviewMinHeight ? parseInt(cfg.imagePreviewMinHeight, 10) : (cfg.avatar ? 130 : null),
                 imagePreviewMaxHeight: cfg.imagePreviewMaxHeight ? parseInt(cfg.imagePreviewMaxHeight, 10) : (cfg.avatar ? 130 : null),
@@ -601,15 +869,15 @@ export function vibeFilepond(config = {}) {
                     return !/svg/i.test(type) && !/\.svg$/i.test(name);
                 },
 
-                allowImageCrop: Boolean(cfg.imageCrop || cfg.imageCropAspectRatio || cfg.avatar),
+                allowImageCrop: Boolean(cfg.imageCrop || cfg.imageCropAspectRatio || (cfg.avatar && cfg.imageCrop !== false)),
                 imageCropAspectRatio: cfg.avatar ? '1:1' : (cfg.imageCropAspectRatio || null),
 
-                allowImageResize: Boolean(cfg.imageResize || cfg.imageResizeTargetWidth || cfg.imageResizeTargetHeight || cfg.avatar),
+                allowImageResize: Boolean(cfg.imageResize || cfg.imageResizeTargetWidth || cfg.imageResizeTargetHeight || (cfg.avatar && cfg.imageResize !== false)),
                 imageResizeTargetWidth: cfg.avatar ? 260 : (cfg.imageResizeTargetWidth ? parseInt(cfg.imageResizeTargetWidth, 10) : null),
                 imageResizeTargetHeight: cfg.avatar ? 260 : (cfg.imageResizeTargetHeight ? parseInt(cfg.imageResizeTargetHeight, 10) : null),
                 imageResizeMode: cfg.imageResizeMode || 'cover',
 
-                allowImageTransform: Boolean(cfg.imageTransform || cfg.imageCrop || cfg.imageResize || cfg.avatar),
+                allowImageTransform: Boolean(cfg.imageTransform || (cfg.avatar && cfg.imageTransform !== false)),
                 imageTransformOutputQuality: cfg.imageQuality ? parseInt(cfg.imageQuality, 10) : null,
                 // Exclude vector SVGs from raster canvas transformations
                 imageTransformImageFilter: (file) => {
@@ -662,6 +930,25 @@ export function vibeFilepond(config = {}) {
                     attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
                     self.updateReactiveState();
                     self.fireEvent('add', { item: item });
+
+                    // Auto-start upload on add if instantUpload is desired (default true),
+                    // but ONLY if an async server endpoint is configured (presignUrl, server, or wireModel)
+                    // and storeAsFile is not active. Traditional form uploads should remain in IDLE ready state.
+                    const hasAsyncServer = Boolean(cfg.presignUrl || cfg.server || cfg.wireModel);
+                    const isStoreAsFile = (cfg.storeAsFile !== null && cfg.storeAsFile !== undefined)
+                        ? Boolean(cfg.storeAsFile)
+                        : !hasAsyncServer;
+
+                    if (hasAsyncServer && !isStoreAsFile && cfg.instantUpload !== false) {
+                        setTimeout(() => {
+                            if (self.pond && typeof self.pond.processFile === 'function' && item && item.id) {
+                                const current = typeof self.pond.getFile === 'function' ? self.pond.getFile(item.id) : null;
+                                if (current && (current.status === FileStatus.IDLE || current.status === FileStatus.INIT)) {
+                                    self.pond.processFile(item.id);
+                                }
+                            }
+                        }, 25);
+                    }
                 },
                 onerror: (err, item, status) => {
                     self.hasError = true;
@@ -725,10 +1012,25 @@ export function vibeFilepond(config = {}) {
                     self.serverError = null; // clear server error on revert
                     self.hasError = false;
                     self.fireEvent('revert', { item: item, key: item?.serverId });
+
+                    // When an already-uploaded file is reverted/cancelled by the user, remove it completely from the list
+                    // so it doesn't leave the file in an awkward un-uploaded state with an "upload again" button.
+                    if (self.pond && typeof self.pond.removeFile === 'function' && item && item.id) {
+                        setTimeout(() => {
+                            const fileInPond = typeof self.pond.getFile === 'function' ? self.pond.getFile(item.id) : null;
+                            if (fileInPond) {
+                                self.pond.removeFile(item.id);
+                            }
+                        }, 20);
+                    }
                 },
                 onremovefile: (err, item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
+                    }
+                    const fileIdentifier = item?.serverId || item?.source || item?.file?.name;
+                    if (fileIdentifier) {
+                        self.handleUploadRevert(fileIdentifier, cfg);
                     }
                     self.updateReactiveState();
                     self.serverError = null; // clear server error when file is removed
@@ -745,16 +1047,49 @@ export function vibeFilepond(config = {}) {
 
         resolveInitialFiles(files) {
             if (!files) return [];
+            const normalize = (f) => {
+                if (typeof f === 'string' && f.trim()) {
+                    const clean = f.trim();
+                    const cleanName = decodeURIComponent(clean.split('/').pop().split('?')[0]);
+                    return {
+                        source: clean,
+                        options: {
+                            type: 'local',
+                            file: {
+                                name: cleanName,
+                            }
+                        }
+                    };
+                }
+                if (f && typeof f === 'object') {
+                    if (f.source) return f;
+                    const src = f.url || f.src || f.path;
+                    if (src) {
+                        const cleanName = f.name || decodeURIComponent(src.split('/').pop().split('?')[0]);
+                        return {
+                            source: src,
+                            options: {
+                                type: 'local',
+                                file: {
+                                    name: cleanName,
+                                    size: f.size || undefined,
+                                    type: f.type || undefined,
+                                }
+                            }
+                        };
+                    }
+                }
+                return f;
+            };
+
             if (typeof files === 'string') {
-                return [{ source: files, options: { type: 'local' } }];
+                return [normalize(files)].filter(Boolean);
             }
             if (Array.isArray(files)) {
-                return files.map(file => {
-                    if (typeof file === 'string') {
-                        return { source: file, options: { type: 'local' } };
-                    }
-                    return file;
-                });
+                return files.map(normalize).filter(Boolean);
+            }
+            if (typeof files === 'object') {
+                return [normalize(files)].filter(Boolean);
             }
             return [];
         },
@@ -762,27 +1097,71 @@ export function vibeFilepond(config = {}) {
         resolveServerConfig(cfg, self) {
             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
 
+            const universalFileLoader = (source, load, error, progress, abort, headers) => {
+                const controller = new AbortController();
+                fetch(source, { signal: controller.signal })
+                    .then(res => {
+                        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                        return res.blob();
+                    })
+                    .then(blob => {
+                        const filename = decodeURIComponent(source.split('/').pop().split('?')[0]);
+                        let fileObj = blob;
+                        try {
+                            const detectedType = blob.type || (/\.png$/i.test(filename) ? 'image/png' : (/\.jpe?g$/i.test(filename) ? 'image/jpeg' : (/\.pdf$/i.test(filename) ? 'application/pdf' : 'application/octet-stream')));
+                            fileObj = new File([blob], filename, { type: detectedType });
+                        } catch (e) {}
+                        load(fileObj);
+
+                        setTimeout(() => {
+                            if (self.pond && typeof self.pond.getFiles === 'function') {
+                                const files = self.pond.getFiles();
+                                const matched = files.find(f => f.source === source || (f.file && f.file.name === filename));
+                                if (matched) {
+                                    attachCustomFileIcon(matched, self._blobUrls, true);
+                                }
+                            }
+                        }, 50);
+                    })
+                    .catch(err => {
+                        if (err.name !== 'AbortError') {
+                            console.warn('[Vibe FilePond] Preloaded file fetch error:', source, err);
+                            error(err.message);
+                        }
+                    });
+
+                return {
+                    abort: () => {
+                        controller.abort();
+                        abort();
+                    }
+                };
+            };
 
             // 1. Presigned URL Direct-to-Cloud Upload (S3, Cloudflare R2, GCS, MinIO)
             if (cfg.presignUrl) {
                 return {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
-                        const uploadId = (metadata && metadata.id) ? metadata.id : (file.name + '_' + file.size + '_' + Math.random());
+                        const fileName = (file && file.name) || (metadata && metadata.name) || 'uploaded-file';
+                        const fileSize = (file && typeof file.size === 'number') ? file.size : 0;
+                        const fileType = (file && file.type) || (/\.svg$/i.test(fileName) ? 'image/svg+xml' : 'application/octet-stream');
+
+                        const uploadId = (metadata && metadata.id) ? metadata.id : (fileName + '_' + fileSize + '_' + Math.random());
                         self.activeUploads.add(uploadId);
                         self.updateReactiveState();
 
                         // Immediately activate FilePond indicator (indeterminate busy spinner)
                         progress(false, 0, 0);
 
-                        const startDetail = { name: file.name, filename: file.name, size: file.size, type: file.type, file };
+                        const startDetail = { name: fileName, filename: fileName, size: fileSize, type: fileType, file };
                         self.fireEvent('start', startDetail);
                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-start', { detail: startDetail }));
                         if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-start', startDetail);
 
                         const requestPayload = {
-                            filename: file.name,
-                            size: file.size,
-                            type: file.type || (/\.svg$/i.test(file.name) ? 'image/svg+xml' : 'application/octet-stream')
+                            filename: fileName,
+                            size: fileSize,
+                            type: fileType
                         };
 
                         const xhrPresign = new XMLHttpRequest();
@@ -815,7 +1194,7 @@ export function vibeFilepond(config = {}) {
                                     const errMsg = 'Endpoint presigned mengembalikan HTML (bukan JSON). Pastikan endpoint mengembalikan JSON.';
                                     self.serverError = errMsg;
                                     error(errMsg);
-                                    self.fireEvent('error', { error: errMsg, file });
+                                    self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                     return;
                                 }
 
@@ -840,10 +1219,10 @@ export function vibeFilepond(config = {}) {
                                             const pathParts = rawPath.split('/');
                                             fileKey = pathParts.length > 1 ? pathParts.slice(1).join('/') : rawPath;
                                         } catch (e) {
-                                            fileKey = file.name;
+                                            fileKey = fileName;
                                         }
                                     }
-                                    if (!fileKey) fileKey = file.name;
+                                    if (!fileKey) fileKey = fileName;
 
                                     const method = response.method || cfg.presignMethod || 'PUT';
 
@@ -854,7 +1233,7 @@ export function vibeFilepond(config = {}) {
                                         const errMsg = 'Presigned response missing upload URL';
                                         self.serverError = errMsg;
                                         error(errMsg);
-                                        self.fireEvent('error', { error: errMsg, file });
+                                        self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                         return;
                                     }
@@ -864,30 +1243,30 @@ export function vibeFilepond(config = {}) {
                                     xhrUpload.open(method, uploadUrl, true);
 
                                     // Set Content-Type for PUT if required
-                                    let uploadContentType = file.type || '';
-                                    if (!uploadContentType && /\.svg$/i.test(file.name)) {
-                                        uploadContentType = 'image/svg+xml';
-                                    }
+                                    let uploadContentType = fileType;
                                     if (method.toUpperCase() === 'PUT' && uploadContentType) {
-                                        xhrUpload.setRequestHeader('Content-Type', uploadContentType);
+                                        try {
+                                            xhrUpload.setRequestHeader('Content-Type', uploadContentType);
+                                        } catch (e) {}
                                     }
 
                                     // Set custom presigned headers (ignoring forbidden headers like Host)
                                     const forbiddenHeaders = ['host', 'content-length', 'connection'];
-                                    for (const [hKey, hVal] of Object.entries(customHeaders)) {
-                                        if (!forbiddenHeaders.includes(hKey.toLowerCase())) {
-                                            xhrUpload.setRequestHeader(hKey, Array.isArray(hVal) ? hVal.join(', ') : hVal);
+                                    if (customHeaders && typeof customHeaders === 'object') {
+                                        for (const [hKey, hVal] of Object.entries(customHeaders)) {
+                                            if (hKey && !forbiddenHeaders.includes(hKey.toLowerCase())) {
+                                                try {
+                                                    xhrUpload.setRequestHeader(hKey, Array.isArray(hVal) ? hVal.join(', ') : String(hVal));
+                                                } catch (e) {}
+                                            }
                                         }
                                     }
 
                                     xhrUpload.upload.onprogress = (e) => {
                                         if (e.lengthComputable) {
-                                            // [FIX BUG-5] Only call progress() — this triggers FilePond's onprocessfileprogress
-                                            // which fires fireEvent('progress'). Calling fireEvent here directly would duplicate it.
                                             progress(true, e.loaded, e.total);
-                                            // Dispatch presigned-specific legacy event only (not unified, to avoid duplication)
                                             const pct = Math.round((e.loaded / e.total) * 100);
-                                            const progressDetail = { loaded: e.loaded, total: e.total, percentage: pct, progress: pct, fileKey, key: fileKey, filename: file.name, file };
+                                            const progressDetail = { loaded: e.loaded, total: e.total, percentage: pct, progress: pct, fileKey, key: fileKey, filename: fileName, file };
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-progress', { detail: progressDetail }));
                                             if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-progress', progressDetail);
                                         }
@@ -897,10 +1276,10 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         if (xhrUpload.status >= 200 && xhrUpload.status < 300) {
-                                            progress(true, file.size, file.size);
+                                            progress(true, fileSize, fileSize);
                                             load(fileKey);
                                             self.handleUploadSuccess(fileKey, cfg, file);
-                                            const successDetail = { key: fileKey, url: uploadUrl.split('?')[0], isLocal: Boolean(response.is_local), filename: file.name, size: file.size, file };
+                                            const successDetail = { key: fileKey, url: uploadUrl.split('?')[0], isLocal: Boolean(response.is_local), filename: fileName, size: fileSize, file };
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-success', { detail: successDetail }));
                                             if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-success', successDetail);
                                         } else {
@@ -908,7 +1287,7 @@ export function vibeFilepond(config = {}) {
                                             const errMsg = 'Direct upload failed with HTTP ' + xhrUpload.status;
                                             self.serverError = errMsg;
                                             error(errMsg);
-                                            self.fireEvent('error', { error: errMsg, status: xhrUpload.status, file });
+                                            self.fireEvent('error', { error: errMsg, status: xhrUpload.status, file, filename: fileName });
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg, status: xhrUpload.status } }));
                                         }
                                     };
@@ -920,7 +1299,18 @@ export function vibeFilepond(config = {}) {
                                         const errMsg = 'Network error during cloud upload';
                                         self.serverError = errMsg;
                                         error(errMsg);
-                                        self.fireEvent('error', { error: errMsg, file });
+                                        self.fireEvent('error', { error: errMsg, file, filename: fileName });
+                                        window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
+                                    };
+
+                                    xhrUpload.ontimeout = () => {
+                                        self.activeUploads.delete(uploadId);
+                                        self.updateReactiveState();
+                                        self.hasError = true;
+                                        const errMsg = 'Upload timed out';
+                                        self.serverError = errMsg;
+                                        error(errMsg);
+                                        self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                     };
 
@@ -932,7 +1322,7 @@ export function vibeFilepond(config = {}) {
                                     const errMsg = 'Error parsing presigned JSON: ' + e.message;
                                     self.serverError = errMsg;
                                     error(errMsg);
-                                    self.fireEvent('error', { error: errMsg, file });
+                                    self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                 }
                             } else {
                                 self.activeUploads.delete(uploadId);
@@ -949,7 +1339,7 @@ export function vibeFilepond(config = {}) {
                                 }
                                 self.serverError = errMsg;
                                 error(errMsg);
-                                self.fireEvent('error', { error: errMsg, status: xhrPresign.status, file, filename: file.name });
+                                self.fireEvent('error', { error: errMsg, status: xhrPresign.status, file, filename: fileName });
                             }
                         };
 
@@ -960,7 +1350,7 @@ export function vibeFilepond(config = {}) {
                             const errMsg = 'Network error requesting presigned URL';
                             self.serverError = errMsg;
                             error(errMsg);
-                            self.fireEvent('error', { error: errMsg, file, filename: file.name });
+                            self.fireEvent('error', { error: errMsg, file, filename: fileName });
                         };
 
                         xhrPresign.send(JSON.stringify(requestPayload));
@@ -970,11 +1360,11 @@ export function vibeFilepond(config = {}) {
                                 self.activeUploads.delete(uploadId);
                                 self.updateReactiveState();
                                 if (xhrUpload) {
-                                    xhrUpload.abort();
+                                    try { xhrUpload.abort(); } catch (e) {}
                                 }
-                                xhrPresign.abort();
+                                try { xhrPresign.abort(); } catch (e) {}
                                 abort();
-                                self.fireEvent('abort', { filename: file.name, file });
+                                self.fireEvent('abort', { filename: fileName, file });
                                 window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-abort'));
                             }
                         };
@@ -982,6 +1372,13 @@ export function vibeFilepond(config = {}) {
 
                     revert: (uniqueFileId, load, error) => {
                         self.handleUploadRevert(uniqueFileId, cfg);
+                        load();
+                    },
+
+                    load: universalFileLoader,
+
+                    remove: (source, load, error) => {
+                        self.handleUploadRevert(source, cfg);
                         load();
                     }
                 };
@@ -1030,34 +1427,56 @@ export function vibeFilepond(config = {}) {
                         }
                         self.fireEvent('revert', { file: filename, filename: filename, key: filename });
                         self.$dispatch('vibe-filepond-reverted', { file: filename });
+                    },
+                    load: universalFileLoader,
+                    remove: (source, load, error) => {
+                        self.handleUploadRevert(source, cfg);
+                        load();
                     }
                 };
             }
 
             // 3. Custom Server Endpoint Config
             if (cfg.server) {
-                if (typeof cfg.server === 'string') {
-                    return {
-                        url: cfg.server,
-                        headers: csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}
-                    };
-                }
+                const baseServer = (typeof cfg.server === 'string')
+                    ? { url: cfg.server }
+                    : { ...cfg.server };
+
                 return {
-                    ...cfg.server,
+                    load: universalFileLoader,
+                    remove: (source, load, error) => {
+                        self.handleUploadRevert(source, cfg);
+                        load();
+                    },
+                    ...baseServer,
                     headers: {
                         ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
-                        ...(cfg.server.headers || {})
+                        ...(baseServer.headers || {})
                     }
                 };
             }
 
-            // 4. File Encode or Default (null means FilePond will not upload async)
+            // 4. Standalone / Form mode with initial files loader
+            const hasInitialFiles = Array.isArray(cfg.existingFiles) ? cfg.existingFiles.length > 0 : Boolean(cfg.existingFiles);
+            if (hasInitialFiles) {
+                return {
+                    load: universalFileLoader,
+                    remove: (source, load, error) => {
+                        self.handleUploadRevert(source, cfg);
+                        load();
+                    }
+                };
+            }
+
+            // 5. File Encode or Default (null means FilePond will not upload async)
             return null;
         },
 
         handleUploadSuccess(fileKey, cfg, fileObj = null) {
             if (cfg.multiple) {
-                this.uploadedKeys.push(fileKey);
+                if (!this.uploadedKeys.includes(fileKey)) {
+                    this.uploadedKeys.push(fileKey);
+                }
             } else {
                 this.uploadedKeys = [fileKey];
             }
@@ -1068,8 +1487,6 @@ export function vibeFilepond(config = {}) {
                 this.$wire.set(cfg.wireModel, val);
             }
 
-            // Update hidden inputs if present for regular forms
-            this.updateHiddenInputs(cfg);
             this.updateReactiveState();
 
             // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
@@ -1079,14 +1496,23 @@ export function vibeFilepond(config = {}) {
         },
 
         handleUploadRevert(fileKey, cfg) {
-            this.uploadedKeys = this.uploadedKeys.filter(k => k !== fileKey);
+            if (!fileKey) return;
+            this.uploadedKeys = this.uploadedKeys.filter(k => {
+                if (k === fileKey) return false;
+                try {
+                    if (decodeURIComponent(k) === decodeURIComponent(fileKey)) return false;
+                } catch (e) {}
+                if (typeof k === 'string' && typeof fileKey === 'string') {
+                    if (k.endsWith('/' + fileKey) || fileKey.endsWith('/' + k)) return false;
+                }
+                return true;
+            });
 
             if (cfg.wireModel && this.$wire) {
                 const val = cfg.multiple ? this.uploadedKeys : (this.uploadedKeys[0] || null);
                 this.$wire.set(cfg.wireModel, val);
             }
 
-            this.updateHiddenInputs(cfg);
             this.updateReactiveState();
 
             // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
@@ -1096,24 +1522,12 @@ export function vibeFilepond(config = {}) {
         },
 
         updateHiddenInputs(cfg) {
+            // FilePond natively creates and manages hidden form input fields (<input type="hidden" name="...">)
+            // for every preloaded file and uploaded server file inside its root element.
+            // Keeping hiddenContainer clear prevents duplicate form input names and values from being submitted.
             const hiddenContainer = this.$refs.hiddenContainer;
-            if (!hiddenContainer || !cfg.name) return;
-
-            hiddenContainer.innerHTML = '';
-            if (cfg.multiple) {
-                this.uploadedKeys.forEach(k => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = `${cfg.name}[]`;
-                    input.value = k;
-                    hiddenContainer.appendChild(input);
-                });
-            } else if (this.uploadedKeys.length) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = cfg.name;
-                input.value = this.uploadedKeys[0];
-                hiddenContainer.appendChild(input);
+            if (hiddenContainer) {
+                hiddenContainer.innerHTML = '';
             }
         },
 

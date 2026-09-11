@@ -351,7 +351,7 @@
     width: 100% !important;
     height: auto !important;
     min-height: 4.25rem !important;
-    padding: 0.75rem 3.25rem 0.75rem 1rem !important;
+    padding: 0.75rem 5.5rem 0.75rem 1rem !important;
     display: flex !important;
     align-items: center !important;
     color: var(--foreground) !important;
@@ -591,9 +591,11 @@
     display: none !important;
 }
 
-/* Inactive transparent buttons should never capture pointer events */
+/* Inactive transparent buttons & indicators should never capture pointer events */
 .filepond--root .filepond--file-action-button[style*='opacity: 0'],
-.filepond--root .filepond--file-action-button[style*='opacity:0'] {
+.filepond--root .filepond--file-action-button[style*='opacity:0'],
+.filepond--root .filepond--progress-indicator[style*='opacity: 0'],
+.filepond--root .filepond--progress-indicator[style*='opacity:0'] {
     opacity: 0 !important;
     pointer-events: none !important;
     visibility: hidden !important;
@@ -638,10 +640,23 @@
     right: 0.875rem !important;
 }
 
-/* Specific positioning for Retry action buttons: positioned to the LEFT of the Remove button with 0.4rem spacing */
+/* Download action button: positioned next to the Remove button */
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-download-item {
+    right: 3.125rem !important;
+}
+
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='busy'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='load-'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--action-download-item {
+    display: none !important;
+}
+
+/* Process (Upload again) and Retry action buttons: positioned to the left of Download button */
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-process-item,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load {
-    right: 3.125rem !important;
+    right: 5.375rem !important;
 }
 
 .filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:hover,
@@ -653,10 +668,14 @@
     transform: translateY(-50%) scale(1.05) !important;
 }
 
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-process-item:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-process-item:focus,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing:hover,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing:focus,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load:hover,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load:focus {
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load:focus,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-download-item:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-download-item:focus {
     background-color: color-mix(in srgb, var(--primary) 12%, var(--card)) !important;
     color: var(--primary) !important;
     border-color: color-mix(in srgb, var(--primary) 40%, transparent) !important;
@@ -746,7 +765,9 @@
     animation: spin 0.85s linear infinite !important;
 }
 
-/* Hide progress indicator cleanly when processing completes */
+/* Hide progress indicator cleanly when item is idle, cancelled, error, or processing complete */
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='idle'] .filepond--progress-indicator,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--progress-indicator,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='processing-complete'] .filepond--progress-indicator {
     opacity: 0 !important;
     visibility: hidden !important;

@@ -91,6 +91,16 @@ return [
         'submit_btn' => 'Save & Test Request',
     ],
 
+    // Section: Preloaded / Existing Files (Edit Form)
+    'existing_files_section' => [
+        'title' => 'Preloaded & Existing Files (Edit Form)',
+        'desc' => 'When building <strong>Edit Forms</strong> (e.g. Edit Profile, Edit Document, or Edit Product), you can preload files that already exist on the server or Cloud Storage (S3) using the <code class="text-xs font-mono text-primary font-semibold">:files="..."</code> or <code class="text-xs font-mono text-primary font-semibold">:existing-files="..."</code> prop. Each loaded file also features a direct <strong>Download</strong> action button so users can quickly retrieve the original file.',
+        'preview_multiple_title' => 'Edit Form Attachments (PDF & Image from S3)',
+        'preview_avatar_title' => 'Edit Profile Photo (Avatar Mode from S3)',
+        'btn_submit' => 'Save Changes (Test Request)',
+        'info_keys' => 'Existing files are automatically synced into hidden form inputs, ensuring previously uploaded keys/URLs are submitted safely without re-uploading.',
+    ],
+
     // Section 8: Livewire
     'livewire' => [
         'title' => 'Native Livewire v3 Integration',

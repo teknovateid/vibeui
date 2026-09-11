@@ -20,7 +20,8 @@ class FilepondController extends Controller
 
     public function requestTest(Request $request)
     {
-        $all = $request->all();
+        dd($request);
+        $all = $this->mergeInputsAndFiles($request->input(), $request->allFiles());
         $formatted = [];
 
         foreach ($all as $key => $value) {
@@ -32,6 +33,33 @@ class FilepondController extends Controller
             'request' => $formatted,
             'timestamp' => now()->toIso8601String(),
         ]);
+    }
+
+    /**
+     * Merge request input data and uploaded files safely, ensuring files are not
+     * overwritten or discarded when both string inputs and files share the same key (e.g. documents[]).
+     */
+    protected function mergeInputsAndFiles(array $input, array $files): array
+    {
+        $merged = $input;
+
+        foreach ($files as $key => $fileVal) {
+            if (!isset($merged[$key])) {
+                $merged[$key] = $fileVal;
+            } elseif (is_array($merged[$key]) && is_array($fileVal)) {
+                if (array_is_list($merged[$key]) && array_is_list($fileVal)) {
+                    $merged[$key] = array_merge($merged[$key], $fileVal);
+                } else {
+                    $merged[$key] = $this->mergeInputsAndFiles($merged[$key], $fileVal);
+                }
+            } elseif (is_array($merged[$key])) {
+                $merged[$key][] = $fileVal;
+            } else {
+                $merged[$key] = [$merged[$key], $fileVal];
+            }
+        }
+
+        return $merged;
     }
 
     /**
@@ -82,18 +110,42 @@ class FilepondController extends Controller
         $rawFilename = $request->filename ?? Str::random(10);
         $extension = pathinfo($rawFilename, PATHINFO_EXTENSION);
         $hashedName = hash('sha256', $rawFilename . microtime()) . ($extension ? '.' . $extension : '');
-
-        $url = Storage::temporaryUploadUrl(
-            'public/presigned/' . $hashedName,
-            now()->addMinutes(15)
-        );
-
-        // $url = Storage::temporaryUploadUrl('public/presigned/' . ($request->filename ?? Str::random(10)), now()->addMinutes(15));
+        
+        $url = Storage::temporaryUploadUrl('public/presigned/' . $hashedName, now()->addMinutes(15));
 
         return response()->json([
             'url' => $url,
-            // 'full-url' => Storage::url($url),
-            'method' => 'PUT',
         ]);
+    }
+
+    /**
+     * Download proxy to stream remote/S3 files with forced Content-Disposition: attachment header.
+     */
+    public function download(Request $request)
+    {
+        $url = $request->query('url');
+        $filename = $request->query('name') ?: basename(parse_url((string) $url, PHP_URL_PATH) ?: 'download');
+
+        if (!$url || !filter_var($url, FILTER_VALIDATE_URL)) {
+            abort(400, 'Invalid URL parameter');
+        }
+
+        try {
+            $response = \Illuminate\Support\Facades\Http::timeout(15)->get($url);
+            if (!$response->successful()) {
+                abort(404, 'File not found');
+            }
+
+            $contentType = $response->header('Content-Type') ?: 'application/octet-stream';
+            $body = $response->body();
+
+            return response($body, 200, [
+                'Content-Type' => $contentType,
+                'Content-Disposition' => 'attachment; filename="' . addslashes($filename) . '"',
+                'Content-Length' => strlen($body),
+            ]);
+        } catch (\Throwable $e) {
+            return redirect()->away($url);
+        }
     }
 }
