@@ -78,14 +78,15 @@ class VibeCommand extends Command
     {
         $actions = [];
 
+        $actions['page'] = 'Generate a new page inside a layout';
+        $actions['table'] = 'Create a new Livewire DataTable component';
+        $actions['layout'] = 'Generate a layout panel';
+
         if (! InstallCommand::isInstalled()) {
             $actions['install'] = 'Install Vibe UI (Publish config & inject assets)';
         }
 
         $actions['component'] = 'Publish a Vibe UI component';
-        $actions['table'] = 'Create a new Livewire DataTable component';
-        $actions['page'] = 'Generate a new page inside a layout';
-        $actions['layout'] = 'Generate a layout panel';
 
         if ($this->hasPackagesDirectory()) {
             $actions['sync'] = 'Synchronize resources into packages/vibe';
