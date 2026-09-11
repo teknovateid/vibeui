@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.10] - 2026-09-11
+
+### 🚀 Features
+- feat: add context menu and design system to global search modal with bilingual support (9f40824)
+
+
 ## [0.1.9] - 2026-09-11
 
 ### 🧰 Maintenance & Documentation
