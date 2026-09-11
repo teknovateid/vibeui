@@ -153,12 +153,10 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
         const itemEl = findItemEl();
         if (!itemEl) return;
 
-        // Skip avatar mode since it has its own circular layout
+        // Check if avatar mode
         const wrapper = itemEl.closest('.filepond-avatar-mode') || itemEl.closest('[data-vibe-filepond].filepond-avatar-mode');
         const rootEl = itemEl.closest('.filepond--root');
-        if (wrapper || (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle')))) {
-            return;
-        }
+        const isAvatar = Boolean(wrapper || (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle'))));
 
         const fileWrapper = itemEl.querySelector('.filepond--file');
         if (!fileWrapper) return;
@@ -172,6 +170,40 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
                 name = item.source.split('/').pop().split('?')[0];
             }
         }
+
+        // Special handling for Avatar Mode:
+        // Render crisp circular <img> inside avatar wrapper to display preloaded S3 images and local uploads without canvas CORS blanking
+        if (isAvatar) {
+            let avatarImgUrl = null;
+            if (file instanceof File || file instanceof Blob) {
+                if (file.size > 0) {
+                    avatarImgUrl = URL.createObjectURL(file);
+                    registerCreatedBlobUrl(avatarImgUrl, blobUrlSet);
+                }
+            }
+            if (!avatarImgUrl) {
+                if (typeof item.source === 'string' && item.source.length > 0) {
+                    avatarImgUrl = item.source;
+                } else if (typeof item.file === 'string' && item.file.length > 0) {
+                    avatarImgUrl = item.file;
+                }
+            }
+
+            if (avatarImgUrl) {
+                let avatarImg = fileWrapper.querySelector('.filepond--avatar-preview-img');
+                if (!avatarImg) {
+                    avatarImg = document.createElement('img');
+                    avatarImg.className = 'filepond--avatar-preview-img';
+                    avatarImg.alt = name || 'Avatar preview';
+                    fileWrapper.prepend(avatarImg);
+                }
+                if (avatarImg.src !== avatarImgUrl) {
+                    avatarImg.src = avatarImgUrl;
+                }
+            }
+            return;
+        }
+
         const ext = (name.split('.').pop() || '').toUpperCase();
         const isImage = (file && file.type && file.type.startsWith('image/')) ||
                         ['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'SVG', 'AVIF'].includes(ext);
@@ -249,6 +281,15 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
                     <line x1="12" y1="15" x2="12" y2="3"/>
                 </svg>
             `;
+
+            // Only show download button for preloaded files or successfully uploaded files
+            const isPreloaded = item.origin === 1 || Boolean(item.serverId) || (typeof item.source === 'string' && (item.source.startsWith('http') || item.source.startsWith('/')));
+            const isComplete = item.status === 5; // ItemStatus.PROCESSING_COMPLETE
+            if (!isPreloaded && !isComplete) {
+                downloadBtn.style.display = 'none';
+            } else {
+                downloadBtn.style.display = '';
+            }
 
             downloadBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
@@ -587,9 +628,7 @@ export function vibeFilepond(config = {}) {
                     if (e.target.closest('.filepond--file-action-button') || e.target.closest('.filepond--action-remove-item')) {
                         return;
                     }
-                    if (this.pond && this.pond.getFiles().length === 0) {
-                        this.browse();
-                    }
+                    this.browse();
                 });
             }
 
@@ -897,14 +936,15 @@ export function vibeFilepond(config = {}) {
                 stylePanelLayout: cfg.avatar ? 'compact circle' : (cfg.panelLayout || null),
                 styleLoadIndicatorPosition: cfg.avatar ? 'center bottom' : (cfg.loadIndicatorPosition || 'right'),
                 styleProgressIndicatorPosition: cfg.avatar ? 'right bottom' : (cfg.progressIndicatorPosition || 'right'),
-                styleButtonRemoveItemPosition: cfg.avatar ? 'left bottom' : (cfg.buttonRemoveItemPosition || 'left'),
+                styleButtonRemoveItemPosition: cfg.avatar ? 'left bottom' : (cfg.buttonRemoveItemPosition || 'right'),
                 styleButtonProcessItemPosition: cfg.avatar ? 'right bottom' : (cfg.buttonProcessItemPosition || 'right'),
 
                 // Modern crisp SVG icons (replaces FilePond's tiny 8px padded icons)
                 iconRemove: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
                 iconRetry: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/></svg>',
                 iconProcess: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>',
-                iconUndo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>',
+                // Use X (remove) icon instead of back/undo arrow when uploaded:
+                iconUndo: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
 
                 // Labels & Translations
                 ...(cfg.labels || {}),
@@ -921,12 +961,6 @@ export function vibeFilepond(config = {}) {
                     self.hasError = false;
                 },
                 onaddfile: (err, item) => {
-                    if (err) {
-                        self.hasError = true;
-                        self.serverError = self.extractErrorMessage(err);
-                        self.fireEvent('error', { error: err, item: item });
-                        return;
-                    }
                     attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
                     self.updateReactiveState();
                     self.fireEvent('add', { item: item });
@@ -993,6 +1027,14 @@ export function vibeFilepond(config = {}) {
                     }
                     self.serverError = null; // clear any previous server error on successful upload
                     self.hasError = false;
+
+                    // Reveal download button for successfully uploaded file
+                    if (item && item.id && self.pond && self.pond.element) {
+                        const itemEl = self.pond.element.querySelector(`[data-filepond-item-id="${item.id}"]`);
+                        const dlBtn = itemEl?.querySelector('.filepond--action-download-item');
+                        if (dlBtn) dlBtn.style.display = '';
+                    }
+
                     self.fireEvent('success', { item: item, key: item?.serverId, progress: 100 });
                 },
                 onprocessfileabort: (item) => {
@@ -1002,6 +1044,14 @@ export function vibeFilepond(config = {}) {
                     self.updateReactiveState();
                     self.serverError = null; // clear server error on abort
                     self.hasError = false;
+
+                    // Ensure download button is hidden on aborted/cancelled uploads
+                    if (item && item.id && self.pond && self.pond.element) {
+                        const itemEl = self.pond.element.querySelector(`[data-filepond-item-id="${item.id}"]`);
+                        const dlBtn = itemEl?.querySelector('.filepond--action-download-item');
+                        if (dlBtn) dlBtn.style.display = 'none';
+                    }
+
                     self.fireEvent('abort', { item: item });
                 },
                 onprocessfilerevert: (item) => {
@@ -1125,8 +1175,25 @@ export function vibeFilepond(config = {}) {
                     })
                     .catch(err => {
                         if (err.name !== 'AbortError') {
-                            console.warn('[Vibe FilePond] Preloaded file fetch error:', source, err);
-                            error(err.message);
+                            const filename = decodeURIComponent(source.split('/').pop().split('?')[0]);
+                            const detectedType = (/\.png$/i.test(filename) ? 'image/png' : (/\.jpe?g$/i.test(filename) ? 'image/jpeg' : (/\.pdf$/i.test(filename) ? 'application/pdf' : 'application/octet-stream')));
+                            let mockFile = null;
+                            try {
+                                mockFile = new File([''], filename, { type: detectedType });
+                            } catch (e) {
+                                mockFile = new Blob([''], { type: detectedType });
+                            }
+                            load(mockFile);
+
+                            setTimeout(() => {
+                                if (self.pond && typeof self.pond.getFiles === 'function') {
+                                    const files = self.pond.getFiles();
+                                    const matched = files.find(f => f.source === source || (f.file && f.file.name === filename));
+                                    if (matched) {
+                                        attachCustomFileIcon(matched, self._blobUrls, true);
+                                    }
+                                }
+                            }, 50);
                         }
                     });
 

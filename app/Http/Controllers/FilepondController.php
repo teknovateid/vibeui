@@ -15,7 +15,28 @@ class FilepondController extends Controller
      */
     public function index()
     {
-        return view('docs.filepond.index');
+        $allFiles = Storage::allFiles('public/presigned');
+
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'webp', 'gif', 'svg'];
+
+        // Cari file berformat gambar untuk avatar (prioritaskan nama yang mengandung "avatar")
+        $avatarFile = collect($allFiles)->first(function ($file) use ($imageExtensions) {
+            return str_contains(strtolower($file), 'avatar') && in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions);
+        }) ?? collect($allFiles)->first(function ($file) use ($imageExtensions) {
+            return in_array(strtolower(pathinfo($file, PATHINFO_EXTENSION)), $imageExtensions);
+        });
+
+        $existingFiles = collect($allFiles)
+            ->take(3)
+            ->map(fn($file) => Storage::url($file))
+            ->values()
+            ->all();
+
+        $existingAvatar = $avatarFile
+            ? Storage::url($avatarFile)
+            : 'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png';
+
+        return view('docs.filepond.index', compact('existingFiles', 'existingAvatar'));
     }
 
     public function requestTest(Request $request)
@@ -109,7 +130,7 @@ class FilepondController extends Controller
         $rawFilename = $request->filename ?? Str::random(10);
         $extension = pathinfo($rawFilename, PATHINFO_EXTENSION);
         $hashedName = hash('sha256', $rawFilename . microtime()) . ($extension ? '.' . $extension : '');
-        
+
         $url = Storage::temporaryUploadUrl('public/presigned/' . $hashedName, now()->addMinutes(15));
 
         return response()->json([

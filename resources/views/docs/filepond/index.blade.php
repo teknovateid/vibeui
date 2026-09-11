@@ -568,10 +568,7 @@
                                 name="documents" 
                                 label="Lampiran Dokumen Proyek" 
                                 description="Berkas yang tersimpan di S3/Cloud Storage dimuat secara otomatis dan dapat diunduh."
-                                :files="[
-                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png',
-                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/316ef42fba0b43f0b5fa0d9e93e5cbafee9a315bb894fbc604a0974d92dccd91.pdf',
-                                ]" 
+                                :files="$existingFiles" 
                                 multiple 
                             />
                             <div class="flex justify-end pt-1">
@@ -587,10 +584,7 @@
                                 name="documents" 
                                 label="Lampiran Dokumen Proyek" 
                                 description="Berkas yang tersimpan di S3/Cloud Storage dimuat secara otomatis dan dapat diunduh."
-                                :files="[
-                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png',
-                                    'https://s3.teknovate.co.id/vibe-ui/public/presigned/316ef42fba0b43f0b5fa0d9e93e5cbafee9a315bb894fbc604a0974d92dccd91.pdf',
-                                ]" 
+                                :files="$existingFiles" 
                                 multiple 
                             />
                             <div class="flex justify-end pt-1">
@@ -614,7 +608,7 @@
                                 name="avatar" 
                                 label="Foto Profil" 
                                 avatar 
-                                :files="'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png'" 
+                                :files="$existingAvatar" 
                             />
                             <div class="flex justify-center pt-1">
                                 <\vibe:button type="submit" variant="primary" size="sm">
@@ -629,7 +623,7 @@
                                 name="avatar" 
                                 label="Foto Profil" 
                                 avatar 
-                                :files="'https://s3.teknovate.co.id/vibe-ui/public/presigned/sample-avatar.png'" 
+                                :files="$existingAvatar" 
                             />
                             <div class="flex justify-center pt-1">
                                 <vibe:button type="submit" variant="primary" size="sm">
