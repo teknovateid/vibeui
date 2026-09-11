@@ -48,6 +48,16 @@
             'icon' => 'folder',
             'keywords' => 'directories struktur folder file architecture',
         ],
+        [
+            'id' => 'menu-design-system',
+            'title' => __('docs/sidebar.nav.design_system') ?: __('docs/search.menu_items.design_system.title'),
+            'subtitle' => __('docs/search.menu_items.design_system.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
+            'url' => route('docs.design-system.index'),
+            'icon' => 'theme',
+            'keywords' => 'design system color semantic warna varian primary secondary danger success warning info rules pedoman palet',
+        ],
 
         // Components - Forms
         [
@@ -180,7 +190,17 @@
             'section' => $navSections['ui'],
             'url' => route('docs.dropdown.index'),
             'icon' => 'dropdown',
-            'keywords' => 'dropdown menu context popup flyout',
+            'keywords' => 'dropdown menu popup flyout popover opsi',
+        ],
+        [
+            'id' => 'menu-context',
+            'title' => __('docs/sidebar.nav.context') ?: __('docs/search.menu_items.context.title'),
+            'subtitle' => __('docs/search.menu_items.context.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
+            'url' => route('docs.context.index'),
+            'icon' => 'context',
+            'keywords' => 'context menu contextmenu klik kanan right click popover table row action sheet submenu delete',
         ],
         [
             'id' => 'menu-badge',
@@ -1005,6 +1025,10 @@
 
             renderIcon(iconName, category) {
                 switch (iconName) {
+                    case 'context':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M9 9h.01" /><path d="M9 12h6" /><path d="M9 15h4" /></svg>`;
+                    case 'dropdown':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="m9 10 3 3 3-3" /></svg>`;
                     case 'user':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
                     case 'chart':

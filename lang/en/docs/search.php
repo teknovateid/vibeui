@@ -89,6 +89,10 @@ return [
             'title' => 'Directories',
             'subtitle' => 'Folder structure and codebase architecture',
         ],
+        'design_system' => [
+            'title' => 'Color Design System',
+            'subtitle' => 'Semantic color variant rules, UI guidelines, and palette',
+        ],
         'form' => [
             'title' => 'Form',
             'subtitle' => 'Form container, validation, and input handling',
@@ -136,6 +140,10 @@ return [
         'dropdown' => [
             'title' => 'Dropdown',
             'subtitle' => 'Contextual dropdown menus & keyboard navigation',
+        ],
+        'context' => [
+            'title' => 'Context Menu',
+            'subtitle' => 'Right-click contextual menu with dynamic positioning',
         ],
         'badge' => [
             'title' => 'Badge',

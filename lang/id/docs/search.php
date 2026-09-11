@@ -89,6 +89,10 @@ return [
             'title' => 'Direktori',
             'subtitle' => 'Struktur folder dan arsitektur kode sumber',
         ],
+        'design_system' => [
+            'title' => 'Color Design System',
+            'subtitle' => 'Aturan semantik varian warna, pedoman UI, dan palet',
+        ],
         'form' => [
             'title' => 'Form',
             'subtitle' => 'Container form, validasi, dan handling input',
@@ -136,6 +140,10 @@ return [
         'dropdown' => [
             'title' => 'Dropdown',
             'subtitle' => 'Menu dropdown kontekstual & keyboard navigate',
+        ],
+        'context' => [
+            'title' => 'Context Menu',
+            'subtitle' => 'Menu kontekstual klik kanan dengan positioning dinamis',
         ],
         'badge' => [
             'title' => 'Badge',
