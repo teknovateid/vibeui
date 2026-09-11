@@ -343,6 +343,16 @@
             'keywords' => 'tabs panel pill navigation segmented switch',
         ],
         [
+            'id' => 'menu-accordion',
+            'title' => __('docs/sidebar.nav.accordion') ?: 'Accordion',
+            'subtitle' => 'Collapsible disclosure panel & FAQ component',
+            'category' => $catMenu,
+            'section' => $navSections['layout'] ?? 'Komponen',
+            'url' => route('docs.accordion.index'),
+            'icon' => 'sheet',
+            'keywords' => 'accordion collapse disclosure faq expand panel fold',
+        ],
+        [
             'id' => 'menu-highlightjs',
             'title' => __('docs/sidebar.nav.highlightjs') ?: __('docs/search.menu_items.highlightjs.title'),
             'subtitle' => __('docs/search.menu_items.highlightjs.subtitle'),

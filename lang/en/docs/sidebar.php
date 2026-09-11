@@ -40,6 +40,7 @@ return [
         'modal' => 'Modal',
         'sheet' => 'Sheet',
         'tabs' => 'Tabs',
+        'accordion' => 'Accordion',
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',

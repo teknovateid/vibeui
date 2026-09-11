@@ -52,6 +52,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/toast', 'docs.toast.index')->name('toast.index');
     Route::view('/sheet', 'docs.sheet.index')->name('sheet.index');
     Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
+    Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
     
     Route::get('/chart', function () {
