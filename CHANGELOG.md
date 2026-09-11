@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.11] - 2026-09-11
+
+### 🐛 Bug Fixes
+- fix(ci): trigger GitHub release on production branch push and push tag first (a5bed0e)
+
+
 ## [0.1.10] - 2026-09-11
 
 ### 🚀 Features
