@@ -45,13 +45,13 @@
                 @dragend="endDrag($el, $event)"
                 title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}"
             @endif
-            class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border/60 rounded-t-xl select-none group {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/60 transition-colors' : '' }}"
+            class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border/60 rounded-t-xl select-none group/header {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/60 transition-colors' : '' }}"
         >
             {{-- Left: Drag Handle, Badge & Title --}}
             <div class="flex items-center gap-2 min-w-0 pointer-events-none">
                 @if ($allowReorder)
                     {{-- Drag Handle --}}
-                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1" />
                             <circle cx="9" cy="12" r="1" />
@@ -189,11 +189,11 @@
                 @dragend="endDrag($el, $event)"
                 title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}"
             @endif
-            class="flex items-center justify-between pb-2 mb-3 border-b border-border/50 select-none {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/30 transition-colors' : '' }}"
+            class="flex items-center justify-between pb-2 mb-3 border-b border-border/50 select-none group/header {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/30 transition-colors' : '' }}"
         >
             <div class="flex items-center gap-2 pointer-events-none">
                 @if ($allowReorder)
-                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors flex items-center justify-center shrink-0 select-none">
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1" />
                             <circle cx="9" cy="12" r="1" />
