@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.13] - 2026-09-11
+
+### 🧰 Maintenance & Documentation
+- chore: remove debug dump from FilepondController request test method (1cb8ea7)
+
+
 ## [0.1.12] - 2026-09-11
 
 ### 🚀 Features
