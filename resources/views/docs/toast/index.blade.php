@@ -368,7 +368,88 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                 </div>
             </section>
 
-            {{-- 6. Props & Payload Reference --}}
+            {{-- 6. Programmatic Control ($vibe.toast & $vibe.toasts) --}}
+            <section id="kontrol-programatik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/toast.programmatic.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/toast.programmatic.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/toast.programmatic.preview_title')">
+                    <vibe:preview.code>
+{{-- 1. Shorthand Semantic Methods --}}
+<vibe:button variant="success" size="sm" @click="$vibe.toast.success('{{ __('docs/toast.programmatic.success_msg') }}', '{{ __('docs/toast.programmatic.success_title') }}')">
+    {{ __('docs/toast.programmatic.success_btn') }}
+</vibe:button>
+
+<vibe:button variant="destructive" size="sm" @click="$vibe.toast.error('{{ __('docs/toast.programmatic.error_msg') }}', '{{ __('docs/toast.programmatic.error_title') }}')">
+    {{ __('docs/toast.programmatic.error_btn') }}
+</vibe:button>
+
+<vibe:button variant="warning" size="sm" @click="$vibe.toast.warning('{{ __('docs/toast.programmatic.warning_msg') }}', '{{ __('docs/toast.programmatic.warning_title') }}')">
+    {{ __('docs/toast.programmatic.warning_btn') }}
+</vibe:button>
+
+<vibe:button variant="info" size="sm" @click="$vibe.toast.info('{{ __('docs/toast.programmatic.info_msg') }}', '{{ __('docs/toast.programmatic.info_title') }}')">
+    {{ __('docs/toast.programmatic.info_btn') }}
+</vibe:button>
+
+{{-- 2. Tutup Semua Toast Aktif --}}
+<vibe:button variant="secondary" size="sm" @click="$vibe.toasts.close()">
+    {{ __('docs/toast.programmatic.close_all_btn') }}
+</vibe:button>
+                    </vibe:preview.code>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <vibe:button variant="success" size="sm" @click="$vibe.toast.success('{{ __('docs/toast.programmatic.success_msg') }}', '{{ __('docs/toast.programmatic.success_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            {{ __('docs/toast.programmatic.success_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="destructive" size="sm" @click="$vibe.toast.error('{{ __('docs/toast.programmatic.error_msg') }}', '{{ __('docs/toast.programmatic.error_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                            {{ __('docs/toast.programmatic.error_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="warning" size="sm" @click="$vibe.toast.warning('{{ __('docs/toast.programmatic.warning_msg') }}', '{{ __('docs/toast.programmatic.warning_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            {{ __('docs/toast.programmatic.warning_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="info" size="sm" @click="$vibe.toast.info('{{ __('docs/toast.programmatic.info_msg') }}', '{{ __('docs/toast.programmatic.info_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            {{ __('docs/toast.programmatic.info_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="secondary" size="sm" @click="$vibe.toasts.close()">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                            {{ __('docs/toast.programmatic.close_all_btn') }}
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 7. Props & Payload Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/toast.props.title') }}</h2>
@@ -439,6 +520,27 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                         </vibe:table.rows>
                     </vibe:table>
                 </div>
+
+                {{-- Helper $vibe.toast & Events Reference --}}
+                <div class="space-y-2 pt-4">
+                    <p class="text-sm font-semibold text-foreground">{{ __('docs/toast.props.events_title') }}</p>
+                    <p class="text-xs text-muted-foreground">{{ __('docs/toast.props.events_desc') }}</p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.th_event') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/toast.props.th_payload') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/toast.props.th_event_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/toast.props.events') as $event)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $event['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground text-xs whitespace-nowrap">{{ $event['payload'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $event['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
                 </div>
             </section>
 

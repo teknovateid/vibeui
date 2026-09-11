@@ -222,6 +222,17 @@
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
     "
+    x-on:close-toast.window="
+        let d = $event.detail;
+        let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d);
+        if (!t || t === '*') {
+            toasts.forEach(item => { if (item.timer) clearTimeout(item.timer); });
+            toasts = [];
+            heights = {};
+        } else {
+            remove(t);
+        }
+    "
     class="fixed z-100 flex flex-col pointer-events-none"
     :class="[getPositionClasses(), getMarginClasses()]"
 >

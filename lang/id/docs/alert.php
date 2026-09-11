@@ -119,15 +119,87 @@ return [
         'desc' => 'Komponen alert dapat dipicu melalui berbagai metode fleksibel: helper JavaScript global, direktif Blade, atau event browser dari Livewire.',
     ],
 
-    // Section 9: Props Reference
+    // Section 9: Programmatic Control
+    'programmatic' => [
+        'title' => 'Kontrol Programatik ($vibe.alert & $vibe.alerts)',
+        'desc' => 'Dialog alert dapat dipicu secara deklaratif dari template Alpine.js menggunakan magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.alert</code> maupun dari vanilla JavaScript dengan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.alert</code>. Untuk menutup seluruh alert aktif, gunakan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.alerts.close()</code>.',
+        'preview_title' => 'Demo Kontrol Programatik Alert',
+        'success_btn' => 'Success Alert',
+        'error_btn' => 'Error Alert',
+        'warning_btn' => 'Warning Alert',
+        'info_btn' => 'Info Alert',
+        'confirm_btn' => 'Dialog Konfirmasi',
+        'close_all_btn' => 'Tutup Semua Alert ($vibe.alerts.close)',
+        'success_title' => 'Operasi Berhasil',
+        'success_msg' => 'Data Anda telah tersimpan dengan aman di cloud.',
+        'error_title' => 'Kesalahan Terjadi',
+        'error_msg' => 'Gagal memproses transaksi. Silakan coba kembali.',
+        'warning_title' => 'Peringatan Keamanan',
+        'warning_msg' => 'Sesi Anda akan segera berakhir dalam hitungan menit.',
+        'info_title' => 'Informasi Penting',
+        'info_msg' => 'Pemeliharaan server dijadwalkan malam ini pukul 00:00.',
+        'confirm_title' => 'Konfirmasi Lanjutkan Tindakan',
+        'confirm_msg' => 'Apakah Anda ingin melanjutkan tindakan ini?',
+        'confirm_yes' => 'Ya, Lanjutkan',
+        'confirm_toast' => 'Tindakan berhasil dikonfirmasi!',
+    ],
+
+    // Section 10: Props Reference
     'props' => [
         'title' => 'Referensi Opsi (Payload API)',
-        'desc' => 'Daftar lengkap konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeAlert(options)</code>.',
+        'desc' => 'Daftar lengkap konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeAlert(options)</code> atau helper <code class="font-mono text-xs text-foreground">$vibe.alert</code>.',
         'columns' => [
             'prop' => 'Opsi',
             'type' => 'Tipe',
             'default' => 'Default',
             'desc' => 'Deskripsi',
+        ],
+        'events_title' => 'Referensi Event Window & Helper $vibe',
+        'events_desc' => 'Event browser global dan helper Alpine.js $vibe untuk memicu atau menutup dialog alert.',
+        'th_event' => 'Nama Event / Helper',
+        'th_payload' => 'Payload Data',
+        'th_event_desc' => 'Keterangan',
+        'events' => [
+            [
+                'name' => "alert / \$vibe.alert(payload)",
+                'payload' => 'object|string',
+                'desc' => 'Memunculkan dialog alert baru dengan pesan dan opsi yang ditentukan.',
+            ],
+            [
+                'name' => "\$vibe.alert.success(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi alert sukses.',
+            ],
+            [
+                'name' => "\$vibe.alert.error(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi alert error.',
+            ],
+            [
+                'name' => "\$vibe.alert.warning(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi alert peringatan.',
+            ],
+            [
+                'name' => "\$vibe.alert.info(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi alert info.',
+            ],
+            [
+                'name' => "\$vibe.alert.confirm(opsi)",
+                'payload' => 'object',
+                'desc' => 'Memunculkan dialog konfirmasi tindakan dengan tombol aksi primer dan sekunder.',
+            ],
+            [
+                'name' => "close-alert / \$vibe.alert.close(id)",
+                'payload' => 'string (alertId)',
+                'desc' => 'Menutup alert spesifik berdasarkan ID.',
+            ],
+            [
+                'name' => "\$vibe.alerts.close()",
+                'payload' => "'*'",
+                'desc' => 'Menutup seluruh dialog alert yang sedang aktif di layar.',
+            ],
         ],
     ],
 

@@ -532,7 +532,82 @@
                 </vibe:preview>
             </section>
 
-            {{-- 7. Props Reference --}}
+            {{-- 7. Programmatic Control ($vibe.dropdown & $vibe.dropdowns) --}}
+            <section id="kontrol-programatik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/dropdown.programmatic.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/dropdown.programmatic.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/dropdown.programmatic.preview_title')" minHeight="260px">
+                    <vibe:preview.code>
+{{-- Tombol Kontrol Eksternal --}}
+<div class="flex flex-wrap gap-2 items-center">
+    <vibe:button variant="primary" size="sm" @click="$vibe.dropdown('remote-demo').toggle()">
+        {{ __('docs/dropdown.programmatic.toggle_btn') }}
+    </vibe:button>
+    <vibe:button variant="outline" size="sm" @click="$vibe.dropdown('remote-demo').show()">
+        {{ __('docs/dropdown.programmatic.open_btn') }}
+    </vibe:button>
+    <vibe:button variant="secondary" size="sm" @click="$vibe.dropdowns.close()">
+        {{ __('docs/dropdown.programmatic.close_all_btn') }}
+    </vibe:button>
+</div>
+
+{{-- Komponen Dropdown dengan ID --}}
+<vibe:dropdown id="remote-demo">
+    <x-slot:trigger>
+        <vibe:button variant="outline" size="sm">
+            <span>{{ __('docs/dropdown.programmatic.target_dropdown') }}</span>
+            <svg class="size-4 ml-1.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+        </vibe:button>
+    </x-slot:trigger>
+
+    <vibe:dropdown.content align="left" width="56">
+        <vibe:dropdown.label>{{ __('docs/dropdown.programmatic.quick_actions') }}</vibe:dropdown.label>
+        <vibe:dropdown.item>{{ __('docs/dropdown.programmatic.edit_profile') }}</vibe:dropdown.item>
+        <vibe:dropdown.item>{{ __('docs/dropdown.programmatic.account_settings') }}</vibe:dropdown.item>
+        <vibe:dropdown.divider />
+        <vibe:dropdown.item destructive @click="$vibe.dropdown('remote-demo').close()">{{ __('docs/dropdown.programmatic.close_dropdown') }}</vibe:dropdown.item>
+    </vibe:dropdown.content>
+</vibe:dropdown>
+                    </vibe:preview.code>
+                    <div class="w-full flex flex-col sm:flex-row items-center justify-center gap-6 p-6">
+                        <div class="flex flex-wrap gap-2 items-center justify-center">
+                            <vibe:button variant="primary" size="sm" @click="$vibe.dropdown('remote-demo').toggle()">
+                                {{ __('docs/dropdown.programmatic.toggle_btn') }}
+                            </vibe:button>
+                            <vibe:button variant="outline" size="sm" @click="$vibe.dropdown('remote-demo').show()">
+                                {{ __('docs/dropdown.programmatic.open_btn_short') }}
+                            </vibe:button>
+                            <vibe:button variant="secondary" size="sm" @click="$vibe.dropdowns.close()">
+                                {{ __('docs/dropdown.programmatic.close_all_btn_short') }}
+                            </vibe:button>
+                        </div>
+
+                        <vibe:dropdown id="remote-demo">
+                            <x-slot:trigger>
+                                <vibe:button variant="outline" size="sm">
+                                    <span>{{ __('docs/dropdown.programmatic.target_dropdown') }}</span>
+                                    <svg class="size-4 ml-1.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                                </vibe:button>
+                            </x-slot:trigger>
+
+                            <vibe:dropdown.content align="left" width="56">
+                                <vibe:dropdown.label>{{ __('docs/dropdown.programmatic.quick_actions') }}</vibe:dropdown.label>
+                                <vibe:dropdown.item>{{ __('docs/dropdown.programmatic.edit_profile') }}</vibe:dropdown.item>
+                                <vibe:dropdown.item>{{ __('docs/dropdown.programmatic.account_settings') }}</vibe:dropdown.item>
+                                <vibe:dropdown.divider />
+                                <vibe:dropdown.item destructive @click="$vibe.dropdown('remote-demo').close()">{{ __('docs/dropdown.programmatic.close_dropdown') }}</vibe:dropdown.item>
+                            </vibe:dropdown.content>
+                        </vibe:dropdown>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 8. Props Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/dropdown.props.title') }}</h2>
@@ -553,6 +628,7 @@
                     <vibe:table.rows>
                         @php
                             $dropdownProps = [
+                                ['id', 'string|null', 'null', __('docs/dropdown.props_items.dropdown.id')],
                                 ['keyboard', 'bool', 'false', __('docs/dropdown.props_items.dropdown.keyboard')],
                             ];
                         @endphp
@@ -685,6 +761,28 @@
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>
+
+                {{-- Window Events & $vibe Helper Table --}}
+                <div class="space-y-2 pt-4">
+                    <p class="text-sm font-semibold text-foreground">{{ __('docs/dropdown.props.events_title') }}</p>
+                    <p class="text-xs text-muted-foreground">{!! __('docs/dropdown.props.events_desc') !!}</p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/dropdown.props.th_event') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/dropdown.props.th_payload') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/dropdown.props.th_event_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/dropdown.props.events') as $event)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $event['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground text-xs whitespace-nowrap">{{ $event['payload'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $event['desc'] }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
             </section>
 
         </div>

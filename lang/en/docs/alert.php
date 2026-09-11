@@ -119,15 +119,87 @@ return [
         'desc' => 'Alert modals can be triggered across various touchpoints: global JavaScript helper, Blade directive, or Livewire browser events.',
     ],
 
-    // Section 9: Props Reference
+    // Section 9: Programmatic Control
+    'programmatic' => [
+        'title' => 'Programmatic Control ($vibe.alert & $vibe.alerts)',
+        'desc' => 'Alert dialogs can be triggered declaratively from Alpine.js templates using the magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.alert</code> or from vanilla JavaScript via <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.alert</code>. To close all active alert dialogs, use <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.alerts.close()</code>.',
+        'preview_title' => 'Alert Programmatic Control Demo',
+        'success_btn' => 'Success Alert',
+        'error_btn' => 'Error Alert',
+        'warning_btn' => 'Warning Alert',
+        'info_btn' => 'Info Alert',
+        'confirm_btn' => 'Confirmation Dialog',
+        'close_all_btn' => 'Close All Alerts ($vibe.alerts.close)',
+        'success_title' => 'Operation Succeeded',
+        'success_msg' => 'Your data has been safely saved to the cloud.',
+        'error_title' => 'An Error Occurred',
+        'error_msg' => 'Failed to process transaction. Please try again.',
+        'warning_title' => 'Security Warning',
+        'warning_msg' => 'Your session is about to expire in a few minutes.',
+        'info_title' => 'Important Notice',
+        'info_msg' => 'Server maintenance is scheduled for tonight at 00:00.',
+        'confirm_title' => 'Confirm Proceed Action',
+        'confirm_msg' => 'Are you sure you want to proceed with this action?',
+        'confirm_yes' => 'Yes, Proceed',
+        'confirm_toast' => 'Action successfully confirmed!',
+    ],
+
+    // Section 10: Props Reference
     'props' => [
         'title' => 'Options Reference (API Payload)',
-        'desc' => 'Comprehensive listing of parameters accepted by <code class="font-mono text-xs text-foreground">vibeAlert(options)</code>.',
+        'desc' => 'Comprehensive listing of parameters accepted by <code class="font-mono text-xs text-foreground">vibeAlert(options)</code> or the <code class="font-mono text-xs text-foreground">$vibe.alert</code> helper.',
         'columns' => [
             'prop' => 'Option',
             'type' => 'Type',
             'default' => 'Default',
             'desc' => 'Description',
+        ],
+        'events_title' => 'Window Events & $vibe Helper Reference',
+        'events_desc' => 'Global browser events and $vibe Alpine.js helpers to trigger or dismiss alert dialogs.',
+        'th_event' => 'Event Name / Helper',
+        'th_payload' => 'Payload',
+        'th_event_desc' => 'Description',
+        'events' => [
+            [
+                'name' => "alert / \$vibe.alert(payload)",
+                'payload' => 'object|string',
+                'desc' => 'Triggers a new alert dialog with specified message and configuration options.',
+            ],
+            [
+                'name' => "\$vibe.alert.success(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display a success alert notification dialog.',
+            ],
+            [
+                'name' => "\$vibe.alert.error(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display an error alert notification dialog.',
+            ],
+            [
+                'name' => "\$vibe.alert.warning(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display a warning alert notification dialog.',
+            ],
+            [
+                'name' => "\$vibe.alert.info(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display an info alert notification dialog.',
+            ],
+            [
+                'name' => "\$vibe.alert.confirm(options)",
+                'payload' => 'object',
+                'desc' => 'Triggers an interactive confirmation action dialog with primary and secondary action buttons.',
+            ],
+            [
+                'name' => "close-alert / \$vibe.alert.close(id)",
+                'payload' => 'string (alertId)',
+                'desc' => 'Closes a specific alert dialog matching the given ID.',
+            ],
+            [
+                'name' => "\$vibe.alerts.close()",
+                'payload' => "'*'",
+                'desc' => 'Closes and dismisses all active alert dialogs on screen.',
+            ],
         ],
     ],
 

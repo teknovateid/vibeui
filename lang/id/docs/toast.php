@@ -94,15 +94,77 @@ return [
         'error_btn' => 'Flash Session Gagal',
     ],
 
-    // Section 6: Props Reference
+    // Section 6: Programmatic Control
+    'programmatic' => [
+        'title' => 'Kontrol Programatik ($vibe.toast & $vibe.toasts)',
+        'desc' => 'Notifikasi toast dapat dimunculkan atau dibersihkan secara fleksibel menggunakan Alpine magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.toast</code> di template Alpine.js atau <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.toast</code> di vanilla JavaScript. Untuk menutup seluruh toast yang aktif, gunakan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.toasts.close()</code>.',
+        'preview_title' => 'Demo Kontrol Programatik Toast',
+        'success_btn' => 'Success Toast',
+        'error_btn' => 'Error Toast',
+        'warning_btn' => 'Warning Toast',
+        'info_btn' => 'Info Toast',
+        'close_all_btn' => 'Tutup Semua Toast ($vibe.toasts.close)',
+        'success_title' => 'Berhasil Disimpan',
+        'success_msg' => 'Perubahan data Anda telah berhasil disimpan ke sistem.',
+        'error_title' => 'Gagal Memproses',
+        'error_msg' => 'Terjadi kendala saat menghubungkan ke server.',
+        'warning_title' => 'Peringatan Kuota',
+        'warning_msg' => 'Sisa ruang penyimpanan Anda kurang dari 10%.',
+        'info_title' => 'Pemberitahuan Baru',
+        'info_msg' => 'Ada 3 berkas baru yang belum Anda tinjau.',
+    ],
+
+    // Section 7: Props Reference
     'props' => [
         'title' => 'Referensi Opsi (Payload API)',
-        'desc' => 'Daftar parameter konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeToast(options)</code>.',
+        'desc' => 'Daftar parameter konfigurasi yang diterima oleh pemanggilan fungsi <code class="font-mono text-xs text-foreground">vibeToast(options)</code> atau helper <code class="font-mono text-xs text-foreground">$vibe.toast</code>.',
         'columns' => [
             'prop' => 'Opsi',
             'type' => 'Tipe',
             'default' => 'Default',
             'desc' => 'Deskripsi',
+        ],
+        'events_title' => 'Referensi Event Window & Helper $vibe',
+        'events_desc' => 'Event browser global dan helper Alpine.js $vibe untuk memicu atau membersihkan toast.',
+        'th_event' => 'Nama Event / Helper',
+        'th_payload' => 'Payload Data',
+        'th_event_desc' => 'Keterangan',
+        'events' => [
+            [
+                'name' => "toast / \$vibe.toast(payload)",
+                'payload' => 'object|string',
+                'desc' => 'Memunculkan notifikasi toast baru dengan pesan dan opsi yang ditentukan.',
+            ],
+            [
+                'name' => "\$vibe.toast.success(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi toast sukses.',
+            ],
+            [
+                'name' => "\$vibe.toast.error(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi toast error.',
+            ],
+            [
+                'name' => "\$vibe.toast.warning(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi toast peringatan.',
+            ],
+            [
+                'name' => "\$vibe.toast.info(pesan, judul?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand untuk memunculkan notifikasi toast info.',
+            ],
+            [
+                'name' => "close-toast / \$vibe.toast.close(id)",
+                'payload' => 'string (toastId)',
+                'desc' => 'Menutup toast spesifik berdasarkan ID.',
+            ],
+            [
+                'name' => "\$vibe.toasts.close()",
+                'payload' => "'*'",
+                'desc' => 'Menutup dan membersihkan seluruh toast yang sedang aktif di layar.',
+            ],
         ],
     ],
 

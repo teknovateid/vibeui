@@ -109,7 +109,23 @@ return [
         'frontend_title' => 'Blade View (Frontend)',
     ],
 
-    // Section 8: Props Table
+    // Section 8: Programmatic Control
+    'programmatic' => [
+        'title' => 'Programmatic Control ($vibe.modal & $vibe.modals)',
+        'desc' => 'Modals can be controlled declaratively from Alpine.js templates using the magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.modal(\'id\')</code> or from vanilla JavaScript via <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.modal(\'id\')</code>. To close all active modals at once, use <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.modals.close()</code>.',
+        'preview_title' => 'Modal Programmatic Control Demo',
+        'open_btn' => 'Open Modal ($vibe.modal.show)',
+        'toggle_btn' => 'Toggle Modal',
+        'close_all_btn' => 'Close All Modals ($vibe.modals.close)',
+        'modal_title' => 'Programmatic Control Modal',
+        'modal_desc' => 'This modal is controlled via the $vibe helper API:',
+        'close_btn' => 'Close via $vibe.modal().close()',
+        'close_btn_short' => 'Close ($vibe.modal.close)',
+        'close_all_modal_btn' => 'Close via $vibe.modals.close()',
+        'close_all_modal_btn_short' => 'Close All ($vibe.modals.close)',
+    ],
+
+    // Section 9: Props Table
     'props' => [
         'title' => 'Properties & API Reference',
         'desc' => 'List of configurable attributes and properties available for the <code class="font-mono text-xs text-foreground">&lt;vibe:modal&gt;</code> component.',
@@ -214,14 +230,24 @@ return [
         'th_event_desc' => 'Description',
         'events' => [
             [
-                'name' => 'open-modal',
+                'name' => "open-modal / \$vibe.modal('id').show()",
                 'payload' => 'string (modalId)',
                 'desc' => 'Opens the modal matching the specified modal ID.',
             ],
             [
-                'name' => 'close-modal',
+                'name' => "close-modal / \$vibe.modal('id').close()",
                 'payload' => 'string (modalId)',
                 'desc' => 'Closes the modal matching the specified modal ID.',
+            ],
+            [
+                'name' => "toggle-modal / \$vibe.modal('id').toggle()",
+                'payload' => 'string (modalId)',
+                'desc' => 'Toggles the open/close state of the matching modal ID.',
+            ],
+            [
+                'name' => "\$vibe.modals.close()",
+                'payload' => "'*'",
+                'desc' => 'Closes all currently open modals on the page.',
             ],
         ],
     ],

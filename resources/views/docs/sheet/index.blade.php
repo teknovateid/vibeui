@@ -861,7 +861,99 @@
                 </vibe:preview>
             </section>
 
-            {{-- 8. API Reference Table --}}
+            {{-- 10. Programmatic Control ($vibe.sheet & $vibe.sheets) --}}
+            <section id="kontrol-programatik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/sheet.programmatic.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/sheet.programmatic.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/sheet.programmatic.preview_title')" minHeight="320px">
+                    <vibe:preview.code>
+{{-- Tombol Kontrol Eksternal --}}
+<div class="flex flex-wrap gap-2 items-center">
+    <vibe:button variant="primary" size="sm" @click="$vibe.sheet('demo-programmatic-sheet').toggle()">
+        {{ __('docs/sheet.programmatic.toggle_btn') }}
+    </vibe:button>
+    <vibe:button variant="outline" size="sm" @click="$vibe.sheet('demo-programmatic-sheet').show()">
+        {{ __('docs/sheet.programmatic.show_btn') }}
+    </vibe:button>
+    <vibe:button variant="secondary" size="sm" @click="$vibe.sheets.close()">
+        {{ __('docs/sheet.programmatic.close_all_btn') }}
+    </vibe:button>
+</div>
+
+{{-- Komponen Sheet dengan ID --}}
+<div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+    <vibe:sheet id="demo-programmatic-sheet" position="left" behavior="collapsible" :resizable="true" :defaultSize="260">
+        <vibe:sheet.header class="flex items-center justify-between">
+            <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.programmatic.panel_title') }}</span>
+            <vibe:sheet.close />
+        </vibe:sheet.header>
+        <vibe:sheet.content class="space-y-2">
+            <p class="text-xs text-muted-foreground leading-relaxed">
+                {{ __('docs/sheet.programmatic.panel_desc') }}
+            </p>
+            <div class="p-2 rounded bg-muted/50 border border-border text-[11px] font-mono space-y-1">
+                <p class="text-primary">$vibe.sheet('id').show()</p>
+                <p class="text-primary">$vibe.sheet('id').close()</p>
+                <p class="text-primary">$vibe.sheet('id').toggle()</p>
+                <p class="text-destructive">$vibe.sheets.close()</p>
+            </div>
+        </vibe:sheet.content>
+    </vibe:sheet>
+
+    <div class="flex-1 flex items-center justify-center p-6 text-center text-xs text-muted-foreground">
+        {{ __('docs/sheet.programmatic.main_content') }}
+    </div>
+</div>
+                    </vibe:preview.code>
+
+                    <div class="space-y-4 p-4">
+                        <div class="flex flex-wrap gap-2 items-center justify-center">
+                            <vibe:button variant="primary" size="sm" @click="$vibe.sheet('demo-programmatic-sheet').toggle()">
+                                {{ __('docs/sheet.programmatic.toggle_btn_short') }}
+                            </vibe:button>
+                            <vibe:button variant="outline" size="sm" @click="$vibe.sheet('demo-programmatic-sheet').show()">
+                                {{ __('docs/sheet.programmatic.show_btn_short') }}
+                            </vibe:button>
+                            <vibe:button variant="secondary" size="sm" @click="$vibe.sheets.close()">
+                                {{ __('docs/sheet.programmatic.close_all_btn_short') }}
+                            </vibe:button>
+                        </div>
+
+                        <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                            <vibe:sheet id="demo-programmatic-sheet" position="left" behavior="collapsible" :resizable="true" :defaultSize="260" defaultState="collapsed">
+                                <vibe:sheet.header class="flex items-center justify-between">
+                                    <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.programmatic.panel_title') }}</span>
+                                    <vibe:button size="icon" variant="ghost" class="size-7" @click="$vibe.sheet('demo-programmatic-sheet').close()">
+                                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                                    </vibe:button>
+                                </vibe:sheet.header>
+                                <vibe:sheet.content class="space-y-2">
+                                    <p class="text-xs text-muted-foreground leading-relaxed">
+                                        {{ __('docs/sheet.programmatic.panel_desc') }}
+                                    </p>
+                                    <div class="p-2.5 rounded bg-muted/50 border border-border text-[11px] font-mono space-y-1">
+                                        <p class="text-primary font-semibold">$vibe.sheet('demo-programmatic-sheet').show()</p>
+                                        <p class="text-primary font-semibold">$vibe.sheet('demo-programmatic-sheet').close()</p>
+                                        <p class="text-primary font-semibold">$vibe.sheet('demo-programmatic-sheet').toggle()</p>
+                                        <p class="text-destructive font-semibold">$vibe.sheets.close()</p>
+                                    </div>
+                                </vibe:sheet.content>
+                            </vibe:sheet>
+
+                            <div class="flex-1 flex items-center justify-center p-6 text-center text-xs text-muted-foreground">
+                                {{ __('docs/sheet.programmatic.hint') }}
+                            </div>
+                        </div>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 11. API Reference Table --}}
             <section id="referensi-api" class="space-y-8">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/sheet.api.title') }}</h2>

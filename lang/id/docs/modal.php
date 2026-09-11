@@ -109,7 +109,23 @@ return [
         'frontend_title' => 'Blade View (Frontend)',
     ],
 
-    // Section 8: Props Table
+    // Section 8: Programmatic Control
+    'programmatic' => [
+        'title' => 'Kontrol Programatik ($vibe.modal & $vibe.modals)',
+        'desc' => 'Modal dapat dikontrol secara deklaratif dari template Alpine.js menggunakan magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.modal(\'id\')</code> maupun dari vanilla JavaScript dengan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.modal(\'id\')</code>. Untuk menutup seluruh modal yang sedang aktif, gunakan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.modals.close()</code>.',
+        'preview_title' => 'Demo Kontrol Programatik Modal',
+        'open_btn' => 'Buka Modal ($vibe.modal.show)',
+        'toggle_btn' => 'Toggle Modal',
+        'close_all_btn' => 'Tutup Semua Modal ($vibe.modals.close)',
+        'modal_title' => 'Modal Kontrol Programatik',
+        'modal_desc' => 'Modal ini dikontrol melalui API helper $vibe:',
+        'close_btn' => 'Tutup via $vibe.modal().close()',
+        'close_btn_short' => 'Tutup ($vibe.modal.close)',
+        'close_all_modal_btn' => 'Tutup via $vibe.modals.close()',
+        'close_all_modal_btn_short' => 'Tutup ($vibe.modals.close)',
+    ],
+
+    // Section 9: Props Table
     'props' => [
         'title' => 'Referensi Properti & API',
         'desc' => 'Daftar atribut dan properti yang tersedia untuk komponen <code class="font-mono text-xs text-foreground">&lt;vibe:modal&gt;</code>.',
@@ -214,14 +230,24 @@ return [
         'th_event_desc' => 'Keterangan',
         'events' => [
             [
-                'name' => 'open-modal',
+                'name' => "open-modal / \$vibe.modal('id').show()",
                 'payload' => 'string (modalId)',
                 'desc' => 'Membuka modal dengan ID yang sesuai.',
             ],
             [
-                'name' => 'close-modal',
+                'name' => "close-modal / \$vibe.modal('id').close()",
                 'payload' => 'string (modalId)',
                 'desc' => 'Menutup modal dengan ID yang sesuai.',
+            ],
+            [
+                'name' => "toggle-modal / \$vibe.modal('id').toggle()",
+                'payload' => 'string (modalId)',
+                'desc' => 'Mengalihkan (toggle) status buka/tutup modal target.',
+            ],
+            [
+                'name' => "\$vibe.modals.close()",
+                'payload' => "'*'",
+                'desc' => 'Menutup seluruh modal yang sedang aktif di halaman.',
             ],
         ],
     ],

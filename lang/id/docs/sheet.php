@@ -218,19 +218,24 @@ return [
         'th_event_desc' => 'Keterangan',
         'events' => [
             [
-                'name' => 'open-sheet',
+                'name' => "open-sheet / \$vibe.sheet('id').show()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Membuka sheet dengan ID yang sesuai ke status \'expanded\'.',
             ],
             [
-                'name' => 'close-sheet',
+                'name' => "close-sheet / \$vibe.sheet('id').close()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Menutup sheet dengan ID yang sesuai ke status \'collapsed\'.',
             ],
             [
-                'name' => 'toggle-sheet',
+                'name' => "toggle-sheet / \$vibe.sheet('id').toggle()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Mengalihkan status sheet antara terbuka dan tertutup/minified.',
+            ],
+            [
+                'name' => "\$vibe.sheets.close()",
+                'payload' => "'*'",
+                'desc' => 'Menutup seluruh sheet yang sedang aktif di halaman.',
             ],
         ],
 
@@ -260,6 +265,23 @@ return [
                 'desc' => 'Tombol ikon silang (x) siap pakai untuk menutup sheet.',
             ],
         ],
+    ],
+
+    // Section 10: Programmatic Control
+    'programmatic' => [
+        'title' => 'Kontrol Programatik ($vibe.sheet & $vibe.sheets)',
+        'desc' => 'Sheet dapat dibuka, ditutup, atau di-toggle dari mana saja menggunakan helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.sheet(\'id\')</code> secara deklaratif di template Alpine.js atau <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.sheet(\'id\')</code> di JavaScript biasa. Untuk menutup seluruh sheet yang sedang terbuka di layar, gunakan <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.sheets.close()</code>.',
+        'preview_title' => 'Demo Kontrol Programatik Sheet',
+        'toggle_btn' => 'Toggle Sheet ($vibe.sheet.toggle)',
+        'show_btn' => 'Buka Sheet ($vibe.sheet.show)',
+        'close_all_btn' => 'Tutup Semua Sheet ($vibe.sheets.close)',
+        'toggle_btn_short' => 'Toggle Sheet',
+        'show_btn_short' => 'Buka Sheet',
+        'close_all_btn_short' => 'Tutup Semua',
+        'panel_title' => 'Panel Kontrol Programatik',
+        'panel_desc' => 'Panel sheet ini dikendalikan melalui API helper $vibe:',
+        'main_content' => 'Konten Utama Halaman',
+        'hint' => 'Klik tombol di atas untuk membuka atau mengalihkan panel sheet.',
     ],
 
     'interactive' => [

@@ -218,19 +218,24 @@ return [
         'th_event_desc' => 'Description',
         'events' => [
             [
-                'name' => 'open-sheet',
+                'name' => "open-sheet / \$vibe.sheet('id').show()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Opens the sheet matching the specified ID to \'expanded\' state.',
             ],
             [
-                'name' => 'close-sheet',
+                'name' => "close-sheet / \$vibe.sheet('id').close()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Closes the sheet matching the specified ID to \'collapsed\' state.',
             ],
             [
-                'name' => 'toggle-sheet',
+                'name' => "toggle-sheet / \$vibe.sheet('id').toggle()",
                 'payload' => 'string (sheetId)',
                 'desc' => 'Toggles the sheet state between open and collapsed/minified.',
+            ],
+            [
+                'name' => "\$vibe.sheets.close()",
+                'payload' => "'*'",
+                'desc' => 'Closes all currently open sheets on the page.',
             ],
         ],
 
@@ -260,6 +265,23 @@ return [
                 'desc' => 'Ready-to-use cross (x) button to close the sheet.',
             ],
         ],
+    ],
+
+    // Section 10: Programmatic Control
+    'programmatic' => [
+        'title' => 'Programmatic Control ($vibe.sheet & $vibe.sheets)',
+        'desc' => 'Sheets can be opened, closed, or toggled from anywhere using the helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.sheet(\'id\')</code> declaratively in Alpine.js templates or via <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.sheet(\'id\')</code> in vanilla JavaScript. To close all currently active sheets on screen, use <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.sheets.close()</code>.',
+        'preview_title' => 'Sheet Programmatic Control Demo',
+        'toggle_btn' => 'Toggle Sheet ($vibe.sheet.toggle)',
+        'show_btn' => 'Open Sheet ($vibe.sheet.show)',
+        'close_all_btn' => 'Close All Sheets ($vibe.sheets.close)',
+        'toggle_btn_short' => 'Toggle Sheet',
+        'show_btn_short' => 'Open Sheet',
+        'close_all_btn_short' => 'Close All',
+        'panel_title' => 'Programmatic Control Panel',
+        'panel_desc' => 'This sheet panel is controlled via the $vibe helper API:',
+        'main_content' => 'Main Page Content',
+        'hint' => 'Click the buttons above to open or toggle the sheet panel.',
     ],
 
     'interactive' => [

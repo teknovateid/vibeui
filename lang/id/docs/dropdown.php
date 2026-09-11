@@ -80,7 +80,24 @@ return [
         'billing' => 'Langganan & Tagihan',
     ],
 
-    // Section 7: Props Reference
+    // Section 7: Programmatic Control
+    'programmatic' => [
+        'title' => 'Kontrol Programatik ($vibe.dropdown & $vibe.dropdowns)',
+        'desc' => 'Dropdown dapat dibuka, ditutup, atau di-toggle secara remote menggunakan helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.dropdown(\'id\')</code> maupun penutupan massal <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.dropdowns.close()</code>.',
+        'preview_title' => 'Kontrol Eksternal Dropdown',
+        'toggle_btn' => 'Toggle Dropdown',
+        'open_btn' => 'Buka Dropdown',
+        'open_btn_short' => 'Buka',
+        'close_all_btn' => 'Tutup Semua Dropdown',
+        'close_all_btn_short' => 'Tutup Semua',
+        'target_dropdown' => 'Target Dropdown',
+        'quick_actions' => 'Aksi Cepat',
+        'edit_profile' => 'Sunting Profil',
+        'account_settings' => 'Pengaturan Akun',
+        'close_dropdown' => 'Tutup Dropdown',
+    ],
+
+    // Section 8: Props Reference
     'props' => [
         'title' => 'Referensi Props & Subkomponen',
         'desc' => 'Daftar atribut dan subkomponen yang dapat digunakan pada komponen <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown&gt;</code>.',
@@ -89,6 +106,33 @@ return [
             'type' => 'Tipe',
             'default' => 'Default',
             'desc' => 'Deskripsi',
+        ],
+        'events_title' => 'Window Events & Helper $vibe',
+        'events_desc' => 'Komponen dropdown merespons event window berikut yang dapat dipicu langsung melalui Alpine magic <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded text-foreground">$vibe.dropdown</code>:',
+        'th_event' => 'Helper / Window Event',
+        'th_payload' => 'Payload',
+        'th_event_desc' => 'Deskripsi',
+        'events' => [
+            [
+                'name' => "\$vibe.dropdown('id').show() / @open-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Membuka dropdown target dengan ID yang ditentukan.',
+            ],
+            [
+                'name' => "\$vibe.dropdown('id').close() / @close-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Menutup dropdown target dengan ID yang ditentukan.',
+            ],
+            [
+                'name' => "\$vibe.dropdown('id').toggle() / @toggle-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Mengalihkan (toggle) status buka/tutup dropdown.',
+            ],
+            [
+                'name' => "\$vibe.dropdowns.close() / @close-dropdown",
+                'payload' => "'*'",
+                'desc' => 'Menutup seluruh dropdown yang sedang aktif di halaman.',
+            ],
         ],
     ],
 
@@ -102,6 +146,7 @@ return [
 
     'props_items' => [
         'dropdown' => [
+            'id' => 'ID unik dropdown untuk kontrol programatik melalui $vibe.dropdown("id").show(), .close(), .toggle(), atau event window.',
             'keyboard' => 'Mengaktifkan navigasi aksesibilitas keyboard (Escape untuk keluar, panah atas/bawah untuk berpindah item, panah kanan/kiri untuk submenu).',
         ],
         'body' => [

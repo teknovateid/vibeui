@@ -87,6 +87,7 @@
     position: '{{ $position }}',
     isResizing: false,
     isInitialized: false,
+    lastTriggerTime: 0,
     startSize: 0,
     startPos: 0,
     minifiedSize: {{ $minifiedSize }},
@@ -291,6 +292,7 @@
     },
 
     toggle() {
+        this.lastTriggerTime = Date.now();
         if (this.behavior === 'static') return;
 
         if (this.behavior === 'collapsible' || (this.behavior === 'minify' && this.isMobile)) {
@@ -313,11 +315,12 @@
     },
 
     open() {
+        this.lastTriggerTime = Date.now();
         if (this.behavior === 'static') return;
         this.state = 'expanded';
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') toggle()" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed') { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{

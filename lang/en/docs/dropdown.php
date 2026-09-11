@@ -80,7 +80,24 @@ return [
         'billing' => 'Billing & Plans',
     ],
 
-    // Section 7: Props Reference
+    // Section 7: Programmatic Control
+    'programmatic' => [
+        'title' => 'Programmatic Control ($vibe.dropdown & $vibe.dropdowns)',
+        'desc' => 'Dropdowns can be opened, closed, or toggled remotely using the helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.dropdown(\'id\')</code> or closed in batch via <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.dropdowns.close()</code>.',
+        'preview_title' => 'Dropdown External Control',
+        'toggle_btn' => 'Toggle Dropdown',
+        'open_btn' => 'Open Dropdown',
+        'open_btn_short' => 'Open',
+        'close_all_btn' => 'Close All Dropdowns',
+        'close_all_btn_short' => 'Close All',
+        'target_dropdown' => 'Target Dropdown',
+        'quick_actions' => 'Quick Actions',
+        'edit_profile' => 'Edit Profile',
+        'account_settings' => 'Account Settings',
+        'close_dropdown' => 'Close Dropdown',
+    ],
+
+    // Section 8: Props Reference
     'props' => [
         'title' => 'Props & Subcomponents Reference',
         'desc' => 'Complete specification of props and subcomponents available for the <code class="font-mono text-xs text-foreground">&lt;vibe:dropdown&gt;</code> component suite.',
@@ -89,6 +106,33 @@ return [
             'type' => 'Type',
             'default' => 'Default',
             'desc' => 'Description',
+        ],
+        'events_title' => 'Window Events & $vibe Helper Reference',
+        'events_desc' => 'The dropdown component responds to the following window events and $vibe Alpine.js helpers:',
+        'th_event' => 'Helper / Window Event',
+        'th_payload' => 'Payload',
+        'th_event_desc' => 'Description',
+        'events' => [
+            [
+                'name' => "\$vibe.dropdown('id').show() / @open-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Opens the target dropdown matching the given ID.',
+            ],
+            [
+                'name' => "\$vibe.dropdown('id').close() / @close-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Closes the target dropdown matching the given ID.',
+            ],
+            [
+                'name' => "\$vibe.dropdown('id').toggle() / @toggle-dropdown",
+                'payload' => "'id'",
+                'desc' => 'Toggles the open/closed state of the target dropdown.',
+            ],
+            [
+                'name' => "\$vibe.dropdowns.close() / @close-dropdown",
+                'payload' => "'*'",
+                'desc' => 'Closes all active dropdowns currently open on the page.',
+            ],
         ],
     ],
 
@@ -102,6 +146,7 @@ return [
 
     'props_items' => [
         'dropdown' => [
+            'id' => 'Unique dropdown ID for programmatic control via $vibe.dropdown("id").show(), .close(), .toggle(), or window events.',
             'keyboard' => 'Enable keyboard accessibility navigation (Escape to close, up/down arrows to navigate items, right/left arrows for submenus).',
         ],
         'body' => [

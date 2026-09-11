@@ -8,7 +8,7 @@
 
     <div class="mx-auto w-full max-w-7xl">
         <div class="mb-6 flex justify-end rounded-full">
-            <vibe:button @click="$dispatch('open-modal', 'test-modal')">
+            <vibe:button @click="$vibe.modal('test-modal').show()">
                 {{ __('docs/index.demo.open_modal_btn') }}
             </vibe:button>
         </div>
@@ -39,7 +39,7 @@
             </vibe:modal.content>
             <vibe:modal.footer>
                 <vibe:button variant="ghost" @click="close">{{ __('docs/index.demo.modal.cancel_btn') }}</vibe:button>
-                <vibe:button variant="primary" @click="$dispatch('close-modal', 'test-modal')">{{ __('docs/index.demo.modal.save_btn') }}</vibe:button>
+                <vibe:button variant="primary" @click="$vibe.modal('test-modal').close()">{{ __('docs/index.demo.modal.save_btn') }}</vibe:button>
             </vibe:modal.footer>
         </vibe:modal>
     </div>

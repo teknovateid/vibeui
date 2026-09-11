@@ -457,7 +457,7 @@ vibeAlert({
                                 // Logika simpan data...
 
                                 // Dispatch event alert ke antarmuka frontend
-                                $this->dispatch('alert', [
+                                 $this->dispatch('alert', [
                                     'type' => 'success',
                                     'title' => 'Tersimpan!',
                                     'message' => 'Data pengguna berhasil diperbarui.'
@@ -465,6 +465,30 @@ vibeAlert({
                             }
                         }
                         PHP;
+
+                        $alpineSnippet = <<<'HTML'
+                        {{-- Notifikasi Sukses / Info / Error --}}
+                        <vibe:button @click="$vibe.alert.success('Profil berhasil diperbarui!')">
+                            Simpan Perubahan
+                        </vibe:button>
+
+                        {{-- Dialog Konfirmasi Aksi --}}
+                        <vibe:button @click="$vibe.alert.confirm({
+                            title: 'Hapus Item?',
+                            message: 'Data yang dihapus tidak dapat dipulihkan kembali.',
+                            confirmButton: {
+                                text: 'Ya, Hapus',
+                                action: () => hapusData()
+                            }
+                        })">
+                            Hapus Data
+                        </vibe:button>
+
+                        {{-- Menutup Semua Alert Aktif --}}
+                        <vibe:button @click="$vibe.alerts.close()">
+                            Tutup Semua Alert
+                        </vibe:button>
+                        HTML;
                     @endphp
 
                     <div>
@@ -481,10 +505,122 @@ vibeAlert({
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">3. Livewire Component Event Dispatch</p>
                         <vibe:highlightjs language="php" title="app/Livewire/UserManager.php" :code="$livewireSnippet" />
                     </div>
+
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">4. Alpine.js Magic Helper ($vibe.alert & $vibe.alerts)</p>
+                        <vibe:highlightjs language="html" title="resources/views/components/form.blade.php" :code="$alpineSnippet" />
+                    </div>
                 </div>
             </section>
 
-            {{-- 7. Props Reference --}}
+            {{-- 9. Programmatic Control ($vibe.alert & $vibe.alerts) --}}
+            <section id="kontrol-programatik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.programmatic.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/alert.programmatic.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/alert.programmatic.preview_title')">
+                    <vibe:preview.code>
+{{-- 1. Shorthand Semantic Alerts --}}
+<vibe:button variant="success" size="sm" @click="$vibe.alert.success('{{ __('docs/alert.programmatic.success_msg') }}', '{{ __('docs/alert.programmatic.success_title') }}')">
+    {{ __('docs/alert.programmatic.success_btn') }}
+</vibe:button>
+
+<vibe:button variant="destructive" size="sm" @click="$vibe.alert.error('{{ __('docs/alert.programmatic.error_msg') }}', '{{ __('docs/alert.programmatic.error_title') }}')">
+    {{ __('docs/alert.programmatic.error_btn') }}
+</vibe:button>
+
+<vibe:button variant="warning" size="sm" @click="$vibe.alert.warning('{{ __('docs/alert.programmatic.warning_msg') }}', '{{ __('docs/alert.programmatic.warning_title') }}')">
+    {{ __('docs/alert.programmatic.warning_btn') }}
+</vibe:button>
+
+<vibe:button variant="info" size="sm" @click="$vibe.alert.info('{{ __('docs/alert.programmatic.info_msg') }}', '{{ __('docs/alert.programmatic.info_title') }}')">
+    {{ __('docs/alert.programmatic.info_btn') }}
+</vibe:button>
+
+{{-- 2. Confirmation Dialog --}}
+<vibe:button variant="outline" size="sm" @click="$vibe.alert.confirm({
+    title: '{{ __('docs/alert.programmatic.confirm_title') }}',
+    message: '{{ __('docs/alert.programmatic.confirm_msg') }}',
+    confirmButton: {
+        text: '{{ __('docs/alert.programmatic.confirm_yes') }}',
+        action: () => $vibe.toast.success('{{ __('docs/alert.programmatic.confirm_toast') }}')
+    }
+})">
+    {{ __('docs/alert.programmatic.confirm_btn') }}
+</vibe:button>
+
+{{-- 3. Close All Active Alerts --}}
+<vibe:button variant="secondary" size="sm" @click="$vibe.alerts.close()">
+    {{ __('docs/alert.programmatic.close_all_btn') }}
+</vibe:button>
+                    </vibe:preview.code>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <vibe:button variant="success" size="sm" @click="$vibe.alert.success('{{ __('docs/alert.programmatic.success_msg') }}', '{{ __('docs/alert.programmatic.success_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                <polyline points="22 4 12 14.01 9 11.01" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.success_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="destructive" size="sm" @click="$vibe.alert.error('{{ __('docs/alert.programmatic.error_msg') }}', '{{ __('docs/alert.programmatic.error_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.error_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="warning" size="sm" @click="$vibe.alert.warning('{{ __('docs/alert.programmatic.warning_msg') }}', '{{ __('docs/alert.programmatic.warning_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.warning_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="info" size="sm" @click="$vibe.alert.info('{{ __('docs/alert.programmatic.info_msg') }}', '{{ __('docs/alert.programmatic.info_title') }}')">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.info_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="outline" size="sm" @click="$vibe.alert.confirm({
+                            title: '{{ __('docs/alert.programmatic.confirm_title') }}',
+                            message: '{{ __('docs/alert.programmatic.confirm_msg') }}',
+                            confirmButton: {
+                                text: '{{ __('docs/alert.programmatic.confirm_yes') }}',
+                                action: () => $vibe.toast.success('{{ __('docs/alert.programmatic.confirm_toast') }}')
+                            }
+                        })">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.confirm_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="secondary" size="sm" @click="$vibe.alerts.close()">
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18" />
+                                <line x1="6" y1="6" x2="18" y2="18" />
+                            </svg>
+                            {{ __('docs/alert.programmatic.close_all_btn') }}
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 10. Props Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.props.title') }}</h2>
@@ -563,6 +699,28 @@ vibeAlert({
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
                                     <vibe:table.cell class="text-muted-foreground text-xs">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- Helper $vibe.alert & Events Reference --}}
+                <div class="space-y-2 pt-4">
+                    <p class="text-sm font-semibold text-foreground">{{ __('docs/alert.props.events_title') }}</p>
+                    <p class="text-xs text-muted-foreground">{{ __('docs/alert.props.events_desc') }}</p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.th_event') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/alert.props.th_payload') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/alert.props.th_event_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach (__('docs/alert.props.events') as $event)
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $event['name'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground text-xs whitespace-nowrap">{{ $event['payload'] }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{{ $event['desc'] }}</vibe:table.cell>
                                 </vibe:table.row>
                             @endforeach
                         </vibe:table.rows>

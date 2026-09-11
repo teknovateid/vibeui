@@ -94,15 +94,77 @@ return [
         'error_btn' => 'Flash Session Error',
     ],
 
-    // Section 6: Props Reference
+    // Section 6: Programmatic Control
+    'programmatic' => [
+        'title' => 'Programmatic Control ($vibe.toast & $vibe.toasts)',
+        'desc' => 'Toast notifications can be triggered or cleared flexibly using the Alpine magic helper <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.toast</code> in Alpine.js templates or <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">window.$vibe.toast</code> in vanilla JavaScript. To clear all active toasts from the screen, use <code class="font-mono text-xs bg-muted px-1.5 py-0.5 rounded text-foreground">$vibe.toasts.close()</code>.',
+        'preview_title' => 'Toast Programmatic Control Demo',
+        'success_btn' => 'Success Toast',
+        'error_btn' => 'Error Toast',
+        'warning_btn' => 'Warning Toast',
+        'info_btn' => 'Info Toast',
+        'close_all_btn' => 'Close All Toasts ($vibe.toasts.close)',
+        'success_title' => 'Successfully Saved',
+        'success_msg' => 'Your changes have been successfully saved to the system.',
+        'error_title' => 'Processing Failed',
+        'error_msg' => 'An issue occurred while connecting to the server.',
+        'warning_title' => 'Quota Warning',
+        'warning_msg' => 'Your remaining storage space is below 10%.',
+        'info_title' => 'New Notification',
+        'info_msg' => 'You have 3 new files waiting for your review.',
+    ],
+
+    // Section 7: Props Reference
     'props' => [
         'title' => 'Options Reference (API Payload)',
-        'desc' => 'Listing of configuration options accepted by the <code class="font-mono text-xs text-foreground">vibeToast(options)</code> helper.',
+        'desc' => 'Listing of configuration options accepted by the <code class="font-mono text-xs text-foreground">vibeToast(options)</code> function or <code class="font-mono text-xs text-foreground">$vibe.toast</code> helper.',
         'columns' => [
             'prop' => 'Option',
             'type' => 'Type',
             'default' => 'Default',
             'desc' => 'Description',
+        ],
+        'events_title' => 'Window Events & $vibe Helper Reference',
+        'events_desc' => 'Global browser events and $vibe Alpine.js helpers to trigger or clear toast notifications.',
+        'th_event' => 'Event Name / Helper',
+        'th_payload' => 'Payload',
+        'th_event_desc' => 'Description',
+        'events' => [
+            [
+                'name' => "toast / \$vibe.toast(payload)",
+                'payload' => 'object|string',
+                'desc' => 'Triggers a new toast notification with given message and options.',
+            ],
+            [
+                'name' => "\$vibe.toast.success(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display a success toast notification.',
+            ],
+            [
+                'name' => "\$vibe.toast.error(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display an error toast notification.',
+            ],
+            [
+                'name' => "\$vibe.toast.warning(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display a warning toast notification.',
+            ],
+            [
+                'name' => "\$vibe.toast.info(message, title?)",
+                'payload' => 'string, string?',
+                'desc' => 'Shorthand to display an info toast notification.',
+            ],
+            [
+                'name' => "close-toast / \$vibe.toast.close(id)",
+                'payload' => 'string (toastId)',
+                'desc' => 'Closes a specific toast matching the given ID.',
+            ],
+            [
+                'name' => "\$vibe.toasts.close()",
+                'payload' => "'*'",
+                'desc' => 'Closes and clears all active toasts currently on the screen.',
+            ],
         ],
     ],
 

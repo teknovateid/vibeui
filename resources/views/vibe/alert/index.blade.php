@@ -378,6 +378,15 @@
         let d = $event.detail;
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
+    " x-on:close-alert.window="
+        let d = $event.detail;
+        let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d);
+        if (!t || t === '*') {
+            alerts.forEach(item => { if (item.timer) clearTimeout(item.timer); });
+            alerts = [];
+        } else {
+            remove(t);
+        }
     " class="fixed inset-0 z-100 flex pointer-events-none" id="vibe-alert-container" :class="getPositionClasses()">
     <div class="hidden" x-init="@if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/alert.success') }}' }); @endif
     @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/alert.error') }}' }); @endif

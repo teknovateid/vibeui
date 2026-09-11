@@ -191,7 +191,110 @@ window.VibeTabs = {
     }
 };
 
+// ==========================================
+// VIBE UI CONTROLLER MANAGER ($vibe / window.$vibe)
+// ==========================================
+const vibeManager = {
+    // MODAL
+    modal: Object.assign((id) => ({
+        show() { window.dispatchEvent(new CustomEvent('open-modal', { detail: id })); },
+        open() { window.dispatchEvent(new CustomEvent('open-modal', { detail: id })); },
+        close() { window.dispatchEvent(new CustomEvent('close-modal', { detail: id })); },
+        toggle() { window.dispatchEvent(new CustomEvent('toggle-modal', { detail: id })); },
+        isOpen() { return window.VibeModal ? window.VibeModal.isOpen(id) : false; }
+    }), {
+        show(id) { window.dispatchEvent(new CustomEvent('open-modal', { detail: id })); },
+        open(id) { window.dispatchEvent(new CustomEvent('open-modal', { detail: id })); },
+        close(id) { window.dispatchEvent(new CustomEvent('close-modal', { detail: id })); },
+        toggle(id) { window.dispatchEvent(new CustomEvent('toggle-modal', { detail: id })); },
+        isOpen(id) { return window.VibeModal ? window.VibeModal.isOpen(id) : false; }
+    }),
+    modals: {
+        close() { window.dispatchEvent(new CustomEvent('close-modal', { detail: '*' })); }
+    },
+
+    // SHEET
+    sheet: Object.assign((id) => ({
+        show() { window.dispatchEvent(new CustomEvent('open-sheet', { detail: id })); },
+        open() { window.dispatchEvent(new CustomEvent('open-sheet', { detail: id })); },
+        close() { window.dispatchEvent(new CustomEvent('close-sheet', { detail: id })); },
+        toggle() { window.dispatchEvent(new CustomEvent('toggle-sheet', { detail: id })); }
+    }), {
+        show(id) { window.dispatchEvent(new CustomEvent('open-sheet', { detail: id })); },
+        open(id) { window.dispatchEvent(new CustomEvent('open-sheet', { detail: id })); },
+        close(id) { window.dispatchEvent(new CustomEvent('close-sheet', { detail: id })); },
+        toggle(id) { window.dispatchEvent(new CustomEvent('toggle-sheet', { detail: id })); }
+    }),
+    sheets: {
+        close() { window.dispatchEvent(new CustomEvent('close-sheet', { detail: '*' })); }
+    },
+
+    // DROPDOWN
+    dropdown: Object.assign((id) => ({
+        show() { window.dispatchEvent(new CustomEvent('open-dropdown', { detail: id })); },
+        open() { window.dispatchEvent(new CustomEvent('open-dropdown', { detail: id })); },
+        close() { window.dispatchEvent(new CustomEvent('close-dropdown', { detail: id })); },
+        toggle() { window.dispatchEvent(new CustomEvent('toggle-dropdown', { detail: id })); }
+    }), {
+        show(id) { window.dispatchEvent(new CustomEvent('open-dropdown', { detail: id })); },
+        open(id) { window.dispatchEvent(new CustomEvent('open-dropdown', { detail: id })); },
+        close(id) { window.dispatchEvent(new CustomEvent('close-dropdown', { detail: id })); },
+        toggle(id) { window.dispatchEvent(new CustomEvent('toggle-dropdown', { detail: id })); }
+    }),
+    dropdowns: {
+        close() { window.dispatchEvent(new CustomEvent('close-dropdown', { detail: '*' })); }
+    },
+
+    // TOAST
+    toast: Object.assign((payload, type = 'info', opts = {}) => {
+        let data = typeof payload === 'string' ? { message: payload, type, ...opts } : { type, ...payload };
+        window.dispatchEvent(new CustomEvent('toast', { detail: data }));
+        return {
+            close() { if (data.id) window.dispatchEvent(new CustomEvent('close-toast', { detail: data.id })); }
+        };
+    }, {
+        success: (msg, title, opts) => vibeManager.toast(msg, 'success', { title, ...opts }),
+        error: (msg, title, opts) => vibeManager.toast(msg, 'error', { title, ...opts }),
+        warning: (msg, title, opts) => vibeManager.toast(msg, 'warning', { title, ...opts }),
+        info: (msg, title, opts) => vibeManager.toast(msg, 'info', { title, ...opts }),
+        close: (id) => window.dispatchEvent(new CustomEvent('close-toast', { detail: id }))
+    }),
+    toasts: {
+        close() { window.dispatchEvent(new CustomEvent('close-toast', { detail: '*' })); }
+    },
+
+    // ALERT
+    alert: Object.assign((payload, type = 'info', opts = {}) => {
+        let data = typeof payload === 'string' ? { message: payload, type, ...opts } : { type, ...payload };
+        window.dispatchEvent(new CustomEvent('alert', { detail: data }));
+        return {
+            close() { if (data.id) window.dispatchEvent(new CustomEvent('close-alert', { detail: data.id })); }
+        };
+    }, {
+        success: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'success', ...opts }),
+        error: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'error', ...opts }),
+        warning: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'warning', ...opts }),
+        info: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'info', ...opts }),
+        confirm: (opts) => vibeManager.alert(typeof opts === 'string' ? { message: opts, type: 'confirm' } : { type: 'confirm', ...opts }),
+        close: (id) => window.dispatchEvent(new CustomEvent('close-alert', { detail: id }))
+    }),
+    alerts: {
+        close() { window.dispatchEvent(new CustomEvent('close-alert', { detail: '*' })); }
+    }
+};
+
+window.$vibe = vibeManager;
+
+const registerAlpineVibe = () => {
+    if (window.Alpine && typeof window.Alpine.magic === 'function') {
+        window.Alpine.magic('vibe', () => vibeManager);
+    }
+};
+
+registerAlpineVibe();
+
 document.addEventListener('alpine:init', () => {
+    registerAlpineVibe();
     try {
         window.Alpine.plugin(persist);
     } catch (e) {

@@ -53,7 +53,7 @@
                 <vibe:preview :title="__('docs/modal.basic_usage.preview_title')">
                     <vibe:preview.code>
                         {{-- Tombol pemicu buka modal --}}
-                        <vibe:button @click="$dispatch('open-modal', 'demo-basic-modal')" variant="primary" size="sm">
+                        <vibe:button @click="$vibe.modal('demo-basic-modal').show()" variant="primary" size="sm">
                             {{ __('docs/modal.basic_usage.btn') }}
                         </vibe:button>
 
@@ -74,7 +74,7 @@
                                 <vibe:button type="button" variant="outline" size="sm" @click="close">
                                     {{ __('docs/modal.basic_usage.btn_cancel') }}
                                 </vibe:button>
-                                <vibe:button type="button" variant="primary" size="sm" @click="close">
+                                <vibe:button type="button" variant="primary" size="sm" @click="$vibe.modal('demo-basic-modal').close()">
                                     {{ __('docs/modal.basic_usage.btn_confirm') }}
                                 </vibe:button>
                             </vibe:modal.footer>
@@ -82,7 +82,7 @@
                     </vibe:preview.code>
 
                     <div class="flex items-center justify-center p-4">
-                        <vibe:button @click="$dispatch('open-modal', 'demo-basic-modal')" variant="primary" size="sm">
+                        <vibe:button @click="$vibe.modal('demo-basic-modal').show()" variant="primary" size="sm">
                             <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="18" height="18" x="3" y="3" rx="2" />
                                 <path d="M3 9h18" />
@@ -704,7 +704,108 @@
                 </div>
             </section>
 
-            {{-- 8. API Reference Table --}}
+            {{-- 8. Programmatic Control ($vibe.modal & $vibe.modals) --}}
+            <section id="kontrol-programatik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/modal.programmatic.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/modal.programmatic.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/modal.programmatic.preview_title')" minHeight="240px">
+                    <vibe:preview.code>
+{{-- Tombol Kontrol Eksternal --}}
+<div class="flex flex-wrap gap-2 items-center">
+    <vibe:button variant="primary" size="sm" @click="$vibe.modal('demo-programmatic-modal').show()">
+        {{ __('docs/modal.programmatic.open_btn') }}
+    </vibe:button>
+    <vibe:button variant="outline" size="sm" @click="$vibe.modal('demo-programmatic-modal').toggle()">
+        {{ __('docs/modal.programmatic.toggle_btn') }}
+    </vibe:button>
+    <vibe:button variant="secondary" size="sm" @click="$vibe.modals.close()">
+        {{ __('docs/modal.programmatic.close_all_btn') }}
+    </vibe:button>
+</div>
+
+{{-- Komponen Modal Target --}}
+<vibe:modal id="demo-programmatic-modal" maxWidth="lg">
+    <vibe:modal.header>
+        <span>{{ __('docs/modal.programmatic.modal_title') }}</span>
+        <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.programmatic.modal_desc') }}</p>
+    </vibe:modal.header>
+
+    <vibe:modal.content>
+        <p class="text-sm text-muted-foreground leading-relaxed">
+            {{ __('docs/modal.programmatic.modal_desc') }}
+        </p>
+        <ul class="mt-3 list-disc list-inside text-xs font-mono text-muted-foreground space-y-1">
+            <li>$vibe.modal('id').show() / .open()</li>
+            <li>$vibe.modal('id').close()</li>
+            <li>$vibe.modal('id').toggle()</li>
+            <li>$vibe.modals.close() // Tutup semua modal</li>
+        </ul>
+    </vibe:modal.content>
+
+    <vibe:modal.footer>
+        <vibe:button type="button" variant="outline" size="sm" @click="$vibe.modal('demo-programmatic-modal').close()">
+            {{ __('docs/modal.programmatic.close_btn') }}
+        </vibe:button>
+        <vibe:button type="button" variant="primary" size="sm" @click="$vibe.modals.close()">
+            {{ __('docs/modal.programmatic.close_all_modal_btn') }}
+        </vibe:button>
+    </vibe:modal.footer>
+</vibe:modal>
+                    </vibe:preview.code>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3 p-6">
+                        <vibe:button variant="primary" size="sm" @click="$vibe.modal('demo-programmatic-modal').show()">
+                            {{ __('docs/modal.programmatic.open_btn') }}
+                        </vibe:button>
+                        <vibe:button variant="outline" size="sm" @click="$vibe.modal('demo-programmatic-modal').toggle()">
+                            {{ __('docs/modal.programmatic.toggle_btn') }}
+                        </vibe:button>
+                        <vibe:button variant="secondary" size="sm" @click="$vibe.modals.close()">
+                            {{ __('docs/modal.programmatic.close_all_btn') }}
+                        </vibe:button>
+
+                        <vibe:modal id="demo-programmatic-modal" maxWidth="lg">
+                            <vibe:modal.header>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex size-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+                                    </span>
+                                    <span>{{ __('docs/modal.programmatic.modal_title') }}</span>
+                                </div>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.programmatic.modal_desc') }}</p>
+                            </vibe:modal.header>
+
+                            <vibe:modal.content>
+                                <p class="text-sm text-muted-foreground leading-relaxed">
+                                    {{ __('docs/modal.programmatic.modal_desc') }}
+                                </p>
+                                <div class="mt-3 p-3 rounded-lg bg-muted border border-border text-xs font-mono space-y-1">
+                                    <p class="text-primary font-semibold">$vibe.modal('demo-programmatic-modal').show()</p>
+                                    <p class="text-primary font-semibold">$vibe.modal('demo-programmatic-modal').close()</p>
+                                    <p class="text-primary font-semibold">$vibe.modal('demo-programmatic-modal').toggle()</p>
+                                    <p class="text-destructive font-semibold">$vibe.modals.close()</p>
+                                </div>
+                            </vibe:modal.content>
+
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="outline" size="sm" @click="$vibe.modal('demo-programmatic-modal').close()">
+                                    {{ __('docs/modal.programmatic.close_btn_short') }}
+                                </vibe:button>
+                                <vibe:button type="button" variant="primary" size="sm" @click="$vibe.modals.close()">
+                                    {{ __('docs/modal.programmatic.close_all_modal_btn_short') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 9. API Reference Table --}}
             <section id="referensi-api" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/modal.props.title') }}</h2>

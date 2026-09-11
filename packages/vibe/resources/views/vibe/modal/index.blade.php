@@ -126,7 +126,7 @@
             }
         }
     }
-}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) close()" @keydown.escape.window="if (open && '{{ $dismissible ? 'true' : 'false' }}' === 'true') close()" class="vibe-modal-root">
+}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId || t === '*' || !t) close()" @toggle-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) { open ? close() : open = true; }" @keydown.escape.window="if (open && '{{ $dismissible ? 'true' : 'false' }}' === 'true') close()" class="vibe-modal-root">
     @if ($teleport)
         <template x-teleport="body">
     @endif
