@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.9] - 2026-09-11
+
+### 🧰 Maintenance & Documentation
+- ci: add automated GitHub Release workflow on tag push (0a690a3)
+
+
 ## [0.1.8] - 2026-09-11
 
 ### 🚀 Features
