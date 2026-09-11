@@ -280,6 +280,32 @@ const vibeManager = {
     }),
     alerts: {
         close() { window.dispatchEvent(new CustomEvent('close-alert', { detail: '*' })); }
+    },
+
+    // CONTEXT MENU
+    context: Object.assign((id) => ({
+        show(x, y, data = {}) {
+            window.dispatchEvent(new CustomEvent('open-context', { detail: { menu: id, x, y, data } }));
+        },
+        open(x, y, data = {}) {
+            window.dispatchEvent(new CustomEvent('open-context', { detail: { menu: id, x, y, data } }));
+        },
+        close() {
+            window.dispatchEvent(new CustomEvent('close-context', { detail: id }));
+        },
+    }), {
+        show(id, x, y, data = {}) {
+            window.dispatchEvent(new CustomEvent('open-context', { detail: { menu: id, x, y, data } }));
+        },
+        open(id, x, y, data = {}) {
+            window.dispatchEvent(new CustomEvent('open-context', { detail: { menu: id, x, y, data } }));
+        },
+        close(id) {
+            window.dispatchEvent(new CustomEvent('close-context', { detail: id }));
+        },
+    }),
+    contexts: {
+        close() { window.dispatchEvent(new CustomEvent('close-context', { detail: '*' })); }
     }
 };
 

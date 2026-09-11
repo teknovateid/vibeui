@@ -36,6 +36,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
+    Route::view('/context', 'docs.context.index')->name('context.index');
     Route::view('/badge', 'docs.badge.index')->name('badge.index');
     Route::view('/avatar', 'docs.avatar.index')->name('avatar.index');
     Route::view('/image', 'docs.image.index')->name('image.index');

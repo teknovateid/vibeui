@@ -26,6 +26,7 @@ return [
         'filepond' => 'FilePond',
         'button' => 'Button',
         'dropdown' => 'Dropdown',
+        'context' => 'Context Menu',
         'badge' => 'Badge',
         'avatar' => 'Avatar',
         'image' => 'Image',
