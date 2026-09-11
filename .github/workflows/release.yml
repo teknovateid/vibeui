@@ -2,12 +2,14 @@ name: GitHub Release
 
 on:
   push:
+    branches:
+      - production
     tags:
       - 'v*'
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag name to release (e.g. v0.1.8)'
+        description: 'Tag name to release (e.g. v0.1.10)'
         required: true
         type: string
 
@@ -17,18 +19,54 @@ permissions:
 jobs:
   release:
     name: Create GitHub Release
+    if: startsWith(github.event.head_commit.message, 'chore(release):') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Resolve Release Tag
         id: resolve_tag
         run: |
-          TAG="${{ github.event.inputs.tag || github.ref_name }}"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            TAG="${{ github.event.inputs.tag }}"
+          elif [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            TAG="${{ github.ref_name }}"
+          else
+            # Extract tag from commit message e.g. "chore(release): v0.1.10"
+            TAG=$(echo "${{ github.event.head_commit.message }}" | grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' | head -n 1)
+          fi
+
+          if [ -z "$TAG" ]; then
+            echo "::error::Could not determine tag name from commit message, ref, or input."
+            exit 1
+          fi
+
           echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
           VERSION="${TAG#v}"
           echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Resolved Tag: ${TAG} (Version: ${VERSION})"
+
+      - name: Wait for Git Tag on Origin
+        run: |
+          TAG="${{ steps.resolve_tag.outputs.tag }}"
+          echo "Checking for tag ${TAG} on origin..."
+          FOUND=false
+          for i in {1..12}; do
+            if git ls-remote --tags origin "refs/tags/${TAG}" | grep -q "${TAG}"; then
+              echo "Tag ${TAG} is present on origin."
+              FOUND=true
+              break
+            fi
+            echo "Waiting for tag ${TAG} to be pushed to origin (attempt $i/12)..."
+            sleep 3
+          done
+
+          if [ "$FOUND" = "false" ]; then
+            echo "::warning::Tag ${TAG} not found on origin after 36s. Proceeding anyway."
+          fi
 
       - name: Extract Release Notes from CHANGELOG
         id: extract_notes

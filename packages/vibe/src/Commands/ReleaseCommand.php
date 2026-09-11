@@ -306,6 +306,10 @@ class ReleaseCommand extends Command
         $this->newLine();
 
         if (confirm('Would you like to push this release and tag to origin now?', false)) {
+            $this->components->task("Pushing tag {$targetTag} to origin", function () use ($targetTag) {
+                return Process::run(['git', 'push', 'origin', '-f', $targetTag])->successful();
+            });
+
             $this->components->task("Pushing branch {$currentBranch} to origin", function () use ($currentBranch) {
                 return Process::run(['git', 'push', 'origin', $currentBranch])->successful();
             });
@@ -315,10 +319,6 @@ class ReleaseCommand extends Command
                     return Process::run(['git', 'push', 'origin', 'production'])->successful();
                 });
             }
-
-            $this->components->task("Pushing tag {$targetTag} to origin", function () use ($targetTag) {
-                return Process::run(['git', 'push', 'origin', '-f', $targetTag])->successful();
-            });
 
             $this->components->success("Tag {$targetTag} pushed! Packagist and production web docs are now up to date.");
         }
