@@ -38,12 +38,20 @@
         @dragend="endDrag($el, $event)" @endif {{ $attributes->twMerge(['class' => $cardClasses]) }}>
     @if ($variant === 'card')
         {{-- Card Header Bar --}}
-        <div class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border/60 rounded-t-xl select-none group">
+        <div
+            @if ($allowReorder)
+                draggable="true"
+                @dragstart="startDrag($el, $event)"
+                @dragend="endDrag($el, $event)"
+                title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}"
+            @endif
+            class="flex items-center justify-between px-4 py-2.5 bg-muted/40 border-b border-border/60 rounded-t-xl select-none group {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/60 transition-colors' : '' }}"
+        >
             {{-- Left: Drag Handle, Badge & Title --}}
-            <div class="flex items-center gap-2 min-w-0">
+            <div class="flex items-center gap-2 min-w-0 pointer-events-none">
                 @if ($allowReorder)
                     {{-- Drag Handle --}}
-                    <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1" />
                             <circle cx="9" cy="12" r="1" />
@@ -65,7 +73,7 @@
             </div>
 
             {{-- Right: Actions Toolbar --}}
-            <div class="flex items-center gap-1 shrink-0">
+            <div class="flex items-center gap-1 shrink-0 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
                 @if ($allowReorder)
                     {{-- Move Up --}}
                     <button type="button" data-action-move-up @click="moveUp($el)" title="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}" aria-label="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer">
@@ -174,10 +182,18 @@
         </div>
     @else
         {{-- Bordered / Ghost Variant with Drag Handle --}}
-        <div class="flex items-center justify-between pb-2 mb-3 border-b border-border/50">
-            <div class="flex items-center gap-2">
+        <div
+            @if ($allowReorder)
+                draggable="true"
+                @dragstart="startDrag($el, $event)"
+                @dragend="endDrag($el, $event)"
+                title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}"
+            @endif
+            class="flex items-center justify-between pb-2 mb-3 border-b border-border/50 select-none {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/30 transition-colors' : '' }}"
+        >
+            <div class="flex items-center gap-2 pointer-events-none">
                 @if ($allowReorder)
-                    <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors flex items-center justify-center shrink-0 select-none">
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors flex items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1" />
                             <circle cx="9" cy="12" r="1" />
@@ -191,7 +207,7 @@
                 <span data-dynamic-form-badge class="text-xs font-semibold font-mono text-primary">#{{ $displayIndex }}</span>
             </div>
 
-            <div class="flex items-center gap-1">
+            <div class="flex items-center gap-1 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
                 @if ($allowReorder)
                     <button type="button" data-action-move-up @click="moveUp($el)" class="p-1 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

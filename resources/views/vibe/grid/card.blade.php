@@ -156,7 +156,7 @@
                 @dragend="endDrag()"
                 title="Tarik header untuk menukar posisi kartu"
             @endif
-            class="flex items-center justify-between border-b border-border/60 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
+            class="group/header flex items-center justify-between border-b border-border/60 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
         >
             {{ $header }}
         </div>
@@ -168,7 +168,7 @@
                 @dragend="endDrag()"
                 title="Tarik header untuk menukar posisi kartu"
             @endif
-            class="flex items-center justify-between gap-2 border-b border-border/50 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
+            class="group/header flex items-center justify-between gap-2 border-b border-border/50 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
         >
             {{-- Title & Description (Flush Left) --}}
             <div class="min-w-0 flex-1 pointer-events-none">
@@ -181,56 +181,58 @@
             </div>
 
             {{-- Actions & Header Controls (Right side) --}}
-            <div class="flex items-center gap-1 shrink-0">
-                @if (isset($actions))
-                    <div class="flex items-center gap-1 shrink-0 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
-                        {{ $actions }}
-                    </div>
-                @endif
+            @if (isset($actions) || $lockType !== 'none' || $reorderable)
+                <div class="flex items-center gap-1 shrink-0 {{ ! isset($actions) ? 'hidden group-hover/header:flex' : '' }}">
+                    @if (isset($actions))
+                        <div class="flex items-center gap-1 shrink-0 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
+                            {{ $actions }}
+                        </div>
+                    @endif
 
-                {{-- Lock icon — visible on hover only, icon differs per lock type --}}
-                @if ($lockType !== 'none')
-                    <div
-                        title="{{ $lockTooltip }}"
-                        class="size-7 rounded-md text-muted-foreground/0 group-hover:text-muted-foreground/50 hover:text-muted-foreground! flex items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
-                    >
-                        @if ($lockType === 'reorder')
-                            {{-- Position locked, can still resize: padlock with dot inside --}}
-                            <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                <circle cx="12" cy="16" r="1" fill="currentColor"/>
-                            </svg>
-                        @elseif ($lockType === 'resize')
-                            {{-- Size locked, can still move: lock with horizontal bar --}}
-                            <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                                <path d="M10 16h4"/>
-                            </svg>
-                        @else
-                            {{-- Fully locked: solid padlock --}}
-                            <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                            </svg>
-                        @endif
-                    </div>
-                @endif
+                    {{-- Lock icon — visible on header hover only --}}
+                    @if ($lockType !== 'none')
+                        <div
+                            title="{{ $lockTooltip }}"
+                            class="hidden group-hover/header:flex size-7 rounded-md text-muted-foreground/50 hover:text-muted-foreground items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
+                        >
+                            @if ($lockType === 'reorder')
+                                {{-- Position locked, can still resize: padlock with dot inside --}}
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    <circle cx="12" cy="16" r="1" fill="currentColor"/>
+                                </svg>
+                            @elseif ($lockType === 'resize')
+                                {{-- Size locked, can still move: lock with horizontal bar --}}
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                    <path d="M10 16h4"/>
+                                </svg>
+                            @else
+                                {{-- Fully locked: solid padlock --}}
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            @endif
+                        </div>
+                    @endif
 
-                {{-- Drag Handle Grip — visible on hover only --}}
-                @if ($reorderable)
-                    <div
-                        title="Tarik header untuk menukar posisi kartu"
-                        class="size-7 rounded-md text-muted-foreground/0 group-hover:text-muted-foreground/60 flex items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
-                    >
-                        <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
-                            <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
-                        </svg>
-                    </div>
-                @endif
-            </div>
+                    {{-- Drag Handle Grip — visible on header hover only, does not take space when hidden --}}
+                    @if ($reorderable)
+                        <div
+                            title="Tarik header untuk menukar posisi kartu"
+                            class="hidden group-hover/header:flex size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
+                        >
+                            <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
+                                <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
+                            </svg>
+                        </div>
+                    @endif
+                </div>
+            @endif
         </div>
     @endif
 
