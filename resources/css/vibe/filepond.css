@@ -351,7 +351,7 @@
     width: 100% !important;
     height: auto !important;
     min-height: 4.25rem !important;
-    padding: 0.75rem 5.5rem 0.75rem 1rem !important;
+    padding: 0.75rem 5.75rem 0.75rem 1rem !important;
     display: flex !important;
     align-items: center !important;
     color: var(--foreground) !important;
@@ -585,6 +585,16 @@
     color: var(--muted-foreground) !important;
 }
 
+/* Upload complete state: crisp success color and hide confusing 'tap to undo' subtext */
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='processing-complete'] .filepond--file-status-main {
+    color: var(--success, #10b981) !important;
+    font-weight: 600 !important;
+}
+
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='processing-complete'] .filepond--file-status-sub {
+    display: none !important;
+}
+
 /* Always respect hidden attribute on action buttons */
 .filepond--root .filepond--file-action-button[hidden],
 .filepond--root [hidden].filepond--file-action-button {
@@ -640,23 +650,36 @@
     right: 0.875rem !important;
 }
 
-/* Download action button: positioned next to the Remove button */
+/* Render crisp X icon inside Abort button (which has no default SVG icon from FilePond) */
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing::before {
+    content: '';
+    width: 0.75rem;
+    height: 0.75rem;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E") no-repeat center / contain;
+}
+
+/* Download action button: positioned in Slot 2 next to the Remove/Revert button */
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-download-item {
     right: 3.125rem !important;
 }
 
+/* Hide download button on busy, loading, error, invalid, cancelled, and uploading states */
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='busy'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='load-'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--action-download-item,
-.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--action-download-item {
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='cancelled'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state~='processing'] .filepond--action-download-item {
     display: none !important;
 }
 
-/* Process (Upload again) and Retry action buttons: positioned to the left of Download button */
+/* Process (Upload again) and Retry action buttons: positioned in Slot 2 (right: 3.125rem) next to Remove button */
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-process-item,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-processing,
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-retry-item-load {
-    right: 5.375rem !important;
+    right: 3.125rem !important;
 }
 
 .filepond--root:not(.filepond-avatar-mode) .filepond--file-action-button:hover,
@@ -683,7 +706,11 @@
 }
 
 .filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item:hover,
-.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item:focus {
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-remove-item:focus,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-abort-item-processing:focus,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-revert-item-processing:hover,
+.filepond--root:not(.filepond-avatar-mode) .filepond--action-revert-item-processing:focus {
     background-color: color-mix(in srgb, var(--destructive) 12%, var(--card)) !important;
     color: var(--destructive) !important;
     border-color: color-mix(in srgb, var(--destructive) 40%, transparent) !important;
@@ -707,10 +734,11 @@
     max-height: 1.6rem !important;
 }
 
-/* Extra right padding during error/invalid states when action buttons may be paired */
+/* Extra right padding during error/invalid/cancelled states when action buttons may be paired */
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--file,
-.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--file {
-    padding-right: 5.5rem !important;
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--file,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='cancelled'] .filepond--file {
+    padding-right: 5.75rem !important;
 }
 
 /* Image Preview Styling */
@@ -723,11 +751,15 @@
     mix-blend-mode: multiply;
 }
 
-/* Progress Ring & Spinner (Upload Progress & Preparation Load Indicator) */
-.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator {
+/* Progress Ring & Spinner (Upload Progress, Preparation, and Item Removal Indicator) */
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator,
+.filepond--root:not(.filepond-avatar-mode) .filepond--load-indicator,
+.filepond--root:not(.filepond-avatar-mode) .filepond--process-indicator {
     position: absolute !important;
+    left: auto !important;
     right: 1.175rem !important; /* Dead-center inside the 1.85rem button at right: 0.875rem */
     top: 50% !important;
+    bottom: auto !important;
     transform: translateY(-50%) !important;
     width: 1.25rem !important;
     height: 1.25rem !important;
@@ -744,11 +776,22 @@
     z-index: 15 !important;
 }
 
+/* Ensure FilePond's internal [data-align] attributes never pull the indicator back to the left */
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator[data-align],
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator[data-align*='left'],
+.filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator[data-align*='right'] {
+    left: auto !important;
+    right: 1.175rem !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 .filepond--root:not(.filepond-avatar-mode) .filepond--progress-indicator svg {
-    width: 1.25rem !important;
-    height: 1.25rem !important;
+    width: 100% !important;
+    height: 100% !important;
     display: block !important;
     margin: auto !important;
+    transform-box: fill-box !important;
     color: var(--primary) !important;
     stroke: var(--primary) !important;
     transform-origin: center center !important;
@@ -759,7 +802,7 @@
     stroke-width: 2 !important;
 }
 
-/* Smooth symmetrical rotation for load indicator / busy spinner during prepare */
+/* Smooth symmetrical rotation for load indicator / busy spinner during prepare and remove */
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='busy'] .filepond--progress-indicator svg,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='load'] .filepond--progress-indicator svg {
     animation: spin 0.85s linear infinite !important;
@@ -1027,6 +1070,18 @@
     width: 100% !important;
     height: 100% !important;
     object-fit: cover !important;
+}
+
+.filepond-avatar-mode .filepond--avatar-preview-img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    border-radius: 9999px !important;
+    object-fit: cover !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    background-color: var(--card) !important;
 }
 
 .filepond-avatar-mode .filepond--image-preview-overlay {
