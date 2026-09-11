@@ -1,136 +1,214 @@
 # 🎨 Vibe UI
 
-> [!WARNING]
-> **🚧 WORK IN PROGRESS**  
-> Repositori ini adalah **lingkungan pengembangan aktif dan dokumentasi** untuk **Vibe UI**. Saat ini, core package Vibe UI masih dalam tahap pengembangan dan belum siap untuk digunakan pada *production*.
+<p align="center">
+  <img src="public/vibe/logo/logo-full.svg" alt="Vibe UI Logo" width="120" height="120" onerror="this.style.display='none'">
+</p>
+
+<p align="center">
+  <strong>A modern, reactive Blade & Livewire UI component library for Laravel.</strong><br>
+  Crafted for speed, aesthetic excellence, and developer happiness — inspired by Flux UI.
+</p>
+
+<p align="center">
+  <a href="https://packagist.org/packages/teknovate/vibeui"><img src="https://img.shields.io/packagist/v/teknovate/vibeui.svg?style=flat-square&color=6366f1" alt="Latest Version"></a>
+  <a href="https://php.net"><img src="https://img.shields.io/badge/php-%3E%3D8.3-8892BF.svg?style=flat-square" alt="PHP Version"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-%3E%3D11.x-FF2D20.svg?style=flat-square" alt="Laravel Version"></a>
+  <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/tailwind-v4-38B2AC.svg?style=flat-square" alt="Tailwind CSS v4"></a>
+  <a href="LICENSE.md"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
+</p>
 
 ---
 
-## 📖 Tentang Project Ini
+## 📖 Overview
 
-Project ini merupakan aplikasi Laravel yang bertindak sebagai *host* (tuan rumah) untuk mengembangkan, menguji, dan mendokumentasikan package **Vibe UI**. 
+**Vibe UI** is a full-featured UI component ecosystem designed specifically for **Laravel 11+**, **Livewire 3**, and **Tailwind CSS v4**. It bridges the gap between raw utility classes and complex reactive logic by providing elegant, declarative custom Blade tags.
 
-**Vibe UI** sendiri adalah sekumpulan komponen antarmuka (*UI Components*) yang dibangun menggunakan **Laravel Livewire** dan **Tailwind CSS**. **Package ini diciptakan dengan mengambil banyak inspirasi dari Flux UI**, dirancang secara khusus untuk membuat proses pengembangan *frontend* pada aplikasi **Laravel** menjadi sangat cepat, modern, dan interaktif (khususnya untuk aplikasi admin/dashboard di ekosistem Teknovate).
+This repository serves as both the **documentation playground** and the **monorepo host** for developing the core library distributed as [`teknovate/vibeui`](https://packagist.org/packages/teknovate/vibeui).
 
-### 🎯 Tujuan Utama Vibe UI Diciptakan
-
-Vibe UI dibangun dengan beberapa visi dan tujuan strategis berikut:
-
-1. **Konsistensi Desain (*Design Consistency*)**
-   Menyediakan satu sumber pedoman (*single source of truth*) untuk elemen-elemen UI. Hal ini memastikan setiap aplikasi dashboard atau produk internal yang dibangun oleh tim Teknovate memiliki identitas visual dan *User Experience* (UX) yang seragam.
-2. **Kecepatan Pengembangan (*Development Velocity*)**
-   Penggunaan Vibe UI membuat pembuatan UI di **Laravel menjadi sangat cepat**. Developer tidak perlu lagi menulis kode *styling* yang berulang-ulang (*reinventing the wheel*), melainkan bisa langsung menyusun halaman kompleks dalam hitungan menit menggunakan blok-blok komponen yang sudah terkonfigurasi dengan baik.
-3. **Kode yang Bersih & Rapi (*Clean Code*)**
-   Membungkus *class* utilitas Tailwind CSS yang panjang dan logika Livewire yang kompleks ke dalam tag yang sangat ringkas (seperti `<vibe:button>`). Akibatnya, file Blade pada aplikasi utama menjadi jauh lebih bersih dan mudah dikelola.
-4. **Sentralisasi Pembaruan (*Centralized Updates*)**
-   Ketika ada perbaikan *bug* desain atau perubahan tema, perbaikan cukup dilakukan di dalam package Vibe UI saja. Seluruh aplikasi (atau halaman) yang menggunakannya akan secara otomatis mewarisi pembaruan tersebut tanpa perlu mengubah kode satu per satu di berbagai tempat.
+> [!NOTE]
+> **Heavily Inspired by Flux UI:** Vibe UI brings the refined aesthetic standards, accessibility foundations, and developer ergonomics popularized by Flux UI directly into the Laravel open-source ecosystem.
 
 ---
 
-## 📂 Struktur Direktori
+## ✨ Key Features
 
-Pengembangan komponen dipisahkan dari aplikasi utama agar bersifat **modular** dan mandiri. Hal ini dikelola melalui direktori `packages`.
-
-### Mengapa ada folder `packages`?
-
-Folder `packages/` digunakan sebagai tempat penyimpanan *internal/local package* (dalam hal ini `vibe`). Dengan pendekatan ini, kita dapat mengembangkan package persis seperti layaknya package yang diunduh dari Composer, tanpa harus terus-menerus melakukan proses rilis ke repositori eksternal selama masa pengembangan.
-
-
-
-### Anatomi `packages/vibe`
-
-Direktori `packages/vibe/` adalah *core package* dari Vibe UI (`teknovate/vibe-ui`). Berikut adalah penjelasan struktur di dalamnya:
-
-```text
-packages/vibe/
-├── config/           # Konfigurasi bawaan Vibe UI yang bisa di-publish ke aplikasi utama.
-├── public/           # Aset statis (CSS, JS, gambar, dll) khusus untuk package.
-├── resources/        # Berisi file Blade templates (views) untuk tiap komponen UI.
-├── routes/           # (Opsional) Rute khusus jika komponen membutuhkan endpoint tersendiri.
-├── src/              # Source code utama PHP (Livewire Components, Service Providers).
-├── composer.json     # File manifest package, mendefinisikan dependensi & namespace PSR-4.
-└── package.json      # Konfigurasi dependencies NPM (Tailwind CSS, dll) khusus package.
-```
-
-### Detail Folder `resources/` (di dalam `packages/vibe`)
-
-Folder `resources` sangat krusial dalam package UI ini karena di sinilah seluruh aset *frontend* dan tampilan (Blade) berada. Berikut adalah anatominya:
-
-```text
-packages/vibe/resources/
-├── css/              # Berisi source file CSS (Tailwind base, components, utilities).
-├── js/               # Berisi file JavaScript pendukung untuk komponen (jika diperlukan).
-└── views/            # Berisi semua file tampilan (.blade.php).
-    ├── components/   # Direktori utama untuk Blade Components.
-    │   ├── layouts/  # Template dasar struktur halaman (misal: sidebar layout, topbar layout).
-    │   └── partials/ # Potongan-potongan UI yang dapat digunakan kembali (menu, header, footer).
-    ├── templates/    # Berisi kerangka utuh sebuah halaman untuk mempercepat pembuatan fitur baru.
-    │   ├── resource/ # Template standar untuk halaman CRUD (berisi create.blade, edit.blade, index.blade).
-    │   ├── blank.blade.php # Template halaman kosong.
-    │   └── index.blade.php # Template halaman indeks utama.
-    └── vibe/         # untuk kumpulan komponen Vibe UI.
-```
+- 🏷️ **Short & Intuitive Blade Syntax:** Use clean custom tags like `<vibe:button>`, `<vibe:card>`, and `<vibe:table>` instead of verbose namespaced tags.
+- 🌓 **First-Class Dark Mode & Curated Tokens:** Built-in semantic design tokens, zero-FOUC theme switching, and accessible contrast ratios out of the box.
+- ⚡ **High-Velocity Scaffolding:** Pre-configured components for inputs, selects, modals, sheets, dropdowns, tables, and FilePond uploads.
+- 🖱️ **Advanced Context Menu Suite:** Single-instance global context menu system supporting cards, standard Blade tables, and Livewire DataTables.
+- 🌐 **Full Multi-Language (i18n) Support:** Native bilingual dictionary support (Indonesian & English) across all interactive components, dialogs, and docs.
+- 🧩 **Deep Livewire 3 & Alpine Integration:** Automatic lazy-loading skeleton placeholders, state preservation, and confirmation dialogs.
+- 💡 **Comprehensive DX:** Out-of-the-box VS Code snippets and IntelliSense attribute autocomplete (`html.customData`).
 
 ---
 
-## ⚡ Fitur & Shortcut
+## 🚀 Quick Look
 
-Package Vibe UI dilengkapi dengan beberapa utilitas bawaan (*built-in*) untuk mempercepat pengembangan aplikasi:
-
-### 1. Sintaks Blade Pendek (*Shortcut Tag*)
-
-Dalam standar Laravel, pemanggilan komponen dari sebuah package biasanya menggunakan *prefix* `x-namapackage::`, sehingga kita harus menuliskan `<x-vibe::nama-komponen>`. 
-
-Untuk mempercepat penulisan kode dan membuatnya lebih bersih, Vibe UI mengimplementasikan kompilator kustom. Anda dapat memanggil semua komponen Vibe menggunakan tag HTML kustom **`<vibe:...>`**:
+Here is how clean and declarative your Blade views become with Vibe UI:
 
 ```html
-<!-- ❌ Penulisan Standar Laravel -->
-<x-vibe::button variant="primary">Simpan</x-vibe::button>
+{{-- Interactive Buttons --}}
+<vibe:button variant="primary" size="md">
+    <svg class="size-4 mr-1.5" ...></svg>
+    Save Changes
+</vibe:button>
 
-<!-- ✅ Menggunakan Shortcut Vibe UI -->
-<vibe:button variant="primary">Simpan</vibe:button>
+{{-- Form Control with Floating Label --}}
+<vibe:input
+    name="email"
+    type="email"
+    label="Email Address"
+    placeholder="you@example.com"
+    required
+/>
+
+{{-- Confirmed Destructive Action --}}
+<vibe:button.delete
+    wire:click="delete(1)"
+    title="Delete Item?"
+    message="Are you sure you want to delete this record? This action cannot be undone."
+/>
+
+{{-- Context Menu Integration --}}
+<vibe:context menu="row-menu">
+    <vibe:card class="cursor-context-menu select-none">
+        <p class="text-sm">Right-click anywhere inside this card</p>
+    </vibe:card>
+</vibe:context>
+
+<vibe:context.menu id="row-menu" width="48">
+    <vibe:context.item @click="$wire.edit(1)">Edit Record</vibe:context.item>
+    <vibe:context.divider />
+    <vibe:context.item.delete wire:click="delete(1)" />
+</vibe:context.menu>
 ```
 
-> **💡 Dukungan VSCode Snippets:**
-> Project ini sudah saya lengkapi dengan *VSCode Snippets* bawaan di dalam direktori `.vscode/vibe.code-snippets`.
-> Cukup ketik `vibe:button`, `vibe:input`, dll di file editor Anda, lalu tekan `Tab` atau `Enter` untuk langsung *generate* tag beserta atribut (*props*) standar-nya secara otomatis!
->
-> **✨ Autocomplete Atribut (IntelliSense):**
-> Project ini juga telah dilengkapi dengan `html.customData` di VSCode. Artinya, jika Anda mengetik spasi di dalam tag komponen (misal: `<vibe:button |>`), VSCode akan otomatis menampilkan saran atribut khusus milik komponen tersebut (seperti `variant`, `size`, `type`) beserta nilai (*values*) yang diperbolehkan!
+---
 
-### 2. Artisan Commands (*Scaffolding*)
+## 📦 Installation
 
-Vibe UI menyediakan beberapa perintah konsol khusus untuk mengotomatisasi pembuatan file dan struktur:
+To install Vibe UI into your existing Laravel project:
 
-- `php artisan vibe:install` — Mempublikasikan seluruh *asset* (CSS/JS) dan konfigurasi awal Vibe UI.
-- `php artisan vibe:layout` — Meng-*generate* struktur file *layout* dasar.
-- `php artisan vibe:page` — Meng-*generate* template halaman baru.
-- `php artisan vibe:component` — Membuat kerangka (*stub*) untuk Blade component baru.
-- `php artisan vibe:sync` — Menyinkronkan aset dari `resources/` ke folder `packages/vibe/`.
-- `php artisan vibe:release` — Otomasi versioning SemVer, update changelog, dan tagging rilis package.
-- `php artisan vibe:clean` — Membersihkan/me-reset cache spesifik milik Vibe UI.
+```bash
+composer require teknovate/vibeui
+```
+
+### Initial Scaffolding
+
+Run the install command to publish necessary assets and configuration:
+
+```bash
+php artisan vibe:install
+```
+
+### Tailwind CSS Setup
+
+Ensure your `@tailwindcss/vite` or `resources/css/app.css` imports Vibe UI styles:
+
+```css
+@import "tailwindcss";
+@import "../../vendor/teknovate/vibeui/resources/css/vibe/vibe.css";
+```
 
 ---
 
-## 🤖 Panduan AI (AI Knowledge)
+## 📂 Repository Architecture (Monorepo)
 
-Untuk memastikan konsistensi kode dan pemahaman konteks bagi *contributor* yang menggunakan AI Code Assistant (seperti Cursor, GitHub Copilot, Windsurf, dll), project ini telah dilengkapi dengan aturan khusus untuk AI.
+The repository uses a monorepo structure separating the documentation host application from the core library:
 
-Pengetahuan (*knowledge*) untuk AI ini disimpan di dalam file **`.cursorrules`** di *root* direktori. 
-File ini memberitahu AI tentang:
-- Arsitektur folder (fokus pada `packages/vibe`).
-- Aturan wajib menggunakan sintaks `<vibe:component>` alih-alih `x-vibe::`.
-- Filosofi desain yang terinspirasi dari Flux UI.
-- Penggunaan Artisan commands bawaan.
+```text
+vibe-ui/
+├── app/                  # Host application logic (Docs & Livewire demos)
+├── config/               # Host configuration
+├── lang/                 # Multilingual translation dictionaries (en, id)
+├── resources/            # SINGLE SOURCE OF TRUTH for UI components & assets
+│   ├── css/vibe/         # CSS styles and design tokens
+│   ├── js/vibe/          # Alpine.js helpers and state managers
+│   └── views/vibe/       # Blade templates for all UI components
+│
+├── packages/vibe/        # Core Distribution Package (teknovate/vibeui)
+│   ├── src/              # PHP ServiceProvider, Commands, and DataTable classes
+│   ├── resources/        # Auto-synced from resources/
+│   ├── lang/             # Auto-synced from lang/
+│   ├── composer.json     # Package manifest for Packagist
+│   └── CHANGELOG.md      # Package release history
+│
+└── vite.config.js        # Configured with real-time vibeSyncPlugin
+```
 
-Dengan adanya file ini, AI Anda tidak akan "meleset jauh" dan akan selalu memberikan saran kode yang relevan dengan standar Vibe UI!
+### ⚠️ Single Source of Truth Rule
+
+> [!IMPORTANT]
+> **NEVER** edit files directly inside the `packages/vibe/` directory.  
+> All component templates, styles, scripts, and localization files must be authored in `resources/` and `lang/`.  
+> The Vite development server runs the custom `vibeSyncPlugin` (in `vite.config.js`), which **automatically synchronizes changes in real-time** into `packages/vibe/`.
 
 ---
 
-## 🛠️ Panduan Pengembangan
+## 🛠️ Developer Tooling & Commands
 
-Karena ini adalah repositori monorepo-style untuk pengembangan package lokal, perubahan yang dilakukan di dalam `packages/vibe` akan langsung tercermin pada aplikasi *host* ini berkat autoloading lokal.
+Vibe UI includes dedicated Artisan commands to streamline workflows:
 
-1. **Jalankan Aplikasi:** Gunakan `php artisan serve` seperti biasa untuk melihat dokumentasi / preview komponen.
-2. **Kompilasi Aset:** Jalankan `npm run dev` di root project untuk mengkompilasi *Tailwind CSS*.
-3. **Modifikasi Komponen:** Lakukan perubahan kode secara eksklusif di dalam folder `packages/vibe/`.
+| Command | Description |
+| :--- | :--- |
+| `php artisan vibe:install` | Publishes initial package configuration and assets. |
+| `php artisan vibe:sync` | Manually synchronizes all assets from `resources/` to `packages/vibe/`. |
+| `php artisan vibe:sync --check` | Verifies 100% asset parity between source and package (ideal for CI/CD). |
+| `php artisan vibe:release` | Interactive release assistant: SemVer calculation, changelog generation, and subtree tagging. |
+| `php artisan vibe:clean` | Clears and resets Vibe UI component caches. |
+
+---
+
+## 💻 Local Development Workflow
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/teknovateid/vibeui.git
+   cd vibeui
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   composer install
+   npm install
+   ```
+
+3. **Configure environment:**
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+4. **Start the development servers:**
+   ```bash
+   npm run dev
+   php artisan serve
+   ```
+
+5. **Browse the documentation & component playground:**  
+   Open `http://localhost:8000` in your browser.
+
+---
+
+## 🚀 Versioning & Releases
+
+Vibe UI strictly follows [Semantic Versioning (SemVer)](https://semver.org/) and uses Conventional Commits for automated changelog generation.
+
+For complete step-by-step instructions on creating new releases, Git subtree splitting, and Packagist synchronization, see **[RELEASING.md](RELEASING.md)**.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these guidelines:
+1. Fork the repository and create a new feature branch from `development`.
+2. Ensure your commit messages adhere to [Conventional Commits](https://www.conventionalcommits.org/).
+3. Make all UI edits inside `resources/` (never directly inside `packages/vibe/`).
+4. Run `php artisan optimize:clear` and test components across both English and Indonesian locales.
+5. Submit a Pull Request targeting the `development` branch.
+
+---
+
+## 📄 License
+
+Vibe UI is open-source software licensed under the **[MIT License](LICENSE.md)**.

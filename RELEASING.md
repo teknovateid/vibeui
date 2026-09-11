@@ -1,114 +1,182 @@
-# 🚀 Panduan Versioning & Rilis Vibe UI
+# 🚀 Vibe UI Release & Versioning Guide
 
-Dokumen ini menjelaskan alur kerja rilis dan *versioning* untuk package **Vibe UI** (`teknovate/vibeui`) menggunakan **1 Repositori Tunggal** (`teknovateid/vibeui`).
+This document outlines the versioning philosophy, release workflow, and distribution architecture for the **Vibe UI** package (`teknovate/vibeui`) maintained within a **single monorepo repository** (`teknovateid/vibeui`).
 
 ---
 
-## 🏗️ 1. Arsitektur Repositori (Monorepo Docs & Package)
+## 🏗️ 1. Architecture & Distribution Model
+
+Vibe UI combines both the interactive documentation web application and the core package source code into a single Git repository:
 
 ```text
-[Repositori: https://github.com/teknovateid/vibeui]
- ├── development        --> Branch koding harian seluruh tim (docs + package)
- ├── production         --> Branch rilis stabil dokumentasi web
- ├── composer.json      --> Aplikasi Dokumentasi (name: "laravel/laravel", type: "project")
- │                          menggunakan path repository: "./packages/*" (@dev symlink)
- └── packages/vibe/     --> Core Package Library (name: "teknovate/vibeui", type: "library")
+[Repository: https://github.com/teknovateid/vibeui]
+ ├── development        --> Active daily development branch (docs + package)
+ ├── production         --> Stable release branch for documentation & tagged releases
+ ├── composer.json      --> Host Documentation App (name: "laravel/laravel", type: "project")
+ │                          Configured with local path repository: "./packages/*" (@dev symlink)
+ └── packages/vibe/     --> Core Distribution Package (name: "teknovate/vibeui", type: "library")
            │
-           │  (Otomatis di-split via git subtree pada Git Tag rilis)
+           │  (Automated git subtree split during release tagging)
            ▼
-       [Git Tag vX.Y.Z] (Hanya berisi isi subfolder packages/vibe/)
+     [Git Tag vX.Y.Z]   (Contains ONLY the contents of packages/vibe/)
            │
            ▼
      [Packagist.org]
            │
            ▼
-  composer require teknovate/vibeui
+   composer require teknovate/vibeui
 ```
 
-Di repositori ini, root bertindak sebagai aplikasi dokumentasi & playground (`laravel/laravel`). Core package sesungguhnya berada di subfolder `packages/vibe/`. Ketika rilis dilakukan (`php artisan vibe:release`), sistem otomatis melakukan *subtree split* pada Git Tag rilis sehingga pengguna akhir yang mengunduh melalui Composer hanya menerima isi dari package murni tanpa file boilerplate dokumentasi (`app/`, `artisan`, `database/`, dll).
+### Why Subtree Split on Tagging?
+
+The root of this repository is a complete Laravel application containing documentation pages, interactive live examples, and development tooling. 
+
+When a release is created, our automated release command (`php artisan vibe:release`) performs a **Git subtree split** on `packages/vibe/`. This ensures that:
+- End users installing `teknovate/vibeui` via Composer **only receive clean, pure package files** (`src/`, `resources/`, `config/`, etc.).
+- No documentation host files (`app/`, `database/`, `routes/web.php`, `artisan`) leak into consumer vendor folders.
+- Everything remains maintainable in one unified repository.
 
 ---
 
-## ⚙️ 2. Registrasi Packagist (Sekali Saja)
+## 📝 2. Semantic Versioning & Conventional Commits
 
-1. Buka [packagist.org/packages/submit](https://packagist.org/packages/submit).
-2. Masukkan URL:
-   ```text
-   https://github.com/teknovateid/vibeui
-   ```
-3. Klik **Check** lalu **Submit**. Packagist akan langsung mengenali nama package **`teknovate/vibeui`**.
-4. Aktifkan **GitHub Service Hook** di pengaturan Packagist agar setiap tag baru otomatis tersinkronisasi.
+Vibe UI strictly adheres to [Semantic Versioning (SemVer)](https://semver.org/): `MAJOR.MINOR.PATCH`.
 
----
+Release automation analyzes the Git commit history since the previous tag to determine the appropriate version bump and generate clean changelog notes. Contributors must always format commit messages using [Conventional Commits](https://www.conventionalcommits.org/):
 
-## 📝 3. Standar Commit (Conventional Commits)
-
-Automasi rilis membaca riwayat commit untuk menentukan kenaikan versi (SemVer) dan menyusun `CHANGELOG.md` secara otomatis. Selalu gunakan format commit konvensional:
-
-| Awalan Commit | Kategori | Kenaikan Versi Otomatis |
-| :--- | :--- | :--- |
-| `feat:` | Fitur Baru | **MINOR** (misal: `0.1.0` $\rightarrow$ `0.2.0`) |
-| `fix:` | Perbaikan Bug | **PATCH** (misal: `0.1.0` $\rightarrow$ `0.1.1`) |
-| `refactor:` / `perf:` | Refaktorisasi / Optimasi | **PATCH** |
-| `BREAKING CHANGE:` / `feat!:` | Perubahan yang merusak kompatibilitas | **MAJOR** (misal: `0.9.0` $\rightarrow$ `1.0.0`) |
-| `docs:` / `chore:` / `style:` | Dokumentasi & Maintenance | Disertakan di kategori Chores |
+| Commit Prefix | Category | SemVer Impact | Description |
+| :--- | :--- | :--- | :--- |
+| `feat:` | Features | **MINOR** (`0.1.0` $\rightarrow$ `0.2.0`) | Introduces a new component, prop, or capability. |
+| `fix:` | Bug Fixes | **PATCH** (`0.1.0` $\rightarrow$ `0.1.1`) | Fixes a bug or unexpected behavior. |
+| `refactor:` / `perf:` | Improvements | **PATCH** (`0.1.0` $\rightarrow$ `0.1.1`) | Code restructuring, styling refinements, or performance optimizations. |
+| `BREAKING CHANGE:` / `feat!:` | Breaking Changes | **MAJOR** (`0.9.0` $\rightarrow$ `1.0.0`) | Incompatible API changes or structural migrations. |
+| `docs:` / `chore:` / `style:` / `test:` | Maintenance | **None / Included in Chores** | Documentation updates, internal maintenance, or test suites. |
 
 ---
 
-## 🎯 4. Alur Rilis Versi Baru (Step-by-Step)
+## 🎯 3. Step-by-Step Release Workflow
 
-Untuk merilis versi baru, Anda cukup menjalankan perintah CLI interaktif:
+Releasing a new version is completely automated through our interactive CLI assistant.
 
-### Langkah 1: Jalankan Release Assistant
+### Step 1: Ensure Working Tree is Clean
+
+Before starting a release, ensure all pending changes on `development` are committed and tested:
+
+```bash
+git status
+php artisan optimize:clear
+```
+
+### Step 2: Run the Release Assistant
+
+Launch the interactive release command:
+
 ```bash
 php artisan vibe:release
 ```
-*(Atau melalui konsol interaktif `php artisan vibe` lalu pilih opsi Release).*
 
-### Langkah 2: Yang Dilakukan Sistem Secara Otomatis
-1. **Validasi Status**: Memeriksa branch dan memastikan tidak ada perubahan lokal yang belum di-commit.
-2. **Auto-Sync**: Memastikan aset di `packages/vibe/` identik 100% dengan `resources/`.
-3. **Analisis Commit**: Membaca commit sejak tag terakhir dan mengelompokkannya (Features, Fixes, Improvements, Chores).
-4. **Saran Versi SemVer**: Sistem menyarankan versi berikutnya (misal `0.1.1`). Anda bisa memilih:
-   - `recommended` (sesuai kalkulasi commit)
+*(You can also access this via the central console command `php artisan vibe` and selecting the **Release** option).*
+
+### Step 3: What the System Automates
+
+The release assistant executes the following pipeline in seconds:
+
+1. **Repository Validation:** Checks current Git branch and ensures no uncommitted working tree changes exist.
+2. **Pre-Release Asset Sync:** Verifies that `packages/vibe/` is 100% synchronized with `resources/` and `lang/` using `vibe:sync`.
+3. **Commit Analysis:** Scans all commits since the last Git tag, categorizing them into Features, Fixes, Refactoring, and Chores.
+4. **SemVer Calculation:** Suggests the next version based on commit conventions. You can choose:
+   - `recommended` (calculated automatically)
    - `patch`
    - `minor`
    - `major`
-   - `custom` (masukkan versi sendiri)
-5. **Update Changelog**: Menulis entri rilis berformat markdown ke `CHANGELOG.md` dan `packages/vibe/CHANGELOG.md`.
-6. **Update Version**: Mengupdate konstanta `Vibe::VERSION` di `packages/vibe/src/Vibe.php`.
-7. **Commit & Tag**: Membuat commit `chore(release): vX.Y.Z` dan git tag beranotasi `vX.Y.Z`.
+   - `custom` (specify an arbitrary version number)
+5. **Changelog Generation:** Prepends a formatted Markdown release entry to both `CHANGELOG.md` and `packages/vibe/CHANGELOG.md`.
+6. **Version Bump:** Updates the `Vibe::VERSION` constant in `packages/vibe/src/Vibe.php`.
+7. **Release Commit:** Creates an annotated Git commit `chore(release): vX.Y.Z`.
+8. **Subtree Tag Creation:** Extracts `packages/vibe/` into an isolated subtree commit and creates an annotated tag `vX.Y.Z`.
+9. **Branch Synchronization:** Fast-forwards the `production` branch to match the release commit.
 
-### Langkah 3: Push ke GitHub
-Setelah tag terbuat, dorong branch dan tag ke repositori:
+### Step 4: Push to GitHub
+
+Once the tag is generated, push the branch and tags to GitHub:
+
 ```bash
 git push origin production --tags
 ```
-*(CLI akan menawarkan konfirmasi untuk langsung melakukan push otomatis jika Anda mau).*
 
-Begitu tag tiba di GitHub, Packagist otomatis mendeteksi rilis baru sehingga pengguna dapat langsung menjalankan:
+*(The CLI assistant will offer an interactive confirmation to push automatically if desired).*
+
+---
+
+## ⚙️ 4. One-Time Packagist Setup
+
+Once published to GitHub, Packagist distributes the package to the global PHP ecosystem:
+
+1. Visit [packagist.org/packages/submit](https://packagist.org/packages/submit).
+2. Enter the repository URL:
+   ```text
+   https://github.com/teknovateid/vibeui
+   ```
+3. Click **Check**, then click **Submit**. Packagist will immediately detect the package name **`teknovate/vibeui`**.
+4. Configure the **GitHub Service Hook** (or webhook) in the Packagist settings so that every newly pushed Git tag automatically triggers a Packagist update within seconds.
+
+---
+
+## 🛠️ 5. Command Reference & CLI Flags
+
+The `vibe:release` command supports several flags for automated environments and CI/CD:
+
 ```bash
-composer require teknovate/vibeui
+# Dry-run mode: preview commit analysis, version bump, and changelog without writing files or tags
+php artisan vibe:release --dry-run
+
+# Specify an explicit version instead of interactive prompts
+php artisan vibe:release --target-version=0.2.0
+
+# Skip automatic pre-release asset synchronization
+php artisan vibe:release --skip-sync
+
+# Skip Pint code style formatting and test checks
+php artisan vibe:release --skip-tests
+
+# Force release even if the working directory has uncommitted files
+php artisan vibe:release --force
+```
+
+### Companion Utility: Asset Parity Check
+
+To verify that `packages/vibe/` is completely up-to-date with `resources/` (useful for GitHub Actions or pre-commit hooks):
+
+```bash
+php artisan vibe:sync --check
 ```
 
 ---
 
-## 🛠️ 5. Perintah Utilitas Terkait
+## 🚨 6. Troubleshooting & Rollbacks
 
-### Mengecek Sinkronisasi Aset Saja
-```bash
-php artisan vibe:sync --check
-```
-Memverifikasi apakah `packages/vibe/` sinkron 100% tanpa mengubah file apa pun (berguna untuk validasi CI).
+### Accidental Tag Created (Before Pushing)
 
-### Menjalankan Sinkronisasi Manual
-```bash
-php artisan vibe:sync
-```
-Menyalin seluruh views, css, js, lang, dan layout stubs ke `packages/vibe/`.
+If you created a tag locally that should not be released:
 
-### Simulasi Rilis (Dry-Run)
 ```bash
-php artisan vibe:release --dry-run
+# Delete local tag
+git tag -d v0.X.Y
+
+# Revert the release commit
+git reset --hard HEAD~1
 ```
-Melihat simulasi pembacaan commit, saran versi, dan preview teks changelog tanpa membuat commit atau tag git nyata.
+
+### Deleting a Pushed Tag (Emergency)
+
+If a broken release tag was already pushed to GitHub:
+
+```bash
+# Delete local tag
+git tag -d v0.X.Y
+
+# Delete remote tag
+git push --delete origin v0.X.Y
+```
+
+After removing a remote tag, log in to [packagist.org](https://packagist.org) and click **Update** on the package dashboard to purge the retracted version.
