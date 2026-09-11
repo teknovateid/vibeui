@@ -41,17 +41,7 @@ class VibeCommand extends Command
 
         $action = select(
             'What would you like to do?',
-            [
-                'install' => 'Install Vibe UI (Publish config & inject assets)',
-                'component' => 'Publish a Vibe UI component',
-                'table' => 'Create a new Livewire DataTable component',
-                'page' => 'Generate a new page inside a layout',
-                'layout' => 'Generate a layout panel',
-                'sync' => 'Synchronize resources into packages/vibe',
-                'release' => 'Create a new release (Bump version, changelog, and tag)',
-                'clean' => 'Clean unused published components',
-                'exit' => 'Exit',
-            ]
+            $this->getAvailableActions()
         );
 
         if ($action === 'exit') {
@@ -77,5 +67,42 @@ class VibeCommand extends Command
         } elseif ($action === 'clean') {
             $this->call('vibe:clean');
         }
+    }
+
+    /**
+     * Get the available actions based on installation status and environment.
+     *
+     * @return array<string, string>
+     */
+    public function getAvailableActions(): array
+    {
+        $actions = [];
+
+        if (! InstallCommand::isInstalled()) {
+            $actions['install'] = 'Install Vibe UI (Publish config & inject assets)';
+        }
+
+        $actions['component'] = 'Publish a Vibe UI component';
+        $actions['table'] = 'Create a new Livewire DataTable component';
+        $actions['page'] = 'Generate a new page inside a layout';
+        $actions['layout'] = 'Generate a layout panel';
+
+        if ($this->hasPackagesDirectory()) {
+            $actions['sync'] = 'Synchronize resources into packages/vibe';
+            $actions['release'] = 'Create a new release (Bump version, changelog, and tag)';
+        }
+
+        $actions['clean'] = 'Clean unused published components';
+        $actions['exit'] = 'Exit';
+
+        return $actions;
+    }
+
+    /**
+     * Determine if the packages directory exists in the project root.
+     */
+    public function hasPackagesDirectory(): bool
+    {
+        return is_dir(base_path('packages'));
     }
 }

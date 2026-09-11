@@ -79,6 +79,12 @@ class SyncCommand extends Command
      */
     public function handle(): int
     {
+        if (! is_dir(base_path('packages'))) {
+            $this->components->error('This command is only available in package development environments ("packages" directory not found).');
+
+            return self::FAILURE;
+        }
+
         $checkOnly = $this->option('check');
         $silent = $this->option('silent');
 

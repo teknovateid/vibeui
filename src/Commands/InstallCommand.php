@@ -94,6 +94,103 @@ class InstallCommand extends Command
     }
 
     /**
+     * Determine if Vibe UI is fully installed and configured in the application.
+     * Checks:
+     * 1. Config: config/vibe.php exists.
+     * 2. Assets: resources/css/vibe and resources/js/vibe exist.
+     * 3. JS registration: resources/js/app.js contains import './vibe/app'.
+     * 4. CSS registration: resources/css/app.css contains @import './vibe/app.css'.
+     * 5. Vite config: vite.config.* registers vibe entry points.
+     * 6. Package dependencies: package.json has vibe dependencies.
+     */
+    public static function isInstalled(): bool
+    {
+        // 1. Config published
+        if (! file_exists(config_path('vibe.php'))) {
+            return false;
+        }
+
+        // 2. Core assets published
+        if (! is_dir(resource_path('css/vibe')) || ! is_dir(resource_path('js/vibe'))) {
+            return false;
+        }
+
+        // 3. app.js injected
+        $jsPath = resource_path('js/app.js');
+        if (file_exists($jsPath)) {
+            $jsContent = file_get_contents($jsPath);
+            if (! str_contains($jsContent, "import './vibe/app'") && ! str_contains($jsContent, 'import "./vibe/app"')) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        // 4. app.css injected
+        $cssPath = resource_path('css/app.css');
+        if (file_exists($cssPath)) {
+            $cssContent = file_get_contents($cssPath);
+            if (! str_contains($cssContent, "@import './vibe/app.css'") && ! str_contains($cssContent, '@import "./vibe/app.css"')) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        // 5. vite.config.js entry points injected
+        $vitePath = null;
+        foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
+            if (file_exists(base_path($file))) {
+                $vitePath = base_path($file);
+                break;
+            }
+        }
+        if ($vitePath) {
+            $viteContent = file_get_contents($vitePath);
+            if (! str_contains($viteContent, 'resources/css/vibe/') && ! str_contains($viteContent, 'resources/js/vibe/')) {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        // 6. package.json dependencies updated
+        $packageJsonPath = base_path('package.json');
+        if (file_exists($packageJsonPath)) {
+            $packageJson = json_decode(file_get_contents($packageJsonPath), true) ?: [];
+            $dependencies = $packageJson['dependencies'] ?? [];
+            $required = array_keys(static::getRequiredDependencies());
+            foreach ($required as $dep) {
+                if (! isset($dependencies[$dep])) {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get required dependencies from Vibe UI package.json.
+     *
+     * @return array<string, string>
+     */
+    public static function getRequiredDependencies(?string $vibePackagePath = null): array
+    {
+        $vibePackagePath = $vibePackagePath ?: __DIR__.'/../../package.json';
+
+        if (file_exists($vibePackagePath)) {
+            $vibePackage = json_decode(file_get_contents($vibePackagePath), true) ?: [];
+
+            return $vibePackage['dependencies'] ?? [];
+        }
+
+        return [];
+    }
+
+    /**
      * Update consumer package.json with dependencies from Vibe UI package.json
      */
     public function updateNpmDependencies(?string $packageJsonPath = null, ?string $vibePackagePath = null): bool
@@ -104,31 +201,7 @@ class InstallCommand extends Command
         }
 
         $packageJson = json_decode(file_get_contents($packageJsonPath), true) ?: [];
-
-        $vibePackagePath = $vibePackagePath ?: __DIR__.'/../../package.json';
-        $vibeDependencies = [];
-
-        if (file_exists($vibePackagePath)) {
-            $vibePackage = json_decode(file_get_contents($vibePackagePath), true) ?: [];
-            $vibeDependencies = $vibePackage['dependencies'] ?? [];
-        }
-
-        if (empty($vibeDependencies)) {
-            $vibeDependencies = [
-                '@alpinejs/persist' => '^3.15.12',
-                'chart.js' => '^4.5.1',
-                'chartjs-plugin-zoom' => '^2.2.0',
-                'filepond' => '^4.32.12',
-                'filepond-plugin-file-encode' => '^2.1.14',
-                'filepond-plugin-file-validate-size' => '^2.2.8',
-                'filepond-plugin-file-validate-type' => '^1.2.9',
-                'filepond-plugin-image-crop' => '^2.0.6',
-                'filepond-plugin-image-preview' => '^4.6.12',
-                'filepond-plugin-image-resize' => '^2.0.10',
-                'filepond-plugin-image-transform' => '^3.8.8',
-                'highlight.js' => '^11.12.0',
-            ];
-        }
+        $vibeDependencies = static::getRequiredDependencies($vibePackagePath);
 
         if (! isset($packageJson['dependencies'])) {
             $packageJson['dependencies'] = [];
