@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.6] - 2026-09-11
+
+### 🚀 Features
+- feat: add dynamic command availability check and installation status verification for Vibe CLI (9f14da2)
+
+### ⚡ Performance & Refactoring
+- refactor: reorder action options for better visibility in VibeCommand (e53a829)
+
+
 ## [0.1.5] - 2026-09-10
 
 ### 🚀 Features
