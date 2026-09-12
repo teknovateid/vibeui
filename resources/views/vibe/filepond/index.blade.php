@@ -59,6 +59,8 @@
     'protectSubmit' => false,
     'protectTitle' => null,
     'protectMessage' => null,
+    'reorder' => false,
+    'allowReorder' => false,
 ])
 
 @php
@@ -77,6 +79,7 @@
 
     $isAvatar = $avatar || $variant === 'avatar';
     $isCompact = $variant === 'compact';
+    $isReorderable = (bool) ($reorder || $allowReorder || ($attributes->has('reorder') && $attributes->get('reorder') !== false) || ($attributes->has('allow-reorder') && $attributes->get('allow-reorder') !== false));
 
     $resolvedExistingFiles = $files ?? $existingFiles ?? [];
     if (is_string($resolvedExistingFiles) && !empty($resolvedExistingFiles)) {
@@ -244,6 +247,8 @@
         'wireModel' => $wireModelAttr,
         'dashed' => (bool) $dashed,
         'variant' => $variant,
+        'reorder' => $isReorderable,
+        'allowReorder' => $isReorderable,
         'panelLayout' => $panelLayout,     // [FIX QA-2] Expose panelLayout prop to JS
         'storeAsFile' => $storeAsFile,     // [FIX QA-3] Expose storeAsFile prop to JS (null = auto-detect)
         'protect' => [

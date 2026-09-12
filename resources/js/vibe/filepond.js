@@ -127,15 +127,34 @@ function isSameOrigin(url) {
  * Attaches modern preview thumbnail for images or document icon with badge for other files
  */
 // [FIX BUG-4] Accepts per-instance blobUrlSet to avoid global Set cross-contamination
-function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
+function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null) {
     if (!item) return;
 
     const findItemEl = () => {
+        if (comp && comp.pond && comp.pond.element) {
+            const root = comp.pond.element;
+            const byId = document.getElementById(`filepond--item-${item.id}`);
+            if (byId && root.contains(byId)) return byId;
+
+            const allItems = Array.from(root.querySelectorAll('li.filepond--item'));
+            const matched = allItems.find(el => {
+                const elId = el.id || '';
+                const dataId = el.getAttribute('data-filepond-item-id') || '';
+                return elId === `filepond--item-${item.id}` ||
+                       dataId === String(item.id) ||
+                       elId.endsWith(`-${item.id}`);
+            });
+            if (matched) return matched;
+
+            if (typeof comp.pond.getFiles === 'function') {
+                const files = comp.pond.getFiles();
+                const idx = files.findIndex(f => String(f.id) === String(item.id) || f === item);
+                if (idx !== -1 && allItems[idx]) return allItems[idx];
+            }
+        }
         if (item.element && item.element.querySelector) return item.element;
         if (item.id) {
-            return document.getElementById(`filepond--item-${item.id}`) ||
-                   document.querySelector(`#filepond--item-${item.id}`) ||
-                   document.querySelector(`[data-filepond-item-id="${item.id}"]`);
+            return document.getElementById(`filepond--item-${item.id}`);
         }
         return null;
     };
@@ -264,6 +283,69 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
                     }
                 })
                 .catch(() => {});
+        }
+
+        // Inject / Update Reorder Controls (Handle + Up/Down arrows)
+        const isReorderEnabled = Boolean(
+            (comp && (comp.config?.reorder || comp.config?.allowReorder)) ||
+            rootEl?.getAttribute('data-allow-reorder') === 'true' ||
+            rootEl?.classList.contains('filepond--allow-reorder')
+        );
+
+        let handleGroup = fileWrapper.querySelector('.filepond--reorder-group');
+        if (isReorderEnabled && !isAvatar) {
+            if (!handleGroup) {
+                handleGroup = document.createElement('div');
+                handleGroup.className = 'filepond--reorder-group';
+                handleGroup.innerHTML = `
+                    <div class="filepond--reorder-handle" title="Tahan dan seret untuk memindahkan urutan" aria-label="Geser urutan">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="5" r="1"></circle>
+                            <circle cx="9" cy="12" r="1"></circle>
+                            <circle cx="9" cy="19" r="1"></circle>
+                            <circle cx="15" cy="5" r="1"></circle>
+                            <circle cx="15" cy="12" r="1"></circle>
+                            <circle cx="15" cy="19" r="1"></circle>
+                        </svg>
+                    </div>
+                    <div class="filepond--reorder-arrows">
+                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-up" title="Pindah ke atas" aria-label="Pindah ke atas">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="18 15 12 9 6 15"></polyline>
+                            </svg>
+                        </button>
+                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-down" title="Pindah ke bawah" aria-label="Pindah ke bawah">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+
+                const upBtn = handleGroup.querySelector('.filepond--reorder-btn-up');
+                const downBtn = handleGroup.querySelector('.filepond--reorder-btn-down');
+
+                upBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (comp && typeof comp.moveUp === 'function') {
+                        comp.moveUp(item.id);
+                    }
+                });
+
+                downBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    if (comp && typeof comp.moveDown === 'function') {
+                        comp.moveDown(item.id);
+                    }
+                });
+
+                fileWrapper.prepend(handleGroup);
+            }
+        } else if (handleGroup) {
+            handleGroup.remove();
+            handleGroup = null;
         }
 
         // Inject / Update Custom Download Action Button
@@ -457,6 +539,14 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
         let iconContainer = document.createElement('div');
         iconContainer.className = 'filepond--custom-file-icon';
 
+        const insertIcon = () => {
+            if (handleGroup && handleGroup.parentNode === fileWrapper) {
+                handleGroup.after(iconContainer);
+            } else {
+                fileWrapper.prepend(iconContainer);
+            }
+        };
+
         if (isImage) {
             // Determine image source URL
             let imgUrl = null;
@@ -512,7 +602,7 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
                     openImageLightbox(imgUrl, name);
                 });
 
-                fileWrapper.prepend(iconContainer);
+                insertIcon();
                 return;
             }
         }
@@ -538,7 +628,7 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false) {
             </div>
         `;
 
-        fileWrapper.prepend(iconContainer);
+        insertIcon();
     };
 
     render();
@@ -555,6 +645,7 @@ export function vibeFilepond(config = {}) {
     return {
         pond: null,
         input: null,
+        config: config,
         uploadedKeys: [],
         activeUploads: new Set(),
         _blobUrls: new Set(), // [FIX BUG-4] Per-instance blob URL tracking
@@ -639,7 +730,12 @@ export function vibeFilepond(config = {}) {
             }
 
             // Setup Upload Protection (Blocks submit & navigation while uploads are in progress)
+            this.config = config;
             this.setupUploadProtection(config);
+
+            if (config.reorder || config.allowReorder) {
+                this.setupReordering();
+            }
 
 
             // [FIX WARN-4] Always destroy pond on Livewire navigation to prevent memory leaks.
@@ -954,14 +1050,16 @@ export function vibeFilepond(config = {}) {
 
                 // Callbacks & Events
                 oninitfile: (item) => {
-                    attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
+                    attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
                 },
                 onaddfilestart: (item) => {
                     self.serverError = null;
                     self.hasError = false;
                 },
                 onaddfile: (err, item) => {
-                    attachCustomFileIcon(item, self._blobUrls); // [FIX BUG-4] pass per-instance set
+                    attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                    self.syncFormInputsOrder();
+                    self.updateArrowButtonStates();
                     self.updateReactiveState();
                     self.fireEvent('add', { item: item });
 
@@ -1035,6 +1133,8 @@ export function vibeFilepond(config = {}) {
                         if (dlBtn) dlBtn.style.display = '';
                     }
 
+                    self.syncFormInputsOrder();
+                    self.updateArrowButtonStates();
                     self.fireEvent('success', { item: item, key: item?.serverId, progress: 100 });
                 },
                 onprocessfileabort: (item) => {
@@ -1082,6 +1182,8 @@ export function vibeFilepond(config = {}) {
                     if (fileIdentifier) {
                         self.handleUploadRevert(fileIdentifier, cfg);
                     }
+                    self.syncFormInputsOrder();
+                    self.updateArrowButtonStates();
                     self.updateReactiveState();
                     self.serverError = null; // clear server error when file is removed
                     self.hasError = false;
@@ -1168,7 +1270,7 @@ export function vibeFilepond(config = {}) {
                                 const files = self.pond.getFiles();
                                 const matched = files.find(f => f.source === source || (f.file && f.file.name === filename));
                                 if (matched) {
-                                    attachCustomFileIcon(matched, self._blobUrls, true);
+                                    attachCustomFileIcon(matched, self._blobUrls, true, self);
                                 }
                             }
                         }, 50);
@@ -1190,7 +1292,7 @@ export function vibeFilepond(config = {}) {
                                     const files = self.pond.getFiles();
                                     const matched = files.find(f => f.source === source || (f.file && f.file.name === filename));
                                     if (matched) {
-                                        attachCustomFileIcon(matched, self._blobUrls, true);
+                                        attachCustomFileIcon(matched, self._blobUrls, true, self);
                                     }
                                 }
                             }, 50);
@@ -1845,6 +1947,453 @@ export function vibeFilepond(config = {}) {
                     proceed();
                 }
             }
+        },
+
+        // =========================================================================
+        // FilePond Item Reordering (Drag & Drop + Arrows + Input Order Sync)
+        // =========================================================================
+
+        setupReordering() {
+            if (!this.pond || !this.pond.element) return;
+            const root = this.pond.element;
+
+            root.setAttribute('data-allow-reorder', 'true');
+            root.classList.add('filepond--allow-reorder');
+
+            this.bindPondPointerDrag();
+
+            // Auto-sync form inputs when form submit starts
+            const form = this.$el ? this.$el.closest('form') : null;
+            if (form) {
+                const submitHandler = () => {
+                    this.syncFormInputsOrder();
+                };
+                form.addEventListener('submit', submitHandler, { capture: true });
+                this._cleanupListeners.push(() => {
+                    form.removeEventListener('submit', submitHandler, { capture: true });
+                });
+            }
+
+            // Initial input order sync and button state update
+            setTimeout(() => {
+                this.syncFormInputsOrder();
+                this.updateArrowButtonStates();
+            }, 80);
+        },
+
+        findItemElement(itemId, fallbackIndex = null) {
+            if (!this.pond || !this.pond.element) return null;
+            const root = this.pond.element;
+
+            // 1. Exact ID
+            const direct = document.getElementById(`filepond--item-${itemId}`);
+            if (direct && root.contains(direct)) return direct;
+
+            // 2. Data attribute or ID suffix
+            const allItems = Array.from(root.querySelectorAll('li.filepond--item'));
+            const matched = allItems.find(el => {
+                const elId = el.id || '';
+                const dataId = el.getAttribute('data-filepond-item-id') || '';
+                return elId === `filepond--item-${itemId}` ||
+                       dataId === String(itemId) ||
+                       elId.endsWith(`-${itemId}`);
+            });
+            if (matched) return matched;
+
+            // 3. Fallback: match by index in pond.getFiles()
+            if (typeof this.pond.getFiles === 'function') {
+                const files = this.pond.getFiles();
+                const idx = files.findIndex(f => String(f.id) === String(itemId) || f.id === itemId);
+                if (idx !== -1 && allItems[idx]) return allItems[idx];
+            }
+
+            // 4. Numerical fallback
+            if (fallbackIndex !== null && allItems[fallbackIndex]) {
+                return allItems[fallbackIndex];
+            }
+
+            return null;
+        },
+
+        getItemIdFromElement(el) {
+            if (!el) return null;
+            const itemEl = el.closest('li.filepond--item');
+            if (!itemEl) return null;
+
+            // 1. Check data-filepond-item-id
+            const dataId = itemEl.getAttribute('data-filepond-item-id');
+            if (dataId) return dataId;
+
+            // 2. Check id attribute (filepond--item-{id})
+            const idAttr = itemEl.id || '';
+            const match = idAttr.match(/filepond--item-(.+)$/);
+            if (match) return match[1];
+
+            // 3. Fallback by position among li.filepond--item
+            if (this.pond && typeof this.pond.getFiles === 'function') {
+                const allItems = Array.from(this.pond.element.querySelectorAll('li.filepond--item'));
+                const idx = allItems.indexOf(itemEl);
+                if (idx !== -1) {
+                    const files = this.pond.getFiles();
+                    if (files[idx]) return files[idx].id;
+                }
+            }
+
+            return null;
+        },
+
+        bindPondPointerDrag() {
+            if (!this.pond || !this.pond.element) return;
+            const root = this.pond.element;
+            const self = this;
+
+            const handlePointerDown = (e) => {
+                const handle = e.target.closest('.filepond--reorder-handle');
+                if (!handle) return;
+
+                const fromEl = handle.closest('li.filepond--item');
+                if (!fromEl) return;
+
+                const fromId = self.getItemIdFromElement(fromEl);
+                if (!fromId) return;
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                const rect = fromEl.getBoundingClientRect();
+                const startX = e.clientX;
+                const startY = e.clientY;
+                const offsetX = startX - rect.left;
+                const offsetY = startY - rect.top;
+
+                let isDragging = false;
+                let cloneRoot = null;
+                let lastTargetItem = null;
+                let lastTargetAbove = false;
+
+                const onPointerMove = (moveEv) => {
+                    const dist = Math.hypot(moveEv.clientX - startX, moveEv.clientY - startY);
+                    if (!isDragging) {
+                        if (dist < 4) return;
+                        isDragging = true;
+
+                        // Create floating clone matching dynamic form drag mirror
+                        cloneRoot = document.createElement('div');
+                        cloneRoot.className = 'filepond--root filepond--drag-clone-root';
+                        cloneRoot.style.setProperty('--drag-clone-width', `${rect.width}px`);
+                        cloneRoot.style.width = `${rect.width}px`;
+
+                        const clone = fromEl.cloneNode(true);
+                        clone.classList.add('filepond--drag-clone-floating');
+                        cloneRoot.appendChild(clone);
+                        document.body.appendChild(cloneRoot);
+
+                        fromEl.classList.add('filepond--item-dragging');
+                    }
+
+                    if (cloneRoot) {
+                        const curX = moveEv.clientX - offsetX;
+                        const curY = moveEv.clientY - offsetY;
+                        cloneRoot.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
+                    }
+
+                    // Find drop target under cursor
+                    const elUnder = document.elementFromPoint(moveEv.clientX, moveEv.clientY);
+                    const targetItem = (elUnder && root.contains(elUnder)) ? elUnder.closest('li.filepond--item') : null;
+
+                    // Clean previous indicators
+                    const allItems = Array.from(root.querySelectorAll('li.filepond--item'));
+                    allItems.forEach(el => {
+                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
+                    });
+
+                    if (targetItem && targetItem !== fromEl) {
+                        const tRect = targetItem.getBoundingClientRect();
+                        const isAbove = (moveEv.clientY < tRect.top + tRect.height / 2);
+                        if (isAbove) {
+                            targetItem.classList.add('filepond--drop-target-above');
+                        } else {
+                            targetItem.classList.add('filepond--drop-target-below');
+                        }
+                        lastTargetItem = targetItem;
+                        lastTargetAbove = isAbove;
+                    } else {
+                        lastTargetItem = null;
+                    }
+                };
+
+                const onPointerUp = (upEv) => {
+                    window.removeEventListener('pointermove', onPointerMove, { capture: true });
+                    window.removeEventListener('pointerup', onPointerUp, { capture: true });
+                    window.removeEventListener('pointercancel', onPointerUp, { capture: true });
+
+                    if (cloneRoot) {
+                        cloneRoot.remove();
+                        cloneRoot = null;
+                    }
+
+                    fromEl.classList.remove('filepond--item-dragging');
+
+                    const allItems = Array.from(root.querySelectorAll('li.filepond--item'));
+                    allItems.forEach(el => {
+                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
+                    });
+
+                    if (isDragging && lastTargetItem && lastTargetItem !== fromEl) {
+                        const targetId = self.getItemIdFromElement(lastTargetItem);
+                        if (targetId) {
+                            self.reorderById(fromId, targetId, lastTargetAbove ? 'before' : 'after');
+                        }
+                    }
+                };
+
+                window.addEventListener('pointermove', onPointerMove, { capture: true });
+                window.addEventListener('pointerup', onPointerUp, { capture: true });
+                window.addEventListener('pointercancel', onPointerUp, { capture: true });
+            };
+
+            root.addEventListener('pointerdown', handlePointerDown);
+            this._cleanupListeners.push(() => {
+                root.removeEventListener('pointerdown', handlePointerDown);
+            });
+        },
+
+        reorderById(fromId, toId, position = 'before') {
+            if (!this.pond || fromId === toId) return;
+            const files = typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
+            const fromIndex = files.findIndex(f => String(f.id) === String(fromId) || f.id === fromId || f.serverId === fromId);
+            const toIndex = files.findIndex(f => String(f.id) === String(toId) || f.id === toId || f.serverId === toId);
+
+            if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return;
+
+            let targetIndex = toIndex;
+            if (position === 'after') {
+                targetIndex = fromIndex < toIndex ? toIndex : toIndex + 1;
+            } else {
+                targetIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+            }
+
+            if (targetIndex < 0) targetIndex = 0;
+            if (targetIndex >= files.length) targetIndex = files.length - 1;
+            if (fromIndex === targetIndex) return;
+
+            this.reorderItem(fromIndex, targetIndex);
+        },
+
+        animateReorder(fromEl, toEl, callback) {
+            if (!this.pond || !this.pond.element) {
+                if (callback) callback();
+                return;
+            }
+
+            const root = this.pond.element;
+            const items = Array.from(root.querySelectorAll('li.filepond--item'));
+
+            // FIRST: Capture initial positions
+            const firstRects = new Map();
+            items.forEach(el => firstRects.set(el, el.getBoundingClientRect()));
+
+            // DO WORK: Reorder DOM and internal state
+            if (callback) callback();
+
+            // LAST, INVERT, PLAY: Animate items to new positions
+            requestAnimationFrame(() => {
+                items.forEach(el => {
+                    const first = firstRects.get(el);
+                    const last = el.getBoundingClientRect();
+                    if (!first) return;
+
+                    const deltaY = first.top - last.top;
+                    if (Math.abs(deltaY) > 0.5) {
+                        el.style.transform = `translate3d(0, ${deltaY}px, 0)`;
+                        el.style.transition = 'transform 0s';
+
+                        requestAnimationFrame(() => {
+                            el.style.transform = '';
+                            el.style.transition = 'transform 260ms cubic-bezier(0.2, 0, 0, 1)';
+                        });
+                    }
+                });
+
+                // Clear inline styles after animation completes
+                setTimeout(() => {
+                    items.forEach(el => {
+                        el.style.transform = '';
+                        el.style.transition = '';
+                    });
+                }, 300);
+            });
+        },
+
+        highlightItem(el) {
+            if (!el) return;
+            const target = el.querySelector('.filepond--file-wrapper') || el;
+            target.classList.add('filepond--reorder-highlight');
+            setTimeout(() => {
+                target.classList.remove('filepond--reorder-highlight');
+            }, 800);
+        },
+
+        reorderItem(fromIndex, toIndex) {
+            if (!this.pond || fromIndex === toIndex) return;
+            const files = typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
+            if (fromIndex < 0 || fromIndex >= files.length || toIndex < 0 || toIndex >= files.length) return;
+
+            const fromItem = files[fromIndex];
+            const toItem = files[toIndex];
+
+            const fromEl = this.findItemElement(fromItem.id, fromIndex);
+            const toEl = this.findItemElement(toItem.id, toIndex);
+
+            const performMove = () => {
+                // 1. Move in FilePond internal state using integer index (100% reliable)
+                if (typeof this.pond.moveFile === 'function') {
+                    this.pond.moveFile(fromIndex, toIndex);
+                }
+
+                // 2. Move in DOM if list container exists
+                if (fromEl && toEl && fromEl.parentNode) {
+                    const parent = fromEl.parentNode;
+                    if (fromIndex < toIndex) {
+                        parent.insertBefore(fromEl, toEl.nextSibling);
+                    } else {
+                        parent.insertBefore(fromEl, toEl);
+                    }
+                }
+
+                // 3. Highlight moved item
+                const movedEl = this.findItemElement(fromItem.id, toIndex);
+                if (movedEl) {
+                    this.highlightItem(movedEl);
+                }
+
+                // 4. Sync form inputs and buttons
+                this.syncFormInputsOrder();
+                this.updateArrowButtonStates();
+                this.updateReactiveState();
+
+                // 5. Fire reorder event
+                const detail = {
+                    id: this.config?.id || (this.input ? this.input.id : 'filepond'),
+                    fromIndex,
+                    toIndex,
+                    files: this.pond.getFiles()
+                };
+                this.fireEvent('reorder', detail);
+            };
+
+            // Animate using FLIP
+            this.animateReorder(fromEl, toEl, performMove);
+        },
+
+        moveUp(itemId) {
+            if (!this.pond || typeof this.pond.getFiles !== 'function') return;
+            const files = this.pond.getFiles();
+            const idx = files.findIndex(f => String(f.id) === String(itemId) || f.id === itemId || f.serverId === itemId);
+            if (idx > 0) {
+                this.reorderItem(idx, idx - 1);
+            }
+        },
+
+        moveDown(itemId) {
+            if (!this.pond || typeof this.pond.getFiles !== 'function') return;
+            const files = this.pond.getFiles();
+            const idx = files.findIndex(f => String(f.id) === String(itemId) || f.id === itemId || f.serverId === itemId);
+            if (idx !== -1 && idx < files.length - 1) {
+                this.reorderItem(idx, idx + 1);
+            }
+        },
+
+        updateArrowButtonStates() {
+            if (!this.pond || !this.pond.element) return;
+            const root = this.pond.element;
+            const items = Array.from(root.querySelectorAll('li.filepond--item'));
+            const total = items.length;
+
+            items.forEach((itemEl, idx) => {
+                const upBtn = itemEl.querySelector('.filepond--reorder-btn-up');
+                const downBtn = itemEl.querySelector('.filepond--reorder-btn-down');
+
+                if (upBtn) {
+                    upBtn.disabled = (idx === 0);
+                }
+                if (downBtn) {
+                    downBtn.disabled = (idx === total - 1);
+                }
+            });
+        },
+
+        syncFormInputsOrder() {
+            if (!this.pond || typeof this.pond.getFiles !== 'function') return;
+            const isReorderEnabled = Boolean(
+                this.config?.reorder ||
+                this.config?.allowReorder ||
+                (this.pond.element && this.pond.element.getAttribute('data-allow-reorder') === 'true')
+            );
+            if (!isReorderEnabled) return;
+
+            const baseName = (this.config?.name || (this.input ? this.input.name : '')).replace(/\[\]$/, '');
+            if (!baseName) return;
+
+            const files = this.pond.getFiles();
+            const root = this.pond.element || this.$el;
+            if (!root) return;
+
+            // Collect all hidden inputs and file inputs created by FilePond
+            const allInputs = Array.from(root.querySelectorAll(`input[name^="${baseName}"]`));
+            const hiddenInputs = allInputs.filter(inp => inp.type === 'hidden');
+            const fileInputs = allInputs.filter(inp => inp.type === 'file');
+
+            // Track matched inputs so we don't assign twice
+            const usedInputs = new Set();
+
+            files.forEach((fileItem, idx) => {
+                const indexedName = `${baseName}[${idx}]`;
+                const fileObj = fileItem.file;
+                const sourceVal = fileItem.serverId || (typeof fileItem.source === 'string' ? fileItem.source : null);
+
+                let matchedInput = null;
+
+                // Case 1: UploadedFile (File/Blob)
+                if (fileObj instanceof File || (fileObj && typeof fileObj === 'object' && fileObj.name)) {
+                    matchedInput = fileInputs.find(inp => {
+                        if (usedInputs.has(inp)) return false;
+                        if (inp.files && inp.files.length > 0) {
+                            return inp.files[0].name === fileObj.name && (fileObj.size ? inp.files[0].size === fileObj.size : true);
+                        }
+                        return false;
+                    });
+                }
+
+                // Case 2: Preloaded or Server-Uploaded string URL/Key
+                if (!matchedInput && sourceVal) {
+                    matchedInput = hiddenInputs.find(inp => {
+                        if (usedInputs.has(inp)) return false;
+                        return inp.value === sourceVal;
+                    });
+                }
+
+                // Case 3: Fallback by item ID or filename match
+                if (!matchedInput) {
+                    matchedInput = allInputs.find(inp => {
+                        if (usedInputs.has(inp)) return false;
+                        if (sourceVal && inp.value && (inp.value.includes(sourceVal) || sourceVal.includes(inp.value))) return true;
+                        if (fileItem.filename && inp.value && inp.value.includes(fileItem.filename)) return true;
+                        return false;
+                    });
+                }
+
+                // Case 4: Positional fallback from remaining unused inputs
+                if (!matchedInput) {
+                    matchedInput = allInputs.find(inp => !usedInputs.has(inp));
+                }
+
+                if (matchedInput) {
+                    usedInputs.add(matchedInput);
+                    matchedInput.setAttribute('name', indexedName);
+                    matchedInput.name = indexedName;
+                }
+            });
         }
     };
 }
