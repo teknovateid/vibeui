@@ -8,7 +8,9 @@
     'checked' => false,
     'description' => null,
     'size' => 'md', // sm, md, lg
-    'variant' => 'default', // default, card, accent
+    'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, accent, card
+    'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info, accent
+    'card' => false,
     'error' => null,
     'errorName' => null,
     'wrapperClass' => null,
@@ -27,6 +29,19 @@
     $isIndicatorHidden = $hideIndicator || $attributes->has('hide-indicator') || $attributes->has('hide_indicator');
     $indicatorVal = filter_var($indicator, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     $showIndicator = ($indicatorVal ?? (bool) $indicator) && !$isIndicatorHidden;
+
+    $isCardVariant = str_starts_with((string) $variant, 'card');
+    $isCard = $card || $isCardVariant || $attributes->has('card');
+
+    $cardColor = null;
+    if ($isCardVariant && $variant !== 'card') {
+        $cardColor = str_replace(['card-', 'card_'], '', (string) $variant);
+    }
+
+    $resolvedVariant = $color ?? $cardColor ?? ($variant === 'card' ? 'primary' : $variant);
+    if ($resolvedVariant === 'default') {
+        $resolvedVariant = 'primary';
+    }
 
     // Outer circle sizes
     $outerSizes = match ($size) {
@@ -55,8 +70,23 @@
         default => 'text-xs',
     };
 
-    // Variant colors
-    $colorClasses = match ($variant) {
+    // Outer circle variant colors
+    $colorClasses = match ($resolvedVariant) {
+        'secondary' => $hasError
+            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
+            : 'border-input bg-background peer-checked:border-secondary-foreground/80 text-secondary-foreground peer-checked:bg-secondary/40',
+        'success' => $hasError
+            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
+            : 'border-input bg-background peer-checked:border-success text-success peer-checked:bg-success/5',
+        'warning' => $hasError
+            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
+            : 'border-input bg-background peer-checked:border-warning text-warning peer-checked:bg-warning/5',
+        'danger', 'destructive' => $hasError
+            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
+            : 'border-input bg-background peer-checked:border-destructive text-destructive peer-checked:bg-destructive/5',
+        'info' => $hasError
+            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
+            : 'border-input bg-background peer-checked:border-info text-info peer-checked:bg-info/5',
         'accent' => $hasError
             ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
             : 'border-input bg-background peer-checked:border-accent text-accent peer-checked:bg-accent/10',
@@ -65,18 +95,33 @@
             : 'border-input bg-background peer-checked:border-primary text-primary peer-checked:bg-primary/5',
     };
 
-    $dotColor = match ($variant) {
+    // Inner dot colors
+    $dotColor = match ($resolvedVariant) {
+        'secondary' => 'bg-secondary-foreground',
+        'success' => 'bg-success',
+        'warning' => 'bg-warning',
+        'danger', 'destructive' => 'bg-destructive',
+        'info' => 'bg-info',
         'accent' => 'bg-accent',
         default => 'bg-primary',
     };
 
-    $isCard = $variant === 'card';
+    // Card checked accent colors
+    $cardCheckedClasses = match ($resolvedVariant) {
+        'secondary' => 'has-checked:border-secondary-foreground/70 has-checked:ring-1 has-checked:ring-secondary-foreground/20 has-checked:bg-secondary/40 has-checked:hover:border-secondary-foreground/80 has-checked:hover:bg-secondary/60',
+        'success' => 'has-checked:border-success has-checked:ring-1 has-checked:ring-success/20 has-checked:bg-success/5 has-checked:hover:border-success has-checked:hover:bg-success/10',
+        'warning' => 'has-checked:border-warning has-checked:ring-1 has-checked:ring-warning/20 has-checked:bg-warning/5 has-checked:hover:border-warning has-checked:hover:bg-warning/10',
+        'danger', 'destructive' => 'has-checked:border-destructive has-checked:ring-1 has-checked:ring-destructive/20 has-checked:bg-destructive/5 has-checked:hover:border-destructive has-checked:hover:bg-destructive/10',
+        'info' => 'has-checked:border-info has-checked:ring-1 has-checked:ring-info/20 has-checked:bg-info/5 has-checked:hover:border-info has-checked:hover:bg-info/10',
+        'accent' => 'has-checked:border-accent has-checked:ring-1 has-checked:ring-accent/20 has-checked:bg-accent/10 has-checked:hover:border-accent has-checked:hover:bg-accent/15',
+        default => 'has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-checked:hover:bg-primary/10',
+    };
 @endphp
 
 <div @if($wrapperClass) class="{{ $wrapperClass }}" @endif>
     @if ($isCard)
         {{-- Card Variant --}}
-        <label for="{{ $id }}" class="relative flex items-start gap-3 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none {{ $hasError ? 'border-destructive/60 bg-destructive/5' : 'border-border bg-card hover:bg-muted/40 hover:border-border/80' }} has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-focus-visible:ring-2 has-focus-visible:ring-ring/20 has-disabled:opacity-50 has-disabled:pointer-events-none shadow-2xs">
+        <label for="{{ $id }}" class="relative flex items-start gap-3 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none {{ $hasError ? 'border-destructive/60 bg-destructive/5' : 'border-border bg-muted hover:bg-muted/80 hover:border-border/80' }} {{ $cardCheckedClasses }} has-focus-visible:ring-2 has-focus-visible:ring-ring/20 has-disabled:opacity-50 has-disabled:pointer-events-none shadow-2xs">
             @if ($showIndicator)
                 <div class="relative flex items-center justify-center shrink-0 mt-0.5">
                     <input

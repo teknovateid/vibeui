@@ -26,9 +26,14 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">default</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">card</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary (default)</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">success</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">card</vibe:badge>
                 </div>
             </div>
 
@@ -82,7 +87,40 @@
                 </vibe:preview>
             </section>
 
-            {{-- 3. Card Variant --}}
+            {{-- 3. Color Variants --}}
+            <section id="varian-warna" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/radio.variants.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/radio.variants.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/radio.variants.preview_title')">
+                    <vibe:preview.code>
+                        <div class="flex flex-wrap gap-4 sm:gap-6">
+                            <vibe:radio name="v_color" variant="primary" label="Primary" checked />
+                            <vibe:radio name="v_color" variant="secondary" label="Secondary" />
+                            <vibe:radio name="v_color" variant="success" label="Success" />
+                            <vibe:radio name="v_color" variant="warning" label="Warning" />
+                            <vibe:radio name="v_color" variant="danger" label="Danger" />
+                            <vibe:radio name="v_color" variant="info" label="Info" />
+                            <vibe:radio name="v_color" variant="accent" label="Accent" />
+                        </div>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap gap-4 sm:gap-6">
+                        <vibe:radio name="v_color_live" variant="primary" label="Primary" checked />
+                        <vibe:radio name="v_color_live" variant="secondary" label="Secondary" />
+                        <vibe:radio name="v_color_live" variant="success" label="Success" />
+                        <vibe:radio name="v_color_live" variant="warning" label="Warning" />
+                        <vibe:radio name="v_color_live" variant="danger" label="Danger" />
+                        <vibe:radio name="v_color_live" variant="info" label="Info" />
+                        <vibe:radio name="v_color_live" variant="accent" label="Accent" />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 4. Card Variant --}}
             <section id="varian-card" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/radio.card.title') }}</h2>
@@ -123,71 +161,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 4. Props Reference --}}
-            <section id="referensi-props" class="space-y-6">
-                <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/radio.props.title') }}</h2>
-                    <p class="text-sm text-muted-foreground">
-                        {!! __('docs/radio.props.desc') !!}
-                    </p>
-                </div>
-
-                <vibe:table>
-                    <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.prop') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.type') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.default') }}</vibe:table.column>
-                        <vibe:table.column>{{ __('docs/radio.props.columns.desc') }}</vibe:table.column>
-                    </vibe:table.header>
-                    <vibe:table.rows>
-                        @php
-                            $radioProps = [['name', 'string', 'null', __('docs/radio.props.items.name')], ['id', 'string', 'auto', __('docs/radio.props.items.id')], ['value', 'string', 'null', __('docs/radio.props.items.value')], ['label', 'string', 'null', __('docs/radio.props.items.label')], ['description', 'string', 'null', __('docs/radio.props.items.description')], ['checked', 'bool', 'false', __('docs/radio.props.items.checked')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')], ['variant', "'default'|'card'|'accent'", "'default'", __('docs/radio.props.items.variant')], ['indicator', 'bool', 'true', __('docs/radio.props.items.indicator')], ['hideIndicator', 'bool', 'false', __('docs/radio.props.items.hideIndicator')], ['error', 'string|bool', 'null', __('docs/radio.props.items.error')], ['errorName', 'string', 'null', __('docs/radio.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/radio.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/radio.props.items.wrapperClass')]];
-                        @endphp
-                        @foreach ($radioProps as [$prop, $type, $default, $desc])
-                            <vibe:table.row>
-                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
-                            </vibe:table.row>
-                        @endforeach
-                    </vibe:table.rows>
-                </vibe:table>
-
-                {{-- Group Props --}}
-                <div class="space-y-3 pt-4">
-                    <div class="space-y-1">
-                        <h3 class="text-lg font-bold text-foreground">{{ __('docs/radio.group_props.title') }}</h3>
-                        <p class="text-sm text-muted-foreground">
-                            {!! __('docs/radio.group_props.desc') !!}
-                        </p>
-                    </div>
-
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.prop') }}</vibe:table.column>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.type') }}</vibe:table.column>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.default') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/radio.group_props.columns.desc') }}</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            @php
-                                $groupProps = [['label', 'string', 'null', __('docs/radio.group_props.items.label')], ['name', 'string', 'null', __('docs/radio.group_props.items.name')], ['description', 'string', 'null', __('docs/radio.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/radio.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/radio.group_props.items.columns')], ['required', 'bool', 'false', __('docs/radio.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/radio.group_props.items.error')], ['errorName', 'string', 'null', __('docs/radio.group_props.items.errorName')]];
-                            @endphp
-                            @foreach ($groupProps as [$prop, $type, $default, $desc])
-                                <vibe:table.row>
-                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                    <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
-                                </vibe:table.row>
-                            @endforeach
-                        </vibe:table.rows>
-                    </vibe:table>
-                </div>
-            </section>
-
-            {{-- Form Submission Test Section --}}
+            {{-- 4. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -250,7 +224,7 @@
                                 </vibe:radio.group>
 
                                 <vibe:radio.group name="payment_gateway" :label="__('docs/radio.test.payment_group_label')" :description="__('docs/radio.test.payment_group_desc')" variant="card">
-                                    <vibe:radio variant="card" name="payment_gateway" value="credit_card" :label="__('docs/radio.test.pay_cc_label')" :description="__('docs/radio.test.pay_cc_desc')" checked />
+                                    <vibe:radio variant="card" name="payment_gateway" value="credit_card" :label="__('docs/radio.test.pay_cc_label')" :description="__('docs/radio.test.pay_cc_desc')" variant="card" checked />
                                     <vibe:radio variant="card" name="payment_gateway" value="bank_transfer" :label="__('docs/radio.test.pay_va_label')" :description="__('docs/radio.test.pay_va_desc')" />
                                     <vibe:radio variant="card" name="payment_gateway" value="qris" :label="__('docs/radio.test.pay_qris_label')" :description="__('docs/radio.test.pay_qris_desc')" />
                                 </vibe:radio.group>
@@ -264,6 +238,87 @@
                         </vibe:card>
                     </vibe:form>
                 </vibe:preview>
+            </section>
+
+            {{-- 5. Props Reference --}}
+            <section id="referensi-props" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/radio.props.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/radio.props.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/radio.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $radioProps = [
+                                ['name', 'string', 'null', __('docs/radio.props.items.name')],
+                                ['id', 'string', 'auto', __('docs/radio.props.items.id')],
+                                ['value', 'string', 'null', __('docs/radio.props.items.value')],
+                                ['label', 'string', 'null', __('docs/radio.props.items.label')],
+                                ['description', 'string', 'null', __('docs/radio.props.items.description')],
+                                ['checked', 'bool', 'false', __('docs/radio.props.items.checked')],
+                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')],
+                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'|'card'", "'primary'", __('docs/radio.props.items.variant')],
+                                ['color', 'string', 'null', __('docs/radio.props.items.color')],
+                                ['card', 'bool', 'false', __('docs/radio.props.items.card')],
+                                ['indicator', 'bool', 'true', __('docs/radio.props.items.indicator')],
+                                ['hideIndicator', 'bool', 'false', __('docs/radio.props.items.hideIndicator')],
+                                ['error', 'string|bool', 'null', __('docs/radio.props.items.error')],
+                                ['errorName', 'string', 'null', __('docs/radio.props.items.errorName')],
+                                ['disabled', 'bool', 'false', __('docs/radio.props.items.disabled')],
+                                ['wrapperClass', 'string', 'null', __('docs/radio.props.items.wrapperClass')],
+                            ];
+                        @endphp
+                        @foreach ($radioProps as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- Group Props --}}
+                <div class="space-y-3 pt-4">
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-bold text-foreground">{{ __('docs/radio.group_props.title') }}</h3>
+                        <p class="text-sm text-muted-foreground">
+                            {!! __('docs/radio.group_props.desc') !!}
+                        </p>
+                    </div>
+
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/radio.group_props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/radio.group_props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $groupProps = [['label', 'string', 'null', __('docs/radio.group_props.items.label')], ['name', 'string', 'null', __('docs/radio.group_props.items.name')], ['description', 'string', 'null', __('docs/radio.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/radio.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/radio.group_props.items.columns')], ['required', 'bool', 'false', __('docs/radio.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/radio.group_props.items.error')], ['errorName', 'string', 'null', __('docs/radio.group_props.items.errorName')]];
+                            @endphp
+                            @foreach ($groupProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
             </section>
 
         </div>

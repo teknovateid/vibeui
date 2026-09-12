@@ -473,74 +473,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 8. Props Reference --}}
-            <section id="referensi-props" class="space-y-4">
-                <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/date-time.props.title') }}</h2>
-                    <p class="text-sm text-muted-foreground">
-                        {!! __('docs/date-time.props.desc') !!}
-                    </p>
-                </div>
-
-                <vibe:table>
-                    <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.prop') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.type') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.default') }}</vibe:table.column>
-                        <vibe:table.column>{{ __('docs/date-time.props.columns.desc') }}</vibe:table.column>
-                    </vibe:table.header>
-                    <vibe:table.rows>
-                        @php
-                            $propsList = [
-                                ['type / mode', 'string', "'single'", __('docs/date-time.props_items.type')],
-                                ['name', 'string|null', 'null', __('docs/date-time.props_items.name')],
-                                ['startName', 'string|null', 'null', __('docs/date-time.props_items.startName')],
-                                ['endName', 'string|null', 'null', __('docs/date-time.props_items.endName')],
-                                ['label', 'string|null', 'null', __('docs/date-time.props_items.label')],
-                                ['description', 'string|null', 'null', __('docs/date-time.props_items.description')],
-                                ['placeholder', 'string|null', 'null', __('docs/date-time.props_items.placeholder')],
-                                ['value', 'string|null', 'null', __('docs/date-time.props_items.value')],
-                                ['presets', 'bool|array', 'false', __('docs/date-time.props_items.presets')],
-                                ['time24', 'bool', 'true', __('docs/date-time.props_items.time24')],
-                                ['minuteStep', 'int', '1', __('docs/date-time.props_items.minuteStep')],
-                                ['secondStep', 'int', '1', __('docs/date-time.props_items.secondStep')],
-                                ['showSeconds', 'bool', 'false', __('docs/date-time.props_items.showSeconds')],
-                                ['dualMonth', 'bool', 'false', __('docs/date-time.props_items.dualMonth')],
-                                ['inline', 'bool', 'false', __('docs/date-time.props_items.inline')],
-                                ['clearable', 'bool', 'true', __('docs/date-time.props_items.clearable')],
-                                ['min / minDate', 'string|null', 'null', __('docs/date-time.props_items.minDate')],
-                                ['max / maxDate', 'string|null', 'null', __('docs/date-time.props_items.maxDate')],
-                                ['minRange', 'int|null', 'null', __('docs/date-time.props_items.minRange')],
-                                ['maxRange', 'int|null', 'null', __('docs/date-time.props_items.maxRange')],
-                                ['disabledDates', 'array', '[]', __('docs/date-time.props_items.disabledDates')],
-                                ['disabledDaysOfWeek', 'array', '[]', __('docs/date-time.props_items.disabledDaysOfWeek')],
-                                ['markers', 'array', '[]', __('docs/date-time.props_items.markers')],
-                                ['locale', 'string|null', 'app()->getLocale()', __('docs/date-time.props_items.locale')],
-                                ['firstDayOfWeek', 'int', '1', __('docs/date-time.props_items.firstDayOfWeek')],
-                                ['size', 'string', "'md'", __('docs/date-time.props_items.size')],
-                                ['variant', 'string', "'primary'", __('docs/date-time.props_items.variant')],
-                                ['error', 'string|bool|null', 'null', __('docs/date-time.props_items.error')],
-                                ['required', 'bool', 'false', __('docs/date-time.props_items.required')],
-                                ['disabled', 'bool', 'false', __('docs/date-time.props_items.disabled')],
-                                ['readonly', 'bool', 'false', __('docs/date-time.props_items.readonly')],
-                                ['startTimeLabel', 'string|null', 'null', __('docs/date-time.props_items.startTimeLabel')],
-                                ['endTimeLabel', 'string|null', 'null', __('docs/date-time.props_items.endTimeLabel')],
-                                ['timeLabel', 'string|null', 'null', __('docs/date-time.props_items.timeLabel')],
-                            ];
-                        @endphp
-                        @foreach ($propsList as [$prop, $type, $default, $desc])
-                            <vibe:table.row>
-                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
-                            </vibe:table.row>
-                        @endforeach
-                    </vibe:table.rows>
-                </vibe:table>
-            </section>
-
-            {{-- Form Submission Test Section --}}
+            {{-- 8. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -621,6 +554,73 @@
                         </vibe:card>
                     </vibe:form>
                 </vibe:preview>
+            </section>
+
+            {{-- 9. Props Reference --}}
+            <section id="referensi-props" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/date-time.props.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/date-time.props.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/date-time.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/date-time.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $propsList = [
+                                ['type / mode', 'string', "'single'", __('docs/date-time.props_items.type')],
+                                ['name', 'string|null', 'null', __('docs/date-time.props_items.name')],
+                                ['startName', 'string|null', 'null', __('docs/date-time.props_items.startName')],
+                                ['endName', 'string|null', 'null', __('docs/date-time.props_items.endName')],
+                                ['label', 'string|null', 'null', __('docs/date-time.props_items.label')],
+                                ['description', 'string|null', 'null', __('docs/date-time.props_items.description')],
+                                ['placeholder', 'string|null', 'null', __('docs/date-time.props_items.placeholder')],
+                                ['value', 'string|null', 'null', __('docs/date-time.props_items.value')],
+                                ['presets', 'bool|array', 'false', __('docs/date-time.props_items.presets')],
+                                ['time24', 'bool', 'true', __('docs/date-time.props_items.time24')],
+                                ['minuteStep', 'int', '1', __('docs/date-time.props_items.minuteStep')],
+                                ['secondStep', 'int', '1', __('docs/date-time.props_items.secondStep')],
+                                ['showSeconds', 'bool', 'false', __('docs/date-time.props_items.showSeconds')],
+                                ['dualMonth', 'bool', 'false', __('docs/date-time.props_items.dualMonth')],
+                                ['inline', 'bool', 'false', __('docs/date-time.props_items.inline')],
+                                ['clearable', 'bool', 'true', __('docs/date-time.props_items.clearable')],
+                                ['min / minDate', 'string|null', 'null', __('docs/date-time.props_items.minDate')],
+                                ['max / maxDate', 'string|null', 'null', __('docs/date-time.props_items.maxDate')],
+                                ['minRange', 'int|null', 'null', __('docs/date-time.props_items.minRange')],
+                                ['maxRange', 'int|null', 'null', __('docs/date-time.props_items.maxRange')],
+                                ['disabledDates', 'array', '[]', __('docs/date-time.props_items.disabledDates')],
+                                ['disabledDaysOfWeek', 'array', '[]', __('docs/date-time.props_items.disabledDaysOfWeek')],
+                                ['markers', 'array', '[]', __('docs/date-time.props_items.markers')],
+                                ['locale', 'string|null', 'app()->getLocale()', __('docs/date-time.props_items.locale')],
+                                ['firstDayOfWeek', 'int', '1', __('docs/date-time.props_items.firstDayOfWeek')],
+                                ['size', 'string', "'md'", __('docs/date-time.props_items.size')],
+                                ['variant', 'string', "'primary'", __('docs/date-time.props_items.variant')],
+                                ['error', 'string|bool|null', 'null', __('docs/date-time.props_items.error')],
+                                ['required', 'bool', 'false', __('docs/date-time.props_items.required')],
+                                ['disabled', 'bool', 'false', __('docs/date-time.props_items.disabled')],
+                                ['readonly', 'bool', 'false', __('docs/date-time.props_items.readonly')],
+                                ['startTimeLabel', 'string|null', 'null', __('docs/date-time.props_items.startTimeLabel')],
+                                ['endTimeLabel', 'string|null', 'null', __('docs/date-time.props_items.endTimeLabel')],
+                                ['timeLabel', 'string|null', 'null', __('docs/date-time.props_items.timeLabel')],
+                            ];
+                        @endphp
+                        @foreach ($propsList as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
         </div>

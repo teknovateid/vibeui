@@ -26,9 +26,15 @@ return [
         'lg' => 'Ukuran Besar (lg)',
     ],
 
+    'variants' => [
+        'title' => 'Varian Warna Semantik',
+        'desc' => 'Radio mendukung varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Varian Warna Radio',
+    ],
+
     'card' => [
         'title' => 'Varian Radio Card',
-        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk menampilkan opsi sebagai kartu yang dapat dipilih secara intuitif. Anda juga dapat menyembunyikan lingkaran radio dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk menampilkan opsi sebagai kartu yang dapat dipilih secara intuitif dengan latar belakang <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">bg-muted</code>. Anda juga dapat memadukan dengan warna semantik via prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color</code> atau menyembunyikan dot dengan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
         'preview_title' => 'Radio Card Selection',
         'card1_title' => 'Paket Pengembang (Developer)',
         'card1_desc' => 'Cocok untuk proyek pribadi dan eksperimen teknologi dengan batas 10.000 request/hari.',
@@ -59,7 +65,9 @@ return [
             'description' => 'Teks panduan / keterangan tambahan di bawah label utama.',
             'checked' => 'Status awal apakah opsi radio ini dalam kondisi terpilih.',
             'size' => 'Ukuran lingkaran radio dan teks: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
-            'variant' => 'Varian gaya visual: <code>\'default\'</code>, <code>\'card\'</code>, atau <code>\'accent\'</code>.',
+            'variant' => 'Varian warna atau bentuk: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, atau <code>\'card\'</code>.',
+            'color' => 'Warna aksen kustom jika menggunakan varian kartu (misal: <code>color="success"</code>).',
+            'card' => 'Flag boolean alternatif untuk mengaktifkan tampilan kartu (card).',
             'indicator' => 'Mengontrol visibilitas lingkaran radio. Set ke <code>false</code> untuk kartu pilihan tanpa dot.',
             'hideIndicator' => 'Atribut boolean alternatif untuk menyembunyikan lingkaran dot radio pada varian card.',
             'error' => 'Pesan error kustom atau flag boolean untuk memicu styling merah destructive.',

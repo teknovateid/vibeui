@@ -598,113 +598,7 @@
                 </div>
             </section>
 
-            {{-- 10. Component Properties Table --}}
-            <section id="properti-komponen" class="space-y-6">
-                <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.props.title') }}</h2>
-                </div>
-
-                {{-- vibe:select props --}}
-                <div class="space-y-2">
-                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.select_title') }}</h3>
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            @php
-                                $selectProps = [
-        ['label', 'string', 'null', __('docs/select.props_items.label')],
-        ['name', 'string', 'null', __('docs/select.props_items.name')],
-        ['id', 'string', 'auto', __('docs/select.props_items.id')],
-        ['placeholder', 'string', "'Select an option...'", __('docs/select.props_items.placeholder')],
-        ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
-        ['variant', 'string', "'default'", __('docs/select.props_items.variant')],
-        ['disabled', 'bool', 'false', __('docs/select.props_items.disabled')],
-        ['readonly', 'bool', 'false', __('docs/select.props_items.readonly')],
-        ['multiple', 'bool', 'false', __('docs/select.props_items.multiple')],
-        ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
-        ['clearable', 'bool', 'false', __('docs/select.props_items.clearable')],
-        ['max', 'int|null', 'null', __('docs/select.props_items.max')],
-        ['min', 'int|null', 'null', __('docs/select.props_items.min')],
-        ['indicator', 'bool', 'true', __('docs/select.props_items.indicator')],
-        ['description', 'string', 'null', __('docs/select.props_items.description')],
-        ['info', 'string', 'null', __('docs/select.props_items.info')],
-        ['error', 'string|bool', 'null', __('docs/select.props_items.error')],
-        ['errorName', 'string', 'null', __('docs/select.props_items.errorName')],
-        ['wrapperClass', 'string', 'null', __('docs/select.props_items.wrapperClass')],
-        ['badgeVariant', 'string', "'secondary'", __('docs/select.props_items.badgeVariant')],
-        ['required', 'bool', 'false', __('docs/select.props_items.required')],
-    ];
-                            @endphp
-                            @foreach ($selectProps as [$prop, $type, $default, $desc])
-                                <vibe:table.row>
-                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
-                                </vibe:table.row>
-                            @endforeach
-                        </vibe:table.rows>
-                    </vibe:table>
-                </div>
-
-                {{-- vibe:select.group props --}}
-                <div class="space-y-2">
-                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.group_title') }}</h3>
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            <vibe:table.row>
-                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">label</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">—</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground">Nama judul grup kategori.</vibe:table.cell>
-                            </vibe:table.row>
-                        </vibe:table.rows>
-                    </vibe:table>
-                </div>
-
-                {{-- vibe:select.option props --}}
-                <div class="space-y-2">
-                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.option_title') }}</h3>
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            @php
-                                $optionProps = [
-        ['value', 'string', '— (Wajib)', __('docs/select.props_items.option_value')],
-        ['disabled', 'bool', 'false', __('docs/select.props_items.option_disabled')],
-        ['selected', 'bool', 'false', __('docs/select.props_items.option_selected')],
-    ];
-                            @endphp
-                            @foreach ($optionProps as [$prop, $type, $default, $desc])
-                                <vibe:table.row>
-                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
-                                </vibe:table.row>
-                            @endforeach
-                        </vibe:table.rows>
-                    </vibe:table>
-                </div>
-            </section>
-
-            {{-- Form Submission Test Section --}}
+            {{-- 10. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -795,6 +689,112 @@
                         </vibe:card>
                     </vibe:form>
                 </vibe:preview>
+            </section>
+
+            {{-- 11. Component Properties Table --}}
+            <section id="properti-komponen" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.props.title') }}</h2>
+                </div>
+
+                {{-- vibe:select props --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.main_title') }}</h3>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $selectProps = [
+        ['name', 'string', 'null', __('docs/select.props_items.name')],
+        ['id', 'string', 'auto', __('docs/select.props_items.id')],
+        ['label', 'string', 'null', __('docs/select.props_items.label')],
+        ['placeholder', 'string', 'Pilih opsi...', __('docs/select.props_items.placeholder')],
+        ['value', 'string|array', 'null', __('docs/select.props_items.value')],
+        ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
+        ['variant', "'primary'|'outline'|'filled'|'ghost'", "'primary'", __('docs/select.props_items.variant')],
+        ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
+        ['multiple', 'bool', 'false', __('docs/select.props_items.multiple')],
+        ['disabled', 'bool', 'false', __('docs/select.props_items.disabled')],
+        ['clearable', 'bool', 'false', __('docs/select.props_items.clearable')],
+        ['max', 'int|null', 'null', __('docs/select.props_items.max')],
+        ['min', 'int|null', 'null', __('docs/select.props_items.min')],
+        ['indicator', 'bool', 'true', __('docs/select.props_items.indicator')],
+        ['description', 'string', 'null', __('docs/select.props_items.description')],
+        ['info', 'string', 'null', __('docs/select.props_items.info')],
+        ['error', 'string|bool', 'null', __('docs/select.props_items.error')],
+        ['errorName', 'string', 'null', __('docs/select.props_items.errorName')],
+        ['wrapperClass', 'string', 'null', __('docs/select.props_items.wrapperClass')],
+        ['badgeVariant', 'string', "'secondary'", __('docs/select.props_items.badgeVariant')],
+        ['required', 'bool', 'false', __('docs/select.props_items.required')],
+    ];
+                            @endphp
+                            @foreach ($selectProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:select.group props --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.group_title') }}</h3>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">label</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">—</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">Nama judul grup kategori.</vibe:table.cell>
+                            </vibe:table.row>
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:select.option props --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.props.option_title') }}</h3>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column>{{ __('docs/select.props.col_prop') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_type') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $optionProps = [
+        ['value', 'string', '— (Wajib)', __('docs/select.props_items.option_value')],
+        ['disabled', 'bool', 'false', __('docs/select.props_items.option_disabled')],
+        ['selected', 'bool', 'false', __('docs/select.props_items.option_selected')],
+    ];
+                            @endphp
+                            @foreach ($optionProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
             </section>
 
         </div>

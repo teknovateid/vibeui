@@ -308,73 +308,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 10. Props Reference --}}
-            <section id="referensi-props" class="space-y-4">
-                <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.props.title') }}</h2>
-                    <p class="text-sm text-muted-foreground">
-                        {!! __('docs/input.props.desc') !!}
-                    </p>
-                </div>
-
-                <vibe:table>
-                    <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.prop') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.type') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.default') }}</vibe:table.column>
-                        <vibe:table.column>{{ __('docs/input.props.columns.desc') }}</vibe:table.column>
-                    </vibe:table.header>
-                    <vibe:table.rows>
-                        @php
-                            $props = [
-                                ['label', 'string', 'null', __('docs/input.props_items.label')],
-                                ['id', 'string', 'auto', __('docs/input.props_items.id')],
-                                ['name', 'string', 'null', __('docs/input.props_items.name')],
-                                ['type', 'string', "'text'", __('docs/input.props_items.type')],
-                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/input.props_items.size')],
-                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/input.props_items.variant')],
-                                ['description', 'string', 'null', __('docs/input.props_items.description')],
-                                ['info', 'string', 'null', __('docs/input.props_items.info')],
-                                ['error', 'string|bool', 'null', __('docs/input.props_items.error')],
-                                ['errorName', 'string', 'null', __('docs/input.props_items.errorName')],
-                                ['prefix', 'string', 'null', __('docs/input.props_items.prefix')],
-                                ['suffix', 'string', 'null', __('docs/input.props_items.suffix')],
-                                ['class', 'string', 'null', __('docs/input.props_items.class')],
-                                ['wrapperClass', 'string', 'null', __('docs/input.props_items.wrapperClass')],
-                            ];
-                        @endphp
-                        @foreach ($props as [$prop, $type, $default, $desc])
-                            <vibe:table.row>
-                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
-                            </vibe:table.row>
-                        @endforeach
-                    </vibe:table.rows>
-                </vibe:table>
-
-                {{-- Slots table --}}
-                <p class="text-sm font-semibold text-foreground pt-2">{{ __('docs/input.slots.title') }}</p>
-                <vibe:table>
-                    <vibe:table.header>
-                        <vibe:table.column>{{ __('docs/input.slots.columns.slot') }}</vibe:table.column>
-                        <vibe:table.column>{{ __('docs/input.slots.columns.desc') }}</vibe:table.column>
-                    </vibe:table.header>
-                    <vibe:table.rows>
-                        <vibe:table.row>
-                            <vibe:table.cell class="font-mono font-bold text-foreground">icon</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.icon') !!}</vibe:table.cell>
-                        </vibe:table.row>
-                        <vibe:table.row>
-                            <vibe:table.cell class="font-mono font-bold text-foreground">trailingIcon</vibe:table.cell>
-                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.trailingIcon') !!}</vibe:table.cell>
-                        </vibe:table.row>
-                    </vibe:table.rows>
-                </vibe:table>
-            </section>
-
-            {{-- Form Submission Test Section --}}
+            {{-- 10. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -437,6 +371,83 @@
                         </vibe:card>
                     </vibe:form>
                 </vibe:preview>
+            </section>
+
+            {{-- 11. Props Reference --}}
+            <section id="referensi-props" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.props.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/input.props.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/input.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/input.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $props = [
+                                ['label', 'string', 'null', __('docs/input.props_items.label')],
+                                ['id', 'string', 'auto', __('docs/input.props_items.id')],
+                                ['name', 'string', 'null', __('docs/input.props_items.name')],
+                                ['type', 'string', "'text'", __('docs/input.props_items.type')],
+                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/input.props_items.size')],
+                                ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/input.props_items.variant')],
+                                ['description', 'string', 'null', __('docs/input.props_items.description')],
+                                ['info', 'string', 'null', __('docs/input.props_items.info')],
+                                ['error', 'string|bool', 'null', __('docs/input.props_items.error')],
+                                ['errorName', 'string', 'null', __('docs/input.props_items.errorName')],
+                                ['prefix', 'string', 'null', __('docs/input.props_items.prefix')],
+                                ['suffix', 'string', 'null', __('docs/input.props_items.suffix')],
+                                ['leadingIcon', 'string', 'null', __('docs/input.props_items.leadingIcon')],
+                                ['trailingIcon', 'string', 'null', __('docs/input.props_items.trailingIcon')],
+                                ['clearable', 'bool', 'false', __('docs/input.props_items.clearable')],
+                                ['copyable', 'bool', 'false', __('docs/input.props_items.copyable')],
+                                ['wrapperClass', 'string', 'null', __('docs/input.props_items.wrapperClass')],
+                            ];
+                        @endphp
+                        @foreach ($props as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+            </section>
+
+            {{-- 12. Slots Reference --}}
+            <section id="referensi-slots" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/input.slots.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/input.slots.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column>{{ __('docs/input.slots.columns.slot') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/input.slots.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-mono font-bold text-foreground">icon</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.icon') !!}</vibe:table.cell>
+                        </vibe:table.row>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-mono font-bold text-foreground">trailingIcon</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">{!! __('docs/input.slots_items.trailingIcon') !!}</vibe:table.cell>
+                        </vibe:table.row>
+                    </vibe:table.rows>
+                </vibe:table>
             </section>
 
         </div>

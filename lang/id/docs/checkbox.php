@@ -30,9 +30,15 @@ return [
         'lg' => 'Ukuran Besar (lg)',
     ],
 
+    'variants' => [
+        'title' => 'Varian Warna Semantik',
+        'desc' => 'Checkbox mendukung beragam varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Varian Warna Checkbox',
+    ],
+
     'card' => [
         'title' => 'Varian Card (Pilihan Berbentuk Kartu)',
-        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk membuat kartu pilihan interaktif yang elegan. Anda juga dapat menyembunyikan kotak centang dengan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> untuk membuat kartu pilihan interaktif yang elegan dengan latar belakang <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">bg-muted</code>. Anda juga dapat memadukan dengan warna semantik via prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color</code> atau menyembunyikan kotak centang dengan atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
         'preview_title' => 'Checkbox Card',
         'opt1_title' => 'Notifikasi Email',
         'opt1_desc' => 'Terima rangkuman mingguan dan laporan aktivitas sistem langsung ke inbox Anda.',
@@ -72,7 +78,9 @@ return [
             'checked' => 'Status awal apakah checkbox dalam kondisi terpilih (checked).',
             'indeterminate' => 'Menampilkan garis minus horizontal untuk status pemilihan sebagian (misal: "Pilih Semua").',
             'size' => 'Ukuran kotak centang dan teks: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
-            'variant' => 'Varian gaya visual: <code>\'primary\'</code>, <code>\'accent\'</code>, atau <code>\'card\'</code>.',
+            'variant' => 'Varian warna atau bentuk: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, atau <code>\'card\'</code>.',
+            'color' => 'Warna aksen kustom jika menggunakan varian card (misal: <code>color="success"</code>).',
+            'card' => 'Flag boolean alternatif untuk mengaktifkan tampilan kartu (card).',
             'indicator' => 'Mengontrol visibilitas kotak centang. Set ke <code>false</code> untuk kartu pilihan tanpa kotak centang.',
             'hideIndicator' => 'Atribut boolean alternatif untuk menyembunyikan kotak centang pada varian card.',
             'info' => 'Teks catatan bantuan kecil di bawah komponen checkbox.',

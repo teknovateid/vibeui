@@ -26,20 +26,26 @@ return [
         'lg' => 'Large Size (lg)',
     ],
 
+    'variants' => [
+        'title' => 'Semantic Color Variants',
+        'desc' => 'Radio buttons support full semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Radio Color Variants',
+    ],
+
     'card' => [
         'title' => 'Radio Card Variant',
-        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> to present options as rich selectable cards. You can hide the circular indicator using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> to present options as intuitive selectable cards with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">bg-muted</code> background. You can also pair with semantic colors via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color</code> prop or hide the dot using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
         'preview_title' => 'Radio Card Selection',
         'card1_title' => 'Developer Plan',
-        'card1_desc' => 'Perfect for personal projects and experimentation with a 10k requests/day limit.',
+        'card1_desc' => 'Best for personal side-projects and rapid experiments with up to 10k daily requests.',
         'card2_title' => 'Business Plan (Team)',
-        'card2_desc' => 'Unlimited team seats, advanced analytics integration, and 99.9% uptime SLA.',
+        'card2_desc' => 'Unlimited team seats, advanced audit logs, dedicated support, and guaranteed 99.9% SLA.',
         'card_hidden_title' => 'Card Without Radio Indicator',
-        'card_hidden_desc' => 'Selectable cards without the radio circle indicator using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'card_hidden_desc' => 'Selectable card tiles without the visual dot indicator using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
         'hidden1_title' => 'Monthly Billing',
         'hidden1_desc' => '$19 billed each month. Cancel anytime.',
         'hidden2_title' => 'Annual Billing',
-        'hidden2_desc' => '$15/mo billed annually ($180/yr). Save 20%.',
+        'hidden2_desc' => '$15/mo billed annually. Save 20%.',
     ],
 
     'props' => [
@@ -59,7 +65,9 @@ return [
             'description' => 'Optional guidance text displayed beneath the primary label.',
             'checked' => 'Initial selection status of the radio option.',
             'size' => 'Visual dimensions of the circular dot and label: <code>\'sm\'</code>, <code>\'md\'</code>, or <code>\'lg\'</code>.',
-            'variant' => 'Visual design variant: <code>\'default\'</code>, <code>\'card\'</code>, or <code>\'accent\'</code>.',
+            'variant' => 'Visual color or layout variant: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, or <code>\'card\'</code>.',
+            'color' => 'Custom accent color override when using card mode (e.g. <code>color="success"</code>).',
+            'card' => 'Alternative boolean flag to enable card-style layout.',
             'indicator' => 'Controls visibility of the inner circular radio dot. Set to <code>false</code> for border-only cards.',
             'hideIndicator' => 'Convenience boolean attribute to hide the circular radio indicator on selectable cards.',
             'error' => 'Custom error message string or boolean flag to toggle red destructive styling.',

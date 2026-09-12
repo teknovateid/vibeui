@@ -26,7 +26,12 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary (default)</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">success</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">card</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -95,7 +100,40 @@
                 </vibe:preview>
             </section>
 
-            {{-- 4. Card Variant --}}
+            {{-- 4. Color Variants --}}
+            <section id="varian-warna" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/checkbox.variants.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/checkbox.variants.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/checkbox.variants.preview_title')">
+                    <vibe:preview.code>
+                        <div class="flex flex-wrap gap-4 sm:gap-6">
+                            <vibe:checkbox name="cb_primary" variant="primary" label="Primary" checked />
+                            <vibe:checkbox name="cb_secondary" variant="secondary" label="Secondary" checked />
+                            <vibe:checkbox name="cb_success" variant="success" label="Success" checked />
+                            <vibe:checkbox name="cb_warning" variant="warning" label="Warning" checked />
+                            <vibe:checkbox name="cb_danger" variant="danger" label="Danger" checked />
+                            <vibe:checkbox name="cb_info" variant="info" label="Info" checked />
+                            <vibe:checkbox name="cb_accent" variant="accent" label="Accent" checked />
+                        </div>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap gap-4 sm:gap-6">
+                        <vibe:checkbox name="cb_primary_live" variant="primary" label="Primary" checked />
+                        <vibe:checkbox name="cb_secondary_live" variant="secondary" label="Secondary" checked />
+                        <vibe:checkbox name="cb_success_live" variant="success" label="Success" checked />
+                        <vibe:checkbox name="cb_warning_live" variant="warning" label="Warning" checked />
+                        <vibe:checkbox name="cb_danger_live" variant="danger" label="Danger" checked />
+                        <vibe:checkbox name="cb_info_live" variant="info" label="Info" checked />
+                        <vibe:checkbox name="cb_accent_live" variant="accent" label="Accent" checked />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 5. Card Variant --}}
             <section id="varian-card" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/checkbox.card.title') }}</h2>
@@ -165,71 +203,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 6. Props Reference --}}
-            <section id="referensi-props" class="space-y-6">
-                <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/checkbox.props.title') }}</h2>
-                    <p class="text-sm text-muted-foreground">
-                        {!! __('docs/checkbox.props.desc') !!}
-                    </p>
-                </div>
-
-                <vibe:table>
-                    <vibe:table.header>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.prop') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.type') }}</vibe:table.column>
-                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.default') }}</vibe:table.column>
-                        <vibe:table.column>{{ __('docs/checkbox.props.columns.desc') }}</vibe:table.column>
-                    </vibe:table.header>
-                    <vibe:table.rows>
-                        @php
-                            $checkboxProps = [['name', 'string', 'null', __('docs/checkbox.props.items.name')], ['id', 'string', 'auto', __('docs/checkbox.props.items.id')], ['value', 'string', "'1'", __('docs/checkbox.props.items.value')], ['label', 'string', 'null', __('docs/checkbox.props.items.label')], ['description', 'string', 'null', __('docs/checkbox.props.items.description')], ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')], ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')], ['variant', "'primary'|'accent'|'card'", "'primary'", __('docs/checkbox.props.items.variant')], ['indicator', 'bool', 'true', __('docs/checkbox.props.items.indicator')], ['hideIndicator', 'bool', 'false', __('docs/checkbox.props.items.hideIndicator')], ['info', 'string', 'null', __('docs/checkbox.props.items.info')], ['error', 'string|bool', 'null', __('docs/checkbox.props.items.error')], ['errorName', 'string', 'null', __('docs/checkbox.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/checkbox.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/checkbox.props.items.wrapperClass')]];
-                        @endphp
-                        @foreach ($checkboxProps as [$prop, $type, $default, $desc])
-                            <vibe:table.row>
-                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
-                            </vibe:table.row>
-                        @endforeach
-                    </vibe:table.rows>
-                </vibe:table>
-
-                {{-- Group Props --}}
-                <div class="space-y-3 pt-4">
-                    <div class="space-y-1">
-                        <h3 class="text-lg font-bold text-foreground">{{ __('docs/checkbox.group_props.title') }}</h3>
-                        <p class="text-sm text-muted-foreground">
-                            {!! __('docs/checkbox.group_props.desc') !!}
-                        </p>
-                    </div>
-
-                    <vibe:table>
-                        <vibe:table.header>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.prop') }}</vibe:table.column>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.type') }}</vibe:table.column>
-                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.default') }}</vibe:table.column>
-                            <vibe:table.column>{{ __('docs/checkbox.group_props.columns.desc') }}</vibe:table.column>
-                        </vibe:table.header>
-                        <vibe:table.rows>
-                            @php
-                                $groupProps = [['label', 'string', 'null', __('docs/checkbox.group_props.items.label')], ['description', 'string', 'null', __('docs/checkbox.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/checkbox.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/checkbox.group_props.items.columns')], ['required', 'bool', 'false', __('docs/checkbox.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/checkbox.group_props.items.error')], ['errorName', 'string', 'null', __('docs/checkbox.group_props.items.errorName')]];
-                            @endphp
-                            @foreach ($groupProps as [$prop, $type, $default, $desc])
-                                <vibe:table.row>
-                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
-                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
-                                    <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
-                                </vibe:table.row>
-                            @endforeach
-                        </vibe:table.rows>
-                    </vibe:table>
-                </div>
-            </section>
-
-            {{-- Form Submission Test Section --}}
+            {{-- 6. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -315,6 +289,89 @@
                         </vibe:card>
                     </vibe:form>
                 </vibe:preview>
+            </section>
+
+            {{-- 7. Props Reference --}}
+            <section id="referensi-props" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/checkbox.props.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/checkbox.props.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/checkbox.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $checkboxProps = [
+                                ['name', 'string', 'null', __('docs/checkbox.props.items.name')],
+                                ['id', 'string', 'auto', __('docs/checkbox.props.items.id')],
+                                ['value', 'string', "'1'", __('docs/checkbox.props.items.value')],
+                                ['label', 'string', 'null', __('docs/checkbox.props.items.label')],
+                                ['description', 'string', 'null', __('docs/checkbox.props.items.description')],
+                                ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')],
+                                ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')],
+                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')],
+                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'|'card'", "'primary'", __('docs/checkbox.props.items.variant')],
+                                ['color', 'string', 'null', __('docs/checkbox.props.items.color')],
+                                ['card', 'bool', 'false', __('docs/checkbox.props.items.card')],
+                                ['indicator', 'bool', 'true', __('docs/checkbox.props.items.indicator')],
+                                ['hideIndicator', 'bool', 'false', __('docs/checkbox.props.items.hideIndicator')],
+                                ['info', 'string', 'null', __('docs/checkbox.props.items.info')],
+                                ['error', 'string|bool', 'null', __('docs/checkbox.props.items.error')],
+                                ['errorName', 'string', 'null', __('docs/checkbox.props.items.errorName')],
+                                ['disabled', 'bool', 'false', __('docs/checkbox.props.items.disabled')],
+                                ['wrapperClass', 'string', 'null', __('docs/checkbox.props.items.wrapperClass')],
+                            ];
+                        @endphp
+                        @foreach ($checkboxProps as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- Group Props --}}
+                <div class="space-y-3 pt-4">
+                    <div class="space-y-1">
+                        <h3 class="text-lg font-bold text-foreground">{{ __('docs/checkbox.group_props.title') }}</h3>
+                        <p class="text-sm text-muted-foreground">
+                            {!! __('docs/checkbox.group_props.desc') !!}
+                        </p>
+                    </div>
+
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/checkbox.group_props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/checkbox.group_props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $groupProps = [['label', 'string', 'null', __('docs/checkbox.group_props.items.label')], ['description', 'string', 'null', __('docs/checkbox.group_props.items.description')], ['orientation', "'vertical'|'horizontal'|'grid'", "'vertical'", __('docs/checkbox.group_props.items.orientation')], ['columns', '2|3|4', '2', __('docs/checkbox.group_props.items.columns')], ['required', 'bool', 'false', __('docs/checkbox.group_props.items.required')], ['error', 'string|bool', 'null', __('docs/checkbox.group_props.items.error')], ['errorName', 'string', 'null', __('docs/checkbox.group_props.items.errorName')]];
+                            @endphp
+                            @foreach ($groupProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
             </section>
 
         </div>

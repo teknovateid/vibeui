@@ -30,9 +30,15 @@ return [
         'lg' => 'Large Size (lg)',
     ],
 
+    'variants' => [
+        'title' => 'Semantic Color Variants',
+        'desc' => 'Checkboxes support full semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'preview_title' => 'Checkbox Color Variants',
+    ],
+
     'card' => [
         'title' => 'Card Variant',
-        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> to create an elegant selectable card. You can also hide the checkbox indicator with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:indicator="false"</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
+        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="card"</code> to create an elegant selectable card with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">bg-muted</code> background. You can also pair with semantic colors via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">color</code> prop or hide the checkbox indicator with <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">hide-indicator</code>.',
         'preview_title' => 'Checkbox Card',
         'opt1_title' => 'Email Notifications',
         'opt1_desc' => 'Receive weekly digests and system activity reports directly to your inbox.',
@@ -48,15 +54,15 @@ return [
 
     'checkbox_group' => [
         'title' => 'Checkbox Group',
-        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:checkbox.group&gt;</code> to group multiple checkboxes with a single group legend and error message.',
+        'desc' => 'Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:checkbox.group&gt;</code> to wrap multiple checkboxes with a single group label and coordinated error message.',
         'preview_title' => 'Checkbox Group with Grid Layout',
-        'group_label' => 'Select Primary Skills',
-        'group_desc' => 'Choose one or more technologies you are proficient with.',
+        'group_label' => 'Select Key Skills',
+        'group_desc' => 'Select one or more technologies you are experienced with.',
     ],
 
     'props' => [
         'title' => 'Checkbox Props Reference',
-        'desc' => 'Complete list of properties and attributes available for the <code class="font-mono text-xs text-foreground">&lt;vibe:checkbox&gt;</code> component.',
+        'desc' => 'Complete list of properties and attributes available on the <code class="font-mono text-xs text-foreground">&lt;vibe:checkbox&gt;</code> component.',
         'columns' => [
             'prop' => 'Prop',
             'type' => 'Type',
@@ -72,7 +78,9 @@ return [
             'checked' => 'Initial checked status of the checkbox.',
             'indeterminate' => 'Renders a horizontal dash representing a partially selected / indeterminate state.',
             'size' => 'Visual dimensions of the checkbox box and label: <code>\'sm\'</code>, <code>\'md\'</code>, or <code>\'lg\'</code>.',
-            'variant' => 'Visual design variant: <code>\'primary\'</code>, <code>\'accent\'</code>, or <code>\'card\'</code>.',
+            'variant' => 'Visual color or layout variant: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, or <code>\'card\'</code>.',
+            'color' => 'Custom accent color override when using card mode (e.g. <code>color="success"</code>).',
+            'card' => 'Alternative boolean flag to enable card-style layout.',
             'indicator' => 'Controls visibility of the visual checkbox box. Set to <code>false</code> to create border-only cards.',
             'hideIndicator' => 'Convenience boolean attribute to hide the checkbox box indicator on selectable cards.',
             'info' => 'Additional helper note text displayed beneath the checkbox.',
