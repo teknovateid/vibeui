@@ -2065,12 +2065,19 @@ export function vibeFilepond(config = {}) {
             const self = this;
 
             const onPointerDown = (e) => {
-                // Only activate from our reorder handle
-                const handle = e.target.closest('[data-filepond-reorder-handle]');
-                if (!handle) return;
-
-                const fromEl = handle.closest('li.filepond--item');
+                // Activate from anywhere on the card EXCEPT interactive elements
+                const fromEl = e.target.closest('li.filepond--item');
                 if (!fromEl) return;
+
+                // Skip clicks on interactive elements (buttons, inputs, links, etc.)
+                const interactive = e.target.closest(
+                    'button, a, input, select, textarea, [contenteditable], ' +
+                    '.filepond--action-remove-item, .filepond--action-abort-item-load, ' +
+                    '.filepond--action-retry-item-load, .filepond--action-abort-item-processing, ' +
+                    '.filepond--action-retry-item-processing, .filepond--action-revert-item-processing, ' +
+                    '.filepond--action-download-item, .filepond--thumbnail-overlay'
+                );
+                if (interactive) return;
 
                 const fromId = self.getItemIdFromElement(fromEl);
                 if (!fromId) return;
