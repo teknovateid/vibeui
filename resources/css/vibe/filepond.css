@@ -1349,6 +1349,22 @@
     touch-action: none;
 }
 
+/* Grab cursor on entire card when reorder is active */
+.filepond--root[data-allow-reorder="true"] .filepond--file-wrapper {
+    cursor: grab;
+}
+
+.filepond--root[data-allow-reorder="true"] .filepond--file-wrapper:active {
+    cursor: grabbing;
+}
+
+/* Interactive elements inside card keep their own cursor */
+.filepond--root[data-allow-reorder="true"] .filepond--file-wrapper button,
+.filepond--root[data-allow-reorder="true"] .filepond--file-wrapper a,
+.filepond--root[data-allow-reorder="true"] .filepond--thumbnail-overlay {
+    cursor: pointer;
+}
+
 /* Grip handle — only the handle should show grab cursor */
 .filepond--reorder-handle {
     display: inline-flex;
