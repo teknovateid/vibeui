@@ -292,10 +292,11 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
             rootEl?.classList.contains('filepond--allow-reorder')
         );
 
-        // Make the li item draggable when reorder is enabled
+        // Make the li item non-selectable during drag for better UX
         const liItemEl = fileWrapper.closest('li.filepond--item');
         if (liItemEl) {
-            liItemEl.draggable = isReorderEnabled && !isAvatar;
+            // draggable is not used (pointer events approach) but ensure no HTML5 drag conflicts
+            liItemEl.removeAttribute('draggable');
         }
 
         let handleGroup = fileWrapper.querySelector('.filepond--reorder-group');
@@ -360,7 +361,6 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
         } else if (handleGroup) {
             handleGroup.remove();
             handleGroup = null;
-            if (liItemEl) liItemEl.draggable = false;
         }
 
         // Inject / Update Custom Download Action Button
@@ -2063,121 +2063,100 @@ export function vibeFilepond(config = {}) {
             if (!this.pond || !this.pond.element) return;
             const root = this.pond.element;
             const self = this;
-            let draggingEl = null;
-            let draggingId = null;
 
-            // dragstart — only from our reorder handle
-            const onDragStart = (e) => {
+            const onPointerDown = (e) => {
+                // Only activate from our reorder handle
                 const handle = e.target.closest('[data-filepond-reorder-handle]');
-                if (!handle) {
-                    // Not our handle — do not interfere (allow FilePond file drop from outside)
-                    return;
-                }
+                if (!handle) return;
 
-                const itemEl = handle.closest('li.filepond--item');
-                if (!itemEl) return;
+                const fromEl = handle.closest('li.filepond--item');
+                if (!fromEl) return;
 
-                draggingEl = itemEl;
-                draggingId = self.getItemIdFromElement(itemEl);
+                const fromId = self.getItemIdFromElement(fromEl);
+                if (!fromId) return;
 
-                if (e.dataTransfer) {
-                    e.dataTransfer.effectAllowed = 'move';
-                    e.dataTransfer.setData('text/plain', draggingId || '');
-                    e.dataTransfer.setData('application/x-vibe-filepond', self.config?.id || 'filepond');
+                // Block FilePond from intercepting this pointer sequence
+                e.stopPropagation();
+                e.preventDefault();
 
-                    // Use item itself as drag image for native ghost
-                    if (e.dataTransfer.setDragImage) {
-                        const rect = itemEl.getBoundingClientRect();
-                        const offsetX = Math.min(rect.width / 2, Math.max(10, e.clientX - rect.left));
-                        const offsetY = Math.min(rect.height / 2, Math.max(10, e.clientY - rect.top));
-                        e.dataTransfer.setDragImage(itemEl, offsetX, offsetY);
+                const startX = e.clientX;
+                const startY = e.clientY;
+                let isDragging = false;
+                let lastTargetItem = null;
+                let lastTargetAbove = false;
+
+                const onPointerMove = (moveEv) => {
+                    const dist = Math.hypot(moveEv.clientX - startX, moveEv.clientY - startY);
+                    if (!isDragging) {
+                        if (dist < 5) return;
+                        isDragging = true;
+                        // Identical to dynamic-form.js visual feedback
+                        fromEl.classList.add('opacity-40', 'scale-[0.99]');
                     }
-                }
 
-                // Same visual feedback as dynamic-form.js
-                setTimeout(() => {
-                    if (draggingEl) draggingEl.classList.add('opacity-40', 'scale-[0.99]');
-                }, 0);
-            };
+                    // Temporarily disable pointer-events on dragging item so
+                    // elementFromPoint finds the element BELOW it
+                    fromEl.style.pointerEvents = 'none';
+                    const elUnder = document.elementFromPoint(moveEv.clientX, moveEv.clientY);
+                    fromEl.style.pointerEvents = '';
 
-            // dragover — highlight drop target
-            const onDragOver = (e) => {
-                if (!draggingEl) return;
-                const targetItem = e.target.closest('li.filepond--item');
-                if (!targetItem || targetItem === draggingEl) return;
+                    const targetItem = (elUnder && root.contains(elUnder))
+                        ? elUnder.closest('li.filepond--item')
+                        : null;
 
-                e.preventDefault();
-                if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+                    // Clear all indicators
+                    Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
+                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
+                    });
 
-                // Remove from all others first
-                Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
-                    el.classList.remove('ring-2', 'ring-primary', 'border-primary/60');
-                });
-                targetItem.classList.add('ring-2', 'ring-primary', 'border-primary/60');
-            };
-
-            // dragleave — remove highlight
-            const onDragLeave = (e) => {
-                const targetItem = e.target.closest('li.filepond--item');
-                if (!targetItem) return;
-                if (e.relatedTarget && targetItem.contains(e.relatedTarget)) return;
-                targetItem.classList.remove('ring-2', 'ring-primary', 'border-primary/60');
-            };
-
-            // drop — perform reorder
-            const onDrop = (e) => {
-                if (!draggingEl || !draggingId) return;
-
-                const sourceFormId = e.dataTransfer ? e.dataTransfer.getData('application/x-vibe-filepond') : null;
-                if (sourceFormId && sourceFormId !== (self.config?.id || 'filepond')) {
-                    cleanup();
-                    return;
-                }
-
-                e.preventDefault();
-
-                const targetItem = e.target.closest('li.filepond--item');
-                if (targetItem && targetItem !== draggingEl) {
-                    const targetId = self.getItemIdFromElement(targetItem);
-                    if (targetId) {
-                        // Determine before/after based on cursor position
+                    if (targetItem && targetItem !== fromEl) {
                         const tRect = targetItem.getBoundingClientRect();
-                        const isAbove = e.clientY < tRect.top + tRect.height / 2;
-                        self.reorderById(draggingId, targetId, isAbove ? 'before' : 'after');
+                        const isAbove = moveEv.clientY < tRect.top + tRect.height / 2;
+                        if (isAbove) {
+                            targetItem.classList.add('filepond--drop-target-above');
+                        } else {
+                            targetItem.classList.add('filepond--drop-target-below');
+                        }
+                        lastTargetItem = targetItem;
+                        lastTargetAbove = isAbove;
+                    } else {
+                        lastTargetItem = null;
                     }
-                }
+                };
 
-                cleanup();
+                const cleanup = () => {
+                    window.removeEventListener('pointermove', onPointerMove, { capture: true });
+                    window.removeEventListener('pointerup', onPointerUp, { capture: true });
+                    window.removeEventListener('pointercancel', onPointerUp, { capture: true });
+
+                    fromEl.classList.remove('opacity-40', 'scale-[0.99]');
+                    fromEl.style.pointerEvents = '';
+
+                    Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
+                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
+                    });
+                };
+
+                const onPointerUp = (upEv) => {
+                    cleanup();
+
+                    if (isDragging && lastTargetItem && lastTargetItem !== fromEl) {
+                        const targetId = self.getItemIdFromElement(lastTargetItem);
+                        if (targetId) {
+                            self.reorderById(fromId, targetId, lastTargetAbove ? 'before' : 'after');
+                        }
+                    }
+                };
+
+                window.addEventListener('pointermove', onPointerMove, { capture: true });
+                window.addEventListener('pointerup', onPointerUp, { capture: true });
+                window.addEventListener('pointercancel', onPointerUp, { capture: true });
             };
 
-            // dragend — cleanup regardless of drop success
-            const onDragEnd = (e) => {
-                cleanup();
-            };
-
-            const cleanup = () => {
-                if (draggingEl) {
-                    draggingEl.classList.remove('opacity-40', 'scale-[0.99]');
-                }
-                Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
-                    el.classList.remove('opacity-40', 'scale-[0.99]', 'ring-2', 'ring-primary', 'border-primary/60');
-                });
-                draggingEl = null;
-                draggingId = null;
-            };
-
-            root.addEventListener('dragstart', onDragStart);
-            root.addEventListener('dragover', onDragOver);
-            root.addEventListener('dragleave', onDragLeave);
-            root.addEventListener('drop', onDrop);
-            root.addEventListener('dragend', onDragEnd);
-
+            // Use capture:true so we get the event BEFORE FilePond's handlers
+            root.addEventListener('pointerdown', onPointerDown, { capture: true });
             this._cleanupListeners.push(() => {
-                root.removeEventListener('dragstart', onDragStart);
-                root.removeEventListener('dragover', onDragOver);
-                root.removeEventListener('dragleave', onDragLeave);
-                root.removeEventListener('drop', onDrop);
-                root.removeEventListener('dragend', onDragEnd);
+                root.removeEventListener('pointerdown', onPointerDown, { capture: true });
             });
         },
 
