@@ -598,7 +598,348 @@
                 </div>
             </section>
 
-            {{-- 10. Form Submission Test --}}
+            {{-- 10. Select Berbasis API (vibe:select.remote) --}}
+            <section id="select-remote" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.remote.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">Baru</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/select.remote.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Demo 1: Basic Remote API Search --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.basic_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.remote.basic_title')" minHeight="320px">
+                        <vibe:preview.code>
+                            <vibe:select.remote
+                                name="user_id"
+                                label="{{ __('docs/select.remote.basic_label') }}"
+                                placeholder="{{ __('docs/select.remote.basic_placeholder') }}"
+                                :api="route('docs.select.api')"
+                                keyboard
+                                clearable
+                            />
+                        </vibe:preview.code>
+                        <div class="w-full max-w-sm">
+                            <vibe:select.remote
+                                name="demo_user_id"
+                                :label="__('docs/select.remote.basic_label')"
+                                :placeholder="__('docs/select.remote.basic_placeholder')"
+                                :api="route('docs.select.api')"
+                                keyboard
+                                clearable
+                            />
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 2: Edit Mode with Pre-filled Value & Initial Label --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.edit_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.remote.edit_title')" minHeight="320px">
+                        <vibe:preview.code>
+                            <vibe:select.remote
+                                name="lead_id"
+                                label="{{ __('docs/select.remote.edit_label') }}"
+                                :api="route('docs.select.api')"
+                                value="13"
+                                initial-label="Alanna Schimmel"
+                                keyboard
+                                clearable
+                            />
+                        </vibe:preview.code>
+                        <div class="w-full max-w-sm">
+                            <vibe:select.remote
+                                name="demo_lead_id"
+                                :label="__('docs/select.remote.edit_label')"
+                                :api="route('docs.select.api')"
+                                value="13"
+                                initial-label="Alanna Schimmel"
+                                keyboard
+                                clearable
+                            />
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 3: Multi-Select API --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.multiple_title') }}</h3>
+                    <vibe:preview :title="__('docs/select.remote.multiple_title')" minHeight="340px">
+                        <vibe:preview.code>
+                            <vibe:select.remote
+                                name="assigned_members[]"
+                                label="{{ __('docs/select.remote.multiple_label') }}"
+                                placeholder="{{ __('docs/select.remote.multiple_placeholder') }}"
+                                :api="route('docs.select.api')"
+                                multiple
+                                :max="4"
+                                keyboard
+                                clearable
+                            />
+                        </vibe:preview.code>
+                        <div class="w-full max-w-md">
+                            <vibe:select.remote
+                                name="demo_assigned_members[]"
+                                :label="__('docs/select.remote.multiple_label')"
+                                :placeholder="__('docs/select.remote.multiple_placeholder')"
+                                :api="route('docs.select.api')"
+                                multiple
+                                :max="4"
+                                keyboard
+                                clearable
+                            />
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 4: Multi-Select Remote Edit Mode (Pre-filled Values & Options) --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.edit_multiple_title') }}</h3>
+                    <p class="text-xs text-muted-foreground">{!! __('docs/select.remote.edit_multiple_desc') !!}</p>
+                    <vibe:preview :title="__('docs/select.remote.edit_multiple_title')" minHeight="340px">
+                        <vibe:preview.code>
+                            @php
+                                $collaborators = [
+                                    [
+                                        'value' => '13',
+                                        'label' => 'Alanna Schimmel',
+                                        'description' => 'patsy07@example.org • @qmaggio',
+                                        'icon' => 'https://ui-avatars.com/api/?name=Alanna+Schimmel&background=random&color=fff&size=64'
+                                    ],
+                                    [
+                                        'value' => '24',
+                                        'label' => 'Corene Smith',
+                                        'description' => 'lind.misael@example.com • @amelia01',
+                                        'icon' => 'https://ui-avatars.com/api/?name=Corene+Smith&background=random&color=fff&size=64'
+                                    ]
+                                ];
+                            @endphp
+
+                            <vibe:select.remote
+                                name="project_collaborators[]"
+                                label="{{ __('docs/select.remote.edit_multiple_label') }}"
+                                placeholder="{{ __('docs/select.remote.multiple_placeholder') }}"
+                                :api="route('docs.select.api')"
+                                multiple
+                                :value="$collaborators"
+                                keyboard
+                                clearable
+                            />
+                        </vibe:preview.code>
+                        <div class="w-full max-w-md">
+                            @php
+                                $demoCollaborators = [
+                                    [
+                                        'value' => '13',
+                                        'label' => 'Alanna Schimmel',
+                                        'description' => 'patsy07@example.org • @qmaggio',
+                                        'icon' => 'https://ui-avatars.com/api/?name=Alanna+Schimmel&background=random&color=fff&size=64'
+                                    ],
+                                    [
+                                        'value' => '24',
+                                        'label' => 'Corene Smith',
+                                        'description' => 'lind.misael@example.com • @amelia01',
+                                        'icon' => 'https://ui-avatars.com/api/?name=Corene+Smith&background=random&color=fff&size=64'
+                                    ]
+                                ];
+                            @endphp
+                            <vibe:select.remote
+                                name="demo_project_collaborators[]"
+                                :label="__('docs/select.remote.edit_multiple_label')"
+                                :placeholder="__('docs/select.remote.multiple_placeholder')"
+                                :api="route('docs.select.api')"
+                                multiple
+                                :value="$demoCollaborators"
+                                keyboard
+                                clearable
+                            />
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Panduan Backend Controller & Skema JSON --}}
+                <div class="space-y-4 pt-4 border-t border-border/60">
+                    <div class="space-y-1">
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/select.remote.backend_title') }}</h3>
+                        <p class="text-sm text-muted-foreground">
+                            {!! __('docs/select.remote.backend_desc') !!}
+                        </p>
+                    </div>
+
+                    @php
+                        $routeCode = <<<'PHP'
+use App\Http\Controllers\SelectController;
+
+// routes/web.php atau routes/api.php
+Route::get('/docs/select/api', [SelectController::class, 'api'])->name('docs.select.api');
+PHP;
+
+                        $controllerCode = <<<'PHP'
+namespace App\Http\Controllers;
+
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+
+class SelectController extends Controller
+{
+    public function api(Request $request): JsonResponse
+    {
+        // 1. Ambil keyword pencarian dari query string (default param: 'q')
+        $query = trim((string) $request->input('q', ''));
+        $like = config('database.default') === 'pgsql' ? 'ilike' : 'like';
+
+        // 2. Query data model dari database (contoh tabel users)
+        $users = User::query()
+            ->when($query !== '', function ($q) use ($query, $like) {
+                $q->where(function ($sub) use ($query, $like) {
+                    $sub->where('name', $like, "%{$query}%")
+                        ->orWhere('email', $like, "%{$query}%")
+                        ->orWhere('username', $like, "%{$query}%")
+                        ->orWhere('position', $like, "%{$query}%");
+                });
+            })
+            ->limit(12)
+            ->get();
+
+        // 3. Petakan (map) koleksi data ke dalam format standar <vibe:select.remote>
+        $data = $users->map(function ($user) {
+            $descParts = array_filter([
+                $user->email,
+                $user->position ?: ($user->username ? '@' . $user->username : null),
+            ]);
+
+            return [
+                'value' => (string) $user->id,
+                'label' => $user->name,
+                'description' => implode(' • ', $descParts),
+                'icon' => 'https://ui-avatars.com/api/?name=' . urlencode($user->name) . '&background=random&color=fff&size=64',
+            ];
+        });
+
+        // 4. Kembalikan response berupa JSON Array murni
+        return response()->json($data);
+    }
+}
+PHP;
+
+                        $schemaCode = <<<'JSON'
+[
+  {
+    "value": "13",
+    "label": "Alanna Schimmel",
+    "description": "patsy07@example.org • @qmaggio",
+    "icon": "https://ui-avatars.com/api/?name=Alanna+Schimmel&background=random&color=fff&size=64"
+  },
+  {
+    "value": "24",
+    "label": "Corene Smith",
+    "description": "lind.misael@example.com • @amelia01",
+    "icon": "https://ui-avatars.com/api/?name=Corene+Smith&background=random&color=fff&size=64"
+  },
+  {
+    "value": "99",
+    "label": "Akun Terkunci",
+    "description": "Pengguna nonaktif / tidak dapat dipilih",
+    "disabled": true
+  }
+]
+JSON;
+
+                        $advancedBladeCode = <<<'BLADE'
+<vibe:select.remote
+    name="customer_id"
+    label="Pilih Pelanggan"
+    placeholder="Ketik minimal 2 karakter..."
+    :api="route('api.customers.search')"
+    searchParam="query"
+    :minChars="2"
+    :debounce="400"
+    :headers="['X-Custom-Auth' => 'Bearer token_secret']"
+    keyboard
+    clearable
+/>
+BLADE;
+                    @endphp
+
+                    {{-- 1. Route Definition --}}
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.route_title') }}</h4>
+                        <vibe:highlightjs language="php" title="routes/web.php" :code="$routeCode" />
+                    </div>
+
+                    {{-- 2. Controller Function Implementation --}}
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.controller_title') }}</h4>
+                        <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.controller_desc') }}</p>
+                        <vibe:highlightjs language="php" title="app/Http/Controllers/SelectController.php" :code="$controllerCode" />
+                    </div>
+
+                    {{-- 3. JSON Response Schema Structure --}}
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.schema_title') }}</h4>
+                        <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.schema_desc') }}</p>
+                        <vibe:highlightjs language="json" title="Response JSON Schema" :code="$schemaCode" />
+
+                        <div class="pt-2">
+                            <vibe:table>
+                                <vibe:table.header>
+                                    <vibe:table.column class="whitespace-nowrap">Kunci JSON</vibe:table.column>
+                                    <vibe:table.column class="whitespace-nowrap">Tipe Data</vibe:table.column>
+                                    <vibe:table.column class="whitespace-nowrap">Status</vibe:table.column>
+                                    <vibe:table.column>Deskripsi</vibe:table.column>
+                                </vibe:table.header>
+                                <vibe:table.rows>
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">value</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string|int</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-primary font-semibold whitespace-nowrap">Wajib</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground">{{ __('docs/select.remote.schema_value') }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">label</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-primary font-semibold whitespace-nowrap">Wajib</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground">{{ __('docs/select.remote.schema_label') }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">description</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string|null</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">Opsional</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground">{{ __('docs/select.remote.schema_description') }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">icon</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">string|null</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">Opsional</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground">{{ __('docs/select.remote.schema_icon') }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                    <vibe:table.row>
+                                        <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">disabled</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">bool</vibe:table.cell>
+                                        <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">Opsional</vibe:table.cell>
+                                        <vibe:table.cell class="text-muted-foreground">{{ __('docs/select.remote.schema_disabled') }}</vibe:table.cell>
+                                    </vibe:table.row>
+                                </vibe:table.rows>
+                            </vibe:table>
+                        </div>
+                    </div>
+
+                    {{-- 4. Advanced Props --}}
+                    <div class="space-y-2 pt-2">
+                        <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.advanced_title') }}</h4>
+                        <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.advanced_desc') }}</p>
+                        <vibe:highlightjs language="blade" title="Contoh Penggunaan Props Lanjutan" :code="$advancedBladeCode" />
+                    </div>
+                </div>
+            </section>
+
+            {{-- 11. Form Submission Test --}}
             <section id="pengujian-form" class="space-y-4">
                 <div class="space-y-1">
                     <div class="flex items-center gap-2">
@@ -624,6 +965,8 @@
                                         <vibe:select.option value="editor" selected>{{ __('docs/select.test.role_editor') }}</vibe:select.option>
                                         <vibe:select.option value="developer">{{ __('docs/select.test.role_developer') }}</vibe:select.option>
                                     </vibe:select>
+
+                                    <vibe:select.remote name="lead_developer_id" label="Lead Developer (API Remote)" placeholder="Cari dari database pengguna..." :api="route('docs.select.api')" clearable />
 
                                     <vibe:select name="department" :label="__('docs/select.test.dept_label')" searchable :placeholder="__('docs/select.test.dept_placeholder')">
                                         <vibe:select.option value="engineering" selected>{{ __('docs/select.test.dept_engineering') }}</vibe:select.option>
@@ -665,6 +1008,8 @@
                                     <vibe:select.option value="developer">{{ __('docs/select.test.role_developer') }}</vibe:select.option>
                                 </vibe:select>
 
+                                <vibe:select.remote name="lead_developer_id" label="Lead Developer (API Remote)" placeholder="Cari dari database pengguna..." :api="route('docs.select.api')" clearable />
+
                                 <vibe:select name="department" :label="__('docs/select.test.dept_label')" searchable :placeholder="__('docs/select.test.dept_placeholder')">
                                     <vibe:select.option value="engineering" selected>{{ __('docs/select.test.dept_engineering') }}</vibe:select.option>
                                     <vibe:select.option value="design">{{ __('docs/select.test.dept_design') }}</vibe:select.option>
@@ -691,7 +1036,7 @@
                 </vibe:preview>
             </section>
 
-            {{-- 11. Component Properties Table --}}
+            {{-- 12. Component Properties Table --}}
             <section id="properti-komponen" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/select.props.title') }}</h2>
@@ -718,6 +1063,7 @@
         ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
         ['variant', "'primary'|'outline'|'filled'|'ghost'", "'primary'", __('docs/select.props_items.variant')],
         ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
+        ['keyboard', 'bool', 'false', __('docs/select.props_items.keyboard')],
         ['multiple', 'bool', 'false', __('docs/select.props_items.multiple')],
         ['disabled', 'bool', 'false', __('docs/select.props_items.disabled')],
         ['clearable', 'bool', 'false', __('docs/select.props_items.clearable')],
@@ -785,6 +1131,61 @@
     ];
                             @endphp
                             @foreach ($optionProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:select.remote props --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.props_title') }}</h3>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/select.props.col_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/select.props.col_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/select.props.col_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/select.props.col_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $remoteProps = [
+                                    ['api', 'string', 'null', 'URL endpoint API target yang mengembalikan array data JSON.'],
+                                    ['name', 'string', 'null', 'Nama atribut form input.'],
+                                    ['id', 'string', 'null', 'Atribut ID unik elemen select (otomatis dibuat jika kosong).'],
+                                    ['value', 'string|int|array|Collection', 'null', 'Nilai ID atau array opsi yang terpilih. Mendukung ID tunggal, array ID (misal: [13, 24]), maupun array/koleksi objek opsi untuk mode edit.'],
+                                    ['label', 'string', 'null', 'Teks label yang ditampilkan di atas komponen input.'],
+                                    ['description', 'string', 'null', 'Teks deskripsi penjelasan singkat di bawah label.'],
+                                    ['placeholder', 'string', 'Pilih opsi...', 'Teks placeholder pada tombol pemicu dropdown.'],
+                                    ['searchPlaceholder', 'string', 'Cari opsi...', 'Teks placeholder pada input pencarian.'],
+                                    ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Ukuran tinggi dan teks komponen select.'],
+                                    ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", 'Varian gaya visual batas dan latar belakang.'],
+                                    ['keyboard', 'bool', 'false', 'Mengaktifkan kontrol navigasi keyboard penuh (panah atas/bawah, Enter, Escape).'],
+                                    ['multiple', 'bool', 'false', 'Mengaktifkan mode pemilihan banyak item dengan badge/chip.'],
+                                    ['clearable', 'bool', 'false', 'Menampilkan tombol hapus/reset pilihan terpilih.'],
+                                    ['disabled', 'bool', 'false', 'Menonaktifkan select input.'],
+                                    ['min', 'int|null', 'null', 'Jumlah minimum opsi yang wajib dipertahankan (mode multiple).'],
+                                    ['max', 'int|null', 'null', 'Jumlah maksimal opsi yang dapat dipilih (mode multiple).'],
+                                    ['placement', "'auto'|'top'|'bottom'", "'auto'", 'Penempatan posisi popover dropdown.'],
+                                    ['info', 'string', 'null', 'Teks bantuan informasi di bawah komponen select.'],
+                                    ['error', 'string|bool', 'null', 'Pesan error validasi atau flag error.'],
+                                    ['errorName', 'string', 'null', 'Kunci nama error session bag Laravel untuk menampilkan pesan error validasi otomatis.'],
+                                    ['wrapperClass', 'string', 'null', 'Kelas utility Tailwind tambahan pada elemen pembungkus terluar.'],
+                                    ['initialLabel', 'string|array', 'null', 'Teks label yang langsung ditampilkan sebelum API pertama kali dipanggil (string untuk single, array untuk multiple).'],
+                                    ['initialAvatar', 'string|array', 'null', 'URL gambar avatar awal yang ditampilkan sebelum opsi dimuat dari endpoint.'],
+                                    ['initialIcon', 'string|array', 'null', 'Markup SVG atau teks inisial ikon awal.'],
+                                    ['searchParam', 'string', "'q'", 'Nama query parameter yang dikirimkan ke endpoint saat pencarian.'],
+                                    ['minChars', 'int', '0', 'Jumlah karakter minimal sebelum request pencarian dikirimkan (0 = langsung fetch saat dropdown dibuka).'],
+                                    ['debounce', 'int', '300', 'Waktu tunda debounce dalam milidetik saat mengetik kata kunci.'],
+                                    ['headers', 'array', '[]', 'Kustom HTTP Headers tambahan saat memanggil API.'],
+                                ];
+                            @endphp
+                            @foreach ($remoteProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>

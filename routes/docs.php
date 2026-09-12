@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardPageController;
 use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\FormController;
+use App\Http\Controllers\SelectController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('docs')->name('docs.')->group(function () {
@@ -18,7 +19,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
-    Route::view('/select', 'docs.select.index')->name('select.index');
+    Route::get('/select',[SelectController::class,'index'])->name('select.index');
+    Route::get('/select/api', [SelectController::class, 'api'])->name('select.api');
     Route::view('/checkbox', 'docs.checkbox.index')->name('checkbox.index');
     Route::view('/radio', 'docs.radio.index')->name('radio.index');
     Route::view('/switch', 'docs.switch.index')->name('switch.index');

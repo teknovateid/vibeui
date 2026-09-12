@@ -31,6 +31,7 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:collapsible="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;x-slot:template&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:schema="[...]"</vibe:badge>
+                    <vibe:badge variant="primary" size="sm" class="font-mono text-[11px]">&lt;vibe:select.remote&gt;</vibe:badge>
                 </div>
             </div>
 
@@ -259,7 +260,54 @@
                 </vibe:preview>
             </section>
 
-            {{-- 5. Pengujian Form Submit (Live Demo) --}}
+            {{-- 5. Integrasi Select Berbasis API (vibe:select.remote) --}}
+            <section id="select-remote" class="space-y-4">
+                <div class="space-y-1">
+                    <div class="flex items-center gap-2">
+                        <h2 class="text-xl font-bold text-foreground">{{ __('docs/dynamic-form.select_remote.title') }}</h2>
+                        <vibe:badge variant="primary" size="sm">Baru</vibe:badge>
+                    </div>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/dynamic-form.select_remote.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/dynamic-form.select_remote.preview_title')" minHeight="360px">
+                    <vibe:preview.code>
+                        <vibe:dynamic-form name="project_tasks" :label="__('docs/dynamic-form.select_remote.form_label')" :description="__('docs/dynamic-form.select_remote.form_desc')" min="1" max="5" :add-text="__('docs/dynamic-form.select_remote.add_task')" variant="card" :allow-reorder="true" :allow-duplicate="true">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <vibe:input name="task_title" :label="__('docs/dynamic-form.select_remote.task_title')" :placeholder="__('docs/dynamic-form.select_remote.task_placeholder')" required />
+                                <vibe:select.remote name="assignee_id" :label="__('docs/dynamic-form.select_remote.assignee')" :placeholder="__('docs/dynamic-form.select_remote.assignee_placeholder')" :api="route('docs.select.api')" clearable keyboard />
+                                <vibe:select name="priority" :label="__('docs/dynamic-form.select_remote.priority')" :placeholder="__('docs/dynamic-form.select_remote.priority_placeholder')" :options="[
+                                    'low' => 'Rendah (Low)',
+                                    'medium' => 'Sedang (Medium)',
+                                    'high' => 'Tinggi (High)',
+                                    'urgent' => 'Mendesak (Urgent)'
+                                ]" />
+                                <vibe:date-time name="due_date" :label="__('docs/dynamic-form.select_remote.due_date')" :placeholder="__('docs/dynamic-form.select_remote.due_placeholder')" />
+                            </div>
+                        </vibe:dynamic-form>
+                    </vibe:preview.code>
+
+                    <div class="w-full max-w-2xl mx-auto p-2">
+                        <vibe:dynamic-form name="project_tasks_demo" :label="__('docs/dynamic-form.select_remote.form_label')" :description="__('docs/dynamic-form.select_remote.form_desc')" min="1" max="5" :add-text="__('docs/dynamic-form.select_remote.add_task')" variant="card" :allow-reorder="true" :allow-duplicate="true">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <vibe:input name="task_title" :label="__('docs/dynamic-form.select_remote.task_title')" :placeholder="__('docs/dynamic-form.select_remote.task_placeholder')" required />
+                                <vibe:select.remote name="assignee_id" :label="__('docs/dynamic-form.select_remote.assignee')" :placeholder="__('docs/dynamic-form.select_remote.assignee_placeholder')" :api="route('docs.select.api')" clearable keyboard />
+                                <vibe:select name="priority" :label="__('docs/dynamic-form.select_remote.priority')" :placeholder="__('docs/dynamic-form.select_remote.priority_placeholder')" :options="[
+                                    'low' => 'Rendah (Low)',
+                                    'medium' => 'Sedang (Medium)',
+                                    'high' => 'Tinggi (High)',
+                                    'urgent' => 'Mendesak (Urgent)'
+                                ]" />
+                                <vibe:date-time name="due_date" :label="__('docs/dynamic-form.select_remote.due_date')" :placeholder="__('docs/dynamic-form.select_remote.due_placeholder')" />
+                            </div>
+                        </vibe:dynamic-form>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 6. Pengujian Form Submit (Live Demo) --}}
             <section id="pengujian-submit" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/dynamic-form.test_submit.title') }}</h2>
@@ -274,9 +322,10 @@
                             @csrf
                             <vibe:dynamic-form name="members" :label="__('docs/dynamic-form.test_form.label')" :description="__('docs/dynamic-form.test_form.desc')" min="1" max="4" :add-text="__('docs/dynamic-form.test_form.add_member')" variant="card" :allow-reorder="true" :allow-duplicate="true">
                                 <div class="space-y-4">
-                                    {{-- 1. Input, Select, Date-time --}}
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    {{-- 1. Input, Select Remote, Select, Date-time --}}
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                         <vibe:input name="member_name" :label="__('docs/dynamic-form.test_form.member_name')" :placeholder="__('docs/dynamic-form.test_form.name_placeholder')" required />
+                                        <vibe:select.remote name="supervisor_id" :label="__('docs/dynamic-form.test_form.supervisor')" :placeholder="__('docs/dynamic-form.test_form.supervisor_placeholder')" :api="route('docs.select.api')" clearable keyboard />
                                         <vibe:select name="role" :label="__('docs/dynamic-form.test_form.role')" :options="[
                                             'lead' => 'Project Lead',
                                             'dev' => 'Developer',
@@ -287,10 +336,12 @@
                                     </div>
 
                                     {{-- 2. Textarea, Range, Switch --}}
-                                    <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
-                                    <div class="grid grid-cols-1 md:grid-cols-2 items-center w-full gap-4">
-                                        <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
-                                        <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
+                                        <div class="space-y-3">
+                                            <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
+                                            <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
+                                        </div>
                                     </div>
 
                                     {{-- 3. Radio, Checkbox, Filepond --}}
@@ -329,9 +380,10 @@
                             <vibe:card.content>
                                 <vibe:dynamic-form name="members" min="1" max="4" :add-text="__('docs/dynamic-form.test_form.add_member')" variant="card" :allow-reorder="true" :allow-duplicate="true">
                                     <div class="space-y-4">
-                                        {{-- 1. Input, Select, Date-time --}}
-                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        {{-- 1. Input, Select Remote, Select, Date-time --}}
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                             <vibe:input name="member_name" :label="__('docs/dynamic-form.test_form.member_name')" :placeholder="__('docs/dynamic-form.test_form.name_placeholder')" />
+                                            <vibe:select.remote name="supervisor_id" :label="__('docs/dynamic-form.test_form.supervisor')" :placeholder="__('docs/dynamic-form.test_form.supervisor_placeholder')" :api="route('docs.select.api')" clearable keyboard />
                                             <vibe:select name="role" :label="__('docs/dynamic-form.test_form.role')" :options="[
                                                 'lead' => 'Project Lead',
                                                 'dev' => 'Developer',
@@ -342,10 +394,12 @@
                                         </div>
 
                                         {{-- 2. Textarea, Range, Switch --}}
-                                        <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
-                                        <div class="grid grid-cols-1 md:grid-cols-2 items-center w-full gap-4">
-                                            <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
-                                            <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <vibe:textarea name="notes" :label="__('docs/dynamic-form.test_form.notes')" rows="3" :placeholder="__('docs/dynamic-form.test_form.notes_placeholder')" />
+                                            <div class="space-y-3">
+                                                <vibe:range name="skill_score" :label="__('docs/dynamic-form.test_form.skill_score')" :min="0" :max="100" :step="5" :value="80" :showValue="true" valueSuffix="%" />
+                                                <vibe:switch name="is_remote" :label="__('docs/dynamic-form.test_form.is_remote')" :description="__('docs/dynamic-form.test_form.remote_desc')" :checked="true" />
+                                            </div>
                                         </div>
 
                                         {{-- 3. Radio, Checkbox, Filepond --}}

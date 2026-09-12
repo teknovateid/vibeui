@@ -9,4 +9,7 @@ return [
     'max_reached' => 'Maks. tercapai',
     'reset' => 'Reset',
     'no_options' => 'Tidak ada opsi ditemukan.',
+    'loading' => 'Memuat data...',
+    'network_error' => 'Gagal memuat data dari server.',
+    'min_chars' => 'Ketik minimal :min karakter...',
 ];
