@@ -22,6 +22,7 @@
     'multiple' => false,
     'min' => null,
     'max' => null,
+    'clearable' => false,
 ])
 
 @php
@@ -215,18 +216,29 @@
 
     clearAll() {
         if (this.disabled) return;
-        if (this.min !== null && this.min > 0) {
-            // Trim down to minimum required items (keep first min items)
-            if (Array.isArray(this.value) && this.value.length > this.min) {
-                this.value = this.value.slice(0, this.min);
-                this.updateSelectionFromValue();
-                this.$nextTick(() => {
-                    this.dispatchChangeEvent();
-                });
+        if (this.multiple) {
+            if (this.min !== null && this.min > 0) {
+                if (Array.isArray(this.value) && this.value.length > this.min) {
+                    this.value = this.value.slice(0, this.min);
+                    this.updateSelectionFromValue();
+                    this.$nextTick(() => {
+                        this.dispatchChangeEvent();
+                    });
+                }
+                return;
             }
+            this.value = [];
+            this.updateSelectionFromValue();
+            this.$nextTick(() => {
+                this.dispatchChangeEvent();
+            });
             return;
         }
-        this.value = [];
+        this.value = '';
+        this.selectedLabel = '';
+        this.selectedAvatar = '';
+        this.selectedIcon = '';
+        this.selectedDescription = '';
         this.updateSelectionFromValue();
         this.$nextTick(() => {
             this.dispatchChangeEvent();
@@ -480,8 +492,8 @@
 
     {{-- Trigger & Popover Wrapper --}}
     <div class="relative">
-        {{-- Trigger Button (Visual Parity with vibe:input) --}}
-        <button type="button" x-ref="triggerBtn" id="{{ $id }}-trigger" @click="toggle()" :disabled="disabled" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif aria-haspopup="listbox" :aria-expanded="open" :class="open ? '{{ $activeOpenClasses }}' : ''" @if ($keyboard) @keydown.down.stop.prevent="if (!open) { toggle(); } else { focusNext($event); }"
+        {{-- Trigger Element (Visual Parity with vibe:input) --}}
+        <div role="combobox" tabindex="0" x-ref="triggerBtn" id="{{ $id }}-trigger" @click="toggle()" :aria-disabled="disabled" :class="{ 'pointer-events-none opacity-50': disabled, '{{ $activeOpenClasses }}': open }" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif aria-haspopup="listbox" :aria-expanded="open" @if ($keyboard) @keydown.down.stop.prevent="if (!open) { toggle(); } else { focusNext($event); }"
                 @keydown.up.stop.prevent="if (!open) { toggle(); } else { focusPrevious($event); }" @endif {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
             {{-- Content Display --}}
             @if ($multiple)
@@ -523,13 +535,27 @@
                 </span>
             @endif
 
-            {{-- Custom Animated Chevron Indicator --}}
-            <div class="pointer-events-none absolute inset-y-0 {{ $chevronRightPosition }} flex items-center text-muted-foreground">
-                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            {{-- Clear Button & Chevron --}}
+            <div class="pointer-events-auto absolute inset-y-0 {{ $chevronRightPosition }} flex items-center gap-1 text-muted-foreground">
+                @if ($clearable)
+                    <button
+                        x-cloak
+                        x-show="(multiple ? (value && value.length > 0) : (value !== '' && value !== null && value !== undefined)) && !disabled"
+                        type="button"
+                        @click.stop="clearAll()"
+                        class="size-4 hover:text-foreground inline-flex items-center justify-center transition-colors cursor-pointer mr-0.5"
+                        aria-label="{{ __('vibe/select.clear') ?? 'Clear' }}">
+                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                @endif
+                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m6 9 6 6 6-6" />
                 </svg>
             </div>
-        </button>
+        </div>
 
         {{-- Dropdown Popover --}}
         <div x-cloak x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute left-0 right-0 z-50 rounded-xl border border-border bg-popover text-popover-foreground shadow-xl overflow-hidden focus:outline-none" :class="openUp ? 'bottom-full mb-1.5' : 'top-full mt-1.5'" style="display: none;">

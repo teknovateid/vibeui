@@ -157,6 +157,11 @@
                                     '['.$i.
                                     ']['.$fName.
                                     ']'" :label="$fLabel" :value="$fVal" :options="$field['options'] ?? []" :required="$fReq" :placeholder="$field['placeholder'] ?? null" />
+                                @elseif ($fType === 'select.remote' || $fType === 'remote-select')
+                                    <vibe:select.remote :name="$name.
+                                    '['.$i.
+                                    ']['.$fName.
+                                    ']'" :label="$fLabel" :value="$fVal" :api="$field['api'] ?? null" :required="$fReq" :placeholder="$field['placeholder'] ?? null" :multiple="$field['multiple'] ?? false" :clearable="$field['clearable'] ?? true" :keyboard="$field['keyboard'] ?? true" />
                                 @elseif ($fType === 'date-time')
                                     <vibe:date-time :name="$name.
                                     '['.$i.
@@ -230,6 +235,10 @@
                                 <vibe:select :name="$name.
                                 '[__INDEX__]['.$fName.
                                 ']'" :label="$fLabel" :options="$field['options'] ?? []" :required="$fReq" :placeholder="$field['placeholder'] ?? null" />
+                            @elseif ($fType === 'select.remote' || $fType === 'remote-select')
+                                <vibe:select.remote :name="$name.
+                                '[__INDEX__]['.$fName.
+                                ']'" :label="$fLabel" :api="$field['api'] ?? null" :required="$fReq" :placeholder="$field['placeholder'] ?? null" :multiple="$field['multiple'] ?? false" :clearable="$field['clearable'] ?? true" :keyboard="$field['keyboard'] ?? true" />
                             @elseif ($fType === 'date-time')
                                 <vibe:date-time :name="$name.
                                 '[__INDEX__]['.$fName.

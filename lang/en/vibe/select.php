@@ -9,4 +9,7 @@ return [
     'max_reached' => 'Max reached',
     'reset' => 'Reset',
     'no_options' => 'No options found.',
+    'loading' => 'Loading data...',
+    'network_error' => 'Failed to load data from server.',
+    'min_chars' => 'Type at least :min characters...',
 ];
