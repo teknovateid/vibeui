@@ -101,6 +101,18 @@ return [
         'info_keys' => 'Berkas yang telah tersimpan otomatis disinkronkan ke dalam hidden input form, sehingga saat form disubmit data berkas lama tetap terkirim secara aman tanpa perlu diunggah ulang.',
     ],
 
+    // Section: Reorder Berkas
+    'reorder_section' => [
+        'title' => 'Reorder Berkas (Mode Edit & Galeri)',
+        'desc' => 'Tambahkan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">reorder</code> untuk mengaktifkan fitur pengurutan ulang berkas secara drag & drop. Urutan visual di UI akan langsung tersinkronkan ke input form saat disubmit, sehingga posisi berkas yang sudah ada maupun yang baru diunggah akan selalu sesuai tampilan.',
+        'preview_title' => 'Galeri Reorder Berkas (Drag & Drop)',
+        'label' => 'Galeri Produk (Bisa Diurutkan Ulang)',
+        'description' => 'Tahan dan seret ikon enam titik atau klik panah ↑↓ untuk mengubah urutan berkas.',
+        'submit_btn' => 'Simpan Urutan Galeri (Test Request)',
+        'doc_title' => 'Cara Kerja di Controller',
+        'doc_desc' => 'Saat form disubmit, <code class="font-mono text-xs text-primary">syncFormInputsOrder()</code> otomatis menyesuaikan indeks numerik tiap input (<code class="font-mono text-xs text-primary">gallery[0]</code>, <code class="font-mono text-xs text-primary">gallery[1]</code>, dst.) sesuai urutan visual di UI. <code class="font-mono text-xs text-primary">mergeInputsAndFiles()</code> di controller kemudian menggabungkan URL lama dan file baru menggunakan union array berindeks numerik sehingga urutan posisi selalu dipertahankan.',
+    ],
+
     // Section 8: Livewire
     'livewire' => [
         'title' => 'Integrasi Native Livewire v3',
@@ -179,6 +191,7 @@ return [
             'protect_upload' => 'Mencegah submit form dan navigasi saat berkas masih diunggah dengan konfirmasi &lt;vibe:alert&gt; serta peringatan penutupan tab (`beforeunload`).',
             'protect_title' => 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").',
             'protect_message' => 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.',
+            'reorder' => 'Aktifkan fitur reorder drag & drop. Urutan visual di UI langsung tersinkronkan ke input form saat submit (bekerja untuk berkas lama maupun baru diunggah).',
         ],
     ],
 

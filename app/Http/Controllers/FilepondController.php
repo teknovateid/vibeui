@@ -67,10 +67,17 @@ class FilepondController extends Controller
             if (!isset($merged[$key])) {
                 $merged[$key] = $fileVal;
             } elseif (is_array($merged[$key]) && is_array($fileVal)) {
-                if (array_is_list($merged[$key]) && array_is_list($fileVal)) {
+                $keyIntersection = array_intersect_key($merged[$key], $fileVal);
+                if (empty($keyIntersection)) {
+                    $merged[$key] = $fileVal + $merged[$key];
+                    ksort($merged[$key], SORT_NUMERIC);
+                    $merged[$key] = array_values($merged[$key]);
+                } elseif (array_is_list($merged[$key]) && array_is_list($fileVal)) {
                     $merged[$key] = array_merge($merged[$key], $fileVal);
                 } else {
                     $merged[$key] = $this->mergeInputsAndFiles($merged[$key], $fileVal);
+                    ksort($merged[$key], SORT_NUMERIC);
+                    $merged[$key] = array_values($merged[$key]);
                 }
             } elseif (is_array($merged[$key])) {
                 $merged[$key][] = $fileVal;

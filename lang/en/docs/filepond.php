@@ -101,6 +101,18 @@ return [
         'info_keys' => 'Existing files are automatically synced into hidden form inputs, ensuring previously uploaded keys/URLs are submitted safely without re-uploading.',
     ],
 
+    // Section: Reorder Files
+    'reorder_section' => [
+        'title' => 'File Reordering (Edit & Gallery Mode)',
+        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">reorder</code> prop to enable drag & drop file reordering. The visual order in the UI is automatically synced to form inputs on submit, ensuring both preloaded and newly uploaded files maintain their correct positions.',
+        'preview_title' => 'File Gallery Reorder (Drag & Drop)',
+        'label' => 'Product Gallery (Reorderable)',
+        'description' => 'Hold and drag the grip icon or click arrows to reorder files.',
+        'submit_btn' => 'Save Gallery Order (Test Request)',
+        'doc_title' => 'How It Works in the Controller',
+        'doc_desc' => 'On form submit, <code class="font-mono text-xs text-primary">syncFormInputsOrder()</code> automatically updates each input numeric index to match the visual UI order. The <code class="font-mono text-xs text-primary">mergeInputsAndFiles()</code> method then merges old URLs with new file uploads using numeric-indexed union arrays to always preserve their position.',
+    ],
+
     // Section 8: Livewire
     'livewire' => [
         'title' => 'Native Livewire v3 Integration',
@@ -179,6 +191,7 @@ return [
             'protect_upload' => 'Prevent form submit and navigation during active uploads with confirmation alert and `beforeunload` warning.',
             'protect_title' => 'Custom title for active upload alert (default: "Upload in Progress").',
             'protect_message' => 'Custom confirmation warning message when attempting to navigate or submit during active upload.',
+            'reorder' => 'Enable drag & drop reordering. The visual UI order is synced to form inputs on submit (works for both preloaded and newly uploaded files).',
         ],
     ],
 

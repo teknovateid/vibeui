@@ -1330,4 +1330,202 @@
     background-color: color-mix(in srgb, var(--muted) 70%, transparent) !important;
 }
 
+/* =========================================================================
+   Vibe UI File Reordering & Drag-and-Drop States
+   ========================================================================= */
+.filepond--root[data-allow-reorder="true"] .filepond--item {
+    cursor: grab;
+    touch-action: pan-y;
+}
+
+.filepond--root[data-allow-reorder="true"] .filepond--item:active {
+    cursor: grabbing;
+}
+
+.filepond--reorder-handle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 2.25rem;
+    margin-right: 0.5rem;
+    color: var(--muted-foreground);
+    opacity: 0.55;
+    cursor: grab !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    touch-action: none !important;
+    border-radius: var(--radius-md, 0.375rem);
+    transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+    flex-shrink: 0;
+}
+
+.filepond--reorder-handle:hover {
+    opacity: 1;
+    color: var(--foreground);
+    background-color: color-mix(in srgb, var(--muted) 80%, transparent);
+}
+
+.filepond--reorder-handle:active {
+    cursor: grabbing !important;
+}
+
+.filepond--reorder-arrows {
+    display: inline-flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-right: 0.375rem;
+    flex-shrink: 0;
+}
+
+.filepond--reorder-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.25rem;
+    height: 1.125rem;
+    padding: 0;
+    color: var(--muted-foreground);
+    opacity: 0.6;
+    border-radius: 0.25rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.filepond--reorder-btn:hover:not(:disabled) {
+    opacity: 1;
+    color: var(--foreground);
+    background-color: color-mix(in srgb, var(--foreground) 10%, transparent);
+}
+
+.filepond--reorder-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+}
+
+/* =========================================================================
+   Floating Drag Clone Preview (Matches Dynamic Form Drag Mirror)
+   ========================================================================= */
+.filepond--root.filepond--drag-clone-root {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: var(--drag-clone-width, auto) !important;
+    max-width: var(--drag-clone-width, 100%) !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+.filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: var(--drag-clone-width, 100%) !important;
+    max-width: var(--drag-clone-width, 100%) !important;
+    height: 100% !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    opacity: 0.88 !important;
+    transform: scale(1.02) !important;
+    transform-origin: center center !important;
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6)) !important;
+    box-sizing: border-box !important;
+}
+
+.filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating .filepond--file-wrapper {
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 4.25rem !important;
+    padding: 0.625rem 1rem !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    background-color: color-mix(in srgb, var(--card, #18181b) 85%, transparent) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 2px solid rgba(255, 255, 255, 0.85) !important; /* Crisp white border matching dynamic-form */
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
+    box-sizing: border-box !important;
+}
+
+:root:not(.dark) .filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating .filepond--file-wrapper {
+    background-color: color-mix(in srgb, #ffffff 85%, transparent) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 2px solid hsl(var(--primary, 220 90% 56%)) !important;
+    box-shadow: 0 0 0 1px hsl(var(--primary, 220 90% 56%) / 0.3), 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Dragging state for original item slot (matches dynamic-form opacity-40 scale-[0.99]) */
+.filepond--item.filepond--item-dragging {
+    opacity: 0.35 !important;
+    transform: scale(0.99) !important;
+    transition: opacity 0.15s ease, transform 0.15s ease !important;
+    z-index: 10 !important;
+}
+
+.filepond--item.filepond--item-dragging .filepond--file-wrapper {
+    border-style: dashed !important;
+    border-color: color-mix(in srgb, var(--foreground) 30%, var(--border)) !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Drop Target Visual Indicator (matches dynamic-form ring-2 ring-primary border-primary/60) */
+.filepond--item.filepond--drop-target-above .filepond--file-wrapper,
+.filepond--item.filepond--drop-target-below .filepond--file-wrapper {
+    box-shadow: 0 0 0 2px hsl(var(--primary, 220 90% 56%)), 0 8px 24px -4px rgba(0, 0, 0, 0.25) !important;
+    border-color: hsl(var(--primary, 220 90% 56%)) !important;
+    transform: scale(1.01) !important;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.filepond--item.filepond--drop-target-above .filepond--file-wrapper::before {
+    content: "";
+    position: absolute;
+    top: -5px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: hsl(var(--primary, 220 90% 56%));
+    border-radius: 9999px;
+    box-shadow: 0 0 10px hsl(var(--primary, 220 90% 56%) / 0.9);
+    z-index: 30;
+    pointer-events: none;
+}
+
+.filepond--item.filepond--drop-target-below .filepond--file-wrapper::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: hsl(var(--primary, 220 90% 56%));
+    border-radius: 9999px;
+    box-shadow: 0 0 10px hsl(var(--primary, 220 90% 56%) / 0.9);
+    z-index: 30;
+    pointer-events: none;
+}
+
+/* Reorder Completion Highlight (matches dynamic-form highlightRow: ring-2 ring-primary/40) */
+.filepond--file-wrapper.filepond--reorder-highlight {
+    box-shadow: 0 0 0 2px hsl(var(--primary, 220 90% 56%)) !important;
+    border-color: hsl(var(--primary, 220 90% 56%)) !important;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease !important;
+}
+
+
 

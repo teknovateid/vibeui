@@ -677,6 +677,94 @@ BLADE;
                 </vibe:card>
             </section>
 
+            {{-- Reorder Berkas --}}
+            <section id="reorder-berkas" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/filepond.reorder_section.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/filepond.reorder_section.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/filepond.reorder_section.preview_title')">
+                    <vibe:preview.code>
+                        <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <\vibe:filepond
+                                name="gallery"
+                                label="{{ __('docs/filepond.reorder_section.label') }}"
+                                description="{{ __('docs/filepond.reorder_section.description') }}"
+                                multiple
+                                reorder
+                                :files="$existingFiles"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <\vibe:button type="submit" variant="primary" size="sm">
+                                    {{ __('docs/filepond.reorder_section.submit_btn') }}
+                                </\vibe:button>
+                            </div>
+                        </\vibe:form>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-lg">
+                        <vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
+                            <vibe:filepond
+                                name="gallery"
+                                :label="__('docs/filepond.reorder_section.label')"
+                                :description="__('docs/filepond.reorder_section.description')"
+                                multiple
+                                reorder
+                                :files="$existingFiles"
+                            />
+                            <div class="flex justify-end pt-1">
+                                <vibe:button type="submit" variant="primary" size="sm">
+                                    <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="m22 2-7 20-4-9-9-4Z" />
+                                        <path d="M22 2 11 13" />
+                                    </svg>
+                                    {{ __('docs/filepond.reorder_section.submit_btn') }}
+                                </vibe:button>
+                            </div>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+
+                <vibe:card class="p-5 space-y-3">
+                    <h3 class="text-sm font-semibold text-foreground">{!! __('docs/filepond.reorder_section.doc_title') !!}</h3>
+                    <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.doc_desc') !!}</p>
+                    @php
+                    $reorderControllerCode = <<<'PHP'
+// Controller: how to handle reordered gallery with mixed URLs + new uploads
+public function update(Request $request, Product $product)
+{
+    // After reordering in the UI, inputs arrive as indexed arrays:
+    // gallery[0] = "https://s3.../foto-belakang.jpg"  (existing, moved to top)
+    // gallery[1] = UploadedFile (new file, at position 1)
+    // gallery[2] = "https://s3.../foto-depan.jpg"     (existing)
+
+    $merged = $this->mergeInputsAndFiles(
+        $request->input(),
+        $request->allFiles()
+    );
+
+    // $merged['gallery'] will now be in the EXACT visual order from the UI
+    $gallery = $merged['gallery'] ?? [];
+
+    foreach ($gallery as $index => $item) {
+        if ($item instanceof UploadedFile) {
+            // Store new upload and save path to product
+            $path = $item->store('products/gallery', 's3');
+            $product->gallery()->create(['path' => $path, 'order' => $index]);
+        } else {
+            // Update order of existing file (URL string)
+            $product->gallery()->where('url', $item)->update(['order' => $index]);
+        }
+    }
+}
+PHP;
+                    @endphp
+                    <vibe:highlightjs language="php" :code="$reorderControllerCode" />
+                </vibe:card>
+            </section>
+
             {{-- 6. Form Submission & Backend Controller --}}
             <section id="form-controller" class="space-y-4">
                 <div class="space-y-1">
@@ -1464,6 +1552,7 @@ BLADE;
                             ['protect-upload', 'bool', 'false', __('docs/filepond.props.items.protect_upload')],
                             ['protect-title', 'string', 'null', __('docs/filepond.props.items.protect_title')],
                             ['protect-message', 'string', 'null', __('docs/filepond.props.items.protect_message')],
+                            ['reorder', 'bool', 'false', __('docs/filepond.props.items.reorder')],
                         ];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])
