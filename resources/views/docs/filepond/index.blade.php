@@ -686,6 +686,21 @@ BLADE;
                     </p>
                 </div>
 
+                {{-- Alert / Banner: Tantangan Superglobal & Solusi Vibe UI --}}
+                <div class="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3.5 text-xs leading-relaxed">
+                    <div class="p-2 rounded-lg bg-primary/10 text-primary shrink-0 mt-0.5">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4" />
+                            <path d="M12 8h.01" />
+                        </svg>
+                    </div>
+                    <div class="space-y-1">
+                        <strong class="text-foreground font-semibold block text-sm">{{ __('docs/filepond.reorder_section.concept_title') }}</strong>
+                        <p class="text-muted-foreground">{!! __('docs/filepond.reorder_section.concept_desc') !!}</p>
+                    </div>
+                </div>
+
                 <vibe:preview :title="__('docs/filepond.reorder_section.preview_title')">
                     <vibe:preview.code>
                         <\vibe:form action="{{ route('docs.filepond.request_test') }}" method="POST" enctype="multipart/form-data" class="space-y-3">
@@ -727,42 +742,343 @@ BLADE;
                     </div>
                 </vibe:preview>
 
-                <vibe:card class="p-5 space-y-3">
-                    <h3 class="text-sm font-semibold text-foreground">{!! __('docs/filepond.reorder_section.doc_title') !!}</h3>
-                    <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.doc_desc') !!}</p>
-                    @php
+                @php
                     $reorderControllerCode = <<<'PHP'
-// Controller: how to handle reordered gallery with mixed URLs + new uploads
-public function update(Request $request, Product $product)
+namespace App\Http\Controllers;
+
+use App\Models\Product;
+use App\Traits\HandlesOrderedUploads;
+use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
+class ProductGalleryController extends Controller
 {
-    // After reordering in the UI, inputs arrive as indexed arrays:
-    // gallery[0] = "https://s3.../foto-belakang.jpg"  (existing, moved to top)
-    // gallery[1] = UploadedFile (new file, at position 1)
-    // gallery[2] = "https://s3.../foto-depan.jpg"     (existing)
+    use HandlesOrderedUploads;
 
-    $merged = $this->mergeInputsAndFiles(
-        $request->input(),
-        $request->allFiles()
-    );
+    /**
+     * Memperbarui galeri produk dan menyinkronkan urutan berkas lama serta berkas baru.
+     */
+    public function update(Request $request, Product $product)
+    {
+        // 1. Gabungkan $_POST dan $_FILES dengan urutan numerik visual UI
+        $payload = $this->mergeInputsAndFiles($request->input(), $request->allFiles());
+        $gallery = $payload['gallery'] ?? [];
 
-    // $merged['gallery'] will now be in the EXACT visual order from the UI
-    $gallery = $merged['gallery'] ?? [];
+        DB::transaction(function () use ($product, $gallery) {
+            $activePaths = [];
 
-    foreach ($gallery as $index => $item) {
-        if ($item instanceof UploadedFile) {
-            // Store new upload and save path to product
-            $path = $item->store('products/gallery', 's3');
-            $product->gallery()->create(['path' => $path, 'order' => $index]);
-        } else {
-            // Update order of existing file (URL string)
-            $product->gallery()->where('url', $item)->update(['order' => $index]);
-        }
+            foreach ($gallery as $orderIndex => $item) {
+                if ($item instanceof UploadedFile) {
+                    // === A. BERKAS BARU DIUNGGAH ===
+                    // Simpan file fisik ke storage (disk 'public' atau 's3')
+                    $path = $item->store('products/gallery', 'public');
+                    $activePaths[] = $path;
+
+                    // Buat record baru di database dengan posisi sort_order
+                    $product->images()->create([
+                        'path' => $path,
+                        'sort_order' => $orderIndex,
+                    ]);
+                } elseif (is_string($item) && !empty($item)) {
+                    // === B. BERKAS LAMA YANG DIPERTAHANKAN ===
+                    // Bersihkan prefix domain jika $item berupa URL absolut
+                    $storagePrefix = Storage::disk('public')->url('');
+                    $path = str_replace($storagePrefix, '', $item);
+                    $activePaths[] = $path;
+
+                    // Perbarui sort_order pada berkas lama
+                    $product->images()
+                        ->where('path', $path)
+                        ->orWhere('path', $item)
+                        ->update(['sort_order' => $orderIndex]);
+                }
+            }
+
+            // === C. HAPUS BERKAS YANG DIKELUARKAN DARI UI ===
+            // Berkas lama yang tidak ada di daftar $activePaths berarti telah dihapus pengguna di FilePond
+            $deletedImages = $product->images()
+                ->whereNotIn('path', $activePaths)
+                ->get();
+
+            foreach ($deletedImages as $image) {
+                Storage::disk('public')->delete($image->path);
+                $image->delete();
+            }
+        });
+
+        return redirect()->back()->with('success', 'Galeri berhasil disimpan sesuai urutan!');
     }
 }
 PHP;
-                    @endphp
-                    <vibe:highlightjs language="php" :code="$reorderControllerCode" />
-                </vibe:card>
+
+                    $reorderTraitCode = <<<'PHP'
+namespace App\Traits;
+
+use Illuminate\Http\UploadedFile;
+
+trait HandlesOrderedUploads
+{
+    /**
+     * Menggabungkan request input ($request->input()) dan uploaded files ($request->allFiles())
+     * dengan aman, mempertahankan indeks numerik sesuai urutan visual di antarmuka (0, 1, 2, ...).
+     */
+    public function mergeInputsAndFiles(array $input, array $files): array
+    {
+        $merged = $input;
+
+        foreach ($files as $key => $fileVal) {
+            if (!isset($merged[$key])) {
+                $merged[$key] = $fileVal;
+            } elseif (is_array($merged[$key]) && is_array($fileVal)) {
+                $keyIntersection = array_intersect_key($merged[$key], $fileVal);
+                if (empty($keyIntersection)) {
+                    $merged[$key] = $fileVal + $merged[$key];
+                    ksort($merged[$key], SORT_NUMERIC);
+                    $merged[$key] = array_values($merged[$key]);
+                } elseif (array_is_list($merged[$key]) && array_is_list($fileVal)) {
+                    $merged[$key] = array_merge($merged[$key], $fileVal);
+                } else {
+                    $merged[$key] = $this->mergeInputsAndFiles($merged[$key], $fileVal);
+                    ksort($merged[$key], SORT_NUMERIC);
+                    $merged[$key] = array_values($merged[$key]);
+                }
+            } elseif (is_array($merged[$key])) {
+                $merged[$key][] = $fileVal;
+            } else {
+                $merged[$key] = [$merged[$key], $fileVal];
+            }
+        }
+
+        return $merged;
+    }
+}
+PHP;
+
+                    $reorderQuickTipCode = <<<'PHP'
+// Alternatif cepat satu baris di Controller khusus field 'gallery' tunggal:
+$gallery = $request->file('gallery', []) + $request->input('gallery', []);
+ksort($gallery, SORT_NUMERIC);
+$gallery = array_values($gallery);
+PHP;
+
+                    $reorderValidationCode = <<<'PHP'
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
+
+class UpdateProductGalleryRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    public function rules(): array
+    {
+        return [
+            'gallery' => ['nullable', 'array'],
+            'gallery.*' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    // Validasi berkas baru (UploadedFile)
+                    if ($value instanceof UploadedFile) {
+                        $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+                        if (!in_array($value->getMimeType(), $allowedMimes)) {
+                            $fail("Item {$attribute} harus berupa gambar (JPG, PNG, WEBP).");
+                        }
+
+                        if ($value->getSize() > 5 * 1024 * 1024) { // Maks 5 MB
+                            $fail("Ukuran berkas {$attribute} tidak boleh lebih dari 5MB.");
+                        }
+                    } elseif (!is_string($value)) {
+                        $fail("Data berkas pada {$attribute} tidak valid.");
+                    }
+                },
+            ],
+        ];
+    }
+}
+PHP;
+
+                    $reorderBladeCode = '{{-- resources/views/products/edit.blade.php --}}' . "\n"
+                        . '@' . "php\n"
+                        . '    // Ambil gambar yang sudah ada dari database terurut sort_order' . "\n"
+                        . '    $existingGallery = $product->images()' . "\n"
+                        . '        ->orderBy(\'sort_order\', \'asc\')' . "\n"
+                        . '        ->get()' . "\n"
+                        . '        ->map(fn($img) => Storage::disk(\'public\')->url($img->path))' . "\n"
+                        . '        ->toArray();' . "\n"
+                        . '@' . "endphp\n\n"
+                        . '<\vibe:form action="{{ route(\'products.gallery.update\', $product) }}" method="POST" enctype="multipart/form-data" class="space-y-4">' . "\n"
+                        . '    @' . "method('PUT')\n\n"
+                        . '    <\vibe:filepond' . "\n"
+                        . '        name="gallery"' . "\n"
+                        . '        label="Foto Galeri Produk"' . "\n"
+                        . '        description="Seret kartu gambar atau klik panah untuk mengatur urutan susunan foto."' . "\n"
+                        . '        multiple' . "\n"
+                        . '        reorder' . "\n"
+                        . '        :files="$existingGallery"' . "\n"
+                        . '        accepted-file-types="image/jpeg, image/png, image/webp"' . "\n"
+                        . '        max-file-size="5MB"' . "\n"
+                        . '    />' . "\n\n"
+                        . '    <div class="flex justify-end pt-2">' . "\n"
+                        . '        <\vibe:button type="submit" variant="primary">' . "\n"
+                        . '            Simpan Perubahan Galeri' . "\n"
+                        . '        </\vibe:button>' . "\n"
+                        . '    </div>' . "\n"
+                        . '</\vibe:form>';
+
+                    $reorderMigrationCode = <<<'PHP'
+// 1. database/migrations/2026_01_01_000001_create_product_images_table.php
+Schema::create('product_images', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+    $table->string('path'); // Lokasi path berkas di storage
+    $table->unsignedInteger('sort_order')->default(0); // Posisi indeks urutan (0, 1, 2, ...)
+    $table->timestamps();
+});
+
+// 2. app/Models/Product.php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+class Product extends Model
+{
+    public function images(): HasMany
+    {
+        return $this->hasMany(ProductImage::class)->orderBy('sort_order', 'asc');
+    }
+}
+PHP;
+
+                    $reorderJsonTipCode = <<<'PHP'
+// Pendekatan alternatif: Menyimpan daftar path langsung ke kolom JSON 'gallery_paths'
+$finalPaths = [];
+foreach ($gallery as $item) {
+    if ($item instanceof UploadedFile) {
+        $finalPaths[] = $item->store('products', 'public');
+    } elseif (is_string($item)) {
+        $finalPaths[] = $item;
+    }
+}
+$product->update(['gallery_paths' => $finalPaths]);
+PHP;
+                @endphp
+
+                <vibe:tabs default="controller" layout="rows" variant="pill" class="space-y-4">
+                    <vibe:tabs.list class="flex-wrap">
+                        <vibe:tabs.tab name="controller">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/filepond.reorder_section.tab_controller') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="trait">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24a1.78 1.78 0 0 0-2.5 1.55v12.42a1.78 1.78 0 0 0 2.5 1.55L16.5 14.6a1.78 1.78 0 0 0 0-3.2z"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/filepond.reorder_section.tab_trait') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="validation">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/><path d="m9 12 2 2 4-4"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/filepond.reorder_section.tab_validation') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="blade">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/filepond.reorder_section.tab_blade') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="migration">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/filepond.reorder_section.tab_migration') }}
+                        </vibe:tabs.tab>
+                    </vibe:tabs.list>
+
+                    {{-- Tab 1: Controller & Eloquent --}}
+                    <vibe:tabs.panel name="controller">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.controller_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.controller_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" :code="$reorderControllerCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 2: Trait HandlesOrderedUploads --}}
+                    <vibe:tabs.panel name="trait">
+                        <vibe:card class="p-5 space-y-4">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.trait_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.trait_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" :code="$reorderTraitCode" />
+
+                            {{-- Quick Tip One-Liner --}}
+                            <div class="p-4 rounded-xl border border-border/70 bg-muted/30 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-semibold text-foreground">{{ __('docs/filepond.reorder_section.quick_tip_title') }}</span>
+                                    <vibe:badge variant="secondary" size="xs">Shortcut</vibe:badge>
+                                </div>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/filepond.reorder_section.quick_tip_desc') }}</p>
+                                <vibe:highlightjs language="php" :code="$reorderQuickTipCode" />
+                            </div>
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 3: Form Request Validation --}}
+                    <vibe:tabs.panel name="validation">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.validation_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.validation_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" :code="$reorderValidationCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 4: Blade View --}}
+                    <vibe:tabs.panel name="blade">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.blade_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.blade_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="blade" :code="$reorderBladeCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 5: Migration & Model --}}
+                    <vibe:tabs.panel name="migration">
+                        <vibe:card class="p-5 space-y-4">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.migration_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.migration_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" :code="$reorderMigrationCode" />
+
+                            {{-- JSON Column Alternative --}}
+                            <div class="p-4 rounded-xl border border-border/70 bg-muted/30 space-y-2">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-semibold text-foreground">{{ __('docs/filepond.reorder_section.json_tip_title') }}</span>
+                                    <vibe:badge variant="warning" size="xs">Alternative</vibe:badge>
+                                </div>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/filepond.reorder_section.json_tip_desc') }}</p>
+                                <vibe:highlightjs language="php" :code="$reorderJsonTipCode" />
+                            </div>
+                        </vibe:card>
+                    </vibe:tabs.panel>
+                </vibe:tabs>
             </section>
 
             {{-- 6. Form Submission & Backend Controller --}}

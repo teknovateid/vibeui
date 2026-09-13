@@ -1345,8 +1345,10 @@
 
 /* Transition for opacity/scale when dragging (matches dynamic-form.js) */
 .filepond--root[data-allow-reorder="true"] .filepond--item {
-    transition: opacity 0.15s ease, transform 0.15s ease;
     touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
 }
 
 /* Grab cursor on entire card when reorder is active */
@@ -1439,125 +1441,152 @@
 }
 
 /* =========================================================================
-   Floating Drag Clone Preview (Matches Dynamic Form Drag Mirror)
+   Reorder Drag-and-Drop States (Matches Dynamic Form)
    ========================================================================= */
-.filepond--root.filepond--drag-clone-root {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: var(--drag-clone-width, auto) !important;
-    max-width: var(--drag-clone-width, 100%) !important;
-    min-width: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    z-index: 999999 !important;
-    pointer-events: none !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    overflow: visible !important;
-    box-sizing: border-box !important;
+
+/* Prevent accidental native text/image drag on card children */
+.filepond--root[data-allow-reorder="true"] .filepond--item img,
+.filepond--root[data-allow-reorder="true"] .filepond--item svg,
+.filepond--root[data-allow-reorder="true"] .filepond--item * {
+    -webkit-user-drag: none;
 }
 
-.filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating {
-    margin: 0 !important;
-    padding: 0 !important;
-    width: var(--drag-clone-width, 100%) !important;
-    max-width: var(--drag-clone-width, 100%) !important;
-    height: 100% !important;
-    pointer-events: none !important;
-    user-select: none !important;
-    opacity: 0.88 !important;
-    transform: scale(1.02) !important;
-    transform-origin: center center !important;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6)) !important;
-    box-sizing: border-box !important;
-}
-
-.filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating .filepond--file-wrapper {
-    position: relative !important;
-    display: flex !important;
-    align-items: center !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    min-height: 4.25rem !important;
-    padding: 0.625rem 1rem !important;
-    border-radius: var(--radius-xl, 0.875rem) !important;
-    background-color: color-mix(in srgb, var(--card, #18181b) 85%, transparent) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 2px solid rgba(255, 255, 255, 0.85) !important; /* Crisp white border matching dynamic-form */
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.2), 0 20px 40px -10px rgba(0, 0, 0, 0.6) !important;
-    box-sizing: border-box !important;
-}
-
-:root:not(.dark) .filepond--root.filepond--drag-clone-root .filepond--drag-clone-floating .filepond--file-wrapper {
-    background-color: color-mix(in srgb, #ffffff 85%, transparent) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 2px solid hsl(var(--primary, 220 90% 56%)) !important;
-    box-shadow: 0 0 0 1px hsl(var(--primary, 220 90% 56%) / 0.3), 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Dragging state for original item slot (matches dynamic-form opacity-40 scale-[0.99]) */
-.filepond--item.filepond--item-dragging {
-    opacity: 0.35 !important;
+/* Dragging state for item (matches dynamic-form opacity-40 scale-[0.99]) */
+.filepond--item.filepond--dragging,
+.filepond--item.opacity-40 {
+    opacity: 0.4 !important;
     transform: scale(0.99) !important;
     transition: opacity 0.15s ease, transform 0.15s ease !important;
-    z-index: 10 !important;
 }
 
-.filepond--item.filepond--item-dragging .filepond--file-wrapper {
-    border-style: dashed !important;
-    border-color: color-mix(in srgb, var(--foreground) 30%, var(--border)) !important;
-    background-color: transparent !important;
-    box-shadow: none !important;
-}
-
-/* Drop Target Visual Indicator (matches dynamic-form ring-2 ring-primary border-primary/60) */
-.filepond--item.filepond--drop-target-above .filepond--file-wrapper,
-.filepond--item.filepond--drop-target-below .filepond--file-wrapper {
-    box-shadow: 0 0 0 2px hsl(var(--primary, 220 90% 56%)), 0 8px 24px -4px rgba(0, 0, 0, 0.25) !important;
-    border-color: hsl(var(--primary, 220 90% 56%)) !important;
-    transform: scale(1.01) !important;
+/* Drop Target Visual Indicator (clean rounded primary ring, matches dynamic-form) */
+.filepond--item.filepond--drag-over .filepond--file-wrapper {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 40%, transparent), 0 4px 12px -2px rgba(0, 0, 0, 0.08) !important;
+    border-color: color-mix(in srgb, var(--primary) 55%, var(--border)) !important;
+    background-color: color-mix(in srgb, var(--primary) 4%, var(--card)) !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    transform: scale(1.006) !important;
     transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-.filepond--item.filepond--drop-target-above .filepond--file-wrapper::before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: hsl(var(--primary, 220 90% 56%));
-    border-radius: 9999px;
-    box-shadow: 0 0 10px hsl(var(--primary, 220 90% 56%) / 0.9);
-    z-index: 30;
-    pointer-events: none;
-}
-
-.filepond--item.filepond--drop-target-below .filepond--file-wrapper::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background-color: hsl(var(--primary, 220 90% 56%));
-    border-radius: 9999px;
-    box-shadow: 0 0 10px hsl(var(--primary, 220 90% 56%) / 0.9);
-    z-index: 30;
-    pointer-events: none;
-}
-
 /* Reorder Completion Highlight (matches dynamic-form highlightRow: ring-2 ring-primary/40) */
-.filepond--file-wrapper.filepond--reorder-highlight {
-    box-shadow: 0 0 0 2px hsl(var(--primary, 220 90% 56%)) !important;
-    border-color: hsl(var(--primary, 220 90% 56%)) !important;
-    transition: box-shadow 0.4s ease, border-color 0.4s ease !important;
+.filepond--file-wrapper.filepond--reorder-highlight,
+.filepond--item.filepond--reorder-highlight .filepond--file-wrapper,
+.filepond--item.ring-primary\/40 .filepond--file-wrapper {
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 35%, transparent) !important;
+    border-color: color-mix(in srgb, var(--primary) 50%, var(--border)) !important;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease !important;
+}
+
+/* Floating Drag Mirror Portal (matches exact Vibe UI card appearance while in flight) */
+.filepond--root.filepond--drag-mirror-portal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 999999 !important;
+    pointer-events: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    cursor: grabbing !important;
+    box-sizing: border-box !important;
+    transition: none !important;
+    overflow: hidden !important;
+    transform-origin: center center !important;
+}
+
+.filepond--drag-mirror-portal .filepond--list {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+}
+
+.filepond--drag-mirror-portal .filepond--item {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    transform: none !important;
+    opacity: 0.98 !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+}
+
+.filepond--drag-mirror-portal .filepond--file-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    background-color: var(--card, #ffffff) !important;
+    border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border)) !important;
+    box-shadow: 0 14px 32px -4px rgba(0, 0, 0, 0.15), 0 6px 14px -2px rgba(0, 0, 0, 0.08) !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    overflow: hidden !important;
+    position: relative !important;
+}
+
+.filepond--drag-mirror-portal .filepond--file {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    background: transparent !important;
+    color: var(--foreground) !important;
+    padding: 0.75rem 5.75rem 0.75rem 1rem !important;
+    border-radius: var(--radius-xl, 0.875rem) !important;
+    overflow: hidden !important;
+}
+
+.filepond--drag-mirror-portal .filepond--file-info {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+    max-width: calc(100% - 6.5rem) !important;
+    overflow: hidden !important;
+    margin-right: 0.75rem !important;
+}
+
+.filepond--drag-mirror-portal .filepond--file-info-main {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+
+.filepond--drag-mirror-portal .filepond--file-info-sub {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    max-width: 100% !important;
+    display: block !important;
+}
+
+/* Ensure buttons inside floating mirror stay precisely in position */
+.filepond--drag-mirror-portal .filepond--action-download-item {
+    position: absolute !important;
+    right: 3.125rem !important;
+    top: 50% !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+    display: inline-flex !important;
+}
+
+.filepond--drag-mirror-portal .filepond--action-remove-item {
+    position: absolute !important;
+    right: 0.875rem !important;
+    top: 50% !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: translateY(-50%) !important;
+    display: inline-flex !important;
 }
 
 

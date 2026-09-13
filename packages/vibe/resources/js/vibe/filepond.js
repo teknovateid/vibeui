@@ -292,22 +292,21 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
             rootEl?.classList.contains('filepond--allow-reorder')
         );
 
-        // Make the li item non-selectable during drag for better UX
-        const liItemEl = fileWrapper.closest('li.filepond--item');
-        if (liItemEl) {
-            // draggable is not used (pointer events approach) but ensure no HTML5 drag conflicts
-            liItemEl.removeAttribute('draggable');
-        }
-
         let handleGroup = fileWrapper.querySelector('.filepond--reorder-group');
         if (isReorderEnabled && !isAvatar) {
+            fileWrapper.removeAttribute('draggable');
+            const liItemEl = fileWrapper.closest('li.filepond--item');
+            if (liItemEl) {
+                liItemEl.removeAttribute('draggable');
+            }
+
             if (!handleGroup) {
                 handleGroup = document.createElement('div');
                 handleGroup.className = 'filepond--reorder-group';
                 handleGroup.setAttribute('data-filepond-reorder-handle', '');
                 handleGroup.innerHTML = `
                     <div class="filepond--reorder-handle" title="Tahan dan seret untuk memindahkan urutan" aria-label="Geser urutan">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1"></circle>
                             <circle cx="9" cy="12" r="1"></circle>
                             <circle cx="9" cy="19" r="1"></circle>
@@ -332,6 +331,14 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
 
                 const upBtn = handleGroup.querySelector('.filepond--reorder-btn-up');
                 const downBtn = handleGroup.querySelector('.filepond--reorder-btn-down');
+
+                const preventDrag = (e) => {
+                    e.stopPropagation();
+                };
+                upBtn.addEventListener('mousedown', preventDrag);
+                downBtn.addEventListener('mousedown', preventDrag);
+                upBtn.addEventListener('dragstart', (e) => { e.preventDefault(); e.stopPropagation(); });
+                downBtn.addEventListener('dragstart', (e) => { e.preventDefault(); e.stopPropagation(); });
 
                 upBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -2061,238 +2068,333 @@ export function vibeFilepond(config = {}) {
 
         bindPondReorderDrag() {
             if (!this.pond || !this.pond.element) return;
+            if (this._reorderDragBound) return;
+            this._reorderDragBound = true;
+
             const root = this.pond.element;
             const self = this;
 
-            const onPointerDown = (e) => {
-                // Activate from anywhere on the card EXCEPT interactive elements
-                const fromEl = e.target.closest('li.filepond--item');
-                if (!fromEl) return;
+            const isReorderAllowed = () => Boolean(
+                self.config?.reorder ||
+                self.config?.allowReorder ||
+                root.getAttribute('data-allow-reorder') === 'true' ||
+                root.classList.contains('filepond--allow-reorder')
+            );
 
-                // Skip clicks on interactive elements (buttons, inputs, links, etc.)
+            const getItems = () => {
+                return Array.from(root.querySelectorAll('li.filepond--item'));
+            };
+
+            const onPointerDown = (e) => {
+                if (!isReorderAllowed()) return;
+                // Only primary mouse button (0) or touch/pen
+                if (e.button !== undefined && e.button !== 0) return;
+
+                // Drag from anywhere on the card
+                const fromEl = e.target.closest('li.filepond--item');
+                if (!fromEl || !root.contains(fromEl)) return;
+
+                // Skip clicks on interactive controls
                 const interactive = e.target.closest(
-                    'button, a, input, select, textarea, [contenteditable], ' +
-                    '.filepond--action-remove-item, .filepond--action-abort-item-load, ' +
-                    '.filepond--action-retry-item-load, .filepond--action-abort-item-processing, ' +
-                    '.filepond--action-retry-item-processing, .filepond--action-revert-item-processing, ' +
-                    '.filepond--action-download-item, .filepond--thumbnail-overlay'
+                    'button, a, input, select, textarea, ' +
+                    '.filepond--file-action-button, .filepond--action-remove-item, ' +
+                    '.filepond--action-download-item, .filepond--reorder-btn, ' +
+                    '.filepond--thumbnail-overlay, ' +
+                    '.filepond--action-abort-item-load, .filepond--action-retry-item-load, ' +
+                    '.filepond--action-abort-item-processing, .filepond--action-retry-item-processing, ' +
+                    '.filepond--action-revert-item-processing'
                 );
                 if (interactive) return;
 
-                const fromId = self.getItemIdFromElement(fromEl);
-                if (!fromId) return;
+                const items = getItems();
+                if (items.length <= 1) return;
 
-                // Block FilePond from intercepting this pointer sequence
-                e.stopPropagation();
-                e.preventDefault();
+                fromEl.removeAttribute('draggable');
+                Array.from(fromEl.querySelectorAll('[draggable]')).forEach(el => el.removeAttribute('draggable'));
 
                 const startX = e.clientX;
                 const startY = e.clientY;
+                const initialRect = fromEl.getBoundingClientRect();
+                const offsetX = startX - initialRect.left;
+                const offsetY = startY - initialRect.top;
+
                 let isDragging = false;
+                let mirror = null;
+                let mirrorPortal = null;
                 let lastTargetItem = null;
-                let lastTargetAbove = false;
+                let didSuppressClick = false;
 
                 const onPointerMove = (moveEv) => {
                     const dist = Math.hypot(moveEv.clientX - startX, moveEv.clientY - startY);
+
                     if (!isDragging) {
-                        if (dist < 5) return;
+                        if (dist < 4) return;
                         isDragging = true;
-                        // Identical to dynamic-form.js visual feedback
-                        fromEl.classList.add('opacity-40', 'scale-[0.99]');
+                        didSuppressClick = true;
+
+                        document.body.classList.add('select-none');
+                        document.body.style.cursor = 'grabbing';
+
+                        // 1. Create floating drag mirror portal with full .filepond--root context
+                        const currentRect = fromEl.getBoundingClientRect();
+                        const exactWidth = Math.round(currentRect.width);
+                        const exactHeight = Math.round(currentRect.height);
+
+                        const portal = document.createElement('div');
+                        portal.className = root.className;
+                        portal.classList.add('filepond--drag-mirror-portal');
+                        portal.setAttribute('data-allow-reorder', 'true');
+                        portal.style.width = `${exactWidth}px`;
+                        portal.style.maxWidth = `${exactWidth}px`;
+                        portal.style.minWidth = `${exactWidth}px`;
+                        portal.style.height = `${exactHeight}px`;
+                        portal.style.overflow = 'hidden';
+                        portal.style.transform = `translate3d(${moveEv.clientX - offsetX}px, ${moveEv.clientY - offsetY}px, 0)`;
+
+                        const list = document.createElement('ul');
+                        list.className = 'filepond--list';
+                        list.style.width = '100%';
+                        list.style.maxWidth = '100%';
+                        list.style.margin = '0';
+                        list.style.padding = '0';
+                        list.style.listStyle = 'none';
+
+                        mirror = fromEl.cloneNode(true);
+                        mirror.removeAttribute('id');
+                        Array.from(mirror.querySelectorAll('[id]')).forEach(el => el.removeAttribute('id'));
+
+                        mirror.style.width = '100%';
+                        mirror.style.maxWidth = '100%';
+                        mirror.style.margin = '0';
+                        mirror.style.padding = '0';
+                        mirror.style.position = 'relative';
+                        mirror.style.transform = 'none';
+
+                        const fileWrapper = mirror.querySelector('.filepond--file-wrapper');
+                        if (fileWrapper) {
+                            fileWrapper.style.width = '100%';
+                            fileWrapper.style.maxWidth = '100%';
+                            fileWrapper.style.boxSizing = 'border-box';
+                            fileWrapper.style.overflow = 'hidden';
+                        }
+
+                        const fileInfo = mirror.querySelector('.filepond--file-info');
+                        if (fileInfo) {
+                            fileInfo.style.minWidth = '0';
+                            fileInfo.style.overflow = 'hidden';
+                            fileInfo.style.flex = '1 1 0%';
+                        }
+                        const infoMain = mirror.querySelector('.filepond--file-info-main');
+                        if (infoMain) {
+                            infoMain.style.whiteSpace = 'nowrap';
+                            infoMain.style.overflow = 'hidden';
+                            infoMain.style.textOverflow = 'ellipsis';
+                            infoMain.style.display = 'block';
+                            infoMain.style.maxWidth = '100%';
+                        }
+
+                        list.appendChild(mirror);
+                        portal.appendChild(list);
+                        document.body.appendChild(portal);
+                        mirrorPortal = portal;
+
+                        // 2. Mark original row with subtle ghost styling (matches dynamic-form opacity-40 scale-[0.99])
+                        fromEl.classList.add('filepond--dragging', 'opacity-40', 'scale-[0.99]');
                     }
 
-                    // Temporarily disable pointer-events on dragging item so
-                    // elementFromPoint finds the element BELOW it
-                    fromEl.style.pointerEvents = 'none';
-                    const elUnder = document.elementFromPoint(moveEv.clientX, moveEv.clientY);
-                    fromEl.style.pointerEvents = '';
+                    if (isDragging) {
+                        moveEv.preventDefault();
 
-                    const targetItem = (elUnder && root.contains(elUnder))
-                        ? elUnder.closest('li.filepond--item')
-                        : null;
-
-                    // Clear all indicators
-                    Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
-                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
-                    });
-
-                    if (targetItem && targetItem !== fromEl) {
-                        const tRect = targetItem.getBoundingClientRect();
-                        const isAbove = moveEv.clientY < tRect.top + tRect.height / 2;
-                        if (isAbove) {
-                            targetItem.classList.add('filepond--drop-target-above');
-                        } else {
-                            targetItem.classList.add('filepond--drop-target-below');
+                        if (mirrorPortal) {
+                            const curX = moveEv.clientX - offsetX;
+                            const curY = moveEv.clientY - offsetY;
+                            mirrorPortal.style.transform = `translate3d(${curX}px, ${curY}px, 0)`;
                         }
-                        lastTargetItem = targetItem;
-                        lastTargetAbove = isAbove;
-                    } else {
-                        lastTargetItem = null;
+
+                        // Use elementsFromPoint to reliably detect drop target item under cursor
+                        const elements = document.elementsFromPoint(moveEv.clientX, moveEv.clientY);
+                        let targetItem = null;
+                        for (const el of elements) {
+                            if (mirrorPortal && mirrorPortal.contains(el)) continue;
+                            const item = el.closest('li.filepond--item');
+                            if (item && root.contains(item) && item !== fromEl) {
+                                targetItem = item;
+                                break;
+                            }
+                        }
+
+                        const currentItems = getItems();
+
+                        if (targetItem) {
+                            currentItems.forEach(el => {
+                                if (el !== targetItem) {
+                                    el.classList.remove('filepond--drag-over');
+                                }
+                            });
+                            targetItem.classList.add('filepond--drag-over');
+                            lastTargetItem = targetItem;
+                        } else {
+                            currentItems.forEach(el => el.classList.remove('filepond--drag-over'));
+                            lastTargetItem = null;
+                        }
                     }
                 };
 
-                const cleanup = () => {
+                const cleanupListeners = () => {
                     window.removeEventListener('pointermove', onPointerMove, { capture: true });
                     window.removeEventListener('pointerup', onPointerUp, { capture: true });
-                    window.removeEventListener('pointercancel', onPointerUp, { capture: true });
+                    window.removeEventListener('pointercancel', onPointerCancel, { capture: true });
 
-                    fromEl.classList.remove('opacity-40', 'scale-[0.99]');
-                    fromEl.style.pointerEvents = '';
+                    document.body.classList.remove('select-none');
+                    document.body.style.cursor = '';
 
-                    Array.from(root.querySelectorAll('li.filepond--item')).forEach(el => {
-                        el.classList.remove('filepond--drop-target-above', 'filepond--drop-target-below');
+                    const currentItems = getItems();
+                    currentItems.forEach(el => {
+                        el.classList.remove(
+                            'filepond--dragging', 'opacity-40', 'scale-[0.99]',
+                            'filepond--drag-over'
+                        );
                     });
+
+                    if (mirrorPortal) {
+                        mirrorPortal.remove();
+                        mirrorPortal = null;
+                        mirror = null;
+                    }
                 };
 
                 const onPointerUp = (upEv) => {
-                    cleanup();
+                    const wasDragging = isDragging;
+                    const dropTarget = lastTargetItem;
 
-                    if (isDragging && lastTargetItem && lastTargetItem !== fromEl) {
-                        const targetId = self.getItemIdFromElement(lastTargetItem);
-                        if (targetId) {
-                            self.reorderById(fromId, targetId, lastTargetAbove ? 'before' : 'after');
-                        }
+                    cleanupListeners();
+
+                    if (didSuppressClick) {
+                        const stopClick = (clickEv) => {
+                            clickEv.stopPropagation();
+                            clickEv.preventDefault();
+                            window.removeEventListener('click', stopClick, true);
+                        };
+                        window.addEventListener('click', stopClick, true);
+                        setTimeout(() => window.removeEventListener('click', stopClick, true), 120);
                     }
+
+                    if (!wasDragging || !dropTarget || dropTarget === fromEl) {
+                        return;
+                    }
+
+                    const currentItems = getItems();
+                    const fromIndex = currentItems.indexOf(fromEl);
+                    const toIndex = currentItems.indexOf(dropTarget);
+
+                    if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
+                        self.reorderItem(fromIndex, toIndex);
+                    }
+                };
+
+                const onPointerCancel = () => {
+                    cleanupListeners();
                 };
 
                 window.addEventListener('pointermove', onPointerMove, { capture: true });
                 window.addEventListener('pointerup', onPointerUp, { capture: true });
-                window.addEventListener('pointercancel', onPointerUp, { capture: true });
+                window.addEventListener('pointercancel', onPointerCancel, { capture: true });
             };
 
-            // Use capture:true so we get the event BEFORE FilePond's handlers
             root.addEventListener('pointerdown', onPointerDown, { capture: true });
+
+            // Prevent native browser text/image dragging from interfering with pointer reorder
+            const onNativeDragStart = (dragEv) => {
+                if (dragEv.target.closest('li.filepond--item')) {
+                    dragEv.preventDefault();
+                }
+            };
+            root.addEventListener('dragstart', onNativeDragStart);
+
             this._cleanupListeners.push(() => {
                 root.removeEventListener('pointerdown', onPointerDown, { capture: true });
+                root.removeEventListener('dragstart', onNativeDragStart);
             });
         },
 
-        reorderById(fromId, toId, position = 'before') {
-            if (!this.pond || fromId === toId) return;
+        reorderById(fromId, toId, onComplete = null) {
+            if (!this.pond || fromId === toId) return false;
             const files = typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
             const fromIndex = files.findIndex(f => String(f.id) === String(fromId) || f.id === fromId || f.serverId === fromId);
             const toIndex = files.findIndex(f => String(f.id) === String(toId) || f.id === toId || f.serverId === toId);
 
-            if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return;
+            if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return false;
 
-            let targetIndex = toIndex;
-            if (position === 'after') {
-                targetIndex = fromIndex < toIndex ? toIndex : toIndex + 1;
-            } else {
-                targetIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
-            }
-
-            if (targetIndex < 0) targetIndex = 0;
-            if (targetIndex >= files.length) targetIndex = files.length - 1;
-            if (fromIndex === targetIndex) return;
-
-            this.reorderItem(fromIndex, targetIndex);
-        },
-
-        animateReorder(fromEl, toEl, callback) {
-            if (!this.pond || !this.pond.element) {
-                if (callback) callback();
-                return;
-            }
-
-            const root = this.pond.element;
-            const items = Array.from(root.querySelectorAll('li.filepond--item'));
-
-            // FIRST: Capture initial positions
-            const firstRects = new Map();
-            items.forEach(el => firstRects.set(el, el.getBoundingClientRect()));
-
-            // DO WORK: Reorder DOM and internal state
-            if (callback) callback();
-
-            // LAST, INVERT, PLAY: Animate items to new positions
-            requestAnimationFrame(() => {
-                items.forEach(el => {
-                    const first = firstRects.get(el);
-                    const last = el.getBoundingClientRect();
-                    if (!first) return;
-
-                    const deltaY = first.top - last.top;
-                    if (Math.abs(deltaY) > 0.5) {
-                        el.style.transform = `translate3d(0, ${deltaY}px, 0)`;
-                        el.style.transition = 'transform 0s';
-
-                        requestAnimationFrame(() => {
-                            el.style.transform = '';
-                            el.style.transition = 'transform 260ms cubic-bezier(0.2, 0, 0, 1)';
-                        });
-                    }
-                });
-
-                // Clear inline styles after animation completes
-                setTimeout(() => {
-                    items.forEach(el => {
-                        el.style.transform = '';
-                        el.style.transition = '';
-                    });
-                }, 300);
-            });
+            this.reorderItem(fromIndex, toIndex, onComplete);
+            return true;
         },
 
         highlightItem(el) {
             if (!el) return;
             const target = el.querySelector('.filepond--file-wrapper') || el;
-            target.classList.add('filepond--reorder-highlight');
+            target.classList.add('filepond--reorder-highlight', 'ring-2', 'ring-primary/40', 'transition-all', 'duration-300');
             setTimeout(() => {
-                target.classList.remove('filepond--reorder-highlight');
-            }, 800);
+                target.classList.remove('filepond--reorder-highlight', 'ring-2', 'ring-primary/40');
+            }, 600);
         },
 
-        reorderItem(fromIndex, toIndex) {
+        reorderItem(fromIndex, toIndex, onComplete = null) {
             if (!this.pond || fromIndex === toIndex) return;
             const files = typeof this.pond.getFiles === 'function' ? this.pond.getFiles() : [];
-            if (fromIndex < 0 || fromIndex >= files.length || toIndex < 0 || toIndex >= files.length) return;
+            const items = Array.from(this.pond.element ? this.pond.element.querySelectorAll('li.filepond--item') : []);
 
-            const fromItem = files[fromIndex];
-            const toItem = files[toIndex];
+            if (fromIndex < 0 || toIndex < 0) return;
+            if (items.length > 0 && (fromIndex >= items.length || toIndex >= items.length)) return;
 
-            const fromEl = this.findItemElement(fromItem.id, fromIndex);
-            const toEl = this.findItemElement(toItem.id, toIndex);
+            const fromItem = files[fromIndex] || null;
+            const toItem = files[toIndex] || null;
 
-            const performMove = () => {
-                // 1. Move in FilePond internal state using integer index (100% reliable)
-                if (typeof this.pond.moveFile === 'function') {
+            const fromEl = fromItem ? this.findItemElement(fromItem.id, fromIndex) : items[fromIndex];
+            const toEl = toItem ? this.findItemElement(toItem.id, toIndex) : items[toIndex];
+
+            // 1. Move in DOM immediately (matches dynamic-form)
+            if (fromEl && toEl && fromEl.parentNode) {
+                const container = fromEl.parentNode;
+                if (fromIndex < toIndex) {
+                    // Dragging DOWNWARDS: insert fromEl AFTER toEl
+                    container.insertBefore(fromEl, toEl.nextSibling);
+                } else {
+                    // Dragging UPWARDS: insert fromEl BEFORE toEl
+                    container.insertBefore(fromEl, toEl);
+                }
+            }
+
+            // 2. Move in FilePond internal state using item ID or index
+            if (typeof this.pond.moveFile === 'function') {
+                if (fromItem && fromItem.id !== undefined) {
+                    this.pond.moveFile(fromItem.id, toIndex);
+                } else {
                     this.pond.moveFile(fromIndex, toIndex);
                 }
+            }
 
-                // 2. Move in DOM if list container exists
-                if (fromEl && toEl && fromEl.parentNode) {
-                    const parent = fromEl.parentNode;
-                    if (fromIndex < toIndex) {
-                        parent.insertBefore(fromEl, toEl.nextSibling);
-                    } else {
-                        parent.insertBefore(fromEl, toEl);
-                    }
-                }
+            // 3. Highlight moved item (matches dynamic-form highlightRow)
+            if (fromEl) {
+                this.highlightItem(fromEl);
+            }
 
-                // 3. Highlight moved item
-                const movedEl = this.findItemElement(fromItem.id, toIndex);
-                if (movedEl) {
-                    this.highlightItem(movedEl);
-                }
+            // 4. Sync form inputs and buttons
+            this.syncFormInputsOrder();
+            this.updateArrowButtonStates();
+            this.updateReactiveState();
 
-                // 4. Sync form inputs and buttons
-                this.syncFormInputsOrder();
-                this.updateArrowButtonStates();
-                this.updateReactiveState();
-
-                // 5. Fire reorder event
-                const detail = {
-                    id: this.config?.id || (this.input ? this.input.id : 'filepond'),
-                    fromIndex,
-                    toIndex,
-                    files: this.pond.getFiles()
-                };
-                this.fireEvent('reorder', detail);
+            // 5. Fire reorder event
+            const detail = {
+                id: this.config?.id || (this.input ? this.input.id : 'filepond'),
+                fromIndex,
+                toIndex,
+                files: this.pond.getFiles()
             };
+            this.fireEvent('reorder', detail);
 
-            // Animate using FLIP
-            this.animateReorder(fromEl, toEl, performMove);
+            if (typeof onComplete === 'function') {
+                onComplete();
+            }
         },
 
         moveUp(itemId) {
@@ -2325,9 +2427,23 @@ export function vibeFilepond(config = {}) {
 
                 if (upBtn) {
                     upBtn.disabled = (idx === 0);
+                    if (idx === 0) {
+                        upBtn.setAttribute('disabled', 'disabled');
+                        upBtn.classList.add('opacity-40', 'pointer-events-none');
+                    } else {
+                        upBtn.removeAttribute('disabled');
+                        upBtn.classList.remove('opacity-40', 'pointer-events-none');
+                    }
                 }
                 if (downBtn) {
                     downBtn.disabled = (idx === total - 1);
+                    if (idx === total - 1) {
+                        downBtn.setAttribute('disabled', 'disabled');
+                        downBtn.classList.add('opacity-40', 'pointer-events-none');
+                    } else {
+                        downBtn.removeAttribute('disabled');
+                        downBtn.classList.remove('opacity-40', 'pointer-events-none');
+                    }
                 }
             });
         },
