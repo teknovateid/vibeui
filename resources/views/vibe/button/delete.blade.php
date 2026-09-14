@@ -8,6 +8,7 @@
     'confirmText' => null,
     'cancelText' => null,
     'action' => null,
+    'url' => null,
 ])
 
 @php
@@ -27,6 +28,7 @@
     };
 
     $callbackJs = match (true) {
+        !empty($url) => "window.vibeSubmitDelete('{$url}')",
         !empty($wireClick) => "\$wire.{$wireClick}",
         !empty($action) => $action,
         default => "\$el.closest('form')?.submit()",
@@ -35,6 +37,7 @@
     $mergedAttributes = $buttonAttributes->merge([
         'class' => $defaultClasses,
         'title' => $title,
+        'data-url' => $url,
         'data-confirm-title' => $title,
         'data-confirm-message' => $message,
         'data-confirm-text' => $confirmText,
@@ -59,6 +62,18 @@
 
 @pushOnce('head', 'vibe-confirm-delete-handler')
     <script>
+        if (typeof window.vibeSubmitDelete === 'undefined') {
+            window.vibeSubmitDelete = function(url) {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = url;
+                var token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+                form.innerHTML = '<input type="hidden" name="_token" value="' + token + '"><input type="hidden" name="_method" value="DELETE">';
+                document.body.appendChild(form);
+                form.submit();
+            };
+        }
+
         if (typeof window.vibeConfirmDelete === 'undefined') {
             window.vibeConfirmDelete = function(target, callback) {
                 var options = {};
@@ -69,11 +84,18 @@
                         title: target.getAttribute('data-confirm-title'),
                         message: target.getAttribute('data-confirm-message'),
                         confirmText: target.getAttribute('data-confirm-text'),
-                        cancelText: target.getAttribute('data-cancel-text')
+                        cancelText: target.getAttribute('data-cancel-text'),
+                        url: target.getAttribute('data-url')
                     };
                 } else if (typeof target === 'object' && target !== null) {
                     options = target;
                     cb = callback || target.callback;
+                }
+
+                if (!cb && options.url) {
+                    cb = function() {
+                        window.vibeSubmitDelete(options.url);
+                    };
                 }
 
                 if (typeof vibeAlert !== 'undefined') {
