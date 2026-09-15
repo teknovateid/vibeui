@@ -76,7 +76,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
         Route::view('/login-history', 'docs.settings.login-history')->middleware('idle:10')->name('login-history');
 
-        Route::middleware(['auth', 'confirm'])->group(function () {
+        Route::middleware(['auth', 'confirm','verified'])->group(function () {
             Route::view('/security', 'docs.settings.security')->name('security');
             Route::view('/passkey', 'docs.settings.passkey')->name('passkey');
         });
