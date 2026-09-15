@@ -2,6 +2,17 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.17] - 2026-09-15
+
+### 🚀 Features
+- feat: require email verification for security settings and clean up User model attributes (dcf8c7c)
+- feat: add alert card component with documentation and translations (69694cc)
+
+### ⚡ Performance & Refactoring
+- refactor: replace inline SVG logos with asset images and update passkey icon paths in auth layouts (cba0680)
+- refactor: replace inline alerts with vibe:card.alert components across auth views and stubs (0adb033)
+
+
 ## [0.1.16] - 2026-09-15
 
 ### 🚀 Features
