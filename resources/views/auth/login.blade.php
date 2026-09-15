@@ -75,7 +75,7 @@
     @endif
 
     {{-- Passkey Login Section --}}
-    <div class="space-y-3">
+    <div class="space-y-3"> 
         <vibe:button 
             type="button" 
             variant="outline" 

@@ -25,6 +25,8 @@ use Teknovate\VibeUi\Commands\ReleaseCommand;
 use Teknovate\VibeUi\Commands\SyncCommand;
 use Teknovate\VibeUi\Commands\TableMakeCommand;
 use Teknovate\VibeUi\Commands\VibeCommand;
+use Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation;
+use Teknovate\VibeUi\Http\Middleware\VibeIdleTimeout;
 
 class VibeServiceProvider extends ServiceProvider
 {
@@ -83,6 +85,14 @@ class VibeServiceProvider extends ServiceProvider
             EncryptCookies::except([
                 $prefix.'_theme',
             ]);
+        }
+
+        // Register Vibe middleware aliases
+        if ($this->app->bound('router')) {
+            $router = $this->app->make('router');
+            $router->aliasMiddleware('confirm', RequirePasswordConfirmation::class);
+            $router->aliasMiddleware('idle', VibeIdleTimeout::class);
+            $router->aliasMiddleware('password.confirm', RequirePasswordConfirmation::class);
         }
 
         // Register anonymous component path for the 'vibe' namespace.

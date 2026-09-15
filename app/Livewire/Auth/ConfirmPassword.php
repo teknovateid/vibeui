@@ -50,8 +50,27 @@ class ConfirmPassword extends Component
         }
 
         session()->put('auth.password_confirmed_at', time());
+        session()->forget('auth.session_locked');
+        session()->put('auth.last_activity_time', time());
+
+        if ($targetRoute = session()->pull('auth.target_route')) {
+            session()->put('auth.confirmed_route', $targetRoute);
+            session()->put('auth.is_single_page_confirm', true);
+        }
 
         return redirect()->intended($this->redirectAfterLoginUrl());
+    }
+
+    /**
+     * Log out the current user session.
+     */
+    public function logout()
+    {
+        Auth::guard('web')->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return redirect('/');
     }
 
     public function render()

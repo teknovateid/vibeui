@@ -30,6 +30,56 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/confirm-password', ConfirmPassword::class)->name('password.confirm');
 
+    Route::post('/confirm-password', function (Request $request) {
+        $request->validate(['password' => ['required', 'string']]);
+
+        if (! Auth::guard('web')->validate([
+            'email' => Auth::user()?->email,
+            'password' => $request->password,
+        ])) {
+            return response()->json([
+                'errors' => ['password' => [__('auth.password')]],
+            ], 422);
+        }
+
+        $request->session()->put('auth.password_confirmed_at', time());
+        $request->session()->put('auth.one_time_confirmed', true);
+
+        if ($request->expectsJson()) {
+            return response()->noContent();
+        }
+
+        return redirect()->intended('/');
+    })->name('password.confirm.post');
+
+    Route::match(['get', 'post'], '/confirm-password/lock', function (Request $request) {
+        $request->session()->forget('auth.password_confirmed_at');
+        $request->session()->forget('auth.confirmed_route');
+        $request->session()->forget('auth.is_single_page_confirm');
+
+        return redirect()->to($request->header('referer') ?: '/');
+    })->name('password.lock');
+
+    Route::get('/confirm-password/idle-lock', function (Request $request) {
+        $request->session()->put('auth.session_locked', true);
+        $request->session()->forget('auth.password_confirmed_at');
+        $request->session()->forget('auth.confirmed_route');
+        $request->session()->put('auth.last_activity_time', time());
+
+        $intended = $request->query('intended') ?: $request->header('referer') ?: '/';
+        $request->session()->put('url.intended', $intended);
+
+        return redirect('/confirm-password')->with('status', 'idle_timeout');
+    })->name('password.idle-lock');
+
+    Route::match(['get', 'post'], '/keep-alive', function (Request $request) {
+        if ($request->session()->get('auth.session_locked')) {
+            return response()->json(['status' => 'locked'], 423);
+        }
+        $request->session()->put('auth.last_activity_time', time());
+        return response()->json(['status' => 'ok']);
+    })->name('auth.keep-alive');
+
     Route::post('/logout', function (Request $request) {
         Auth::guard('web')->logout();
 

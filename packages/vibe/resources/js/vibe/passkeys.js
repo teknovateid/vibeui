@@ -126,6 +126,46 @@ window.vibeLoginWithPasskey = async function(btn, redirectUrl) {
     }
 };
 
+window.vibeConfirmWithPasskey = async function(btn, redirectUrl) {
+    let textSpan = null;
+    let loadingSpan = null;
+
+    if (btn) {
+        btn.setAttribute('disabled', 'true');
+        textSpan = btn.querySelector('.vibe-passkey-text');
+        loadingSpan = btn.querySelector('.vibe-passkey-loading');
+        if (textSpan) textSpan.style.display = 'none';
+        if (loadingSpan) loadingSpan.style.display = 'inline-flex';
+    }
+
+    try {
+        if (!Passkeys) {
+            throw new Error('Modul Passkey belum dimuat.');
+        }
+
+        const res = await Passkeys.verify({
+            routes: {
+                options: '/passkeys/confirm/options',
+                submit: '/passkeys/confirm',
+            },
+        });
+
+        window.location.href = redirectUrl || '/';
+    } catch (e) {
+        console.warn('Passkey confirm error:', e);
+        if (btn) {
+            btn.removeAttribute('disabled');
+            if (textSpan) textSpan.style.display = 'inline-flex';
+            if (loadingSpan) loadingSpan.style.display = 'none';
+        }
+        if (window.vibeToast) {
+            window.vibeToast(e.message || 'Gagal mengkonfirmasi dengan passkey.', { type: 'error' });
+        } else {
+            alert(e.message || 'Gagal mengkonfirmasi dengan passkey.');
+        }
+    }
+};
+
 let isAutofillActive = false;
 
 function initPasskeyAutofill() {

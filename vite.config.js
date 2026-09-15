@@ -49,6 +49,16 @@ function vibeSyncPlugin() {
             destDir: 'packages/vibe/lang/id/vibe',
             label: 'Lang ID',
         },
+        {
+            srcPattern: '/resources/views/auth/layouts/',
+            destDir: 'packages/vibe/stubs/Auth/layouts',
+            label: 'Auth Layouts',
+        },
+        {
+            srcPattern: '/resources/views/auth/',
+            destDir: 'packages/vibe/stubs/Auth/views',
+            label: 'Auth Views',
+        },
     ];
 
     return {
@@ -124,6 +134,7 @@ export default defineConfig({
                 'resources/js/vibe/highlightjs.js',
                 'resources/js/vibe/table.js',
                 'resources/js/vibe/passkeys.js',
+                'resources/js/vibe/idle.js',
             ],
             refresh: true,
             fonts: [

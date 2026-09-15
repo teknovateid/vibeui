@@ -12,7 +12,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
     Route::view('/auth', 'docs.auth.index')->name('auth.index');
-   
+
     Route::prefix('form')->name('form.')->group(function () {
         Route::get('/', [FormController::class, 'index'])->name('index');
         Route::post('/', [FormController::class, 'store'])->name('store');
@@ -20,7 +20,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::view('/input', 'docs.input.index')->name('input.index');
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
-    Route::get('/select',[SelectController::class,'index'])->name('select.index');
+    Route::get('/select', [SelectController::class, 'index'])->name('select.index');
     Route::get('/select/api', [SelectController::class, 'api'])->name('select.api');
     Route::view('/checkbox', 'docs.checkbox.index')->name('checkbox.index');
     Route::view('/radio', 'docs.radio.index')->name('radio.index');
@@ -37,7 +37,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::post('/presigned', [FilepondController::class, 'presigned'])->name('presigned');
         Route::put('/local-upload/{key}', [FilepondController::class, 'localUpload'])->name('local_upload');
     });
-    
+
     Route::view('/button', 'docs.button.index')->name('button.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
     Route::view('/context', 'docs.context.index')->name('context.index');
@@ -59,7 +59,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
     Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
-    
+
     Route::get('/chart', function () {
         $monthlyMetrics = \App\Models\SalesMetric::where('category', 'Semua Kategori')->orderBy('id')->get();
         $categoryMetrics = \App\Models\SalesMetric::where('month', 'Total')->orderByDesc('revenue')->get();
@@ -67,10 +67,21 @@ Route::prefix('docs')->name('docs.')->group(function () {
         return view('docs.chart.index', compact('monthlyMetrics', 'categoryMetrics'));
     })->name('chart.index');
 
-    Route::get('/dashboard/{view}',[DashboardPageController::class,'show'])->name('dashboard.show');
-    Route::view('/settings', 'docs.settings.index')->name('settings.index');
-    Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');
+    Route::get('/dashboard/{view}', [DashboardPageController::class, 'show'])->name('dashboard.show');
 
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::redirect('/', '/docs/settings/account')->name('index');
+        Route::view('/account', 'docs.settings.account')->name('account');
+        Route::view('/appearance', 'docs.settings.appearance')->name('appearance');
+        Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
+        Route::view('/login-history', 'docs.settings.login-history')->middleware('idle:10')->name('login-history');
+
+        Route::middleware(['auth', 'confirm'])->group(function () {
+            Route::view('/security', 'docs.settings.security')->name('security');
+            Route::view('/passkey', 'docs.settings.passkey')->name('passkey');
+        });
+    });
+    Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');
 });
 
 
