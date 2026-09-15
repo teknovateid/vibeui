@@ -56,7 +56,6 @@
     </div>
 
     <form wire:submit="authenticate" class="space-y-4">
-        {{-- Identifier Input (Email, Username, or Phone depending on config) --}}
         <vibe:input wire:model="login" id="login" name="login" label="{{ $loginLabel }}" placeholder="{{ $loginPlaceholder }}" type="{{ $this->isOnlyEmail() ? 'email' : 'text' }}" required autofocus autocomplete="username webauthn" />
 
         {{-- Password Input with Viewable Toggle --}}

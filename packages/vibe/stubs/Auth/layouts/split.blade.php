@@ -43,44 +43,39 @@
     {{-- Split Screen Layout Variant --}}
     <div class="min-h-screen w-full grid lg:grid-cols-2">
         {{-- Left Column: Visual Branding --}}
-        <div class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-zinc-950 text-white border-r border-border/30 overflow-hidden select-none">
-            {{-- Ambient Light Gradients --}}
+        <div class="relative hidden lg:flex flex-col justify-between p-12 xl:p-16 bg-background text-foreground border-r border-border/80 overflow-hidden select-none">
             <div class="pointer-events-none absolute -top-32 -left-32 size-96 rounded-full bg-primary/25 blur-[120px]"></div>
-            <div class="pointer-events-none absolute -bottom-32 -right-32 size-96 rounded-full bg-blue-600/15 blur-[120px]"></div>
-
-            {{-- Brand Header --}}
+            <div class="pointer-events-none absolute -bottom-32 -right-32 size-96 rounded-full bg-primary/15 blur-[120px]"></div>
             <div class="relative z-10 flex items-center gap-3">
                 <a href="/" wire:navigate class="flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg">
-                    <div class="size-9 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                        <svg class="size-5 text-primary-foreground" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <div class="size-10 rounded-xl bg-primary flex items-center justify-center shadow-sm p-2.5">
+                        <img class="size-full" src="{{ asset('vibe/logo/logo.svg') }}" alt="Vibe Logo">
                     </div>
-                    <span class="font-bold text-lg tracking-tight">{{ config('app.name', 'Vibe UI') }}</span>
+                    <span class="font-bold text-lg tracking-tight">{{ config('app.name') }}</span>
                 </a>
             </div>
 
             {{-- Center Quote / Value Proposition --}}
             <div class="relative z-10 max-w-md my-auto py-12">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/90 text-xs font-medium backdrop-blur-md mb-6 border border-white/10">
+                <vibe:badge class="rounded-full">
                     <span class="size-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                     Next-Gen Blade UI Kit
-                </div>
+                </vibe:badge>
                 <h2 class="text-3xl xl:text-4xl font-extrabold tracking-tight leading-snug">
                     Modern, accessible, & reactive components for Laravel.
                 </h2>
-                <p class="mt-4 text-sm text-zinc-400 leading-relaxed">
+                <p class="mt-4 text-sm text-muted-foreground leading-relaxed">
                     Inspired by the clean minimalism of Flux UI, supercharged with Livewire, Tailwind CSS v4, and first-class developer experience.
                 </p>
             </div>
 
             {{-- Footer Info --}}
-            <div class="relative z-10 flex items-center justify-between text-xs text-zinc-500">
+            <div class="relative z-10 flex items-center justify-between text-xs text-muted-foreground">
                 <span>&copy; {{ date('Y') }} {{ config('app.name', 'Teknovate') }}. All rights reserved.</span>
                 <div class="flex items-center gap-4">
-                    <a href="/docs" wire:navigate class="hover:text-zinc-300 transition-colors">Documentation</a>
-                    <span class="text-zinc-700">&bull;</span>
-                    <a href="https://github.com/teknovateid/vibeui" target="_blank" rel="noopener noreferrer" class="hover:text-zinc-300 transition-colors">GitHub</a>
+                    <a href="https://vibeui.teknovate.co.id" wire:navigate class="hover:text-muted-foreground/60 transition-colors">Documentation</a>
+                    <span class="text-muted-foreground">&bull;</span>
+                    <a href="https://github.com/teknovateid/vibeui" target="_blank" rel="noopener noreferrer" class="hover:text-muted-foreground/60 transition-colors">GitHub</a>
                 </div>
             </div>
         </div>

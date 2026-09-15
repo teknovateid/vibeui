@@ -105,7 +105,7 @@ return [
         | - ['username']                     : Login khusus username.
         | - ['phone']                        : Login khusus nomor handphone.
         */
-        'login_by' => ['email'],
+        'login_by' => ['email','username'],
 
         /*
         | Layout Otentikasi Default:
@@ -113,7 +113,7 @@ return [
         | - 'simple'            : Tampilan minimalis bersih rata tengah.
         | - 'split'             : Tampilan split screen 2-kolom (branding + form).
         */
-        'default_layout' => 'card',
+        'default_layout' => 'simple',
 
         /*
         | Pengalihan Setelah Login / Registrasi Berhasil:

@@ -46,12 +46,10 @@
             {{-- Logo Header --}}
             <div class="text-center">
                 <a href="/" wire:navigate class="inline-flex items-center gap-2.5 focus:outline-none focus:ring-2 focus:ring-primary rounded-lg mb-4">
-                    <div class="size-10 rounded-2xl bg-primary flex items-center justify-center shadow-sm">
-                        <svg class="size-5 text-primary-foreground" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M13 2L3 14H12L11 22L21 10H12L13 2Z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
+                    <div class="size-10 rounded-xl p-2.5 bg-primary flex items-center justify-center shadow-sm">
+                        <img class="size-full" src="{{ asset('vibe/logo/logo.svg') }}" alt="Vibe Logo">
                     </div>
-                    <span class="font-bold text-lg tracking-tight text-foreground">{{ config('app.name', 'Vibe UI') }}</span>
+                    <span class="font-bold text-lg tracking-tight text-foreground">{{ config('app.name') }}</span>
                 </a>
 
                 @if ($title)
