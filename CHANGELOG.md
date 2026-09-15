@@ -2,6 +2,26 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.15] - 2026-09-15
+
+### 🚀 Features
+- feat: add authentication scaffolding with Livewire and passkeys support (eb1d935)
+- feat: add url parameter and dynamic form submission to delete button (6e46f4b)
+- feat(filepond): make entire card draggable for reorder, not just grip icon (1e731d3)
+- feat(filepond): add drag & drop reorder with FLIP animation, translucent clone, arrow controls, and input order sync (454edbe)
+- feat: add remote select component with API integration, controller, routes, and documentation (3298d83)
+
+### 🐛 Bug Fixes
+- fix(filepond): fix drag reorder by using pointer events with capture:true + pointer-events:none trick (f89f098)
+- fix(filepond): rewrite drag reorder using HTML5 drag API to match dynamic-form.js behavior (9a8b093)
+
+### ⚡ Performance & Refactoring
+- refactor: remove custom FilePond CSS styling and theme overrides (a3e1464)
+
+### 🧰 Maintenance & Documentation
+- docs: update component properties and documentation layout for form inputs (3b90ad1)
+
+
 ## [0.1.14] - 2026-09-11
 
 ### ⚡ Performance & Refactoring
