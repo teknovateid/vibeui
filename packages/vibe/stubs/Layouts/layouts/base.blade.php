@@ -6,9 +6,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
         $currentIdleTimeout = request()->attributes->get('vibeIdleTimeout', $vibeIdleTimeout ?? null);
+        $idleConfirmUrl = Route::has('password.confirm') ? route('password.confirm', [], false) : '/confirm-password';
+        $idleLockUrl = Route::has('password.idle-lock') ? route('password.idle-lock', [], false) : ($idleConfirmUrl . '/idle-lock');
+        $keepAliveUrl = Route::has('auth.keep-alive') ? route('auth.keep-alive', [], false) : '/keep-alive';
     @endphp
     @if($currentIdleTimeout && $currentIdleTimeout > 0)
         <meta name="vibe-idle-timeout" content="{{ $currentIdleTimeout }}">
+        <meta name="vibe-idle-lock-url" content="{{ $idleLockUrl }}">
+        <meta name="vibe-confirm-url" content="{{ $idleConfirmUrl }}">
+        <meta name="vibe-keep-alive-url" content="{{ $keepAliveUrl }}">
     @endif
     @vibeStyles
     @stack('seo')
@@ -19,7 +25,13 @@
 <body class="font-medium font-sans antialiased bg-background text-foreground vibe-scrollbar"
     @if($currentIdleTimeout && $currentIdleTimeout > 0) data-idle-timeout="{{ $currentIdleTimeout }}" @endif>
     @if($currentIdleTimeout && $currentIdleTimeout > 0)
-        <div id="vibe-idle-tracker" data-timeout="{{ $currentIdleTimeout }}" class="hidden" style="display:none;"></div>
+        <div id="vibe-idle-tracker" 
+            data-timeout="{{ $currentIdleTimeout }}" 
+            data-lock-url="{{ $idleLockUrl }}" 
+            data-confirm-url="{{ $idleConfirmUrl }}" 
+            data-keep-alive-url="{{ $keepAliveUrl }}" 
+            class="hidden" 
+            style="display:none;"></div>
     @endif
     {{ $slot }}
     <vibe:alert position="top-right" />

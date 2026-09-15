@@ -56,26 +56,17 @@ class RequirePasswordConfirmation
             return $next($request);
         }
 
-        // 2. Mode: Single-page confirmation jika sesi is_single_page_confirm aktif
-        $confirmedRoute = $request->session()->get('auth.confirmed_route');
-        $isSinglePage = $request->session()->get('auth.is_single_page_confirm');
-        $routeName = $request->route()?->getName();
-        $routePath = trim($request->path(), '/');
+        // Cek apakah rute ini secara spesifik menggunakan alias bawaan Laravel 'password.confirm' (misal pada Passkeys)
+        $routeMiddlewares = $request->route()?->gatherMiddleware() ?? [];
+        $isStandardLaravelConfirm = in_array('password.confirm', $routeMiddlewares, true) ||
+            collect($routeMiddlewares)->contains(fn ($m) => is_string($m) && str_starts_with($m, 'password.confirm'));
 
-        if ($isSinglePage) {
-            $isRouteMatched = $confirmedRoute && (
-                $confirmedRoute === $routeName ||
-                $confirmedRoute === $routePath ||
-                $confirmedRoute === $request->url()
-            );
+        if ($isStandardLaravelConfirm) {
+            $defaultTimeout = (int) config('auth.password_timeout', 10800);
+            $isExpired = ! $confirmedAt || ($now - (int) $confirmedAt) >= $defaultTimeout;
 
-            if (! $confirmedAt || ! $isRouteMatched) {
+            if ($isExpired) {
                 $request->session()->forget('auth.password_confirmed_at');
-                $request->session()->forget('auth.confirmed_route');
-                $request->session()->forget('auth.is_single_page_confirm');
-
-                $request->session()->put('auth.target_route', $routeName ?: $routePath);
-                $request->session()->put('auth.is_single_page_confirm', true);
 
                 return $this->requireConfirmation($request, $redirectToRoute);
             }
@@ -83,21 +74,71 @@ class RequirePasswordConfirmation
             return $next($request);
         }
 
-        // 3. Fallback: Standar konfirmasi password Laravel (misal password.confirm bawaan)
-        $defaultTimeout = (int) config('auth.password_timeout', 10800);
-        $isExpired = ! $confirmedAt || ($now - (int) $confirmedAt) >= $defaultTimeout;
+        // 2. Mode: Single-page confirmation (default saat menggunakan middleware 'confirm')
+        $routeName = $request->route()?->getName();
+        $routePath = trim($request->path(), '/');
+        $currentUrl = $request->url();
+        $currentIdentifier = $routeName ?: $routePath;
 
-        if ($isExpired) {
+        $confirmedRoute = $request->session()->get('auth.confirmed_route');
+        $targetRoute = $request->session()->get('auth.target_route');
+        $intendedUrl = $request->session()->get('url.intended');
+
+        // Jika baru saja terkonfirmasi (misal via passkey callback / redirect setelah confirm)
+        // dan route target atau intended URL cocok dengan request saat ini, otorisasi confirmed_route
+        $possibleTargets = array_filter([$targetRoute, $intendedUrl]);
+        if (! $confirmedRoute && $confirmedAt && count($possibleTargets) > 0) {
+            foreach ($possibleTargets as $candidate) {
+                $candidatePath = trim(parse_url($candidate, PHP_URL_PATH) ?? '', '/');
+                $isTargetMatch = (
+                    $candidate === $routeName ||
+                    $candidate === $routePath ||
+                    $candidate === $currentUrl ||
+                    ($candidatePath && $candidatePath === $routePath)
+                );
+
+                if ($isTargetMatch) {
+                    $request->session()->put('auth.confirmed_route', $candidate);
+                    $request->session()->put('auth.is_single_page_confirm', true);
+                    $request->session()->forget('auth.target_route');
+                    $request->session()->forget('auth.session_locked');
+                    $confirmedRoute = $candidate;
+                    break;
+                }
+            }
+        }
+
+        $isRouteMatched = $confirmedRoute && (
+            $confirmedRoute === $routeName ||
+            $confirmedRoute === $routePath ||
+            $confirmedRoute === $currentUrl ||
+            trim(parse_url($confirmedRoute, PHP_URL_PATH) ?? '', '/') === $routePath
+        );
+
+        if ($isRouteMatched) {
+            $request->session()->forget('auth.session_locked');
+        }
+
+        if (! $confirmedAt || ! $isRouteMatched) {
             $request->session()->forget('auth.password_confirmed_at');
+            $request->session()->forget('auth.confirmed_route');
+            $request->session()->forget('auth.is_single_page_confirm');
 
-            // Tandai rute target untuk diotorisasi setelah konfirmasi
-            $request->session()->put('auth.target_route', $routeName ?: $routePath);
+            $request->session()->put('auth.target_route', $currentIdentifier);
             $request->session()->put('auth.is_single_page_confirm', true);
 
             return $this->requireConfirmation($request, $redirectToRoute);
         }
 
-        return $next($request);
+        $response = $next($request);
+
+        // Header anti-cache agar riwayat browser dan wire:navigate tidak menyajikan snapshot sensitif tanpa verifikasi ulang
+        if (method_exists($response, 'header')) {
+            $response->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+            $response->header('Pragma', 'no-cache');
+        }
+
+        return $response;
     }
 
     /**

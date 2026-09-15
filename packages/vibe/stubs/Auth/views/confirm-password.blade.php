@@ -17,8 +17,15 @@
     @endif
 
     {{-- Passkey Confirm Button --}}
+    @php
+        $targetRouteName = session('auth.target_route');
+        $intendedPasskeyUrl = session('url.intended')
+            ?: ($targetRouteName
+                ? (Route::has($targetRouteName) ? route($targetRouteName) : url($targetRouteName))
+                : route('docs.settings.security'));
+    @endphp
     <div class="space-y-3">
-        <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ session()->get('url.intended') ?: route('docs.settings.security') }}')">
+        <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">
             <span class="vibe-passkey-text inline-flex items-center gap-2">
                 <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />

@@ -150,7 +150,8 @@ window.vibeConfirmWithPasskey = async function(btn, redirectUrl) {
             },
         });
 
-        window.location.href = redirectUrl || '/';
+        var dest = (res && res.redirect) ? res.redirect : (redirectUrl || '/');
+        window.location.href = dest;
     } catch (e) {
         console.warn('Passkey confirm error:', e);
         if (btn) {

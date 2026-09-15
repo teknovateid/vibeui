@@ -49,12 +49,112 @@
     }
 
     /**
+     * Helper to extract pathname from a URL string (relative or absolute).
+     */
+    function getPathname(url) {
+        if (!url || typeof url !== 'string') return '';
+        try {
+            if (url.indexOf('://') !== -1) {
+                return new URL(url, window.location.origin).pathname;
+            }
+        } catch (e) {}
+        return url.split('?')[0].split('#')[0];
+    }
+
+    /**
+     * Get the configured confirmation URL.
+     */
+    function getConfirmUrl() {
+        if (window.VIBE_CONFIRM_URL && typeof window.VIBE_CONFIRM_URL === 'string') {
+            return window.VIBE_CONFIRM_URL;
+        }
+
+        var meta = document.querySelector('meta[name="vibe-confirm-url"]');
+        if (meta && meta.content) return meta.content;
+
+        var tracker = document.querySelector('#vibe-idle-tracker, #vibe-idle-tracker-base, [data-confirm-url]');
+        if (tracker && tracker.getAttribute('data-confirm-url')) {
+            return tracker.getAttribute('data-confirm-url');
+        }
+
+        return '/confirm-password';
+    }
+
+    /**
+     * Get the configured idle lock URL.
+     */
+    function getIdleLockUrl() {
+        if (window.VIBE_IDLE_LOCK_URL && typeof window.VIBE_IDLE_LOCK_URL === 'string') {
+            return window.VIBE_IDLE_LOCK_URL;
+        }
+
+        var meta = document.querySelector('meta[name="vibe-idle-lock-url"]');
+        if (meta && meta.content) return meta.content;
+
+        var tracker = document.querySelector('#vibe-idle-tracker, #vibe-idle-tracker-base, [data-lock-url]');
+        if (tracker && tracker.getAttribute('data-lock-url')) {
+            return tracker.getAttribute('data-lock-url');
+        }
+
+        var confirmUrl = getConfirmUrl();
+        return confirmUrl.replace(/\/+$/, '') + '/idle-lock';
+    }
+
+    /**
+     * Get the configured keep-alive URL.
+     */
+    function getKeepAliveUrl() {
+        if (window.VIBE_KEEP_ALIVE_URL && typeof window.VIBE_KEEP_ALIVE_URL === 'string') {
+            return window.VIBE_KEEP_ALIVE_URL;
+        }
+
+        var meta = document.querySelector('meta[name="vibe-keep-alive-url"]');
+        if (meta && meta.content) return meta.content;
+
+        var tracker = document.querySelector('#vibe-idle-tracker, #vibe-idle-tracker-base, [data-keep-alive-url]');
+        if (tracker && tracker.getAttribute('data-keep-alive-url')) {
+            return tracker.getAttribute('data-keep-alive-url');
+        }
+
+        return '/keep-alive';
+    }
+
+    /**
+     * Check if a path matches an auth, login, or confirmation route.
+     */
+    function isAuthOrConfirmPath(currentPath) {
+        var cleanPath = (currentPath.replace(/\/+$/, '') || '/').toLowerCase();
+
+        // Always ignore standard auth entry points
+        if (cleanPath === '/login' || cleanPath.indexOf('/login/') === 0) {
+            return true;
+        }
+
+        var confirmPath = (getPathname(getConfirmUrl()).replace(/\/+$/, '') || '/').toLowerCase();
+        if (confirmPath && (cleanPath === confirmPath || cleanPath.indexOf(confirmPath + '/') === 0)) {
+            return true;
+        }
+
+        var lockPath = (getPathname(getIdleLockUrl()).replace(/\/+$/, '') || '/').toLowerCase();
+        if (lockPath && (cleanPath === lockPath || cleanPath.indexOf(lockPath + '/') === 0)) {
+            return true;
+        }
+
+        // Safety fallback for default confirm-password paths
+        if (cleanPath === '/confirm-password' || cleanPath.indexOf('/confirm-password/') === 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Redirect to the password confirmation lock route.
      */
     function redirectToConfirmation() {
         if (redirecting) return;
         var path = window.location.pathname.replace(/\/+$/, '') || '/';
-        if (path === '/confirm-password' || path.indexOf('/confirm-password/') === 0 || path === '/login') {
+        if (isAuthOrConfirmPath(path)) {
             return;
         }
 
@@ -65,7 +165,9 @@
         }
 
         var intended = encodeURIComponent(window.location.href);
-        window.location.href = '/confirm-password/idle-lock?intended=' + intended;
+        var lockUrl = getIdleLockUrl();
+        var separator = lockUrl.indexOf('?') === -1 ? '?' : '&';
+        window.location.href = lockUrl + separator + 'intended=' + intended;
     }
 
     /**
@@ -75,7 +177,8 @@
         if (redirecting) return;
         lastKeepAliveTime = Date.now();
 
-        fetch('/keep-alive', {
+        var keepAliveUrl = getKeepAliveUrl();
+        fetch(keepAliveUrl, {
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         }).then(function (res) {
@@ -183,6 +286,9 @@
         getTimeout: function () {
             return timeout;
         },
+        getConfirmUrl: getConfirmUrl,
+        getIdleLockUrl: getIdleLockUrl,
+        getKeepAliveUrl: getKeepAliveUrl,
         reset: function () {
             remaining = timeout;
             lastX = null;
@@ -192,9 +298,15 @@
         lockNow: function () {
             redirectToConfirmation();
         },
-        init: function (sec) {
+        init: function (sec, lockUrl, confirmUrl) {
             if (typeof sec === 'number' && sec > 0) {
                 window.VIBE_IDLE_TIMEOUT = sec;
+            }
+            if (typeof lockUrl === 'string' && lockUrl) {
+                window.VIBE_IDLE_LOCK_URL = lockUrl;
+            }
+            if (typeof confirmUrl === 'string' && confirmUrl) {
+                window.VIBE_CONFIRM_URL = confirmUrl;
             }
             initWatcher();
         }
@@ -221,7 +333,7 @@
         }
     });
 
-    // Hook into Livewire 3 requests to catch X-Vibe-Idle-Timeout header directly from server
+    // Hook into Livewire 3 requests to catch X-Vibe-Idle-* headers directly from server
     if (window.Livewire && window.Livewire.hook) {
         try {
             window.Livewire.hook('request', function (context) {
@@ -235,6 +347,18 @@
                                 if (!isNaN(parsed) && parsed > 0) {
                                     window.VIBE_IDLE_TIMEOUT = parsed;
                                 }
+                            }
+                            var lockHeader = response.headers.get('X-Vibe-Idle-Lock-Url') || response.headers.get('x-vibe-idle-lock-url');
+                            if (lockHeader) {
+                                window.VIBE_IDLE_LOCK_URL = lockHeader;
+                            }
+                            var confirmHeader = response.headers.get('X-Vibe-Confirm-Url') || response.headers.get('x-vibe-confirm-url');
+                            if (confirmHeader) {
+                                window.VIBE_CONFIRM_URL = confirmHeader;
+                            }
+                            var keepAliveHeader = response.headers.get('X-Vibe-Keep-Alive-Url') || response.headers.get('x-vibe-keep-alive-url');
+                            if (keepAliveHeader) {
+                                window.VIBE_KEEP_ALIVE_URL = keepAliveHeader;
                             }
                         }
                     });
