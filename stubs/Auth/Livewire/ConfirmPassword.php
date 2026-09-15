@@ -53,7 +53,8 @@ class ConfirmPassword extends Component
         session()->forget('auth.session_locked');
         session()->put('auth.last_activity_time', time());
 
-        if ($targetRoute = session()->pull('auth.target_route')) {
+        $targetRoute = session()->pull('auth.target_route') ?: session('url.intended');
+        if ($targetRoute) {
             session()->put('auth.confirmed_route', $targetRoute);
             session()->put('auth.is_single_page_confirm', true);
         }

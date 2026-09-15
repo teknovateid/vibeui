@@ -53,10 +53,14 @@ class VibeIdleTimeout
                     ], 423);
                 }
 
-                $redirect = redirect('/confirm-password')->with('status', 'idle_timeout');
+                $confirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm')
+                    ? route('password.confirm')
+                    : url('/confirm-password');
+
+                $redirect = redirect($confirmUrl)->with('status', 'idle_timeout');
 
                 if ($request->hasHeader('X-Livewire-Navigate')) {
-                    $redirect->header('X-Livewire-Redirect', '/confirm-password');
+                    $redirect->header('X-Livewire-Redirect', $confirmUrl);
                 }
 
                 return $redirect;
@@ -73,6 +77,17 @@ class VibeIdleTimeout
 
         if (method_exists($response, 'header')) {
             $response->header('X-Vibe-Idle-Timeout', (string) $timeout);
+            if (\Illuminate\Support\Facades\Route::has('password.confirm')) {
+                $response->header('X-Vibe-Confirm-Url', route('password.confirm', [], false));
+            }
+            if (\Illuminate\Support\Facades\Route::has('password.idle-lock')) {
+                $response->header('X-Vibe-Idle-Lock-Url', route('password.idle-lock', [], false));
+            } elseif (\Illuminate\Support\Facades\Route::has('password.confirm')) {
+                $response->header('X-Vibe-Idle-Lock-Url', route('password.confirm', [], false) . '/idle-lock');
+            }
+            if (\Illuminate\Support\Facades\Route::has('auth.keep-alive')) {
+                $response->header('X-Vibe-Keep-Alive-Url', route('auth.keep-alive', [], false));
+            }
         }
 
         return $response;

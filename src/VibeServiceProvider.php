@@ -95,6 +95,28 @@ class VibeServiceProvider extends ServiceProvider
             $router->aliasMiddleware('password.confirm', RequirePasswordConfirmation::class);
         }
 
+        // Listen to Passkey confirmation event to synchronize Vibe single-page auth session
+        if (class_exists(\Laravel\Passkeys\Events\PasskeyVerified::class)) {
+            \Illuminate\Support\Facades\Event::listen(\Laravel\Passkeys\Events\PasskeyVerified::class, function ($event) {
+                $session = request()->hasSession() ? request()->session() : (session()->isStarted() ? session() : null);
+                if (! $session && app()->bound('session')) {
+                    $session = app('session')->driver();
+                }
+
+                if ($session) {
+                    $session->forget('auth.session_locked');
+                    $session->put('auth.last_activity_time', time());
+                    $session->put('auth.password_confirmed_at', time());
+
+                    $target = $session->get('auth.target_route') ?: $session->get('url.intended');
+                    if ($target) {
+                        $session->put('auth.confirmed_route', $target);
+                        $session->put('auth.is_single_page_confirm', true);
+                    }
+                }
+            });
+        }
+
         // Register anonymous component path for the 'vibe' namespace.
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
         // User published views take precedence, fallback to package views.
@@ -191,6 +213,9 @@ class VibeServiceProvider extends ServiceProvider
                 }
                 \$prefix = \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
                 \$historyConfig = json_encode(\Illuminate\Support\Facades\Config::get('vibe.history'));
+                \$confirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm') ? route('password.confirm', [], false) : '/confirm-password';
+                \$idleLockUrl = \Illuminate\Support\Facades\Route::has('password.idle-lock') ? route('password.idle-lock', [], false) : (\$confirmUrl . '/idle-lock');
+                \$keepAliveUrl = \Illuminate\Support\Facades\Route::has('auth.keep-alive') ? route('auth.keep-alive', [], false) : '/keep-alive';
                 
                 // Pre-rendered Anti-FOUC Theme Shield style tag
                 echo '<style id=\"' . \$prefix . '-theme-override\" data-navigate-once=\"true\"></style>';
@@ -199,6 +224,9 @@ class VibeServiceProvider extends ServiceProvider
                     (function() {
                         window.VIBE_PREFIX = \'' . \$prefix . '\';
                         window.VIBE_HISTORY_CONFIG = ' . \$historyConfig . ';
+                        window.VIBE_CONFIRM_URL = \'' . \$confirmUrl . '\';
+                        window.VIBE_IDLE_LOCK_URL = \'' . \$idleLockUrl . '\';
+                        window.VIBE_KEEP_ALIVE_URL = \'' . \$keepAliveUrl . '\';
                         if (\'scrollRestoration\' in history) {
                             history.scrollRestoration = \'manual\';
                         }

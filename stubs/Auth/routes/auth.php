@@ -45,6 +45,12 @@ Route::middleware('auth')->group(function () {
         $request->session()->put('auth.password_confirmed_at', time());
         $request->session()->put('auth.one_time_confirmed', true);
 
+        $target = $request->session()->pull('auth.target_route') ?: $request->session()->get('url.intended');
+        if ($target) {
+            $request->session()->put('auth.confirmed_route', $target);
+            $request->session()->put('auth.is_single_page_confirm', true);
+        }
+
         if ($request->expectsJson()) {
             return response()->noContent();
         }
@@ -69,7 +75,9 @@ Route::middleware('auth')->group(function () {
         $intended = $request->query('intended') ?: $request->header('referer') ?: '/';
         $request->session()->put('url.intended', $intended);
 
-        return redirect('/confirm-password')->with('status', 'idle_timeout');
+        $confirmUrl = Route::has('password.confirm') ? route('password.confirm') : '/confirm-password';
+
+        return redirect($confirmUrl)->with('status', 'idle_timeout');
     })->name('password.idle-lock');
 
     Route::match(['get', 'post'], '/keep-alive', function (Request $request) {
