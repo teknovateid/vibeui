@@ -7,7 +7,7 @@ class Vibe
     /**
      * The current version of Vibe UI.
      */
-    const VERSION = '0.1.16';
+    const VERSION = '0.1.17';
 
     /**
      * Get the current Vibe UI version.
