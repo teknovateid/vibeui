@@ -96,15 +96,26 @@
         </vibe:nav.item>
 
         <!-- Input Group -->
-        <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
+        <vibe:nav.group :title="__('docs/sidebar.nav.input_group.group')" :active="request()->routeIs('docs.input.*')" persist>
             <x-slot:icon>
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <rect x="3" y="6" width="18" height="12" rx="3"></rect>
                     <path d="M8 12h8"></path>
                 </svg>
             </x-slot:icon>
-            {{ __('docs/sidebar.nav.input') }}
-        </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
+                {{ __('docs/sidebar.nav.input_group.standard') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.otp') }}" :active="request()->routeIs('docs.input.otp')">
+                {{ __('docs/sidebar.nav.input_group.otp') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.currency') }}" :active="request()->routeIs('docs.input.currency')">
+                {{ __('docs/sidebar.nav.input_group.currency') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.phone') }}" :active="request()->routeIs('docs.input.phone')">
+                {{ __('docs/sidebar.nav.input_group.phone') }}
+            </vibe:nav.item>
+        </vibe:nav.group>
 
         <!-- Textarea -->
         <vibe:nav.item href="{{ route('docs.textarea.index') }}" :active="request()->routeIs('docs.textarea.index')">
@@ -458,6 +469,29 @@
             </x-slot:icon>
             {{ __('docs/sidebar.nav.highlightjs') }}
         </vibe:nav.item>
+
+        <!-- Display Group -->
+        <vibe:nav.group :title="__('docs/sidebar.nav.display.group')" :active="request()->routeIs('docs.display.*')" persist>
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="5" height="5" x="3" y="3" rx="1"/>
+                    <rect width="5" height="5" x="16" y="3" rx="1"/>
+                    <rect width="5" height="5" x="3" y="16" rx="1"/>
+                    <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+                    <path d="M21 21v.01"/>
+                    <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+                    <path d="M3 12h.01"/>
+                    <path d="M12 3h.01"/>
+                    <path d="M12 16v.01"/>
+                    <path d="M16 12h1"/>
+                    <path d="M21 12v.01"/>
+                    <path d="M12 21v-1"/>
+                </svg>
+            </x-slot:icon>
+            <vibe:nav.item href="{{ route('docs.display.qrcode') }}" :active="request()->routeIs('docs.display.qrcode')">
+                {{ __('docs/sidebar.nav.display.qrcode') }}
+            </vibe:nav.item>
+        </vibe:nav.group>
 
         <!-- Chart -->
         <vibe:nav.item href="{{ route('docs.chart.index') }}" :active="request()->routeIs('docs.chart.*')">

@@ -193,20 +193,29 @@
 
                 <div class="space-y-6">
                     <vibe:preview title="Toggle Intip Kata Sandi (Input Viewable)">
-                        <div class="max-w-sm w-full">
-                            <vibe:input label="Kata Sandi Akun" type="password" viewable placeholder="Masukkan kata sandi..." />
-                        </div>
-                        <x-slot:code>
-&lt;vibe:input
+                        <vibe:preview.code>
+<\vibe:input
     label="Kata Sandi Akun"
     type="password"
     viewable
     placeholder="Masukkan kata sandi..."
-/&gt;
-                        </x-slot:code>
+/>
+                        </vibe:preview.code>
+                        <div class="max-w-sm w-full">
+                            <vibe:input label="Kata Sandi Akun" type="password" viewable placeholder="Masukkan kata sandi..." />
+                        </div>
                     </vibe:preview>
 
                     <vibe:preview title="Pemisah Form dengan Teks (Separator)">
+                        <vibe:preview.code>
+<\vibe:button variant="outline" class="w-full justify-center">
+    Masuk dengan Google
+</\vibe:button>
+
+<\vibe:separator text="atau masuk dengan email" />
+
+<\vibe:input label="Email" type="email" placeholder="nama@domain.com" />
+                        </vibe:preview.code>
                         <div class="w-full max-w-sm space-y-3">
                             <vibe:button variant="outline" class="w-full justify-center">
                                 <svg class="size-4 mr-2" viewBox="0 0 24 24"><path fill="currentColor" d="M12.545 10.239v3.821h5.445c-.712 2.315-2.647 3.972-5.445 3.972a6.033 6.033 0 1 1 0-12.064c1.498 0 2.866.549 3.921 1.453l2.814-2.814A9.97 9.97 0 0 0 12.545 2C7.021 2 2.543 6.477 2.543 12s4.478 10 10.002 10c8.396 0 10.249-7.85 9.426-11.761h-9.426Z"/></svg>
@@ -215,15 +224,6 @@
                             <vibe:separator text="atau masuk dengan email" />
                             <vibe:input label="Email" type="email" placeholder="nama@domain.com" />
                         </div>
-                        <x-slot:code>
-&lt;vibe:button variant="outline" class="w-full justify-center"&gt;
-    Masuk dengan Google
-&lt;/vibe:button&gt;
-
-&lt;vibe:separator text="atau masuk dengan email" /&gt;
-
-&lt;vibe:input label="Email" type="email" placeholder="nama@domain.com" /&gt;
-                        </x-slot:code>
                     </vibe:preview>
                 </div>
             </section>

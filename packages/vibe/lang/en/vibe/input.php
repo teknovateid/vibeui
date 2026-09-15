@@ -6,4 +6,5 @@ return [
     'clear' => 'Clear',
     'show_password' => 'Show password',
     'hide_password' => 'Hide password',
+    'digit_label' => 'Digit :digit of :total',
 ];

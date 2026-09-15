@@ -25,7 +25,13 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::post('/', [FormController::class, 'store'])->name('store');
     });
 
-    Route::view('/input', 'docs.input.index')->name('input.index');
+    Route::prefix('input')->name('input.')->group(function () {
+        Route::view('/', 'docs.input.index')->name('index');
+        Route::view('/otp', 'docs.input.otp')->name('otp');
+        Route::view('/currency', 'docs.input.currency')->name('currency');
+        Route::view('/phone', 'docs.input.phone')->name('phone');
+    });
+    
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
     Route::get('/select', [SelectController::class, 'index'])->name('select.index');
     Route::get('/select/api', [SelectController::class, 'api'])->name('select.api');
@@ -66,6 +72,11 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
     Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
+
+    Route::prefix('display')->name('display.')->group(function () {
+        Route::redirect('/', '/docs/display/qrcode')->name('index');
+        Route::view('/qrcode', 'docs.display.qrcode')->name('qrcode');
+    });
 
     Route::get('/chart', function () {
         $monthlyMetrics = \App\Models\SalesMetric::where('category', 'Semua Kategori')->orderBy('id')->get();

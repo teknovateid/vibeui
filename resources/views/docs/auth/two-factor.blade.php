@@ -41,12 +41,12 @@
 
                 <div class="p-6 rounded-2xl border border-border bg-card space-y-6 shadow-xs" x-data="{
                     step: 1, // 1: Setup/QR, 2: Recovery Codes, 3: Completed
-                    otp: ['', '', '', '', '', ''],
                     secretKey: 'JBSWY3DPEHPK3PXP',
                     copiedSecret: false,
                     loading: false,
                     feedback: null,
                     feedbackType: 'info',
+                    otpCode: '',
                     recoveryCodes: [
                         'a8f9-4b21-9c3e',
                         '7e12-88f0-1a2b',
@@ -64,34 +64,10 @@
                         setTimeout(() => { this.copiedSecret = false; }, 2000);
                     },
 
-                    handleOtpInput(index, event) {
-                        const val = event.target.value;
-                        // Handle paste of 6 digits
-                        if (val.length > 1) {
-                            const digits = val.replace(/\D/g, '').slice(0, 6).split('');
-                            for (let i = 0; i < 6; i++) {
-                                this.otp[i] = digits[i] || '';
-                            }
-                            const nextIndex = Math.min(digits.length, 5);
-                            this.$refs['otp_' + nextIndex]?.focus();
-                            return;
-                        }
-
-                        this.otp[index] = val.replace(/\D/g, '');
-                        if (this.otp[index] && index < 5) {
-                            this.$refs['otp_' + (index + 1)]?.focus();
-                        }
-                    },
-
-                    handleOtpKeydown(index, event) {
-                        if (event.key === 'Backspace' && !this.otp[index] && index > 0) {
-                            this.$refs['otp_' + (index - 1)]?.focus();
-                        }
-                    },
-
                     verifyOtp() {
-                        const code = this.otp.join('');
-                        if (code.length < 6) {
+                        const hidden = document.getElementById('demo-2fa-otp');
+                        const code = this.otpCode || (hidden ? hidden.value : '');
+                        if (!code || code.length < 6) {
                             this.feedbackType = 'error';
                             this.feedback = 'Harap lengkapi seluruh 6 digit kode autentikator.';
                             return;
@@ -114,8 +90,13 @@
 
                     resetDemo() {
                         this.step = 1;
-                        this.otp = ['', '', '', '', '', ''];
+                        this.otpCode = '';
                         this.feedback = null;
+                        let hidden = document.getElementById('demo-2fa-otp');
+                        if (hidden) {
+                            hidden.value = '';
+                            hidden.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
                     }
                 }">
                     {{-- Status Steps Header --}}
@@ -145,29 +126,14 @@
                     {{-- Step 1: Scan QR & Input OTP --}}
                     <div x-show="step === 1" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-                            {{-- QR Code Card --}}
+                            {{-- Real Scannable QR Code Card --}}
                             <div class="p-5 rounded-xl bg-muted/40 border border-border flex flex-col items-center justify-center text-center space-y-3">
-                                <div class="p-3 bg-white rounded-xl shadow-xs border border-border/80">
-                                    {{-- Mock SVG QR Code --}}
-                                    <svg class="size-36 text-neutral-900" viewBox="0 0 100 100" fill="currentColor">
-                                        <rect x="5" y="5" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="5"/>
-                                        <rect x="13" y="13" width="14" height="14" fill="currentColor"/>
-                                        <rect x="65" y="5" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="5"/>
-                                        <rect x="73" y="13" width="14" height="14" fill="currentColor"/>
-                                        <rect x="5" y="65" width="30" height="30" rx="4" fill="none" stroke="currentColor" stroke-width="5"/>
-                                        <rect x="13" y="73" width="14" height="14" fill="currentColor"/>
-                                        <rect x="42" y="10" width="8" height="8"/>
-                                        <rect x="42" y="25" width="8" height="15"/>
-                                        <rect x="10" y="45" width="15" height="8"/>
-                                        <rect x="30" y="45" width="8" height="8"/>
-                                        <rect x="45" y="45" width="12" height="12"/>
-                                        <rect x="65" y="45" width="25" height="8"/>
-                                        <rect x="65" y="60" width="8" height="12"/>
-                                        <rect x="80" y="60" width="10" height="25"/>
-                                        <rect x="45" y="65" width="12" height="25"/>
-                                        <rect x="65" y="80" width="8" height="10"/>
-                                    </svg>
-                                </div>
+                                <vibe:display.qrcode 
+                                    value="otpauth://totp/Vibe%20UI:demo@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Vibe%20UI"
+                                    size="150"
+                                    level="M"
+                                    class="p-2.5 rounded-xl bg-white shadow-xs border border-border/80"
+                                />
                                 <div class="space-y-1">
                                     <p class="text-xs font-semibold text-foreground">Pindai dengan Aplikasi Autentikator</p>
                                     <p class="text-[11px] text-muted-foreground">Buka Google Authenticator atau Authy di smartphone Anda.</p>
@@ -193,21 +159,14 @@
                                         <span class="text-[10px] text-muted-foreground font-normal">Dapat paste langsung</span>
                                     </label>
 
-                                    {{-- 6 boxes OTP input --}}
-                                    <div class="flex items-center gap-2">
-                                        <template x-for="(digit, idx) in otp" :key="idx">
-                                            <input 
-                                                type="text" 
-                                                maxlength="6"
-                                                inputmode="numeric"
-                                                x-ref="'otp_' + idx"
-                                                :value="otp[idx]"
-                                                @input="handleOtpInput(idx, $event)"
-                                                @keydown="handleOtpKeydown(idx, $event)"
-                                                class="w-10 h-12 text-center text-lg font-bold rounded-lg border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none transition-all"
-                                                placeholder="•"
-                                            />
-                                        </template>
+                                    {{-- 6 boxes OTP input using vibe:input.otp --}}
+                                    <div @otp-change="otpCode = $event.detail; if ($event.detail.length === 6) verifyOtp()">
+                                        <vibe:input.otp 
+                                            id="demo-2fa-otp"
+                                            name="demo_otp"
+                                            length="6"
+                                            size="md"
+                                        />
                                     </div>
                                 </div>
 
@@ -294,24 +253,28 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="html">
-{{-- Form Tantangan 2FA pada Login --}}
-&lt;form wire:submit="verifyTwoFactor" class="space-y-4"&gt;
-    &lt;vibe:input 
+                <vibe:highlightjs language="blade">
+{{-- Form Tantangan 2FA pada Login Menggunakan vibe:input.otp --}}
+<form wire:submit="verifyTwoFactor" class="space-y-4">
+    <\vibe:input.otp 
         label="Kode Verifikasi 6 Digit" 
         name="code" 
-        type="text" 
-        maxlength="6"
-        placeholder="123456" 
-        autocomplete="one-time-code"
-        autofocus 
-    /&gt;
+        length="6"
+        auto-submit
+        wire:model="twoFactorCode" 
+    />
 
-    &lt;vibe:button type="submit" variant="primary" class="w-full justify-center"&gt;
+    <\vibe:button type="submit" variant="primary" class="w-full justify-center">
         Masuk ke Akun
-    &lt;/vibe:button&gt;
-&lt;/form&gt;
+    </\vibe:button>
+</form>
 </vibe:highlightjs>
+
+                <div class="pt-1">
+                    <vibe:button href="{{ route('docs.input.otp') }}" variant="outline" size="xs">
+                        Lihat Dokumentasi Lengkap &lt;vibe:input.otp&gt; &rarr;
+                    </vibe:button>
+                </div>
             </section>
 
         </div>

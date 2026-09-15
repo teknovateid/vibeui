@@ -30,6 +30,20 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                 </div>
+
+                {{-- Quick family links --}}
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                    <span class="text-xs font-semibold text-foreground">Keluarga Input:</span>
+                    <vibe:button href="{{ route('docs.input.otp') }}" variant="outline" size="xs">
+                        &lt;vibe:input.otp&gt; &rarr;
+                    </vibe:button>
+                    <vibe:button href="{{ route('docs.input.currency') }}" variant="outline" size="xs">
+                        &lt;vibe:input.currency&gt; &rarr;
+                    </vibe:button>
+                    <vibe:button href="{{ route('docs.input.phone') }}" variant="outline" size="xs">
+                        &lt;vibe:input.phone&gt; &rarr;
+                    </vibe:button>
+                </div>
             </div>
 
             {{-- 1. Basic Usage --}}

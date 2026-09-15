@@ -15,6 +15,13 @@ return [
         'design_system' => 'Color Design System',
         'form' => 'Form',
         'input' => 'Input',
+        'input_group' => [
+            'group' => 'Input',
+            'standard' => 'Standard Input',
+            'otp' => 'Input OTP',
+            'currency' => 'Input Currency',
+            'phone' => 'Input Phone',
+        ],
         'textarea' => 'Textarea',
         'select' => 'Select',
         'checkbox' => 'Checkbox',
@@ -45,6 +52,10 @@ return [
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',
+        'display' => [
+            'group' => 'Display',
+            'qrcode' => 'QR Code',
+        ],
         'chart' => 'Chart',
         'dashboard' => 'Dashboard',
         'auth' => [

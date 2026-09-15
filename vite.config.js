@@ -135,6 +135,7 @@ export default defineConfig({
                 'resources/js/vibe/table.js',
                 'resources/js/vibe/passkeys.js',
                 'resources/js/vibe/idle.js',
+                'resources/js/vibe/qrcode.js',
             ],
             refresh: true,
             fonts: [
