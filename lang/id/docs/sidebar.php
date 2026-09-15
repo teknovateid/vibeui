@@ -47,6 +47,14 @@ return [
         'highlightjs' => 'Highlight.js',
         'chart' => 'Chart',
         'dashboard' => 'dashboard',
+        'auth' => [
+            'group' => 'Autentikasi',
+            'installation' => 'Instalasi Auth',
+            'confirm' => 'Konfirmasi Password',
+            'idle' => 'Idle Timeout',
+            'two_factor' => 'Two-Factor (2FA)',
+            'passkey' => 'Passkey (WebAuthn)',
+        ],
     ],
 
     'notifications' => [

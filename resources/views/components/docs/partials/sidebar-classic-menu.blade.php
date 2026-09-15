@@ -39,6 +39,31 @@
             </x-slot:icon>
             {{ __('docs/sidebar.nav.directories') }}
         </vibe:nav.item>
+
+        <!-- Authentication -->
+        <vibe:nav.group :title="__('docs/sidebar.nav.auth.group')" :active="request()->routeIs('docs.auth.*')" persist>
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </x-slot:icon>
+            <vibe:nav.item href="{{ route('docs.auth.installation') }}" :active="request()->routeIs('docs.auth.installation')">
+                {{ __('docs/sidebar.nav.auth.installation') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.confirm') }}" :active="request()->routeIs('docs.auth.confirm')">
+                {{ __('docs/sidebar.nav.auth.confirm') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.idle') }}" :active="request()->routeIs('docs.auth.idle')">
+                {{ __('docs/sidebar.nav.auth.idle') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.two-factor') }}" :active="request()->routeIs('docs.auth.two-factor')">
+                {{ __('docs/sidebar.nav.auth.two_factor') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.passkey') }}" :active="request()->routeIs('docs.auth.passkey')">
+                {{ __('docs/sidebar.nav.auth.passkey') }}
+            </vibe:nav.item>
+        </vibe:nav.group>
     </vibe:nav.label>
 
 

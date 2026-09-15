@@ -47,6 +47,14 @@ return [
         'highlightjs' => 'Highlight.js',
         'chart' => 'Chart',
         'dashboard' => 'Dashboard',
+        'auth' => [
+            'group' => 'Authentication',
+            'installation' => 'Auth Installation',
+            'confirm' => 'Confirm Password',
+            'idle' => 'Idle Timeout',
+            'two_factor' => 'Two-Factor (2FA)',
+            'passkey' => 'Passkey (WebAuthn)',
+        ],
     ],
 
     'notifications' => [

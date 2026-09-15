@@ -11,7 +11,14 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
-    Route::view('/auth', 'docs.auth.index')->name('auth.index');
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::redirect('/', '/docs/auth/installation')->name('index');
+        Route::view('/installation', 'docs.auth.installation')->name('installation');
+        Route::view('/confirm', 'docs.auth.confirm')->name('confirm');
+        Route::view('/idle', 'docs.auth.idle')->name('idle');
+        Route::view('/two-factor', 'docs.auth.two-factor')->name('two-factor');
+        Route::view('/passkey', 'docs.auth.passkey')->name('passkey');
+    });
 
     Route::prefix('form')->name('form.')->group(function () {
         Route::get('/', [FormController::class, 'index'])->name('index');

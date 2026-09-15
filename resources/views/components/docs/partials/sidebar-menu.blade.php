@@ -42,27 +42,41 @@
         <vibe:nav.item href="{{ route('docs.design-system.index') }}" :active="request()->routeIs('docs.design-system.*')">
             <x-slot:icon>
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="13.5" cy="6.5" r="2.5"/>
-                    <circle cx="19.5" cy="15.5" r="2.5"/>
-                    <circle cx="6.5" cy="15.5" r="2.5"/>
-                    <path d="M13.5 9 A7 7 0 0 1 19.5 13"/>
-                    <path d="M13.5 9 A7 7 0 0 0 6.5 13"/>
-                    <path d="M6.5 18 L13 21 L19.5 18"/>
+                    <circle cx="13.5" cy="6.5" r="2.5" />
+                    <circle cx="19.5" cy="15.5" r="2.5" />
+                    <circle cx="6.5" cy="15.5" r="2.5" />
+                    <path d="M13.5 9 A7 7 0 0 1 19.5 13" />
+                    <path d="M13.5 9 A7 7 0 0 0 6.5 13" />
+                    <path d="M6.5 18 L13 21 L19.5 18" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.design_system') }}
         </vibe:nav.item>
 
         <!-- Authentication -->
-        <vibe:nav.item href="{{ route('docs.auth.index') }}" :active="request()->routeIs('docs.auth.*')">
+        <vibe:nav.group :title="__('docs/sidebar.nav.auth.group')" :active="request()->routeIs('docs.auth.*')" persist>
             <x-slot:icon>
                 <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
             </x-slot:icon>
-            Authentication
-        </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.installation') }}" :active="request()->routeIs('docs.auth.installation')">
+                {{ __('docs/sidebar.nav.auth.installation') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.confirm') }}" :active="request()->routeIs('docs.auth.confirm')">
+                {{ __('docs/sidebar.nav.auth.confirm') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.idle') }}" :active="request()->routeIs('docs.auth.idle')">
+                {{ __('docs/sidebar.nav.auth.idle') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.two-factor') }}" :active="request()->routeIs('docs.auth.two-factor')">
+                {{ __('docs/sidebar.nav.auth.two_factor') }}
+            </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.passkey') }}" :active="request()->routeIs('docs.auth.passkey')">
+                {{ __('docs/sidebar.nav.auth.passkey') }}
+            </vibe:nav.item>
+        </vibe:nav.group>
     </vibe:nav.label>
 
 
@@ -460,7 +474,7 @@
 
 
     <vibe:nav.label :title="__('docs/sidebar.groups.pages')" persist>
-        <vibe:nav.group :title="__('docs/sidebar.groups.dashboard')" :active="request()->routeIs('docs.dashboard.*')" >
+        <vibe:nav.group :title="__('docs/sidebar.groups.dashboard')" :active="request()->routeIs('docs.dashboard.*')">
             <x-slot:icon>
                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                     <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
@@ -468,16 +482,16 @@
                     <path d="M16 10a4 4 0 0 1-8 0" />
                 </svg>
             </x-slot:icon>
-            <vibe:nav.item href="{{ route('docs.dashboard.show','index') }}" :active="request()->routeIs('docs.dashboard.show','index')">Semua Produk</vibe:nav.item>
-            <vibe:nav.item href="{{ route('docs.dashboard.show','index') }}" badge="14" badgeColor="warning">Pesanan Pelanggan</vibe:nav.item>
-            <vibe:nav.item href="{{ route('docs.dashboard.show','index') }}">Daftar Pembeli</vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.dashboard.show', 'index') }}" :active="request()->routeIs('docs.dashboard.show','index')">Semua Produk</vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.dashboard.show', 'index') }}" badge="14" badgeColor="warning">Pesanan Pelanggan</vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.dashboard.show', 'index') }}">Daftar Pembeli</vibe:nav.item>
         </vibe:nav.group>
 
         <vibe:nav.item href="{{ route('docs.settings.index') }}" :active="request()->routeIs('docs.settings.*')">
             <x-slot:icon>
                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
-                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                    <circle cx="12" cy="12" r="3" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/page/settings/index.breadcrumb.settings') }}
