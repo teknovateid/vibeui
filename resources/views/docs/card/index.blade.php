@@ -34,6 +34,7 @@
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:card.header&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:card.footer&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:card.alert&gt;</vibe:badge>
                 </div>
             </div>
 
@@ -347,7 +348,91 @@
                 </vibe:preview>
             </section>
 
-            {{-- 6. Props & Slots Reference --}}
+            {{-- 6. Card Alert (<vibe:card.alert>) --}}
+            <section id="card-alert" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/card.alert.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/card.alert.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Alert Variants Showcase --}}
+                <vibe:preview :title="__('docs/card.alert.preview_title')">
+                    <vibe:preview.code>
+{{-- Info (Default) --}}
+<vibe:card.alert variant="info" :title="__('docs/card.alert.info_title')" :description="__('docs/card.alert.info_desc')" />
+
+{{-- Success --}}
+<vibe:card.alert variant="success" :title="__('docs/card.alert.success_title')" :description="__('docs/card.alert.success_desc')" />
+
+{{-- Warning --}}
+<vibe:card.alert variant="warning" :title="__('docs/card.alert.warning_title')" :description="__('docs/card.alert.warning_desc')" />
+
+{{-- Destructive / Danger --}}
+<vibe:card.alert variant="destructive" :title="__('docs/card.alert.danger_title')" :description="__('docs/card.alert.danger_desc')" />
+                    </vibe:preview.code>
+                    <div class="w-full space-y-3 p-2">
+                        <vibe:card.alert variant="info" :title="__('docs/card.alert.info_title')" :description="__('docs/card.alert.info_desc')" />
+                        <vibe:card.alert variant="success" :title="__('docs/card.alert.success_title')" :description="__('docs/card.alert.success_desc')" />
+                        <vibe:card.alert variant="warning" :title="__('docs/card.alert.warning_title')" :description="__('docs/card.alert.warning_desc')" />
+                        <vibe:card.alert variant="destructive" :title="__('docs/card.alert.danger_title')" :description="__('docs/card.alert.danger_desc')" />
+                    </div>
+                </vibe:preview>
+
+                {{-- Alert Appearances (Accent-Left & Solid) --}}
+                <vibe:preview :title="__('docs/card.alert.accent_preview_title')">
+                    <vibe:preview.code>
+{{-- Accent Left --}}
+<vibe:card.alert appearance="accent-left" variant="primary" :title="__('docs/card.alert.info_title')" :description="__('docs/card.alert.info_desc')" />
+
+{{-- Solid Appearance --}}
+<vibe:card.alert appearance="solid" variant="destructive" :title="__('docs/card.alert.danger_title')" :description="__('docs/card.alert.danger_desc')" />
+
+{{-- Outline Appearance --}}
+<vibe:card.alert appearance="outline" variant="success" :title="__('docs/card.alert.success_title')" :description="__('docs/card.alert.success_desc')" />
+                    </vibe:preview.code>
+                    <div class="w-full space-y-3 p-2">
+                        <vibe:card.alert appearance="accent-left" variant="primary" :title="__('docs/card.alert.info_title')" :description="__('docs/card.alert.info_desc')" />
+                        <vibe:card.alert appearance="solid" variant="destructive" :title="__('docs/card.alert.danger_title')" :description="__('docs/card.alert.danger_desc')" />
+                        <vibe:card.alert appearance="outline" variant="success" :title="__('docs/card.alert.success_title')" :description="__('docs/card.alert.success_desc')" />
+                    </div>
+                </vibe:preview>
+
+                {{-- Dismissible & Action Slots --}}
+                <vibe:preview :title="__('docs/card.alert.dismissible_preview_title')">
+                    <vibe:preview.code>
+<vibe:card.alert
+    variant="primary"
+    dismissible
+    :title="__('docs/card.alert.dismissible_title')"
+    :description="__('docs/card.alert.dismissible_desc')"
+>
+    <x-slot:actions>
+        <vibe:button size="xs" variant="primary">
+            {{ __('docs/card.alert.dismissible_action') }}
+        </vibe:button>
+    </x-slot:actions>
+</vibe:card.alert>
+                    </vibe:preview.code>
+                    <div class="w-full p-2">
+                        <vibe:card.alert
+                            variant="primary"
+                            dismissible
+                            :title="__('docs/card.alert.dismissible_title')"
+                            :description="__('docs/card.alert.dismissible_desc')"
+                        >
+                            <x-slot:actions>
+                                <vibe:button size="xs" variant="primary">
+                                    {{ __('docs/card.alert.dismissible_action') }}
+                                </vibe:button>
+                            </x-slot:actions>
+                        </vibe:card.alert>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 7. Props & Slots Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/card.props.title') }}</h2>
@@ -373,6 +458,39 @@
                             ];
                         @endphp
                         @foreach ($cardProps as [$prop, $type, $default, $desc])
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{!! $desc !!}</vibe:table.cell>
+                            </vibe:table.row>
+                        @endforeach
+                    </vibe:table.rows>
+                </vibe:table>
+
+                {{-- vibe:card.alert Props --}}
+                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:card.alert&gt;</p>
+                <vibe:table>
+                    <vibe:table.header>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/card.props.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/card.props.columns.type') }}</vibe:table.column>
+                        <vibe:table.column class="whitespace-nowrap">{{ __('docs/card.props.columns.default') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/card.props.columns.desc') }}</vibe:table.column>
+                    </vibe:table.header>
+                    <vibe:table.rows>
+                        @php
+                            $cardAlertProps = [
+                                ['variant', 'string', "'info'", __('docs/card.alert_props.items.variant')],
+                                ['appearance', 'string', "'subtle'", __('docs/card.alert_props.items.appearance')],
+                                ['size', 'string', "'md'", __('docs/card.alert_props.items.size')],
+                                ['title', 'string|null', 'null', __('docs/card.alert_props.items.title')],
+                                ['description', 'string|null', 'null', __('docs/card.alert_props.items.description')],
+                                ['icon', 'string|bool|null', 'null', __('docs/card.alert_props.items.icon')],
+                                ['dismissible', 'bool', 'false', __('docs/card.alert_props.items.dismissible')],
+                                ['rounded', 'string', "'rounded-xl'", __('docs/card.alert_props.items.rounded')],
+                            ];
+                        @endphp
+                        @foreach ($cardAlertProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>

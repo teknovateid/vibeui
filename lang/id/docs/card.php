@@ -66,10 +66,30 @@ return [
         'growth_conversion' => '+1.2% bln ini',
     ],
 
-    // Section 6: Props & Slots
+    // Section 6: Card Alert (<vibe:card.alert>)
+    'alert' => [
+        'title' => 'Card Alert (<vibe:card.alert>)',
+        'desc' => 'Komponen kartu notifikasi terintegrasi dalam keluarga Card untuk menampilkan pesan status, peringatan sistem, atau konfirmasi dengan dukungan varian warna, gaya penampilan (<code class="font-mono text-xs text-foreground">subtle</code>, <code class="font-mono text-xs text-foreground">outline</code>, <code class="font-mono text-xs text-foreground">solid</code>, <code class="font-mono text-xs text-foreground">accent-left</code>), tombol aksi, dan tombol dismiss interaktif.',
+        'preview_title' => 'Varian Card Alert',
+        'info_title' => 'Pembaruan Tersedia',
+        'info_desc' => 'Versi terbaru sistem telah dirilis. Silakan muat ulang halaman untuk memperbarui komponen.',
+        'success_title' => 'Penyimpanan Berhasil',
+        'success_desc' => 'Perubahan profil dan konfigurasi integrasi Anda telah berhasil disimpan ke cloud.',
+        'warning_title' => 'Koneksi API Tidak Stabil',
+        'warning_desc' => 'Layanan webhook sedang mengalami latensi tinggi. Sinkronisasi data mungkin tertunda beberapa saat.',
+        'danger_title' => 'Pembayaran Gagal',
+        'danger_desc' => 'Metode pembayaran utama Anda ditolak oleh penerbit kartu. Harap perbarui kartu kredit Anda.',
+        'accent_preview_title' => 'Gaya Accent-Left & Solid',
+        'dismissible_preview_title' => 'Alert Interaktif & Aksi',
+        'dismissible_title' => 'Tips Keamanan Akun',
+        'dismissible_desc' => 'Aktifkan passkey biometric untuk pengalaman login tanpa kata sandi yang lebih cepat dan aman.',
+        'dismissible_action' => 'Aktifkan Sekarang',
+    ],
+
+    // Section 7: Props & Slots
     'props' => [
         'title' => 'Referensi Props & Subkomponen',
-        'desc' => 'Daftar lengkap atribut prop dan subkomponen yang dapat digunakan pada komponen <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code>.',
+        'desc' => 'Daftar lengkap atribut prop dan subkomponen yang dapat digunakan pada keluarga komponen <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code> dan <code class="font-mono text-xs text-foreground">&lt;vibe:card.alert&gt;</code>.',
         'columns' => [
             'prop' => 'Prop',
             'type' => 'Tipe',
@@ -103,5 +123,19 @@ return [
         'description' => 'Elemen deskripsi pendukung judul kartu dengan teks muted.',
         'content' => 'Kontainer pembungkus isi konten utama kartu.',
         'footer' => 'Bagian footer kartu yang dilengkapi garis pemisah atas dan penyusunan tombol aksi.',
+    ],
+
+    'alert_props' => [
+        'title' => 'Props <vibe:card.alert>',
+        'items' => [
+            'variant' => "Varian status warna: `'info'`, `'success'`, `'warning'`, `'destructive'` (atau `'danger'`), `'primary'`, atau `'default'`. Default: `'info'`.",
+            'appearance' => "Gaya visual alert: `'subtle'`, `'outline'`, `'solid'`, atau `'accent-left'`. Default: `'subtle'`.",
+            'size' => "Skala ukuran font & padding: `'sm'`, `'md'`, atau `'lg'`. Default: `'md'`.",
+            'title' => 'Teks judul utama alert.',
+            'description' => 'Teks deskripsi pendukung detail alert.',
+            'icon' => 'Ikon SVG atau HTML kustom. Disesuaikan otomatis dengan varian jika dikosongkan. Set `:icon="false"` untuk menyembunyikan.',
+            'dismissible' => 'Boolean untuk mengaktifkan tombol tutup interaktif dengan animasi Alpine.js.',
+            'rounded' => "Kelas sudut membulat Tailwind: misal `'rounded-xl'`, `'rounded-lg'`. Default: `'rounded-xl'`.",
+        ],
     ],
 ];

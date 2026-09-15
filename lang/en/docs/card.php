@@ -66,10 +66,30 @@ return [
         'growth_conversion' => '+1.2% this mo',
     ],
 
-    // Section 6: Props & Slots
+    // Section 6: Card Alert (<vibe:card.alert>)
+    'alert' => [
+        'title' => 'Card Alert (<vibe:card.alert>)',
+        'desc' => 'Integrated notification card within the Card family designed to present status messages, system warnings, or confirmations with rich color variants, visual appearances (<code class="font-mono text-xs text-foreground">subtle</code>, <code class="font-mono text-xs text-foreground">outline</code>, <code class="font-mono text-xs text-foreground">solid</code>, <code class="font-mono text-xs text-foreground">accent-left</code>), action buttons, and interactive dismissibility.',
+        'preview_title' => 'Card Alert Variants',
+        'info_title' => 'Update Available',
+        'info_desc' => 'A new version of the application has been released. Please refresh your browser to update.',
+        'success_title' => 'Changes Saved Successfully',
+        'success_desc' => 'Your profile and integration settings have been synchronized and stored to the cloud.',
+        'warning_title' => 'API Latency Detected',
+        'warning_desc' => 'Webhooks service is currently experiencing elevated latency. Sync operations may be delayed.',
+        'danger_title' => 'Payment Failed',
+        'danger_desc' => 'Your default payment method was declined by the card issuer. Please update your billing details.',
+        'accent_preview_title' => 'Accent-Left & Solid Styles',
+        'dismissible_preview_title' => 'Interactive Dismissible & Actions',
+        'dismissible_title' => 'Account Security Tip',
+        'dismissible_desc' => 'Activate biometric passkeys for a faster, passwordless, and significantly safer authentication experience.',
+        'dismissible_action' => 'Enable Now',
+    ],
+
+    // Section 7: Props & Slots
     'props' => [
         'title' => 'Props & Subcomponents Reference',
-        'desc' => 'Comprehensive list of props and subcomponents available for the <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code> component.',
+        'desc' => 'Comprehensive list of props and subcomponents available for the <code class="font-mono text-xs text-foreground">&lt;vibe:card&gt;</code> and <code class="font-mono text-xs text-foreground">&lt;vibe:card.alert&gt;</code> component family.',
         'columns' => [
             'prop' => 'Prop',
             'type' => 'Type',
@@ -103,5 +123,19 @@ return [
         'description' => 'Supporting description element beneath card title in muted text.',
         'content' => 'Main card body content wrapper.',
         'footer' => 'Card footer section with top divider and action button placement.',
+    ],
+
+    'alert_props' => [
+        'title' => 'Props <vibe:card.alert>',
+        'items' => [
+            'variant' => "Status color variant: `'info'`, `'success'`, `'warning'`, `'destructive'` (or `'danger'`), `'primary'`, or `'default'`. Default: `'info'`.",
+            'appearance' => "Visual appearance style: `'subtle'`, `'outline'`, `'solid'`, or `'accent-left'`. Default: `'subtle'`.",
+            'size' => "Font and padding scale: `'sm'`, `'md'`, or `'lg'`. Default: `'md'`.",
+            'title' => 'Primary title text for the alert.',
+            'description' => 'Detailed body or descriptive text for the alert.',
+            'icon' => 'Displayed icon SVG or HTML markup. Automatically assigned based on variant if empty. Set `:icon="false"` to hide.',
+            'dismissible' => 'Boolean indicating whether to render an interactive close button with Alpine.js transition.',
+            'rounded' => "Tailwind border radius class: e.g. `'rounded-xl'`, `'rounded-lg'`. Default: `'rounded-xl'`.",
+        ],
     ],
 ];
