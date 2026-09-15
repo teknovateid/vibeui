@@ -233,14 +233,16 @@ class InstallCommand extends Command
      */
     public function getVibeAssets(): array
     {
-        $viewsDir = __DIR__.'/../../resources/views/vibe';
-        if (! is_dir($viewsDir)) {
-            $viewsDir = resource_path('views/vibe');
-        }
+        $viewsDirs = array_filter([
+            __DIR__.'/../../resources/views/vibe',
+            resource_path('views/vibe'),
+            __DIR__.'/../../stubs/Auth/layouts',
+            resource_path('views/auth/layouts'),
+        ], 'is_dir');
 
         $assets = [];
 
-        if (is_dir($viewsDir)) {
+        foreach ($viewsDirs as $viewsDir) {
             $files = File::allFiles($viewsDir);
             foreach ($files as $file) {
                 if (str_ends_with($file->getFilename(), '.blade.php')) {
@@ -251,7 +253,10 @@ class InstallCommand extends Command
                         foreach ($matches[1] as $group) {
                             if (preg_match_all("/['\"]([^'\"]+)['\"]/", $group, $assetMatches)) {
                                 foreach ($assetMatches[1] as $asset) {
-                                    $assets[] = trim($asset);
+                                    $asset = trim($asset);
+                                    if (str_starts_with($asset, 'resources/css/vibe/') || str_starts_with($asset, 'resources/js/vibe/')) {
+                                        $assets[] = $asset;
+                                    }
                                 }
                             }
                         }
@@ -260,11 +265,19 @@ class InstallCommand extends Command
                     // Matches single string syntax: @vite('...')
                     if (preg_match_all("/@vite\(\s*['\"]([^'\"]+)['\"]\s*\)/", $content, $singleMatches)) {
                         foreach ($singleMatches[1] as $asset) {
-                            $assets[] = trim($asset);
+                            $asset = trim($asset);
+                            if (str_starts_with($asset, 'resources/css/vibe/') || str_starts_with($asset, 'resources/js/vibe/')) {
+                                $assets[] = $asset;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        // Always guarantee passkeys.js is included if the file exists
+        if (File::exists(__DIR__.'/../../resources/js/vibe/passkeys.js') || File::exists(resource_path('js/vibe/passkeys.js'))) {
+            $assets[] = 'resources/js/vibe/passkeys.js';
         }
 
         $assets = array_values(array_unique(array_filter($assets)));
@@ -285,6 +298,7 @@ class InstallCommand extends Command
             'resources/js/vibe/form.js',
             'resources/js/vibe/grid.js',
             'resources/js/vibe/highlightjs.js',
+            'resources/js/vibe/passkeys.js',
             'resources/js/vibe/table.js',
         ];
     }

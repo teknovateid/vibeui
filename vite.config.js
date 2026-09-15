@@ -123,6 +123,7 @@ export default defineConfig({
                 'resources/js/vibe/grid.js',
                 'resources/js/vibe/highlightjs.js',
                 'resources/js/vibe/table.js',
+                'resources/js/vibe/passkeys.js',
             ],
             refresh: true,
             fonts: [

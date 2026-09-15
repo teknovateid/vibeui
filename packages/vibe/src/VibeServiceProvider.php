@@ -14,6 +14,7 @@ use Livewire\Blaze\BlazeManager;
 use Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets;
 use TailwindMerge\Contracts\TailwindMergeContract;
 use TailwindMerge\TailwindMerge;
+use Teknovate\VibeUi\Commands\AuthCommand;
 use Teknovate\VibeUi\Commands\CleanCommand;
 use Teknovate\VibeUi\Commands\ComponentCommand;
 use Teknovate\VibeUi\Commands\CrudCommand;
@@ -86,7 +87,12 @@ class VibeServiceProvider extends ServiceProvider
 
         // Register anonymous component path for the 'vibe' namespace.
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
+        // User published views take precedence, fallback to package views.
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
+        $packageViews = __DIR__.'/../resources/views/vibe';
+        if (is_dir($packageViews)) {
+            Blade::anonymousComponentPath($packageViews, 'vibe');
+        }
 
         // Override livewire-tables views with Vibe UI custom theme views
         $vibeDatatableViews = resource_path('views/vibe/datatable');
@@ -354,6 +360,7 @@ class VibeServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $commands = [
+                AuthCommand::class,
                 LayoutCommand::class,
                 ComponentCommand::class,
                 VibeCommand::class,

@@ -18,6 +18,7 @@
     'suffix' => null,
     'disabled' => false,
     'readonly' => false,
+    'viewable' => false,
 ])
 
 @php
@@ -30,9 +31,10 @@
 
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
     $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
+    $isViewable = ($viewable || $attributes->has('viewable')) && $type === 'password';
 
     $hasLeading = isset($icon) || !empty($prefix);
-    $hasTrailing = isset($trailingIcon) || !empty($suffix);
+    $hasTrailing = isset($trailingIcon) || !empty($suffix) || $isViewable;
 
     // Outer control box classes (holds border, background, focus ring, rounded, height)
     $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
@@ -146,7 +148,7 @@
         <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
     @endif
 
-    <div {{ $attributes->only('class')->twMerge(['class' => $controlClasses]) }} onclick="if (!event.target.closest('button, a, input')) this.querySelector('input')?.focus()">
+    <div @if($isViewable) x-data="{ showPassword: false }" @endif {{ $attributes->only('class')->twMerge(['class' => $controlClasses]) }} onclick="if (!event.target.closest('button, a, input')) this.querySelector('input')?.focus()">
         @if ($hasLeading)
             <div class="flex items-center {{ $leadingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
                 @if (isset($icon))
@@ -158,7 +160,7 @@
             </div>
         @endif
 
-        <input type="{{ $type }}" id="{{ $id }}" name="{{ $name }}" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif @if ($isDisabled) disabled @endif @if ($isReadonly) readonly @endif {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}>
+        <input @if($isViewable) :type="showPassword ? 'text' : 'password'" @else type="{{ $type }}" @endif id="{{ $id }}" name="{{ $name }}" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif @if ($isDisabled) disabled @endif @if ($isReadonly) readonly @endif {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}>
 
         @if ($hasTrailing)
             <div class="flex items-center {{ $trailingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
@@ -167,6 +169,27 @@
                 @endif
                 @if (isset($trailingIcon))
                     <span class="size-4 flex items-center justify-center shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">{{ $trailingIcon }}</span>
+                @endif
+                @if ($isViewable)
+                    <button 
+                        type="button" 
+                        tabindex="-1"
+                        @click.stop="showPassword = !showPassword" 
+                        class="text-muted-foreground hover:text-foreground p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
+                        aria-label="Toggle password visibility"
+                        :aria-pressed="showPassword"
+                    >
+                        <svg x-show="!showPassword" class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <svg x-show="showPassword" x-cloak class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24" />
+                            <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68" />
+                            <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61" />
+                            <line x1="2" x2="22" y1="2" y2="22" />
+                        </svg>
+                    </button>
                 @endif
             </div>
         @endif

@@ -84,5 +84,42 @@ return [
             '/password/*',
         ],
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vibe Authentication System Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Pengaturan untuk sistem otentikasi Vibe UI (Starter Kit & Auth).
+    | Anda dapat menentukan strategi kredensial login default dan varian
+    | layout bawaan yang digunakan oleh modul otentikasi.
+    |
+    */
+    'auth' => [
+        /*
+        | Kredensial Login yang Diizinkan:
+        | Anda dapat menentukan array kredensial yang diizinkan untuk login:
+        | - ['email']                        : Login hanya menggunakan email (Default).
+        | - ['email', 'username']            : Login menggunakan email atau username.
+        | - ['email', 'username', 'phone']   : Login menggunakan email, username, atau no. hp.
+        | - ['username']                     : Login khusus username.
+        | - ['phone']                        : Login khusus nomor handphone.
+        */
+        'login_by' => ['email'],
+
+        /*
+        | Layout Otentikasi Default:
+        | - 'card'              : Tampilan kartu berelevasi di tengah (Default).
+        | - 'simple'            : Tampilan minimalis bersih rata tengah.
+        | - 'split'             : Tampilan split screen 2-kolom (branding + form).
+        */
+        'default_layout' => 'card',
+
+        /*
+        | Pengalihan Setelah Login / Registrasi Berhasil:
+        | Gunakan path seperti '/docs' atau URL tujuan setelah otentikasi.
+        */
+        'redirect_after_login' => '/docs',
+    ],
 ];
 

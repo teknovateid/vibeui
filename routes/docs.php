@@ -11,6 +11,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
+    Route::view('/auth', 'docs.auth.index')->name('auth.index');
    
     Route::prefix('form')->name('form.')->group(function () {
         Route::get('/', [FormController::class, 'index'])->name('index');

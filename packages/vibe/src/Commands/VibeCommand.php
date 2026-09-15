@@ -52,6 +52,8 @@ class VibeCommand extends Command
 
         if ($action === 'install') {
             $this->call('vibe:install');
+        } elseif ($action === 'auth') {
+            $this->call('vibe:auth');
         } elseif ($action === 'component') {
             $this->call('vibe:component');
         } elseif ($action === 'table') {
@@ -78,6 +80,7 @@ class VibeCommand extends Command
     {
         $actions = [];
 
+        $actions['auth'] = 'Scaffold Authentication system (Login, Register, Password Reset)';
         $actions['page'] = 'Generate a new page inside a layout';
         $actions['table'] = 'Create a new Livewire DataTable component';
         $actions['layout'] = 'Generate a layout panel';

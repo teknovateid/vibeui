@@ -30,6 +30,7 @@ JS);
     $expectedAssets = $command->getVibeAssets();
 
     expect($expectedAssets)->not->toBeEmpty();
+    expect($expectedAssets)->toContain('resources/js/vibe/passkeys.js');
 
     foreach ($expectedAssets as $asset) {
         expect($content)->toContain("'{$asset}'");
