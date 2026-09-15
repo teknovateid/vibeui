@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.16] - 2026-09-15
+
+### 🚀 Features
+- feat: support dynamic URL resolution for idle timeouts and password confirmation redirection (a51af9f)
+- feat: add security middleware and account settings views with idle timeout and password confirmation (ab3fa17)
+
+
 ## [0.1.15] - 2026-09-15
 
 ### 🚀 Features
