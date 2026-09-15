@@ -4,10 +4,6 @@
     'status' => null,
 ])
 
-@php
-    $statusMessage = $status ?? session('status');
-@endphp
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 
@@ -72,10 +68,8 @@
                     </div>
                 @endif
 
-                @if ($statusMessage)
-                    <vibe:alert variant="success" class="text-xs">
-                        {{ $statusMessage }}
-                    </vibe:alert>
+                @if ($status)
+                    <vibe:card.alert variant="success" size="sm" :description="$status" />
                 @endif
 
                 <div>
