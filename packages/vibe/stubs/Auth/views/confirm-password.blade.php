@@ -3,17 +3,19 @@
 @endpush
 
 <div class="space-y-4">
-    @if(session('status') === 'idle_timeout' || session('auth.session_locked'))
-        <div class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-600 dark:text-amber-400 flex items-start gap-2.5">
-            <svg class="size-4 shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-            </svg>
-            <div class="space-y-0.5">
-                <p class="font-semibold">Sesi Terkunci Otomatis</p>
-                <p class="text-muted-foreground">Tidak ada aktivitas selama beberapa saat. Masukkan kata sandi atau gunakan passkey untuk membuka kunci, atau keluar jika bukan perangkat Anda.</p>
-            </div>
-        </div>
+    @if (session('status') === 'idle_timeout' || session('auth.session_locked'))
+        <vibe:card.alert
+            variant="warning"
+            size="sm"
+            title="Sesi Terkunci Otomatis"
+            description="Tidak ada aktivitas selama beberapa saat. Masukkan kata sandi atau gunakan passkey untuk membuka kunci, atau keluar jika bukan perangkat Anda."
+        />
+    @elseif (session('status'))
+        <vibe:card.alert variant="success" size="sm" :description="session('status')" />
+    @endif
+
+    @if (session('error'))
+        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" />
     @endif
 
     {{-- Passkey Confirm Button --}}
@@ -35,8 +37,8 @@
                 </svg>
                 <span>Confirm with passkey</span>
             </span>
-            <span class="vibe-passkey-loading inline-flex items-center gap-2" style="display: none;">
-                <svg class="animate-spin size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <span class="vibe-passkey-loading inline-flex items-center justify-center gap-2" style="display: none;">
+                <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -55,8 +57,8 @@
         <div class="pt-2">
             <vibe:button type="submit" variant="primary" class="w-full justify-center flex shadow-xs" wire:loading.attr="disabled" wire:target="confirmPassword">
                 <span wire:loading.remove wire:target="confirmPassword">Confirm</span>
-                <span wire:loading wire:target="confirmPassword" class="inline-flex items-center gap-2">
-                    <svg class="animate-spin size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <span wire:loading.inline-flex wire:target="confirmPassword" class="inline-flex items-center justify-center gap-2">
+                    <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

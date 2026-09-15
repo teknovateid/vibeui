@@ -1,4 +1,13 @@
-<form wire:submit="register" class="space-y-4">
+<div class="space-y-4">
+    @if (session('status'))
+        <vibe:card.alert variant="success" size="sm" :description="session('status')" />
+    @endif
+
+    @if (session('error'))
+        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" />
+    @endif
+
+    <form wire:submit="register" class="space-y-4">
     {{-- Full Name --}}
     <vibe:input 
         wire:model="name" 
@@ -85,9 +94,9 @@
             wire:target="register"
         >
             <span wire:loading.remove wire:target="register">{{ __('auth.actions.register') }}</span>
-            <span wire:loading wire:target="register" class="inline-flex items-center gap-2">
-                <svg class="animate-spin size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                {{ __('auth.actions.registering') }}
+            <span wire:loading.inline-flex wire:target="register" class="inline-flex items-center justify-center gap-2">
+                <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span>{{ __('auth.actions.registering') }}</span>
             </span>
         </vibe:button>
     </div>
@@ -106,3 +115,4 @@
         </p>
     @endif
 </form>
+</div>

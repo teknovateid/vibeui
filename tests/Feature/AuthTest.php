@@ -261,5 +261,52 @@ test('login redirects using URL path when configured with path string', function
         ->assertRedirect(url('/docs'));
 });
 
+test('login screen displays status card alert when session status is present', function () {
+    $response = $this->withSession(['status' => 'Password reset successful'])
+        ->get('/login');
+
+    $response->assertStatus(200);
+    $response->assertSee('Password reset successful');
+});
+
+test('login screen displays warning card alert with action when session warning is present', function () {
+    $response = $this->withSession([
+        'warning' => 'Development IP Notice',
+        'localhost_url' => 'http://localhost:8000/login',
+    ])->get('/login');
+
+    $response->assertStatus(200);
+    $response->assertSee('Development IP Notice');
+    $response->assertSee('http://localhost:8000/login');
+});
+
+test('login screen displays error card alert when passkey error is present', function () {
+    $response = $this->withSession(['error' => 'Biometric credential cancelled'])
+        ->get('/login');
+
+    $response->assertStatus(200);
+    $response->assertSee('Biometric credential cancelled');
+});
+
+test('forgot password screen displays status card alert', function () {
+    $response = $this->withSession(['status' => 'Reset link sent to your email'])
+        ->get('/forgot-password');
+
+    $response->assertStatus(200);
+    $response->assertSee('Reset link sent to your email');
+});
+
+test('confirm password screen displays warning card alert on idle timeout', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->withSession(['status' => 'idle_timeout'])
+        ->get('/confirm-password');
+
+    $response->assertStatus(200);
+    $response->assertSee('Sesi Terkunci Otomatis');
+});
+
+
 
 

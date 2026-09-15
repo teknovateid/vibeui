@@ -2,87 +2,33 @@
 
     {{-- Status Session Alert --}}
     @if (session('status'))
-        <div class="rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-3.5 text-xs text-emerald-800 dark:text-emerald-200">
-            {{ session('status') }}
-        </div>
+        <vibe:card.alert variant="success" size="sm" :description="session('status')" />
     @endif
 
     {{-- Development IP Warning Notice --}}
     @if (session('warning'))
-        <div class="rounded-xl border border-amber-500/30 bg-amber-500/10 dark:bg-amber-500/15 p-3.5 text-amber-950 dark:text-amber-100 shadow-2xs space-y-2.5 transition-all">
-            <div class="flex items-start gap-2.5">
-                <div class="p-1.5 rounded-lg bg-amber-500/20 text-amber-700 dark:text-amber-300 shrink-0 mt-0.5">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                </div>
-
-                <div class="flex-1 min-w-0 space-y-1">
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold text-amber-900 dark:text-amber-200">{{ __('auth.passkey.dev_mode_title') }}</span>
-                    </div>
-                    <p class="text-[11px] sm:text-xs leading-relaxed text-amber-900/80 dark:text-amber-200/80">
-                        {{ session('warning') }}
-                    </p>
-                </div>
-
-                <button type="button" onclick="this.closest('.rounded-xl').remove()" class="text-amber-800/60 hover:text-amber-900 dark:text-amber-200/60 dark:hover:text-amber-100 shrink-0 p-1 rounded-md hover:bg-amber-500/10 transition-colors cursor-pointer" title="Tutup">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
+        <vibe:card.alert variant="warning" size="sm" dismissible :title="__('auth.passkey.dev_mode_title')" :description="session('warning')">
             @if (session('localhost_url'))
-                <div class="flex items-center justify-end pt-1">
-                    <a href="{{ session('localhost_url') }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white shadow-2xs transition-colors cursor-pointer">
+                <x-slot:actions>
+                    <vibe:button href="{{ session('localhost_url') }}" size="xs" variant="primary">
                         <span>{{ __('auth.passkey.switch_to_localhost') }}</span>
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                         </svg>
-                    </a>
-                </div>
+                    </vibe:button>
+                </x-slot:actions>
             @endif
-        </div>
+        </vibe:card.alert>
     @endif
 
     {{-- Passkey Error Notice --}}
     @if (session('error'))
-        <div class="relative overflow-hidden rounded-xl border border-destructive/25 bg-destructive/10 dark:bg-destructive/15 p-3.5 text-destructive shadow-2xs transition-all space-y-2.5">
-            <div class="flex items-start gap-2.5">
-                <div class="p-1 rounded-lg bg-destructive/15 text-destructive shrink-0 mt-0.5">
-                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
-                </div>
-                <div class="flex-1 min-w-0 space-y-1">
-                    <div class="font-semibold text-xs text-destructive dark:text-red-400">
-                        {{ __('auth.passkey.failed_title') }}
-                    </div>
-                    <p class="text-[12px] leading-relaxed text-destructive/90 dark:text-red-300">
-                        {{ session('error') }}
-                    </p>
-                </div>
-                <button type="button" onclick="this.closest('.rounded-xl').remove()" class="text-destructive/60 hover:text-destructive shrink-0 p-1 rounded-md hover:bg-destructive/10 transition-colors cursor-pointer" title="Tutup">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+        <vibe:card.alert variant="destructive" size="sm" dismissible :title="__('auth.passkey.failed_title')" :description="session('error')" />
     @endif
 
     {{-- Passkey Login Section --}}
-    <div class="space-y-3"> 
-        <vibe:button 
-            type="button" 
-            variant="outline" 
-            class="w-full justify-center shadow-2xs font-medium cursor-pointer" 
-            data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}"
-            onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')"
-        >
+    <div class="space-y-3">
+        <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
             <span class="vibe-passkey-text inline-flex items-center gap-2">
                 <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
@@ -97,8 +43,8 @@
                 </svg>
                 <span>{{ __('auth.passkey.login_button') }}</span>
             </span>
-            <span class="vibe-passkey-loading inline-flex items-center gap-2" style="display: none;">
-                <svg class="animate-spin size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <span class="vibe-passkey-loading inline-flex items-center justify-center gap-2" style="display: none;">
+                <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                 </svg>
@@ -138,12 +84,12 @@
         <div class="pt-2">
             <vibe:button type="submit" variant="primary" class="w-full justify-center flex shadow-xs" wire:loading.attr="disabled" wire:target="authenticate">
                 <span wire:loading.remove wire:target="authenticate">{{ __('auth.actions.login') }}</span>
-                <span wire:loading wire:target="authenticate" class="inline-flex items-center gap-2">
-                    <svg class="animate-spin size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <span wire:loading.inline-flex wire:target="authenticate" class="inline-flex items-center justify-center gap-2">
+                    <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    {{ __('auth.actions.logging_in') }}
+                    <span>{{ __('auth.actions.logging_in') }}</span>
                 </span>
             </vibe:button>
         </div>
