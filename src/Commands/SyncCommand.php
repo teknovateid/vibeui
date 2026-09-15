@@ -71,6 +71,17 @@ class SyncCommand extends Command
                 'dest' => base_path('packages/vibe/lang/id/vibe'),
                 'label' => 'Lang ID',
             ],
+            [
+                'src' => resource_path('views/auth/layouts'),
+                'dest' => base_path('packages/vibe/stubs/Auth/layouts'),
+                'label' => 'Auth Layouts',
+            ],
+            [
+                'src' => resource_path('views/auth'),
+                'dest' => base_path('packages/vibe/stubs/Auth/views'),
+                'label' => 'Auth Views',
+                'shallow' => true,
+            ],
         ];
     }
 
@@ -108,11 +119,12 @@ class SyncCommand extends Command
             }
 
             // 1. Check/copy source files to destination
-            $srcFiles = File::allFiles($srcDir);
+            $isShallow = ! empty($rule['shallow']);
+            $srcFiles = $isShallow ? File::files($srcDir) : File::allFiles($srcDir);
             $expectedDestFiles = [];
 
             foreach ($srcFiles as $file) {
-                $relativePath = $file->getRelativePathname();
+                $relativePath = $isShallow ? $file->getFilename() : $file->getRelativePathname();
                 $destPath = $destDir.DIRECTORY_SEPARATOR.$relativePath;
                 $expectedDestFiles[] = $destPath;
 
@@ -146,12 +158,13 @@ class SyncCommand extends Command
 
             // 2. Check/delete orphan files in destination
             if (File::isDirectory($destDir)) {
-                $destFiles = File::allFiles($destDir);
+                $destFiles = $isShallow ? File::files($destDir) : File::allFiles($destDir);
                 foreach ($destFiles as $destFile) {
                     $destPath = $destFile->getRealPath();
                     if (! in_array($destPath, $expectedDestFiles)) {
+                        $relName = $isShallow ? $destFile->getFilename() : $destFile->getRelativePathname();
                         if ($checkOnly) {
-                            $differences[] = "[Orphan file in package] {$label}: ".$destFile->getRelativePathname();
+                            $differences[] = "[Orphan file in package] {$label}: ".$relName;
                         } else {
                             File::delete($destPath);
                             $totalDeleted++;
