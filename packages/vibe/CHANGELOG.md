@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.18] - 2026-09-15
+
+### 🚀 Features
+- feat: add English and Indonesian localization files and language switcher component to authentication layouts (0e02dd8)
+
+
 ## [0.1.17] - 2026-09-15
 
 ### 🚀 Features
