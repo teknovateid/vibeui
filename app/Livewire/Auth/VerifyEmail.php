@@ -61,8 +61,8 @@ class VerifyEmail extends Component
         $view = view('auth.verify-email');
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.verify_email'),
-            'description' => __('auth.titles.verify_email_description'),
+            'title' => __('auth/titles.verify_email'),
+            'description' => __('auth/titles.verify_email_description'),
         ]);
     }
 }

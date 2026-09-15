@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
             'password' => $request->password,
         ])) {
             return response()->json([
-                'errors' => ['password' => [__('auth.password')]],
+                'errors' => ['password' => [__('auth/errors.password')]],
             ], 422);
         }
 

@@ -40,12 +40,12 @@ class Register extends Component
     protected function validationAttributes(): array
     {
         return [
-            'name' => __('auth.fields.name'),
-            'email' => __('auth.fields.email'),
-            'username' => __('auth.fields.username'),
-            'phone' => __('auth.fields.phone'),
-            'password' => __('auth.fields.password'),
-            'password_confirmation' => __('auth.fields.password_confirmation'),
+            'name' => __('auth/fields.name'),
+            'email' => __('auth/fields.email'),
+            'username' => __('auth/fields.username'),
+            'phone' => __('auth/fields.phone'),
+            'password' => __('auth/fields.password'),
+            'password_confirmation' => __('auth/fields.password_confirmation'),
         ];
     }
 
@@ -77,8 +77,8 @@ class Register extends Component
         $view = view('auth.register');
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.register'),
-            'description' => __('auth.titles.register_description'),
+            'title' => __('auth/titles.register'),
+            'description' => __('auth/titles.register_description'),
         ]);
     }
 }

@@ -195,7 +195,7 @@ test('login screen displays passkey login button and webauthn autocomplete', fun
     $response = $this->get('/login');
 
     $response->assertStatus(200);
-    $response->assertSee(__('auth.passkey.login_button'));
+    $response->assertSee(__('auth/passkey.login_button'));
     $response->assertSee('autocomplete="username webauthn"', false);
 });
 
@@ -304,7 +304,7 @@ test('confirm password screen displays warning card alert on idle timeout', func
         ->get('/confirm-password');
 
     $response->assertStatus(200);
-    $response->assertSee('Sesi Terkunci Otomatis');
+    $response->assertSee(__('auth/messages.session_locked'));
 });
 
 
