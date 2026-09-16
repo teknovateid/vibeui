@@ -29,7 +29,7 @@ class ForgotPassword extends Component
     protected function validationAttributes(): array
     {
         return [
-            'email' => __('auth.fields.email'),
+            'email' => __('auth/fields.email'),
         ];
     }
 
@@ -60,8 +60,8 @@ class ForgotPassword extends Component
         $view = view('auth.forgot-password');
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.forgot_password'),
-            'description' => __('auth.titles.forgot_password_description'),
+            'title' => __('auth/titles.forgot_password'),
+            'description' => __('auth/titles.forgot_password_description'),
         ]);
     }
 }

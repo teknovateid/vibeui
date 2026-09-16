@@ -50,9 +50,9 @@ trait AuthenticatesUsers
 
         if (count($fields) === 1) {
             return match ($fields[0]) {
-                'username' => __('auth.fields.username'),
-                'phone' => __('auth.fields.phone'),
-                default => __('auth.fields.email'),
+                'username' => __('auth/fields.username'),
+                'phone' => __('auth/fields.phone'),
+                default => __('auth/fields.email'),
             };
         }
 
@@ -61,22 +61,22 @@ trait AuthenticatesUsers
         $hasPhone = in_array('phone', $fields, true);
 
         if ($hasEmail && $hasUsername && $hasPhone) {
-            return __('auth.fields.all_credentials');
+            return __('auth/fields.all_credentials');
         }
 
         if ($hasEmail && $hasUsername) {
-            return __('auth.fields.email_or_username');
+            return __('auth/fields.email_or_username');
         }
 
         if ($hasEmail && $hasPhone) {
-            return __('auth.fields.email_or_phone');
+            return __('auth/fields.email_or_phone');
         }
 
         if ($hasUsername && $hasPhone) {
-            return __('auth.fields.username_or_phone');
+            return __('auth/fields.username_or_phone');
         }
 
-        return __('auth.fields.credentials');
+        return __('auth/fields.credentials');
     }
 
     /**
@@ -88,9 +88,9 @@ trait AuthenticatesUsers
 
         if (count($fields) === 1) {
             return match ($fields[0]) {
-                'username' => __('auth.fields.username_placeholder'),
-                'phone' => __('auth.fields.phone_placeholder'),
-                default => __('auth.fields.email_placeholder'),
+                'username' => __('auth/fields.username_placeholder'),
+                'phone' => __('auth/fields.phone_placeholder'),
+                default => __('auth/fields.email_placeholder'),
             };
         }
 
@@ -99,22 +99,22 @@ trait AuthenticatesUsers
         $hasPhone = in_array('phone', $fields, true);
 
         if ($hasEmail && $hasUsername && $hasPhone) {
-            return __('auth.fields.email_placeholder').', '.__('auth.fields.username_placeholder').', '.__('auth.fields.phone_placeholder');
+            return __('auth/fields.email_placeholder').', '.__('auth/fields.username_placeholder').', '.__('auth/fields.phone_placeholder');
         }
 
         if ($hasEmail && $hasUsername) {
-            return __('auth.fields.email_placeholder').' / '.__('auth.fields.username_placeholder');
+            return __('auth/fields.email_placeholder').' / '.__('auth/fields.username_placeholder');
         }
 
         if ($hasEmail && $hasPhone) {
-            return __('auth.fields.email_placeholder').' / '.__('auth.fields.phone_placeholder');
+            return __('auth/fields.email_placeholder').' / '.__('auth/fields.phone_placeholder');
         }
 
         if ($hasUsername && $hasPhone) {
-            return __('auth.fields.username_placeholder').' / '.__('auth.fields.phone_placeholder');
+            return __('auth/fields.username_placeholder').' / '.__('auth/fields.phone_placeholder');
         }
 
-        return __('auth.fields.credentials_placeholder');
+        return __('auth/fields.credentials_placeholder');
     }
 
     /**

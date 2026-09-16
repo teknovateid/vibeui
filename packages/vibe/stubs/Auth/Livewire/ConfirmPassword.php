@@ -29,7 +29,7 @@ class ConfirmPassword extends Component
     protected function validationAttributes(): array
     {
         return [
-            'password' => __('auth.fields.password'),
+            'password' => __('auth/fields.password'),
         ];
     }
 
@@ -45,7 +45,7 @@ class ConfirmPassword extends Component
             'password' => $this->password,
         ])) {
             throw ValidationException::withMessages([
-                'password' => __('auth.password'),
+                'password' => __('auth/errors.password'),
             ]);
         }
 
@@ -80,8 +80,8 @@ class ConfirmPassword extends Component
         $view = view('auth.confirm-password');
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.confirm_password'),
-            'description' => __('auth.titles.confirm_password_description'),
+            'title' => __('auth/titles.confirm_password'),
+            'description' => __('auth/titles.confirm_password_description'),
         ]);
     }
 }

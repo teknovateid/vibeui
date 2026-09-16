@@ -39,7 +39,7 @@ class Login extends Component
     {
         return [
             'login' => $this->getLoginLabel(),
-            'password' => __('auth.fields.password'),
+            'password' => __('auth/fields.password'),
         ];
     }
 
@@ -98,7 +98,7 @@ class Login extends Component
         $seconds = RateLimiter::availableIn($key);
 
         throw ValidationException::withMessages([
-            'login' => trans('auth.throttle', [
+            'login' => trans('auth/errors.throttle', [
                 'seconds' => $seconds,
                 'minutes' => ceil($seconds / 60),
             ]),
@@ -129,8 +129,8 @@ class Login extends Component
         ]);
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.login'),
-            'description' => __('auth.titles.login_description'),
+            'title' => __('auth/titles.login'),
+            'description' => __('auth/titles.login_description'),
         ]);
     }
 }

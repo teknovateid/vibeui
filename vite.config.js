@@ -50,6 +50,16 @@ function vibeSyncPlugin() {
             label: 'Lang ID',
         },
         {
+            srcPattern: '/lang/en/auth/',
+            destDir: 'packages/vibe/lang/en/auth',
+            label: 'Lang EN Auth',
+        },
+        {
+            srcPattern: '/lang/id/auth/',
+            destDir: 'packages/vibe/lang/id/auth',
+            label: 'Lang ID Auth',
+        },
+        {
             srcPattern: '/resources/views/auth/layouts/',
             destDir: 'packages/vibe/stubs/Auth/layouts',
             label: 'Auth Layouts',
