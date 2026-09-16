@@ -298,7 +298,9 @@ class InstallCommand extends Command
             'resources/js/vibe/form.js',
             'resources/js/vibe/grid.js',
             'resources/js/vibe/highlightjs.js',
+            'resources/js/vibe/idle.js',
             'resources/js/vibe/passkeys.js',
+            'resources/js/vibe/qrcode.js',
             'resources/js/vibe/table.js',
         ];
     }
