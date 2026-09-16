@@ -2,6 +2,21 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.19] - 2026-09-16
+
+### 🚀 Features
+- feat: add settings page stubs, routes, and localized translation files (b235dac)
+- feat: add modular authentication language files for English and Indonesian and update stub references (7b4566c)
+- feat: require password confirmation for sensitive 2FA actions with configurable options (a2fba0f)
+- feat: add two-factor authentication support for user settings, stubs, and localization (444f00d)
+- feat: implement comprehensive multi-method two-factor authentication (2FA) support (dc5cd24)
+- feat: add QR code display and input components for OTP, phone, and currency (e2b52dc)
+- feat: add documentation pages, routes, and sidebar translations for authentication features (5556b42)
+
+### ⚡ Performance & Refactoring
+- refactor: migrate settings navigation to vibe components and enhance 2FA secret sanitization (4bf7115)
+
+
 ## [0.1.18] - 2026-09-15
 
 ### 🚀 Features
