@@ -105,9 +105,9 @@ return [
 
     // Section 7: Error & Validation
     'error' => [
-        'title' => 'Error & Validation',
-        'desc' => 'Automatically displays errors from Laravel <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> matching the input <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code>, or pass custom string messages via the prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
-        'preview_title' => 'Validation Error State',
+        'title' => 'Error, Validation & Shake Animation',
+        'desc' => 'Automatically displays errors from Laravel <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> matching the input <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code>, or pass custom string messages via the prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>. Use <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:animation="true"</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="shake"</code> to provide a shake animation on validation errors.',
+        'preview_title' => 'Validation Error State & Shake Animation',
         'label' => 'User Email',
         'placeholder' => 'invalid-email@',
         'message' => 'The email address format you entered is invalid.',
@@ -146,7 +146,7 @@ return [
     // Section 11: Slots
     'slots' => [
         'title' => 'Slots',
-        'desc' => 'Available custom slots for the component.',
+        'desc' => 'Available custom slots for the input component.',
         'columns' => [
             'slot' => 'Slot',
             'desc' => 'Description',
@@ -170,6 +170,7 @@ return [
         'info' => 'Helper note below the input. Hidden when error exists.',
         'error' => 'Custom error message or boolean to trigger error state.',
         'errorName' => 'Laravel validation error key if different from name (e.g. user.phone).',
+        'animation' => 'Animation effect ("shake", "pop", "pulse", "wobble", "auto", or boolean true for shake on error). Default: false.',
         'prefix' => 'Text on the left side of the input (e.g. "https://", "$").',
         'suffix' => 'Text on the right side of the input (e.g. ".com", "/month").',
         'class' => 'Extra classes for input merged via twMerge (e.g. "rounded-full" for pill style).',

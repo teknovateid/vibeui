@@ -10,6 +10,7 @@
     'maxWidth' => '2xl',
     'teleport' => true,
     'variant' => 'default',
+    'animation' => false,
     'containerClass' => null,
     'backdropClass' => null,
 ])
@@ -55,6 +56,21 @@
     open: {{ $persist ? "(() => { const s = window.VibeModal?.getStored('{$modalId}'); return s ? !!s.open : " . ($show ? 'true' : 'false') . '; })()' : ($show ? 'true' : 'false') }},
     modalId: '{{ $modalId }}',
     persist: {{ $persist ? 'true' : 'false' }},
+    animation: @js($animation),
+    isShaking: false,
+
+    triggerShake() {
+        this.isShaking = true;
+        setTimeout(() => { this.isShaking = false; }, 500);
+    },
+
+    onBackdropClick() {
+        if ('{{ $dismissible ? 'true' : 'false' }}' === 'true') {
+            this.close();
+        } else {
+            this.triggerShake();
+        }
+    },
 
     init() {
         if (this.persist && this.modalId) {
@@ -126,16 +142,16 @@
             }
         }
     }
-}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId || t === '*' || !t) close()" @toggle-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) { open ? close() : open = true; }" @keydown.escape.window="if (open && '{{ $dismissible ? 'true' : 'false' }}' === 'true') close()" class="vibe-modal-root">
+}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId || t === '*' || !t) close()" @toggle-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) { open ? close() : open = true; }" @keydown.escape.window="if (open) { if ('{{ $dismissible ? 'true' : 'false' }}' === 'true') { close(); } else { triggerShake(); } }" class="vibe-modal-root">
     @if ($teleport)
         <template x-teleport="body">
     @endif
 
     <div id="{{ $modalId }}" x-show="open" x-cloak class="vibe-modal-container fixed inset-0 z-60 overflow-y-auto {{ $containerClass }}" aria-labelledby="modal-title" role="dialog" aria-modal="true" data-dismissible="{{ $dismissible ? 'true' : 'false' }}" style="display: none;">
         <div class="flex justify-center min-h-screen p-4 text-center {{ $positionClasses }}">
-            <div x-show="open" x-transition.opacity class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-xs {{ $backdropClass }}" aria-hidden="true" @if ($dismissible) @click="close" @endif></div>
+            <div x-show="open" x-transition.opacity class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-xs {{ $backdropClass }}" aria-hidden="true" @click="onBackdropClick"></div>
 
-            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" {{ $attributes->twMerge(['class' => $dialogClasses]) }}>
+            <div x-show="open" :class="{ 'animate-vibe-shake': isShaking, 'animate-vibe-pop': animation === 'pop' || animation === 'bounce', 'animate-vibe-pulse': animation === 'pulse', 'animate-vibe-wobble': animation === 'wobble' }" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" {{ $attributes->twMerge(['class' => $dialogClasses]) }}>
                 @if ($dismissibleButton)
                     <div class="absolute top-4 right-4 z-10">
                         <vibe:modal.close />

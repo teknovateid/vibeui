@@ -30,6 +30,9 @@
                     @foreach (['sm', 'md', 'lg', 'xl'] as $s)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">pulse</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">pop</vibe:badge>
                 </div>
             </div>
 
@@ -161,7 +164,30 @@
                 </vibe:preview>
             </section>
 
-            {{-- 6. Icons & Prefix / Suffix --}}
+            {{-- 6. Animation & Pulse --}}
+            <section id="animasi-badge" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/badge.animation.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/badge.animation.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/badge.animation.preview_title')">
+                    <vibe:preview.code>
+<vibe:badge variant="destructive" pulse>{{ __('docs/badge.animation.live') }}</vibe:badge>
+<vibe:badge variant="success" animation="pulse">{{ __('docs/badge.animation.active') }}</vibe:badge>
+<vibe:badge variant="primary" animation="pop">{{ __('docs/badge.animation.new_tag') }}</vibe:badge>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center gap-4">
+                        <vibe:badge variant="destructive" pulse>{{ __('docs/badge.animation.live') }}</vibe:badge>
+                        <vibe:badge variant="success" animation="pulse">{{ __('docs/badge.animation.active') }}</vibe:badge>
+                        <vibe:badge variant="primary" animation="pop">{{ __('docs/badge.animation.new_tag') }}</vibe:badge>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 7. Icons & Prefix / Suffix --}}
             <section id="ikon-dan-addon" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/badge.icons_addons.title') }}</h2>
@@ -304,6 +330,8 @@
                                 ['suffix', 'string|null', 'null', __('docs/badge.props_items.suffix')],
                                 ['dot', 'bool', 'false', __('docs/badge.props_items.dot')],
                                 ['dotPulse', 'bool', 'false', __('docs/badge.props_items.dotPulse')],
+                                ['pulse', 'bool', 'false', __('docs/badge.props_items.pulse')],
+                                ['animation', "'pulse'|'pop'|'bounce'|'shake'|'wobble'|false", 'false', __('docs/badge.props_items.animation')],
                                 ['dismissible', 'bool', 'false', __('docs/badge.props_items.dismissible')],
                                 ['href', 'string|null', 'null', __('docs/badge.props_items.href')],
                                 ['class', 'string|null', 'null', __('docs/badge.props_items.class')],

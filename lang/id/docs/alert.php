@@ -99,7 +99,26 @@ return [
         'preview_title' => 'Efek Glassmorphism Backdrop Blur',
         'open_btn' => 'Buka Alert dengan Blur Kuat (lg)',
         'dialog_title' => 'Fokus Eksklusif',
-        'dialog_msg' => 'Latar belakang di-blur secara intens untuk fokus visual penuh.',
+        'dialog_msg' => 'Latar belakang diburamkan secara intensif untuk menjaga fokus pengguna tetap tertuju pada dialog ini.',
+    ],
+
+    // Section: Animation
+    'animation' => [
+        'title' => 'Animasi Interaktif (Shake, Pop, Pulse, Wobble)',
+        'desc' => 'Gunakan opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation: "shake" | "pop" | "pulse" | "wobble" | false</code> untuk menambahkan efek gerak. Default bernilai <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">false</code>.',
+        'preview_title' => 'Uji Efek Animasi Alert',
+        'shake_btn' => 'Shake (Getar Error/Denied)',
+        'pop_btn' => 'Pop / Bounce (Membal Sukses)',
+        'pulse_btn' => 'Pulse (Denyut Warning)',
+        'wobble_btn' => 'Wobble (Goyang Info)',
+        'shake_title' => 'Validasi Gagal!',
+        'shake_msg' => 'Contoh alert bergetar untuk menarik perhatian saat terjadi kesalahan.',
+        'pop_title' => 'Aksi Berhasil!',
+        'pop_msg' => 'Contoh alert dengan efek pop membal elastis.',
+        'pulse_title' => 'Perhatian Khusus!',
+        'pulse_msg' => 'Contoh alert dengan efek denyut cincin halus.',
+        'wobble_title' => 'Tips Baru Tersedia',
+        'wobble_msg' => 'Contoh alert dengan efek goyang ringan yang ramah.',
     ],
 
     // Section 7: Persist State

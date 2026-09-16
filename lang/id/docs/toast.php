@@ -85,6 +85,17 @@ return [
         'silent_btn' => 'Tanpa Suara (Mute)',
     ],
 
+    // Section: Interactive Animations
+    'animation' => [
+        'title' => 'Animasi Toast (Shake, Pop, Pulse, Wobble)',
+        'desc' => 'Gunakan opsi <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation: "shake" | "pop" | "pulse" | "wobble" | "auto"</code> pada payload atau tag container toast. Opsi <code class="font-mono text-xs text-foreground">auto</code> otomatis menerapkan efek <em>shake</em> untuk error dan <em>pop</em> untuk sukses.',
+        'preview_title' => 'Uji Efek Animasi Toast',
+        'shake_btn' => 'Shake (Error)',
+        'pop_btn' => 'Pop / Bounce (Sukses)',
+        'pulse_btn' => 'Pulse (Warning)',
+        'wobble_btn' => 'Wobble (Info)',
+    ],
+
     // Section 5: Integration
     'integration' => [
         'title' => 'Integrasi Laravel Flash Session & Event',
@@ -173,6 +184,7 @@ return [
             'position' => 'Posisi penempatan default container tumpukan toast pada layar.',
             'timeout' => 'Waktu tunda auto-dismiss dalam milidetik (atau false untuk toast persisten).',
             'sound' => 'Memutar nada audio sintesis Web Audio API (true) atau file audio eksternal (string URL).',
+            'animation' => 'Animasi default untuk semua toast ("auto", "pop", "shake", atau false). Default: false.',
         ],
         'payload' => [
             'type' => 'Jenis status notifikasi toast yang menentukan palet warna, badge, dan ikon otomatis.',
@@ -181,6 +193,7 @@ return [
             'icon' => 'Kustomisasi elemen SVG ikon untuk menggantikan ikon bawaan status.',
             'timeout' => 'Menimpa durasi auto-dismiss (false agar toast tetap terbuka hingga tombol close diklik).',
             'sound' => 'Menimpa preferensi efek suara saat toast muncul (true atau URL string audio).',
+            'animation' => 'Efek animasi saat toast muncul ("shake", "pop", "pulse", "wobble", "auto", atau false).',
         ],
     ],
 ];

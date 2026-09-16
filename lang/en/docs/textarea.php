@@ -54,6 +54,7 @@ return [
             'info' => 'Supplementary guidance note displayed beneath the textarea.',
             'error' => 'Custom error message string or boolean flag to toggle red destructive styling.',
             'errorName' => 'Laravel validation error key in <code>$errors</code> to track automatically.',
+            'animation' => 'Animation effect ("shake", "pop", "pulse", "wobble", "auto", or boolean true for shake on error). Default: false.',
             'disabled' => 'Native HTML attribute to disable input interaction and dim opacity.',
             'readonly' => 'Native HTML attribute to make textarea non-editable with read-only styling.',
             'wrapperClass' => 'Additional CSS classes for the outer container element.',

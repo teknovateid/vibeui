@@ -430,6 +430,55 @@
                         </vibe:card.alert>
                     </div>
                 </vibe:preview>
+
+                {{-- Alert Animations (Shake, Pop, Pulse) --}}
+                <vibe:preview title="Animasi Efek Perhatian (Shake, Pop, Pulse)">
+                    <vibe:preview.code>
+{{-- Shake on Destructive Alert --}}
+<vibe:card.alert
+    variant="destructive"
+    animation="shake"
+    title="Peringatan Kritis"
+    description="Sesi autentikasi Anda hampir berakhir, harap simpan pekerjaan Anda."
+/>
+
+{{-- Pop on Success Alert --}}
+<vibe:card.alert
+    variant="success"
+    animation="pop"
+    title="Data Berhasil Disimpan"
+    description="Perubahan profil Anda telah berhasil diperbarui ke server."
+/>
+
+{{-- Pulse on Info Alert --}}
+<vibe:card.alert
+    variant="info"
+    animation="pulse"
+    title="Pemberitahuan Sistem"
+    description="Pemeliharaan server terjadwal dalam 15 menit ke depan."
+/>
+                    </vibe:preview.code>
+                    <div class="w-full space-y-3 p-2">
+                        <vibe:card.alert
+                            variant="destructive"
+                            animation="shake"
+                            title="Peringatan Kritis"
+                            description="Sesi autentikasi Anda hampir berakhir, harap simpan pekerjaan Anda."
+                        />
+                        <vibe:card.alert
+                            variant="success"
+                            animation="pop"
+                            title="Data Berhasil Disimpan"
+                            description="Perubahan profil Anda telah berhasil diperbarui ke server."
+                        />
+                        <vibe:card.alert
+                            variant="info"
+                            animation="pulse"
+                            title="Pemberitahuan Sistem"
+                            description="Pemeliharaan server terjadwal dalam 15 menit ke depan."
+                        />
+                    </div>
+                </vibe:preview>
             </section>
 
             {{-- 7. Props & Slots Reference --}}
@@ -454,7 +503,7 @@
                         @php
                             $cardProps = [
                                 ['variant', 'string', "'default'", __('docs/card.props_items.variant')],
-                                ['padding', 'string|null', 'null', __('docs/card.props_items.padding')],
+                                ['padding', 'string', "'md' (p-6)", __('docs/card.props_items.padding')],
                             ];
                         @endphp
                         @foreach ($cardProps as [$prop, $type, $default, $desc])
@@ -469,7 +518,7 @@
                 </vibe:table>
 
                 {{-- vibe:card.alert Props --}}
-                <p class="text-sm font-semibold text-foreground pt-4">&lt;vibe:card.alert&gt;</p>
+                <p class="text-sm font-semibold text-foreground pt-4">{{ __('docs/card.alert_props.title') }}</p>
                 <vibe:table>
                     <vibe:table.header>
                         <vibe:table.column class="whitespace-nowrap">{{ __('docs/card.props.columns.prop') }}</vibe:table.column>
@@ -487,6 +536,7 @@
                                 ['description', 'string|null', 'null', __('docs/card.alert_props.items.description')],
                                 ['icon', 'string|bool|null', 'null', __('docs/card.alert_props.items.icon')],
                                 ['dismissible', 'bool', 'false', __('docs/card.alert_props.items.dismissible')],
+                                ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|false", 'false', __('docs/card.alert_props.items.animation')],
                                 ['rounded', 'string', "'rounded-xl'", __('docs/card.alert_props.items.rounded')],
                             ];
                         @endphp

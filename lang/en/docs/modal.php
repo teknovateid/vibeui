@@ -49,14 +49,25 @@ return [
 
     // Section 4: Non-Dismissible / Static Modal
     'non_dismissible' => [
-        'title' => 'Static Modal (Non-Dismissible)',
-        'desc' => 'Pass <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dismissible="false"</code> (or <code class="font-mono text-xs text-foreground">:dismissible="false"</code>) to prevent the modal from closing when clicking outside on the backdrop or showing the cross button. The user must explicitly choose an action button inside the dialog.',
-        'preview_title' => 'Mandatory Action Dialog',
-        'btn' => 'Open Static Modal',
+        'title' => 'Static Modal (Non-Dismissible & Shake)',
+        'desc' => 'Pass <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dismissible="false"</code> (or <code class="font-mono text-xs text-foreground">:dismissible="false"</code>) to prevent accidental closure. Clicking the outside backdrop or pressing <kbd class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Escape</kbd> automatically triggers a <strong>shake animation</strong> as visual feedback that the dialog requires resolution.',
+        'preview_title' => 'Mandatory Action Dialog with Shake Effect',
+        'btn' => 'Open Static Modal (Click Outside)',
         'modal_title' => 'Confirm Critical Action',
-        'modal_desc' => 'This action is permanent and cannot be undone. Clicking the backdrop or pressing Escape will not dismiss this dialog.',
+        'modal_desc' => 'This action is permanent and cannot be undone. Try clicking outside on the backdrop or pressing Escape to experience the denial shake effect.',
         'btn_cancel' => 'Cancel',
         'btn_confirm' => 'Yes, Proceed Now',
+    ],
+
+    // Section: Interactive Animation
+    'animation' => [
+        'title' => 'Modal Animations (Pop & Bounce)',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="pop"</code> (or <code class="font-mono text-xs text-foreground">bounce</code>, <code class="font-mono text-xs text-foreground">shake</code>, <code class="font-mono text-xs text-foreground">wobble</code>) prop to add expressive spring bounce entrance effects. Defaults to <code class="font-mono text-xs text-foreground">false</code>.',
+        'preview_title' => 'Modal with Elastic Pop Animation',
+        'btn' => 'Open Pop Animated Modal',
+        'modal_title' => 'Milestone Unlocked!',
+        'modal_desc' => 'This modal opens with a delightful spring pop bounce animation.',
+        'btn_close' => 'Awesome, thanks!',
     ],
 
     // Section 5: Form with Auto-focus
@@ -221,6 +232,12 @@ return [
                 'type' => 'string',
                 'default' => 'null',
                 'desc' => 'Additional CSS classes for the backdrop overlay.',
+            ],
+            [
+                'name' => 'animation',
+                'type' => "'pop'|'bounce'|'shake'|'pulse'|'wobble'|false",
+                'default' => 'false',
+                'desc' => 'Opening animation effect (pop, bounce, shake, wobble) or false for standard transition.',
             ],
         ],
         'events_title' => 'Window Events Reference (Alpine.js & Livewire)',

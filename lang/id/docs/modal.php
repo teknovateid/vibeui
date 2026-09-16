@@ -49,14 +49,25 @@ return [
 
     // Section 4: Non-Dismissible / Static Modal
     'non_dismissible' => [
-        'title' => 'Modal Statis (Non-Dismissible)',
-        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dismissible="false"</code> (atau <code class="font-mono text-xs text-foreground">:dismissible="false"</code>) untuk mencegah modal ditutup secara tidak sengaja melalui klik backdrop latar belakang atau tombol close silang. Pengguna diwajibkan memilih salah satu tombol aksi di dalam modal.',
-        'preview_title' => 'Modal Konfirmasi Wajib',
-        'btn' => 'Buka Modal Statis',
+        'title' => 'Modal Statis (Non-Dismissible & Shake)',
+        'desc' => 'Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dismissible="false"</code> (atau <code class="font-mono text-xs text-foreground">:dismissible="false"</code>) untuk mencegah modal ditutup sembarangan. Mengeklik latar belakang luar (backdrop) atau menekan tombol <kbd class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">Escape</kbd> secara otomatis memicu efek <strong>getar (shake)</strong> sebagai indikasi visual bahwa dialog wajib diselesaikan.',
+        'preview_title' => 'Modal Konfirmasi Wajib & Efek Shake',
+        'btn' => 'Buka Modal Statis (Uji Klik Luar)',
         'modal_title' => 'Konfirmasi Penghapusan Data',
-        'modal_desc' => 'Tindakan ini permanen dan tidak dapat dibatalkan. Klik di luar backdrop atau tombol Escape tidak akan menutup dialog ini.',
+        'modal_desc' => 'Tindakan ini permanen dan tidak dapat dibatalkan. Coba klik area luar modal (backdrop) atau tekan tombol Escape untuk melihat efek getar penolakan.',
         'btn_cancel' => 'Batalkan',
         'btn_confirm' => 'Ya, Hapus Sekarang',
+    ],
+
+    // Section: Interactive Animation
+    'animation' => [
+        'title' => 'Animasi Modal (Pop & Bounce)',
+        'desc' => 'Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="pop"</code> (atau <code class="font-mono text-xs text-foreground">bounce</code>, <code class="font-mono text-xs text-foreground">shake</code>, <code class="font-mono text-xs text-foreground">wobble</code>) untuk memberikan efek transisi pembuka yang elastis dan ekspresif. Default bernilai <code class="font-mono text-xs text-foreground">false</code>.',
+        'preview_title' => 'Modal dengan Animasi Pop',
+        'btn' => 'Buka Modal Animasi Pop',
+        'modal_title' => 'Pencapaian Berhasil Diraih!',
+        'modal_desc' => 'Modal ini terbuka dengan efek pop elastis spring bounce yang memikat perhatian pengguna.',
+        'btn_close' => 'Keren, Terima Kasih!',
     ],
 
     // Section 5: Form Inside Modal
@@ -221,6 +232,12 @@ return [
                 'type' => 'string',
                 'default' => 'null',
                 'desc' => 'Class CSS tambahan untuk backdrop overlay gelap/blur.',
+            ],
+            [
+                'name' => 'animation',
+                'type' => "'pop'|'bounce'|'shake'|'pulse'|'wobble'|false",
+                'default' => 'false',
+                'desc' => 'Efek animasi pembuka (pop, bounce, shake, wobble) atau false untuk transisi bawaan.',
             ],
         ],
         'events_title' => 'Referensi Event Window (Alpine.js & Livewire)',

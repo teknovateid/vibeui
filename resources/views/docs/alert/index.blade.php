@@ -367,7 +367,117 @@ vibeAlert({
                 </vibe:preview>
             </section>
 
-            {{-- 7. Persist Option --}}
+            {{-- 7. Interactive Animations (Shake, Pop, Pulse, Wobble) --}}
+            <section id="animasi-alert" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.animation.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/alert.animation.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/alert.animation.preview_title')">
+                    <vibe:preview.code>
+{{-- 1. Shake: Efek bergetar saat error/denied/validasi gagal --}}
+<vibe:button variant="destructive" size="sm" onclick="vibeAlert({
+    type: 'error',
+    animation: 'shake',
+    title: '{{ __('docs/alert.animation.shake_title') }}',
+    message: '{{ __('docs/alert.animation.shake_msg') }}'
+})">
+    {{ __('docs/alert.animation.shake_btn') }}
+</vibe:button>
+
+{{-- 2. Pop / Bounce: Efek membal elastis saat sukses --}}
+<vibe:button variant="success" size="sm" onclick="vibeAlert({
+    type: 'success',
+    animation: 'pop',
+    title: '{{ __('docs/alert.animation.pop_title') }}',
+    message: '{{ __('docs/alert.animation.pop_msg') }}'
+})">
+    {{ __('docs/alert.animation.pop_btn') }}
+</vibe:button>
+
+{{-- 3. Pulse: Denyut cincin halus untuk warning --}}
+<vibe:button variant="warning" size="sm" onclick="vibeAlert({
+    type: 'warning',
+    animation: 'pulse',
+    title: '{{ __('docs/alert.animation.pulse_title') }}',
+    message: '{{ __('docs/alert.animation.pulse_msg') }}'
+})">
+    {{ __('docs/alert.animation.pulse_btn') }}
+</vibe:button>
+
+{{-- 4. Wobble: Goyang ringan untuk info/tips --}}
+<vibe:button variant="info" size="sm" onclick="vibeAlert({
+    type: 'info',
+    animation: 'wobble',
+    title: '{{ __('docs/alert.animation.wobble_title') }}',
+    message: '{{ __('docs/alert.animation.wobble_msg') }}'
+})">
+    {{ __('docs/alert.animation.wobble_btn') }}
+</vibe:button>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <vibe:button variant="destructive" size="sm" onclick="vibeAlert({
+                                type: 'error',
+                                animation: 'shake',
+                                title: '{{ __('docs/alert.animation.shake_title') }}',
+                                message: '{{ __('docs/alert.animation.shake_msg') }}'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                            {{ __('docs/alert.animation.shake_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="success" size="sm" onclick="vibeAlert({
+                                type: 'success',
+                                animation: 'pop',
+                                title: '{{ __('docs/alert.animation.pop_title') }}',
+                                message: '{{ __('docs/alert.animation.pop_msg') }}'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m9 12 2 2 4-4" />
+                            </svg>
+                            {{ __('docs/alert.animation.pop_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="warning" size="sm" onclick="vibeAlert({
+                                type: 'warning',
+                                animation: 'pulse',
+                                title: '{{ __('docs/alert.animation.pulse_title') }}',
+                                message: '{{ __('docs/alert.animation.pulse_msg') }}'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            {{ __('docs/alert.animation.pulse_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="info" size="sm" onclick="vibeAlert({
+                                type: 'info',
+                                animation: 'wobble',
+                                title: '{{ __('docs/alert.animation.wobble_title') }}',
+                                message: '{{ __('docs/alert.animation.wobble_msg') }}'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            {{ __('docs/alert.animation.wobble_btn') }}
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 8. Persist Option --}}
             <section id="persistensi-alert" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/alert.persist.title') }}</h2>
@@ -647,7 +757,8 @@ vibeAlert({
                                     ['timeout', 'int|false', '3000', __('docs/alert.props_items.container.timeout')],
                                     ['sound', 'bool|string', 'false', __('docs/alert.props_items.container.sound')],
                                     ['blur', "'xs'|'sm'|'md'|'lg'|'xl'|bool", 'false', __('docs/alert.props_items.container.blur')],
-                                    ['closeOnOutside', 'bool|null', 'null (auto)', __('docs/alert.props_items.container.closeOnOutside')]
+                                    ['closeOnOutside', 'bool|null', 'null (auto)', __('docs/alert.props_items.container.closeOnOutside')],
+                                    ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|false", 'false', 'Efek animasi alert (shake, pop, pulse, wobble). Default: false.'],
                                 ];
                             @endphp
                             @foreach ($containerProps as [$prop, $type, $default, $desc])
@@ -689,6 +800,7 @@ vibeAlert({
                                     ['closeButton', 'string|object', "null ('Batal' for confirm)", __('docs/alert.props_items.payload.closeButton')],
                                     ['buttonLayout', "'row'|'col'", 'null', __('docs/alert.props_items.payload.buttonLayout')],
                                     ['closeOnOutside', 'bool', 'true (false for confirm)', __('docs/alert.props_items.payload.closeOnOutside')],
+                                    ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|false", 'false', 'Efek animasi saat dialog muncul atau ditolak (shake, pop, pulse, wobble)'],
                                     ['id', 'string', 'null', __('docs/alert.props_items.payload.id')],
                                     ['persist', 'bool|string', 'false', __('docs/alert.props_items.payload.persist')]
                                 ];

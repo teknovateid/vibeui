@@ -8,6 +8,7 @@
     'blur' => false, // false, true, xs, sm, md, lg, xl, 2xl, 3xl, none
     'closeOnOutside' => null, // null (auto: true for non-confirm, false for confirm), or boolean
     'persist' => false, // simpan status tampil alert ke storage
+    'animation' => false, // false (default), shake, pop/bounce, pulse, wobble, auto
 ])
 
 <div x-data="{
@@ -18,6 +19,7 @@
     globalBlur: @js($blur),
     globalCloseOnOutside: @js($closeOnOutside),
     globalPersist: @js($persist),
+    globalAnimation: @js($animation),
 
     init() {
         let key = '{{ config('vibe.prefix', 'vibe') }}-alert';
@@ -113,6 +115,32 @@
         return this.blurClasses['xs'];
     },
 
+    getAnimationClass(alert) {
+        let anim = alert.animation !== undefined ? alert.animation : this.globalAnimation;
+        if (!anim || anim === 'none' || anim === 'false') return '';
+        if (anim === true || anim === 'auto') {
+            if (alert.type === 'error' || alert.type === 'confirm') return 'animate-vibe-shake';
+            if (alert.type === 'success') return 'animate-vibe-pop';
+            if (alert.type === 'warning') return 'animate-vibe-pulse';
+            if (alert.type === 'info') return 'animate-vibe-wobble';
+            return '';
+        }
+        if (anim === 'shake') return 'animate-vibe-shake';
+        if (anim === 'pop' || anim === 'bounce') return 'animate-vibe-pop';
+        if (anim === 'pulse') return 'animate-vibe-pulse';
+        if (anim === 'wobble') return 'animate-vibe-wobble';
+        return 'animate-vibe-' + anim;
+    },
+
+    shakeAlert(alert) {
+        let el = document.getElementById('vibe-alert-' + alert.id);
+        if (el) {
+            el.classList.remove('animate-vibe-shake');
+            void el.offsetWidth;
+            el.classList.add('animate-vibe-shake');
+        }
+    },
+
     add(alert) {
         if (alert.type === 'confirm' && this.alerts.some(a => a.type === 'confirm')) {
             return;
@@ -192,6 +220,8 @@
         this.alerts.slice().forEach(a => {
             if (a.ready && this.canCloseOutside(a)) {
                 this.remove(a.id);
+            } else if (a.ready && !this.canCloseOutside(a)) {
+                this.shakeAlert(a);
             }
         });
     },
@@ -302,6 +332,7 @@
             closeOnOutside: alert.closeOnOutside !== undefined ? alert.closeOnOutside : null,
             buttonLayout: alert.buttonLayout || null,
             persist: alert.persist !== undefined ? alert.persist : true,
+            animation: alert.animation !== undefined ? alert.animation : null,
         };
         if (alert.confirmButton) {
             clean.confirmButton = typeof alert.confirmButton === 'string'
@@ -399,7 +430,7 @@
 
     <div class="w-full max-w-88 sm:max-w-md flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
-            <div :class="'pos-' + (alert.position || globalPosition)" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready && canCloseOutside(alert)) remove(alert.id)" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
+            <div :id="'vibe-alert-' + alert.id" :class="['pos-' + (alert.position || globalPosition), getAnimationClass(alert)]" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready) { if (canCloseOutside(alert)) { remove(alert.id); } else { shakeAlert(alert); } }" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
                 <div class="p-5 sm:p-6 flex flex-col" :class="getAlignClasses(alert)">
                     <div class="flex size-16 items-center justify-center rounded-full mb-4" :class="typeClasses[alert.type] || typeClasses.info" x-html="alert.icon || icons[alert.type] || icons.info"></div>
                     <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? '{{ __('vibe/alert.error') }}' : (alert.type === 'success' ? '{{ __('vibe/alert.success') }}' : '{{ __('vibe/alert.notice') }}'))"></h3>
@@ -516,6 +547,7 @@
                     type: 'confirm',
                     title: options.title,
                     message: options.message,
+                    animation: options.animation !== undefined ? options.animation : 'shake',
                     confirmButton: {
                         text: options.confirmText,
                         class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',

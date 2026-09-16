@@ -105,9 +105,9 @@ return [
 
     // Section 7: Error & Validation
     'error' => [
-        'title' => 'Error & Validasi',
-        'desc' => 'Secara otomatis menampilkan error dari <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> Laravel sesuai <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> input, atau teruskan pesan string kustom via prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>.',
-        'preview_title' => 'Status Kesalahan (Error Validation)',
+        'title' => 'Error, Validasi & Animasi Shake',
+        'desc' => 'Secara otomatis menampilkan error dari <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">$errors</code> Laravel sesuai <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">name</code> input, atau teruskan pesan string kustom via prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">error</code>. Gunakan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">:animation="true"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="shake"</code> untuk efek getar perhatian saat ada kesalahan validasi.',
+        'preview_title' => 'Status Kesalahan & Animasi Shake',
         'label' => 'Email Pengguna',
         'placeholder' => 'email-salah@',
         'message' => 'Format alamat email yang Anda masukkan tidak valid.',
@@ -170,6 +170,7 @@ return [
         'info' => 'Catatan pembantu di bawah input. Disembunyikan saat ada error.',
         'error' => 'Pesan error kustom atau boolean untuk memicu status error.',
         'errorName' => 'Kunci error validasi Laravel jika berbeda dari name (mis. user.phone).',
+        'animation' => 'Efek animasi input ("shake", "pop", "pulse", "wobble", "auto", atau boolean true untuk shake saat error). Default: false.',
         'prefix' => 'Teks di sisi kiri input (misal "https://", "$").',
         'suffix' => 'Teks di sisi kanan input (misal ".com", "/bulan").',
         'class' => 'Kelas tambahan untuk input digabungkan via twMerge (misal "rounded-full" untuk gaya pill).',

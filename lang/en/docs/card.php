@@ -135,6 +135,7 @@ return [
             'description' => 'Detailed body or descriptive text for the alert.',
             'icon' => 'Displayed icon SVG or HTML markup. Automatically assigned based on variant if empty. Set `:icon="false"` to hide.',
             'dismissible' => 'Boolean indicating whether to render an interactive close button with Alpine.js transition.',
+            'animation' => "Visual animation effect for the alert card: `'shake'`, `'pop'`, `'pulse'`, `'wobble'`, `'auto'` (shake on destructive, pop on others), or `false`. Default: `false`.",
             'rounded' => "Tailwind border radius class: e.g. `'rounded-xl'`, `'rounded-lg'`. Default: `'rounded-xl'`.",
         ],
     ],

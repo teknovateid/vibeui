@@ -254,15 +254,15 @@
 
                 <vibe:preview :title="__('docs/input.error.preview_title')">
                     <vibe:preview.code>
-                        {{-- Error from prop directly --}}
-                        <vibe:input name="password" type="password" label="Password" value="12345" error="{{ __('docs/input.error.message') }}" />
+                        {{-- Error with shake animation --}}
+                        <vibe:input name="password" type="password" label="Password" value="12345" :error="__('docs/input.error.message')" animation="shake" />
 
-                        {{-- Error with placeholder --}}
-                        <vibe:input name="phone" label="Phone Number" error="{{ __('docs/input.error.message') }}" placeholder="+1 (555) 000-0000" />
+                        {{-- Auto shake on error --}}
+                        <vibe:input name="phone" label="Phone Number" :error="__('docs/input.error.message')" placeholder="+1 (555) 000-0000" :animation="true" />
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
-                        <vibe:input name="password" type="password" label="Password" value="12345" :error="__('docs/input.error.message')" />
-                        <vibe:input name="phone" label="Phone Number" :error="__('docs/input.error.message')" placeholder="+1 (555) 000-0000" />
+                        <vibe:input name="password" type="password" label="Password" value="12345" :error="__('docs/input.error.message')" animation="shake" />
+                        <vibe:input name="phone" label="Phone Number" :error="__('docs/input.error.message')" placeholder="+1 (555) 000-0000" :animation="true" />
                     </div>
                 </vibe:preview>
             </section>
@@ -416,6 +416,7 @@
                                 ['info', 'string', 'null', __('docs/input.props_items.info')],
                                 ['error', 'string|bool', 'null', __('docs/input.props_items.error')],
                                 ['errorName', 'string', 'null', __('docs/input.props_items.errorName')],
+                                ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|bool", 'false', __('docs/input.props_items.animation')],
                                 ['prefix', 'string', 'null', __('docs/input.props_items.prefix')],
                                 ['suffix', 'string', 'null', __('docs/input.props_items.suffix')],
                                 ['leadingIcon', 'string', 'null', __('docs/input.props_items.leadingIcon')],

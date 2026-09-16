@@ -19,6 +19,7 @@
     'disabled' => false,
     'readonly' => false,
     'viewable' => false,
+    'animation' => false,
 ])
 
 @php
@@ -73,7 +74,16 @@
         $stateControlClasses = 'bg-muted/20 cursor-default';
     }
 
-    $controlClasses = trim("{$baseControlClasses} {$sizeControlClasses} {$variantControlClasses} {$stateControlClasses}");
+    $animationClass = match ($animation) {
+        true, 'auto' => ($hasError ? 'animate-vibe-shake' : ''),
+        'shake' => 'animate-vibe-shake',
+        'pop', 'bounce' => 'animate-vibe-pop',
+        'pulse' => 'animate-vibe-pulse',
+        'wobble' => 'animate-vibe-wobble',
+        default => '',
+    };
+
+    $controlClasses = trim("{$baseControlClasses} {$sizeControlClasses} {$variantControlClasses} {$stateControlClasses} {$animationClass}");
 
     // Padding for addons and input
     if ($variant === 'flush') {

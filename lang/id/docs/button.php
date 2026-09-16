@@ -71,7 +71,17 @@ return [
         'deleting' => 'Menghapus...',
     ],
 
-    // Section 7: Status Disabled & Type
+    // Section 7: Animation & Attention
+    'animation' => [
+        'title' => 'Animasi & Efek Atensi (Pulse & Shake)',
+        'desc' => 'Tingkatkan fokus visual pengguna pada tombol aksi penting atau Call-to-Action (CTA) dengan prop boolean <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pulse</code> (atau <code class="font-mono text-xs text-foreground">animation="pulse"</code>) untuk efek cincin denyut radar bercahaya, atau gunakan <code class="font-mono text-xs text-foreground">animation="shake"</code> untuk menandakan aksi bahaya / validasi gagal.',
+        'preview_title' => 'Tombol dengan Efek Animasi',
+        'cta' => 'Mulai Sekarang Gratis',
+        'danger' => 'Konfirmasi Hapus Data',
+        'pop' => 'Klaim Diskon 50%',
+    ],
+
+    // Section 8: Status Disabled & Type
     'status' => [
         'title' => 'Status Disabled & Tipe Tombol',
         'desc' => 'Atribut HTML standar seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> didukung secara penuh dengan visual pengurangan opasitas dan pemblokiran pointer event. Gunakan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">type</code> untuk menentukan aksi form (<code class="font-mono text-xs text-foreground">submit</code>, <code class="font-mono text-xs text-foreground">button</code>, <code class="font-mono text-xs text-foreground">reset</code>).',

@@ -9,6 +9,7 @@
     'icon' => null,               // null/true (auto icon sesuai variant), false (tanpa icon), string (custom SVG)
     'dismissible' => false,       // tombol close interaktif (Alpine.js)
     'rounded' => 'xl',            // none, sm, md, lg, xl, 2xl, full
+    'animation' => false,         // false, auto/true, shake, pop, bounce, pulse, wobble
 ])
 
 @php
@@ -117,6 +118,20 @@
 
     // Resolve if icon should be displayed
     $showIcon = $icon !== false && $icon !== 'false' && $icon !== 'none';
+
+    $animationClass = match ($animation) {
+        true, 'auto' => match ($normalizedVariant) {
+            'destructive' => 'animate-vibe-shake',
+            'success' => 'animate-vibe-pop',
+            'warning' => 'animate-vibe-pulse',
+            default => 'animate-vibe-shake',
+        },
+        'shake' => 'animate-vibe-shake',
+        'pop', 'bounce' => 'animate-vibe-pop',
+        'pulse' => 'animate-vibe-pulse',
+        'wobble' => 'animate-vibe-wobble',
+        default => '',
+    };
 @endphp
 
 <div
@@ -127,7 +142,7 @@
         x-transition:leave-start="opacity-100 transform scale-100"
         x-transition:leave-end="opacity-0 transform scale-95"
     @endif
-    {{ $attributes->twMerge(['class' => "relative flex items-start w-full {$sizeClasses['card']} {$roundedClass} {$variantClasses}"]) }}
+    {{ $attributes->twMerge(['class' => trim("relative flex items-start w-full {$sizeClasses['card']} {$roundedClass} {$variantClasses} {$animationClass}")]) }}
     role="alert"
 >
     {{-- Leading Icon --}}

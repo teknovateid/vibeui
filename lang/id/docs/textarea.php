@@ -54,6 +54,7 @@ return [
             'info' => 'Teks informasi bantuan kecil yang tampil di bawah textarea.',
             'error' => 'Pesan error kustom atau flag boolean untuk memicu styling merah destructive.',
             'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk deteksi error otomatis.',
+            'animation' => 'Efek animasi input textarea ("shake", "pop", "pulse", "wobble", "auto", atau boolean true untuk shake saat error). Default: false.',
             'disabled' => 'Atribut HTML standar untuk menonaktifkan interaksi dan memudarkan komponen.',
             'readonly' => 'Atribut HTML standar untuk menjadikan textarea hanya bisa dibaca (read-only).',
             'wrapperClass' => 'Kelas CSS tambahan untuk elemen kontainer pembungkus terluar.',

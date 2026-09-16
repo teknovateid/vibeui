@@ -71,7 +71,17 @@ return [
         'deleting' => 'Deleting...',
     ],
 
-    // Section 7: Status Disabled & Type
+    // Section 7: Animation & Attention
+    'animation' => [
+        'title' => 'Animation & Attention Effects (Pulse & Shake)',
+        'desc' => 'Draw user attention to primary actions or Call-to-Actions (CTA) using the boolean prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pulse</code> (or <code class="font-mono text-xs text-foreground">animation="pulse"</code>) for a rhythmic glowing radar ring, or use <code class="font-mono text-xs text-foreground">animation="shake"</code> for hazardous actions or validation failure cues.',
+        'preview_title' => 'Buttons with Animation Effects',
+        'cta' => 'Get Started Free',
+        'danger' => 'Confirm Delete Data',
+        'pop' => 'Claim 50% Off',
+    ],
+
+    // Section 8: Status Disabled & Type
     'status' => [
         'title' => 'Disabled State & Button Type',
         'desc' => 'Standard HTML attributes like <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">disabled</code> are fully supported with reduced opacity styling and pointer event locking. Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">type</code> prop for form actions (<code class="font-mono text-xs text-foreground">submit</code>, <code class="font-mono text-xs text-foreground">button</code>, <code class="font-mono text-xs text-foreground">reset</code>).',

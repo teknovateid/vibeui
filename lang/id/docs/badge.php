@@ -59,6 +59,16 @@ return [
         'maintenance' => 'Pemeliharaan',
     ],
 
+    // Section: Animation & Pulse
+    'animation' => [
+        'title' => 'Animasi & Pulse Glow Badge',
+        'desc' => 'Gunakan prop boolean <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pulse</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="pulse"</code> untuk memberikan efek denyut cincin bercahaya berkala. Juga mendukung <code class="font-mono text-xs text-foreground">animation="pop"</code> untuk efek kemunculan badge baru yang membal elastis.',
+        'preview_title' => 'Badge dengan Efek Pulse & Pop',
+        'live' => '● LIVE STREAM',
+        'active' => 'Sistem Aktif',
+        'new_tag' => 'Fitur Baru',
+    ],
+
     // Section 6: Icons and Addons
     'icons_addons' => [
         'title' => 'Ikon & Teks Prefix / Suffix',
@@ -109,6 +119,8 @@ return [
         'suffix' => 'Teks akhiran setelah slot utama.',
         'dot' => 'Menampilkan titik indikator status di sisi kiri.',
         'dotPulse' => 'Menambahkan efek animasi ping radar pada status dot.',
+        'pulse' => 'Menambahkan efek denyut cincin berkala (.animate-vibe-pulse) pada seluruh badge.',
+        'animation' => 'Efek animasi visual badge ("pulse", "pop", "bounce", "shake", "wobble" atau false). Default: false.',
         'dismissible' => 'Menampilkan tombol hapus interaktif di sisi kanan badge.',
         'href' => 'Jika diisi, badge otomatis dirender sebagai hyperlink `<a wire:navigate>`.',
         'class' => 'Kelas Tailwind tambahan via `twMerge` (misal `rounded-full` untuk gaya pill).',

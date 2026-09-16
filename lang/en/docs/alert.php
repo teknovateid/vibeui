@@ -102,6 +102,25 @@ return [
         'dialog_msg' => 'The background is intensely blurred to keep focus entirely on this modal.',
     ],
 
+    // Section: Animation
+    'animation' => [
+        'title' => 'Interactive Animations (Shake, Pop, Pulse, Wobble)',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation: "shake" | "pop" | "pulse" | "wobble" | false</code> option to add motion effects. Defaults to <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">false</code>.',
+        'preview_title' => 'Test Alert Animation Effects',
+        'shake_btn' => 'Shake (Error / Denied)',
+        'pop_btn' => 'Pop / Bounce (Success)',
+        'pulse_btn' => 'Pulse (Warning Glow)',
+        'wobble_btn' => 'Wobble (Info Jiggle)',
+        'shake_title' => 'Validation Failed!',
+        'shake_msg' => 'Example of a shaking alert to immediately grab attention on error.',
+        'pop_title' => 'Action Successful!',
+        'pop_msg' => 'Example of an alert with an elastic spring pop bounce.',
+        'pulse_title' => 'Attention Required!',
+        'pulse_msg' => 'Example of an alert with a subtle glowing pulse ring.',
+        'wobble_title' => 'New Tip Available',
+        'wobble_msg' => 'Example of an alert with a playful friendly wobble.',
+    ],
+
     // Section 7: Persist State
     'persist' => [
         'title' => 'Dialog Persistence (LocalStorage)',

@@ -134,5 +134,66 @@ test('passkey confirmation unlocks session after idle timeout lock', function ()
     $response->assertStatus(200);
 });
 
+test('idle timeout persists lock when navigating away and returning to idle-protected routes', function () {
+    $user = User::factory()->create();
+
+    // 1. Visit /docs/settings/login-history (idle protected)
+    $response = $this->actingAs($user)->get('/docs/settings/login-history');
+    $response->assertStatus(200);
+
+    // 2. Simulate idle lock triggering
+    $response = $this->actingAs($user)->get('/confirm-password/idle-lock?intended=' . urlencode('/docs/settings/login-history'));
+    $response->assertRedirect(route('password.confirm'));
+    expect(session('auth.session_locked'))->toBeTrue();
+
+    // 3. User navigates away to a non-idle page (e.g. /docs/settings/account)
+    $response = $this->actingAs($user)->get('/docs/settings/account');
+    $response->assertStatus(200);
+    expect(session('auth.session_locked'))->toBeTrue();
+
+    // 4. User navigates back to /docs/settings/login-history without confirming password
+    // Even if recently active on another page, it MUST redirect back to password confirmation
+    $response = $this->actingAs($user)->get('/docs/settings/login-history');
+    $response->assertRedirect(route('password.confirm'));
+    expect(session('status'))->toBe('idle_timeout');
+
+    // 5. User unlocks with password
+    Livewire::actingAs($user)
+        ->test(ConfirmPassword::class)
+        ->set('password', 'password')
+        ->call('confirmPassword')
+        ->assertRedirect('/docs/settings/login-history');
+
+    expect(session('auth.session_locked'))->toBeNull();
+
+    // 6. User can now access /docs/settings/login-history
+    $response = $this->actingAs($user)->get('/docs/settings/login-history');
+    $response->assertStatus(200);
+});
+
+test('idle timeout middleware locks session on server-side inactivity and prevents re-entering', function () {
+    $user = User::factory()->create();
+
+    // 1. Visit /docs/settings/login-history
+    $this->actingAs($user)->get('/docs/settings/login-history')->assertStatus(200);
+
+    // 2. Fast forward inactivity by 15 seconds (timeout is 10s)
+    session(['auth.last_activity_time' => time() - 15]);
+
+    // 3. Next visit to idle route triggers lock
+    $response = $this->actingAs($user)->get('/docs/settings/login-history');
+    $response->assertRedirect(route('password.confirm'));
+    expect(session('auth.session_locked'))->toBeTrue();
+
+    // 4. Navigate away to another page
+    $this->actingAs($user)->get('/docs/settings/account')->assertStatus(200);
+
+    // 5. Navigate back to idle route within 2 seconds
+    session(['auth.last_activity_time' => time()]);
+    $response = $this->actingAs($user)->get('/docs/settings/login-history');
+    $response->assertRedirect(route('password.confirm'));
+});
+
+
 
 

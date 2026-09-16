@@ -135,6 +135,7 @@ return [
             'description' => 'Teks deskripsi pendukung detail alert.',
             'icon' => 'Ikon SVG atau HTML kustom. Disesuaikan otomatis dengan varian jika dikosongkan. Set `:icon="false"` untuk menyembunyikan.',
             'dismissible' => 'Boolean untuk mengaktifkan tombol tutup interaktif dengan animasi Alpine.js.',
+            'animation' => "Efek animasi visual kartu alert: `'shake'`, `'pop'`, `'pulse'`, `'wobble'`, `'auto'` (shake pada destructive, pop pada varian lain), atau `false`. Default: `false`.",
             'rounded' => "Kelas sudut membulat Tailwind: misal `'rounded-xl'`, `'rounded-lg'`. Default: `'rounded-xl'`.",
         ],
     ],

@@ -85,6 +85,17 @@ return [
         'silent_btn' => 'Mute (Silent)',
     ],
 
+    // Section: Interactive Animations
+    'animation' => [
+        'title' => 'Toast Animations (Shake, Pop, Pulse, Wobble)',
+        'desc' => 'Add the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation: "shake" | "pop" | "pulse" | "wobble" | "auto"</code> parameter to the toast payload or tag container. The <code class="font-mono text-xs text-foreground">auto</code> option automatically applies <em>shake</em> for errors and <em>pop</em> for success.',
+        'preview_title' => 'Test Toast Motion Effects',
+        'shake_btn' => 'Shake (Error)',
+        'pop_btn' => 'Pop / Bounce (Success)',
+        'pulse_btn' => 'Pulse (Warning)',
+        'wobble_btn' => 'Wobble (Info)',
+    ],
+
     // Section 5: Integration
     'integration' => [
         'title' => 'Laravel Flash Session & Livewire',
@@ -173,6 +184,7 @@ return [
             'position' => 'Default stacking container position on screen.',
             'timeout' => 'Auto-dismiss delay duration in milliseconds (or false for persistent toasts).',
             'sound' => 'Play synthesized Web Audio API chime (true) or external audio file (string URL).',
+            'animation' => 'Default animation effect for all toasts ("auto", "pop", "shake", or false). Default: false.',
         ],
         'payload' => [
             'type' => 'Toast status type determining color palette, badge, and default icon.',
@@ -181,6 +193,7 @@ return [
             'icon' => 'Custom SVG icon element to replace default status icon.',
             'timeout' => 'Override auto-dismiss duration (false to keep open until manually closed).',
             'sound' => 'Override sound effect preference when toast appears (true or audio URL string).',
+            'animation' => 'Motion animation effect ("shake", "pop", "pulse", "wobble", "auto", or false).',
         ],
     ],
 ];

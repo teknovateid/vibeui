@@ -31,7 +31,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sound', 'timeout', 'stacked', 'hover-expand'] as $f)
+                    @foreach (['sound', 'timeout', 'animation', 'stacked', 'hover-expand'] as $f)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $f }}</vibe:badge>
                     @endforeach
                 </div>
@@ -271,6 +271,117 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                 </vibe:preview>
             </section>
 
+            {{-- Interactive Animations (Shake, Pop, Pulse, Wobble) --}}
+            <section id="animasi-toast" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/toast.animation.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/toast.animation.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/toast.animation.preview_title')">
+                    <vibe:preview.code>
+{{-- 1. Pop / Bounce: Membal elastis saat sukses --}}
+<vibe:button variant="success" size="sm" onclick="vibeToast({
+    type: 'success',
+    animation: 'pop',
+    title: 'Aksi Berhasil',
+    message: 'Data Anda berhasil disimpan ke cloud.'
+})">
+    {{ __('docs/toast.animation.pop_btn') }}
+</vibe:button>
+
+{{-- 2. Shake: Getar teredam saat error / gagal --}}
+<vibe:button variant="destructive" size="sm" onclick="vibeToast({
+    type: 'error',
+    animation: 'shake',
+    title: 'Validasi Gagal',
+    message: 'Periksa kembali formulir input Anda.'
+})">
+    {{ __('docs/toast.animation.shake_btn') }}
+</vibe:button>
+
+{{-- 3. Pulse: Denyut cincin untuk peringatan --}}
+<vibe:button variant="warning" size="sm" onclick="vibeToast({
+    type: 'warning',
+    animation: 'pulse',
+    title: 'Peringatan Server',
+    message: 'Beban memori CPU mencapai 90%.'
+})">
+    {{ __('docs/toast.animation.pulse_btn') }}
+</vibe:button>
+
+{{-- 4. Wobble: Goyang halus untuk informasi --}}
+<vibe:button variant="info" size="sm" onclick="vibeToast({
+    type: 'info',
+    animation: 'wobble',
+    title: 'Tips Desain',
+    message: 'Gunakan shortcut Ctrl+K untuk pencarian cepat.'
+})">
+    {{ __('docs/toast.animation.wobble_btn') }}
+</vibe:button>
+                    </vibe:preview.code>
+
+                    <div class="flex flex-wrap items-center justify-center gap-3 p-4">
+                        <vibe:button variant="success" size="sm" onclick="vibeToast({
+                                type: 'success',
+                                animation: 'pop',
+                                title: 'Aksi Berhasil',
+                                message: 'Data Anda berhasil disimpan ke cloud.'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m9 12 2 2 4-4" />
+                            </svg>
+                            {{ __('docs/toast.animation.pop_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="destructive" size="sm" onclick="vibeToast({
+                                type: 'error',
+                                animation: 'shake',
+                                title: 'Validasi Gagal',
+                                message: 'Periksa kembali formulir input Anda.'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" y1="9" x2="9" y2="15" />
+                                <line x1="9" y1="9" x2="15" y2="15" />
+                            </svg>
+                            {{ __('docs/toast.animation.shake_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="warning" size="sm" onclick="vibeToast({
+                                type: 'warning',
+                                animation: 'pulse',
+                                title: 'Peringatan Server',
+                                message: 'Beban memori CPU mencapai 90%.'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            {{ __('docs/toast.animation.pulse_btn') }}
+                        </vibe:button>
+
+                        <vibe:button variant="info" size="sm" onclick="vibeToast({
+                                type: 'info',
+                                animation: 'wobble',
+                                title: 'Tips Desain',
+                                message: 'Gunakan shortcut Ctrl+K untuk pencarian cepat.'
+                            })">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="12" y1="16" x2="12" y2="12" />
+                                <line x1="12" y1="8" x2="12.01" y2="8" />
+                            </svg>
+                            {{ __('docs/toast.animation.wobble_btn') }}
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
+            </section>
+
             {{-- 5. Trigger Methods --}}
             <section id="metode-pemanggilan" class="space-y-4">
                 <div class="space-y-1">
@@ -473,7 +584,8 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                                 $containerProps = [
                                     ['position', "'bottom-right'|'bottom-left'|'top-right'|'top-left'|'top-center'|'bottom-center'", "'bottom-right'", __('docs/toast.props_items.container.position')],
                                     ['timeout', 'int|false', '3000', __('docs/toast.props_items.container.timeout')],
-                                    ['sound', 'bool|string', 'false', __('docs/toast.props_items.container.sound')]
+                                    ['sound', 'bool|string', 'false', __('docs/toast.props_items.container.sound')],
+                                    ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|false", 'false', __('docs/toast.props_items.container.animation')]
                                 ];
                             @endphp
                             @foreach ($containerProps as [$prop, $type, $default, $desc])
@@ -506,7 +618,8 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                                     ['message', 'string', '""', __('docs/toast.props_items.payload.message')],
                                     ['icon', 'string (HTML/SVG)', 'null', __('docs/toast.props_items.payload.icon')],
                                     ['timeout', 'int|false', 'Inherit (3000)', __('docs/toast.props_items.payload.timeout')],
-                                    ['sound', 'bool|string', 'Inherit (false)', __('docs/toast.props_items.payload.sound')]
+                                    ['sound', 'bool|string', 'Inherit (false)', __('docs/toast.props_items.payload.sound')],
+                                    ['animation', "'shake'|'pop'|'pulse'|'wobble'|'auto'|false", 'Inherit (false)', __('docs/toast.props_items.payload.animation')]
                                 ];
                             @endphp
                             @foreach ($payloadParams as [$prop, $type, $default, $desc])

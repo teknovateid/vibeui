@@ -16,6 +16,7 @@
     'error' => null,
     'errorName' => null,
     'wrapperClass' => null,
+    'animation' => false,
 ])
 
 @php
@@ -65,7 +66,16 @@
             : 'border border-input bg-background text-foreground shadow-2xs focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
     };
 
-    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
+    $animationClass = match ($animation) {
+        true, 'auto' => ($hasError ? 'animate-vibe-shake' : ''),
+        'shake' => 'animate-vibe-shake',
+        'pop', 'bounce' => 'animate-vibe-pop',
+        'pulse' => 'animate-vibe-pulse',
+        'wobble' => 'animate-vibe-wobble',
+        default => '',
+    };
+
+    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$animationClass}");
 @endphp
 
 <div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }} x-data="{

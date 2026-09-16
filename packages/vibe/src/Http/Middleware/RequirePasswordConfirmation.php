@@ -39,11 +39,12 @@ class RequirePasswordConfirmation
         }
 
         $confirmedAt = $request->session()->get('auth.password_confirmed_at');
+        $isSessionLocked = (bool) $request->session()->get('auth.session_locked', false);
         $now = Date::now()->unix();
 
         // 1. Mode dengan durasi waktu spesifik (misal 'confirm:300')
         if ($timeoutSeconds !== null) {
-            $isExpired = ! $confirmedAt || ($now - (int) $confirmedAt) >= $timeoutSeconds;
+            $isExpired = $isSessionLocked || ! $confirmedAt || ($now - (int) $confirmedAt) >= $timeoutSeconds;
 
             if ($isExpired) {
                 $request->session()->forget('auth.password_confirmed_at');
@@ -63,7 +64,7 @@ class RequirePasswordConfirmation
 
         if ($isStandardLaravelConfirm) {
             $defaultTimeout = (int) config('auth.password_timeout', 10800);
-            $isExpired = ! $confirmedAt || ($now - (int) $confirmedAt) >= $defaultTimeout;
+            $isExpired = $isSessionLocked || ! $confirmedAt || ($now - (int) $confirmedAt) >= $defaultTimeout;
 
             if ($isExpired) {
                 $request->session()->forget('auth.password_confirmed_at');
@@ -115,11 +116,11 @@ class RequirePasswordConfirmation
             trim(parse_url($confirmedRoute, PHP_URL_PATH) ?? '', '/') === $routePath
         );
 
-        if ($isRouteMatched) {
+        if (! $isSessionLocked && $isRouteMatched) {
             $request->session()->forget('auth.session_locked');
         }
 
-        if (! $confirmedAt || ! $isRouteMatched) {
+        if ($isSessionLocked || ! $confirmedAt || ! $isRouteMatched) {
             $request->session()->forget('auth.password_confirmed_at');
             $request->session()->forget('auth.confirmed_route');
             $request->session()->forget('auth.is_single_page_confirm');

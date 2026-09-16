@@ -26,6 +26,10 @@
                     @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'accent', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">pulse</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">shake</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">pop</vibe:badge>
                 </div>
             </div>
 
@@ -285,7 +289,44 @@
                 </vibe:preview>
             </section>
 
-            {{-- 7. Disabled State & Type --}}
+            {{-- 7. Animation & Attention --}}
+            <section id="animasi-tombol" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.animation.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/button.animation.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/button.animation.preview_title')">
+                    <vibe:preview.code>
+<vibe:button pulse variant="primary">
+    {{ __('docs/button.animation.cta') }}
+</vibe:button>
+
+<vibe:button animation="shake" variant="destructive">
+    {{ __('docs/button.animation.danger') }}
+</vibe:button>
+
+<vibe:button animation="pop" variant="accent">
+    {{ __('docs/button.animation.pop') }}
+</vibe:button>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center gap-4 justify-center">
+                        <vibe:button pulse variant="primary">
+                            {{ __('docs/button.animation.cta') }}
+                        </vibe:button>
+                        <vibe:button animation="shake" variant="destructive">
+                            {{ __('docs/button.animation.danger') }}
+                        </vibe:button>
+                        <vibe:button animation="pop" variant="accent">
+                            {{ __('docs/button.animation.pop') }}
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 8. Disabled State & Type --}}
             <section id="status-disabled" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.status.title') }}</h2>
@@ -592,7 +633,17 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'accent'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'], ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'], ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'], ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'], ['loading', 'bool', 'false', 'Menampilkan animasi spinner loading bawaan dan menonaktifkan klik.'], ['disabled', 'bool', 'false', 'Menonaktifkan tombol serta menerapkan pengurangan opasitas.'], ['class', 'string|null', 'null', 'Kelas Tailwind tambahan yang dimerge via `twMerge` (misal: `rounded-full` untuk gaya pill).']];
+                            $props = [
+                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'accent'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'],
+                                ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'],
+                                ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'],
+                                ['loading', 'bool', 'false', 'Menampilkan animasi spinner loading bawaan dan menonaktifkan klik.'],
+                                ['disabled', 'bool', 'false', 'Menonaktifkan tombol serta menerapkan pengurangan opasitas.'],
+                                ['pulse', 'bool', 'false', 'Menambahkan efek denyut cincin bercahaya berkala (.animate-vibe-pulse) untuk tombol CTA.'],
+                                ['animation', "'pulse'|'shake'|'pop'|'wobble'|false", 'false', 'Efek animasi visual pada tombol. Default: false.'],
+                                ['class', 'string|null', 'null', 'Kelas Tailwind tambahan yang dimerge via `twMerge` (misal: `rounded-full` untuk gaya pill).'],
+                            ];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
                             <vibe:table.row>

@@ -59,6 +59,16 @@ return [
         'maintenance' => 'Maintenance',
     ],
 
+    // Section: Animation & Pulse
+    'animation' => [
+        'title' => 'Badge Animations & Pulse Glow',
+        'desc' => 'Use the boolean prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">pulse</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">animation="pulse"</code> to emit a periodic glowing ring pulse. It also supports <code class="font-mono text-xs text-foreground">animation="pop"</code> for spring bounce entrance effects.',
+        'preview_title' => 'Badge with Pulse & Pop Animations',
+        'live' => '● LIVE STREAM',
+        'active' => 'System Online',
+        'new_tag' => 'New Feature',
+    ],
+
     // Section 6: Icons and Addons
     'icons_addons' => [
         'title' => 'Icons & Prefix / Suffix',

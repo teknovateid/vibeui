@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['id', 'maxWidth', 'position', 'variant', 'dismissible', 'dismissibleButton', 'show', 'persist', 'teleport'] as $p)
+                    @foreach (['id', 'maxWidth', 'position', 'variant', 'dismissible', 'dismissibleButton', 'animation', 'show', 'persist', 'teleport'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -398,6 +398,64 @@
                                 </vibe:button>
                                 <vibe:button type="button" variant="destructive" size="sm" @click="close">
                                     {{ __('docs/modal.non_dismissible.btn_confirm') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- Interactive Animations (Pop, Bounce, Shake) --}}
+            <section id="animasi-modal" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/modal.animation.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/modal.animation.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/modal.animation.preview_title')">
+                    <vibe:preview.code>
+                        <vibe:button @click="$dispatch('open-modal', 'modal-pop-demo')" variant="success" size="sm">
+                            {{ __('docs/modal.animation.btn') }}
+                        </vibe:button>
+
+                        <vibe:modal id="modal-pop-demo" animation="pop" maxWidth="md">
+                            <vibe:modal.header>
+                                <span>{{ __('docs/modal.animation.modal_title') }}</span>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.animation.modal_desc') }}</p>
+                            </vibe:modal.header>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="success" size="sm" @click="close">
+                                    {{ __('docs/modal.animation.btn_close') }}
+                                </vibe:button>
+                            </vibe:modal.footer>
+                        </vibe:modal>
+                    </vibe:preview.code>
+
+                    <div class="flex items-center justify-center p-4">
+                        <vibe:button @click="$dispatch('open-modal', 'modal-pop-demo')" variant="success" size="sm">
+                            <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="m9 12 2 2 4-4" />
+                            </svg>
+                            {{ __('docs/modal.animation.btn') }}
+                        </vibe:button>
+
+                        <vibe:modal id="modal-pop-demo" animation="pop" maxWidth="md">
+                            <vibe:modal.header>
+                                <div class="flex items-center gap-2 text-success">
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="m9 12 2 2 4-4" />
+                                    </svg>
+                                    <span>{{ __('docs/modal.animation.modal_title') }}</span>
+                                </div>
+                                <p class="text-sm font-normal text-muted-foreground">{{ __('docs/modal.animation.modal_desc') }}</p>
+                            </vibe:modal.header>
+                            <vibe:modal.footer>
+                                <vibe:button type="button" variant="success" size="sm" @click="close">
+                                    {{ __('docs/modal.animation.btn_close') }}
                                 </vibe:button>
                             </vibe:modal.footer>
                         </vibe:modal>
