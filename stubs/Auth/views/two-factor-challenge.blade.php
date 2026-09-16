@@ -32,7 +32,7 @@
 
     {{-- Error Feedback --}}
     @if ($errors->any())
-        <vibe:card.alert variant="destructive" size="sm" dismissible>
+        <vibe:card.alert variant="destructive" size="sm" dismissible animation="shake">
             <x-slot:description>
                 {{ $errors->first() }}
             </x-slot:description>

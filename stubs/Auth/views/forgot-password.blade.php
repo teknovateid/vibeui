@@ -1,10 +1,10 @@
 <div class="space-y-4">
     @if ($status ?? session('status'))
-        <vibe:card.alert variant="success" size="sm" :description="$status ?? session('status')" />
+        <vibe:card.alert variant="success" size="sm" :description="$status ?? session('status')" animation="pop" />
     @endif
 
     @if (session('error'))
-        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" />
+        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" animation="shake" />
     @endif
 
     <form wire:submit="sendResetLink" class="space-y-4">

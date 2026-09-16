@@ -2,12 +2,12 @@
 
     {{-- Status Session Alert --}}
     @if (session('status'))
-        <vibe:card.alert variant="success" size="sm" :description="session('status')" />
+        <vibe:card.alert variant="success" size="sm" :description="session('status')" animation="pop" />
     @endif
 
     {{-- Development IP Warning Notice --}}
     @if (session('warning'))
-        <vibe:card.alert variant="warning" size="sm" dismissible :title="__('auth/passkey.dev_mode_title')" :description="session('warning')">
+        <vibe:card.alert variant="warning" size="sm" dismissible :title="__('auth/passkey.dev_mode_title')" :description="session('warning')" animation="pulse">
             @if (session('localhost_url'))
                 <x-slot:actions>
                     <vibe:button href="{{ session('localhost_url') }}" size="xs" variant="primary">
@@ -23,7 +23,7 @@
 
     {{-- Passkey Error Notice --}}
     @if (session('error'))
-        <vibe:card.alert variant="destructive" size="sm" dismissible :title="__('auth/passkey.failed_title')" :description="session('error')" />
+        <vibe:card.alert variant="destructive" size="sm" dismissible :title="__('auth/passkey.failed_title')" :description="session('error')" animation="shake" />
     @endif
 
     {{-- Passkey Login Section --}}

@@ -1,6 +1,6 @@
 <div class="space-y-4">
     @if (session('status') == 'verification-link-sent')
-        <vibe:card.alert variant="success" size="sm" :description="__('auth/messages.verification_sent')" />
+        <vibe:card.alert variant="success" size="sm" :description="__('auth/messages.verification_sent')" animation="pop" />
     @else
         <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
             {{ __('auth/messages.verification_notice') }}
@@ -8,7 +8,7 @@
     @endif
 
     @if (session('error'))
-        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" />
+        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" animation="shake" />
     @endif
 
     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3">

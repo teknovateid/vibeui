@@ -7,15 +7,16 @@
         <vibe:card.alert
             variant="warning"
             size="sm"
+            animation="shake"
             :title="__('auth/messages.session_locked')"
             :description="__('auth/messages.session_locked_description')"
         />
     @elseif (session('status'))
-        <vibe:card.alert variant="success" size="sm" :description="session('status')" />
+        <vibe:card.alert variant="success" size="sm" :description="session('status')" animation="pop" />
     @endif
 
     @if (session('error'))
-        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" />
+        <vibe:card.alert variant="destructive" size="sm" dismissible :description="session('error')" animation="shake" />
     @endif
 
     {{-- Passkey Confirm Button --}}
