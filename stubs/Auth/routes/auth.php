@@ -138,6 +138,23 @@ Route::middleware('auth')->group(function () {
                     return response()->json(['message' => 'Alamat email akun tidak ditemukan.'], 422);
                 }
 
+                // Throttle pengiriman email: maks 3 kali per menit per user
+                $throttleKey = 'two-factor-setup-email:' . $user->getAuthIdentifier();
+                $rateLimiter = app(\Illuminate\Cache\RateLimiter::class);
+
+                if ($rateLimiter->tooManyAttempts($throttleKey, 3)) {
+                    $seconds = $rateLimiter->availableIn($throttleKey);
+                    return response()->json([
+                        'method' => 'email',
+                        'email' => $manager->maskEmail($user->email),
+                        'message' => 'Email sudah dikirim. Tunggu ' . $seconds . ' detik sebelum meminta ulang.',
+                        'cooldown_seconds' => $seconds,
+                        'throttled' => true,
+                    ], 429);
+                }
+
+                $rateLimiter->hit($throttleKey, 60);
+
                 $otp = $manager->createOtpForUser($user, 'email', 10);
                 $manager->sendEmailOtp($user, $otp, 10);
 
@@ -145,6 +162,7 @@ Route::middleware('auth')->group(function () {
                     'method' => 'email',
                     'email' => $manager->maskEmail($user->email),
                     'message' => 'Kode verifikasi 6-digit telah dikirimkan ke email Anda.',
+                    'cooldown_seconds' => 60,
                 ]);
             }
 
@@ -160,11 +178,13 @@ Route::middleware('auth')->group(function () {
             }
 
             $appName = config('app.name', 'Vibe UI');
+            // Sanitasi secret ke Base32 murni agar QR dan secret yang ditampilkan konsisten
+            $cleanSecret = $manager->sanitizeSecret($authenticator->secret);
             $qrUrl = $manager->qrCodeUrl($appName, $user->email ?? $user->username, $authenticator->secret);
 
             return response()->json([
                 'method' => 'totp',
-                'secret' => $authenticator->secret,
+                'secret' => $cleanSecret,
                 'qr_code_url' => $qrUrl,
                 'confirmed' => $authenticator->isConfirmed(),
             ]);
@@ -248,12 +268,28 @@ Route::middleware('auth')->group(function () {
                 if (empty($user->email)) {
                     return response()->json(['message' => 'Alamat email tidak tersedia.'], 422);
                 }
+
+                // Throttle kirim ulang: maks 3 kali per menit per user (shared dengan setup)
+                $throttleKey = 'two-factor-setup-email:' . $user->getAuthIdentifier();
+                $rateLimiter = app(\Illuminate\Cache\RateLimiter::class);
+
+                if ($rateLimiter->tooManyAttempts($throttleKey, 3)) {
+                    $seconds = $rateLimiter->availableIn($throttleKey);
+                    return response()->json([
+                        'message' => 'Terlalu sering. Tunggu ' . $seconds . ' detik sebelum meminta ulang.',
+                        'cooldown_seconds' => $seconds,
+                    ], 429);
+                }
+
+                $rateLimiter->hit($throttleKey, 60);
+
                 $otp = $manager->createOtpForUser($user, 'email', 10);
                 $manager->sendEmailOtp($user, $otp, 10);
 
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Kode 6-digit baru telah dikirimkan ke email Anda.',
+                    'cooldown_seconds' => 60,
                 ]);
             }
 
