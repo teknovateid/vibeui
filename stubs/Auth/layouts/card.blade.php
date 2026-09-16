@@ -5,8 +5,7 @@
 ])
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,21 +14,20 @@
     <title>{{ ($title ? $title . ' — ' : '') . config('app.name', 'Vibe UI') }}</title>
 
     @vibeStyles
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/vibe/passkeys.js'])
+    @stack('seo')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/vibe/passkeys.js'])
     @livewireStyles
     @stack('head')
 </head>
 
-<body class="min-h-full flex flex-col font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground vibe-scrollbar">
-
-    {{-- Global Theme Toggle + Language Switcher --}}
+<body class="font-medium font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground vibe-scrollbar">
     <div class="fixed top-4 right-4 z-50 flex items-center gap-2" x-data="{
         isDark: document.documentElement.classList.contains('dark'),
         toggle(e) {
             window.VibeTheme ? window.VibeTheme.toggle(e) : document.documentElement.classList.toggle('dark');
         }
     }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')">
-        {{-- Language Switcher --}}
         <div class="relative" x-data="{ open: false }" @click.outside="open = false">
             <button type="button" @click="open = !open" class="inline-flex items-center justify-center size-8 rounded-lg border border-border/80 bg-card/80 backdrop-blur-sm text-foreground/80 hover:text-foreground shadow-2xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring" :title="'{{ __('auth/language.switch') }}'" aria-label="{{ __('auth/language.switch') }}">
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -67,8 +65,7 @@
         </button>
     </div>
 
-    {{-- Elevated Card Layout --}}
-    <div class="min-h-screen flex flex-col justify-center items-center px-4 py-12 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex flex-col justify-center items-center px-4 py-12 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
         <div class="w-full max-w-md space-y-6">
             {{-- Brand Header --}}
             <div class="text-center">
@@ -116,5 +113,4 @@
     @livewireScripts
     @stack('body')
 </body>
-
 </html>
