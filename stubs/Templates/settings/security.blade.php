@@ -18,7 +18,7 @@
             <vibe:tabs selected="security" variant="sidebar" class="min-h-155">
                 @include('[path].settings.tabs', ['active' => 'security'])
 
-                <div class="flex flex-col gap-6 p-6 w-full">
+                <div class="flex-1 min-w-0 p-6 space-y-6">
                     {{-- Header --}}
                     <div class="pb-4 border-border/50 border-b">
                         <div class="flex justify-between items-center">
@@ -42,9 +42,11 @@
                             <vibe:input type="password" name="current_password" :label="__('vibe/settings.security.current_password')" viewable :placeholder="__('vibe/settings.security.current_password_placeholder')" />
                             <vibe:input type="password" name="new_password" :label="__('vibe/settings.security.new_password')" viewable :placeholder="__('vibe/settings.security.new_password_placeholder')" />
                             <vibe:input type="password" name="confirm_password" :label="__('vibe/settings.security.confirm_password')" viewable :placeholder="__('vibe/settings.security.confirm_password_placeholder')" />
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer float-end flex" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.security.password_updated_toast') }}', { type: 'success', title: '{{ __('vibe/settings.security.password_updated_title') }}' }) : null">
-                                {{ __('vibe/settings.security.update_password_btn') }}
-                            </vibe:button>
+                            <div class="flex justify-end pt-2">
+                                <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.security.password_updated_toast') }}', { type: 'success', title: '{{ __('vibe/settings.security.password_updated_title') }}' }) : null">
+                                    {{ __('vibe/settings.security.update_password_btn') }}
+                                </vibe:button>
+                            </div>
                         </div>
                     </div>
 
