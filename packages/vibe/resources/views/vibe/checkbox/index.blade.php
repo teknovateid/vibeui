@@ -108,7 +108,11 @@
         default => 'has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-checked:hover:bg-primary/10',
     };
 
-    $hasText = !empty($label) || !empty($description) || ($slot->isNotEmpty() && trim($slot) !== '');
+    $hasDescription = !empty($description);
+    $hasText = !empty($label) || $hasDescription || ($slot->isNotEmpty() && trim($slot) !== '');
+    $alignClass = $hasDescription ? 'items-start' : 'items-center';
+    $boxMarginTop = $hasDescription ? 'mt-0.5' : '';
+    $isDisabled = $disabled ?? ($attributes->has('disabled') && $attributes->get('disabled') !== false);
 
     $hasXShow = $attributes->has('x-show');
     $xShow = $attributes->get('x-show');
@@ -116,11 +120,11 @@
     $hasWireKey = $attributes->has('wire:key');
     $wireKey = $attributes->get('wire:key');
 
-    $inputAttributes = $attributes->except(['x-show', 'x-cloak', 'wire:key']);
+    $inputAttributes = $attributes->except(['x-show', 'x-cloak', 'wire:key', 'disabled']);
 @endphp
 
 <div 
-    @if($wrapperClass) class="{{ $wrapperClass }}" @elseif(!$hasText) class="inline-flex items-center justify-center" @endif
+    @if($wrapperClass) class="{{ $wrapperClass }}" @elseif(!$hasText) class="inline-flex items-center justify-center" @else class="w-fit" @endif
     @if($hasWireKey) wire:key="{{ $wireKey }}" @endif
     @if($hasXShow) x-show="{{ $xShow }}" @endif
     @if($hasXCloak) x-cloak @endif
@@ -129,23 +133,24 @@
         {{-- Card Variant --}}
         <label for="{{ $id }}" class="relative flex items-start gap-3 p-3.5 rounded-xl border transition-all duration-150 cursor-pointer select-none {{ $hasError ? 'border-destructive/60 bg-destructive/5' : 'border-border bg-muted hover:bg-muted/80 hover:border-border/80' }} {{ $cardCheckedClasses }} has-focus-visible:ring-2 has-focus-visible:ring-ring/20 has-disabled:opacity-50 has-disabled:pointer-events-none shadow-2xs">
             @if ($showIndicator)
-                <div class="relative flex items-center justify-center shrink-0 mt-0.5">
+                <div class="relative flex items-center justify-center shrink-0 {{ $boxSizes }} mt-0.5">
                     <input
                         type="checkbox"
                         id="{{ $id }}"
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
+                        @disabled($isDisabled)
+                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0 appearance-none']) }}
                         @if($indeterminate) x-init="$el.indeterminate = true" @endif
                     />
-                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-check-icon]:hidden! peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
+                    <div class="relative {{ $boxSizes }} {{ $boxColorClasses }} border transition-colors duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-check-icon]:opacity-100 peer-checked:[&_.vibe-check-icon]:scale-100 peer-indeterminate:[&_.vibe-check-icon]:opacity-0! peer-indeterminate:[&_.vibe-check-icon]:scale-75! peer-indeterminate:[&_.vibe-indeterminate-icon]:opacity-100 peer-indeterminate:[&_.vibe-indeterminate-icon]:scale-100">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </div>
@@ -157,6 +162,7 @@
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
                     @checked($checked)
+                    @disabled($isDisabled)
                     {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
                     @if($indeterminate) x-init="$el.indeterminate = true" @endif
                 />
@@ -180,25 +186,26 @@
         </label>
     @else
         {{-- Standard / Inline Variant --}}
-        <div class="inline-flex {{ $hasText ? 'items-start gap-2.5' : 'items-center justify-center' }}">
+        <label for="{{ $id }}" class="inline-flex {{ $alignClass }} gap-2.5 select-none cursor-pointer {{ $isDisabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : '' }}">
             @if ($showIndicator)
-                <div class="relative flex items-center justify-center shrink-0 {{ $hasText ? 'mt-0.5' : '' }}">
+                <div class="relative flex items-center justify-center shrink-0 {{ $boxSizes }} {{ $boxMarginTop }}">
                     <input
                         type="checkbox"
                         id="{{ $id }}"
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
                         @checked($checked)
-                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0']) }}
+                        @disabled($isDisabled)
+                        {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0 appearance-none']) }}
                         @if($indeterminate) x-init="$el.indeterminate = true" @endif
                     />
-                    <div class="{{ $boxSizes }} {{ $boxColorClasses }} border transition-all duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none pointer-events-none peer-checked:[&_.vibe-check-icon]:block peer-indeterminate:[&_.vibe-check-icon]:hidden! peer-indeterminate:[&_.vibe-indeterminate-icon]:block">
+                    <div class="relative {{ $boxSizes }} {{ $boxColorClasses }} border transition-colors duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none pointer-events-none peer-checked:[&_.vibe-check-icon]:opacity-100 peer-checked:[&_.vibe-check-icon]:scale-100 peer-indeterminate:[&_.vibe-check-icon]:opacity-0! peer-indeterminate:[&_.vibe-check-icon]:scale-75! peer-indeterminate:[&_.vibe-indeterminate-icon]:opacity-100 peer-indeterminate:[&_.vibe-indeterminate-icon]:scale-100">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-check-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 hidden vibe-indeterminate-icon pointer-events-none fill-none stroke-current" viewBox="0 0 24 24">
+                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24">
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                         </svg>
                     </div>
@@ -210,22 +217,23 @@
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
                     @checked($checked)
+                    @disabled($isDisabled)
                     {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
                     @if($indeterminate) x-init="$el.indeterminate = true" @endif
                 />
             @endif
 
             @if ($label || $description || $slot->isNotEmpty())
-                <div class="flex flex-col">
-                    <label for="{{ $id }}" class="{{ $labelSizes }} font-medium text-foreground select-none cursor-pointer leading-tight peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
+                <div class="flex flex-col select-none">
+                    <span class="{{ $labelSizes }} font-medium text-foreground leading-normal peer-disabled:opacity-50">
                         {{ $label ?? $slot }}
-                    </label>
+                    </span>
                     @if ($description)
-                        <p class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal select-none">{{ $description }}</p>
+                        <p class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal">{{ $description }}</p>
                     @endif
                 </div>
             @endif
-        </div>
+        </label>
     @endif
 
     {{-- Error / Info Message --}}
