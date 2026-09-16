@@ -134,12 +134,12 @@
             <vibe:modal.content>
                 {{-- Feedback Alert --}}
                 <div x-show="feedback && feedbackType === 'success'" x-cloak class="mb-4">
-                    <vibe:card.alert variant="success" size="sm">
+                    <vibe:card.alert variant="success" size="sm" animation="pop">
                         <span x-text="feedback"></span>
                     </vibe:card.alert>
                 </div>
                 <div x-show="feedback && feedbackType === 'error'" x-cloak class="mb-4">
-                    <vibe:card.alert variant="destructive" size="sm">
+                    <vibe:card.alert variant="destructive" size="sm" animation="shake">
                         <span x-text="feedback"></span>
                     </vibe:card.alert>
                 </div>
@@ -242,17 +242,17 @@
             <vibe:modal.content>
                 {{-- Feedback Alert --}}
                 <div x-show="feedback && feedbackType === 'success'" x-cloak class="mb-4">
-                    <vibe:card.alert variant="success" size="sm">
+                    <vibe:card.alert variant="success" size="sm" animation="pop">
                         <span x-text="feedback"></span>
                     </vibe:card.alert>
                 </div>
                 <div x-show="feedback && feedbackType === 'info'" x-cloak class="mb-4">
-                    <vibe:card.alert variant="info" size="sm">
+                    <vibe:card.alert variant="info" size="sm" animation="pulse">
                         <span x-text="feedback"></span>
                     </vibe:card.alert>
                 </div>
                 <div x-show="feedback && feedbackType === 'error'" x-cloak class="mb-4">
-                    <vibe:card.alert variant="destructive" size="sm">
+                    <vibe:card.alert variant="destructive" size="sm" animation="shake">
                         <span x-text="feedback"></span>
                     </vibe:card.alert>
                 </div>

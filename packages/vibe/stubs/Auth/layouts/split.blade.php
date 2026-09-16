@@ -134,7 +134,7 @@
                 @endif
 
                 @if ($status)
-                    <vibe:card.alert variant="success" size="sm" :description="$status" />
+                    <vibe:card.alert variant="success" size="sm" :description="$status" animation="pop" />
                 @endif
 
                 {{ $slot }}
