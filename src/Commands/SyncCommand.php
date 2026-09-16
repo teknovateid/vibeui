@@ -82,6 +82,32 @@ class SyncCommand extends Command
                 'label' => 'Auth Views',
                 'shallow' => true,
             ],
+            [
+                'src' => resource_path('views/docs/settings'),
+                'dest' => base_path('packages/vibe/stubs/Templates/settings'),
+                'label' => 'Settings Templates',
+                'ignore' => ['index.blade.php'],
+                'transform' => function (string $content): string {
+                    $content = preg_replace('/<x-docs\.layouts\.[a-z0-9_-]+>/', '<x-[path].layouts.[style]>', $content);
+                    $content = preg_replace('/<\/x-docs\.layouts\.[a-z0-9_-]+>/', '</x-[path].layouts.[style]>', $content);
+
+                    return str_replace(
+                        ["route('docs.index')", "route('docs.settings.", "@include('docs.settings.", 'docs.settings.'],
+                        ["route('[path].index')", "route('[path].settings.", "@include('[path].settings.", '[path].settings.'],
+                        $content
+                    );
+                },
+            ],
+            [
+                'src' => resource_path('views/livewire/settings'),
+                'dest' => base_path('packages/vibe/stubs/Auth/views/settings'),
+                'label' => 'Settings Livewire Views',
+            ],
+            [
+                'src' => app_path('Livewire/Settings'),
+                'dest' => base_path('packages/vibe/stubs/Auth/Livewire/Settings'),
+                'label' => 'Settings Livewire Classes',
+            ],
         ];
     }
 
@@ -123,8 +149,13 @@ class SyncCommand extends Command
             $srcFiles = $isShallow ? File::files($srcDir) : File::allFiles($srcDir);
             $expectedDestFiles = [];
 
+            $ignoreList = $rule['ignore'] ?? [];
+
             foreach ($srcFiles as $file) {
                 $relativePath = $isShallow ? $file->getFilename() : $file->getRelativePathname();
+                if (in_array($relativePath, $ignoreList, true)) {
+                    continue;
+                }
                 $destPath = $destDir.DIRECTORY_SEPARATOR.$relativePath;
                 $expectedDestFiles[] = $destPath;
 

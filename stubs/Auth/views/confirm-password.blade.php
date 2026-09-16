@@ -21,10 +21,13 @@
     {{-- Passkey Confirm Button --}}
     @php
         $targetRouteName = session('auth.target_route');
+        $fallbackUrl = Route::has('docs.settings.security')
+            ? route('docs.settings.security')
+            : (Route::has('settings.security') ? route('settings.security') : url('/'));
         $intendedPasskeyUrl = session('url.intended')
             ?: ($targetRouteName
                 ? (Route::has($targetRouteName) ? route($targetRouteName) : url($targetRouteName))
-                : route('docs.settings.security'));
+                : $fallbackUrl);
     @endphp
     <div class="space-y-3">
         <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">

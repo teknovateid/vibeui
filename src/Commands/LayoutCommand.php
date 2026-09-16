@@ -77,6 +77,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         if ($layout) {
             $this->components->success('Layout created');
             $list[] = "resources/views/{$path}";
+            $list[] = "resources/views/{$path}/settings";
             $list[] = "resources/views/components/{$path}";
         } else {
             $this->components->info('Layout skipped.');
@@ -114,6 +115,12 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
         $pages = [
             'index' => 'pages/index.blade.php',
+            'settings.account' => 'settings/account.blade.php',
+            'settings.appearance' => 'settings/appearance.blade.php',
+            'settings.security' => 'settings/security.blade.php',
+            'settings.login-history' => 'settings/login-history.blade.php',
+            'settings.notifications' => 'settings/notifications.blade.php',
+            'settings.tabs' => 'settings/tabs.blade.php',
         ];
 
         foreach ($pages as $component => $templatePath) {
@@ -124,7 +131,9 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 $titleName = str($path)->headline().' '.str(str_replace('.', ' ', $component))->headline();
                 $content = File::get($templateFile);
 
-                if (str_contains($content, '<x-[path].layouts.')) {
+                if ($component === 'settings.tabs') {
+                    $wrappedContent = str_replace('[path]', $path, $content);
+                } elseif (str_contains($content, '<x-[path].layouts.')) {
                     $wrappedContent = str_replace(
                         ['[path]', '[style]', '[Title]'],
                         [$path, $chosenLayout, $titleName],
@@ -143,32 +152,15 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
                 File::put($destView, $wrappedContent);
             }
+        }
 
-            // Add to menu
-            $menuPath = resource_path("views/components/{$path}/partials/{$chosenLayout}-menu.blade.php");
-            $stubPath = __DIR__."/../../stubs/Partials/{$chosenLayout}/item.blade.php";
-            if (! File::exists($stubPath)) {
-                $stubPath = __DIR__.'/../../stubs/Partials/sidebar/item.blade.php';
-            }
-
-            if (File::exists($menuPath) && File::exists($stubPath)) {
-                $menuContent = File::get($menuPath);
-
-                if (str_contains($menuContent, '</vibe:nav>')) {
-                    $stub = File::get($stubPath);
-                    $humanTitle = (string) str($path)->headline();
-
-                    // The layout's index route is just {$path}.index
-                    // The active check should exactly match {$path}.index so it doesn't stay active on all child pages
-                    $stub = str_replace(
-                        ["route('[route].index')", "request()->routeIs('[route].*')", '[Title]'],
-                        ["route('{$path}.index')", "request()->routeIs('{$path}.index')", $humanTitle],
-                        $stub
-                    );
-
-                    $menuContent = str_replace('</vibe:nav>', $stub."\n</vibe:nav>", $menuContent);
-                    File::put($menuPath, $menuContent);
-                }
+        // Ensure settings translations are published if not already present
+        foreach (['id', 'en'] as $locale) {
+            $destLang = lang_path("{$locale}/vibe/settings.php");
+            $srcLang = __DIR__."/../../lang/{$locale}/vibe/settings.php";
+            if (File::exists($srcLang) && ! File::exists($destLang)) {
+                File::ensureDirectoryExists(dirname($destLang));
+                File::copy($srcLang, $destLang);
             }
         }
 
@@ -213,6 +205,8 @@ class LayoutCommand extends Command implements PromptsForMissingInput
     protected function updateComponentReferences(string $dir, string $path): void
     {
         $files = File::allFiles($dir);
+        $humanTitle = (string) str($path)->headline();
+
         foreach ($files as $file) {
             if ($file->getExtension() === 'php') {
                 $content = File::get($file->getPathname());
@@ -223,6 +217,20 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
                 $content = preg_replace('/<x-partials\./', '<x-'.$path.'.partials.', $content);
                 $content = preg_replace('/<\/x-partials\./', '</x-'.$path.'.partials.', $content);
+
+                // Replace [path] and [Title] placeholders in components (like menu files)
+                $content = str_replace(
+                    ['[path]', '[Title]'],
+                    [$path, $humanTitle],
+                    $content
+                );
+
+                // Site settings dropdown link
+                $content = str_replace(
+                    '<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="#" class="gap-3">',
+                    '<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="{{ Route::has(\''.$path.'.settings.index\') ? route(\''.$path.'.settings.index\') : \'#\' }}" class="gap-3">',
+                    $content
+                );
 
                 File::put($file->getPathname(), $content);
             }
@@ -247,20 +255,27 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         File::put($routePath, $stubRouteContent);
 
         $appPath = base_path('bootstrap/app.php');
-        $appContent = File::get($appPath);
+        if (File::exists($appPath)) {
+            $appContent = File::get($appPath);
 
-        $searchSingle = "web: __DIR__.'/../routes/web.php',";
-        $replaceSingle = "web: [\n            __DIR__.'/../routes/web.php',\n            __DIR__.'/../routes/{$path}.php',\n        ],";
-
-        if (! str_contains($appContent, "routes/{$path}.php")) {
-            if (str_contains($appContent, $searchSingle)) {
-                $appContent = str_replace($searchSingle, $replaceSingle, $appContent);
-                File::put($appPath, $appContent);
-            } else {
-                $searchArray = "web: [\n            __DIR__.'/../routes/web.php',";
-                $replaceArray = "web: [\n            __DIR__.'/../routes/web.php',\n            __DIR__.'/../routes/{$path}.php',";
-                if (str_contains($appContent, 'web: [')) {
+            if (! str_contains($appContent, "routes/{$path}.php")) {
+                // Case 1: web: is already an array
+                if (preg_match('/web:\s*\[/s', $appContent)) {
                     $appContent = preg_replace('/(web:\s*\[)/', "$1\n            __DIR__.'/../routes/{$path}.php',", $appContent);
+                    File::put($appPath, $appContent);
+                }
+                // Case 2: web: is a single route file string
+                elseif (preg_match('/web:\s*(__DIR__\s*\.\s*[\'"][^\'"]+[\'"])\s*,/', $appContent, $matches)) {
+                    $originalRoute = $matches[1];
+                    $replacement = "web: [\n            {$originalRoute},\n            __DIR__.'/../routes/{$path}.php',\n        ],";
+                    $appContent = str_replace($matches[0], $replacement, $appContent);
+                    File::put($appPath, $appContent);
+                }
+                // Case 3: Generic fallback for web: <expression>,
+                elseif (preg_match('/web:\s*([^,\n]+),/', $appContent, $matches)) {
+                    $expr = trim($matches[1]);
+                    $replacement = "web: [\n            {$expr},\n            __DIR__.'/../routes/{$path}.php',\n        ],";
+                    $appContent = str_replace($matches[0], $replacement, $appContent);
                     File::put($appPath, $appContent);
                 }
             }

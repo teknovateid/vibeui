@@ -19,16 +19,16 @@
                 <div class="flex-1 min-w-0 p-6 space-y-6">
                     {{-- Header --}}
                     <div class="border-b border-border/50 pb-4">
-                        <h2 class="text-lg font-bold text-foreground">Profil Akun</h2>
+                        <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.profile.header_title') }}</h2>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            Kelola informasi publik dan preferensi akun Anda.
+                            {{ __('vibe/settings.profile.header_desc') }}
                         </p>
                     </div>
 
                     @auth
                         <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300">
                             <span class="size-2 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
-                            <span>Login sebagai <strong>{{ auth()->user()->name }}</strong> &mdash; data di bawah adalah informasi akun Anda yang sebenarnya.</span>
+                            <span>{!! __('vibe/settings.profile.logged_in_as', ['name' => '<strong>'.e(auth()->user()->name).'</strong>']) !!}</span>
                         </div>
 
                         {{-- Avatar & Identity --}}
@@ -43,14 +43,14 @@
                                 {{ $initials }}
                             </div>
                             <div class="space-y-1">
-                                <h4 class="text-sm font-semibold text-foreground">Foto Profil</h4>
-                                <p class="text-xs text-muted-foreground">Foto profil diambil dari Gravatar berdasarkan email Anda.</p>
+                                <h4 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.profile.avatar_title') }}</h4>
+                                <p class="text-xs text-muted-foreground">{{ __('vibe/settings.profile.avatar_desc_gravatar') }}</p>
                                 <div class="flex items-center gap-2 pt-1">
                                     <vibe:button type="button" size="sm" variant="outline" class="text-xs cursor-pointer">
-                                        Ubah Foto
+                                        {{ __('vibe/settings.profile.change_photo') }}
                                     </vibe:button>
                                     <vibe:button type="button" size="sm" variant="ghost" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer">
-                                        Hapus Foto
+                                        {{ __('vibe/settings.profile.remove_photo') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -59,20 +59,20 @@
                         {{-- Form Fields (data nyata dari auth()) --}}
                         <div class="space-y-4 max-w-xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <vibe:input name="full_name" label="Nama Lengkap" value="{{ auth()->user()->name }}" placeholder="Nama lengkap Anda" />
-                                <vibe:input type="email" name="email" label="Alamat Email" value="{{ auth()->user()->email }}" placeholder="nama@domain.com" />
+                                <vibe:input name="full_name" :label="__('vibe/settings.profile.full_name')" value="{{ auth()->user()->name }}" :placeholder="__('vibe/settings.profile.full_name_placeholder')" />
+                                <vibe:input type="email" name="email" :label="__('vibe/settings.profile.email_address')" value="{{ auth()->user()->email }}" :placeholder="__('vibe/settings.profile.email_placeholder')" />
                             </div>
                             @if (isset(auth()->user()->username))
-                                <vibe:input name="username" label="Username" value="{{ auth()->user()->username ?? '' }}" placeholder="username_anda" />
+                                <vibe:input name="username" :label="__('vibe/settings.profile.username')" value="{{ auth()->user()->username ?? '' }}" :placeholder="__('vibe/settings.profile.username_placeholder')" />
                             @endif
                             @if (isset(auth()->user()->phone))
-                                <vibe:input name="phone" label="No. Handphone" value="{{ auth()->user()->phone ?? '' }}" placeholder="+62 812 xxxx xxxx" />
+                                <vibe:input name="phone" :label="__('vibe/settings.profile.phone')" value="{{ auth()->user()->phone ?? '' }}" :placeholder="__('vibe/settings.profile.phone_placeholder')" />
                             @endif
-                            <vibe:textarea name="bio" label="Bio" placeholder="Ceritakan sedikit tentang Anda..." rows="2"></vibe:textarea>
+                            <vibe:textarea name="bio" :label="__('vibe/settings.profile.bio')" :placeholder="__('vibe/settings.profile.bio_placeholder')" rows="2"></vibe:textarea>
 
                             {{-- Language Selector --}}
                             <div class="space-y-2 pt-2">
-                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
+                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">{{ __('vibe/settings.profile.interface_language') }}</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
                                     <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'id' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
                                         🇮🇩 Bahasa Indonesia
@@ -86,8 +86,8 @@
 
                         {{-- Save Action --}}
                         <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Profil berhasil disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                                Simpan Perubahan
+                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.profile.saved_toast') }}', { type: 'success', title: '{{ __('vibe/settings.profile.saved_title') }}' }) : null">
+                                {{ __('vibe/settings.profile.save_changes') }}
                             </vibe:button>
                         </div>
                     @else
@@ -96,21 +96,21 @@
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Ini adalah pratinjau UI. <strong>Login</strong> untuk mengelola profil akun nyata Anda.</span>
-                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">Login →</a>
+                            <span>{!! __('vibe/settings.profile.guest_notice') !!}</span>
+                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">{{ __('vibe/settings.profile.login_button') }}</a>
                         </div>
 
                         {{-- Avatar & Identity (dummy) --}}
                         <div class="flex items-center gap-4">
                             <vibe:avatar size="lg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=128&h=128&auto=format&fit=crop" alt="User Avatar" class="ring-2 ring-primary/20 shrink-0" />
                             <div class="space-y-1">
-                                <h4 class="text-sm font-semibold text-foreground">Foto Profil</h4>
+                                <h4 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.profile.avatar_title') }}</h4>
                                 <div class="flex items-center gap-2">
                                     <vibe:button type="button" size="sm" variant="outline" class="text-xs cursor-pointer">
-                                        Ubah Foto
+                                        {{ __('vibe/settings.profile.change_photo') }}
                                     </vibe:button>
                                     <vibe:button type="button" size="sm" variant="ghost" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer">
-                                        Hapus Foto
+                                        {{ __('vibe/settings.profile.remove_photo') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -119,13 +119,13 @@
                         {{-- Essential Fields (dummy) --}}
                         <div class="space-y-4 max-w-xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <vibe:input name="full_name" label="Nama Lengkap" value="Masum Parvej" placeholder="Nama lengkap Anda" />
-                                <vibe:input type="email" name="email" label="Alamat Email" value="masum@hugeicons.com" placeholder="nama@domain.com" />
+                                <vibe:input name="full_name" :label="__('vibe/settings.profile.full_name')" value="Masum Parvej" :placeholder="__('vibe/settings.profile.full_name_placeholder')" />
+                                <vibe:input type="email" name="email" :label="__('vibe/settings.profile.email_address')" value="masum@hugeicons.com" :placeholder="__('vibe/settings.profile.email_placeholder')" />
                             </div>
-                            <vibe:textarea name="bio" label="Bio" placeholder="Ceritakan sedikit tentang Anda..." rows="2">UI/UX Designer & Design Systems Architect at Teknovate.</vibe:textarea>
+                            <vibe:textarea name="bio" :label="__('vibe/settings.profile.bio')" :placeholder="__('vibe/settings.profile.bio_placeholder')" rows="2">UI/UX Designer & Design Systems Architect at Teknovate.</vibe:textarea>
 
                             <div class="space-y-2 pt-2">
-                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
+                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">{{ __('vibe/settings.profile.interface_language') }}</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
                                     <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'id' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
                                         🇮🇩 Bahasa Indonesia
@@ -138,8 +138,8 @@
                         </div>
 
                         <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Profil berhasil disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                                Simpan Perubahan
+                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.profile.saved_toast') }}', { type: 'success', title: '{{ __('vibe/settings.profile.saved_title') }}' }) : null">
+                                {{ __('vibe/settings.profile.save_changes') }}
                             </vibe:button>
                         </div>
                     @endauth

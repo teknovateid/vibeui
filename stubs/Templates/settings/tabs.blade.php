@@ -4,7 +4,7 @@
 
 <vibe:tabs.list class="w-full md:w-64 shrink-0 flex flex-col gap-0.5 p-3 border-b md:border-b-0 md:border-r border-border/60 bg-sidebar/40">
     @auth
-        <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Akun</p>
+        <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
 
         <vibe:tabs.tab name="account" href="{{ route('[path].settings.account') }}">
             <x-slot:icon>
@@ -13,7 +13,7 @@
                     <path d="M20 21a8 8 0 0 0-16 0" />
                 </svg>
             </x-slot:icon>
-            Profil Akun
+            {{ __('vibe/settings.tabs.account.label') }}
         </vibe:tabs.tab>
 
         <vibe:tabs.tab name="security" href="{{ route('[path].settings.security') }}">
@@ -23,7 +23,7 @@
                     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
             </x-slot:icon>
-            Keamanan
+            {{ __('vibe/settings.tabs.security.label') }}
             <x-slot:right>
                 <svg class="size-3 text-muted-foreground/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect width="18" height="11" x="3" y="11" rx="2" />
@@ -40,12 +40,12 @@
                     <path d="M12 7v5l4 2" />
                 </svg>
             </x-slot:icon>
-            Riwayat Login
+            {{ __('vibe/settings.tabs.login_history.label') }}
         </vibe:tabs.tab>
     @endauth
 
     {{-- Group: Preferensi --}}
-    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Preferensi</p>
+    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
 
     <vibe:tabs.tab name="appearance" href="{{ route('[path].settings.appearance') }}" badge="Live" badgeVariant="primary">
         <x-slot:icon>
@@ -55,7 +55,7 @@
                 <path d="M19 17v4" />
             </svg>
         </x-slot:icon>
-        Tampilan
+        {{ __('vibe/settings.tabs.appearance.label') }}
     </vibe:tabs.tab>
 
     <vibe:tabs.tab name="notifications" href="{{ route('[path].settings.notifications') }}">
@@ -65,7 +65,7 @@
                 <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
             </svg>
         </x-slot:icon>
-        Notifikasi
+        {{ __('vibe/settings.tabs.notifications.label') }}
     </vibe:tabs.tab>
 
 
@@ -79,7 +79,7 @@
                         <polyline points="16 17 21 12 16 7" />
                         <line x1="2" x2="9" y1="12" y2="12" />
                     </svg>
-                    <span>Logout</span>
+                    <span>{{ __('vibe/settings.tabs.logout') }}</span>
                 </vibe:button>
             </form>
         </div>
