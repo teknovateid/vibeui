@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.22] - 2026-09-16
+
+### 🚀 Features
+- feat: add passkeys support to authentication scaffolding (a4e1f25)
+
+
 ## [0.1.21] - 2026-09-16
 
 ### 🚀 Features
