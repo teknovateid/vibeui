@@ -58,9 +58,22 @@ class Login extends Component
             RateLimiter::hit($this->throttleKey($this->login));
 
             throw ValidationException::withMessages([
-                'login' => trans('auth.failed'),
+                'login' => trans('auth/errors.failed'),
             ]);
         }
+
+        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+
+        if ($user && method_exists($user, 'hasTwoFactorEnabled') && $user->hasTwoFactorEnabled()) {
+            RateLimiter::clear($this->throttleKey($this->login));
+
+            session()->put('auth.2fa.user_id', $user->getAuthIdentifier());
+            session()->put('auth.2fa.remember', $this->remember);
+
+            return redirect()->route('two-factor.challenge');
+        }
+
+        Auth::login($user, $this->remember);
 
         RateLimiter::clear($this->throttleKey($this->login));
 

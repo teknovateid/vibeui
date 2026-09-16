@@ -11,7 +11,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
-    Route::prefix('auth')->name('auth.')->group(function () {
+    
+    Route::prefix('auth')->middleware(['auth','verified'])->name('auth.')->group(function () {
         Route::redirect('/', '/docs/auth/installation')->name('index');
         Route::view('/installation', 'docs.auth.installation')->name('installation');
         Route::view('/confirm', 'docs.auth.confirm')->name('confirm');

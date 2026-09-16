@@ -167,10 +167,10 @@ test('forgot password screen can be rendered', function () {
 });
 
 test('auth documentation page is accessible', function () {
-    $response = $this->get('/docs/auth');
+    $response = $this->get('/docs/auth/installation');
 
     $response->assertStatus(200);
-    $response->assertSee('Authentication System');
+    $response->assertSee('Instalasi Autentikasi');
 });
 
 test('passkey login options endpoint returns valid challenge', function () {

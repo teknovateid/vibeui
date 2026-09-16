@@ -80,7 +80,15 @@ export const VibePasskeyService = {
                 return { success: false, cancelled: true, message: 'Pendaftaran passkey dibatalkan oleh pengguna.' };
             }
 
-            return { success: false, message: error?.message || 'Gagal mendaftarkan passkey.' };
+            if (error?.status === 423 || error?.response?.status === 423 || error?.message?.includes('423') || error?.message?.toLowerCase().includes('password confirmation')) {
+                return { 
+                    success: false, 
+                    confirmationRequired: true, 
+                    message: 'Konfirmasi kata sandi (sudo mode) diperlukan sebelum mendaftarkan Passkey baru.' 
+                };
+            }
+
+            return { success: false, message: error?.message || 'Gagal mendaftarkan passkey.', error };
         }
     },
 };

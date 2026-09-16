@@ -121,5 +121,31 @@ return [
         */
         'redirect_after_login' => '/docs',
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vibe Custom Models Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Jika developer ingin meng-extend atau me-rewrite model internal Vibe UI,
+    | daftarkan class model kustom Anda di sini.
+    |
+    */
+    'models' => [
+        'two_factor' => \Teknovate\VibeUi\Models\TwoFactorAuthenticator::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vibe Notifications Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Class notifikasi bawaan yang digunakan untuk pengiriman kode verifikasi 2FA.
+    | Developer dapat me-rewrite atau meng-extend notifikasi kustom mereka di sini.
+    |
+    */
+    'notifications' => [
+        'two_factor_code' => \Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class,
+    ],
 ];
 

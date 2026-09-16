@@ -106,6 +106,7 @@ class AuthCommand extends Command
                 'ResetPassword.php',
                 'VerifyEmail.php',
                 'ConfirmPassword.php',
+                'TwoFactorChallenge.php',
             ];
 
             File::ensureDirectoryExists(app_path('Livewire/Auth'));
@@ -132,6 +133,7 @@ class AuthCommand extends Command
                 'reset-password.blade.php',
                 'verify-email.blade.php',
                 'confirm-password.blade.php',
+                'two-factor-challenge.blade.php',
             ];
 
             $destDir = resource_path('views/auth');
@@ -239,6 +241,56 @@ class AuthCommand extends Command
             $installCmd = new InstallCommand;
             $installCmd->registerViteAssets();
             $installCmd->updateNpmDependencies();
+        });
+
+        // 8. Publish & Rewrite User and 2FA Migration
+        $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () {
+            $src = __DIR__.'/../../stubs/Auth/migrations/0001_01_01_000000_create_users_table.php';
+
+            $existing = File::glob(database_path('migrations/*_create_users_table.php'));
+            $dest = ! empty($existing)
+                ? $existing[0]
+                : database_path('migrations/0001_01_01_000000_create_users_table.php');
+
+            File::ensureDirectoryExists(dirname($dest));
+            File::copy($src, $dest);
+        });
+
+        // 9. Ensure User Model has TwoFactorAuthenticatable and required fillables
+        $this->components->task('Updating User Model Traits & Fillables', function () {
+            $userModel = app_path('Models/User.php');
+            if (File::exists($userModel)) {
+                $content = File::get($userModel);
+
+                // Add trait import if not present
+                if (! str_contains($content, 'Teknovate\VibeUi\Traits\TwoFactorAuthenticatable')) {
+                    $content = preg_replace(
+                        '/(namespace App\\\\Models;\s+)/',
+                        "$1\nuse Teknovate\\VibeUi\\Traits\\TwoFactorAuthenticatable;\n",
+                        $content
+                    );
+                }
+
+                // Add trait to class if not present
+                if (! str_contains($content, 'TwoFactorAuthenticatable;')) {
+                    $content = preg_replace(
+                        '/(use HasFactory,\s*Notifiable(?:,\s*PasskeyAuthenticatable)?)/',
+                        '$1, TwoFactorAuthenticatable',
+                        $content
+                    );
+                }
+
+                // Ensure username and phone in fillable if not present
+                if (! str_contains($content, "'username'")) {
+                    $content = preg_replace(
+                        "/'name',/",
+                        "'name',\n        'username',\n        'phone',\n        'position',",
+                        $content
+                    );
+                }
+
+                File::put($userModel, $content);
+            }
         });
 
         $this->newLine();

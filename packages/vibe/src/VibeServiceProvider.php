@@ -56,6 +56,11 @@ class VibeServiceProvider extends ServiceProvider
             $this->app->alias(TailwindMergeContract::class, 'tailwind-merge');
             $this->app->alias(TailwindMergeContract::class, TailwindMerge::class);
         }
+
+        // Register TwoFactorManager
+        $this->app->singleton(Services\TwoFactorManager::class, function () {
+            return new Services\TwoFactorManager();
+        });
     }
 
     public function boot(): void
@@ -74,6 +79,10 @@ class VibeServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../lang' => $this->app->langPath(),
             ], 'vibe-lang');
+
+            $this->publishes([
+                __DIR__.'/../stubs/Auth/migrations' => database_path('migrations'),
+            ], 'vibe-migrations');
         }
 
         // Load translations from package lang folder

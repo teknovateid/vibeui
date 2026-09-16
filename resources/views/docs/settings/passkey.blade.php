@@ -19,7 +19,7 @@
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
-            <div class="flex flex-col md:flex-row w-full min-h-[620px]">
+            <div class="flex flex-col md:flex-row w-full min-h-155">
                 @include('docs.settings.tabs', ['active' => 'passkey'])
 
                 <div class="flex-1 min-w-0 p-6 space-y-6">
@@ -137,67 +137,40 @@
                                 @endif
                             </div>
 
-                            {{-- Add New Passkey (Wajib Kata Sandi Terlebih Dahulu) --}}
+                            {{-- Add New Passkey (Sudo Mode / Protected by /confirm-password) --}}
                             <div class="pt-3 border-t border-border/50 space-y-4">
                                 <div>
                                     <h3 class="text-sm font-semibold text-foreground">Daftarkan Passkey Baru</h3>
                                     <p class="text-xs text-muted-foreground mt-0.5">
-                                        Untuk alasan keamanan, masukkan kata sandi akun Anda terlebih dahulu sebelum mendaftarkan Passkey baru.
+                                        Daftarkan biometrik (Touch ID, Face ID, Windows Hello, atau YubiKey) pada perangkat ini.
                                     </p>
                                 </div>
 
                                 <form @submit.prevent="submitRegisterPasskey()" class="p-4 rounded-2xl bg-muted/30 border border-border/60 space-y-3.5">
-                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        <div class="space-y-1.5">
-                                            <label class="text-xs font-semibold text-foreground">Nama Perangkat</label>
-                                            <input
-                                                type="text"
-                                                x-model="registerName"
-                                                placeholder="Contoh: MacBook Pro Touch ID"
-                                                class="w-full px-3 py-2 text-sm rounded-xl border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none"
-                                                required
-                                            />
-                                        </div>
-                                        <div class="space-y-1.5">
-                                            <label class="text-xs font-semibold text-foreground flex items-center justify-between">
-                                                <span>Kata Sandi Akun</span>
-                                                <span class="text-[10px] text-muted-foreground font-normal">Verifikasi Keamanan</span>
-                                            </label>
-                                            <div class="relative">
-                                                <input
-                                                    :type="showPassword ? 'text' : 'password'"
-                                                    x-model="accountPassword"
-                                                    placeholder="Masukkan kata sandi akun..."
-                                                    autocomplete="current-password"
-                                                    class="w-full px-3 py-2 pr-10 text-sm rounded-xl border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none"
-                                                    required
-                                                />
-                                                <button
-                                                    type="button"
-                                                    @click="showPassword = !showPassword"
-                                                    class="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer"
-                                                    tabindex="-1"
-                                                >
-                                                    <svg x-show="!showPassword" class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                                    <svg x-show="showPassword" x-cloak class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
-                                                </button>
-                                            </div>
-                                        </div>
+                                    <div class="space-y-1.5 max-w-md">
+                                        <label class="text-xs font-semibold text-foreground">Nama Perangkat</label>
+                                        <input
+                                            type="text"
+                                            x-model="registerName"
+                                            placeholder="Contoh: MacBook Pro Touch ID"
+                                            class="w-full px-3 py-2 text-sm rounded-xl border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none"
+                                            required
+                                        />
                                     </div>
 
                                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
                                         <div class="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                                            <svg class="size-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                            <span>Kata sandi diverifikasi terlebih dahulu sebelum memicu sensor biometrik.</span>
+                                            <svg class="size-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M2 12a10 10 0 0 1 18-6"/></svg>
+                                            <span>Sensor biometrik perangkat akan langsung dipicu saat tombol ditekan.</span>
                                         </div>
 
-                                        <vibe:button type="submit" variant="primary" size="sm" ::disabled="loading || !accountPassword" class="cursor-pointer shrink-0">
+                                        <vibe:button type="submit" variant="primary" size="sm" ::disabled="loading || !registerName" class="cursor-pointer shrink-0">
                                             <template x-if="!loading">
                                                 <span class="inline-flex items-center gap-1.5">
                                                     <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                                     </svg>
-                                                    <span>Konfirmasi & Daftarkan Passkey</span>
+                                                    <span>Daftarkan Passkey</span>
                                                 </span>
                                             </template>
                                             <template x-if="loading">
@@ -250,8 +223,6 @@
                     isIpAddress: typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1'),
                     localhostUrl: typeof window !== 'undefined' ? window.location.href.replace('127.0.0.1', 'localhost') : '',
                     registerName: 'Perangkat Saya (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
-                    accountPassword: '',
-                    showPassword: false,
                     loading: false,
                     statusText: '',
                     feedbackMessage: null,
@@ -260,39 +231,17 @@
                         this.supported = !!(window.PublicKeyCredential && (window.VibePasskeyService?.isSupported() ?? true));
                     },
                     async submitRegisterPasskey() {
-                        if (!this.accountPassword) {
+                        if (!this.registerName) {
                             this.feedbackType = 'error';
-                            this.feedbackMessage = 'Harap masukkan kata sandi akun Anda terlebih dahulu.';
+                            this.feedbackMessage = 'Harap masukkan nama perangkat.';
                             return;
                         }
 
                         this.loading = true;
-                        this.statusText = 'Memverifikasi kata sandi...';
+                        this.statusText = 'Menyiapkan sensor biometrik perangkat...';
                         this.feedbackMessage = null;
 
                         try {
-                            // 1. Verifikasi kata sandi terlebih dahulu
-                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
-                            const verifyRes = await fetch('/confirm-password', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': csrfToken,
-                                    'Accept': 'application/json',
-                                },
-                                body: JSON.stringify({ password: this.accountPassword }),
-                            });
-
-                            if (!verifyRes.ok && verifyRes.status !== 204 && !verifyRes.redirected) {
-                                const data = await verifyRes.json().catch(() => ({}));
-                                this.feedbackType = 'error';
-                                this.feedbackMessage = data?.errors?.password?.[0] || data?.message || 'Kata sandi salah. Silakan periksa kembali.';
-                                this.loading = false;
-                                return;
-                            }
-
-                            // 2. Jika kata sandi benar, lanjutkan pendaftaran WebAuthn Passkey
-                            this.statusText = 'Menyiapkan sensor biometrik perangkat...';
                             if (!window.VibePasskeyService) {
                                 throw new Error('Modul Passkey belum dimuat.');
                             }
@@ -301,13 +250,21 @@
                             if (regRes.success) {
                                 this.feedbackType = 'success';
                                 this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
-                                this.accountPassword = '';
                                 setTimeout(() => window.location.reload(), 1500);
+                            } else if (regRes.confirmationRequired) {
+                                // Sesi konfirmasi password telah kedaluwarsa, arahkan ke /confirm-password
+                                this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                window.location.href = '{{ route("password.confirm") }}';
                             } else {
                                 this.feedbackType = 'error';
                                 this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
                             }
                         } catch (err) {
+                            if (err?.response?.status === 423 || err?.status === 423 || err?.message?.includes('423') || err?.message?.toLowerCase().includes('password confirmation')) {
+                                this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                window.location.href = '{{ route("password.confirm") }}';
+                                return;
+                            }
                             this.feedbackType = 'error';
                             this.feedbackMessage = err.message || 'Terjadi kesalahan saat memproses pendaftaran passkey.';
                         } finally {
