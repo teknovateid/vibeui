@@ -5,6 +5,7 @@ use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\SelectController;
 use App\Http\Controllers\SettingsController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 if (app()->environment('local', 'testing')) {
@@ -108,7 +109,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', function () {
-            return auth()->check() ? redirect('/docs/settings/account') : redirect('/docs/settings/appearance');
+            return Auth::check() ? redirect('/docs/settings/account') : redirect('/docs/settings/appearance');
         })->name('index');
         Route::view('/appearance', 'docs.settings.appearance')->name('appearance');
         Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
@@ -117,12 +118,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
             Route::view('/account', 'docs.settings.account')->name('account');
 
             Route::get('/security', [SettingsController::class, 'security'])
-                ->middleware('confirm')
+                // ->middleware('confirm')
                 ->name('security');
-
-            Route::view('/passkey', 'docs.settings.security')
-                ->middleware('confirm')
-                ->name('passkey');
 
             Route::view('/login-history', 'docs.settings.login-history')
                 ->middleware('idle:10')

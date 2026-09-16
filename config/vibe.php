@@ -120,6 +120,16 @@ return [
         | Gunakan path seperti '/docs' atau URL tujuan setelah otentikasi.
         */
         'redirect_after_login' => '/docs',
+
+        /*
+        | Konfirmasi Kata Sandi untuk Aksi Sensitif 2FA (Livewire - Cara A):
+        | - true  : (Default) Mewajibkan konfirmasi kata sandi sebelum memulai setup 2FA,
+        |           melihat recovery codes, membuat ulang kode, atau menonaktifkan 2FA.
+        | - false : Aksi 2FA dapat langsung dijalankan tanpa meminta konfirmasi kata sandi.
+        |
+        | Developer juga dapat menonaktifkannya via .env: VIBE_CONFIRM_PASSWORD_FOR_2FA=false
+        */
+        'confirm_password_for_2fa' => env('VIBE_CONFIRM_PASSWORD_FOR_2FA', true),
     ],
 
     /*

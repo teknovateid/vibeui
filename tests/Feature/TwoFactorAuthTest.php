@@ -139,7 +139,7 @@ test('user can complete two factor challenge with recovery code', function () {
 test('authenticated user can setup and confirm 2fa via livewire component', function () {
     $user = User::factory()->create();
 
-    $this->actingAs($user);
+    $this->actingAs($user)->withSession(['auth.password_confirmed_at' => time()]);
 
     $test = Livewire::test(TwoFactor::class)
         ->assertSet('totpEnabled', false)
@@ -201,7 +201,7 @@ test('user can setup and confirm two factor authentication via email otp in live
         'password' => Hash::make('password123'),
     ]);
 
-    $this->actingAs($user);
+    $this->actingAs($user)->withSession(['auth.password_confirmed_at' => time()]);
 
     $test = Livewire::test(TwoFactor::class)
         ->assertSet('emailEnabled', false)
@@ -329,7 +329,7 @@ test('email 2fa setup does not resend email when cooldown is still active', func
         'password' => Hash::make('password123'),
     ]);
 
-    $this->actingAs($user);
+    $this->actingAs($user)->withSession(['auth.password_confirmed_at' => time()]);
 
     $test = Livewire::test(TwoFactor::class)
         ->assertSet('emailEnabled', false)
@@ -471,5 +471,27 @@ test('invalid recovery code displays properly translated validation error messag
         ->assertHasErrors(['recovery_code'])
         ->assertDontSee('auth.two_factor.invalid_recovery_code')
         ->assertSee('Kode pemulihan yang Anda masukkan tidak valid atau sudah digunakan.');
+});
+
+test('two factor sensitive actions redirect to password confirmation when unconfirmed', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user); // Tanpa sesi konfirmasi password
+
+    Livewire::test(TwoFactor::class)
+        ->call('setupTotp')
+        ->assertRedirect(route('password.confirm'));
+});
+
+test('two factor sensitive actions allow direct setup when password confirmation is disabled via config', function () {
+    config(['vibe.auth.confirm_password_for_2fa' => false]);
+
+    $user = User::factory()->create();
+
+    $this->actingAs($user); // Tanpa sesi konfirmasi password
+
+    Livewire::test(TwoFactor::class)
+        ->call('setupTotp')
+        ->assertDispatched('open-modal', 'modal-2fa-totp');
 });
 
