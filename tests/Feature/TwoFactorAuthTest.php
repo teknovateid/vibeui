@@ -186,7 +186,9 @@ test('security settings page renders two factor setup ui', function () {
         ->assertSee('Aktifkan 2FA')
         ->assertSee('Aplikasi Autentikator (TOTP)')
         ->assertSee('Kode Verifikasi Email (OTP)')
-        ->assertSee('vibeTwoFactorSettings');
+        ->assertSee('vibeTwoFactorSettings')
+        ->assertSee('Passkey (WebAuthn)')
+        ->assertSee('passkeyController');
 });
 
 test('user can setup and confirm two factor authentication via email otp', function () {
@@ -271,6 +273,7 @@ test('user can switch provider to email and complete challenge via email otp', f
 
 test('whatsapp and sms otp stubs are prepared and verify otp successfully', function () {
     $user = User::factory()->create([
+        'username' => 'test_user_otp_' . uniqid(),
         'phone' => '081234567890',
         'password' => Hash::make('password123'),
     ]);

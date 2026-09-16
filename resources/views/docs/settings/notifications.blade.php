@@ -15,7 +15,7 @@
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
-            <div class="flex flex-col md:flex-row w-full min-h-[620px]">
+            <vibe:tabs selected="notifications" variant="sidebar" class="min-h-155">
                 @include('docs.settings.tabs', ['active' => 'notifications'])
 
                 <div class="flex-1 min-w-0 p-6 space-y-6">
@@ -68,7 +68,7 @@
                     </div>
 
                 </div>
-            </div>
+            </vibe:tabs>
         </vibe:card>
     </div>
 </x-docs.layouts.sidebar>

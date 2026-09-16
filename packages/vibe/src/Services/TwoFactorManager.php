@@ -28,28 +28,66 @@ class TwoFactorManager
     }
 
     /**
+     * Sanitasi secret ke format Base32 murni (RFC 4648).
+     *
+     * Beberapa secret lama mungkin mengandung '0' (nol) atau '1' (satu) yang
+     * bukan karakter Base32 valid (hanya A-Z dan 2-7). Metode ini memetakan:
+     *   '0' => 'O'  (nol ke huruf O)
+     *   '1' => 'I'  (satu ke huruf I)
+     * dan membuang karakter lain yang tidak valid, lalu uppercase.
+     * Gunakan metode ini sebelum encode ke QR dan sebelum kalkulasi OTP
+     * agar keduanya selalu menggunakan secret yang sama.
+     */
+    public function sanitizeSecret(string $secret): string
+    {
+        $secret = strtoupper(trim($secret));
+        // Peta karakter mirip yang umum digunakan di luar spec Base32
+        $secret = strtr($secret, ['0' => 'O', '1' => 'I']);
+        // Buang padding '='
+        $secret = str_replace('=', '', $secret);
+        // Hanya pertahankan karakter Base32 valid
+        $secret = preg_replace('/[^A-Z2-7]/', '', $secret);
+
+        return $secret;
+    }
+
+    /**
      * Generate URI skema otpauth:// untuk QR Code.
+     *
+     * Secret di-sanitasi terlebih dahulu ke Base32 murni agar QR Code
+     * dan kode OTP yang dikalkulasi server selalu sinkron.
+     *
+     * Parameter opsional (algorithm=SHA1, digits=6, period=30) sengaja
+     * TIDAK disertakan karena sudah menjadi default RFC 6238 dan semua
+     * aplikasi autentikator (GA, Authy, 1Password, dll) mendukungnya.
+     * Menghilangkan parameter ini mempersingkat URL ~30 karakter sehingga
+     * QR Code berversi lebih rendah (37×37 vs 45×45 modul) dan jauh
+     * lebih mudah dipindai kamera smartphone.
      */
     public function qrCodeUrl(string $issuer, string $accountName, string $secret): string
     {
+        $cleanSecret = $this->sanitizeSecret($secret);
+
         return sprintf(
-            'otpauth://totp/%s:%s?secret=%s&issuer=%s&algorithm=SHA1&digits=6&period=30',
+            'otpauth://totp/%s:%s?secret=%s&issuer=%s',
             rawurlencode($issuer),
             rawurlencode($accountName),
-            rawurlencode($secret),
+            rawurlencode($cleanSecret),
             rawurlencode($issuer)
         );
     }
 
     /**
      * Hitung kode TOTP 6-digit saat ini berdasarkan secret dan timestamp (RFC 6238).
+     *
+     * Secret di-sanitasi dulu ke Base32 murni agar konsisten dengan QR Code.
      */
     public function calculateOtp(string $secret, ?int $timestamp = null, int $digits = 6, int $period = 30): string
     {
         $timestamp = $timestamp ?? time();
         $timeCounter = (int) floor($timestamp / $period);
 
-        $binarySecret = $this->base32Decode($secret);
+        $binarySecret = $this->base32Decode($this->sanitizeSecret($secret));
 
         // Ubah time counter ke 8-byte big-endian binary (64-bit integer)
         $binaryTime = pack('N*', 0) . pack('N*', $timeCounter);

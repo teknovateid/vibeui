@@ -200,7 +200,7 @@
                             </svg>
                         </div>
                     </vibe:button>
-                    <vibe:button type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="md:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
+                    <vibe:button variant="default" type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="md:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
                         <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>

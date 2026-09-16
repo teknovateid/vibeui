@@ -36,8 +36,57 @@
         copied: false,
 
         init() {
+            // Read initial attribute/property if supplied via Alpine or HTML
+            if (this.$el.getAttribute('value')) {
+                this.value = this.$el.getAttribute('value');
+            } else if (this.$el.value) {
+                this.value = this.$el.value;
+            }
+
+            // Support reactive x-bind:value or el.value assignment
+            try {
+                Object.defineProperty(this.$el, 'value', {
+                    get: () => this.value,
+                    set: (val) => {
+                        this.value = val;
+                        this.render();
+                    },
+                    configurable: true
+                });
+            } catch (e) {}
+
+            // MutationObserver for attribute changes (x-bind:value, x-bind:size, x-bind:level)
+            const observer = new MutationObserver((mutations) => {
+                for (const mutation of mutations) {
+                    if (mutation.type === 'attributes') {
+                        if (mutation.attributeName === 'value') {
+                            const val = this.$el.getAttribute('value');
+                            if (val !== null && val !== this.value) {
+                                this.value = val;
+                                this.render();
+                            }
+                        } else if (mutation.attributeName === 'size') {
+                            const sz = parseInt(this.$el.getAttribute('size'));
+                            if (!isNaN(sz) && sz !== this.size) {
+                                this.size = sz;
+                                this.render();
+                            }
+                        } else if (mutation.attributeName === 'level') {
+                            const lvl = this.$el.getAttribute('level');
+                            if (lvl && lvl !== this.level) {
+                                this.level = lvl;
+                                this.render();
+                            }
+                        }
+                    }
+                }
+            });
+            observer.observe(this.$el, { attributes: true, attributeFilter: ['value', 'size', 'level'] });
+
             this.render();
             this.$watch('value', () => this.render());
+            this.$watch('size', () => this.render());
+            this.$watch('level', () => this.render());
         },
 
         render() {
@@ -89,10 +138,11 @@
     <div 
         class="flex items-center justify-center overflow-hidden rounded-xl bg-white"
         style="width: {{ $numericSize }}px; height: {{ $numericSize }}px;"
-        x-html="svgHtml"
+        :style="'width: ' + size + 'px; height: ' + size + 'px;'"
     >
-        {{-- Fallback placeholder while JS loads --}}
-        <div class="flex items-center justify-center size-full text-muted-foreground animate-pulse">
+        <div x-html="svgHtml" x-show="svgHtml" class="flex items-center justify-center"></div>
+        {{-- Fallback placeholder while JS or value loads --}}
+        <div x-show="!svgHtml" class="flex items-center justify-center size-full text-muted-foreground animate-pulse">
             <svg class="size-8 opacity-20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect width="18" height="18" x="3" y="3" rx="2"/>
                 <path d="M7 7h.01M17 7h.01M7 17h.01M17 17h.01"/>

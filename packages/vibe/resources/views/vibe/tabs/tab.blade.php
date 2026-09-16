@@ -85,7 +85,11 @@
 
     <span class="truncate">{{ $slot }}</span>
 
-    @if ($badge !== null && $badge !== '')
+    @if (isset($right))
+        <span class="ml-auto inline-flex items-center shrink-0">
+            {{ $right }}
+        </span>
+    @elseif ($badge !== null && $badge !== '')
         <vibe:badge :variant="$badgeVariant" size="xs" class="ml-auto rounded-full px-1.5 py-0 text-[10px] font-mono leading-tight">
             {{ $badge }}
         </vibe:badge>

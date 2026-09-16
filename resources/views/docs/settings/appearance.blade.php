@@ -15,7 +15,7 @@
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
-            <div class="flex flex-col md:flex-row w-full min-h-[620px]">
+            <vibe:tabs selected="appearance" variant="sidebar" class="min-h-155">
                 @include('docs.settings.tabs', ['active' => 'appearance'])
 
                 <div class="flex-1 min-w-0 p-6 sm:p-8 space-y-8">
@@ -499,7 +499,7 @@
                     {{-- Alpine.js Appearance Manager Script --}}
 
                 </div>
-            </div>
+            </vibe:tabs>
         </vibe:card>
     </div>
 

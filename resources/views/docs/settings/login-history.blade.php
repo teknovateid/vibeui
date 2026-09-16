@@ -15,7 +15,7 @@
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
-            <div class="flex flex-col md:flex-row w-full min-h-[620px]">
+            <vibe:tabs selected="login-history" variant="sidebar" class="min-h-155">
                 @include('docs.settings.tabs', ['active' => 'login-history'])
 
                 <div class="flex-1 min-w-0 p-6 space-y-6">
@@ -178,7 +178,7 @@
                         @endauth
 
                 </div>
-            </div>
+            </vibe:tabs>
         </vibe:card>
     </div>
 </x-docs.layouts.sidebar>

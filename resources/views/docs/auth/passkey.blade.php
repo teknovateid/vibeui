@@ -34,8 +34,8 @@
                         </svg>
                         Uji Login dengan Passkey
                     </vibe:button>
-                    <vibe:button href="{{ route('docs.settings.passkey') }}" variant="outline" size="sm">
-                        Pengaturan Passkey Akun &rarr;
+                    <vibe:button href="{{ route('docs.settings.security') }}" variant="outline" size="sm">
+                        Pengaturan Keamanan & Passkey &rarr;
                     </vibe:button>
                 </div>
             </div>

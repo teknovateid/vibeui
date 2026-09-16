@@ -167,7 +167,11 @@ test('forgot password screen can be rendered', function () {
 });
 
 test('auth documentation page is accessible', function () {
-    $response = $this->get('/docs/auth/installation');
+    $user = User::factory()->create([
+        'email_verified_at' => now(),
+    ]);
+
+    $response = $this->actingAs($user)->get('/docs/auth/installation');
 
     $response->assertStatus(200);
     $response->assertSee('Instalasi Autentikasi');

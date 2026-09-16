@@ -65,6 +65,7 @@ class Login extends Component
         $user = Auth::getProvider()->retrieveByCredentials($credentials);
 
         if ($user && method_exists($user, 'hasTwoFactorEnabled') && $user->hasTwoFactorEnabled()) {
+            Auth::logout();
             RateLimiter::clear($this->throttleKey($this->login));
 
             session()->put('auth.2fa.user_id', $user->getAuthIdentifier());
@@ -72,8 +73,6 @@ class Login extends Component
 
             return redirect()->route('two-factor.challenge');
         }
-
-        Auth::login($user, $this->remember);
 
         RateLimiter::clear($this->throttleKey($this->login));
 

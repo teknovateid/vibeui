@@ -54,6 +54,14 @@ export function vibeForm(config = {}) {
         },
 
         async handleSubmit(event) {
+            const form = this.$el;
+            const formData = new FormData(form);
+            const submitDetail = { form, id: formId, formData, event };
+
+            // Trigger submit events
+            window.dispatchEvent(new CustomEvent('vibe-form-submit', { detail: submitDetail }));
+            form.dispatchEvent(new CustomEvent('vibe-submit', { detail: submitDetail }));
+
             if (!isAjax) {
                 if (saveToStorage) {
                     this.clearStorage();
@@ -70,10 +78,8 @@ export function vibeForm(config = {}) {
                 return;
             }
 
-            const form = this.$el;
             const action = form.getAttribute('action') || window.location.href;
             const method = (form.getAttribute('method') || 'POST').toUpperCase();
-            const formData = new FormData(form);
 
             // Extract CSRF token
             let csrfToken = null;
@@ -89,11 +95,6 @@ export function vibeForm(config = {}) {
 
             this.loading = true;
             this.error = null;
-
-            // Trigger submit events
-            const submitDetail = { form, id: formId, formData };
-            window.dispatchEvent(new CustomEvent('vibe-form-submit', { detail: submitDetail }));
-            form.dispatchEvent(new CustomEvent('vibe-submit', { detail: submitDetail }));
 
             try {
                 const headers = {

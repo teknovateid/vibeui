@@ -1,7 +1,7 @@
 @blaze(fold: true)
 
 @props([
-    'variant' => 'default', // primary, secondary, outline, ghost, surface, accent, destructive/danger, success, warning, info, link, default
+    'variant' => 'primary', // primary, secondary, outline, ghost, surface, accent, destructive/danger, success, warning, info, link, default
     'size' => 'md',        // xs, sm, md, lg, xl, icon-xs, icon-sm, icon-md, icon-lg
     'type' => 'button',
     'href' => null,

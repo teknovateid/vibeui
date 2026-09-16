@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardPageController;
 use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\SelectController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('docs')->name('docs.')->group(function () {
@@ -89,15 +90,22 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::get('/dashboard/{view}', [DashboardPageController::class, 'show'])->name('dashboard.show');
 
     Route::prefix('settings')->name('settings.')->group(function () {
-        Route::redirect('/', '/docs/settings/account')->name('index');
-        Route::view('/account', 'docs.settings.account')->name('account');
+        Route::get('/', function(){
+            return auth()->check() ? redirect('/docs/settings/account') : redirect('/docs/settings/appearance');
+        })->name('index');
         Route::view('/appearance', 'docs.settings.appearance')->name('appearance');
         Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
-        Route::view('/login-history', 'docs.settings.login-history')->middleware('idle:10')->name('login-history');
-
-        Route::middleware(['auth', 'confirm','verified'])->group(function () {
-            Route::view('/security', 'docs.settings.security')->name('security');
-            Route::view('/passkey', 'docs.settings.passkey')->name('passkey');
+        
+        Route::middleware(['auth','verified'])->group(function () {
+            Route::view('/account', 'docs.settings.account')->name('account');
+            
+            Route::get('/security',[SettingsController::class,'security'])
+            // ->middleware('confirm')
+            ->name('security');
+            
+            Route::view('/login-history', 'docs.settings.login-history')
+            // ->middleware('idle:10')
+            ->name('login-history');
         });
     });
     Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');

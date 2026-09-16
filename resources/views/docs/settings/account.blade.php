@@ -13,7 +13,7 @@
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
-            <div class="flex flex-col md:flex-row w-full min-h-[620px]">
+            <vibe:tabs selected="account" variant="sidebar" class="min-h-155">
                 @include('docs.settings.tabs', ['active' => 'account'])
 
                 <div class="flex-1 min-w-0 p-6 space-y-6">
@@ -26,7 +26,6 @@
                     </div>
 
                     @auth
-                        {{-- Logged-in: data nyata --}}
                         <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300">
                             <span class="size-2 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
                             <span>Login sebagai <strong>{{ auth()->user()->name }}</strong> &mdash; data di bawah adalah informasi akun Anda yang sebenarnya.</span>
@@ -145,7 +144,7 @@
                         </div>
                     @endauth
                 </div>
-            </div>
+            </vibe:tabs>
         </vibe:card>
     </div>
 </x-docs.layouts.sidebar>
