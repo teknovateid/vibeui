@@ -214,9 +214,15 @@ const ThemeManager = {
 
         document.documentElement.classList.add('vibe-theme-switching');
 
-        const transition = document.startViewTransition(() => {
-            callback();
-        });
+        let transition;
+        try {
+            transition = document.startViewTransition(() => {
+                callback();
+            });
+        } catch (e) {
+            document.documentElement.classList.remove('vibe-theme-switching');
+            return;
+        }
 
         transition.ready.then(() => {
             document.documentElement.classList.remove('vibe-theme-switching');
@@ -238,9 +244,15 @@ const ThemeManager = {
         });
 
         if (transition.finished) {
-            transition.finished.finally(() => {
-                document.documentElement.classList.remove('vibe-theme-switching');
-            });
+            transition.finished
+                .catch(() => {})
+                .finally(() => {
+                    document.documentElement.classList.remove('vibe-theme-switching');
+                });
+        }
+
+        if (transition.updateCallbackDone) {
+            transition.updateCallbackDone.catch(() => {});
         }
     },
 
@@ -463,4 +475,20 @@ document.addEventListener('livewire:navigated', () => {
         });
     }
 });
+
+// Safely catch and suppress browser View Transition abort errors (e.g. viewport size changes or tab visibility changes)
+if (typeof window !== 'undefined' && !window.__vibe_vt_handler_registered__) {
+    window.__vibe_vt_handler_registered__ = true;
+    window.addEventListener('unhandledrejection', (event) => {
+        const err = event.reason;
+        if (
+            err &&
+            (err.name === 'InvalidStateError' || err.name === 'AbortError') &&
+            typeof err.message === 'string' &&
+            err.message.toLowerCase().includes('transition was aborted')
+        ) {
+            event.preventDefault();
+        }
+    });
+}
 

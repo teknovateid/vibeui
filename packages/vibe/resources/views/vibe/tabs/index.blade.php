@@ -103,6 +103,9 @@
     }"
     @select-tab="select($event.detail)"
     @change-tab.window="if ($event.detail?.id === tabId || !$event.detail?.id) activeTab = $event.detail?.tab || $event.detail"
+    data-variant="{{ $variant }}"
+    data-layout="{{ $normalizedLayout }}"
+    data-selected="{{ $initialTab }}"
     {{ $attributes->twMerge(['class' => 'vibe-tabs-root ' . $layoutClasses]) }}
 >
     {{ $slot }}

@@ -26,6 +26,8 @@ use Teknovate\VibeUi\Commands\SyncCommand;
 use Teknovate\VibeUi\Commands\TableMakeCommand;
 use Teknovate\VibeUi\Commands\VibeCommand;
 use Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation;
+use Teknovate\VibeUi\Http\Middleware\SetLocale;
+use Teknovate\VibeUi\Http\Middleware\TrackNavigationState;
 use Teknovate\VibeUi\Http\Middleware\VibeIdleTimeout;
 
 class VibeServiceProvider extends ServiceProvider
@@ -102,6 +104,11 @@ class VibeServiceProvider extends ServiceProvider
             $router->aliasMiddleware('confirm', RequirePasswordConfirmation::class);
             $router->aliasMiddleware('idle', VibeIdleTimeout::class);
             $router->aliasMiddleware('password.confirm', RequirePasswordConfirmation::class);
+            $router->aliasMiddleware('setlocale', SetLocale::class);
+            $router->aliasMiddleware('locale', SetLocale::class);
+
+            $router->pushMiddlewareToGroup('web', SetLocale::class);
+            $router->pushMiddlewareToGroup('web', TrackNavigationState::class);
         }
 
         // Listen to Passkey confirmation event to synchronize Vibe single-page auth session

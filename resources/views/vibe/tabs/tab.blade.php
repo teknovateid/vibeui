@@ -10,9 +10,12 @@
     'activeVariant' => null,
     'inactiveVariant' => null,
     'size' => null,
+    'active' => null,
 ])
 
 @php
+    $isSsrActive = $active === true || $active === 'true' || $active === 1;
+
     $buttonVariantMap = [
         'primary' => 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
         'secondary' => 'bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80',
@@ -33,6 +36,26 @@
 
     $activeBtnClasses = $buttonVariantMap[$activeBtn] ?? $buttonVariantMap['primary'];
     $inactiveBtnClasses = $buttonVariantMap[$inactiveBtn] ?? $buttonVariantMap['default'];
+
+    $ssrClasses = '';
+    if ($active !== null) {
+        $ssrClasses = match ($variant) {
+            'sidebar' => $isSsrActive
+                ? 'w-full justify-start text-left bg-accent text-accent-foreground font-semibold rounded-lg shadow-2xs'
+                : 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium',
+            'underline' => $isSsrActive
+                ? 'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent px-3 pb-2.5 pt-2 hover:bg-transparent'
+                : 'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 pb-2.5 pt-2 font-medium hover:bg-transparent',
+            'button' => $isSsrActive
+                ? "{$activeBtnClasses} font-medium rounded-lg"
+                : "{$inactiveBtnClasses} font-medium rounded-lg",
+            default => $isSsrActive
+                ? 'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50'
+                : 'text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium',
+        };
+    } elseif ($variant === 'sidebar') {
+        $ssrClasses = 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium';
+    }
 @endphp
 
 <vibe:button
@@ -45,11 +68,13 @@
     id="tab-{{ $name }}"
     aria-controls="panel-{{ $name }}"
     data-tab-name="{{ $name }}"
+    aria-selected="{{ $isSsrActive ? 'true' : 'false' }}"
+    tabindex="{{ $isSsrActive ? '0' : '-1' }}"
     x-bind:aria-selected="activeTab === '{{ $name }}' ? 'true' : 'false'"
     x-bind:tabindex="activeTab === '{{ $name }}' ? '0' : '-1'"
     @click="select('{{ $name }}'); $dispatch('select-tab', '{{ $name }}')"
     {{ $attributes->twMerge([
-        'class' => 'vibe-tabs-tab relative transition-all duration-150 gap-2 shrink-0 cursor-pointer'
+        'class' => 'vibe-tabs-tab relative !transition-colors duration-150 gap-2 shrink-0 cursor-pointer ' . $ssrClasses
     ]) }}
     x-bind:class="{
         {{-- Layout 2 Baris (Horizontal / Rows) --}}

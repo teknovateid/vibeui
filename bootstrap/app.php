@@ -15,16 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->web(append: [
-            \App\Http\Middleware\SetLocale::class,
-            \Teknovate\VibeUi\Http\Middleware\TrackNavigationState::class,
-        ]);
-
-        $middleware->alias([
-            'confirm' => \Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation::class,
-            'idle' => \Teknovate\VibeUi\Http\Middleware\VibeIdleTimeout::class,
-            'password.confirm' => \Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation::class,
-        ]);
+        //
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

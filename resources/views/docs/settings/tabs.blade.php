@@ -6,7 +6,7 @@
     @auth
         <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
 
-        <vibe:tabs.tab name="account" href="{{ route('docs.settings.account') }}">
+        <vibe:tabs.tab name="account" href="{{ route('docs.settings.account') }}" variant="sidebar" :active="$active === 'account'">
             <x-slot:icon>
                 <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="8" r="5" />
@@ -16,7 +16,7 @@
             {{ __('vibe/settings.tabs.account.label') }}
         </vibe:tabs.tab>
 
-        <vibe:tabs.tab name="security" href="{{ route('docs.settings.security') }}">
+        <vibe:tabs.tab name="security" href="{{ route('docs.settings.security') }}" variant="sidebar" :active="$active === 'security'">
             <x-slot:icon>
                 <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
@@ -32,7 +32,7 @@
             </x-slot:right>
         </vibe:tabs.tab>
 
-        <vibe:tabs.tab name="login-history" href="{{ route('docs.settings.login-history') }}">
+        <vibe:tabs.tab name="login-history" href="{{ route('docs.settings.login-history') }}" variant="sidebar" :active="$active === 'login-history'">
             <x-slot:icon>
                 <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -47,7 +47,7 @@
     {{-- Group: Preferensi --}}
     <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
 
-    <vibe:tabs.tab name="appearance" href="{{ route('docs.settings.appearance') }}" badge="Live" badgeVariant="primary">
+    <vibe:tabs.tab name="appearance" href="{{ route('docs.settings.appearance') }}" variant="sidebar" :active="$active === 'appearance'" badge="Live" badgeVariant="primary">
         <x-slot:icon>
             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
@@ -58,7 +58,7 @@
         {{ __('vibe/settings.tabs.appearance.label') }}
     </vibe:tabs.tab>
 
-    <vibe:tabs.tab name="notifications" href="{{ route('docs.settings.notifications') }}">
+    <vibe:tabs.tab name="notifications" href="{{ route('docs.settings.notifications') }}" variant="sidebar" :active="$active === 'notifications'">
         <x-slot:icon>
             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />

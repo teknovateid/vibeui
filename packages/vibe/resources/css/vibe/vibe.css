@@ -464,3 +464,22 @@ html.vibe-theme-switching *::after {
         grid-row: span var(--vibe-row-span, 1) / span var(--vibe-row-span, 1);
     }
 }
+
+/* =========================================================================
+   Vibe UI - Tabs SSR & FOUC Prevention
+   ========================================================================= */
+
+/* Prevent morphing and layout jumping: tabs only transition colors/background */
+.vibe-tabs-tab {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, box-shadow !important;
+}
+
+/* Vertical & Sidebar Tabs: ensure immediate full-width and left-alignment on SSR */
+.vibe-tabs-list.flex-col .vibe-tabs-tab,
+.vibe-tabs-root[data-variant="sidebar"] .vibe-tabs-tab,
+.vibe-tabs-root[data-layout="cols"] .vibe-tabs-tab,
+[role="tablist"].flex-col .vibe-tabs-tab {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+}
