@@ -2,6 +2,18 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.0] - 2026-09-16
+
+### 🚀 Features
+- feat: add autofill styling and enhance checkbox component state handling and icon transitions (8796072)
+- feat: add animations to card alert components across auth views and stubs (49465a6)
+- feat: add interactive animations to alert components with styling, tests, and documentation (adcc753)
+- feat: add SSR support to tabs and relocate SetLocale middleware to vibe package (1662cfc)
+
+### ⚡ Performance & Refactoring
+- refactor: update auth layout views and stubs with seo stack and asset adjustments (3ad9a62)
+
+
 ## [0.1.22] - 2026-09-16
 
 ### 🚀 Features
