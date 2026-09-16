@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.20] - 2026-09-16
+
+### 🚀 Features
+- feat: localize security settings stubs and add auth command tests (b20c6fb)
+
+
 ## [0.1.19] - 2026-09-16
 
 ### 🚀 Features
