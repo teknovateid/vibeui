@@ -5,8 +5,7 @@
 ])
 
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
-
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,12 +14,14 @@
     <title>{{ ($title ? $title . ' — ' : '') . config('app.name', 'Vibe UI') }}</title>
 
     @vibeStyles
-    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/vibe/passkeys.js'])
+    @stack('seo')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/js/vibe/passkeys.js'])
     @livewireStyles
     @stack('head')
 </head>
 
-<body class="min-h-full flex flex-col font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground vibe-scrollbar">
+<body class="font-medium font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground vibe-scrollbar">
 
     {{-- Global Theme Toggle + Language Switcher --}}
     <div class="fixed top-4 right-4 z-50 flex items-center gap-2" x-data="{
@@ -68,7 +69,7 @@
     </div>
 
     {{-- Simple Minimalist Layout Variant --}}
-    <div class="min-h-screen flex flex-col justify-center items-center px-4 py-12 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex flex-col justify-center items-center px-4 py-12 sm:px-6 lg:px-8 selection:bg-primary selection:text-primary-foreground">
         <div class="w-full max-w-sm space-y-6">
             {{-- Logo Header --}}
             <div class="text-center">
@@ -104,5 +105,4 @@
     @livewireScripts
     @stack('body')
 </body>
-
 </html>
