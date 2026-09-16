@@ -2,25 +2,25 @@
     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
         <div class="space-y-1 max-w-lg w-full">
             <div class="flex items-center gap-2">
-                <h3 class="font-semibold text-foreground text-base">Autentikasi Dua Faktor (2FA)</h3>
+                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.two_factor.title') }}</h3>
                 <div>
                     <vibe:badge size="sm" variant="success" class="rounded-full font-semibold" x-show="enabled" x-cloak>
-                        Aktif
+                        {{ __('vibe/settings.two_factor.enabled') }}
                     </vibe:badge>
                     <vibe:badge size="sm" variant="secondary" class="rounded-full font-medium" x-show="!enabled">
-                        Nonaktif
+                        {{ __('vibe/settings.two_factor.disabled') }}
                     </vibe:badge>
                 </div>
             </div>
-            <p class="text-muted-foreground text-xs">Tambahkan lapisan keamanan ekstra. Setiap login membutuhkan kode verifikasi dari aplikasi autentikator atau email.</p>
+            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.two_factor.desc') }}</p>
         </div>
 
         <div class="space-y-4 w-full">
             {{-- Header & Quick Info --}}
             <div class="flex justify-between items-center gap-3">
                 <div>
-                    <p class="font-semibold text-foreground text-sm">Metode Verifikasi Dua Langkah</p>
-                    <p class="text-xs text-muted-foreground">Pilih metode autentikasi yang ingin Anda hubungkan dengan akun ini.</p>
+                    <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.methods_title') }}</p>
+                    <p class="text-xs text-muted-foreground">{{ __('vibe/settings.two_factor.methods_desc') }}</p>
                 </div>
             </div>
 
@@ -37,17 +37,17 @@
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
-                                <p class="font-semibold text-foreground text-sm">Aplikasi Autentikator (TOTP)</p>
+                                <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.totp_title') }}</p>
                             </div>
-                            <p class="text-xs text-muted-foreground truncate">Google Authenticator, Authy, atau 1Password.</p>
+                            <p class="text-xs text-muted-foreground truncate">{{ __('vibe/settings.two_factor.totp_desc') }}</p>
                         </div>
                     </div>
                     <div class="shrink-0 flex items-center gap-1.5">
                         <vibe:button variant="primary" type="button" size="xs" x-show="!totpEnabled" @click="openSetup('totp')" ::disabled="loading" class="rounded-full">
-                            Aktifkan
+                            {{ __('vibe/settings.two_factor.enable_btn') }}
                         </vibe:button>
-                        <vibe:button.delete class="rounded-full" size="xs" x-show="totpEnabled" x-cloak action="disable2FA('totp')" title="Nonaktifkan Autentikator" message="Apakah Anda yakin ingin menonaktifkan Aplikasi Autentikator (TOTP)?">
-                            Nonaktifkan
+                        <vibe:button.delete class="rounded-full" size="xs" x-show="totpEnabled" x-cloak action="disable2FA('totp')" :title="__('vibe/settings.two_factor.disable_totp_title')" :message="__('vibe/settings.two_factor.disable_totp_confirm')">
+                            {{ __('vibe/settings.two_factor.disable_btn') }}
                         </vibe:button.delete>
                     </div>
                 </div>
@@ -63,17 +63,17 @@
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
-                                <p class="font-semibold text-foreground text-sm">Kode Verifikasi Email (OTP)</p>
+                                <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.email_title') }}</p>
                             </div>
-                            <p class="text-xs text-muted-foreground truncate" x-text="userEmail ? 'Kode 6-digit dikirim ke ' + userEmail : 'Kode 6-digit dikirim ke email terdaftar.'"></p>
+                            <p class="text-xs text-muted-foreground truncate" x-text="userEmail ? '{{ __('vibe/settings.two_factor.email_desc') }}' + ' (' + userEmail + ')' : '{{ __('vibe/settings.two_factor.email_desc') }}'"></p>
                         </div>
                     </div>
                     <div class="shrink-0 flex items-center gap-1.5">
                         <vibe:button variant="primary" type="button" size="xs" x-show="!emailEnabled" @click="openSetup('email')" ::disabled="loading" class="rounded-full">
-                            Aktifkan
+                            {{ __('vibe/settings.two_factor.enable_btn') }}
                         </vibe:button>
-                        <vibe:button.delete class="rounded-full" size="xs" x-show="emailEnabled" x-cloak action="disable2FA('email')" title="Nonaktifkan Verifikasi Email" message="Apakah Anda yakin ingin menonaktifkan Verifikasi Dua Langkah via Email?">
-                            Nonaktifkan
+                        <vibe:button.delete class="rounded-full" size="xs" x-show="emailEnabled" x-cloak action="disable2FA('email')" :title="__('vibe/settings.two_factor.disable_email_title')" :message="__('vibe/settings.two_factor.disable_email_confirm')">
+                            {{ __('vibe/settings.two_factor.disable_btn') }}
                         </vibe:button.delete>
                     </div>
                 </div>
@@ -88,14 +88,14 @@
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
-                                <p class="font-semibold text-foreground text-sm">WhatsApp / SMS OTP</p>
-                                <vibe:badge size="sm" variant="secondary" class="rounded-full">Segera Hadir</vibe:badge>
+                                <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.whatsapp_title') }}</p>
+                                <vibe:badge size="sm" variant="secondary" class="rounded-full">{{ __('vibe/settings.two_factor.coming_soon') }}</vibe:badge>
                             </div>
-                            <p class="text-xs text-muted-foreground truncate">Verifikasi praktis langsung ke WhatsApp atau SMS.</p>
+                            <p class="text-xs text-muted-foreground truncate">{{ __('vibe/settings.two_factor.whatsapp_desc') }}</p>
                         </div>
                     </div>
                     <div class="shrink-0">
-                        <vibe:badge size="sm" variant="outline" class="rounded-full font-mono">Stub Siap</vibe:badge>
+                        <vibe:badge size="sm" variant="outline" class="rounded-full font-mono">{{ __('vibe/settings.two_factor.stub_ready') }}</vibe:badge>
                     </div>
                 </div>
             </div>
@@ -103,14 +103,14 @@
             {{-- Footer: Recovery Codes & Global Disable --}}
             <div x-show="enabled" x-cloak class="flex flex-wrap justify-between items-center gap-2 pt-3 border-border/50 border-t">
                 <div class="text-muted-foreground text-xs">
-                    <span>Kode Pemulihan Cadangan</span>
+                    <span>{{ __('vibe/settings.two_factor.recovery_codes_title') }}</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <vibe:button type="button" variant="outline" size="xs" @click="openRecoveryCodes()" ::disabled="loading" class="cursor-pointer">
-                        Lihat Kode Pemulihan
+                        {{ __('vibe/settings.two_factor.view_codes_btn') }}
                     </vibe:button>
-                    <vibe:button.delete size="xs" action="disable2FA(null)" title="Nonaktifkan Semua 2FA" message="Apakah Anda yakin ingin menonaktifkan seluruh Autentikasi Dua Faktor (2FA)?">
-                        Nonaktifkan Semua
+                    <vibe:button.delete size="xs" action="disable2FA(null)" :title="__('vibe/settings.two_factor.disable_all_btn')" :message="__('vibe/settings.two_factor.disable_all_confirm')">
+                        {{ __('vibe/settings.two_factor.disable_all_btn') }}
                     </vibe:button.delete>
                 </div>
             </div>
@@ -122,12 +122,12 @@
         <form wire:submit="confirmTwoFactor">
             <vibe:modal.header>
                 <div class="font-semibold text-foreground text-base">
-                    <span x-show="step === 0">Setup Aplikasi Autentikator</span>
-                    <span x-show="step === 1" x-cloak>Simpan Kode Pemulihan Anda</span>
+                    <span x-show="step === 0">{{ __('vibe/settings.two_factor.setup_totp_title') }}</span>
+                    <span x-show="step === 1" x-cloak>{{ __('vibe/settings.two_factor.save_recovery_title') }}</span>
                 </div>
                 <p class="mt-0.5 font-normal text-muted-foreground text-xs">
-                    <span x-show="step === 0">Pindai kode QR dan masukkan 6-digit kode verifikasi untuk mengaktifkan.</span>
-                    <span x-show="step === 1" x-cloak>Simpan kode darurat sekali pakai di tempat yang aman.</span>
+                    <span x-show="step === 0">{{ __('vibe/settings.two_factor.setup_totp_desc') }}</span>
+                    <span x-show="step === 1" x-cloak>{{ __('vibe/settings.two_factor.save_recovery_desc') }}</span>
                 </p>
             </vibe:modal.header>
 
@@ -155,16 +155,16 @@
                             class="rounded-xl bg-white shadow-2xs border border-border/80 shrink-0" 
                         />
                         <div class="flex-1 space-y-2 sm:text-left text-center">
-                            <p class="font-semibold text-foreground text-sm">Pindai dengan Aplikasi Autentikator</p>
+                            <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.scan_qr_title') }}</p>
                             <p class="text-xs text-muted-foreground leading-relaxed">
-                                Buka Google Authenticator, Authy, atau 1Password di smartphone, lalu pindai kode QR di samping.
+                                {{ __('vibe/settings.two_factor.scan_qr_desc') }}
                             </p>
                             <div class="pt-1">
-                                <span class="block mb-1 text-xs text-muted-foreground">Atau masukkan kunci manual:</span>
+                                <span class="block mb-1 text-xs text-muted-foreground">{{ __('vibe/settings.two_factor.or_manual_key') }}</span>
                                 <div class="flex items-center gap-1.5">
                                     <code class="flex-1 bg-background px-2.5 py-1 border border-border rounded font-mono text-xs text-foreground truncate tracking-wider select-all" x-text="secretKey"></code>
                                     <vibe:button type="button" variant="outline" size="xs" @click="copySecret()" class="cursor-pointer shrink-0">
-                                        <span x-text="copiedSecret ? 'Tersalin!' : 'Salin'"></span>
+                                        <span x-text="copiedSecret ? '{{ __('vibe/settings.two_factor.copied') }}' : '{{ __('vibe/settings.two_factor.copy') }}'"></span>
                                     </vibe:button>
                                 </div>
                             </div>
@@ -173,8 +173,8 @@
 
                     <div class="space-y-2">
                         <label class="flex justify-between items-center font-semibold text-foreground text-xs">
-                            <span>Masukkan Kode 6-Digit dari Aplikasi</span>
-                            <span class="font-normal text-xs text-muted-foreground">Dapat paste langsung</span>
+                            <span>{{ __('vibe/settings.two_factor.enter_app_code') }}</span>
+                            <span class="font-normal text-xs text-muted-foreground">{{ __('vibe/settings.two_factor.can_paste') }}</span>
                         </label>
                         <div>
                             <vibe:input.otp id="setup-2fa-otp-totp" wire:model="code" :auto-submit="true" length="6" size="md" />
@@ -184,8 +184,8 @@
 
                 {{-- Step 1: Recovery Codes --}}
                 <div x-show="step === 1" x-cloak class="space-y-4">
-                    <vibe:card.alert variant="warning" size="sm" title="PENTING: Simpan kode pemulihan ini!">
-                        Jika Anda kehilangan akses ke aplikasi autentikator, kode ini adalah satu-satunya cara untuk masuk kembali ke akun Anda.
+                    <vibe:card.alert variant="warning" size="sm" :title="__('vibe/settings.two_factor.recovery_warning_title')">
+                        {{ __('vibe/settings.two_factor.recovery_warning_desc_totp') }}
                     </vibe:card.alert>
 
                     <div class="gap-2 grid grid-cols-2 sm:grid-cols-4 bg-muted/40 p-3.5 border border-border rounded-xl font-mono text-foreground text-xs">
@@ -195,7 +195,7 @@
                             </div>
                         @empty
                             <div class="col-span-full text-center py-2 text-muted-foreground text-xs">
-                                Tidak ada kode pemulihan yang tersedia.
+                                {{ __('vibe/settings.two_factor.no_recovery_codes') }}
                             </div>
                         @endforelse
                     </div>
@@ -205,20 +205,20 @@
             <vibe:modal.footer>
                 <div x-show="step === 0" class="flex justify-between items-center w-full">
                     <vibe:button type="button" variant="outline" size="sm" @click="$vibe.modal('modal-2fa-totp').close()">
-                        Batal
+                        {{ __('vibe/settings.two_factor.cancel') }}
                     </vibe:button>
                     <vibe:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled" class="cursor-pointer">
-                        <span wire:loading.remove wire:target="confirmTwoFactor">Aktifkan 2FA &rarr;</span>
-                        <span wire:loading wire:target="confirmTwoFactor">Memverifikasi...</span>
+                        <span wire:loading.remove wire:target="confirmTwoFactor">{{ __('vibe/settings.two_factor.enable_2fa_btn') }}</span>
+                        <span wire:loading wire:target="confirmTwoFactor">{{ __('vibe/settings.two_factor.verifying') }}</span>
                     </vibe:button>
                 </div>
 
                 <div x-show="step === 1" x-cloak class="flex justify-between items-center w-full">
-                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('Semua kode berhasil disalin!', { type: 'success' })">
-                        Salin Semua Kode
+                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                        {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="$vibe.modal('modal-2fa-totp').close(); $wire.set('step', 0)">
-                        Selesai &rarr;
+                        {{ __('vibe/settings.two_factor.done_btn') }}
                     </vibe:button>
                 </div>
             </vibe:modal.footer>
@@ -230,12 +230,12 @@
         <form wire:submit="confirmTwoFactor">
             <vibe:modal.header>
                 <div class="font-semibold text-foreground text-base">
-                    <span x-show="step === 0">Verifikasi Dua Langkah via Email</span>
-                    <span x-show="step === 1" x-cloak>Simpan Kode Pemulihan Anda</span>
+                    <span x-show="step === 0">{{ __('vibe/settings.two_factor.setup_email_title') }}</span>
+                    <span x-show="step === 1" x-cloak>{{ __('vibe/settings.two_factor.save_recovery_title') }}</span>
                 </div>
                 <p class="mt-0.5 font-normal text-muted-foreground text-xs">
-                    <span x-show="step === 0">Masukkan 6-digit kode verifikasi yang dikirimkan ke email Anda.</span>
-                    <span x-show="step === 1" x-cloak>Simpan kode darurat sekali pakai di tempat yang aman.</span>
+                    <span x-show="step === 0">{{ __('vibe/settings.two_factor.setup_email_desc') }}</span>
+                    <span x-show="step === 1" x-cloak>{{ __('vibe/settings.two_factor.save_recovery_desc') }}</span>
                 </p>
             </vibe:modal.header>
 
@@ -267,9 +267,9 @@
                             </svg>
                         </div>
                         <div class="flex-1 space-y-1 text-xs">
-                            <p class="font-semibold text-foreground text-sm">Kode Verifikasi Telah Dikirim</p>
+                            <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.email_sent_title') }}</p>
                             <p class="text-muted-foreground leading-relaxed">
-                                Kami telah mengirimkan 6-digit kode OTP ke alamat email <span class="font-mono font-medium text-foreground" x-text="userEmail"></span>. Masukkan kode tersebut di bawah ini untuk mengonfirmasi.
+                                {!! __('vibe/settings.two_factor.email_sent_desc', ['email' => '<span class="font-mono font-medium text-foreground" x-text="userEmail"></span>']) !!}
                             </p>
                         </div>
                     </div>
@@ -277,13 +277,13 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="font-semibold text-foreground text-xs">
-                                Masukkan Kode 6-Digit dari Email
+                                {{ __('vibe/settings.two_factor.enter_email_code') }}
                             </label>
                             <div class="text-xs">
-                                <span x-show="cooldown > 0" class="text-muted-foreground">Kirim ulang dalam <span class="font-mono font-semibold" x-text="cooldown"></span>s</span>
+                                <span x-show="cooldown > 0" class="text-muted-foreground">{{ __('vibe/settings.two_factor.resend_in', ['seconds' => '']) }}<span class="font-mono font-semibold" x-text="cooldown"></span>s</span>
                                 <vibe:button type="button" variant="link" size="xs" x-show="cooldown <= 0" wire:click="resendEmailOtp" wire:loading.attr="disabled" class="cursor-pointer font-semibold">
-                                    <span wire:loading.remove wire:target="resendEmailOtp">Kirim Ulang Kode</span>
-                                    <span wire:loading wire:target="resendEmailOtp">Mengirim...</span>
+                                    <span wire:loading.remove wire:target="resendEmailOtp">{{ __('vibe/settings.two_factor.resend_btn') }}</span>
+                                    <span wire:loading wire:target="resendEmailOtp">{{ __('vibe/settings.two_factor.sending') }}</span>
                                 </vibe:button>
                             </div>
                         </div>
@@ -295,8 +295,8 @@
 
                 {{-- Step 1: Recovery Codes --}}
                 <div x-show="step === 1" x-cloak class="space-y-4">
-                    <vibe:card.alert variant="warning" size="sm" title="PENTING: Simpan kode pemulihan ini!">
-                        Jika Anda kehilangan akses ke email Anda, kode ini adalah satu-satunya cara untuk masuk kembali ke akun Anda.
+                    <vibe:card.alert variant="warning" size="sm" :title="__('vibe/settings.two_factor.recovery_warning_title')">
+                        {{ __('vibe/settings.two_factor.recovery_warning_desc_email') }}
                     </vibe:card.alert>
 
                     <div class="gap-2 grid grid-cols-2 sm:grid-cols-4 bg-muted/40 p-3.5 border border-border rounded-xl font-mono text-foreground text-xs">
@@ -306,7 +306,7 @@
                             </div>
                         @empty
                             <div class="col-span-full text-center py-2 text-muted-foreground text-xs">
-                                Tidak ada kode pemulihan yang tersedia.
+                                {{ __('vibe/settings.two_factor.no_recovery_codes') }}
                             </div>
                         @endforelse
                     </div>
@@ -316,20 +316,20 @@
             <vibe:modal.footer>
                 <div x-show="step === 0" class="flex justify-between items-center w-full">
                     <vibe:button type="button" variant="outline" size="sm" @click="$vibe.modal('modal-2fa-email').close()">
-                        Batal
+                        {{ __('vibe/settings.two_factor.cancel') }}
                     </vibe:button>
                     <vibe:button type="submit" variant="primary" size="sm" wire:loading.attr="disabled" class="cursor-pointer">
-                        <span wire:loading.remove wire:target="confirmTwoFactor">Aktifkan 2FA &rarr;</span>
-                        <span wire:loading wire:target="confirmTwoFactor">Memverifikasi...</span>
+                        <span wire:loading.remove wire:target="confirmTwoFactor">{{ __('vibe/settings.two_factor.enable_2fa_btn') }}</span>
+                        <span wire:loading wire:target="confirmTwoFactor">{{ __('vibe/settings.two_factor.verifying') }}</span>
                     </vibe:button>
                 </div>
 
                 <div x-show="step === 1" x-cloak class="flex justify-between items-center w-full">
-                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('Semua kode berhasil disalin!', { type: 'success' })">
-                        Salin Semua Kode
+                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                        {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="$vibe.modal('modal-2fa-email').close(); $wire.set('step', 0)">
-                        Selesai &rarr;
+                        {{ __('vibe/settings.two_factor.done_btn') }}
                     </vibe:button>
                 </div>
             </vibe:modal.footer>
@@ -339,14 +339,14 @@
     {{-- Modal View Recovery Codes --}}
     <vibe:modal id="modal-2fa-recovery" maxWidth="md">
         <vibe:modal.header>
-            <div class="font-semibold text-foreground text-base">Kode Pemulihan Cadangan (2FA)</div>
-            <p class="mt-0.5 font-normal text-muted-foreground text-xs">Daftar kode pemulihan darurat sekali pakai</p>
+            <div class="font-semibold text-foreground text-base">{{ __('vibe/settings.two_factor.recovery_modal_title') }}</div>
+            <p class="mt-0.5 font-normal text-muted-foreground text-xs">{{ __('vibe/settings.two_factor.recovery_modal_subtitle') }}</p>
         </vibe:modal.header>
 
         <vibe:modal.content>
             <div class="space-y-4">
                 <vibe:card.alert variant="warning" size="sm">
-                    Setiap kode hanya dapat digunakan satu kali. Simpan kode-kode ini di tempat yang aman.
+                    {{ __('vibe/settings.two_factor.recovery_modal_alert') }}
                 </vibe:card.alert>
 
                 <div class="gap-2 grid grid-cols-2 bg-muted/40 p-3.5 border border-border rounded-xl font-mono text-foreground text-xs">
@@ -356,7 +356,7 @@
                         </div>
                     @empty
                         <div class="col-span-full text-center py-2 text-muted-foreground text-xs">
-                            Tidak ada kode pemulihan yang tersedia.
+                            {{ __('vibe/settings.two_factor.no_recovery_codes') }}
                         </div>
                     @endforelse
                 </div>
@@ -365,15 +365,15 @@
 
         <vibe:modal.footer>
             <div class="flex justify-between items-center w-full">
-                <vibe:button type="button" variant="ghost" size="xs" class="hover:bg-destructive/10 text-destructive cursor-pointer" @click="if(confirm('Apakah Anda yakin ingin membuat ulang kode pemulihan? Kode lama tidak akan berlaku lagi.')) $wire.regenerateRecoveryCodes()">
-                    Buat Ulang Kode Baru
+                <vibe:button type="button" variant="ghost" size="xs" class="hover:bg-destructive/10 text-destructive cursor-pointer" @click="if(confirm('{{ __('vibe/settings.two_factor.regenerate_codes_btn') }}?')) $wire.regenerateRecoveryCodes()">
+                    {{ __('vibe/settings.two_factor.regenerate_new_codes') }}
                 </vibe:button>
                 <div class="flex items-center gap-2">
-                    <vibe:button type="button" variant="outline" size="xs" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('Kode pemulihan berhasil disalin!', { type: 'success' })">
-                        Salin Semua
+                    <vibe:button type="button" variant="outline" size="xs" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                        {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="xs" class="cursor-pointer" @click="$vibe.modal('modal-2fa-recovery').close()">
-                        Tutup
+                        {{ __('vibe/settings.two_factor.close') }}
                     </vibe:button>
                 </div>
             </div>

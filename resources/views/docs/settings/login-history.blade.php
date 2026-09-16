@@ -1,17 +1,17 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo :title="__('docs/page/settings/index.title')" :description="__('docs/page/settings/index.subtitle')" :breadcrumbs="[
-        ['name' => __('docs/page/settings/index.breadcrumb.home'), 'url' => '/'],
-        ['name' => __('docs/page/settings/index.breadcrumb.pages'), 'url' => '#'],
-        ['name' => __('docs/page/settings/index.breadcrumb.settings'), 'url' => route('docs.settings.account')],
-        ['name' => 'Riwayat Login', 'url' => route('docs.settings.login-history')],
+    <vibe:seo :title="__('vibe/settings.title')" :description="__('vibe/settings.subtitle')" :breadcrumbs="[
+        ['name' => __('vibe/settings.breadcrumb.home'), 'url' => '/'],
+        ['name' => __('vibe/settings.breadcrumb.pages'), 'url' => '#'],
+        ['name' => __('vibe/settings.breadcrumb.settings'), 'url' => route('docs.settings.account')],
+        ['name' => __('vibe/settings.login_history.breadcrumb'), 'url' => route('docs.settings.login-history')],
     ]" />
 
     <div class="mx-auto w-full space-y-6">
-        <vibe:breadcrumb title="{!! __('docs/page/settings/index.title') !!}">
-            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('docs/page/settings/index.breadcrumb.home') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item>{{ __('docs/page/settings/index.breadcrumb.pages') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('docs/page/settings/index.breadcrumb.settings') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item active>Riwayat Login</vibe:breadcrumb.item>
+        <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
+            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('vibe/settings.breadcrumb.settings') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item active>{{ __('vibe/settings.login_history.breadcrumb') }}</vibe:breadcrumb.item>
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
@@ -22,9 +22,9 @@
 
                         {{-- Header --}}
                         <div class="border-b border-border/50 pb-4">
-                            <h2 class="text-lg font-bold text-foreground">Riwayat Login & Sesi Aktif</h2>
+                            <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.login_history.header_title') }}</h2>
                             <p class="text-xs text-muted-foreground mt-0.5">
-                                Pantau semua aktivitas login dan akhiri sesi yang tidak dikenal.
+                                {{ __('vibe/settings.login_history.header_desc') }}
                             </p>
                         </div>
 
@@ -33,8 +33,8 @@
                             <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                                 <span class="size-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                                 <div class="flex-1 min-w-0 text-xs">
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-300">Sesi Aktif Saat Ini</span>
-                                    <span class="text-muted-foreground"> — {{ request()->userAgent() ? Str::limit(request()->userAgent(), 60) : 'Browser Anda' }}</span>
+                                    <span class="font-semibold text-emerald-700 dark:text-emerald-300">{{ __('vibe/settings.login_history.current_session') }}</span>
+                                    <span class="text-muted-foreground"> — {{ request()->userAgent() ? Str::limit(request()->userAgent(), 60) : __('vibe/settings.login_history.your_browser') }}</span>
                                 </div>
                                 <span class="text-xs text-muted-foreground shrink-0">IP: {{ request()->ip() }}</span>
                             </div>
@@ -42,9 +42,9 @@
                             {{-- Login History Table --}}
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-semibold text-foreground">Semua Sesi</h3>
-                                    <vibe:button type="button" variant="ghost" size="sm" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer" @click="window.vibeToast ? vibeToast('Semua sesi lain telah diakhiri.', { type: 'success', title: 'Sesi Diakhiri' }) : null">
-                                        Akhiri Semua Sesi Lain
+                                    <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.all_sessions') }}</h3>
+                                    <vibe:button type="button" variant="ghost" size="sm" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.login_history.terminated_all_toast') }}', { type: 'success', title: '{{ __('vibe/settings.login_history.terminated_all_title') }}' }) : null">
+                                        {{ __('vibe/settings.login_history.terminate_all_btn') }}
                                     </vibe:button>
                                 </div>
 
@@ -130,7 +130,7 @@
                                                     @if ($session['current'])
                                                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                                             <span class="size-1.5 rounded-full bg-emerald-500"></span>
-                                                            Sesi Ini
+                                                            {{ __('vibe/settings.login_history.this_session_badge') }}
                                                         </span>
                                                     @endif
                                                 </div>
@@ -144,8 +144,8 @@
 
                                             {{-- Action --}}
                                             @if (!$session['current'])
-                                                <button type="button" data-device="{{ $session['device'] }}" class="shrink-0 text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer mt-0.5" @click="window.vibeToast ? vibeToast('Sesi ' + $el.dataset.device + ' telah diakhiri.', { type: 'success', title: 'Sesi Diakhiri' }) : null">
-                                                    Akhiri
+                                                <button type="button" data-device="{{ $session['device'] }}" class="shrink-0 text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer mt-0.5" @click="window.vibeToast ? vibeToast('Sesi ' + $el.dataset.device + ' telah diakhiri.', { type: 'success', title: '{{ __('vibe/settings.login_history.terminated_single_title') }}' }) : null">
+                                                    {{ __('vibe/settings.login_history.terminate_btn') }}
                                                 </button>
                                             @endif
                                         </div>
@@ -153,7 +153,7 @@
                                 </div>
 
                                 <p class="text-xs text-muted-foreground italic">
-                                    * Data riwayat login di atas adalah demo. Implementasi nyata memerlukan paket seperti <code class="font-mono bg-muted px-1 py-0.5 rounded">spatie/laravel-login-activity</code> atau model sesi kustom.
+                                    {!! __('vibe/settings.login_history.demo_notice', ['package' => '<code class="font-mono bg-muted px-1 py-0.5 rounded">spatie/laravel-login-activity</code>']) !!}
                                 </p>
                             </div>
                         @else
@@ -166,13 +166,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-semibold text-foreground">Login Diperlukan</h3>
+                                    <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.guest_title') }}</h3>
                                     <p class="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
-                                        Riwayat login dan sesi aktif hanya tersedia setelah Anda masuk ke akun.
+                                        {{ __('vibe/settings.login_history.guest_desc') }}
                                     </p>
                                 </div>
                                 <vibe:button href="/login" variant="primary" size="sm">
-                                    Masuk ke Akun
+                                    {{ __('vibe/settings.login_history.guest_btn') }}
                                 </vibe:button>
                             </div>
                         @endauth

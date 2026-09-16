@@ -65,7 +65,11 @@ Route::middleware('auth')->group(function () {
         $request->session()->forget('auth.confirmed_route');
         $request->session()->forget('auth.is_single_page_confirm');
 
-        return redirect()->to($request->header('referer') ?: route('docs.settings.security'));
+        $fallback = Route::has('docs.settings.security')
+            ? route('docs.settings.security')
+            : (Route::has('settings.security') ? route('settings.security') : url('/'));
+
+        return redirect()->to($request->header('referer') ?: $fallback);
     })->name('password.lock');
 
     Route::get('/confirm-password/idle-lock', function (Request $request) {
@@ -74,7 +78,10 @@ Route::middleware('auth')->group(function () {
         $request->session()->forget('auth.confirmed_route');
         $request->session()->put('auth.last_activity_time', time());
 
-        $intended = $request->query('intended') ?: $request->header('referer') ?: route('docs.settings.login-history');
+        $fallback = Route::has('docs.settings.login-history')
+            ? route('docs.settings.login-history')
+            : (Route::has('settings.login-history') ? route('settings.login-history') : url('/'));
+        $intended = $request->query('intended') ?: $request->header('referer') ?: $fallback;
         $request->session()->put('url.intended', $intended);
 
         $confirmUrl = Route::has('password.confirm') ? route('password.confirm') : '/confirm-password';

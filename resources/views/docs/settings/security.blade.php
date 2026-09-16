@@ -1,17 +1,17 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo :title="__('docs/page/settings/index.title')" :description="__('docs/page/settings/index.subtitle')" :breadcrumbs="[
-        ['name' => __('docs/page/settings/index.breadcrumb.home'), 'url' => '/'],
-        ['name' => __('docs/page/settings/index.breadcrumb.pages'), 'url' => '#'],
-        ['name' => __('docs/page/settings/index.breadcrumb.settings'), 'url' => route('docs.settings.account')],
-        ['name' => 'Keamanan', 'url' => route('docs.settings.security')],
+    <vibe:seo :title="__('vibe/settings.title')" :description="__('vibe/settings.subtitle')" :breadcrumbs="[
+        ['name' => __('vibe/settings.breadcrumb.home'), 'url' => '/'],
+        ['name' => __('vibe/settings.breadcrumb.pages'), 'url' => '#'],
+        ['name' => __('vibe/settings.breadcrumb.settings'), 'url' => route('docs.settings.account')],
+        ['name' => __('vibe/settings.breadcrumb.security'), 'url' => route('docs.settings.security')],
     ]" />
 
     <div class="space-y-6 mx-auto w-full">
-        <vibe:breadcrumb title="{!! __('docs/page/settings/index.title') !!}">
-            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('docs/page/settings/index.breadcrumb.home') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item>{{ __('docs/page/settings/index.breadcrumb.pages') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('docs/page/settings/index.breadcrumb.settings') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item active>Keamanan</vibe:breadcrumb.item>
+        <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
+            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('vibe/settings.breadcrumb.settings') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item active>{{ __('vibe/settings.breadcrumb.security') }}</vibe:breadcrumb.item>
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
@@ -23,9 +23,9 @@
                     <div class="pb-4 border-border/50 border-b">
                         <div class="flex justify-between items-center">
                             <div>
-                                <h2 class="font-bold text-foreground text-lg">Keamanan Akun</h2>
+                                <h2 class="font-bold text-foreground text-lg">{{ __('vibe/settings.security.header_title') }}</h2>
                                 <p class="mt-0.5 text-muted-foreground text-xs">
-                                    Kelola kata sandi dan lapisan keamanan tambahan untuk akun Anda.
+                                    {{ __('vibe/settings.security.header_desc') }}
                                 </p>
                             </div>
                         </div>
@@ -34,16 +34,16 @@
 
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Ubah Kata Sandi</h3>
-                            <p class="text-muted-foreground text-xs">Pastikan kata sandi baru Anda minimal 8 karakter dan mengandung kombinasi huruf dan angka.</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.security.password_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.security.password_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full">
-                            <vibe:input type="password" name="current_password" label="Kata Sandi Saat Ini" viewable placeholder="Masukkan kata sandi saat ini" />
-                            <vibe:input type="password" name="new_password" label="Kata Sandi Baru" viewable placeholder="Minimal 8 karakter" />
-                            <vibe:input type="password" name="confirm_password" label="Konfirmasi Kata Sandi Baru" viewable placeholder="Ulangi kata sandi baru" />
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer float-end flex " @click="window.vibeToast ? vibeToast('Kata sandi berhasil diperbarui.', { type: 'success', title: 'Diperbarui' }) : null">
-                                Perbarui Kata Sandi
+                            <vibe:input type="password" name="current_password" :label="__('vibe/settings.security.current_password')" viewable :placeholder="__('vibe/settings.security.current_password_placeholder')" />
+                            <vibe:input type="password" name="new_password" :label="__('vibe/settings.security.new_password')" viewable :placeholder="__('vibe/settings.security.new_password_placeholder')" />
+                            <vibe:input type="password" name="confirm_password" :label="__('vibe/settings.security.confirm_password')" viewable :placeholder="__('vibe/settings.security.confirm_password_placeholder')" />
+                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer float-end flex" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.security.password_updated_toast') }}', { type: 'success', title: '{{ __('vibe/settings.security.password_updated_title') }}' }) : null">
+                                {{ __('vibe/settings.security.update_password_btn') }}
                             </vibe:button>
                         </div>
                     </div>
@@ -53,16 +53,16 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20" x-data="passkeyController()">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Passkey (WebAuthn)</h3>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.security.passkey_title') }}</h3>
                                 <vibe:badge size="sm" variant="success" dot class="rounded-full" x-show="supported" x-cloak>
-                                    Browser Didukung
+                                    {{ __('vibe/settings.security.browser_supported') }}
                                 </vibe:badge>
                                 <vibe:badge size="sm" variant="destructive" class="rounded-full" x-show="!supported">
-                                    Tidak Didukung
+                                    {{ __('vibe/settings.security.browser_not_supported') }}
                                 </vibe:badge>
                             </div>
                             <p class="text-muted-foreground text-xs">
-                                Daftarkan Touch ID, Face ID, Windows Hello, atau kunci fisik (YubiKey) untuk login cepat tanpa kata sandi.
+                                {{ __('vibe/settings.security.passkey_desc') }}
                             </p>
                         </div>
 
@@ -70,8 +70,8 @@
                             <div x-show="isIpAddress" x-cloak>
                                 <vibe:card.alert variant="warning" size="sm">
                                     <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 w-full">
-                                        <span>Anda mengakses via <strong>127.0.0.1</strong>. Buka via <strong>localhost</strong> agar WebAuthn berfungsi.</span>
-                                        <a :href="localhostUrl" class="bg-amber-500 hover:bg-amber-600 px-2.5 py-1 rounded-lg font-medium text-white text-xs transition-colors shrink-0">Buka di Localhost &rarr;</a>
+                                        <span>{!! __('vibe/settings.security.passkey_ip_alert') !!}</span>
+                                        <a :href="localhostUrl" class="bg-amber-500 hover:bg-amber-600 px-2.5 py-1 rounded-lg font-medium text-white text-xs transition-colors shrink-0">{!! __('vibe/settings.security.passkey_open_localhost') !!}</a>
                                     </div>
                                 </vibe:card.alert>
                             </div>
@@ -95,10 +95,10 @@
                             <div class="space-y-4">
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <p class="font-semibold text-foreground text-sm">Passkey Terdaftar</p>
-                                        <p class="text-xs text-muted-foreground">Kunci biometrik yang terhubung ke akun Anda.</p>
+                                        <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.security.registered_passkeys') }}</p>
+                                        <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.registered_passkeys_desc') }}</p>
                                     </div>
-                                    <vibe:badge size="sm" variant="secondary" class="rounded-full">{{ $userPasskeys->count() }} Terdaftar</vibe:badge>
+                                    <vibe:badge size="sm" variant="secondary" class="rounded-full">{{ __('vibe/settings.security.registered_badge', ['count' => $userPasskeys->count()]) }}</vibe:badge>
                                 </div>
 
                                 @if ($userPasskeys->isEmpty())
@@ -117,8 +117,8 @@
                                             </svg>
                                         </div>
                                         <div>
-                                            <p class="font-semibold text-foreground text-sm">Belum ada passkey terdaftar</p>
-                                            <p class="text-xs text-muted-foreground">Tambahkan perangkat Anda di bawah untuk mengaktifkan login biometrik.</p>
+                                            <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.security.no_passkeys') }}</p>
+                                            <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.no_passkeys_desc') }}</p>
                                         </div>
                                     </div>
                                 @else
@@ -141,11 +141,11 @@
                                                     </div>
                                                     <div class="min-w-0">
                                                         <p class="font-semibold text-foreground text-sm truncate">{{ $passkey->name }}</p>
-                                                        <p class="text-xs text-muted-foreground">Ditambahkan {{ $passkey->created_at?->diffForHumans() }}</p>
+                                                        <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.added_time', ['time' => $passkey->created_at?->diffForHumans()]) }}</p>
                                                     </div>
                                                 </div>
-                                                <vibe:button.delete class="rounded-full" size="xs" :url="route('passkey.destroy', $passkey)" title="Hapus Passkey" message="Hapus passkey '{{ $passkey->name }}'? Anda tidak bisa login dengan perangkat ini lagi.">
-                                                    Hapus
+                                                <vibe:button.delete class="rounded-full" size="xs" :url="route('passkey.destroy', $passkey)" :title="__('vibe/settings.security.delete_passkey_title')" :message="__('vibe/settings.security.delete_passkey_message', ['name' => $passkey->name])">
+                                                    {{ __('vibe/settings.security.delete_passkey') }}
                                                 </vibe:button.delete>
                                             </div>
                                         @endforeach
@@ -155,18 +155,18 @@
                                 <div class="space-y-3 pt-3 border-border/50 border-t">
                                     <vibe:form :ajax="false" @submit.prevent="submitRegisterPasskey()" class="space-y-3">
                                         <div class="space-y-1.5">
-                                            <vibe:input x-model="registerName" label="Daftarkan Passkey Baru" description="Daftarkan biometrik perangkat saat ini." placeholder="Contoh: MacBook Pro Touch ID" required />
+                                            <vibe:input x-model="registerName" :label="__('vibe/settings.security.register_new_passkey')" :description="__('vibe/settings.security.register_new_passkey_desc')" :placeholder="__('vibe/settings.security.register_new_passkey_placeholder')" required />
                                         </div>
 
                                         <div class="flex sm:flex-row flex-col justify-between items-start sm:items-center gap-3 pt-0.5">
                                             <span class="flex items-center gap-1.5 text-xs text-muted-foreground">
-                                                Sensor biometrik akan langsung dipicu saat tombol ditekan.
+                                                {{ __('vibe/settings.security.sensor_prompt') }}
                                             </span>
 
                                             <vibe:button type="submit" variant="primary" size="sm" ::disabled="registering || loading || !registerName" class="cursor-pointer shrink-0">
                                                 <template x-if="!registering && !loading">
                                                     <span class="inline-flex items-center gap-1.5">
-                                                        <span>Daftarkan Passkey</span>
+                                                        <span>{{ __('vibe/settings.security.register_button') }}</span>
                                                     </span>
                                                 </template>
                                                 <template x-if="registering || loading">
@@ -175,7 +175,7 @@
                                                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                         </svg>
-                                                        <span x-text="statusText || 'Memproses...'"></span>
+                                                        <span x-text="statusText || '{{ __('vibe/settings.security.processing') }}'"></span>
                                                     </span>
                                                 </template>
                                             </vibe:button>
@@ -195,18 +195,18 @@
 
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-destructive text-base">Zona Berbahaya</h3>
-                            <p class="text-muted-foreground text-xs">Tindakan berikut bersifat permanen dan tidak dapat dibatalkan.</p>
+                            <h3 class="font-semibold text-destructive text-base">{{ __('vibe/settings.security.danger_zone_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.security.danger_zone_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full">
                             <div class="flex justify-between items-center gap-4">
                                 <div>
-                                    <p class="font-semibold text-foreground text-sm">Hapus Akun</p>
-                                    <p class="mt-0.5 text-muted-foreground text-xs">Menghapus akun secara permanen beserta semua data terkait.</p>
+                                    <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.security.delete_account_title') }}</p>
+                                    <p class="mt-0.5 text-muted-foreground text-xs">{{ __('vibe/settings.security.delete_account_desc') }}</p>
                                 </div>
                                 <vibe:button type="button" variant="destructive" size="sm" class="cursor-pointer shrink-0">
-                                    Hapus Akun
+                                    {{ __('vibe/settings.security.delete_account_btn') }}
                                 </vibe:button>
                             </div>
                         </div>
@@ -260,16 +260,18 @@
                                 this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
                                 setTimeout(() => window.location.reload(), 1500);
                             } else if (regRes.confirmationRequired) {
+                                const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
                                 this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
-                                window.location.href = '{{ route('password.confirm') }}';
+                                window.location.href = confirmUrl;
                             } else {
                                 this.feedbackType = 'error';
                                 this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
                             }
                         } catch (err) {
                             if (err?.response?.status === 423 || err?.status === 423 || err?.message?.includes('423') || err?.message?.toLowerCase().includes('password confirmation')) {
+                                const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
                                 this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
-                                window.location.href = '{{ route('password.confirm') }}';
+                                window.location.href = confirmUrl;
                                 return;
                             }
                             this.feedbackType = 'error';

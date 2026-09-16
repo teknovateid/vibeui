@@ -1,17 +1,17 @@
 <x-docs.layouts.sidebar>
-    <vibe:seo :title="__('docs/page/settings/index.title')" :description="__('docs/page/settings/index.subtitle')" :breadcrumbs="[
-        ['name' => __('docs/page/settings/index.breadcrumb.home'), 'url' => '/'],
-        ['name' => __('docs/page/settings/index.breadcrumb.pages'), 'url' => '#'],
-        ['name' => __('docs/page/settings/index.breadcrumb.settings'), 'url' => route('docs.settings.account')],
-        ['name' => __('docs/page/settings/index.tabs.appearance.label'), 'url' => route('docs.settings.appearance')],
+    <vibe:seo :title="__('vibe/settings.title')" :description="__('vibe/settings.subtitle')" :breadcrumbs="[
+        ['name' => __('vibe/settings.breadcrumb.home'), 'url' => '/'],
+        ['name' => __('vibe/settings.breadcrumb.pages'), 'url' => '#'],
+        ['name' => __('vibe/settings.breadcrumb.settings'), 'url' => route('docs.settings.account')],
+        ['name' => __('vibe/settings.tabs.appearance.label'), 'url' => route('docs.settings.appearance')],
     ]" />
 
     <div class="mx-auto w-full space-y-6">
-        <vibe:breadcrumb title="{!! __('docs/page/settings/index.title') !!}">
-            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('docs/page/settings/index.breadcrumb.home') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item>{{ __('docs/page/settings/index.breadcrumb.pages') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('docs/page/settings/index.breadcrumb.settings') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item active>{{ __('docs/page/settings/index.tabs.appearance.label') }}</vibe:breadcrumb.item>
+        <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
+            <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item href="{{ route('docs.settings.account') }}">{{ __('vibe/settings.breadcrumb.settings') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item active>{{ __('vibe/settings.tabs.appearance.label') }}</vibe:breadcrumb.item>
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
@@ -33,14 +33,14 @@
                                 <div>
                                     <div class="flex items-center gap-2.5">
                                         <h2 class="text-xl font-bold tracking-tight text-foreground">
-                                            {{ __('docs/page/settings/index.tabs.appearance.label') }}
+                                            {{ __('vibe/settings.tabs.appearance.label') }}
                                         </h2>
                                         <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
                                             Live Engine
                                         </vibe:badge>
                                     </div>
                                     <p class="text-xs text-muted-foreground mt-1 leading-relaxed max-w-xl">
-                                        {{ __('docs/page/settings/index.tabs.appearance.desc') }}
+                                        {{ __('vibe/settings.tabs.appearance.desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -65,10 +65,10 @@
                         <div class="space-y-3">
                             <div>
                                 <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                    {{ __('docs/page/settings/index.appearance.theme_mode_title') }}
+                                    {{ __('vibe/settings.appearance.theme_mode_title') }}
                                 </label>
                                 <p class="text-xs text-muted-foreground mt-0.5">
-                                    {{ __('docs/page/settings/index.appearance.theme_mode_desc') }}
+                                    {{ __('vibe/settings.appearance.theme_mode_desc') }}
                                 </p>
                             </div>
 
@@ -177,10 +177,10 @@
                             <div class="flex items-center justify-between">
                                 <div>
                                     <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                        {{ __('docs/page/settings/index.appearance.primary_color_title') }}
+                                        {{ __('vibe/settings.appearance.primary_color_title') }}
                                     </label>
                                     <p class="text-xs text-muted-foreground mt-0.5">
-                                        {{ __('docs/page/settings/index.appearance.primary_color_desc') }}
+                                        {{ __('vibe/settings.appearance.primary_color_desc') }}
                                     </p>
                                 </div>
                                 <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-muted/60 border border-border/80 shadow-2xs">
@@ -217,12 +217,12 @@
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                            {{ __('docs/page/settings/index.appearance.sidebar_title') }}
+                                            {{ __('vibe/settings.appearance.sidebar_title') }}
                                         </label>
                                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border/60" x-text="getActiveSidebarName()"></span>
                                     </div>
                                     <p class="text-xs text-muted-foreground mt-0.5">
-                                        {{ __('docs/page/settings/index.appearance.sidebar_desc') }}
+                                        {{ __('vibe/settings.appearance.sidebar_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -280,7 +280,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                                     {{-- Background --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_bg') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_bg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarBg }">
                                                 <input type="color" x-model="customSidebarBg" @input="applyCustomSidebarBg(customSidebarBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -291,7 +291,7 @@
 
                                     {{-- Foreground --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_fg') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_fg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarFg }">
                                                 <input type="color" x-model="customSidebarFg" @input="applyCustomSidebarFg(customSidebarFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -302,7 +302,7 @@
 
                                     {{-- Border --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_border') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_border') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarBorder }">
                                                 <input type="color" x-model="customSidebarBorder" @input="applyCustomSidebarBorder(customSidebarBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -320,12 +320,12 @@
                                 <div>
                                     <div class="flex items-center gap-2">
                                         <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                            {{ __('docs/page/settings/index.appearance.header_title') }}
+                                            {{ __('vibe/settings.appearance.header_title') }}
                                         </label>
                                         <span class="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-muted text-muted-foreground border border-border/60" x-text="getActiveHeaderName()"></span>
                                     </div>
                                     <p class="text-xs text-muted-foreground mt-0.5">
-                                        {{ __('docs/page/settings/index.appearance.header_desc') }}
+                                        {{ __('vibe/settings.appearance.header_desc') }}
                                     </p>
                                 </div>
                             </div>
@@ -383,7 +383,7 @@
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
                                     {{-- Background --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_bg') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_bg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderBg }">
                                                 <input type="color" x-model="customHeaderBg" @input="applyCustomHeaderBg(customHeaderBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -394,7 +394,7 @@
 
                                     {{-- Foreground --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_fg') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_fg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderFg }">
                                                 <input type="color" x-model="customHeaderFg" @input="applyCustomHeaderFg(customHeaderFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -405,7 +405,7 @@
 
                                     {{-- Border --}}
                                     <div class="p-3 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_border') }}</label>
+                                        <label class="text-[11px] font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_border') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderBorder }">
                                                 <input type="color" x-model="customHeaderBorder" @input="applyCustomHeaderBorder(customHeaderBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
@@ -423,7 +423,7 @@
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                        {{ __('docs/page/settings/index.appearance.radius_title') }}
+                                        {{ __('vibe/settings.appearance.radius_title') }}
                                     </label>
                                     <span class="text-xs font-mono font-semibold text-primary px-2.5 py-0.5 rounded-md bg-primary/10 border border-primary/20" x-text="selectedRadius"></span>
                                 </div>
@@ -443,7 +443,7 @@
                             <div class="space-y-3">
                                 <div class="flex items-center justify-between">
                                     <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                        {{ __('docs/page/settings/index.appearance.font_title') }}
+                                        {{ __('vibe/settings.appearance.font_title') }}
                                     </label>
                                     <span class="text-xs font-medium text-primary px-2.5 py-0.5 rounded-md bg-primary/10 border border-primary/20" x-text="selectedFontName"></span>
                                 </div>
@@ -466,7 +466,7 @@
                         <div class="space-y-3 pt-6 border-t border-border/50">
                             <div class="flex items-center justify-between">
                                 <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
-                                    {{ __('docs/page/settings/index.profile.language') }}
+                                    {{ __('vibe/settings.profile.language') }}
                                 </label>
                                 <span class="text-xs text-muted-foreground font-medium">{{ app()->getLocale() === 'id' ? 'Bahasa Indonesia (Aktif)' : 'English (Active)' }}</span>
                             </div>
@@ -1222,7 +1222,7 @@ body {
                             navigator.clipboard.writeText(this.generatedCss).then(() => {
                                 this.copied = true;
                                 if (window.vibeToast) {
-                                    vibeToast('{{ __('docs/page/settings/index.appearance.copied') }}', {
+                                    vibeToast('{{ __('vibe/settings.appearance.copied') }}', {
                                         type: 'success',
                                         title: 'CSS Disalin'
                                     });
@@ -1271,7 +1271,7 @@ body {
                         } catch (e) {}
 
                         if (window.vibeToast) {
-                            vibeToast('{{ __('docs/page/settings/index.appearance.toast_saved') }}', {
+                            vibeToast('{{ __('vibe/settings.appearance.toast_saved') }}', {
                                 type: 'success',
                                 title: 'Tema Disimpan'
                             });
@@ -1309,7 +1309,7 @@ body {
                         this.updateGeneratedCss();
 
                         if (window.vibeToast) {
-                            vibeToast('{{ __('docs/page/settings/index.appearance.toast_reset') }}', {
+                            vibeToast('{{ __('vibe/settings.appearance.toast_reset') }}', {
                                 type: 'info',
                                 title: 'Reset Selesai'
                             });

@@ -580,9 +580,14 @@ class TwoFactor extends Component
         // Cek apakah belum pernah konfirmasi atau sudah melewati batas timeout
         if (! $confirmedAt || ($now - (int) $confirmedAt) >= $this->passwordConfirmationTimeout) {
             // Simpan target URL agar setelah konfirmasi berhasil, user kembali ke halaman pengaturan
-            $intended = request()->header('referer') ?: route('docs.settings.security');
+            $targetRoute = \Illuminate\Support\Facades\Route::has('docs.settings.security')
+                ? 'docs.settings.security'
+                : (\Illuminate\Support\Facades\Route::has('settings.security') ? 'settings.security' : null);
+
+            $fallback = $targetRoute ? route($targetRoute) : url('/');
+            $intended = request()->header('referer') ?: $fallback;
             session()->put('url.intended', $intended);
-            session()->put('auth.target_route', 'docs.settings.security');
+            session()->put('auth.target_route', $targetRoute ?: $intended);
 
             $confirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm')
                 ? route('password.confirm')

@@ -3,7 +3,7 @@
         ['name' => __('vibe/settings.breadcrumb.home'), 'url' => '/'],
         ['name' => __('vibe/settings.breadcrumb.pages'), 'url' => '#'],
         ['name' => __('vibe/settings.breadcrumb.settings'), 'url' => route('[path].settings.account')],
-        ['name' => __('vibe/settings.tabs.notifications.label'), 'url' => route('[path].settings.notifications')],
+        ['name' => __('vibe/settings.breadcrumb.notifications'), 'url' => route('[path].settings.notifications')],
     ]" />
 
     <div class="mx-auto w-full space-y-6">
@@ -11,7 +11,7 @@
             <vibe:breadcrumb.item href="{{ route('[path].index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item href="{{ route('[path].settings.account') }}">{{ __('vibe/settings.breadcrumb.settings') }}</vibe:breadcrumb.item>
-            <vibe:breadcrumb.item active>{{ __('vibe/settings.tabs.notifications.label') }}</vibe:breadcrumb.item>
+            <vibe:breadcrumb.item active>{{ __('vibe/settings.breadcrumb.notifications') }}</vibe:breadcrumb.item>
         </vibe:breadcrumb>
 
         <vibe:card class="p-0 overflow-hidden">
@@ -22,48 +22,48 @@
 
                     {{-- Header --}}
                     <div class="border-b border-border/50 pb-4">
-                        <h2 class="text-lg font-bold text-foreground">Preferensi Notifikasi</h2>
+                        <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.notifications.header_title') }}</h2>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            Atur notifikasi apa yang ingin Anda terima dan melalui kanal apa.
+                            {{ __('vibe/settings.notifications.header_desc') }}
                         </p>
                     </div>
 
                     {{-- Email Notifications --}}
                     <div class="space-y-2">
-                        <h3 class="text-sm font-semibold text-foreground">Notifikasi Email</h3>
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.notifications.email_section_title') }}</h3>
                         <div class="max-w-xl space-y-0 divide-y divide-border/40 border border-border/60 rounded-2xl overflow-hidden">
                             <div class="p-4">
-                                <vibe:switch name="alert_security" label="Peringatan Keamanan" description="Notifikasi login dari perangkat baru, perubahan kata sandi, dan aktivitas mencurigakan." checked />
+                                <vibe:switch name="alert_security" :label="__('vibe/settings.notifications.security_alerts_label')" :description="__('vibe/settings.notifications.security_alerts_desc')" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_orders" label="Pembaruan Pesanan" description="Status pemrosesan, pengiriman, dan konfirmasi pesanan." checked />
+                                <vibe:switch name="alert_orders" :label="__('vibe/settings.notifications.orders_label')" :description="__('vibe/settings.notifications.orders_desc')" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_product" label="Pembaruan Produk" description="Fitur baru, rilis komponen, dan changelog Vibe UI." />
+                                <vibe:switch name="alert_product" :label="__('vibe/settings.notifications.product_label')" :description="__('vibe/settings.notifications.product_desc')" />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_newsletter" label="Newsletter Bulanan" description="Ringkasan bulanan tips, tutorial, dan update dari tim Teknovate." />
+                                <vibe:switch name="alert_newsletter" :label="__('vibe/settings.notifications.newsletter_label')" :description="__('vibe/settings.notifications.newsletter_desc')" />
                             </div>
                         </div>
                     </div>
 
                     {{-- Push / In-App Notifications --}}
                     <div class="space-y-2 pt-2">
-                        <h3 class="text-sm font-semibold text-foreground">Notifikasi In-App</h3>
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.notifications.inapp_section_title') }}</h3>
                         <div class="max-w-xl space-y-0 divide-y divide-border/40 border border-border/60 rounded-2xl overflow-hidden">
                             <div class="p-4">
-                                <vibe:switch name="alert_sound" label="Efek Suara Notifikasi" description="Mainkan suara saat notifikasi baru masuk di dalam aplikasi." checked />
+                                <vibe:switch name="alert_sound" :label="__('vibe/settings.notifications.sound_label')" :description="__('vibe/settings.notifications.sound_desc')" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_desktop" label="Notifikasi Desktop" description="Tampilkan notifikasi sistem operasi meski browser diminimalkan." />
+                                <vibe:switch name="alert_desktop" :label="__('vibe/settings.notifications.desktop_label')" :description="__('vibe/settings.notifications.desktop_desc')" />
                             </div>
                         </div>
                     </div>
 
                     {{-- Save Action --}}
                     <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Preferensi notifikasi disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                            Simpan Preferensi
+                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.notifications.saved_toast') }}', { type: 'success', title: '{{ __('vibe/settings.notifications.saved_title') }}' }) : null">
+                            {{ __('vibe/settings.notifications.save_btn') }}
                         </vibe:button>
                     </div>
 

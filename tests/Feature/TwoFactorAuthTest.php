@@ -177,6 +177,8 @@ test('security settings page renders two factor setup ui', function () {
         'email_verified_at' => now(),
     ]);
 
+    app()->setLocale('id');
+
     $this->actingAs($user)
         ->withSession([
             'auth.password_confirmed_at' => time(),
@@ -184,13 +186,28 @@ test('security settings page renders two factor setup ui', function () {
         ])
         ->get(route('docs.settings.security'))
         ->assertOk()
-        ->assertSee('Autentikasi Dua Faktor (2FA)')
-        ->assertSee('Aktifkan')
-        ->assertSee('Aplikasi Autentikator (TOTP)')
-        ->assertSee('Kode Verifikasi Email (OTP)')
+        ->assertSee(__('vibe/settings.two_factor.title'))
+        ->assertSee(__('vibe/settings.two_factor.enable_btn'))
+        ->assertSee(__('vibe/settings.two_factor.totp_title'))
+        ->assertSee(__('vibe/settings.two_factor.email_title'))
         ->assertSee('vibeTwoFactorSettings')
-        ->assertSee('Passkey (WebAuthn)')
+        ->assertSee(__('vibe/settings.security.passkey_title'))
         ->assertSee('passkeyController');
+
+    app()->setLocale('en');
+
+    $this->actingAs($user)
+        ->withSession([
+            'auth.password_confirmed_at' => time(),
+            'auth.confirmed_route' => 'docs.settings.security',
+        ])
+        ->get(route('docs.settings.security'))
+        ->assertOk()
+        ->assertSee('Two-Factor Authentication (2FA)')
+        ->assertSee('Enable')
+        ->assertSee('Authenticator App (TOTP)')
+        ->assertSee('Email Verification Code (OTP)')
+        ->assertSee('Passkey (WebAuthn)');
 });
 
 test('user can setup and confirm two factor authentication via email otp in livewire component', function () {

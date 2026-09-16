@@ -118,8 +118,12 @@ Route::prefix('docs')->name('docs.')->group(function () {
             Route::view('/account', 'docs.settings.account')->name('account');
 
             Route::get('/security', [SettingsController::class, 'security'])
-                // ->middleware('confirm')
+                ->middleware('confirm')
                 ->name('security');
+
+            Route::view('/passkey', 'docs.settings.security')
+                ->middleware('confirm')
+                ->name('passkey');
 
             Route::view('/login-history', 'docs.settings.login-history')
                 ->middleware('idle:10')

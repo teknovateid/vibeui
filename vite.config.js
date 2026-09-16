@@ -69,6 +69,25 @@ function vibeSyncPlugin() {
             destDir: 'packages/vibe/stubs/Auth/views',
             label: 'Auth Views',
         },
+        {
+            srcPattern: '/resources/views/docs/settings/',
+            destDir: 'packages/vibe/stubs/Templates/settings',
+            label: 'Settings Templates',
+            transform: (content) => {
+                return content
+                    .replace(/<x-docs\.layouts\.[a-z0-9_-]+>/g, '<x-[path].layouts.[style]>')
+                    .replace(/<\/x-docs\.layouts\.[a-z0-9_-]+>/g, '</x-[path].layouts.[style]>')
+                    .replace(/docs\.settings\./g, '[path].settings.')
+                    .replace(/route\('docs\.index'\)/g, "route('[path].index')")
+                    .replace(/route\('docs\.settings\./g, "route('[path].settings.")
+                    .replace(/@include\('docs\.settings\./g, "@include('[path].settings.");
+            },
+        },
+        {
+            srcPattern: '/resources/views/livewire/settings/',
+            destDir: 'packages/vibe/stubs/Auth/views/settings',
+            label: 'Settings Livewire Views',
+        },
     ];
 
     return {

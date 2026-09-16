@@ -184,20 +184,7 @@ class AuthCommand extends Command
             }
 
             // Register in bootstrap/app.php
-            $appFile = base_path('bootstrap/app.php');
-            if (File::exists($appFile)) {
-                $content = File::get($appFile);
-                if (! str_contains($content, 'routes/auth.php')) {
-                    $updated = preg_replace(
-                        '/web:\s*\[([^\]]*)\]/s',
-                        "web: [$1    __DIR__ . '/../routes/auth.php',\n        ]",
-                        $content
-                    );
-                    if ($updated && $updated !== $content) {
-                        File::put($appFile, $updated);
-                    }
-                }
-            }
+            $this->registerRouteInBootstrap();
         });
 
         // 6. Publish Auth Language Files
@@ -334,5 +321,54 @@ class AuthCommand extends Command
         $this->line(" <fg=gray>Default Layout: <fg=white>{$layout}</> | Credential Mode: <fg=white>{$loginBy}</></>");
         $this->line(' <fg=gray>You can now test the routes at: <fg=cyan>/login</>, <fg=cyan>/register</>, and <fg=cyan>/forgot-password</></>');
         $this->newLine();
+    }
+
+    protected function registerRouteInBootstrap(): void
+    {
+        $appFile = base_path('bootstrap/app.php');
+        if (! File::exists($appFile)) {
+            return;
+        }
+
+        $content = File::get($appFile);
+        if (str_contains($content, 'routes/auth.php')) {
+            return;
+        }
+
+        // Case 1: web: is already an array (e.g. web: [ ... ])
+        if (preg_match('/web:\s*\[/s', $content)) {
+            $updated = preg_replace(
+                '/(web:\s*\[)/',
+                "$1\n            __DIR__ . '/../routes/auth.php',",
+                $content
+            );
+            if ($updated && $updated !== $content) {
+                File::put($appFile, $updated);
+
+                return;
+            }
+        }
+
+        // Case 2: web: is a single route file string (e.g. web: __DIR__.'/../routes/web.php', or web: __DIR__ . '/../routes/web.php',)
+        if (preg_match('/web:\s*(__DIR__\s*\.\s*[\'"][^\'"]+[\'"])\s*,/', $content, $matches)) {
+            $originalRoute = $matches[1];
+            $replacement = "web: [\n            {$originalRoute},\n            __DIR__ . '/../routes/auth.php',\n        ],";
+            $updated = str_replace($matches[0], $replacement, $content);
+            if ($updated && $updated !== $content) {
+                File::put($appFile, $updated);
+
+                return;
+            }
+        }
+
+        // Case 3: Generic fallback for web: <expression>,
+        if (preg_match('/web:\s*([^,\n]+),/', $content, $matches)) {
+            $expr = trim($matches[1]);
+            $replacement = "web: [\n            {$expr},\n            __DIR__ . '/../routes/auth.php',\n        ],";
+            $updated = str_replace($matches[0], $replacement, $content);
+            if ($updated && $updated !== $content) {
+                File::put($appFile, $updated);
+            }
+        }
     }
 }
