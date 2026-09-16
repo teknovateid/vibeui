@@ -43,9 +43,9 @@ class ResetPassword extends Component
     protected function validationAttributes(): array
     {
         return [
-            'email' => __('auth.fields.email'),
-            'password' => __('auth.fields.new_password'),
-            'password_confirmation' => __('auth.fields.confirm_new_password'),
+            'email' => __('auth/fields.email'),
+            'password' => __('auth/fields.new_password'),
+            'password_confirmation' => __('auth/fields.confirm_new_password'),
         ];
     }
 
@@ -89,8 +89,8 @@ class ResetPassword extends Component
         $view = view('auth.reset-password');
 
         return $view->layout($this->resolveAuthLayout(), [
-            'title' => __('auth.titles.reset_password'),
-            'description' => __('auth.titles.reset_password_description'),
+            'title' => __('auth/titles.reset_password'),
+            'description' => __('auth/titles.reset_password_description'),
         ]);
     }
 }

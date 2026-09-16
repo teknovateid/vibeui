@@ -99,3 +99,4 @@ Route::middleware('auth')->group(function () {
         return redirect('/');
     })->name('logout');
 });
+

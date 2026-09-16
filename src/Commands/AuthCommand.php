@@ -211,6 +211,23 @@ class AuthCommand extends Command
                         File::copy($src, $dest);
                     }
                 }
+
+                $srcDir = __DIR__."/../../lang/{$locale}/auth";
+                $destDir = lang_path("{$locale}/auth");
+                if (File::isDirectory($srcDir)) {
+                    File::ensureDirectoryExists($destDir);
+                    if ($force) {
+                        File::copyDirectory($srcDir, $destDir);
+                    } else {
+                        foreach (File::allFiles($srcDir) as $file) {
+                            $target = $destDir.'/'.$file->getRelativePathname();
+                            if (! File::exists($target)) {
+                                File::ensureDirectoryExists(dirname($target));
+                                File::copy($file->getPathname(), $target);
+                            }
+                        }
+                    }
+                }
             }
         });
 

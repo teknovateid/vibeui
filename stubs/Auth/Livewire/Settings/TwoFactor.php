@@ -92,10 +92,54 @@ class TwoFactor extends Component
     public bool $copiedSecret = false;
 
     /**
+     * =========================================================================
+     * PENGATURAN KONFIRMASI KATA SANDI (PASSWORD CONFIRMATION - CARA A)
+     * =========================================================================
+     *
+     * Jika diaktifkan (`true`), pengguna wajib mengonfirmasi kata sandi terlebih
+     * dahulu sebelum dapat menjalankan tindakan sensitif 2FA (seperti memulai setup,
+     * melihat recovery codes, membuat ulang kode, atau menonaktifkan 2FA).
+     *
+     * -------------------------------------------------------------------------
+     * PANDUAN UNTUK DEVELOPER (CARA MENONAKTIFKAN FITUR INI):
+     * -------------------------------------------------------------------------
+     * Anda dapat menonaktifkan proteksi konfirmasi kata sandi ini dengan salah
+     * satu dari 3 cara berikut:
+     *
+     * 1. Melalui Properti Class (Komponen Ini):
+     *    Ubah nilai properti `$requirePasswordConfirmation` di bawah menjadi `false`:
+     *    public bool $requirePasswordConfirmation = false;
+     *
+     * 2. Melalui File Konfigurasi (config/vibe.php):
+     *    Atur pada array 'auth':
+     *    'confirm_password_for_2fa' => false,
+     *
+     * 3. Melalui Environment Variable (.env):
+     *    Tambahkan di file .env:
+     *    VIBE_CONFIRM_PASSWORD_FOR_2FA=false
+     * =========================================================================
+     */
+    public bool $requirePasswordConfirmation = true;
+
+    /**
+     * Durasi toleransi waktu konfirmasi kata sandi dalam detik (default: 300 detik / 5 menit).
+     * Selama durasi ini belum berakhir sejak konfirmasi terakhir, aksi sensitif dapat
+     * dijalankan langsung tanpa meminta konfirmasi kata sandi ulang.
+     */
+    public int $passwordConfirmationTimeout = 300;
+
+    /**
      * Lifecycle mount hook.
      */
     public function mount(): void
     {
+        // Baca pengaturan dari config/vibe.php atau .env (default: true)
+        $this->requirePasswordConfirmation = (bool) config(
+            'vibe.auth.confirm_password_for_2fa',
+            env('VIBE_CONFIRM_PASSWORD_FOR_2FA', true)
+        );
+        $this->passwordConfirmationTimeout = (int) config('vibe.auth.password_timeout', 300);
+
         $this->refreshStatus();
     }
 
@@ -155,6 +199,11 @@ class TwoFactor extends Component
      */
     public function setupTotp(): void
     {
+        // Verifikasi konfirmasi password sebelum memulai setup (Cara A)
+        if (! $this->ensurePasswordIsConfirmed()) {
+            return;
+        }
+
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
@@ -190,6 +239,11 @@ class TwoFactor extends Component
      */
     public function setupEmail(): void
     {
+        // Verifikasi konfirmasi password sebelum memulai setup (Cara A)
+        if (! $this->ensurePasswordIsConfirmed()) {
+            return;
+        }
+
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
@@ -406,6 +460,11 @@ class TwoFactor extends Component
      */
     public function disable(?string $method = null): void
     {
+        // Verifikasi konfirmasi password sebelum menonaktifkan 2FA (Cara A)
+        if (! $this->ensurePasswordIsConfirmed()) {
+            return;
+        }
+
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
@@ -442,6 +501,11 @@ class TwoFactor extends Component
      */
     public function getRecoveryCodes(): void
     {
+        // Verifikasi konfirmasi password sebelum melihat kode pemulihan (Cara A)
+        if (! $this->ensurePasswordIsConfirmed()) {
+            return;
+        }
+
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
@@ -463,6 +527,11 @@ class TwoFactor extends Component
      */
     public function regenerateRecoveryCodes(): void
     {
+        // Verifikasi konfirmasi password sebelum mereset kode pemulihan (Cara A)
+        if (! $this->ensurePasswordIsConfirmed()) {
+            return;
+        }
+
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
@@ -481,6 +550,50 @@ class TwoFactor extends Component
 
         $this->recoveryCodes = $recoveryCodes;
         $this->dispatch('vibe-toast', message: 'Kode pemulihan baru berhasil dibuat.', type: 'success');
+    }
+
+    /**
+     * Memeriksa apakah kata sandi pengguna baru saja dikonfirmasi (Cara A).
+     * Jika belum atau sesi konfirmasi telah kedaluwarsa, pengguna akan
+     * secara otomatis dialihkan ke halaman /confirm-password.
+     *
+     * -------------------------------------------------------------------------
+     * PANDUAN UNTUK DEVELOPER:
+     * -------------------------------------------------------------------------
+     * Untuk menonaktifkan pengecekan ini:
+     * 1. Ubah properti `$requirePasswordConfirmation = false;` di atas, atau
+     * 2. Set 'confirm_password_for_2fa' => false di config/vibe.php, atau
+     * 3. Set VIBE_CONFIRM_PASSWORD_FOR_2FA=false di .env
+     *
+     * @return bool True jika terkonfirmasi atau proteksi dinonaktifkan, False jika dialihkan.
+     */
+    protected function ensurePasswordIsConfirmed(): bool
+    {
+        // Lewati pengecekan jika proteksi dinonaktifkan oleh developer
+        if (! $this->requirePasswordConfirmation) {
+            return true;
+        }
+
+        $confirmedAt = session('auth.password_confirmed_at');
+        $now = time();
+
+        // Cek apakah belum pernah konfirmasi atau sudah melewati batas timeout
+        if (! $confirmedAt || ($now - (int) $confirmedAt) >= $this->passwordConfirmationTimeout) {
+            // Simpan target URL agar setelah konfirmasi berhasil, user kembali ke halaman pengaturan
+            $intended = request()->header('referer') ?: route('docs.settings.security');
+            session()->put('url.intended', $intended);
+            session()->put('auth.target_route', 'docs.settings.security');
+
+            $confirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm')
+                ? route('password.confirm')
+                : url('/confirm-password');
+
+            $this->redirect($confirmUrl, navigate: true);
+
+            return false;
+        }
+
+        return true;
     }
 
     public function render()
