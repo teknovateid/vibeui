@@ -17,6 +17,7 @@ class AuthCommand extends Command
     protected $signature = 'vibe:auth
         {--layout= : The auth layout variant (card, simple, split)}
         {--login-by= : Login identifier mode (email, username, phone, email_or_username, any)}
+        {--migrate : Run database migrations after scaffolding}
         {--force : Overwrite existing files}';
 
     /**
@@ -247,7 +248,25 @@ class AuthCommand extends Command
             }
         });
 
-        // 7. Ensure Vite Assets & NPM Dependencies for Passkeys
+        // 8. Publish Passkeys Configuration
+        $this->components->task('Publishing Passkeys Configuration', function () use ($force) {
+            $dest = config_path('passkeys.php');
+            if ($force || ! File::exists($dest)) {
+                $src = __DIR__.'/../../stubs/Auth/config/passkeys.php';
+                if (! File::exists($src)) {
+                    $src = base_path('vendor/laravel/passkeys/config/passkeys.php');
+                }
+
+                if (File::exists($src)) {
+                    File::ensureDirectoryExists(dirname($dest));
+                    File::copy($src, $dest);
+                } else {
+                    $this->callSilent('vendor:publish', ['--tag' => 'passkeys-config', '--force' => true]);
+                }
+            }
+        });
+
+        // 9. Ensure Vite Assets & NPM Dependencies for Passkeys
         $this->components->task('Ensuring Vite assets and Passkeys dependencies', function () {
             // Ensure passkeys.js is published if missing
             $passkeysDest = resource_path('js/vibe/passkeys.js');
@@ -266,7 +285,7 @@ class AuthCommand extends Command
             $installCmd->updateNpmDependencies();
         });
 
-        // 8. Publish & Rewrite User and 2FA Migration
+        // 10. Publish & Rewrite User and 2FA Migration
         $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () {
             $src = __DIR__.'/../../stubs/Auth/migrations/0001_01_01_000000_create_users_table.php';
 
@@ -279,25 +298,91 @@ class AuthCommand extends Command
             File::copy($src, $dest);
         });
 
-        // 9. Ensure User Model has TwoFactorAuthenticatable and required fillables
+        // 11. Publish Passkeys Migration
+        $this->components->task('Publishing Passkeys Migration', function () use ($force) {
+            $existing = File::glob(database_path('migrations/*_create_passkeys_table.php'));
+
+            if (empty($existing) || $force) {
+                $timestamp = date('Y_m_d_His');
+                $dest = ! empty($existing)
+                    ? $existing[0]
+                    : database_path("migrations/{$timestamp}_create_passkeys_table.php");
+
+                $src = __DIR__.'/../../stubs/Auth/migrations/create_passkeys_table.php';
+                if (! File::exists($src)) {
+                    $src = base_path('vendor/laravel/passkeys/database/migrations/2024_01_01_000000_create_passkeys_table.php');
+                }
+
+                if (File::exists($src)) {
+                    File::ensureDirectoryExists(dirname($dest));
+                    File::copy($src, $dest);
+                } else {
+                    $this->callSilent('vendor:publish', ['--tag' => 'passkeys-migrations', '--force' => true]);
+                }
+            }
+        });
+
+        // 12. Ensure User Model has Passkey & TwoFactorAuthenticatable traits and required fillables
         $this->components->task('Updating User Model Traits & Fillables', function () {
             $userModel = app_path('Models/User.php');
             if (File::exists($userModel)) {
                 $content = File::get($userModel);
 
-                // Add trait import if not present
-                if (! str_contains($content, 'Teknovate\VibeUi\Traits\TwoFactorAuthenticatable')) {
+                // Add Passkey imports if not present
+                if (! str_contains($content, 'Laravel\Passkeys\Contracts\PasskeyUser')) {
                     $content = preg_replace(
-                        '/(namespace App\\\\Models;\s+)/',
-                        "$1\nuse Teknovate\\VibeUi\\Traits\\TwoFactorAuthenticatable;\n",
+                        '/(namespace App\\\\Models;)/',
+                        "$1\n\nuse Laravel\\Passkeys\\Contracts\\PasskeyUser;",
+                        $content
+                    );
+                }
+                if (! str_contains($content, 'Laravel\Passkeys\PasskeyAuthenticatable')) {
+                    $content = preg_replace(
+                        '/(namespace App\\\\Models;)/',
+                        "$1\n\nuse Laravel\\Passkeys\\PasskeyAuthenticatable;",
                         $content
                     );
                 }
 
-                // Add trait to class if not present
-                if (! str_contains($content, 'TwoFactorAuthenticatable;')) {
+                // Add trait import if not present
+                if (! str_contains($content, 'Teknovate\VibeUi\Traits\TwoFactorAuthenticatable')) {
                     $content = preg_replace(
-                        '/(use HasFactory,\s*Notifiable(?:,\s*PasskeyAuthenticatable)?)/',
+                        '/(namespace App\\\\Models;)/',
+                        "$1\n\nuse Teknovate\\VibeUi\\Traits\\TwoFactorAuthenticatable;",
+                        $content
+                    );
+                }
+
+                // Add PasskeyUser interface to class declaration if not present
+                if (! preg_match('/class\s+User\b[^{]*\bPasskeyUser\b/s', $content)) {
+                    if (preg_match('/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/', $content)) {
+                        $content = preg_replace(
+                            '/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/',
+                            '$1$2, PasskeyUser',
+                            $content
+                        );
+                    } elseif (preg_match('/(class\s+User\s+extends\s+Authenticatable)/', $content)) {
+                        $content = preg_replace(
+                            '/(class\s+User\s+extends\s+Authenticatable)/',
+                            '$1 implements PasskeyUser',
+                            $content
+                        );
+                    }
+                }
+
+                // Add PasskeyAuthenticatable trait to class if not present
+                if (! preg_match('/class\s+User\b[^{]*\{[^}]*\bPasskeyAuthenticatable\b/s', $content)) {
+                    $content = preg_replace(
+                        '/(\buse\s+HasFactory,\s*Notifiable)/',
+                        '$1, PasskeyAuthenticatable',
+                        $content
+                    );
+                }
+
+                // Add TwoFactorAuthenticatable trait to class if not present
+                if (! preg_match('/class\s+User\b[^{]*\{[^}]*\bTwoFactorAuthenticatable\b/s', $content)) {
+                    $content = preg_replace(
+                        '/(\buse\s+HasFactory,\s*Notifiable(?:,\s*PasskeyAuthenticatable)?)/',
                         '$1, TwoFactorAuthenticatable',
                         $content
                     );
@@ -316,10 +401,21 @@ class AuthCommand extends Command
             }
         });
 
+        // 13. Optional Migrations Run
+        if ($this->option('migrate')) {
+            $this->components->task('Running Database Migrations', function () {
+                $this->call('migrate', ['--force' => true]);
+            });
+        }
+
         $this->newLine();
         $this->components->info('Authentication system scaffolded successfully!');
         $this->line(" <fg=gray>Default Layout: <fg=white>{$layout}</> | Credential Mode: <fg=white>{$loginBy}</></>");
         $this->line(' <fg=gray>You can now test the routes at: <fg=cyan>/login</>, <fg=cyan>/register</>, and <fg=cyan>/forgot-password</></>');
+        if (! $this->option('migrate')) {
+            $this->newLine();
+            $this->line(' <fg=yellow>Reminder:</> Run <fg=white;options=bold>php artisan migrate</> to create the user, 2FA, and passkeys database tables.');
+        }
         $this->newLine();
     }
 
