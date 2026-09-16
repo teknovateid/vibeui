@@ -4,6 +4,7 @@
     'position' => 'bottom-right',
     'timeout' => 3000,
     'sound' => false,
+    'animation' => false,
 ])
 
 <div 
@@ -12,6 +13,7 @@
         heights: {},
         globalPosition: '{{ $position }}',
         globalSound: '{{ $sound }}',
+        globalAnimation: @js($animation),
         expanded: false,
         hoverTimeout: null,
         
@@ -77,8 +79,11 @@
             let s = toast.sound !== undefined ? toast.sound : this.globalSound;
             if (s === 'true' || s === '1') s = true;
             if (s === 'false' || s === '0' || s === '') s = false;
+
+            let anim = toast.animation !== undefined ? toast.animation : this.globalAnimation;
+            if (anim === 'false' || anim === '0' || anim === '') anim = false;
             
-            let item = { ...toast, id, timer: null, hover: false, sound: s };
+            let item = { ...toast, id, timer: null, hover: false, sound: s, animation: anim };
 
             this.toasts.unshift(item);
             this.startTimer(item);
@@ -88,6 +93,25 @@
                 let oldest = this.toasts[this.toasts.length - 1];
                 this.remove(oldest.id);
             }
+        },
+
+        getAnimationClass(toast) {
+            let anim = toast.animation;
+            if (!anim || anim === false) return '';
+            if (anim === true || anim === 'auto') {
+                if (toast.type === 'error' || toast.type === 'destructive' || toast.type === 'danger') return 'animate-vibe-shake';
+                if (toast.type === 'success') return 'animate-vibe-pop';
+                if (toast.type === 'warning') return 'animate-vibe-pulse';
+                return 'animate-vibe-pop';
+            }
+            const map = {
+                shake: 'animate-vibe-shake',
+                pop: 'animate-vibe-pop',
+                bounce: 'animate-vibe-pop',
+                pulse: 'animate-vibe-pulse',
+                wobble: 'animate-vibe-wobble',
+            };
+            return map[anim] || '';
         },
         
         getAudioContext() {
@@ -271,7 +295,8 @@
                 class="absolute left-0 right-0 p-4 rounded-xl lg:rounded-2xl shadow-lg pointer-events-auto flex items-center gap-3 overflow-hidden"
                 :class="[
                     typeClasses[toast.type] || typeClasses.info,
-                    getActivePosition().includes('top') ? 'top-0 origin-top' : 'bottom-0 origin-bottom'
+                    getActivePosition().includes('top') ? 'top-0 origin-top' : 'bottom-0 origin-bottom',
+                    getAnimationClass(toast)
                 ]"
                 :style="`transform: ${getTransform(index)}; z-index: ${50 - index}; opacity: ${index > 2 && !expanded ? 0 : 1}; transition-property: transform, opacity; transition-duration: 300ms;`"
             >

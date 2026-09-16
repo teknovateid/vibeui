@@ -33,16 +33,16 @@ class VibeIdleTimeout
                 return $next($request);
             }
 
+            $isLocked = (bool) $request->session()->get('auth.session_locked', false);
             $lastActivity = $request->session()->get('auth.last_activity_time');
             $now = time();
 
-            // Jika durasi inaktivitas telah mencapai atau melebihi batas waktu
-            if ($lastActivity && ($now - (int) $lastActivity) >= $timeout) {
+            // Jika sesi sedang terkunci atau durasi inaktivitas telah mencapai/melebihi batas waktu
+            if ($isLocked || ($lastActivity && ($now - (int) $lastActivity) >= $timeout)) {
                 // Kunci sesi pengguna
                 $request->session()->put('auth.session_locked', true);
                 $request->session()->forget('auth.password_confirmed_at');
                 $request->session()->forget('auth.confirmed_route');
-                $request->session()->put('auth.last_activity_time', $now);
 
                 // Simpan URL yang sedang dituju pengguna
                 $request->session()->put('url.intended', $request->fullUrl());
@@ -76,6 +76,10 @@ class VibeIdleTimeout
         $response = $next($request);
 
         if (method_exists($response, 'header')) {
+            // Header anti-cache agar riwayat browser (Back button) dan wire:navigate tidak menyajikan snapshot sensitif tanpa verifikasi ulang
+            $response->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+            $response->header('Pragma', 'no-cache');
+
             $response->header('X-Vibe-Idle-Timeout', (string) $timeout);
             if (\Illuminate\Support\Facades\Route::has('password.confirm')) {
                 $response->header('X-Vibe-Confirm-Url', route('password.confirm', [], false));

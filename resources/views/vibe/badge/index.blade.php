@@ -9,6 +9,8 @@
     'suffix' => null,
     'dot' => false,
     'dotPulse' => false,
+    'pulse' => false,
+    'animation' => false,
     'dismissible' => false,
     'href' => null,
 ])
@@ -79,7 +81,15 @@
 
     $interactiveClasses = $href ? 'cursor-pointer hover:opacity-90 active:scale-[0.98]' : '';
 
-    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$interactiveClasses}");
+    $animationClass = match ($animation) {
+        'pulse' => 'animate-vibe-pulse',
+        'pop', 'bounce' => 'animate-vibe-pop',
+        'shake' => 'animate-vibe-shake',
+        'wobble' => 'animate-vibe-wobble',
+        default => ($pulse ? 'animate-vibe-pulse' : ''),
+    };
+
+    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$interactiveClasses} {$animationClass}");
 @endphp
 
 @if ($href)

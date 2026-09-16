@@ -7,6 +7,8 @@
     'href' => null,
     'loading' => false,
     'disabled' => false,
+    'pulse' => false,
+    'animation' => false,
 ])
 
 @php
@@ -45,7 +47,15 @@
         $sizeClasses = 'text-sm p-0';
     }
 
-    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
+    $animationClass = match ($animation) {
+        'pulse' => 'animate-vibe-pulse',
+        'shake' => 'animate-vibe-shake',
+        'pop', 'bounce' => 'animate-vibe-pop',
+        'wobble' => 'animate-vibe-wobble',
+        default => ($pulse ? 'animate-vibe-pulse' : ''),
+    };
+
+    $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$animationClass}");
     $hasCustomXData = $attributes->has('x-data');
     $isDisabled = $disabled || $loading;
     $isIcon = str_starts_with($size, 'icon-');
