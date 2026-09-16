@@ -13,4 +13,8 @@ return [
     'confirm_password_description' => 'This is a secure area of the application. Please confirm your password before continuing.',
     'verify_email' => 'Verify email address',
     'verify_email_description' => 'Please verify your email address to continue.',
+    'two_factor_challenge' => 'Two-Factor Authentication (2FA)',
+    'two_factor_challenge_description' => 'Enter the 6-digit code from your authenticator app on your device.',
+    'two_factor_select' => 'Choose Verification Method',
+    'two_factor_select_description' => 'Select an available authentication method to verify your identity.',
 ];

@@ -2,6 +2,7 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\TwoFactorChallenge;
+use App\Livewire\Settings\TwoFactor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
@@ -135,39 +136,40 @@ test('user can complete two factor challenge with recovery code', function () {
     $this->assertNotContains($codeToUse, $auth->recovery_codes);
 });
 
-test('authenticated user can setup and confirm 2fa via api endpoints', function () {
+test('authenticated user can setup and confirm 2fa via livewire component', function () {
     $user = User::factory()->create();
 
     $this->actingAs($user);
 
-    // 1. Setup
-    $setupRes = $this->postJson('/two-factor/setup');
-    $setupRes->assertStatus(200);
-    $secret = $setupRes->json('secret');
-    $this->assertNotEmpty($secret);
-    $this->assertNotEmpty($setupRes->json('qr_code_url'));
+    $test = Livewire::test(TwoFactor::class)
+        ->assertSet('totpEnabled', false)
+        ->call('setupTotp')
+        ->assertDispatched('open-modal', 'modal-2fa-totp');
 
-    // 2. Confirm with valid OTP
+    $secret = $test->get('secretKey');
+    expect($secret)->not->toBeEmpty();
+    expect($test->get('qrCodeUrl'))->not->toBeEmpty();
+
+    // Confirm with valid OTP
     $validOtp = Vibe::twoFactor()->calculateOtp($secret);
-    $confirmRes = $this->postJson('/two-factor/confirm', ['code' => $validOtp]);
-    $confirmRes->assertStatus(200);
-    $confirmRes->assertJsonFragment(['status' => 'success']);
-    $this->assertCount(8, $confirmRes->json('recovery_codes'));
+    $test->set('code', $validOtp)
+        ->call('confirmTwoFactor')
+        ->assertSet('step', 1)
+        ->assertSet('totpEnabled', true)
+        ->assertDispatched('vibe-toast');
+
+    expect($test->get('recoveryCodes'))->toHaveCount(8);
 
     $user->refresh();
-    $this->assertTrue($user->hasTwoFactorEnabled('totp'));
+    expect($user->hasTwoFactorEnabled('totp'))->toBeTrue();
 
-    // 3. Status
-    $statusRes = $this->getJson('/two-factor/status');
-    $statusRes->assertStatus(200);
-    $statusRes->assertJsonFragment(['enabled' => true, 'recovery_codes_count' => 8]);
-
-    // 4. Disable
-    $disableRes = $this->deleteJson('/two-factor/disable');
-    $disableRes->assertStatus(200);
+    // Disable
+    $test->call('disable', 'totp')
+        ->assertSet('totpEnabled', false)
+        ->assertDispatched('vibe-toast');
 
     $user->refresh();
-    $this->assertFalse($user->hasTwoFactorEnabled('totp'));
+    expect($user->hasTwoFactorEnabled('totp'))->toBeFalse();
 });
 
 test('security settings page renders two factor setup ui', function () {
@@ -183,7 +185,7 @@ test('security settings page renders two factor setup ui', function () {
         ->get(route('docs.settings.security'))
         ->assertOk()
         ->assertSee('Autentikasi Dua Faktor (2FA)')
-        ->assertSee('Aktifkan 2FA')
+        ->assertSee('Aktifkan')
         ->assertSee('Aplikasi Autentikator (TOTP)')
         ->assertSee('Kode Verifikasi Email (OTP)')
         ->assertSee('vibeTwoFactorSettings')
@@ -191,7 +193,7 @@ test('security settings page renders two factor setup ui', function () {
         ->assertSee('passkeyController');
 });
 
-test('user can setup and confirm two factor authentication via email otp', function () {
+test('user can setup and confirm two factor authentication via email otp in livewire component', function () {
     \Illuminate\Support\Facades\Notification::fake();
 
     $user = User::factory()->create([
@@ -199,13 +201,14 @@ test('user can setup and confirm two factor authentication via email otp', funct
         'password' => Hash::make('password123'),
     ]);
 
-    // 1. Setup endpoint with method=email
-    $response = $this->actingAs($user)
-        ->postJson(route('two-factor.setup'), ['method' => 'email'])
-        ->assertOk()
-        ->assertJson([
-            'method' => 'email',
-        ]);
+    $this->actingAs($user);
+
+    $test = Livewire::test(TwoFactor::class)
+        ->assertSet('emailEnabled', false)
+        ->call('setupEmail')
+        ->assertSet('emailOtpSent', true)
+        ->assertSet('selectedMethod', 'email')
+        ->assertDispatched('open-modal', 'modal-2fa-email');
 
     $otp = null;
     \Illuminate\Support\Facades\Notification::assertSentTo(
@@ -219,14 +222,11 @@ test('user can setup and confirm two factor authentication via email otp', funct
 
     expect($otp)->not->toBeNull();
 
-    // 2. Confirm endpoint with method=email and valid otp
-    $this->actingAs($user)
-        ->postJson(route('two-factor.confirm'), [
-            'method' => 'email',
-            'code' => $otp,
-        ])
-        ->assertOk()
-        ->assertJsonStructure(['status', 'method', 'recovery_codes']);
+    $test->set('code', $otp)
+        ->call('confirmTwoFactor')
+        ->assertSet('step', 1)
+        ->assertSet('emailEnabled', true)
+        ->assertDispatched('vibe-toast');
 
     $user->refresh();
     expect($user->hasTwoFactorEnabled('email'))->toBeTrue();
@@ -243,6 +243,11 @@ test('user can switch provider to email and complete challenge via email otp', f
     $user->twoFactorAuthenticators()->create([
         'method' => 'totp',
         'secret' => Vibe::twoFactor()->generateSecretKey(),
+        'confirmed_at' => now(),
+    ]);
+
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'email',
         'confirmed_at' => now(),
     ]);
 
@@ -284,6 +289,11 @@ test('whatsapp and sms otp stubs are prepared and verify otp successfully', func
         'confirmed_at' => now(),
     ]);
 
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'whatsapp',
+        'confirmed_at' => now(),
+    ]);
+
     session(['auth.2fa.user_id' => $user->id]);
 
     $test = Livewire::test(TwoFactorChallenge::class)
@@ -310,3 +320,156 @@ test('two factor notification can be resolved dynamically or customized via Vibe
     // Reset back
     Vibe::useTwoFactorNotification(\Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class);
 });
+
+test('email 2fa setup does not resend email when cooldown is still active', function () {
+    \Illuminate\Support\Facades\Notification::fake();
+
+    $user = User::factory()->create([
+        'email' => 'cooldown-test-' . uniqid() . '@example.com',
+        'password' => Hash::make('password123'),
+    ]);
+
+    $this->actingAs($user);
+
+    $test = Livewire::test(TwoFactor::class)
+        ->assertSet('emailEnabled', false)
+        ->call('setupEmail')
+        ->assertSet('emailOtpSent', true)
+        ->assertSet('cooldown', 60)
+        ->assertDispatched('open-modal', 'modal-2fa-email');
+
+    // Email harus terkirim 1 kali
+    \Illuminate\Support\Facades\Notification::assertSentTimes(
+        \Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class,
+        1
+    );
+
+    // Panggil setupEmail lagi saat cooldown masih berjalan (simulasi modal ditutup dan dibuka lagi)
+    $test->call('setupEmail')
+        ->assertSet('emailOtpSent', true)
+        ->assertDispatched('open-modal', 'modal-2fa-email');
+
+    // Email TIDAK boleh dikirim lagi (tetap 1 kali)
+    \Illuminate\Support\Facades\Notification::assertSentTimes(
+        \Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class,
+        1
+    );
+
+    // Begitu pula resendEmailOtp saat cooldown masih aktif tidak mengirim email tambahan
+    $test->call('resendEmailOtp');
+    \Illuminate\Support\Facades\Notification::assertSentTimes(
+        \Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class,
+        1
+    );
+});
+
+test('two factor challenge renders proper translations and toggles method selector screen', function () {
+    app()->setLocale('id');
+
+    $user = User::factory()->create([
+        'email' => 'toggle-test-' . uniqid() . '@example.com',
+        'password' => Hash::make('password123'),
+    ]);
+
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'totp',
+        'secret' => Vibe::twoFactor()->generateSecretKey(),
+        'recovery_codes' => $user->generateTwoFactorRecoveryCodes(),
+        'confirmed_at' => now(),
+    ]);
+
+    session(['auth.2fa.user_id' => $user->id]);
+
+    $component = Livewire::test(TwoFactorChallenge::class);
+
+    // Layar 1 (Challenge Form) - Bahasa Indonesia
+    $component
+        ->assertDontSee('auth.titles.two_factor_challenge')
+        ->assertSee('Autentikasi Dua Faktor (2FA)')
+        ->assertSee('Coba cara verifikasi lain')
+        ->assertSet('showingMethodSelector', false);
+
+    // Beralih ke Layar 2 (Pilih Metode Verifikasi)
+    $component
+        ->call('toggleMethodSelector')
+        ->assertSet('showingMethodSelector', true)
+        ->assertSee('Pilih Metode Verifikasi')
+        ->assertSee('Kembali ke verifikasi')
+        ->assertDontSee('Batal dan kembali ke login')
+        ->assertDontSee('Cancel and back to login');
+
+    // Kembali lagi ke Layar 1
+    $component
+        ->call('toggleMethodSelector')
+        ->assertSet('showingMethodSelector', false)
+        ->assertSee('Autentikasi Dua Faktor (2FA)')
+        ->assertSee('Coba cara verifikasi lain')
+        ->assertSee('Batal dan kembali ke login');
+});
+
+test('unconfigured methods such as whatsapp and sms are not shown when user has not enabled them in database', function () {
+    $user = User::factory()->create([
+        'email' => 'db-test-' . uniqid() . '@example.com',
+        'phone' => '081234567890',
+        'password' => Hash::make('password123'),
+    ]);
+
+    // User hanya mengaktifkan TOTP dan Email di database
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'totp',
+        'secret' => Vibe::twoFactor()->generateSecretKey(),
+        'confirmed_at' => now(),
+    ]);
+
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'email',
+        'confirmed_at' => now(),
+    ]);
+
+    session(['auth.2fa.user_id' => $user->id]);
+
+    // Di challenge, HANYA totp dan email yang muncul. WhatsApp dan SMS TIDAK BOLEH muncul!
+    Livewire::test(TwoFactorChallenge::class)
+        ->call('toggleMethodSelector')
+        ->assertSee('Aplikasi Autentikator')
+        ->assertSee('Kode Verifikasi Email')
+        ->assertDontSee('WhatsApp OTP')
+        ->assertDontSee('SMS OTP');
+});
+
+test('invalid recovery code displays properly translated validation error message', function () {
+    app()->setLocale('en');
+
+    $user = User::factory()->create([
+        'email' => 'recovery-lang-test@example.com',
+        'password' => Hash::make('password123'),
+    ]);
+
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'totp',
+        'secret' => Vibe::twoFactor()->generateSecretKey(),
+        'recovery_codes' => $user->generateTwoFactorRecoveryCodes(),
+        'confirmed_at' => now(),
+    ]);
+
+    session(['auth.2fa.user_id' => $user->id]);
+
+    Livewire::test(TwoFactorChallenge::class)
+        ->call('selectMethod', 'recovery')
+        ->set('recovery_code', 'invalid-code-1234')
+        ->call('challenge')
+        ->assertHasErrors(['recovery_code'])
+        ->assertDontSee('auth.two_factor.invalid_recovery_code')
+        ->assertSee('The recovery code provided is invalid or has already been used.');
+
+    app()->setLocale('id');
+
+    Livewire::test(TwoFactorChallenge::class)
+        ->call('selectMethod', 'recovery')
+        ->set('recovery_code', 'invalid-code-1234')
+        ->call('challenge')
+        ->assertHasErrors(['recovery_code'])
+        ->assertDontSee('auth.two_factor.invalid_recovery_code')
+        ->assertSee('Kode pemulihan yang Anda masukkan tidak valid atau sudah digunakan.');
+});
+

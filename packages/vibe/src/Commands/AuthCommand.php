@@ -122,6 +122,15 @@ class AuthCommand extends Command
                     File::copy($src, $dest);
                 }
             }
+            File::ensureDirectoryExists(app_path('Livewire/Settings'));
+            $srcTwoFactor = app_path('Livewire/Settings/TwoFactor.php');
+            if (! File::exists($srcTwoFactor)) {
+                $srcTwoFactor = __DIR__.'/../../stubs/Auth/Livewire/Settings/TwoFactor.php';
+            }
+            $destTwoFactor = app_path('Livewire/Settings/TwoFactor.php');
+            if ($force || ! File::exists($destTwoFactor)) {
+                File::copy($srcTwoFactor, $destTwoFactor);
+            }
         });
 
         // 4. Publish Auth Views
@@ -149,6 +158,16 @@ class AuthCommand extends Command
                 if ($force || ! File::exists($dest)) {
                     File::copy($src, $dest);
                 }
+            }
+
+            File::ensureDirectoryExists(resource_path('views/livewire/settings'));
+            $srcTfView = resource_path('views/livewire/settings/two-factor.blade.php');
+            if (! File::exists($srcTfView)) {
+                $srcTfView = __DIR__.'/../../stubs/Auth/views/settings/two-factor.blade.php';
+            }
+            $destTfView = resource_path('views/livewire/settings/two-factor.blade.php');
+            if ($force || ! File::exists($destTfView)) {
+                File::copy($srcTfView, $destTfView);
             }
         });
 

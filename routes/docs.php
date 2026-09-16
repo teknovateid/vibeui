@@ -7,13 +7,30 @@ use App\Http\Controllers\SelectController;
 use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
+if (app()->environment('local', 'testing')) {
+    Route::post('/dev-login-demo', function () {
+        $user = \App\Models\User::firstOrCreate(
+            ['email' => 'demo@vibeui.test'],
+            [
+                'name' => 'Demo User',
+                'username' => 'demouser',
+                'phone' => '08123456789',
+                'password' => bcrypt('password'),
+                'email_verified_at' => now(),
+            ]
+        );
+        \Illuminate\Support\Facades\Auth::login($user);
+        return redirect()->back();
+    })->name('dev.login.demo');
+}
+
 Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/', 'docs.index')->name('index');
     Route::view('/instalation', 'docs.instalation.index')->name('instalation.index');
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
-    
-    Route::prefix('auth')->middleware(['auth','verified'])->name('auth.')->group(function () {
+
+    Route::prefix('auth')->middleware(['auth', 'verified'])->name('auth.')->group(function () {
         Route::redirect('/', '/docs/auth/installation')->name('index');
         Route::view('/installation', 'docs.auth.installation')->name('installation');
         Route::view('/confirm', 'docs.auth.confirm')->name('confirm');
@@ -33,7 +50,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/currency', 'docs.input.currency')->name('currency');
         Route::view('/phone', 'docs.input.phone')->name('phone');
     });
-    
+
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
     Route::get('/select', [SelectController::class, 'index'])->name('select.index');
     Route::get('/select/api', [SelectController::class, 'api'])->name('select.api');
@@ -90,22 +107,26 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::get('/dashboard/{view}', [DashboardPageController::class, 'show'])->name('dashboard.show');
 
     Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/', function(){
+        Route::get('/', function () {
             return auth()->check() ? redirect('/docs/settings/account') : redirect('/docs/settings/appearance');
         })->name('index');
         Route::view('/appearance', 'docs.settings.appearance')->name('appearance');
         Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
-        
-        Route::middleware(['auth','verified'])->group(function () {
+
+        Route::middleware(['auth', 'verified'])->group(function () {
             Route::view('/account', 'docs.settings.account')->name('account');
-            
-            Route::get('/security',[SettingsController::class,'security'])
-            // ->middleware('confirm')
-            ->name('security');
-            
+
+            Route::get('/security', [SettingsController::class, 'security'])
+                ->middleware('confirm')
+                ->name('security');
+
+            Route::view('/passkey', 'docs.settings.security')
+                ->middleware('confirm')
+                ->name('passkey');
+
             Route::view('/login-history', 'docs.settings.login-history')
-            // ->middleware('idle:10')
-            ->name('login-history');
+                ->middleware('idle:10')
+                ->name('login-history');
         });
     });
     Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');

@@ -13,4 +13,8 @@ return [
     'confirm_password_description' => 'Ini adalah area aman aplikasi. Harap konfirmasi kata sandi Anda sebelum melanjutkan.',
     'verify_email' => 'Verifikasi Alamat Email',
     'verify_email_description' => 'Harap verifikasi email Anda sebelum menggunakan layanan penuh.',
+    'two_factor_challenge' => 'Autentikasi Dua Faktor (2FA)',
+    'two_factor_challenge_description' => 'Masukkan kode 6 digit dari aplikasi autentikator di ponsel Anda.',
+    'two_factor_select' => 'Pilih Metode Verifikasi',
+    'two_factor_select_description' => 'Pilih salah satu metode autentikasi yang tersedia untuk memverifikasi akun Anda.',
 ];

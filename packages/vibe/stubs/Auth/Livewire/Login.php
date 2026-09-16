@@ -62,7 +62,8 @@ class Login extends Component
             ]);
         }
 
-        $user = Auth::getProvider()->retrieveByCredentials($credentials);
+        
+        $user = Auth::user();
 
         if ($user && method_exists($user, 'hasTwoFactorEnabled') && $user->hasTwoFactorEnabled()) {
             Auth::logout();

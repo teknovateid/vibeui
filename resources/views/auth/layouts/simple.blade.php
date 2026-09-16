@@ -79,10 +79,10 @@
                     <span class="font-bold text-lg tracking-tight text-foreground">{{ config('app.name') }}</span>
                 </a>
 
-                @if ($title)
+                @if (!($hideHeader ?? false) && $title)
                     <h1 class="text-2xl font-bold tracking-tight text-foreground">{{ $title }}</h1>
                 @endif
-                @if ($description)
+                @if (!($hideHeader ?? false) && $description)
                     <p class="mt-1 text-xs sm:text-sm text-muted-foreground">{{ $description }}</p>
                 @endif
             </div>
