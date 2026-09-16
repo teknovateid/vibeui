@@ -122,7 +122,7 @@
                     </a>
                 </div>
 
-                @if ($title || $description)
+                @if (!($hideHeader ?? false) && ($title || $description))
                     <div class="text-left space-y-1">
                         @if ($title)
                             <h1 class="text-2xl font-bold tracking-tight text-foreground">{{ $title }}</h1>

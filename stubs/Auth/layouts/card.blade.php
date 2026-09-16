@@ -82,7 +82,7 @@
 
             {{-- Elevated Card Container --}}
             <vibe:card variant="elevated" class="p-6 sm:p-8 rounded-2xl border border-border/80 shadow-sm bg-card space-y-6">
-                @if ($title || $description)
+                @if (!($hideHeader ?? false) && ($title || $description))
                     <div class="space-y-1">
                         @if ($title)
                             <h1 class="text-xl font-bold tracking-tight text-card-foreground">{{ $title }}</h1>
