@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.1.21] - 2026-09-16
+
+### 🚀 Features
+- feat: add idle and qrcode JavaScript assets to installation command (1b840c7)
+
+
 ## [0.1.20] - 2026-09-16
 
 ### 🚀 Features
