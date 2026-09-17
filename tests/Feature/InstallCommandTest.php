@@ -89,3 +89,53 @@ test('InstallCommand::getRequiredDependencies dynamically reads from packages/vi
     expect($dependencies)->toBeArray();
     expect($dependencies)->toBe($vibePackage['dependencies']);
 });
+
+test('vibe:install registers locale switch route in routes/web.php', function () {
+    $tempWebRoute = sys_get_temp_dir().'/web.test.php';
+
+    File::put($tempWebRoute, <<<'PHP'
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
+PHP);
+
+    $command = new InstallCommand;
+    $hasInjected = $command->registerLocaleRoute($tempWebRoute);
+
+    expect($hasInjected)->toBeTrue();
+
+    $content = File::get($tempWebRoute);
+    expect($content)->toContain("Route::get('/locale/{locale}'");
+    expect($content)->toContain("name('locale.switch')");
+    expect($content)->toContain("session(['locale' => \$locale]);");
+
+    // Idempotent: running again should not duplicate
+    $hasInjectedAgain = $command->registerLocaleRoute($tempWebRoute);
+    expect($hasInjectedAgain)->toBeFalse();
+
+    File::delete($tempWebRoute);
+});
+
+test('vibe:install creates routes/web.php if it does not exist when registering locale route', function () {
+    $tempWebRoute = sys_get_temp_dir().'/web_non_existent.test.php';
+    if (File::exists($tempWebRoute)) {
+        File::delete($tempWebRoute);
+    }
+
+    $command = new InstallCommand;
+    $hasInjected = $command->registerLocaleRoute($tempWebRoute);
+
+    expect($hasInjected)->toBeTrue();
+    expect(File::exists($tempWebRoute))->toBeTrue();
+
+    $content = File::get($tempWebRoute);
+    expect($content)->toContain('use Illuminate\Support\Facades\Route;');
+    expect($content)->toContain("Route::get('/locale/{locale}'");
+    expect($content)->toContain("name('locale.switch')");
+
+    File::delete($tempWebRoute);
+});
