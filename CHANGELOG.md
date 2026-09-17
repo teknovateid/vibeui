@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.2] - 2026-09-17
+
+### 🧰 Maintenance & Documentation
+- config: trust all proxies in application bootstrap (4f7737c)
+
+
 ## [0.2.1] - 2026-09-17
 
 
