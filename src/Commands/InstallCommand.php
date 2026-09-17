@@ -77,7 +77,12 @@ class InstallCommand extends Command
             $this->updateNpmDependencies();
         });
 
-        // 8. Run NPM Install
+        // 8. Register locale switch route in routes/web.php
+        $this->components->task('Registering locale switch route', function () {
+            $this->registerLocaleRoute();
+        });
+
+        // 9. Run NPM Install
         if (! $this->option('skip-npm')) {
             $this->components->info('Running npm install...');
             $process = new Process(['npm', 'install'], base_path());
@@ -361,5 +366,45 @@ class InstallCommand extends Command
             $content = str_replace($matches[0], $replacement, $content);
             file_put_contents($vitePath, $content);
         }
+    }
+
+    /**
+     * Register the locale switch route in routes/web.php
+     */
+    public function registerLocaleRoute(?string $webRoutePath = null): bool
+    {
+        $webRoutePath = $webRoutePath ?: base_path('routes/web.php');
+
+        if (! File::exists($webRoutePath)) {
+            File::ensureDirectoryExists(dirname($webRoutePath));
+            File::put($webRoutePath, "<?php\n\nuse Illuminate\Support\Facades\Route;\n");
+        }
+
+        $content = File::get($webRoutePath);
+
+        if (str_contains($content, 'locale.switch') || str_contains($content, '/locale/{locale}')) {
+            return false;
+        }
+
+        if (! str_contains($content, 'Illuminate\Support\Facades\Route')) {
+            if (str_contains($content, '<?php')) {
+                $content = preg_replace('/<\?php\s*/', "<?php\n\nuse Illuminate\Support\Facades\Route;\n\n", $content, 1);
+            }
+        }
+
+        $routeCode = <<<'PHP'
+Route::get('/locale/{locale}', function (string $locale) {
+    if (in_array($locale, ['id', 'en'])) {
+        session(['locale' => $locale]);
+    }
+
+    return redirect()->back();
+})->name('locale.switch');
+PHP;
+
+        $trimmed = rtrim($content);
+        File::put($webRoutePath, $trimmed."\n\n".$routeCode."\n");
+
+        return true;
     }
 }
