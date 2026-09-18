@@ -66,9 +66,17 @@ class TwoFactorChallenge extends Component
             return redirect()->route('login');
         }
 
+        // Cek batas kedaluwarsa sesi challenge 2FA (maksimal 10 menit)
+        $timestamp = session('auth.2fa.timestamp');
+        if ($timestamp && (time() - (int) $timestamp) > 600) {
+            session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
+
+            return redirect()->route('login');
+        }
+
         $user = $this->getUser();
         if (! $user) {
-            session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
+            session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
 
             return redirect()->route('login');
         }
@@ -239,7 +247,7 @@ class TwoFactorChallenge extends Component
      */
     public function cancel()
     {
-        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
+        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
 
         return redirect()->route('login');
     }
@@ -251,7 +259,7 @@ class TwoFactorChallenge extends Component
     {
         $user = $this->getUser();
         if (! $user) {
-            session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
+            session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
 
             return redirect()->route('login');
         }
@@ -301,6 +309,16 @@ class TwoFactorChallenge extends Component
                 ]);
             }
 
+            // Cegah serangan replay: tolak jika token TOTP yang sama di-submit ulang dalam rentang window
+            $replayKey = 'vibe_used_totp_' . $user->getAuthIdentifier() . '_' . trim($this->code);
+            if (Cache::has($replayKey)) {
+                RateLimiter::hit($throttleKey, 300);
+
+                throw ValidationException::withMessages([
+                    'code' => __('auth/two_factor.invalid_totp_code'),
+                ]);
+            }
+
             $valid = $twoFactor->verifyOtp($authenticator->secret, $this->code);
             if (! $valid) {
                 RateLimiter::hit($throttleKey, 300);
@@ -309,6 +327,9 @@ class TwoFactorChallenge extends Component
                     'code' => __('auth/two_factor.invalid_totp_code'),
                 ]);
             }
+
+            // Simpan cache token yang sudah dipakai selama 90 detik
+            Cache::put($replayKey, true, 90);
 
             RateLimiter::clear($throttleKey);
             $authenticator->touchUsage();

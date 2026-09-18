@@ -214,7 +214,7 @@ trait AuthenticatesUsers
      */
     public function regenerateAuthSession(): void
     {
-        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
+        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
         session()->regenerate();
         session()->put('auth.last_activity_time', time());
     }
@@ -236,6 +236,7 @@ trait AuthenticatesUsers
         session()->regenerate();
         session()->put('auth.2fa.user_id', $userId);
         session()->put('auth.2fa.remember', $remember);
+        session()->put('auth.2fa.timestamp', time());
     }
 
     /**

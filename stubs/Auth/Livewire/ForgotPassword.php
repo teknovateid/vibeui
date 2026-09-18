@@ -47,8 +47,9 @@ class ForgotPassword extends Component
 
         $status = Password::sendResetLink(['email' => $this->email]);
 
-        if ($status === Password::RESET_LINK_SENT) {
-            $this->status = trans($status);
+        // Cegah User Enumeration: berikan respon generik sukses baik email terdaftar maupun tidak
+        if ($status === Password::RESET_LINK_SENT || $status === Password::INVALID_USER) {
+            $this->status = trans(Password::RESET_LINK_SENT);
             $this->reset('email');
 
             return;

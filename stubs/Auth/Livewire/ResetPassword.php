@@ -6,6 +6,7 @@ use App\Livewire\Auth\Concerns\AuthenticatesUsers;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
@@ -54,7 +55,12 @@ class ResetPassword extends Component
      */
     public function resetPassword()
     {
+        $this->ensureIsNotRateLimited();
+
         $this->validate();
+
+        $throttleKey = 'reset-password|' . request()->ip();
+        RateLimiter::hit($throttleKey, 900);
 
         $credentials = [
             'token' => $this->token,
@@ -73,6 +79,7 @@ class ResetPassword extends Component
         });
 
         if ($status === Password::PASSWORD_RESET) {
+            RateLimiter::clear($throttleKey);
             session()->flash('status', trans($status));
 
             return redirect()->route('login');
@@ -80,6 +87,27 @@ class ResetPassword extends Component
 
         throw ValidationException::withMessages([
             'email' => [trans($status)],
+        ]);
+    }
+
+    /**
+     * Pastikan permintaan reset kata sandi tidak melebihi batas percobaan.
+     */
+    protected function ensureIsNotRateLimited(): void
+    {
+        $key = 'reset-password|' . request()->ip();
+
+        if (! RateLimiter::tooManyAttempts($key, 5)) {
+            return;
+        }
+
+        $seconds = RateLimiter::availableIn($key);
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth/errors.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
         ]);
     }
 
