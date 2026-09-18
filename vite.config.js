@@ -73,6 +73,7 @@ function vibeSyncPlugin() {
             srcPattern: '/resources/views/docs/settings/',
             destDir: 'packages/vibe/stubs/Templates/settings',
             label: 'Settings Templates',
+            ignore: ['index.blade.php'],
             transform: (content) => {
                 return content
                     .replace(/<x-docs\.layouts\.[a-z0-9_-]+>/g, '<x-[path].layouts.[style]>')
@@ -88,6 +89,11 @@ function vibeSyncPlugin() {
             destDir: 'packages/vibe/stubs/Auth/views/settings',
             label: 'Settings Livewire Views',
         },
+        {
+            srcPattern: '/app/Livewire/Settings/',
+            destDir: 'packages/vibe/stubs/Auth/Livewire/Settings',
+            label: 'Settings Livewire Classes',
+        },
     ];
 
     return {
@@ -99,6 +105,9 @@ function vibeSyncPlugin() {
                 for (const rule of syncRules) {
                     if (normalizedFile.includes(rule.srcPattern)) {
                         const relativePath = normalizedFile.split(rule.srcPattern)[1];
+                        if (rule.ignore && rule.ignore.includes(relativePath)) {
+                            break;
+                        }
                         const dest = path.resolve(process.cwd(), rule.destDir, relativePath);
                         
                         if (event === 'add' || event === 'change') {
