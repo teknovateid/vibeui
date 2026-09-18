@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.4] - 2026-09-18
+
+### 🐛 Bug Fixes
+- fix: harden authentication security with 2FA session expiration, TOTP replay protection, and user enumeration prevention (39c6dc6)
+
+
 ## [0.2.3] - 2026-09-18
 
 ### 🚀 Features
