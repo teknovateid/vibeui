@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Livewire\Auth\Concerns\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -45,10 +46,9 @@ class ConfirmPassword extends Component
         $this->ensureIsNotRateLimited();
         $throttleKey = Str::transliterate('confirm-password|' . (Auth::id() ?? 'guest') . '|' . request()->ip());
 
-        if (! Auth::guard('web')->validate([
-            'email' => Auth::user()?->email,
-            'password' => $this->password,
-        ])) {
+        $user = Auth::user();
+
+        if (! $user || ! Hash::check($this->password, $user->getAuthPassword())) {
             RateLimiter::hit($throttleKey, 300);
 
             throw ValidationException::withMessages([

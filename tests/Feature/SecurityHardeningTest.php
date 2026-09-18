@@ -3,6 +3,7 @@
 use App\Livewire\Auth\ConfirmPassword;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Register;
+use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\TwoFactorChallenge;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -176,4 +177,94 @@ test('sec-fetch-dest media tags are blocked from triggering session locks', func
         ->get('/confirm-password/idle-lock');
 
     $response->assertStatus(403);
+});
+
+test('password.lock route sanitizes referer to prevent open redirect', function () {
+    $user = User::factory()->create();
+
+    $response = $this->actingAs($user)
+        ->withHeaders(['Referer' => 'https://malicious-phishing.com/steal'])
+        ->get('/confirm-password/lock');
+
+    $response->assertRedirect(route('docs.settings.security'));
+});
+
+test('reset password is rate limited after 5 attempts', function () {
+    RateLimiter::clear('reset-password|127.0.0.1');
+
+    for ($i = 0; $i < 5; $i++) {
+        Livewire::test(ResetPassword::class, ['token' => 'invalid-token'])
+            ->set('email', "victim{$i}@example.com")
+            ->set('password', 'ValidPass123!@#')
+            ->set('password_confirmation', 'ValidPass123!@#')
+            ->call('resetPassword');
+    }
+
+    Livewire::test(ResetPassword::class, ['token' => 'invalid-token'])
+        ->set('email', 'victim@example.com')
+        ->set('password', 'ValidPass123!@#')
+        ->set('password_confirmation', 'ValidPass123!@#')
+        ->call('resetPassword')
+        ->assertHasErrors(['email']);
+});
+
+test('forgot password does not leak whether email is registered', function () {
+    // Non-existent email should still set status and not throw invalid user validation exception
+    $test = Livewire::test(ForgotPassword::class)
+        ->set('email', 'nonexistent-user-12345@example.com')
+        ->call('sendResetLink')
+        ->assertHasNoErrors();
+
+    expect($test->get('status'))->not->toBeNull();
+});
+
+test('totp verification prevents code replay attacks', function () {
+    $user = User::factory()->create([
+        'email' => '2fa-replay@example.com',
+        'password' => Hash::make('password123'),
+    ]);
+
+    $twoFactor = Vibe::twoFactor();
+    $secret = $twoFactor->generateSecretKey();
+
+    $user->twoFactorAuthenticators()->create([
+        'method' => 'totp',
+        'secret' => $secret,
+        'recovery_codes' => $user->generateTwoFactorRecoveryCodes(),
+        'confirmed_at' => now(),
+    ]);
+
+    $validOtp = $twoFactor->calculateOtp($secret);
+
+    // Set 2FA pending session
+    session(['auth.2fa.user_id' => $user->id, 'auth.2fa.timestamp' => time()]);
+
+    // First attempt succeeds
+    Livewire::test(TwoFactorChallenge::class)
+        ->set('code', $validOtp)
+        ->call('challenge')
+        ->assertHasNoErrors();
+
+    // Replay with identical OTP immediately should fail
+    session(['auth.2fa.user_id' => $user->id, 'auth.2fa.timestamp' => time()]);
+
+    Livewire::test(TwoFactorChallenge::class)
+        ->set('code', $validOtp)
+        ->call('challenge')
+        ->assertHasErrors(['code']);
+});
+
+test('two factor challenge session expires after 10 minutes', function () {
+    $user = User::factory()->create();
+
+    // 2FA session from 15 minutes ago
+    session([
+        'auth.2fa.user_id' => $user->id,
+        'auth.2fa.timestamp' => time() - 900,
+    ]);
+
+    $response = $this->get('/two-factor-challenge');
+    $response->assertRedirect(route('login'));
+
+    expect(session('auth.2fa.user_id'))->toBeNull();
 });

@@ -11,6 +11,7 @@ use App\Livewire\Auth\VerifyEmail;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
@@ -64,10 +65,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/confirm-password', function (Request $request) use ($sanitizeIntendedUrl) {
         $request->validate(['password' => ['required', 'string']]);
 
-        if (! Auth::guard('web')->validate([
-            'email' => Auth::user()?->email,
-            'password' => $request->password,
-        ])) {
+        $user = Auth::user();
+
+        if (! $user || ! Hash::check($request->password, $user->getAuthPassword())) {
             return response()->json([
                 'errors' => ['password' => [__('auth/errors.password')]],
             ], 422);
@@ -92,7 +92,7 @@ Route::middleware('auth')->group(function () {
         return redirect()->intended('/');
     })->middleware('throttle:10,1')->name('password.confirm.post');
 
-    Route::match(['get', 'post'], '/confirm-password/lock', function (Request $request) {
+    Route::match(['get', 'post'], '/confirm-password/lock', function (Request $request) use ($sanitizeIntendedUrl) {
         // Tolak jika dipanggil dari tag media/script (anti CSRF micro-DoS)
         $fetchDest = $request->header('Sec-Fetch-Dest');
         if ($fetchDest && in_array($fetchDest, ['image', 'script', 'style', 'video', 'audio', 'track'], true)) {
@@ -107,7 +107,9 @@ Route::middleware('auth')->group(function () {
             ? route('docs.settings.security')
             : (Route::has('settings.security') ? route('settings.security') : url('/'));
 
-        return redirect()->to($request->header('referer') ?: $fallback);
+        $safeTarget = $sanitizeIntendedUrl($request->header('referer'), $fallback);
+
+        return redirect()->to($safeTarget);
     })->name('password.lock');
 
     Route::get('/confirm-password/idle-lock', function (Request $request) use ($sanitizeIntendedUrl) {
