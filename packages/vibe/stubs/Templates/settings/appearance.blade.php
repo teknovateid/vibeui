@@ -69,8 +69,11 @@
                     {{-- 1. Custom Primary Color (--primary, --primary-foreground, --ring) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Custom primary color</h3>
-                            <p class="text-muted-foreground text-xs">Mengatur token warna primer utama (<code class="font-mono text-[11px] text-primary">--primary</code>, <code class="font-mono text-[11px] text-primary">--ring</code>) untuk tombol, badge, fokus kontrol, dan elemen interaktif.</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">Custom primary color</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">Light & Dark</span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">Mengatur token warna primer utama (<code class="font-mono text-[11px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10">--primary</code>, <code class="font-mono text-[11px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10">--ring</code>) untuk tombol, badge, fokus kontrol, dan elemen interaktif di kedua mode.</p>
                         </div>
 
                         <div class="space-y-4 w-full">
@@ -266,15 +269,25 @@
                             </div>
 
                             {{-- High Contrast Toggle --}}
-                            <vibe:card variant="muted" class="max-w-2xl p-3.5 mt-3 border border-border/60">
-                                <vibe:switch 
-                                    label="Mode Kontras Tinggi (High Contrast)" 
-                                    description="Meningkatkan ketajaman token pembatas (`--border`) untuk keterbacaan optimal." 
-                                    labelPlacement="justify" 
-                                    size="sm" 
-                                    x-model="highContrast" 
-                                    @change="toggleHighContrast(highContrast)" 
-                                />
+                            <vibe:card class="max-w-2xl p-3.5 border border-border/80 bg-card hover:border-border transition-all shadow-2xs">
+                                <div class="flex items-center gap-3">
+                                    <div class="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 ring-1 ring-primary/20">
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="10" />
+                                            <path d="M12 18a6 6 0 0 0 0-12v12z" fill="currentColor" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <vibe:switch 
+                                            label="Mode Kontras Tinggi" 
+                                            description="Pertegas garis pembatas dan kontur elemen antarmuka untuk keterbacaan lebih optimal." 
+                                            labelPlacement="justify" 
+                                            size="sm" 
+                                            x-model="highContrast" 
+                                            @change="toggleHighContrast($el.checked)" 
+                                        />
+                                    </div>
+                                </div>
                             </vibe:card>
                         </div>
                     </div>
@@ -284,8 +297,11 @@
                     {{-- 3. Canvas & Surface Palette (--background, --card, --popover) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Canvas & surface palette</h3>
-                            <p class="text-muted-foreground text-xs">Pilih nuansa warna dasar kanvas (<code class="font-mono text-[11px] text-primary">--background</code>, <code class="font-mono text-[11px] text-primary">--card</code>, <code class="font-mono text-[11px] text-primary">--popover</code>).</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">Canvas & surface palette</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">Pilih nuansa warna dasar kanvas (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--background</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--card</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--popover</code>) khusus untuk mode aktif saat ini.</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-2xl">
@@ -298,8 +314,8 @@
                                         :class="selectedSurface === surface.id ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
                                     >
                                         {{-- Visual Surface Preview Dot --}}
-                                        <div class="size-9 rounded-lg border border-border/80 p-1 flex items-center justify-center shrink-0 shadow-2xs" :style="{ backgroundColor: mode === 'dark' ? surface.dark.bg : surface.light.bg }">
-                                            <div class="size-4 rounded-sm border border-border/60 shadow-2xs" :style="{ backgroundColor: mode === 'dark' ? surface.dark.card : surface.light.card }"></div>
+                                        <div class="size-9 rounded-lg border border-border/80 p-1 flex items-center justify-center shrink-0 shadow-2xs" :style="{ backgroundColor: isDarkNow ? surface.dark.bg : surface.light.bg }">
+                                            <div class="size-4 rounded-sm border border-border/60 shadow-2xs" :style="{ backgroundColor: isDarkNow ? surface.dark.card : surface.light.card }"></div>
                                         </div>
 
                                         <div class="min-w-0 flex-1">
@@ -320,8 +336,11 @@
                     {{-- 4. Desktop Sidebar (--sidebar, --sidebar-border, --sidebar-accent) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Desktop sidebar</h3>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah sisi (<code class="font-mono text-[11px] text-primary">--sidebar</code>, <code class="font-mono text-[11px] text-primary">--sidebar-border</code>), palet permukaan, garis batas, dan transparansi.</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">Desktop sidebar</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah sisi (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--sidebar</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--sidebar-border</code>), palet permukaan, garis batas, dan transparansi untuk mode aktif saat ini.</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -452,8 +471,11 @@
                     {{-- 5. Navigation Items (--nav-active-bg, --nav-active-fg, --nav-indicator) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Navigation items (Nav)</h3>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token item navigasi (<code class="font-mono text-[11px] text-primary">--nav-active-bg</code>, <code class="font-mono text-[11px] text-primary">--nav-active-fg</code>, <code class="font-mono text-[11px] text-primary">--nav-indicator</code>), gaya aktif, garis indikator, dan kerapatan baris.</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">Navigation items (Nav)</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">Kustomisasi token item navigasi (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-active-bg</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-active-fg</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-indicator</code>), gaya aktif, garis indikator, dan kerapatan baris untuk mode aktif saat ini.</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -612,7 +634,7 @@
                                     labelPlacement="justify" 
                                     size="md" 
                                     x-model="navIndicator" 
-                                    @change="toggleNavIndicator(navIndicator)" 
+                                    @change="toggleNavIndicator($el.checked)" 
                                 />
                             </vibe:card>
                         </div>
@@ -623,8 +645,11 @@
                     {{-- 6. Application Header (--header, --header-border, --header-accent) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Application header</h3>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah atas (<code class="font-mono text-[11px] text-primary">--header</code>, <code class="font-mono text-[11px] text-primary">--header-border</code>), gaya permukaan, garis batas, dan transparansi blur.</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">Application header</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah atas (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--header</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--header-border</code>), gaya permukaan, garis batas, dan transparansi blur untuk mode aktif saat ini.</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -636,7 +661,7 @@
                                     labelPlacement="justify" 
                                     size="md" 
                                     x-model="headerGlassEffect" 
-                                    @change="toggleHeaderGlassEffect(headerGlassEffect)" 
+                                    @change="toggleHeaderGlassEffect($el.checked)" 
                                 />
                             </vibe:card>
 
@@ -811,7 +836,7 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <h3 class="font-semibold text-foreground text-base">Chart & data palette</h3>
-                            <p class="text-muted-foreground text-xs">Palet warna grafik analitik (<code class="font-mono text-[11px] text-primary">--chart-1</code> s/d <code class="font-mono text-[11px] text-primary">--chart-5</code>) pada dashboard dan diagram data.</p>
+                            <p class="text-muted-foreground text-xs">Palet warna grafik analitik (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--chart-1</code> s/d <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--chart-5</code>) pada dashboard dan diagram data.</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -847,7 +872,7 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <h3 class="font-semibold text-foreground text-base">Border radius</h3>
-                            <p class="text-muted-foreground text-xs">Derajat kelengkungan sudut (<code class="font-mono text-[11px] text-primary">--radius</code>) pada kartu, tombol, badge, dan kontrol input.</p>
+                            <p class="text-muted-foreground text-xs">Derajat kelengkungan sudut (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--radius</code>) pada kartu, tombol, badge, dan kontrol input.</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-xl">
@@ -879,7 +904,7 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <h3 class="font-semibold text-foreground text-base">Typography</h3>
-                            <p class="text-muted-foreground text-xs">Pilih font antarmuka sistem utama (<code class="font-mono text-[11px] text-primary">--font-sans</code>).</p>
+                            <p class="text-muted-foreground text-xs">Pilih font antarmuka sistem utama (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--font-sans</code>).</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-xl">
@@ -1041,7 +1066,7 @@
                                     labelPlacement="justify" 
                                     size="sm" 
                                     x-model="motionActive" 
-                                    @change="toggleMotion(motionActive)" 
+                                    @change="toggleMotion($el.checked)" 
                                 />
                             </vibe:card>
 
@@ -1052,7 +1077,7 @@
                                     labelPlacement="justify" 
                                     size="sm" 
                                     x-model="glassEffect" 
-                                    @change="toggleGlassEffect(glassEffect)" 
+                                    @change="toggleGlassEffect($el.checked)" 
                                 />
                             </vibe:card>
                         </div>
@@ -1071,41 +1096,80 @@
                 const styleId = prefix + '-theme-override';
 
                 return {
+                    isDarkNow: false,
+
                     mode: window.VibeTheme?.getConfig()?.mode || (document.documentElement.classList.contains('dark') ? 'dark' : 'light'),
                     customHex: '#18181b',
                     customHexInput: '18181B',
                     highContrast: false,
+                    motionActive: true,
+
+                    // Surface
                     selectedSurface: 'zinc',
+                    selectedSurfaceLight: 'zinc',
+                    selectedSurfaceDark: 'zinc',
                     
                     // Sidebar States
                     sidebarStyle: 'default',
+                    sidebarStyleLight: 'default',
+                    sidebarStyleDark: 'default',
                     sidebarCustomBg: '#ffffff',
+                    sidebarCustomBgLight: '#ffffff',
+                    sidebarCustomBgDark: '#121312',
                     sidebarCustomBgInput: 'FFFFFF',
                     sidebarCustomBorder: '#e5e6e5',
+                    sidebarCustomBorderLight: '#e5e6e5',
+                    sidebarCustomBorderDark: '#262726',
                     sidebarCustomBorderInput: 'E5E6E5',
                     sidebarBorderMode: 'default',
+                    sidebarBorderModeLight: 'default',
+                    sidebarBorderModeDark: 'default',
                     transparentSidebar: false,
+                    transparentSidebarLight: false,
+                    transparentSidebarDark: false,
                     sidebarFeature: 'Recent changes',
 
                     // Nav States
                     navStyle: 'harmony',
+                    navStyleLight: 'harmony',
+                    navStyleDark: 'harmony',
                     navDensity: 'default',
+                    navDensityLight: 'default',
+                    navDensityDark: 'default',
                     navIndicator: false,
+                    navIndicatorLight: false,
+                    navIndicatorDark: false,
                     navCustomActiveBg: '#f4f5f5',
+                    navCustomActiveBgLight: '#f4f5f5',
+                    navCustomActiveBgDark: '#1e1f1e',
                     navCustomActiveBgInput: 'F4F5F5',
                     navCustomActiveFg: '#0a0b0a',
+                    navCustomActiveFgLight: '#0a0b0a',
+                    navCustomActiveFgDark: '#f9fafa',
                     navCustomActiveFgInput: '0A0B0A',
                     navCustomIndicator: '#18181b',
+                    navCustomIndicatorLight: '#18181b',
+                    navCustomIndicatorDark: '#f9fafa',
                     navCustomIndicatorInput: '18181B',
 
                     // Header States
                     headerStyle: 'default',
+                    headerStyleLight: 'default',
+                    headerStyleDark: 'default',
                     headerCustomBg: '#ffffff',
+                    headerCustomBgLight: '#ffffff',
+                    headerCustomBgDark: '#121312',
                     headerCustomBgInput: 'FFFFFF',
                     headerCustomBorder: '#e5e6e5',
+                    headerCustomBorderLight: '#e5e6e5',
+                    headerCustomBorderDark: '#262726',
                     headerCustomBorderInput: 'E5E6E5',
                     headerBorderMode: 'default',
+                    headerBorderModeLight: 'default',
+                    headerBorderModeDark: 'default',
                     headerGlassEffect: true,
+                    headerGlassEffectLight: true,
+                    headerGlassEffectDark: true,
 
                     selectedSemantic: 'vibrant',
                     selectedChartPreset: 'rainbow',
@@ -1114,7 +1178,6 @@
                     selectedFontValue: "'Figtree', ui-sans-serif, system-ui, sans-serif",
                     tablesView: 'default',
                     reduceMotion: false,
-                    motionActive: true,
                     glassEffect: true,
                     copied: false,
 
@@ -1260,7 +1323,78 @@
                         return p ? p.colors : this.semanticPresets[0].colors;
                     },
 
+                    updateIsDarkNow() {
+                        if (this.mode === 'dark') {
+                            this.isDarkNow = true;
+                        } else if (this.mode === 'light') {
+                            this.isDarkNow = false;
+                        } else {
+                            this.isDarkNow = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                        }
+                    },
+
+                    syncActiveModeValues() {
+                        if (this.isDarkNow) {
+                            this.selectedSurface = this.selectedSurfaceDark;
+
+                            this.sidebarStyle = this.sidebarStyleDark;
+                            this.sidebarCustomBg = this.sidebarCustomBgDark;
+                            this.sidebarCustomBgInput = (this.sidebarCustomBgDark || '').replace('#', '').toUpperCase();
+                            this.sidebarCustomBorder = this.sidebarCustomBorderDark;
+                            this.sidebarCustomBorderInput = (this.sidebarCustomBorderDark || '').replace('#', '').toUpperCase();
+                            this.sidebarBorderMode = this.sidebarBorderModeDark;
+                            this.transparentSidebar = this.transparentSidebarDark;
+
+                            this.headerStyle = this.headerStyleDark;
+                            this.headerCustomBg = this.headerCustomBgDark;
+                            this.headerCustomBgInput = (this.headerCustomBgDark || '').replace('#', '').toUpperCase();
+                            this.headerCustomBorder = this.headerCustomBorderDark;
+                            this.headerCustomBorderInput = (this.headerCustomBorderDark || '').replace('#', '').toUpperCase();
+                            this.headerBorderMode = this.headerBorderModeDark;
+                            this.headerGlassEffect = this.headerGlassEffectDark;
+
+                            this.navStyle = this.navStyleDark;
+                            this.navDensity = this.navDensityDark;
+                            this.navIndicator = this.navIndicatorDark;
+                            this.navCustomActiveBg = this.navCustomActiveBgDark;
+                            this.navCustomActiveBgInput = (this.navCustomActiveBgDark || '').replace('#', '').toUpperCase();
+                            this.navCustomActiveFg = this.navCustomActiveFgDark;
+                            this.navCustomActiveFgInput = (this.navCustomActiveFgDark || '').replace('#', '').toUpperCase();
+                            this.navCustomIndicator = this.navCustomIndicatorDark;
+                            this.navCustomIndicatorInput = (this.navCustomIndicatorDark || '').replace('#', '').toUpperCase();
+                        } else {
+                            this.selectedSurface = this.selectedSurfaceLight;
+
+                            this.sidebarStyle = this.sidebarStyleLight;
+                            this.sidebarCustomBg = this.sidebarCustomBgLight;
+                            this.sidebarCustomBgInput = (this.sidebarCustomBgLight || '').replace('#', '').toUpperCase();
+                            this.sidebarCustomBorder = this.sidebarCustomBorderLight;
+                            this.sidebarCustomBorderInput = (this.sidebarCustomBorderLight || '').replace('#', '').toUpperCase();
+                            this.sidebarBorderMode = this.sidebarBorderModeLight;
+                            this.transparentSidebar = this.transparentSidebarLight;
+
+                            this.headerStyle = this.headerStyleLight;
+                            this.headerCustomBg = this.headerCustomBgLight;
+                            this.headerCustomBgInput = (this.headerCustomBgLight || '').replace('#', '').toUpperCase();
+                            this.headerCustomBorder = this.headerCustomBorderLight;
+                            this.headerCustomBorderInput = (this.headerCustomBorderLight || '').replace('#', '').toUpperCase();
+                            this.headerBorderMode = this.headerBorderModeLight;
+                            this.headerGlassEffect = this.headerGlassEffectLight;
+
+                            this.navStyle = this.navStyleLight;
+                            this.navDensity = this.navDensityLight;
+                            this.navIndicator = this.navIndicatorLight;
+                            this.navCustomActiveBg = this.navCustomActiveBgLight;
+                            this.navCustomActiveBgInput = (this.navCustomActiveBgLight || '').replace('#', '').toUpperCase();
+                            this.navCustomActiveFg = this.navCustomActiveFgLight;
+                            this.navCustomActiveFgInput = (this.navCustomActiveFgLight || '').replace('#', '').toUpperCase();
+                            this.navCustomIndicator = this.navCustomIndicatorLight;
+                            this.navCustomIndicatorInput = (this.navCustomIndicatorLight || '').replace('#', '').toUpperCase();
+                        }
+                    },
+
                     init() {
+                        this.updateIsDarkNow();
                         try {
                             if (window.VibeTheme) {
                                 const cfg = window.VibeTheme.getConfig();
@@ -1274,54 +1408,139 @@
                             if (stored) {
                                 const parsed = JSON.parse(stored);
                                 if (parsed.mode) this.mode = parsed.mode;
+                                this.updateIsDarkNow();
+
                                 if (parsed.customHex) {
                                     this.customHex = parsed.customHex;
                                     this.customHexInput = parsed.customHex.replace('#', '').toUpperCase();
                                 }
                                 if (typeof parsed.highContrast !== 'undefined') this.highContrast = !!parsed.highContrast;
-                                if (parsed.selectedSurface) this.selectedSurface = parsed.selectedSurface;
-                                
-                                if (parsed.sidebarStyle) this.sidebarStyle = parsed.sidebarStyle;
-                                if (parsed.sidebarCustomBg) {
-                                    this.sidebarCustomBg = parsed.sidebarCustomBg;
-                                    this.sidebarCustomBgInput = parsed.sidebarCustomBg.replace('#', '').toUpperCase();
+
+                                // Surface
+                                if (parsed.selectedSurfaceLight) this.selectedSurfaceLight = parsed.selectedSurfaceLight;
+                                if (parsed.selectedSurfaceDark) this.selectedSurfaceDark = parsed.selectedSurfaceDark;
+                                if (parsed.selectedSurface && !parsed.selectedSurfaceLight && !parsed.selectedSurfaceDark) {
+                                    this.selectedSurfaceLight = parsed.selectedSurface;
+                                    this.selectedSurfaceDark = parsed.selectedSurface;
                                 }
-                                if (parsed.sidebarCustomBorder) {
-                                    this.sidebarCustomBorder = parsed.sidebarCustomBorder;
-                                    this.sidebarCustomBorderInput = parsed.sidebarCustomBorder.replace('#', '').toUpperCase();
+
+                                // Sidebar
+                                if (parsed.sidebarStyleLight) this.sidebarStyleLight = parsed.sidebarStyleLight;
+                                if (parsed.sidebarStyleDark) this.sidebarStyleDark = parsed.sidebarStyleDark;
+                                if (parsed.sidebarStyle && !parsed.sidebarStyleLight) {
+                                    this.sidebarStyleLight = parsed.sidebarStyle;
+                                    this.sidebarStyleDark = parsed.sidebarStyle;
                                 }
-                                if (parsed.sidebarBorderMode) this.sidebarBorderMode = parsed.sidebarBorderMode;
-                                if (typeof parsed.transparentSidebar !== 'undefined') this.transparentSidebar = !!parsed.transparentSidebar;
+
+                                if (parsed.sidebarCustomBgLight) this.sidebarCustomBgLight = parsed.sidebarCustomBgLight;
+                                if (parsed.sidebarCustomBgDark) this.sidebarCustomBgDark = parsed.sidebarCustomBgDark;
+                                if (parsed.sidebarCustomBg && !parsed.sidebarCustomBgLight) {
+                                    this.sidebarCustomBgLight = parsed.sidebarCustomBg;
+                                    this.sidebarCustomBgDark = parsed.sidebarCustomBg;
+                                }
+
+                                if (parsed.sidebarCustomBorderLight) this.sidebarCustomBorderLight = parsed.sidebarCustomBorderLight;
+                                if (parsed.sidebarCustomBorderDark) this.sidebarCustomBorderDark = parsed.sidebarCustomBorderDark;
+                                if (parsed.sidebarCustomBorder && !parsed.sidebarCustomBorderLight) {
+                                    this.sidebarCustomBorderLight = parsed.sidebarCustomBorder;
+                                    this.sidebarCustomBorderDark = parsed.sidebarCustomBorder;
+                                }
+
+                                if (parsed.sidebarBorderModeLight) this.sidebarBorderModeLight = parsed.sidebarBorderModeLight;
+                                if (parsed.sidebarBorderModeDark) this.sidebarBorderModeDark = parsed.sidebarBorderModeDark;
+                                if (parsed.sidebarBorderMode && !parsed.sidebarBorderModeLight) {
+                                    this.sidebarBorderModeLight = parsed.sidebarBorderMode;
+                                    this.sidebarBorderModeDark = parsed.sidebarBorderMode;
+                                }
+
+                                if (typeof parsed.transparentSidebarLight !== 'undefined') this.transparentSidebarLight = !!parsed.transparentSidebarLight;
+                                if (typeof parsed.transparentSidebarDark !== 'undefined') this.transparentSidebarDark = !!parsed.transparentSidebarDark;
+                                if (typeof parsed.transparentSidebar !== 'undefined' && typeof parsed.transparentSidebarLight === 'undefined') {
+                                    this.transparentSidebarLight = !!parsed.transparentSidebar;
+                                    this.transparentSidebarDark = !!parsed.transparentSidebar;
+                                }
                                 if (parsed.sidebarFeature) this.sidebarFeature = parsed.sidebarFeature;
 
-                                if (parsed.headerStyle) this.headerStyle = parsed.headerStyle;
-                                if (parsed.headerCustomBg) {
-                                    this.headerCustomBg = parsed.headerCustomBg;
-                                    this.headerCustomBgInput = parsed.headerCustomBg.replace('#', '').toUpperCase();
-                                }
-                                if (parsed.headerCustomBorder) {
-                                    this.headerCustomBorder = parsed.headerCustomBorder;
-                                    this.headerCustomBorderInput = parsed.headerCustomBorder.replace('#', '').toUpperCase();
-                                }
-                                if (parsed.headerBorderMode) this.headerBorderMode = parsed.headerBorderMode;
-                                if (typeof parsed.headerGlassEffect !== 'undefined') this.headerGlassEffect = !!parsed.headerGlassEffect;
-
-                                if (parsed.navStyle) this.navStyle = parsed.navStyle;
-                                if (parsed.navDensity) this.navDensity = parsed.navDensity;
-                                if (typeof parsed.navIndicator !== 'undefined') this.navIndicator = !!parsed.navIndicator;
-                                if (parsed.navCustomActiveBg) {
-                                    this.navCustomActiveBg = parsed.navCustomActiveBg;
-                                    this.navCustomActiveBgInput = parsed.navCustomActiveBg.replace('#', '').toUpperCase();
-                                }
-                                if (parsed.navCustomActiveFg) {
-                                    this.navCustomActiveFg = parsed.navCustomActiveFg;
-                                    this.navCustomActiveFgInput = parsed.navCustomActiveFg.replace('#', '').toUpperCase();
-                                }
-                                if (parsed.navCustomIndicator) {
-                                    this.navCustomIndicator = parsed.navCustomIndicator;
-                                    this.navCustomIndicatorInput = parsed.navCustomIndicator.replace('#', '').toUpperCase();
+                                // Header
+                                if (parsed.headerStyleLight) this.headerStyleLight = parsed.headerStyleLight;
+                                if (parsed.headerStyleDark) this.headerStyleDark = parsed.headerStyleDark;
+                                if (parsed.headerStyle && !parsed.headerStyleLight) {
+                                    this.headerStyleLight = parsed.headerStyle;
+                                    this.headerStyleDark = parsed.headerStyle;
                                 }
 
+                                if (parsed.headerCustomBgLight) this.headerCustomBgLight = parsed.headerCustomBgLight;
+                                if (parsed.headerCustomBgDark) this.headerCustomBgDark = parsed.headerCustomBgDark;
+                                if (parsed.headerCustomBg && !parsed.headerCustomBgLight) {
+                                    this.headerCustomBgLight = parsed.headerCustomBg;
+                                    this.headerCustomBgDark = parsed.headerCustomBg;
+                                }
+
+                                if (parsed.headerCustomBorderLight) this.headerCustomBorderLight = parsed.headerCustomBorderLight;
+                                if (parsed.headerCustomBorderDark) this.headerCustomBorderDark = parsed.headerCustomBorderDark;
+                                if (parsed.headerCustomBorder && !parsed.headerCustomBorderLight) {
+                                    this.headerCustomBorderLight = parsed.headerCustomBorder;
+                                    this.headerCustomBorderDark = parsed.headerCustomBorder;
+                                }
+
+                                if (parsed.headerBorderModeLight) this.headerBorderModeLight = parsed.headerBorderModeLight;
+                                if (parsed.headerBorderModeDark) this.headerBorderModeDark = parsed.headerBorderModeDark;
+                                if (parsed.headerBorderMode && !parsed.headerBorderModeLight) {
+                                    this.headerBorderModeLight = parsed.headerBorderMode;
+                                    this.headerBorderModeDark = parsed.headerBorderMode;
+                                }
+
+                                if (typeof parsed.headerGlassEffectLight !== 'undefined') this.headerGlassEffectLight = !!parsed.headerGlassEffectLight;
+                                if (typeof parsed.headerGlassEffectDark !== 'undefined') this.headerGlassEffectDark = !!parsed.headerGlassEffectDark;
+                                if (typeof parsed.headerGlassEffect !== 'undefined' && typeof parsed.headerGlassEffectLight === 'undefined') {
+                                    this.headerGlassEffectLight = !!parsed.headerGlassEffect;
+                                    this.headerGlassEffectDark = !!parsed.headerGlassEffect;
+                                }
+
+                                // Nav
+                                if (parsed.navStyleLight) this.navStyleLight = parsed.navStyleLight;
+                                if (parsed.navStyleDark) this.navStyleDark = parsed.navStyleDark;
+                                if (parsed.navStyle && !parsed.navStyleLight) {
+                                    this.navStyleLight = parsed.navStyle;
+                                    this.navStyleDark = parsed.navStyle;
+                                }
+
+                                if (parsed.navDensityLight) this.navDensityLight = parsed.navDensityLight;
+                                if (parsed.navDensityDark) this.navDensityDark = parsed.navDensityDark;
+                                if (parsed.navDensity && !parsed.navDensityLight) {
+                                    this.navDensityLight = parsed.navDensity;
+                                    this.navDensityDark = parsed.navDensity;
+                                }
+
+                                if (typeof parsed.navIndicatorLight !== 'undefined') this.navIndicatorLight = !!parsed.navIndicatorLight;
+                                if (typeof parsed.navIndicatorDark !== 'undefined') this.navIndicatorDark = !!parsed.navIndicatorDark;
+                                if (typeof parsed.navIndicator !== 'undefined' && typeof parsed.navIndicatorLight === 'undefined') {
+                                    this.navIndicatorLight = !!parsed.navIndicator;
+                                    this.navIndicatorDark = !!parsed.navIndicator;
+                                }
+
+                                if (parsed.navCustomActiveBgLight) this.navCustomActiveBgLight = parsed.navCustomActiveBgLight;
+                                if (parsed.navCustomActiveBgDark) this.navCustomActiveBgDark = parsed.navCustomActiveBgDark;
+                                if (parsed.navCustomActiveBg && !parsed.navCustomActiveBgLight) {
+                                    this.navCustomActiveBgLight = parsed.navCustomActiveBg;
+                                    this.navCustomActiveBgDark = parsed.navCustomActiveBg;
+                                }
+
+                                if (parsed.navCustomActiveFgLight) this.navCustomActiveFgLight = parsed.navCustomActiveFgLight;
+                                if (parsed.navCustomActiveFgDark) this.navCustomActiveFgDark = parsed.navCustomActiveFgDark;
+                                if (parsed.navCustomActiveFg && !parsed.navCustomActiveFgLight) {
+                                    this.navCustomActiveFgLight = parsed.navCustomActiveFg;
+                                    this.navCustomActiveFgDark = parsed.navCustomActiveFg;
+                                }
+
+                                if (parsed.navCustomIndicatorLight) this.navCustomIndicatorLight = parsed.navCustomIndicatorLight;
+                                if (parsed.navCustomIndicatorDark) this.navCustomIndicatorDark = parsed.navCustomIndicatorDark;
+                                if (parsed.navCustomIndicator && !parsed.navCustomIndicatorLight) {
+                                    this.navCustomIndicatorLight = parsed.navCustomIndicator;
+                                    this.navCustomIndicatorDark = parsed.navCustomIndicator;
+                                }
+
+                                // Global
                                 if (parsed.selectedSemantic) this.selectedSemantic = parsed.selectedSemantic;
                                 if (parsed.selectedChartPreset) this.selectedChartPreset = parsed.selectedChartPreset;
                                 if (parsed.selectedRadius) this.selectedRadius = parsed.selectedRadius;
@@ -1335,6 +1554,38 @@
                                 if (typeof parsed.glassEffect !== 'undefined') this.glassEffect = !!parsed.glassEffect;
                             }
                         } catch (e) {}
+
+                        this.syncActiveModeValues();
+
+                        const shouldBeDark = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                        if (document.documentElement.classList.contains('dark') !== shouldBeDark) {
+                            if (window.VibeTheme?.applyTheme) {
+                                window.VibeTheme.applyTheme(this.mode);
+                            } else {
+                                document.documentElement.classList.toggle('dark', shouldBeDark);
+                            }
+                        }
+
+                        // Listen for system theme changes
+                        const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
+                        if (mediaDark.addEventListener) {
+                            mediaDark.addEventListener('change', () => {
+                                if (this.mode === 'system') {
+                                    this.updateIsDarkNow();
+                                    this.syncActiveModeValues();
+                                    this.applyTheme();
+                                }
+                            });
+                        }
+
+                        window.addEventListener('vibe-theme-changed', (e) => {
+                            if (e.detail && e.detail.mode && e.detail.mode !== this.mode) {
+                                this.mode = e.detail.mode;
+                                this.updateIsDarkNow();
+                                this.syncActiveModeValues();
+                                this.applyTheme();
+                            }
+                        });
 
                         this.applyTheme();
                     },
@@ -1373,20 +1624,47 @@
                         this.applyTheme();
                     },
 
+                    // Surface Selection
+                    selectSurfacePreset(id) {
+                        if (this.isDarkNow) {
+                            this.selectedSurfaceDark = id;
+                        } else {
+                            this.selectedSurfaceLight = id;
+                        }
+                        this.selectedSurface = id;
+                        this.applyTheme();
+                        this.notify(`Kanvas permukaan (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) diperbarui.`);
+                    },
+
                     // Sidebar Methods
                     selectSidebarStyle(id) {
+                        if (this.isDarkNow) {
+                            this.sidebarStyleDark = id;
+                        } else {
+                            this.sidebarStyleLight = id;
+                        }
                         this.sidebarStyle = id;
                         this.applyTheme();
-                        this.notify('Gaya bilah sisi (sidebar): ' + id);
+                        this.notify(`Gaya bilah sisi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
                     },
 
                     selectSidebarBorderMode(mode) {
+                        if (this.isDarkNow) {
+                            this.sidebarBorderModeDark = mode;
+                        } else {
+                            this.sidebarBorderModeLight = mode;
+                        }
                         this.sidebarBorderMode = mode;
                         this.applyTheme();
-                        this.notify('Batas border sidebar: ' + mode);
+                        this.notify(`Batas border sidebar (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${mode}`);
                     },
 
                     onSidebarCustomBgChange(val) {
+                        if (this.isDarkNow) {
+                            this.sidebarCustomBgDark = val;
+                        } else {
+                            this.sidebarCustomBgLight = val;
+                        }
                         this.sidebarCustomBg = val;
                         this.sidebarCustomBgInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1396,12 +1674,23 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.sidebarCustomBgInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.sidebarCustomBg = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.sidebarCustomBgDark = hex;
+                            } else {
+                                this.sidebarCustomBgLight = hex;
+                            }
+                            this.sidebarCustomBg = hex;
                             this.applyTheme();
                         }
                     },
 
                     onSidebarCustomBorderChange(val) {
+                        if (this.isDarkNow) {
+                            this.sidebarCustomBorderDark = val;
+                        } else {
+                            this.sidebarCustomBorderLight = val;
+                        }
                         this.sidebarCustomBorder = val;
                         this.sidebarCustomBorderInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1411,15 +1700,27 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.sidebarCustomBorderInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.sidebarCustomBorder = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.sidebarCustomBorderDark = hex;
+                            } else {
+                                this.sidebarCustomBorderLight = hex;
+                            }
+                            this.sidebarCustomBorder = hex;
                             this.applyTheme();
                         }
                     },
 
                     toggleTransparentSidebar() {
-                        this.transparentSidebar = !this.transparentSidebar;
+                        const next = !this.transparentSidebar;
+                        if (this.isDarkNow) {
+                            this.transparentSidebarDark = next;
+                        } else {
+                            this.transparentSidebarLight = next;
+                        }
+                        this.transparentSidebar = next;
                         this.applyTheme();
-                        this.notify(this.transparentSidebar ? 'Sidebar transparan aktif.' : 'Sidebar solid aktif.');
+                        this.notify(this.transparentSidebar ? `Sidebar transparan (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Sidebar solid (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.`);
                     },
 
                     selectSidebarFeature(name) {
@@ -1435,24 +1736,45 @@
 
                     // Header Methods
                     selectHeaderStyle(id) {
+                        if (this.isDarkNow) {
+                            this.headerStyleDark = id;
+                        } else {
+                            this.headerStyleLight = id;
+                        }
                         this.headerStyle = id;
                         this.applyTheme();
-                        this.notify('Gaya bilah atas (header): ' + id);
+                        this.notify(`Gaya bilah atas (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
                     },
 
                     selectHeaderBorderMode(mode) {
+                        if (this.isDarkNow) {
+                            this.headerBorderModeDark = mode;
+                        } else {
+                            this.headerBorderModeLight = mode;
+                        }
                         this.headerBorderMode = mode;
                         this.applyTheme();
-                        this.notify('Batas border header: ' + mode);
+                        this.notify(`Batas border header (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${mode}`);
                     },
 
                     toggleHeaderGlassEffect(val) {
-                        this.headerGlassEffect = typeof val !== 'undefined' ? !!val : !this.headerGlassEffect;
+                        const next = typeof val !== 'undefined' ? !!val : !this.headerGlassEffect;
+                        if (this.isDarkNow) {
+                            this.headerGlassEffectDark = next;
+                        } else {
+                            this.headerGlassEffectLight = next;
+                        }
+                        this.headerGlassEffect = next;
                         this.applyTheme();
-                        this.notify(this.headerGlassEffect ? 'Header backdrop blur aktif.' : 'Header backdrop blur nonaktif.');
+                        this.notify(this.headerGlassEffect ? `Header glassmorphism (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Header glassmorphism (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) nonaktif.`);
                     },
 
                     onHeaderCustomBgChange(val) {
+                        if (this.isDarkNow) {
+                            this.headerCustomBgDark = val;
+                        } else {
+                            this.headerCustomBgLight = val;
+                        }
                         this.headerCustomBg = val;
                         this.headerCustomBgInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1462,12 +1784,23 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.headerCustomBgInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.headerCustomBg = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.headerCustomBgDark = hex;
+                            } else {
+                                this.headerCustomBgLight = hex;
+                            }
+                            this.headerCustomBg = hex;
                             this.applyTheme();
                         }
                     },
 
                     onHeaderCustomBorderChange(val) {
+                        if (this.isDarkNow) {
+                            this.headerCustomBorderDark = val;
+                        } else {
+                            this.headerCustomBorderLight = val;
+                        }
                         this.headerCustomBorder = val;
                         this.headerCustomBorderInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1477,31 +1810,58 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.headerCustomBorderInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.headerCustomBorder = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.headerCustomBorderDark = hex;
+                            } else {
+                                this.headerCustomBorderLight = hex;
+                            }
+                            this.headerCustomBorder = hex;
                             this.applyTheme();
                         }
                     },
 
                     // Nav Methods
                     selectNavStyle(id) {
+                        if (this.isDarkNow) {
+                            this.navStyleDark = id;
+                        } else {
+                            this.navStyleLight = id;
+                        }
                         this.navStyle = id;
                         this.applyTheme();
-                        this.notify('Gaya item navigasi: ' + id);
+                        this.notify(`Gaya item navigasi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
                     },
 
                     selectNavDensity(density) {
+                        if (this.isDarkNow) {
+                            this.navDensityDark = density;
+                        } else {
+                            this.navDensityLight = density;
+                        }
                         this.navDensity = density;
                         this.applyTheme();
-                        this.notify('Kerapatan navigasi: ' + density);
+                        this.notify(`Kerapatan navigasi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${density}`);
                     },
 
                     toggleNavIndicator(val) {
-                        this.navIndicator = typeof val !== 'undefined' ? !!val : !this.navIndicator;
+                        const next = typeof val !== 'undefined' ? !!val : !this.navIndicator;
+                        if (this.isDarkNow) {
+                            this.navIndicatorDark = next;
+                        } else {
+                            this.navIndicatorLight = next;
+                        }
+                        this.navIndicator = next;
                         this.applyTheme();
-                        this.notify(this.navIndicator ? 'Garis indikator aktif.' : 'Garis indikator nonaktif.');
+                        this.notify(this.navIndicator ? `Garis indikator (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Garis indikator (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) nonaktif.`);
                     },
 
                     onNavCustomActiveBgChange(val) {
+                        if (this.isDarkNow) {
+                            this.navCustomActiveBgDark = val;
+                        } else {
+                            this.navCustomActiveBgLight = val;
+                        }
                         this.navCustomActiveBg = val;
                         this.navCustomActiveBgInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1511,12 +1871,23 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.navCustomActiveBgInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.navCustomActiveBg = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.navCustomActiveBgDark = hex;
+                            } else {
+                                this.navCustomActiveBgLight = hex;
+                            }
+                            this.navCustomActiveBg = hex;
                             this.applyTheme();
                         }
                     },
 
                     onNavCustomActiveFgChange(val) {
+                        if (this.isDarkNow) {
+                            this.navCustomActiveFgDark = val;
+                        } else {
+                            this.navCustomActiveFgLight = val;
+                        }
                         this.navCustomActiveFg = val;
                         this.navCustomActiveFgInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1526,12 +1897,23 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.navCustomActiveFgInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.navCustomActiveFg = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.navCustomActiveFgDark = hex;
+                            } else {
+                                this.navCustomActiveFgLight = hex;
+                            }
+                            this.navCustomActiveFg = hex;
                             this.applyTheme();
                         }
                     },
 
                     onNavCustomIndicatorChange(val) {
+                        if (this.isDarkNow) {
+                            this.navCustomIndicatorDark = val;
+                        } else {
+                            this.navCustomIndicatorLight = val;
+                        }
                         this.navCustomIndicator = val;
                         this.navCustomIndicatorInput = val.replace('#', '').toUpperCase();
                         this.applyTheme();
@@ -1541,33 +1923,39 @@
                         let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
                         this.navCustomIndicatorInput = clean.toUpperCase();
                         if (clean.length === 6 || clean.length === 3) {
-                            this.navCustomIndicator = '#' + clean;
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.navCustomIndicatorDark = hex;
+                            } else {
+                                this.navCustomIndicatorLight = hex;
+                            }
+                            this.navCustomIndicator = hex;
                             this.applyTheme();
                         }
                     },
 
                     getPreviewNavActiveBg() {
-                        const surface = this.surfacePresets.find(s => s.id === this.selectedSurface) || this.surfacePresets[0];
-                        const sb = this.getResolvedSidebarColors(surface);
-                        const isDark = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                        const nav = this.getResolvedNavColors(surface, sb);
-                        return isDark ? nav.dark.activeBg : nav.light.activeBg;
+                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
+                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
+                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
+                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+                        return this.isDarkNow ? nav.dark.activeBg : nav.light.activeBg;
                     },
 
                     getPreviewNavActiveFg() {
-                        const surface = this.surfacePresets.find(s => s.id === this.selectedSurface) || this.surfacePresets[0];
-                        const sb = this.getResolvedSidebarColors(surface);
-                        const isDark = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                        const nav = this.getResolvedNavColors(surface, sb);
-                        return isDark ? nav.dark.activeFg : nav.light.activeFg;
+                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
+                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
+                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
+                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+                        return this.isDarkNow ? nav.dark.activeFg : nav.light.activeFg;
                     },
 
                     getPreviewNavIndicator() {
-                        const surface = this.surfacePresets.find(s => s.id === this.selectedSurface) || this.surfacePresets[0];
-                        const sb = this.getResolvedSidebarColors(surface);
-                        const isDark = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                        const nav = this.getResolvedNavColors(surface, sb);
-                        return isDark ? nav.dark.indicator : nav.light.indicator;
+                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
+                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
+                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
+                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+                        return this.isDarkNow ? nav.dark.indicator : nav.light.indicator;
                     },
 
                     updateMonoChart(hex) {
@@ -1579,17 +1967,13 @@
 
                     setMode(newMode, event = null) {
                         this.mode = newMode;
+                        this.updateIsDarkNow();
+                        this.syncActiveModeValues();
                         if (window.VibeTheme) {
                             window.VibeTheme.setMode(newMode, event);
                         } else {
-                            if (newMode === 'system') {
-                                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                                document.documentElement.classList.toggle('dark', prefersDark);
-                            } else if (newMode === 'dark') {
-                                document.documentElement.classList.add('dark');
-                            } else {
-                                document.documentElement.classList.remove('dark');
-                            }
+                            const isDark = newMode === 'dark' || (newMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                            document.documentElement.classList.toggle('dark', isDark);
                         }
                         this.applyTheme();
                         this.notify('Mode tema diubah ke ' + newMode);
@@ -1599,12 +1983,6 @@
                         this.highContrast = typeof val !== 'undefined' ? !!val : !this.highContrast;
                         this.applyTheme();
                         this.notify(this.highContrast ? 'Kontras tinggi aktif.' : 'Kontras standar.');
-                    },
-
-                    selectSurfacePreset(id) {
-                        this.selectedSurface = id;
-                        this.applyTheme();
-                        this.notify('Kanvas permukaan diperbarui.');
                     },
 
                     selectSemanticPreset(id) {
@@ -1657,38 +2035,54 @@
 
                     resetToDefault() {
                         this.mode = 'system';
+                        this.updateIsDarkNow();
                         this.customHex = '#18181b';
                         this.customHexInput = '18181B';
                         this.highContrast = false;
                         this.motionActive = true;
-                        this.selectedSurface = 'zinc';
-                        
-                        this.sidebarStyle = 'default';
-                        this.sidebarCustomBg = '#ffffff';
-                        this.sidebarCustomBgInput = 'FFFFFF';
-                        this.sidebarCustomBorder = '#e5e6e5';
-                        this.sidebarCustomBorderInput = 'E5E6E5';
-                        this.sidebarBorderMode = 'default';
-                        this.transparentSidebar = false;
+
+                        // Reset Surface
+                        this.selectedSurfaceLight = 'zinc';
+                        this.selectedSurfaceDark = 'zinc';
+
+                        // Reset Sidebar
+                        this.sidebarStyleLight = 'default';
+                        this.sidebarStyleDark = 'default';
+                        this.sidebarCustomBgLight = '#ffffff';
+                        this.sidebarCustomBgDark = '#121312';
+                        this.sidebarCustomBorderLight = '#e5e6e5';
+                        this.sidebarCustomBorderDark = '#262726';
+                        this.sidebarBorderModeLight = 'default';
+                        this.sidebarBorderModeDark = 'default';
+                        this.transparentSidebarLight = false;
+                        this.transparentSidebarDark = false;
                         this.sidebarFeature = 'Recent changes';
 
-                        this.headerStyle = 'default';
-                        this.headerCustomBg = '#ffffff';
-                        this.headerCustomBgInput = 'FFFFFF';
-                        this.headerCustomBorder = '#e5e6e5';
-                        this.headerCustomBorderInput = 'E5E6E5';
-                        this.headerBorderMode = 'default';
-                        this.headerGlassEffect = true;
+                        // Reset Header
+                        this.headerStyleLight = 'default';
+                        this.headerStyleDark = 'default';
+                        this.headerCustomBgLight = '#ffffff';
+                        this.headerCustomBgDark = '#121312';
+                        this.headerCustomBorderLight = '#e5e6e5';
+                        this.headerCustomBorderDark = '#262726';
+                        this.headerBorderModeLight = 'default';
+                        this.headerBorderModeDark = 'default';
+                        this.headerGlassEffectLight = true;
+                        this.headerGlassEffectDark = true;
 
-                        this.navStyle = 'harmony';
-                        this.navDensity = 'default';
-                        this.navIndicator = false;
-                        this.navCustomActiveBg = '#f4f5f5';
-                        this.navCustomActiveBgInput = 'F4F5F5';
-                        this.navCustomActiveFg = '#0a0b0a';
-                        this.navCustomActiveFgInput = '0A0B0A';
-                        this.navCustomIndicator = '#18181b';
-                        this.navCustomIndicatorInput = '18181B';
+                        // Reset Nav
+                        this.navStyleLight = 'harmony';
+                        this.navStyleDark = 'harmony';
+                        this.navDensityLight = 'default';
+                        this.navDensityDark = 'default';
+                        this.navIndicatorLight = false;
+                        this.navIndicatorDark = false;
+                        this.navCustomActiveBgLight = '#f4f5f5';
+                        this.navCustomActiveBgDark = '#1e1f1e';
+                        this.navCustomActiveFgLight = '#0a0b0a';
+                        this.navCustomActiveFgDark = '#f9fafa';
+                        this.navCustomIndicatorLight = '#18181b';
+                        this.navCustomIndicatorDark = '#f9fafa';
 
                         this.selectedSemantic = 'vibrant';
                         this.selectedChartPreset = 'rainbow';
@@ -1698,6 +2092,8 @@
                         this.tablesView = 'default';
                         this.reduceMotion = false;
                         this.glassEffect = true;
+
+                        this.syncActiveModeValues();
 
                         const root = document.documentElement;
                         root.style.removeProperty('--primary');
@@ -1716,9 +2112,19 @@
                         root.style.removeProperty('--color-nav-hover-bg');
                         root.style.removeProperty('--color-nav-hover-fg');
                         root.style.removeProperty('--color-nav-indicator');
+                        root.style.removeProperty('--background');
+                        root.style.removeProperty('--card');
+                        root.style.removeProperty('--popover');
+                        root.style.removeProperty('--container');
+                        root.style.removeProperty('--sidebar');
+                        root.style.removeProperty('--header');
 
                         if (window.VibeTheme?.clearCssOverride) {
                             window.VibeTheme.clearCssOverride();
+                        }
+                        const overrideEl = document.getElementById(styleId);
+                        if (overrideEl) {
+                            overrideEl.textContent = '';
                         }
                         try {
                             localStorage.removeItem(themeKey);
@@ -1740,39 +2146,50 @@
                         return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
                     },
 
-                    getResolvedSidebarColors(surface) {
-                        let lightBg = surface.light.sidebar;
-                        let darkBg = surface.dark.sidebar;
-                        let lightBorder = this.highContrast ? '#71717a' : surface.light.border;
-                        let darkBorder = this.highContrast ? '#a1a1aa' : surface.dark.border;
+                    getResolvedSidebarColors(surfaceLight, surfaceDark) {
+                        let lightBg = surfaceLight.light.sidebar;
+                        let darkBg = surfaceDark.dark.sidebar;
+                        let lightBorder = this.highContrast ? '#a1a1aa' : surfaceLight.light.border;
+                        let darkBorder = this.highContrast ? '#3f3f46' : surfaceDark.dark.border;
 
-                        if (this.sidebarStyle === 'card') {
-                            lightBg = surface.light.card;
-                            darkBg = surface.dark.card;
-                        } else if (this.sidebarStyle === 'contrast') {
+                        if (this.sidebarStyleLight === 'card') {
+                            lightBg = surfaceLight.light.card;
+                        } else if (this.sidebarStyleLight === 'contrast') {
                             lightBg = '#ffffff';
-                            darkBg = '#0a0b0a';
-                        } else if (this.sidebarStyle === 'muted') {
+                        } else if (this.sidebarStyleLight === 'muted') {
                             lightBg = '#f4f5f5';
-                            darkBg = '#181918';
-                        } else if (this.sidebarStyle === 'dark') {
+                        } else if (this.sidebarStyleLight === 'dark') {
                             lightBg = '#121312';
-                            darkBg = '#121312';
                             lightBorder = '#262726';
-                            darkBorder = '#262726';
-                        } else if (this.sidebarStyle === 'custom') {
-                            lightBg = this.sidebarCustomBg;
-                            darkBg = this.sidebarCustomBg;
-                            lightBorder = this.sidebarCustomBorder;
-                            darkBorder = this.sidebarCustomBorder;
+                        } else if (this.sidebarStyleLight === 'custom') {
+                            lightBg = this.sidebarCustomBgLight;
+                            lightBorder = this.sidebarCustomBorderLight;
                         }
 
-                        if (this.sidebarBorderMode === 'none') {
+                        if (this.sidebarBorderModeLight === 'none') {
                             lightBorder = 'transparent';
+                        } else if (this.sidebarBorderModeLight === 'high') {
+                            lightBorder = '#a1a1aa';
+                        }
+
+                        if (this.sidebarStyleDark === 'card') {
+                            darkBg = surfaceDark.dark.card;
+                        } else if (this.sidebarStyleDark === 'contrast') {
+                            darkBg = '#0a0b0a';
+                        } else if (this.sidebarStyleDark === 'muted') {
+                            darkBg = '#181918';
+                        } else if (this.sidebarStyleDark === 'dark') {
+                            darkBg = '#121312';
+                            darkBorder = '#262726';
+                        } else if (this.sidebarStyleDark === 'custom') {
+                            darkBg = this.sidebarCustomBgDark;
+                            darkBorder = this.sidebarCustomBorderDark;
+                        }
+
+                        if (this.sidebarBorderModeDark === 'none') {
                             darkBorder = 'transparent';
-                        } else if (this.sidebarBorderMode === 'high') {
-                            lightBorder = '#71717a';
-                            darkBorder = '#a1a1aa';
+                        } else if (this.sidebarBorderModeDark === 'high') {
+                            darkBorder = '#3f3f46';
                         }
 
                         const lightFg = this.isLight(lightBg) ? '#0a0b0a' : '#f9fafa';
@@ -1784,41 +2201,53 @@
                         };
                     },
 
-                    getResolvedHeaderColors(surface) {
-                        let lightBg = surface.light.header;
-                        let darkBg = surface.dark.header;
-                        let lightBorder = this.highContrast ? '#71717a' : surface.light.border;
-                        let darkBorder = this.highContrast ? '#a1a1aa' : surface.dark.border;
+                    getResolvedHeaderColors(surfaceLight, surfaceDark) {
+                        let lightBg = surfaceLight.light.header;
+                        let darkBg = surfaceDark.dark.header;
+                        let lightBorder = this.highContrast ? '#a1a1aa' : surfaceLight.light.border;
+                        let darkBorder = this.highContrast ? '#3f3f46' : surfaceDark.dark.border;
 
-                        if (this.headerStyle === 'card') {
-                            lightBg = surface.light.card;
-                            darkBg = surface.dark.card;
-                        } else if (this.headerStyle === 'glass') {
+                        if (this.headerStyleLight === 'card') {
+                            lightBg = surfaceLight.light.card;
+                        } else if (this.headerStyleLight === 'glass') {
                             lightBg = 'rgba(255, 255, 255, 0.82)';
-                            darkBg = 'rgba(18, 19, 18, 0.82)';
-                        } else if (this.headerStyle === 'contrast') {
+                        } else if (this.headerStyleLight === 'contrast') {
                             lightBg = '#ffffff';
-                            darkBg = '#0a0b0a';
-                        } else if (this.headerStyle === 'muted') {
+                        } else if (this.headerStyleLight === 'muted') {
                             lightBg = '#f4f5f5';
-                            darkBg = '#181918';
-                        } else if (this.headerStyle === 'dark') {
+                        } else if (this.headerStyleLight === 'dark') {
                             lightBg = '#121312';
-                            darkBg = '#121312';
                             lightBorder = '#262726';
-                            darkBorder = '#262726';
-                        } else if (this.headerStyle === 'custom') {
-                            lightBg = this.headerCustomBg;
-                            darkBg = this.headerCustomBg;
-                            lightBorder = this.headerCustomBorder;
-                            darkBorder = this.headerCustomBorder;
+                        } else if (this.headerStyleLight === 'custom') {
+                            lightBg = this.headerCustomBgLight;
+                            lightBorder = this.headerCustomBorderLight;
                         }
 
-                        if (this.headerBorderMode === 'none') {
+                        if (this.headerBorderModeLight === 'none') {
                             lightBorder = 'transparent';
-                            darkBorder = 'transparent';
-                        } else if (this.headerBorderMode === 'high') {
+                        } else if (this.headerBorderModeLight === 'high') {
                             lightBorder = '#71717a';
+                        }
+
+                        if (this.headerStyleDark === 'card') {
+                            darkBg = surfaceDark.dark.card;
+                        } else if (this.headerStyleDark === 'glass') {
+                            darkBg = 'rgba(18, 19, 18, 0.82)';
+                        } else if (this.headerStyleDark === 'contrast') {
+                            darkBg = '#0a0b0a';
+                        } else if (this.headerStyleDark === 'muted') {
+                            darkBg = '#181918';
+                        } else if (this.headerStyleDark === 'dark') {
+                            darkBg = '#121312';
+                            darkBorder = '#262726';
+                        } else if (this.headerStyleDark === 'custom') {
+                            darkBg = this.headerCustomBgDark;
+                            darkBorder = this.headerCustomBorderDark;
+                        }
+
+                        if (this.headerBorderModeDark === 'none') {
+                            darkBorder = 'transparent';
+                        } else if (this.headerBorderModeDark === 'high') {
                             darkBorder = '#a1a1aa';
                         }
 
@@ -1831,7 +2260,7 @@
                         };
                     },
 
-                    getResolvedNavColors(surface, sb) {
+                    getResolvedNavColors(surfaceLight, surfaceDark, sb) {
                         let lightActiveBg = '#f4f5f5';
                         let darkActiveBg = '#1e1f1e';
                         let lightActiveFg = '#0a0b0a';
@@ -1843,62 +2272,71 @@
                         let lightIndicator = this.customHex;
                         let darkIndicator = this.customHex;
 
-                        if (this.navStyle === 'primary') {
+                        if (this.navStyleLight === 'primary') {
                             lightActiveBg = this.customHex;
-                            darkActiveBg = this.customHex;
-                            const pFg = this.isLight(this.customHex) ? '#0a0b0a' : '#ffffff';
-                            lightActiveFg = pFg;
-                            darkActiveFg = pFg;
+                            lightActiveFg = this.isLight(this.customHex) ? '#0a0b0a' : '#ffffff';
                             lightIndicator = this.customHex;
-                            darkIndicator = this.customHex;
-                        } else if (this.navStyle === 'line') {
+                        } else if (this.navStyleLight === 'line') {
                             lightActiveBg = 'transparent';
-                            darkActiveBg = 'transparent';
                             lightActiveFg = sb.light.fg;
-                            darkActiveFg = sb.dark.fg;
                             lightIndicator = this.customHex;
-                            darkIndicator = this.customHex;
-                        } else if (this.navStyle === 'subtle') {
+                        } else if (this.navStyleLight === 'subtle') {
                             lightActiveBg = '#f4f5f5';
-                            darkActiveBg = '#181918';
                             lightActiveFg = '#0a0b0a';
-                            darkActiveFg = '#f9fafa';
                             lightIndicator = this.customHex;
-                            darkIndicator = this.customHex;
-                        } else if (this.navStyle === 'custom') {
-                            lightActiveBg = this.navCustomActiveBg;
-                            darkActiveBg = this.navCustomActiveBg;
-                            lightActiveFg = this.navCustomActiveFg;
-                            darkActiveFg = this.navCustomActiveFg;
-                            lightHoverBg = this.navCustomActiveBg;
-                            darkHoverBg = this.navCustomActiveBg;
-                            lightHoverFg = this.navCustomActiveFg;
-                            darkHoverFg = this.navCustomActiveFg;
-                            lightIndicator = this.navCustomIndicator;
-                            darkIndicator = this.navCustomIndicator;
+                        } else if (this.navStyleLight === 'custom') {
+                            lightActiveBg = this.navCustomActiveBgLight;
+                            lightActiveFg = this.navCustomActiveFgLight;
+                            lightHoverBg = this.navCustomActiveBgLight;
+                            lightHoverFg = this.navCustomActiveFgLight;
+                            lightIndicator = this.navCustomIndicatorLight;
                         } else {
-                            // 'harmony' (default)
-                            if (this.sidebarStyle === 'custom') {
-                                const isSidebarLight = this.isLight(this.sidebarCustomBg);
+                            if (this.sidebarStyleLight === 'custom') {
+                                const isSidebarLight = this.isLight(this.sidebarCustomBgLight);
                                 lightActiveBg = isSidebarLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.12)';
-                                darkActiveBg = lightActiveBg;
                                 lightActiveFg = isSidebarLight ? '#0a0b0a' : '#ffffff';
-                                darkActiveFg = lightActiveFg;
                                 lightHoverBg = isSidebarLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.08)';
-                                darkHoverBg = lightHoverBg;
                                 lightHoverFg = lightActiveFg;
-                                darkHoverFg = darkActiveFg;
                             } else {
                                 lightActiveBg = '#f4f5f5';
-                                darkActiveBg = '#1e1f1e';
                                 lightActiveFg = '#0a0b0a';
-                                darkActiveFg = '#f9fafa';
                                 lightHoverBg = '#f4f5f5';
-                                darkHoverBg = '#1e1f1e';
                                 lightHoverFg = '#0a0b0a';
-                                darkHoverFg = '#f9fafa';
                             }
                             lightIndicator = this.customHex;
+                        }
+
+                        if (this.navStyleDark === 'primary') {
+                            darkActiveBg = this.customHex;
+                            darkActiveFg = this.isLight(this.customHex) ? '#0a0b0a' : '#ffffff';
+                            darkIndicator = this.customHex;
+                        } else if (this.navStyleDark === 'line') {
+                            darkActiveBg = 'transparent';
+                            darkActiveFg = sb.dark.fg;
+                            darkIndicator = this.customHex;
+                        } else if (this.navStyleDark === 'subtle') {
+                            darkActiveBg = '#181918';
+                            darkActiveFg = '#f9fafa';
+                            darkIndicator = this.customHex;
+                        } else if (this.navStyleDark === 'custom') {
+                            darkActiveBg = this.navCustomActiveBgDark;
+                            darkActiveFg = this.navCustomActiveFgDark;
+                            darkHoverBg = this.navCustomActiveBgDark;
+                            darkHoverFg = this.navCustomActiveFgDark;
+                            darkIndicator = this.navCustomIndicatorDark;
+                        } else {
+                            if (this.sidebarStyleDark === 'custom') {
+                                const isSidebarLight = this.isLight(this.sidebarCustomBgDark);
+                                darkActiveBg = isSidebarLight ? 'rgba(0, 0, 0, 0.06)' : 'rgba(255, 255, 255, 0.12)';
+                                darkActiveFg = isSidebarLight ? '#0a0b0a' : '#ffffff';
+                                darkHoverBg = isSidebarLight ? 'rgba(0, 0, 0, 0.04)' : 'rgba(255, 255, 255, 0.08)';
+                                darkHoverFg = darkActiveFg;
+                            } else {
+                                darkActiveBg = '#1e1f1e';
+                                darkActiveFg = '#f9fafa';
+                                darkHoverBg = '#1e1f1e';
+                                darkHoverFg = '#f9fafa';
+                            }
                             darkIndicator = this.customHex;
                         }
 
@@ -1921,46 +2359,50 @@
                     },
 
                     applyTheme() {
-                        const isDarkNow = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                        const isDefaultSlate = (this.customHex === '#18181b');
-                        const activePrimary = (isDefaultSlate && isDarkNow) ? '#f9fafa' : this.customHex;
-                        const fg = this.isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
-                        const r = this.selectedRadius;
-                        const surface = this.surfacePresets.find(s => s.id === this.selectedSurface) || this.surfacePresets[0];
-                        const semantic = this.semanticPresets.find(s => s.id === this.selectedSemantic) || this.semanticPresets[0];
-                        const chart = this.chartPresets.find(c => c.id === this.selectedChartPreset) || this.chartPresets[0];
-
-                        const sb = this.getResolvedSidebarColors(surface);
-                        const hd = this.getResolvedHeaderColors(surface);
-                        const nav = this.getResolvedNavColors(surface, sb);
-
-                        // Terapkan inline style langsung ke root <html> untuk prioritas tertinggi
-                        const root = document.documentElement;
-                        root.style.setProperty('--primary', activePrimary, 'important');
-                        root.style.setProperty('--color-primary', activePrimary, 'important');
-                        root.style.setProperty('--ring', activePrimary, 'important');
-                        root.style.setProperty('--color-ring', activePrimary, 'important');
-                        root.style.setProperty('--primary-foreground', fg, 'important');
-                        root.style.setProperty('--color-primary-foreground', fg, 'important');
-
-                        root.style.setProperty('--nav-active-bg', isDarkNow ? nav.dark.activeBg : nav.light.activeBg, 'important');
-                        root.style.setProperty('--nav-active-fg', isDarkNow ? nav.dark.activeFg : nav.light.activeFg, 'important');
-                        root.style.setProperty('--nav-hover-bg', isDarkNow ? nav.dark.hoverBg : nav.light.hoverBg, 'important');
-                        root.style.setProperty('--nav-hover-fg', isDarkNow ? nav.dark.hoverFg : nav.light.hoverFg, 'important');
-                        root.style.setProperty('--nav-indicator', isDarkNow ? nav.dark.indicator : nav.light.indicator, 'important');
-                        root.style.setProperty('--color-nav-active-bg', isDarkNow ? nav.dark.activeBg : nav.light.activeBg, 'important');
-                        root.style.setProperty('--color-nav-active-fg', isDarkNow ? nav.dark.activeFg : nav.light.activeFg, 'important');
-                        root.style.setProperty('--color-nav-hover-bg', isDarkNow ? nav.dark.hoverBg : nav.light.hoverBg, 'important');
-                        root.style.setProperty('--color-nav-hover-fg', isDarkNow ? nav.dark.hoverFg : nav.light.hoverFg, 'important');
-                        root.style.setProperty('--color-nav-indicator', isDarkNow ? nav.dark.indicator : nav.light.indicator, 'important');
-
-                        const lightPrimary = this.customHex;
+                        const isDefaultSlate = (this.customHex.toLowerCase() === '#18181b' || this.customHex.toLowerCase() === '#0a0b0a');
+                        const lightPrimary = isDefaultSlate ? '#0a0b0a' : this.customHex;
                         const lightFg = this.isLight(lightPrimary) ? '#0a0b0a' : '#ffffff';
                         const darkPrimary = isDefaultSlate ? '#f9fafa' : this.customHex;
                         const darkFg = this.isLight(darkPrimary) ? '#0a0b0a' : '#ffffff';
 
+                        const r = this.selectedRadius;
+                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
+                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
+
+                        const semantic = this.semanticPresets.find(s => s.id === this.selectedSemantic) || this.semanticPresets[0];
+                        const chart = this.chartPresets.find(c => c.id === this.selectedChartPreset) || this.chartPresets[0];
+
+                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
+                        const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
+                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+
+                        // Hapus inline style dari documentElement agar stylesheet berperan sebagai single source of truth
+                        const root = document.documentElement;
+                        root.style.removeProperty('--primary');
+                        root.style.removeProperty('--color-primary');
+                        root.style.removeProperty('--ring');
+                        root.style.removeProperty('--color-ring');
+                        root.style.removeProperty('--primary-foreground');
+                        root.style.removeProperty('--color-primary-foreground');
+                        root.style.removeProperty('--nav-active-bg');
+                        root.style.removeProperty('--nav-active-fg');
+                        root.style.removeProperty('--nav-hover-bg');
+                        root.style.removeProperty('--nav-hover-fg');
+                        root.style.removeProperty('--nav-indicator');
+                        root.style.removeProperty('--color-nav-active-bg');
+                        root.style.removeProperty('--color-nav-active-fg');
+                        root.style.removeProperty('--color-nav-hover-bg');
+                        root.style.removeProperty('--color-nav-hover-fg');
+                        root.style.removeProperty('--color-nav-indicator');
+                        root.style.removeProperty('--background');
+                        root.style.removeProperty('--card');
+                        root.style.removeProperty('--popover');
+                        root.style.removeProperty('--container');
+                        root.style.removeProperty('--sidebar');
+                        root.style.removeProperty('--header');
+
                         let css = `
-                            :root:root, html:root, html.dark, html:not(.dark), body, [data-canvas-theme] {
+                            :root, html, body, [data-canvas-theme] {
                                 --font-sans: ${this.selectedFontValue} !important;
                                 font-family: ${this.selectedFontValue} !important;
                                 --radius: ${r} !important;
@@ -1984,7 +2426,7 @@
                                 --chart-5: ${chart.colors[4]} !important;
                             }
 
-                            :root:root, html:root, html:not(.dark), .light, [data-canvas-theme="light"] {
+                            :root:root, html:root:root, html:not(.dark), html.light, .light, [data-canvas-theme="light"] {
                                 --primary: ${lightPrimary} !important;
                                 --primary-foreground: ${lightFg} !important;
                                 --ring: ${lightPrimary} !important;
@@ -1992,13 +2434,17 @@
                                 --color-primary-foreground: ${lightFg} !important;
                                 --color-ring: ${lightPrimary} !important;
 
-                                --background: ${surface.light.bg} !important;
-                                --card: ${surface.light.card} !important;
-                                --popover: ${surface.light.card} !important;
-                                --container: ${surface.light.card} !important;
-                                --container-border: ${this.highContrast ? '#71717a' : surface.light.border} !important;
-                                --border: ${this.highContrast ? '#71717a' : surface.light.border} !important;
-                                --input: ${this.highContrast ? '#71717a' : surface.light.border} !important;
+                                --background: ${surfaceLight.light.bg} !important;
+                                --foreground: #0a0b0a !important;
+                                --card: ${surfaceLight.light.card} !important;
+                                --card-foreground: #0a0b0a !important;
+                                --popover: ${surfaceLight.light.card} !important;
+                                --popover-foreground: #0a0b0a !important;
+                                --container: ${surfaceLight.light.card} !important;
+                                --container-foreground: #0a0b0a !important;
+                                --container-border: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border} !important;
+                                --border: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border} !important;
+                                --input: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border} !important;
 
                                 --sidebar: ${sb.light.bg} !important;
                                 --sidebar-foreground: ${sb.light.fg} !important;
@@ -2026,7 +2472,7 @@
                                 --color-nav-indicator: ${nav.light.indicator} !important;
                             }
 
-                            :root:root, html.dark, html.dark *, .dark, [data-canvas-theme="dark"], .light .dark {
+                            html.dark:root:root, html.dark, .dark, [data-canvas-theme="dark"] {
                                 --primary: ${darkPrimary} !important;
                                 --primary-foreground: ${darkFg} !important;
                                 --ring: ${darkPrimary} !important;
@@ -2034,13 +2480,17 @@
                                 --color-primary-foreground: ${darkFg} !important;
                                 --color-ring: ${darkPrimary} !important;
 
-                                --background: ${surface.dark.bg} !important;
-                                --card: ${surface.dark.card} !important;
-                                --popover: ${surface.dark.card} !important;
-                                --container: ${surface.dark.card} !important;
-                                --container-border: ${this.highContrast ? '#a1a1aa' : surface.dark.border} !important;
-                                --border: ${this.highContrast ? '#a1a1aa' : surface.dark.border} !important;
-                                --input: ${this.highContrast ? '#a1a1aa' : surface.dark.border} !important;
+                                --background: ${surfaceDark.dark.bg} !important;
+                                --foreground: #f9fafa !important;
+                                --card: ${surfaceDark.dark.card} !important;
+                                --card-foreground: #f9fafa !important;
+                                --popover: ${surfaceDark.dark.card} !important;
+                                --popover-foreground: #f9fafa !important;
+                                --container: ${surfaceDark.dark.card} !important;
+                                --container-foreground: #f9fafa !important;
+                                --container-border: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border} !important;
+                                --border: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border} !important;
+                                --input: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border} !important;
 
                                 --sidebar: ${sb.dark.bg} !important;
                                 --sidebar-foreground: ${sb.dark.fg} !important;
@@ -2074,9 +2524,18 @@
                         `;
 
                         // Sidebar custom rules
-                        if (this.transparentSidebar) {
+                        if (this.transparentSidebarLight) {
                             css += `
-                                aside, [data-vibe-sidebar], .vibe-sidebar, .sidebar {
+                                html:not(.dark) aside, html:not(.dark) [data-vibe-sidebar], html:not(.dark) .vibe-sidebar, html:not(.dark) .sidebar {
+                                    background-color: transparent !important;
+                                    backdrop-filter: blur(10px) !important;
+                                    -webkit-backdrop-filter: blur(10px) !important;
+                                }
+                            `;
+                        }
+                        if (this.transparentSidebarDark) {
+                            css += `
+                                html.dark aside, html.dark [data-vibe-sidebar], html.dark .vibe-sidebar, html.dark .sidebar {
                                     background-color: transparent !important;
                                     backdrop-filter: blur(10px) !important;
                                     -webkit-backdrop-filter: blur(10px) !important;
@@ -2085,16 +2544,32 @@
                         }
 
                         // Header glassmorphism rules
-                        if (this.headerStyle === 'glass' || this.headerGlassEffect) {
+                        if (this.headerGlassEffectLight) {
                             css += `
-                                header, [data-vibe-header], .vibe-header {
+                                html:not(.dark) header, html:not(.dark) [data-vibe-header], html:not(.dark) .vibe-header {
                                     backdrop-filter: blur(12px) !important;
                                     -webkit-backdrop-filter: blur(12px) !important;
                                 }
                             `;
-                        } else if (!this.headerGlassEffect) {
+                        } else {
                             css += `
-                                header, [data-vibe-header], .vibe-header {
+                                html:not(.dark) header, html:not(.dark) [data-vibe-header], html:not(.dark) .vibe-header {
+                                    backdrop-filter: none !important;
+                                    -webkit-backdrop-filter: none !important;
+                                }
+                            `;
+                        }
+
+                        if (this.headerGlassEffectDark) {
+                            css += `
+                                html.dark header, html.dark [data-vibe-header], html.dark .vibe-header {
+                                    backdrop-filter: blur(12px) !important;
+                                    -webkit-backdrop-filter: blur(12px) !important;
+                                }
+                            `;
+                        } else {
+                            css += `
+                                html.dark header, html.dark [data-vibe-header], html.dark .vibe-header {
                                     backdrop-filter: none !important;
                                     -webkit-backdrop-filter: none !important;
                                 }
@@ -2102,7 +2577,8 @@
                         }
 
                         // Navigation density rules
-                        if (this.navDensity === 'compact') {
+                        const activeNavDensity = this.isDarkNow ? this.navDensityDark : this.navDensityLight;
+                        if (activeNavDensity === 'compact') {
                             css += `
                                 nav [data-pin-type="item"], nav [data-pin-type="group"] [data-nav-group-trigger] {
                                     min-height: 2rem !important;
@@ -2111,7 +2587,7 @@
                                     font-size: 0.75rem !important;
                                 }
                             `;
-                        } else if (this.navDensity === 'relaxed') {
+                        } else if (activeNavDensity === 'relaxed') {
                             css += `
                                 nav [data-pin-type="item"], nav [data-pin-type="group"] [data-nav-group-trigger] {
                                     min-height: 2.5rem !important;
@@ -2123,16 +2599,39 @@
                         }
 
                         // Navigation indicator line rule
-                        if (this.navIndicator || this.navStyle === 'line') {
+                        if (this.navIndicatorLight || this.navStyleLight === 'line') {
                             css += `
-                                nav [data-pin-type="item"].nav-item-active,
-                                nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active,
-                                [data-pin-type="item"].nav-item-active {
+                                html:not(.dark) nav [data-pin-type="item"].nav-item-active,
+                                html:not(.dark) nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active,
+                                html:not(.dark) [data-pin-type="item"].nav-item-active {
                                     position: relative !important;
                                 }
-                                nav [data-pin-type="item"].nav-item-active::before,
-                                nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active::before,
-                                [data-pin-type="item"].nav-item-active::before {
+                                html:not(.dark) nav [data-pin-type="item"].nav-item-active::before,
+                                html:not(.dark) nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active::before,
+                                html:not(.dark) [data-pin-type="item"].nav-item-active::before {
+                                    content: "" !important;
+                                    position: absolute !important;
+                                    left: 0 !important;
+                                    top: 0.375rem !important;
+                                    bottom: 0.375rem !important;
+                                    width: 0.25rem !important;
+                                    border-top-right-radius: 0.25rem !important;
+                                    border-bottom-right-radius: 0.25rem !important;
+                                    background-color: var(--nav-indicator) !important;
+                                }
+                            `;
+                        }
+
+                        if (this.navIndicatorDark || this.navStyleDark === 'line') {
+                            css += `
+                                html.dark nav [data-pin-type="item"].nav-item-active,
+                                html.dark nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active,
+                                html.dark [data-pin-type="item"].nav-item-active {
+                                    position: relative !important;
+                                }
+                                html.dark nav [data-pin-type="item"].nav-item-active::before,
+                                html.dark nav [data-pin-type="group"] [data-nav-group-trigger].nav-item-active::before,
+                                html.dark [data-pin-type="item"].nav-item-active::before {
                                     content: "" !important;
                                     position: absolute !important;
                                     left: 0 !important;
@@ -2185,9 +2684,9 @@
                             document.head.appendChild(styleEl);
                         }
                         styleEl.textContent = css;
-                        document.head.appendChild(styleEl); // Pindahkan ke paling akhir head agar prioritas tertinggi
+                        document.head.appendChild(styleEl);
 
-                        // Sinkronkan ke ThemeManager agar persisten lintas halaman dan tidak ditimpa oleh Livewire
+                        // Sinkronkan ke ThemeManager agar persisten lintas navigasi
                         if (window.VibeTheme && typeof window.VibeTheme.setCssOverride === 'function') {
                             window.VibeTheme.setCssOverride(css, {
                                 customHex: this.customHex,
@@ -2206,23 +2705,29 @@
                     },
 
                     generateCssText() {
-                        const fg = this.isLight(this.customHex) ? '#0a0b0a' : '#ffffff';
+                        const isDefaultSlate = (this.customHex.toLowerCase() === '#18181b' || this.customHex.toLowerCase() === '#0a0b0a');
+                        const lightPrimary = isDefaultSlate ? '#0a0b0a' : this.customHex;
+                        const lightFg = this.isLight(lightPrimary) ? '#0a0b0a' : '#ffffff';
+                        const darkPrimary = isDefaultSlate ? '#f9fafa' : this.customHex;
+                        const darkFg = this.isLight(darkPrimary) ? '#0a0b0a' : '#ffffff';
+
                         const r = this.selectedRadius;
-                        const surface = this.surfacePresets.find(s => s.id === this.selectedSurface) || this.surfacePresets[0];
+                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
+                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
                         const semantic = this.semanticPresets.find(s => s.id === this.selectedSemantic) || this.semanticPresets[0];
                         const chart = this.chartPresets.find(c => c.id === this.selectedChartPreset) || this.chartPresets[0];
 
-                        const sb = this.getResolvedSidebarColors(surface);
-                        const hd = this.getResolvedHeaderColors(surface);
-                        const nav = this.getResolvedNavColors(surface, sb);
+                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
+                        const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
+                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
 
                         return `:root {
-    --primary: ${this.customHex};
-    --primary-foreground: ${fg};
-    --ring: ${this.customHex};
-    --color-primary: ${this.customHex};
-    --color-primary-foreground: ${fg};
-    --color-ring: ${this.customHex};
+    --primary: ${lightPrimary};
+    --primary-foreground: ${lightFg};
+    --ring: ${lightPrimary};
+    --color-primary: ${lightPrimary};
+    --color-primary-foreground: ${lightFg};
+    --color-ring: ${lightPrimary};
     --font-sans: ${this.selectedFontValue};
     --radius: ${r};
     --success: ${semantic.colors.success};
@@ -2236,19 +2741,23 @@
     --chart-5: ${chart.colors[4]};
 }
 
-.light {
-    --background: ${surface.light.bg};
-    --card: ${surface.light.card};
-    --popover: ${surface.light.card};
-    --container: ${surface.light.card};
-    --border: ${surface.light.border};
-    --input: ${surface.light.border};
-    --primary: ${this.customHex};
-    --primary-foreground: ${fg};
-    --ring: ${this.customHex};
-    --color-primary: ${this.customHex};
-    --color-primary-foreground: ${fg};
-    --color-ring: ${this.customHex};
+:root, html:not(.dark), .light {
+    --background: ${surfaceLight.light.bg};
+    --foreground: #0a0b0a;
+    --card: ${surfaceLight.light.card};
+    --card-foreground: #0a0b0a;
+    --popover: ${surfaceLight.light.card};
+    --popover-foreground: #0a0b0a;
+    --container: ${surfaceLight.light.card};
+    --container-foreground: #0a0b0a;
+    --border: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border};
+    --input: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border};
+    --primary: ${lightPrimary};
+    --primary-foreground: ${lightFg};
+    --ring: ${lightPrimary};
+    --color-primary: ${lightPrimary};
+    --color-primary-foreground: ${lightFg};
+    --color-ring: ${lightPrimary};
     --sidebar: ${sb.light.bg};
     --sidebar-foreground: ${sb.light.fg};
     --sidebar-border: ${sb.light.border};
@@ -2262,19 +2771,23 @@
     --nav-indicator: ${nav.light.indicator};
 }
 
-.dark {
-    --background: ${surface.dark.bg};
-    --card: ${surface.dark.card};
-    --popover: ${surface.dark.card};
-    --container: ${surface.dark.card};
-    --border: ${surface.dark.border};
-    --input: ${surface.dark.border};
-    --primary: ${this.customHex};
-    --primary-foreground: ${fg};
-    --ring: ${this.customHex};
-    --color-primary: ${this.customHex};
-    --color-primary-foreground: ${fg};
-    --color-ring: ${this.customHex};
+html.dark, .dark {
+    --background: ${surfaceDark.dark.bg};
+    --foreground: #f9fafa;
+    --card: ${surfaceDark.dark.card};
+    --card-foreground: #f9fafa;
+    --popover: ${surfaceDark.dark.card};
+    --popover-foreground: #f9fafa;
+    --container: ${surfaceDark.dark.card};
+    --container-foreground: #f9fafa;
+    --border: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border};
+    --input: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border};
+    --primary: ${darkPrimary};
+    --primary-foreground: ${darkFg};
+    --ring: ${darkPrimary};
+    --color-primary: ${darkPrimary};
+    --color-primary-foreground: ${darkFg};
+    --color-ring: ${darkPrimary};
     --sidebar: ${sb.dark.bg};
     --sidebar-foreground: ${sb.dark.fg};
     --sidebar-border: ${sb.dark.border};
@@ -2306,27 +2819,62 @@
                                 mode: this.mode,
                                 customHex: this.customHex,
                                 highContrast: this.highContrast,
+
                                 selectedSurface: this.selectedSurface,
+                                selectedSurfaceLight: this.selectedSurfaceLight,
+                                selectedSurfaceDark: this.selectedSurfaceDark,
 
                                 sidebarStyle: this.sidebarStyle,
+                                sidebarStyleLight: this.sidebarStyleLight,
+                                sidebarStyleDark: this.sidebarStyleDark,
                                 sidebarCustomBg: this.sidebarCustomBg,
+                                sidebarCustomBgLight: this.sidebarCustomBgLight,
+                                sidebarCustomBgDark: this.sidebarCustomBgDark,
                                 sidebarCustomBorder: this.sidebarCustomBorder,
+                                sidebarCustomBorderLight: this.sidebarCustomBorderLight,
+                                sidebarCustomBorderDark: this.sidebarCustomBorderDark,
                                 sidebarBorderMode: this.sidebarBorderMode,
+                                sidebarBorderModeLight: this.sidebarBorderModeLight,
+                                sidebarBorderModeDark: this.sidebarBorderModeDark,
                                 transparentSidebar: this.transparentSidebar,
+                                transparentSidebarLight: this.transparentSidebarLight,
+                                transparentSidebarDark: this.transparentSidebarDark,
                                 sidebarFeature: this.sidebarFeature,
 
                                 headerStyle: this.headerStyle,
+                                headerStyleLight: this.headerStyleLight,
+                                headerStyleDark: this.headerStyleDark,
                                 headerCustomBg: this.headerCustomBg,
+                                headerCustomBgLight: this.headerCustomBgLight,
+                                headerCustomBgDark: this.headerCustomBgDark,
                                 headerCustomBorder: this.headerCustomBorder,
+                                headerCustomBorderLight: this.headerCustomBorderLight,
+                                headerCustomBorderDark: this.headerCustomBorderDark,
                                 headerBorderMode: this.headerBorderMode,
+                                headerBorderModeLight: this.headerBorderModeLight,
+                                headerBorderModeDark: this.headerBorderModeDark,
                                 headerGlassEffect: this.headerGlassEffect,
+                                headerGlassEffectLight: this.headerGlassEffectLight,
+                                headerGlassEffectDark: this.headerGlassEffectDark,
 
                                 navStyle: this.navStyle,
+                                navStyleLight: this.navStyleLight,
+                                navStyleDark: this.navStyleDark,
                                 navDensity: this.navDensity,
+                                navDensityLight: this.navDensityLight,
+                                navDensityDark: this.navDensityDark,
                                 navIndicator: this.navIndicator,
+                                navIndicatorLight: this.navIndicatorLight,
+                                navIndicatorDark: this.navIndicatorDark,
                                 navCustomActiveBg: this.navCustomActiveBg,
+                                navCustomActiveBgLight: this.navCustomActiveBgLight,
+                                navCustomActiveBgDark: this.navCustomActiveBgDark,
                                 navCustomActiveFg: this.navCustomActiveFg,
+                                navCustomActiveFgLight: this.navCustomActiveFgLight,
+                                navCustomActiveFgDark: this.navCustomActiveFgDark,
                                 navCustomIndicator: this.navCustomIndicator,
+                                navCustomIndicatorLight: this.navCustomIndicatorLight,
+                                navCustomIndicatorDark: this.navCustomIndicatorDark,
 
                                 selectedSemantic: this.selectedSemantic,
                                 selectedChartPreset: this.selectedChartPreset,
