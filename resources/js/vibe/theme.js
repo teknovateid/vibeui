@@ -21,11 +21,11 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
                 }
                 document.head.appendChild(style);
             }
-            if (parsed && parsed.customHex) {
+            if (parsed && parsed.customHex && !parsed.css) {
                 const root = document.documentElement;
-                const isDark = root.classList.contains('dark') || (!root.classList.contains('light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                const isDefaultSlate = (parsed.customHex.toLowerCase() === '#18181b');
-                const activePrimary = (isDefaultSlate && isDark) ? '#f9fafa' : parsed.customHex;
+                const isDark = root.classList.contains('dark');
+                const isDefaultSlate = (parsed.customHex.toLowerCase() === '#18181b' || parsed.customHex.toLowerCase() === '#0a0b0a');
+                const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : parsed.customHex;
                 root.style.setProperty('--primary', activePrimary, 'important');
                 root.style.setProperty('--color-primary', activePrimary, 'important');
                 root.style.setProperty('--ring', activePrimary, 'important');
@@ -42,6 +42,14 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
                 const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
                 root.style.setProperty('--primary-foreground', fg, 'important');
                 root.style.setProperty('--color-primary-foreground', fg, 'important');
+            } else if (parsed && parsed.css) {
+                const root = document.documentElement;
+                root.style.removeProperty('--primary');
+                root.style.removeProperty('--color-primary');
+                root.style.removeProperty('--ring');
+                root.style.removeProperty('--color-ring');
+                root.style.removeProperty('--primary-foreground');
+                root.style.removeProperty('--color-primary-foreground');
             }
         }
     } catch (e) {}
@@ -106,8 +114,6 @@ const ThemeManager = {
 
     setMode(mode, event = null) {
         const config = this.getConfig();
-        if (config.mode === mode) return;
-
         let targetIsDark = false;
         if (mode === 'dark') {
             targetIsDark = true;
@@ -118,9 +124,12 @@ const ThemeManager = {
         }
 
         const currentlyDark = document.documentElement.classList.contains('dark');
+        if (config.mode === mode && targetIsDark === currentlyDark) return;
+
         if (targetIsDark === currentlyDark) {
             config.mode = mode;
             this.saveConfig(config);
+            this.applyTheme(mode);
             return;
         }
 
@@ -357,10 +366,10 @@ const ThemeManager = {
             }
         }
 
-        if (config.customHex) {
-            const isDark = root.classList.contains('dark') || (!root.classList.contains('light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
-            const isDefaultSlate = (config.customHex.toLowerCase() === '#18181b');
-            const activePrimary = (isDefaultSlate && isDark) ? '#f9fafa' : config.customHex;
+        if (config.customHex && !config.css) {
+            const isDark = root.classList.contains('dark');
+            const isDefaultSlate = (config.customHex.toLowerCase() === '#18181b' || config.customHex.toLowerCase() === '#0a0b0a');
+            const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : config.customHex;
             root.style.setProperty('--primary', activePrimary, 'important');
             root.style.setProperty('--color-primary', activePrimary, 'important');
             root.style.setProperty('--ring', activePrimary, 'important');

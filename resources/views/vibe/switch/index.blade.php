@@ -4,7 +4,7 @@
     'label' => null,
     'id' => null,
     'name' => null,
-    'value' => '1',
+    'value' => null,
     'checked' => false,
     'description' => null,
     'size' => 'md', // sm, md, lg
@@ -99,11 +99,9 @@
                 role="switch"
                 id="{{ $id }}"
                 @if($name) name="{{ $name }}" @endif
-                value="{{ $value }}"
+                @if($value !== null) value="{{ $value }}" @elseif($name) value="1" @endif
                 @checked($checked)
                 @disabled($isDisabled)
-                x-init="$el.setAttribute('aria-checked', $el.checked ? 'true' : 'false')"
-                @change="$el.setAttribute('aria-checked', $el.checked ? 'true' : 'false')"
                 {{ $attributes->merge(['class' => 'peer sr-only']) }}
             />
             
