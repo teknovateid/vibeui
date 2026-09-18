@@ -32,23 +32,7 @@
                     </div>
 
 
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.security.password_title') }}</h3>
-                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.security.password_desc') }}</p>
-                        </div>
-
-                        <div class="space-y-4 w-full">
-                            <vibe:input type="password" name="current_password" :label="__('vibe/settings.security.current_password')" viewable :placeholder="__('vibe/settings.security.current_password_placeholder')" />
-                            <vibe:input type="password" name="new_password" :label="__('vibe/settings.security.new_password')" viewable :placeholder="__('vibe/settings.security.new_password_placeholder')" />
-                            <vibe:input type="password" name="confirm_password" :label="__('vibe/settings.security.confirm_password')" viewable :placeholder="__('vibe/settings.security.confirm_password_placeholder')" />
-                            <div class="flex justify-end pt-2">
-                                <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('{{ __('vibe/settings.security.password_updated_toast') }}', { type: 'success', title: '{{ __('vibe/settings.security.password_updated_title') }}' }) : null">
-                                    {{ __('vibe/settings.security.update_password_btn') }}
-                                </vibe:button>
-                            </div>
-                        </div>
-                    </div>
+                    <livewire:settings.password />
 
                     <vibe:separator />
 
@@ -195,24 +179,7 @@
 
                     <vibe:separator />
 
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-destructive text-base">{{ __('vibe/settings.security.danger_zone_title') }}</h3>
-                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.security.danger_zone_desc') }}</p>
-                        </div>
-
-                        <div class="space-y-4 w-full">
-                            <div class="flex justify-between items-center gap-4">
-                                <div>
-                                    <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.security.delete_account_title') }}</p>
-                                    <p class="mt-0.5 text-muted-foreground text-xs">{{ __('vibe/settings.security.delete_account_desc') }}</p>
-                                </div>
-                                <vibe:button type="button" variant="destructive" size="sm" class="cursor-pointer shrink-0">
-                                    {{ __('vibe/settings.security.delete_account_btn') }}
-                                </vibe:button>
-                            </div>
-                        </div>
-                    </div>
+                    <livewire:settings.delete-user />
 
                 </div>
             </vibe:tabs>

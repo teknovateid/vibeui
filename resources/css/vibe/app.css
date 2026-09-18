@@ -61,6 +61,12 @@
     --color-sidebar-accent: var(--sidebar-accent);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
 
+    --color-nav-active-bg: var(--nav-active-bg);
+    --color-nav-active-fg: var(--nav-active-fg);
+    --color-nav-hover-bg: var(--nav-hover-bg);
+    --color-nav-hover-fg: var(--nav-hover-fg);
+    --color-nav-indicator: var(--nav-indicator);
+
     --color-header: var(--header);
     --color-header-foreground: var(--header-foreground);
     --color-header-border: var(--header-border);
@@ -100,6 +106,12 @@
     --sidebar-border: #e5e6e5 !important;
     --sidebar-accent: #f4f5f5 !important;
     --sidebar-accent-foreground: #0a0b0a !important;
+
+    --nav-active-bg: #f4f5f5 !important;
+    --nav-active-fg: #0a0b0a !important;
+    --nav-hover-bg: #f4f5f5 !important;
+    --nav-hover-fg: #0a0b0a !important;
+    --nav-indicator: #0a0b0a !important;
 
     --header: #ffffff !important;
     --header-foreground: #0a0b0a !important;
@@ -164,6 +176,12 @@
     --sidebar-border: #262726 !important;
     --sidebar-accent: #1e1f1e !important;
     --sidebar-accent-foreground: #f9fafa !important;
+
+    --nav-active-bg: #1e1f1e !important;
+    --nav-active-fg: #f9fafa !important;
+    --nav-hover-bg: #1e1f1e !important;
+    --nav-hover-fg: #f9fafa !important;
+    --nav-indicator: #f9fafa !important;
 
     --header: #121312 !important;
     --header-foreground: #f9fafa !important;

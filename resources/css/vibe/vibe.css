@@ -505,3 +505,54 @@ input:-webkit-autofill:active {
     caret-color: var(--foreground) !important;
     transition: background-color 5000s ease-in-out 0s;
 }
+
+
+/* Navigation Component Utilities */
+nav[data-nav-variant="primary"] [data-pin-type="item"].nav-item-active,
+nav[data-nav-variant="primary"] [data-pin-type="group"] [data-nav-group-trigger].nav-item-active {
+    background-color: var(--primary) !important;
+    color: var(--primary-foreground) !important;
+}
+
+nav[data-nav-variant="subtle"] [data-pin-type="item"].nav-item-active,
+nav[data-nav-variant="subtle"] [data-pin-type="group"] [data-nav-group-trigger].nav-item-active {
+    background-color: var(--muted) !important;
+    color: var(--foreground) !important;
+}
+
+nav[data-nav-variant="line"] [data-pin-type="item"].nav-item-active,
+nav[data-nav-variant="line"] [data-pin-type="group"] [data-nav-group-trigger].nav-item-active {
+    background-color: transparent !important;
+    color: var(--foreground) !important;
+}
+
+nav[data-nav-variant="line"] [data-pin-type="item"].nav-item-active::before,
+nav[data-nav-variant="line"] [data-pin-type="group"] [data-nav-group-trigger].nav-item-active::before,
+nav[data-nav-indicator="true"] [data-pin-type="item"].nav-item-active::before,
+nav[data-nav-indicator="true"] [data-pin-type="group"] [data-nav-group-trigger].nav-item-active::before {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0.375rem !important;
+    bottom: 0.375rem !important;
+    width: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+    background-color: var(--nav-indicator) !important;
+}
+
+nav[data-nav-density="compact"] [data-pin-type="item"],
+nav[data-nav-density="compact"] [data-pin-type="group"] [data-nav-group-trigger] {
+    min-height: 2rem !important;
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+    font-size: 0.75rem !important;
+}
+
+nav[data-nav-density="relaxed"] [data-pin-type="item"],
+nav[data-nav-density="relaxed"] [data-pin-type="group"] [data-nav-group-trigger] {
+    min-height: 2.5rem !important;
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    font-size: 0.875rem !important;
+}

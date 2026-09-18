@@ -5,6 +5,9 @@
     'pinnable' => false,
     'maxpin' => null, // optional max number of pinned items
     'id' => null,
+    'variant' => null, // 'sidebar' | 'primary' | 'subtle' | 'line'
+    'density' => null, // 'compact' | 'default' | 'relaxed'
+    'indicator' => false, // bool
 ])
 
 @php
@@ -12,7 +15,7 @@
     $pinnedContainerId = 'vibe-nav-pinned-' . Str::random(6);
 @endphp
 
-<nav id="{{ $navId }}" data-nav-id="{{ $navId }}" x-data="(function() {
+<nav id="{{ $navId }}" data-nav-id="{{ $navId }}" @if ($variant) data-nav-variant="{{ $variant }}" @endif @if ($density) data-nav-density="{{ $density }}" @endif @if ($indicator) data-nav-indicator="true" @endif x-data="(function() {
     var key = (window.VIBE_PREFIX || 'vibe') + '-nav';
     var navId = '{{ $navId }}';
     var pinned = [];
@@ -166,7 +169,7 @@
                     // Reset active state on shortcut clones
                     let targets = [clone, ...clone.querySelectorAll('a, button')];
                     targets.forEach(t => {
-                        t.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold');
+                        t.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold', 'bg-primary', 'text-primary-foreground', 'bg-muted', 'nav-item-active', 'shadow-xs');
                         t.classList.add('text-muted-foreground');
                     });
 
