@@ -133,6 +133,16 @@ class RequirePasswordConfirmation
 
         $response = $next($request);
 
+        // One-time consume: jika aksi mutasi (non-GET) dan tanpa parameter waktu (confirm murni), hanguskan sesi konfirmasi
+        if (! $request->isMethod('GET') && $timeoutSeconds === null) {
+            $request->session()->forget([
+                'auth.password_confirmed_at',
+                'auth.confirmed_route',
+                'auth.is_single_page_confirm',
+                'auth.one_time_confirmed',
+            ]);
+        }
+
         // Header anti-cache agar riwayat browser dan wire:navigate tidak menyajikan snapshot sensitif tanpa verifikasi ulang
         if (method_exists($response, 'header')) {
             $response->header('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');

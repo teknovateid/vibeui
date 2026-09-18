@@ -456,10 +456,14 @@ class TwoFactor extends Component
     }
 
     /**
-     * Nonaktifkan metode 2FA tertentu atau seluruh 2FA.
+     * Nonaktifkan metode 2FA tertentu (dihapus satu per satu).
      */
-    public function disable(?string $method = null): void
+    public function disable(string $method): void
     {
+        if (! in_array($method, ['totp', 'email', 'whatsapp', 'sms'])) {
+            return;
+        }
+
         // Verifikasi konfirmasi password sebelum menonaktifkan 2FA (Cara A)
         if (! $this->ensurePasswordIsConfirmed()) {
             return;
@@ -471,26 +475,24 @@ class TwoFactor extends Component
             return;
         }
 
-        if ($method && in_array($method, ['totp', 'email', 'whatsapp', 'sms'])) {
-            $user->twoFactorAuthenticators()->where('method', $method)->delete();
-            $message = 'Metode 2FA (' . strtoupper($method) . ') telah dinonaktifkan.';
-            if ($method === 'totp') $this->totpEnabled = false;
-            if ($method === 'email') {
-                $this->emailEnabled = false;
-                Cache::forget('2fa_cooldown_setup_email_' . $user->getAuthIdentifier());
-                $this->emailOtpSent = false;
-                $this->cooldown = 0;
-            }
-            $this->enabled = $this->totpEnabled || $this->emailEnabled;
-        } else {
-            $user->twoFactorAuthenticators()->delete();
-            $message = 'Seluruh Autentikasi Dua Faktor telah dinonaktifkan.';
+        $user->twoFactorAuthenticators()->where('method', $method)->delete();
+        $message = 'Metode 2FA (' . strtoupper($method) . ') telah dinonaktifkan.';
+
+        if ($method === 'totp') {
             $this->totpEnabled = false;
+        }
+
+        if ($method === 'email') {
             $this->emailEnabled = false;
-            $this->enabled = false;
             Cache::forget('2fa_cooldown_setup_email_' . $user->getAuthIdentifier());
             $this->emailOtpSent = false;
             $this->cooldown = 0;
+        }
+
+        $this->enabled = $user->twoFactorAuthenticators()->exists();
+
+        if ($this->enabled && ! $user->twoFactorAuthenticators()->where('is_default', true)->exists()) {
+            $user->twoFactorAuthenticators()->first()?->update(['is_default' => true]);
         }
 
         $this->dispatch('vibe-toast', message: $message, type: 'info');

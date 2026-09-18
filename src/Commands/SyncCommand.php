@@ -108,6 +108,25 @@ class SyncCommand extends Command
                 'dest' => base_path('packages/vibe/stubs/Auth/Livewire/Settings'),
                 'label' => 'Settings Livewire Classes',
             ],
+            [
+                'src' => app_path('Livewire/Auth/Concerns'),
+                'dest' => base_path('packages/vibe/stubs/Auth/Concerns'),
+                'label' => 'Auth Concerns',
+            ],
+            [
+                'src' => app_path('Livewire/Auth'),
+                'dest' => base_path('packages/vibe/stubs/Auth/Livewire'),
+                'label' => 'Auth Livewire Classes',
+                'shallow' => true,
+                'ignore' => ['Concerns'],
+            ],
+            [
+                'src' => base_path('routes'),
+                'dest' => base_path('packages/vibe/stubs/Auth/routes'),
+                'label' => 'Auth Routes',
+                'shallow' => true,
+                'ignore' => ['console.php', 'docs.php', 'web.php'],
+            ],
         ];
     }
 

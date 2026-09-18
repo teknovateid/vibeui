@@ -207,4 +207,42 @@ trait AuthenticatesUsers
 
         return "auth.layouts.{$layout}";
     }
+
+    /**
+     * Regenerasi session otentikasi: membersihkan session temporary (2FA),
+     * meregenerasi session ID (anti session fixation), dan mencatat waktu aktivitas.
+     */
+    public function regenerateAuthSession(): void
+    {
+        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
+        session()->regenerate();
+        session()->put('auth.last_activity_time', time());
+    }
+
+    /**
+     * Invalidate sesi pengguna saat logout dan meregenerasi token CSRF.
+     */
+    public function invalidateAuthSession(): void
+    {
+        session()->invalidate();
+        session()->regenerateToken();
+    }
+
+    /**
+     * Siapkan session untuk proses challenge Two-Factor Authentication.
+     */
+    public function initTwoFactorSession(mixed $userId, bool $remember = false): void
+    {
+        session()->regenerate();
+        session()->put('auth.2fa.user_id', $userId);
+        session()->put('auth.2fa.remember', $remember);
+    }
+
+    /**
+     * Regenerasi session ID saat ini.
+     */
+    public function regenerateSession(): void
+    {
+        session()->regenerate();
+    }
 }

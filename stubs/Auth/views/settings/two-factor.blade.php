@@ -100,7 +100,7 @@
                 </div>
             </div>
 
-            {{-- Footer: Recovery Codes & Global Disable --}}
+            {{-- Footer: Recovery Codes --}}
             <div x-show="enabled" x-cloak class="flex flex-wrap justify-between items-center gap-2 pt-3 border-border/50 border-t">
                 <div class="text-muted-foreground text-xs">
                     <span>{{ __('vibe/settings.two_factor.recovery_codes_title') }}</span>
@@ -109,9 +109,6 @@
                     <vibe:button type="button" variant="outline" size="xs" @click="openRecoveryCodes()" ::disabled="loading" class="cursor-pointer">
                         {{ __('vibe/settings.two_factor.view_codes_btn') }}
                     </vibe:button>
-                    <vibe:button.delete size="xs" action="disable2FA(null)" :title="__('vibe/settings.two_factor.disable_all_btn')" :message="__('vibe/settings.two_factor.disable_all_confirm')">
-                        {{ __('vibe/settings.two_factor.disable_all_btn') }}
-                    </vibe:button.delete>
                 </div>
             </div>
         </div>
@@ -491,7 +488,8 @@
                     }
                 },
 
-                async disable2FA(method = null) {
+                async disable2FA(method) {
+                    if (!method) return;
                     this.loading = true;
                     try {
                         await this.$wire.disable(method);
