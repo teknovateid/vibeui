@@ -48,6 +48,9 @@
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                 </svg>
             </x-slot:icon>
+            <vibe:nav.item href="{{ route('docs.auth.index') }}" :active="request()->routeIs('docs.auth.index')">
+                {{ __('docs/sidebar.nav.auth.overview') }}
+            </vibe:nav.item>
             <vibe:nav.item href="{{ route('docs.auth.installation') }}" :active="request()->routeIs('docs.auth.installation')">
                 {{ __('docs/sidebar.nav.auth.installation') }}
             </vibe:nav.item>

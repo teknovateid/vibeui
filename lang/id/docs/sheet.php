@@ -147,7 +147,7 @@ return [
                 'name' => 'variant',
                 'type' => 'string',
                 'default' => '\'default\'',
-                'desc' => 'Tema latar belakang: \'default\' (card), \'accent\', atau \'muted\'.',
+                'desc' => 'Tema latar belakang: \'default\' / \'card\', \'sidebar\' (menggunakan token warna kanvas & garis tepi sidebar), \'accent\', atau \'muted\'.',
             ],
             [
                 'name' => 'behavior',

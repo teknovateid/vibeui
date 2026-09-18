@@ -75,10 +75,11 @@ return [
     ],
 
     'props_items' => [
-        'variant' => "Variasi posisi header: `'default'` (statis normal) atau `'sticky'` (menempel di bagian atas layar dengan `sticky top-0 z-50`).",
+        'variant' => "Tema warna atau posisi header: `'header'` (menggunakan variabel warna header), `'default'` / `'card'` (warna kartu), `'muted'`, `'accent'`, atau `'sticky'`.",
+        'sticky' => "Jika diaktifkan (`true`), header akan menempel di bagian atas saat di-scroll (`sticky top-0 z-50`).",
         'size' => "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`).",
-        'scrolledClass' => "Class utility yang ditambahkan saat header `variant=\"sticky\"` di-scroll melebihi threshold.",
-        'unscrolledClass' => "Class utility saat header `variant=\"sticky\"` di posisi paling atas (belum di-scroll).",
+        'scrolledClass' => "Class utility yang ditambahkan saat header sticky di-scroll melebihi threshold.",
+        'unscrolledClass' => "Class utility saat header sticky di posisi paling atas (belum di-scroll).",
         'threshold' => "Jarak scroll (dalam pixel) sebelum status scrolled aktif.",
     ],
 ];

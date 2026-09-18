@@ -1,6 +1,16 @@
 @blaze(fold: true)
 
-@props(['title', 'active' => false, 'open' => false, 'persist' => false, 'id' => null, 'pinnable' => false])
+@props([
+    'title', 
+    'active' => false, 
+    'open' => false, 
+    'persist' => false, 
+    'id' => null, 
+    'pinnable' => false,
+    'variant' => null,
+    'density' => null,
+    'indicator' => null,
+])
 
 @php
     $groupId = $id ?? Str::slug($title);
@@ -8,8 +18,34 @@
     $chevronId = 'nav-group-chevron-' . Str::random(6);
     $defaultOpenState = ($active || $open) ? true : false;
     $minifiedClasses = 'data-[collapsed=true]:w-11 data-[collapsed=true]:h-11 data-[collapsed=true]:mx-auto data-[collapsed=true]:justify-center data-[collapsed=true]:px-0 group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto group-data-[state=minified]/sheet:overflow-visible';
-    $baseClasses = "flex items-center min-h-9 px-3 py-2 rounded-lg text-sm font-medium w-full relative overflow-hidden group/nav-item cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-ring $minifiedClasses";
-    $activeClasses = $active ? 'bg-accent text-accent-foreground font-semibold' : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground';
+    
+    $itemDensity = match($density) {
+        'compact', 'sm' => 'compact',
+        'relaxed', 'lg' => 'relaxed',
+        default => $density,
+    };
+    $densityClasses = match($itemDensity) {
+        'compact' => 'min-h-8 px-2.5 py-1 text-xs',
+        'relaxed' => 'min-h-10 px-3.5 py-2.5 text-sm',
+        default => 'min-h-9 px-3 py-2 text-sm',
+    };
+
+    $baseClasses = "flex items-center rounded-lg font-medium w-full relative overflow-hidden group/nav-item cursor-pointer select-none outline-none focus-visible:ring-2 focus-visible:ring-ring $densityClasses $minifiedClasses";
+
+    $hasIndicator = $indicator || $variant === 'line';
+    $indicatorClasses = ($active && $hasIndicator) 
+        ? 'before:absolute before:left-0 before:top-1.5 before:bottom-1.5 before:w-1 before:rounded-r before:bg-[var(--nav-indicator)]' 
+        : '';
+
+    $variantClasses = match ($variant) {
+        'primary' => $active ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:bg-primary/10 hover:text-primary',
+        'subtle' => $active ? 'bg-muted text-foreground font-semibold' : 'text-muted-foreground hover:bg-muted/80 hover:text-foreground',
+        'line' => $active ? 'bg-transparent text-foreground font-semibold' : 'text-muted-foreground hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-hover-fg)]',
+        default => $active ? 'bg-[var(--nav-active-bg)] text-[var(--nav-active-fg)] font-semibold' : 'text-muted-foreground hover:bg-[var(--nav-hover-bg)] hover:text-[var(--nav-hover-fg)]',
+    };
+
+    $activeMarker = $active ? 'nav-item-active' : '';
+    $compiledClasses = "$baseClasses $variantClasses $indicatorClasses $activeMarker";
 @endphp
 
 <div 
@@ -82,12 +118,15 @@
         data-pin-title="{{ $title }}" 
         x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" 
         type="button" 
+        @if ($variant) data-variant="{{ $variant }}" @endif 
+        @if ($itemDensity) data-density="{{ $itemDensity }}" @endif 
+        @if ($hasIndicator) data-indicator="true" @endif 
         :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" 
-        {{ $attributes->twMerge(['class' => "$baseClasses $activeClasses"]) }}
+        {{ $attributes->twMerge(['class' => $compiledClasses]) }}
     >
         <!-- Icon -->
         @if (isset($icon))
-            <span data-pin-icon class="shrink-0 flex items-center justify-center w-5 h-5 {{ $active ? 'text-foreground' : 'text-muted-foreground group-hover/nav-item:text-foreground' }}">
+            <span data-pin-icon class="shrink-0 flex items-center justify-center w-5 h-5 {{ $active ? 'text-current' : 'text-muted-foreground group-hover/nav-item:text-foreground' }}">
                 {{ $icon }}
             </span>
         @endif
@@ -123,7 +162,7 @@
                 <!-- Chevron -->
                 <svg 
                     id="{{ $chevronId }}" 
-                    class="size-3.5 shrink-0 text-muted-foreground group-hover/nav-item:text-foreground" 
+                    class="size-3.5 shrink-0 {{ $active ? 'text-current' : 'text-muted-foreground group-hover/nav-item:text-foreground' }}" 
                     :class="ready ? 'transition-transform duration-300' : ''" 
                     style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};" 
                     x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`"

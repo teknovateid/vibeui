@@ -4,7 +4,6 @@ use App\Http\Controllers\DashboardPageController;
 use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\SelectController;
-use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,8 +30,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
 
-    Route::prefix('auth')->middleware(['auth', 'verified'])->name('auth.')->group(function () {
-        Route::redirect('/', '/docs/auth/installation')->name('index');
+    Route::prefix('auth')->name('auth.')->group(function () {
+        Route::view('/', 'docs.auth.index')->name('index');
         Route::view('/installation', 'docs.auth.installation')->name('installation');
         Route::view('/confirm', 'docs.auth.confirm')->name('confirm');
         Route::view('/idle', 'docs.auth.idle')->name('idle');
@@ -109,15 +108,15 @@ Route::prefix('docs')->name('docs.')->group(function () {
 
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', function () {
-            return Auth::check() ? redirect('/docs/settings/account') : redirect('/docs/settings/appearance');
+            return Auth::check() ? redirect()->route('docs.settings.account') : redirect()->route('docs.settings.appearance');
         })->name('index');
+
         Route::view('/appearance', 'docs.settings.appearance')->name('appearance');
-        Route::view('/notifications', 'docs.settings.notifications')->name('notifications');
 
         Route::middleware(['auth', 'verified'])->group(function () {
             Route::view('/account', 'docs.settings.account')->name('account');
 
-            Route::get('/security', [SettingsController::class, 'security'])
+            Route::view('/security', 'docs.settings.security')
                 ->middleware('confirm')
                 ->name('security');
 

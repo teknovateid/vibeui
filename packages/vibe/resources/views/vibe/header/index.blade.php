@@ -3,23 +3,50 @@
 @props([
     'variant' => 'default',
     'size' => 'default',
+    'sticky' => false,
     'scrolledClass' => null,
     'unscrolledClass' => null,
     'threshold' => 10,
 ])
 
 @php
-    $isSticky = $variant === 'sticky';
+    $isSticky = $variant === 'sticky' || (bool) $sticky;
+    $colorVariant = $variant === 'sticky' ? 'header' : $variant;
     $hasCustomClasses = !empty($scrolledClass) || !empty($unscrolledClass);
 
-    $baseClasses = $isSticky
-        ? 'flex items-center justify-between shrink-0 text-header-foreground border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,box-shadow] duration-200' . (!$hasCustomClasses ? ' data-[scrolled=true]:bg-header/80 data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:border-header-border/80 data-[scrolled=true]:shadow-2xs' : '')
-        : 'flex items-center justify-between shrink-0 bg-header text-header-foreground border-b border-header-border';
-
-    $variantClasses = match ($variant) {
-        'sticky' => 'sticky top-0 z-50',
-        default => '',
+    $colorClasses = match ($colorVariant) {
+        'header' => [
+            'normal' => 'bg-header text-header-foreground border-b border-header-border',
+            'scrolled' => 'data-[scrolled=true]:bg-header/80 data-[scrolled=true]:border-header-border/80',
+            'text' => 'text-header-foreground',
+        ],
+        'muted' => [
+            'normal' => 'bg-muted text-muted-foreground border-b border-border',
+            'scrolled' => 'data-[scrolled=true]:bg-muted/80 data-[scrolled=true]:border-border/80',
+            'text' => 'text-muted-foreground',
+        ],
+        'accent' => [
+            'normal' => 'bg-accent text-accent-foreground border-b border-border',
+            'scrolled' => 'data-[scrolled=true]:bg-accent/80 data-[scrolled=true]:border-border/80',
+            'text' => 'text-accent-foreground',
+        ],
+        'card', 'default' => [
+            'normal' => 'bg-card text-card-foreground border-b border-border',
+            'scrolled' => 'data-[scrolled=true]:bg-card/80 data-[scrolled=true]:border-border/80',
+            'text' => 'text-card-foreground',
+        ],
+        default => [
+            'normal' => 'bg-card text-card-foreground border-b border-border',
+            'scrolled' => 'data-[scrolled=true]:bg-card/80 data-[scrolled=true]:border-border/80',
+            'text' => 'text-card-foreground',
+        ],
     };
+
+    $baseClasses = $isSticky
+        ? "flex items-center justify-between shrink-0 {$colorClasses['text']} border-b border-transparent bg-transparent transition-[background-color,border-color,backdrop-filter,box-shadow] duration-200" . (!$hasCustomClasses ? " {$colorClasses['scrolled']} data-[scrolled=true]:backdrop-blur-md data-[scrolled=true]:shadow-2xs" : '')
+        : "flex items-center justify-between shrink-0 {$colorClasses['normal']}";
+
+    $variantClasses = $isSticky ? 'sticky top-0 z-50' : '';
 
     $sizeClasses = match ($size) {
         'sm' => 'py-2.5 px-4',
@@ -28,7 +55,7 @@
         default => 'py-4 px-6',
     };
 
-    $compiledClasses = "{$baseClasses} {$sizeClasses} {$variantClasses}";
+    $compiledClasses = "{$baseClasses} {$sizeClasses} {$variantClasses} group/header";
 @endphp
 
 @if ($isSticky)
@@ -74,7 +101,8 @@
                 }
             }
         }"
-        data-variant="{{ $variant }}"
+        data-variant="{{ $colorVariant }}"
+        data-sticky="true"
         data-scrolled="false"
         :data-scrolled="isScrolled ? 'true' : 'false'"
         @if ($hasCustomClasses)
@@ -86,7 +114,7 @@
         {{ $slot }}
     </header>
 @else
-    <header data-variant="{{ $variant }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
+    <header data-variant="{{ $colorVariant }}" data-sticky="false" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
         {{ $slot }}
     </header>
 @endif

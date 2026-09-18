@@ -27,8 +27,10 @@
     };
 
     $variantClasses = match ($variant) {
+        'sidebar' => 'bg-sidebar text-sidebar-foreground border-sidebar-border',
         'accent' => 'bg-accent text-accent-foreground border-border',
         'muted' => 'bg-muted text-muted-foreground border-border',
+        'card', 'default' => 'bg-card text-card-foreground border-border',
         default => 'bg-card text-card-foreground border-border',
     };
 
@@ -73,9 +75,9 @@
 
     $innerStyle = $behavior !== 'minify'
         ? match ($position) {
-            'right' => "top: 0; right: 0; bottom: 0; width: {$defaultSize}px",
-            'bottom' => "left: 0; right: 0; bottom: 0; height: {$defaultSize}px",
-            'top' => "left: 0; right: 0; top: 0; height: {$defaultSize}px",
+            'right' => "top: 0; left: 0; bottom: 0; width: {$defaultSize}px",
+            'bottom' => "left: 0; right: 0; top: 0; height: {$defaultSize}px",
+            'top' => "left: 0; right: 0; bottom: 0; height: {$defaultSize}px",
             default => "top: 0; left: 0; bottom: 0; width: {$defaultSize}px",
         }
         : 'top: 0; left: 0; right: 0; bottom: 0';
@@ -323,9 +325,9 @@
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
-].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
+].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-60 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-60 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -373,12 +375,9 @@
 
     @if ($layout === 'relative')
         {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0.
-             group-data-[state=collapsed]/sheet:overflow-hidden bereaksi ke data-state attribute
-             yang di-set oleh PHP & anti-FOUC script — zero flash tanpa perlu Alpine aktif. --}}
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 group-data-[state=collapsed]/sheet:overflow-hidden"
-             :class="{ 'overflow-visible': state !== 'collapsed' }">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full group-data-[state=collapsed]/sheet:overflow-hidden"
-                 :class="{ 'overflow-visible': state !== 'collapsed' }"
+             overflow-hidden memastikan konten terpotong rapi saat animasi width/height. --}}
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
@@ -388,18 +387,16 @@
         </div>
     @else
         {{-- Fixed/absolute/sticky layout: clip-wrapper untuk content, tidak mempengaruhi resize handle. --}}
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col group-data-[state=collapsed]/sheet:overflow-hidden"
-             :class="{ 'overflow-visible': state !== 'collapsed' }">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full group-data-[state=collapsed]/sheet:overflow-hidden"
-                 :class="{ 'overflow-visible': state !== 'collapsed' }"
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
-                         ? `top: 0; right: 0; bottom: 0; width: ${size}px`
+                         ? `top: 0; left: 0; bottom: 0; width: ${size}px`
                          : position === 'bottom'
-                         ? `left: 0; right: 0; bottom: 0; height: ${size}px`
-                         : position === 'top'
                          ? `left: 0; right: 0; top: 0; height: ${size}px`
+                         : position === 'top'
+                         ? `left: 0; right: 0; bottom: 0; height: ${size}px`
                          : `top: 0; left: 0; bottom: 0; width: ${size}px`)
                      : 'top: 0; left: 0; right: 0; bottom: 0'">
                 {{ $slot }}

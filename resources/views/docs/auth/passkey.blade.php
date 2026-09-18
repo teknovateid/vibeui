@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
     <vibe:seo title="Autentikasi Biometrik Passkey (WebAuthn) — Vibe UI" description="Dokumentasi lengkap dan konsol uji coba langsung Passkey (FIDO2/WebAuthn) untuk login tanpa kata sandi menggunakan biometrik perangkat." schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
-        ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Authentication', 'url' => route('docs.auth.installation')],
+        ['name' => 'Docs', 'url' => route('docs.index')],
+        ['name' => 'Authentication', 'url' => route('docs.auth.index')],
         ['name' => 'Passkey (WebAuthn)', 'url' => route('docs.auth.passkey')]
     ]" />
 
@@ -303,6 +303,24 @@ async function loginWithPasskey() {
 }
 </vibe:highlightjs>
             </section>
+
+            {{-- Navigation Footer --}}
+            <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="{{ route('docs.auth.two-factor') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Two-Factor Authentication (2FA)</span>
+                    </div>
+                </a>
+
+                <a href="{{ route('docs.auth.index') }}" class="w-full sm:w-auto inline-flex items-center justify-between sm:justify-end gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group text-right">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Kembali ke Hub</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Ikhtisar Autentikasi &rarr;</span>
+                    </div>
+                </a>
+            </div>
 
         </div>
 

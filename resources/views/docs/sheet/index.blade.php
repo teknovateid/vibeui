@@ -23,8 +23,12 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['layout', 'position', 'behavior', 'resizable', 'defaultSize', 'showToggle', 'persist', 'closeOnOutsideClick'] as $p)
+                    @foreach (['variant', 'layout', 'position', 'behavior', 'resizable', 'defaultSize', 'showToggle', 'persist', 'closeOnOutsideClick'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
+                    @endforeach
+                    <span class="text-muted-foreground/40 text-xs">|</span>
+                    @foreach (['sidebar', 'card', 'muted', 'accent'] as $v)
+                        <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     @foreach (['left', 'right', 'top', 'bottom'] as $pos)
@@ -242,7 +246,95 @@
                 </vibe:preview>
             </section>
 
-            {{-- 3. Resizable (Interactive Drag) --}}
+            {{-- 3. Variants (Sidebar, Card, Muted, Accent) --}}
+            <section id="varian-tema" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Varian Tema & Warna (variant)</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Komponen sheet mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sidebar"</code> yang otomatis mengaplikasikan palet warna surface sidebar (<code class="font-mono text-xs text-primary">bg-sidebar</code>, <code class="font-mono text-xs text-primary">text-sidebar-foreground</code>, dan <code class="font-mono text-xs text-primary">border-sidebar-border</code>), sehingga serasi dengan navigasi desktop aplikasi. Anda juga dapat memilih varian <code class="font-mono text-xs">card</code> (default), <code class="font-mono text-xs">muted</code>, maupun <code class="font-mono text-xs">accent</code>.
+                    </p>
+                </div>
+
+                <vibe:preview title="Varian Sheet: Sidebar vs Card (Default)">
+                    <vibe:preview.code>
+                        {{-- Varian Sidebar (menggunakan warna kanvas sidebar) --}}
+                        <vibe:sheet id="demo-sheet-sidebar-var" variant="sidebar" position="right" behavior="collapsible" :defaultSize="280">
+                            <vibe:sheet.header class="flex items-center justify-between">
+                                <span class="text-xs font-semibold">Variant Sidebar</span>
+                                <vibe:sheet.close />
+                            </vibe:sheet.header>
+                            <vibe:sheet.content class="space-y-2 text-xs">
+                                <p class="text-muted-foreground">Menggunakan token --sidebar dan --sidebar-border.</p>
+                            </vibe:sheet.content>
+                        </vibe:sheet>
+
+                        {{-- Varian Card (Default) --}}
+                        <vibe:sheet id="demo-sheet-card-var" variant="card" position="right" behavior="collapsible" :defaultSize="280">
+                            <vibe:sheet.header class="flex items-center justify-between">
+                                <span class="text-xs font-semibold">Variant Card</span>
+                                <vibe:sheet.close />
+                            </vibe:sheet.header>
+                            <vibe:sheet.content class="space-y-2 text-xs">
+                                <p class="text-muted-foreground">Menggunakan token --card dan --border.</p>
+                            </vibe:sheet.content>
+                        </vibe:sheet>
+                    </vibe:preview.code>
+
+                    <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                        <div class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-3 min-w-0">
+                            <div class="flex flex-wrap items-center justify-center gap-2">
+                                <vibe:button @click="$dispatch('toggle-sheet', 'demo-sheet-sidebar-var')" variant="primary" size="sm">
+                                    Toggle Variant Sidebar
+                                </vibe:button>
+                                <vibe:button @click="$dispatch('toggle-sheet', 'demo-sheet-card-var')" variant="outline" size="sm">
+                                    Toggle Variant Card
+                                </vibe:button>
+                            </div>
+                            <p class="text-xs text-muted-foreground max-w-sm">
+                                Buka panel untuk melihat perbedaan warna kanvas antara varian <strong>sidebar</strong> dan <strong>card</strong>.
+                            </p>
+                        </div>
+
+                        <vibe:sheet id="demo-sheet-sidebar-var" variant="sidebar" position="right" behavior="collapsible" :defaultSize="280">
+                            <vibe:sheet.header class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="size-2 rounded-full bg-primary"></span>
+                                    <span class="text-xs font-semibold text-sidebar-foreground">Variant Sidebar</span>
+                                </div>
+                                <vibe:sheet.close />
+                            </vibe:sheet.header>
+                            <vibe:sheet.content class="space-y-3 text-xs">
+                                <p class="text-muted-foreground">Panel ini menggunakan token warna kanvas sidebar:</p>
+                                <div class="p-2.5 rounded-lg bg-sidebar-accent/50 border border-sidebar-border font-mono text-[11px] space-y-1">
+                                    <div class="text-sidebar-foreground font-semibold">bg-sidebar</div>
+                                    <div class="text-muted-foreground">text-sidebar-foreground</div>
+                                    <div class="text-muted-foreground">border-sidebar-border</div>
+                                </div>
+                            </vibe:sheet.content>
+                        </vibe:sheet>
+
+                        <vibe:sheet id="demo-sheet-card-var" variant="card" position="right" behavior="collapsible" defaultState="collapsed" :defaultSize="280">
+                            <vibe:sheet.header class="flex items-center justify-between">
+                                <div class="flex items-center gap-2">
+                                    <span class="size-2 rounded-full bg-zinc-400"></span>
+                                    <span class="text-xs font-semibold text-card-foreground">Variant Card (Default)</span>
+                                </div>
+                                <vibe:sheet.close />
+                            </vibe:sheet.header>
+                            <vibe:sheet.content class="space-y-3 text-xs">
+                                <p class="text-muted-foreground">Panel ini menggunakan token warna kartu standar:</p>
+                                <div class="p-2.5 rounded-lg bg-muted/50 border border-border font-mono text-[11px] space-y-1">
+                                    <div class="text-card-foreground font-semibold">bg-card</div>
+                                    <div class="text-muted-foreground">text-card-foreground</div>
+                                    <div class="text-muted-foreground">border-border</div>
+                                </div>
+                            </vibe:sheet.content>
+                        </vibe:sheet>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 4. Resizable (Interactive Drag) --}}
             <section id="resize-interaktif" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/sheet.resizable.title') }}</h2>

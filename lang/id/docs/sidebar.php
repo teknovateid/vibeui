@@ -60,6 +60,7 @@ return [
         'dashboard' => 'dashboard',
         'auth' => [
             'group' => 'Autentikasi',
+            'overview' => 'Ikhtisar',
             'installation' => 'Instalasi Auth',
             'confirm' => 'Konfirmasi Password',
             'idle' => 'Idle Timeout',

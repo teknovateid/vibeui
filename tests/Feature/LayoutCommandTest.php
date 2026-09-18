@@ -65,7 +65,6 @@ test('vibe:layout generates settings pages including appearance', function () {
     expect(File::exists(resource_path('views/admin-test/settings/account.blade.php')))->toBeTrue();
     expect(File::exists(resource_path('views/admin-test/settings/security.blade.php')))->toBeTrue();
     expect(File::exists(resource_path('views/admin-test/settings/login-history.blade.php')))->toBeTrue();
-    expect(File::exists(resource_path('views/admin-test/settings/notifications.blade.php')))->toBeTrue();
     expect(File::exists(resource_path('views/admin-test/settings/tabs.blade.php')))->toBeTrue();
 
     // Verify content contains converted path

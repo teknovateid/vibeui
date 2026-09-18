@@ -1,4 +1,4 @@
- <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
+ <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" class="shadow-2xl" persist>
      <vibe:sheet.header class="flex items-center justify-between">
          <div class="flex items-center gap-2">
              <span class="font-semibold text-sm text-foreground">{{ __('docs/sidebar.notifications.title') }}</span>

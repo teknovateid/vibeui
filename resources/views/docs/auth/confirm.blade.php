@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
     <vibe:seo title="Konfirmasi Password (Sudo Mode) — Vibe UI" description="Dokumentasi dan demo interaktif middleware konfirmasi password (confirm, confirm:300, sudo mode) di Vibe UI untuk mengamankan tindakan sensitif." schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
-        ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Authentication', 'url' => route('docs.auth.installation')],
+        ['name' => 'Docs', 'url' => route('docs.index')],
+        ['name' => 'Authentication', 'url' => route('docs.auth.index')],
         ['name' => 'Konfirmasi Password', 'url' => route('docs.auth.confirm')]
     ]" />
 
@@ -57,6 +57,7 @@
                 @endphp
 
                 <div class="p-6 rounded-2xl border border-border bg-card space-y-6 shadow-xs" x-data="{
+                    isLoggedIn: {{ auth()->check() ? 'true' : 'false' }},
                     isConfirmed: {{ $isConfirmed ? 'true' : 'false' }},
                     remaining: {{ $remainingSecs }},
                     password: '',
@@ -97,6 +98,23 @@
                         this.loading = true;
                         this.feedback = null;
 
+                        if (!this.isLoggedIn) {
+                            setTimeout(() => {
+                                this.loading = false;
+                                if (this.password === 'password' || this.password.length >= 4) {
+                                    this.isConfirmed = true;
+                                    this.remaining = 300;
+                                    this.modalOpen = false;
+                                    this.feedbackType = 'success';
+                                    this.feedback = 'Konfirmasi berhasil disimulasikan! Sesi aman aktif selama 5 menit. (Gunakan 1-Klik Login Demo untuk menguji verifikasi nyata ke database).';
+                                } else {
+                                    this.feedbackType = 'error';
+                                    this.feedback = 'Kata sandi simulasi salah. Dalam mode demo, masukkan kata sandi \"password\".';
+                                }
+                            }, 400);
+                            return;
+                        }
+
                         try {
                             const csrf = document.querySelector('meta[name=&quot;csrf-token&quot;]')?.getAttribute('content') || '{{ csrf_token() }}';
                             const res = await fetch('/confirm-password', {
@@ -129,6 +147,13 @@
                     },
 
                     lockSession() {
+                        if (!this.isLoggedIn) {
+                            this.isConfirmed = false;
+                            this.remaining = 0;
+                            this.feedback = 'Sesi pengujian berhasil dikunci kembali.';
+                            this.feedbackType = 'info';
+                            return;
+                        }
                         window.location.href = '{{ route('password.lock') }}';
                     }
                 }">
@@ -278,6 +303,24 @@ Route::middleware(['auth', 'confirm:300'])->group(function () {
                     Sedangkan untuk form biasa atau browser visit langsung, middleware otomatis me-redirect ke rute nama <code>password.confirm</code> (default: <code>/confirm-password</code>).
                 </p>
             </section>
+
+            {{-- Navigation Footer --}}
+            <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="{{ route('docs.auth.installation') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Instalasi &amp; Scaffolding CLI</span>
+                    </div>
+                </a>
+
+                <a href="{{ route('docs.auth.idle') }}" class="w-full sm:w-auto inline-flex items-center justify-between sm:justify-end gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group text-right">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Selanjutnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Idle Timeout &amp; Session Lock &rarr;</span>
+                    </div>
+                </a>
+            </div>
 
         </div>
 

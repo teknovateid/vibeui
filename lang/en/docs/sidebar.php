@@ -60,6 +60,7 @@ return [
         'dashboard' => 'Dashboard',
         'auth' => [
             'group' => 'Authentication',
+            'overview' => 'Overview',
             'installation' => 'Auth Installation',
             'confirm' => 'Confirm Password',
             'idle' => 'Idle Timeout',

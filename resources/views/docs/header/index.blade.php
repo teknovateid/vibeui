@@ -165,7 +165,75 @@
                 </vibe:preview>
             </section>
 
-            {{-- 3. Sticky Header --}}
+            {{-- 3. Variants (Header vs Card/Default) --}}
+            <section id="varian-tema" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Varian Tema & Warna (variant)</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Komponen header mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="header"</code> yang otomatis mengaplikasikan palet variabel warna khusus header (<code class="font-mono text-xs text-primary">bg-header</code>, <code class="font-mono text-xs text-primary">text-header-foreground</code>, dan <code class="font-mono text-xs text-primary">border-header-border</code>). Sedangkan secara default (<code class="font-mono text-xs">variant="default"</code> atau <code class="font-mono text-xs">variant="card"</code>), header menggunakan token warna kanvas kartu (<code class="font-mono text-xs">bg-card</code>, <code class="font-mono text-xs">text-card-foreground</code>, <code class="font-mono text-xs">border-border</code>). Anda juga dapat memilih varian <code class="font-mono text-xs">muted</code> maupun <code class="font-mono text-xs">accent</code>.
+                    </p>
+                </div>
+
+                <vibe:preview data-toc-ignore title="Varian Header: Header vs Card (Default)">
+                    <vibe:preview.code>
+{{-- 1. Variant Header (menggunakan variabel warna header: bg-header, text-header-foreground, border-header-border) --}}
+<vibe:header variant="header">
+    <div>
+        <vibe:header.heading>Variant Header</vibe:header.heading>
+        <vibe:header.subheading>Menggunakan variabel --header dan --header-border</vibe:header.subheading>
+    </div>
+    <vibe:header.actions>
+        <vibe:badge variant="outline" size="sm">variant="header"</vibe:badge>
+        <vibe:button variant="primary" size="sm">Aksi Utama</vibe:button>
+    </vibe:header.actions>
+</vibe:header>
+
+{{-- 2. Variant Card / Default (menggunakan variabel kartu: bg-card, text-card-foreground, border-border) --}}
+<vibe:header variant="card">
+    <div>
+        <vibe:header.heading>Variant Card (Default)</vibe:header.heading>
+        <vibe:header.subheading>Menggunakan variabel --card dan --border</vibe:header.subheading>
+    </div>
+    <vibe:header.actions>
+        <vibe:badge variant="outline" size="sm">variant="card"</vibe:badge>
+        <vibe:button variant="outline" size="sm">Aksi Sekunder</vibe:button>
+    </vibe:header.actions>
+</vibe:header>
+                    </vibe:preview.code>
+
+                    <div class="w-full p-4 sm:p-6 bg-muted/20 space-y-4">
+                        {{-- Variant Header Demo --}}
+                        <div class="rounded-xl overflow-hidden shadow-2xs">
+                            <vibe:header variant="header" size="sm">
+                                <div>
+                                    <vibe:header.heading class="text-sm font-semibold">Variant Header</vibe:header.heading>
+                                    <vibe:header.subheading class="text-[11px]">Variabel: bg-header, text-header-foreground, border-header-border</vibe:header.subheading>
+                                </div>
+                                <vibe:header.actions>
+                                    <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">variant="header"</vibe:badge>
+                                    <vibe:button variant="primary" size="xs">Tombol</vibe:button>
+                                </vibe:header.actions>
+                            </vibe:header>
+                        </div>
+
+                        {{-- Variant Card Demo --}}
+                        <div class="rounded-xl overflow-hidden shadow-2xs">
+                            <vibe:header variant="card" size="sm">
+                                <div>
+                                    <vibe:header.heading class="text-sm font-semibold">Variant Card (Default)</vibe:header.heading>
+                                    <vibe:header.subheading class="text-[11px]">Variabel: bg-card, text-card-foreground, border-border</vibe:header.subheading>
+                                </div>
+                                <vibe:header.actions>
+                                    <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">variant="card"</vibe:badge>
+                                    <vibe:button variant="secondary" size="xs">Tombol</vibe:button>
+                                </vibe:header.actions>
+                            </vibe:header>
+                        </div>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 4. Sticky Header --}}
             <section id="header-sticky" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/header.sticky.title') }}</h2>
@@ -385,10 +453,11 @@
                     <vibe:table.rows>
                         @php
                             $headerProps = [
-                                ['variant', 'string', "'default'", "Variasi posisi header: `'default'` (statis normal) atau `'sticky'` (menempel di bagian atas layar dengan `sticky top-0 z-50`)."],
+                                ['variant', 'string', "'default'", "Tema warna atau posisi header: `'default'`, `'sidebar'` (menggunakan warna surface sidebar), `'card'`, `'muted'`, `'accent'`, atau `'sticky'`."],
+                                ['sticky', 'bool', "false", "Jika `true`, header akan menempel di bagian atas saat di-scroll (`sticky top-0 z-50`)."],
                                 ['size', 'string', "'default'", "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`)."],
-                                ['scrolledClass', 'string', "'bg-background/80 backdrop-blur-md border-b border-border/80 shadow-2xs'", "Class utility yang ditambahkan saat header `variant=\"sticky\"` di-scroll melebihi threshold."],
-                                ['unscrolledClass', 'string', "'bg-transparent border-b border-transparent'", "Class utility saat header `variant=\"sticky\"` di posisi paling atas (belum di-scroll)."],
+                                ['scrolledClass', 'string', "'data-[scrolled=true]:bg-header/80 data-[scrolled=true]:backdrop-blur-md...'", "Class utility kustom yang ditambahkan saat header sticky di-scroll melebihi threshold."],
+                                ['unscrolledClass', 'string', "'bg-transparent border-b border-transparent'", "Class utility saat header sticky di posisi paling atas (belum di-scroll)."],
                                 ['threshold', 'int', "10", "Jarak scroll (dalam pixel) sebelum status scrolled aktif."],
                             ];
                         @endphp

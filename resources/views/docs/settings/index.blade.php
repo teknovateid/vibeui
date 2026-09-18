@@ -22,7 +22,7 @@
                 {{-- ================================================================= --}}
                 {{-- TABS LIST (sidebar kiri)                                          --}}
                 {{-- ================================================================= --}}
-                <vibe:tabs.list class="w-56 shrink-0 flex flex-col gap-0.5 p-3 border-r border-border/60 bg-sidebar/40">
+                <vibe:tabs.list class="w-56 shrink-0 flex flex-col gap-0.5 p-3 border-r border-border/60 bg-muted/40">
                     <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Akun</p>
                     <vibe:tabs.tab name="account">
                         <x-slot:icon>

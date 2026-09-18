@@ -19,6 +19,29 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
                 if (style.textContent !== parsed.css) {
                     style.textContent = parsed.css;
                 }
+                document.head.appendChild(style);
+            }
+            if (parsed && parsed.customHex) {
+                const root = document.documentElement;
+                const isDark = root.classList.contains('dark') || (!root.classList.contains('light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                const isDefaultSlate = (parsed.customHex.toLowerCase() === '#18181b');
+                const activePrimary = (isDefaultSlate && isDark) ? '#f9fafa' : parsed.customHex;
+                root.style.setProperty('--primary', activePrimary, 'important');
+                root.style.setProperty('--color-primary', activePrimary, 'important');
+                root.style.setProperty('--ring', activePrimary, 'important');
+                root.style.setProperty('--color-ring', activePrimary, 'important');
+                const isLight = (hex) => {
+                    let c = (hex || '').replace('#', '');
+                    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+                    if (c.length < 6) return true;
+                    const r = parseInt(c.substring(0, 2), 16) || 0;
+                    const g = parseInt(c.substring(2, 4), 16) || 0;
+                    const b = parseInt(c.substring(4, 6), 16) || 0;
+                    return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
+                };
+                const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
+                root.style.setProperty('--primary-foreground', fg, 'important');
+                root.style.setProperty('--color-primary-foreground', fg, 'important');
             }
         }
     } catch (e) {}
@@ -139,7 +162,31 @@ const ThemeManager = {
         delete config.customHeaderBg;
         delete config.customHeaderFg;
         delete config.customHeaderBorder;
+        delete config.navStyle;
+        delete config.navDensity;
+        delete config.navIndicator;
+        delete config.navCustomActiveBg;
+        delete config.navCustomActiveFg;
+        delete config.navCustomIndicator;
         this.saveConfig(config);
+
+        const root = document.documentElement;
+        root.style.removeProperty('--primary');
+        root.style.removeProperty('--color-primary');
+        root.style.removeProperty('--ring');
+        root.style.removeProperty('--color-ring');
+        root.style.removeProperty('--primary-foreground');
+        root.style.removeProperty('--color-primary-foreground');
+        root.style.removeProperty('--nav-active-bg');
+        root.style.removeProperty('--nav-active-fg');
+        root.style.removeProperty('--nav-hover-bg');
+        root.style.removeProperty('--nav-hover-fg');
+        root.style.removeProperty('--nav-indicator');
+        root.style.removeProperty('--color-nav-active-bg');
+        root.style.removeProperty('--color-nav-active-fg');
+        root.style.removeProperty('--color-nav-hover-bg');
+        root.style.removeProperty('--color-nav-hover-fg');
+        root.style.removeProperty('--color-nav-indicator');
     },
 
     setAnimation(animation) {
@@ -292,8 +339,8 @@ const ThemeManager = {
 
         // Terapkan penimpaan variabel CSS tema (seperti --primary, --ring, --radius) jika ada
         const overrideStyleId = `${VIBE_PREFIX}-theme-override`;
+        let style = document.getElementById(overrideStyleId);
         if (config.css) {
-            let style = document.getElementById(overrideStyleId);
             if (!style) {
                 style = document.createElement('style');
                 style.id = overrideStyleId;
@@ -303,11 +350,40 @@ const ThemeManager = {
             if (style.textContent !== config.css) {
                 style.textContent = config.css;
             }
+            document.head.appendChild(style);
         } else {
-            const style = document.getElementById(overrideStyleId);
             if (style) {
                 style.textContent = '';
             }
+        }
+
+        if (config.customHex) {
+            const isDark = root.classList.contains('dark') || (!root.classList.contains('light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            const isDefaultSlate = (config.customHex.toLowerCase() === '#18181b');
+            const activePrimary = (isDefaultSlate && isDark) ? '#f9fafa' : config.customHex;
+            root.style.setProperty('--primary', activePrimary, 'important');
+            root.style.setProperty('--color-primary', activePrimary, 'important');
+            root.style.setProperty('--ring', activePrimary, 'important');
+            root.style.setProperty('--color-ring', activePrimary, 'important');
+            const isLight = (hex) => {
+                let c = (hex || '').replace('#', '');
+                if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+                if (c.length < 6) return true;
+                const r = parseInt(c.substring(0, 2), 16) || 0;
+                const g = parseInt(c.substring(2, 4), 16) || 0;
+                const b = parseInt(c.substring(4, 6), 16) || 0;
+                return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
+            };
+            const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
+            root.style.setProperty('--primary-foreground', fg, 'important');
+            root.style.setProperty('--color-primary-foreground', fg, 'important');
+        } else {
+            root.style.removeProperty('--primary');
+            root.style.removeProperty('--color-primary');
+            root.style.removeProperty('--ring');
+            root.style.removeProperty('--color-ring');
+            root.style.removeProperty('--primary-foreground');
+            root.style.removeProperty('--color-primary-foreground');
         }
     }
 };

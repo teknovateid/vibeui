@@ -1,8 +1,8 @@
 <x-docs.layouts.sidebar>
     <vibe:seo title="Autentikasi Dua Faktor (2FA) — Vibe UI" description="Dokumentasi dan demo interaktif Autentikasi Dua Faktor (2FA TOTP, Authenticator App, Recovery Codes) di Vibe UI." schema="techarticle" :breadcrumbs="[
         ['name' => 'Home', 'url' => '/'],
-        ['name' => 'Docs', 'url' => '/docs'],
-        ['name' => 'Authentication', 'url' => route('docs.auth.installation')],
+        ['name' => 'Docs', 'url' => route('docs.index')],
+        ['name' => 'Authentication', 'url' => route('docs.auth.index')],
         ['name' => 'Two-Factor (2FA)', 'url' => route('docs.auth.two-factor')]
     ]" />
 
@@ -276,6 +276,24 @@
                     </vibe:button>
                 </div>
             </section>
+
+            {{-- Navigation Footer --}}
+            <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <a href="{{ route('docs.auth.idle') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Idle Timeout &amp; Session Lock</span>
+                    </div>
+                </a>
+
+                <a href="{{ route('docs.auth.passkey') }}" class="w-full sm:w-auto inline-flex items-center justify-between sm:justify-end gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group text-right">
+                    <div>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Selanjutnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Passkey (WebAuthn) &rarr;</span>
+                    </div>
+                </a>
+            </div>
 
         </div>
 
