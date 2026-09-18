@@ -2,6 +2,17 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.3] - 2026-09-18
+
+### 🚀 Features
+- feat: add rate limiting and security enhancements to authentication workflows (47524a3)
+
+### ⚡ Performance & Refactoring
+- refactor: replace settings template stub with modular Livewire settings components (ea51fa2)
+- refactor: improve switch component value handling and update appearance settings UI and theme logic (1dfda34)
+- refactor: migrate settings module to Livewire components and add feature tests (38a9468)
+
+
 ## [0.2.2] - 2026-09-17
 
 ### 🧰 Maintenance & Documentation
