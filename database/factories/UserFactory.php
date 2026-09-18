@@ -26,8 +26,8 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->unique()->phoneNumber(),
+            'email' => Str::random(5) . '_' . fake()->unique()->safeEmail(),
+            'phone' => fake()->unique()->numerify('08##########'),
             'username' => fake()->unique()->userName() . '_' . Str::random(5),
             'position' => fake()->jobTitle(),
             'email_verified_at' => now(),

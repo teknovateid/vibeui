@@ -69,15 +69,14 @@ class Login extends Component
             Auth::logout();
             RateLimiter::clear($this->throttleKey($this->login));
 
-            session()->put('auth.2fa.user_id', $user->getAuthIdentifier());
-            session()->put('auth.2fa.remember', $this->remember);
+            $this->initTwoFactorSession($user->getAuthIdentifier(), $this->remember);
 
             return redirect()->route('two-factor.challenge');
         }
 
         RateLimiter::clear($this->throttleKey($this->login));
 
-        session()->regenerate();
+        $this->regenerateAuthSession();
 
         return redirect()->intended($this->redirectAfterLoginUrl());
     }

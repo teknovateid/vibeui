@@ -35,6 +35,17 @@ class VerifyEmail extends Component
             return redirect()->intended($this->redirectAfterLoginUrl());
         }
 
+        $throttleKey = 'verify-email|' . ($user?->id ?? request()->ip());
+
+        if (\Illuminate\Support\Facades\RateLimiter::tooManyAttempts($throttleKey, 3)) {
+            $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($throttleKey);
+            session()->flash('status', 'throttle:' . ceil($seconds / 60));
+
+            return;
+        }
+
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 600);
+
         if ($user && method_exists($user, 'sendEmailVerificationNotification')) {
             $user->sendEmailVerificationNotification();
         }
@@ -48,9 +59,7 @@ class VerifyEmail extends Component
     public function logout()
     {
         Auth::guard('web')->logout();
-
-        session()->invalidate();
-        session()->regenerateToken();
+        $this->invalidateAuthSession();
 
         return redirect()->route('login');
     }

@@ -67,13 +67,25 @@ class Profile extends Component
             return;
         }
 
-        $user->update([
+        $emailChanged = $user->email !== $this->email;
+
+        $user->fill([
             'name' => $this->name,
             'email' => $this->email,
             'username' => $this->username ?: null,
             'phone' => $this->phone ?: null,
             'position' => $this->position ?: null,
         ]);
+
+        if ($emailChanged && $user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail) {
+            $user->email_verified_at = null;
+        }
+
+        $user->save();
+
+        if ($emailChanged && $user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail) {
+            $user->sendEmailVerificationNotification();
+        }
 
         $this->dispatch('toast', [
             'message' => __('vibe/settings.profile.saved_toast'),

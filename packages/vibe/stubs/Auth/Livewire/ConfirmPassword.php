@@ -4,6 +4,8 @@ namespace App\Livewire\Auth;
 
 use App\Livewire\Auth\Concerns\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
@@ -40,26 +42,73 @@ class ConfirmPassword extends Component
     {
         $this->validate();
 
+        $this->ensureIsNotRateLimited();
+        $throttleKey = Str::transliterate('confirm-password|' . (Auth::id() ?? 'guest') . '|' . request()->ip());
+
         if (! Auth::guard('web')->validate([
             'email' => Auth::user()?->email,
             'password' => $this->password,
         ])) {
+            RateLimiter::hit($throttleKey, 300);
+
             throw ValidationException::withMessages([
                 'password' => __('auth/errors.password'),
             ]);
         }
 
+        RateLimiter::clear($throttleKey);
+
         session()->put('auth.password_confirmed_at', time());
         session()->forget('auth.session_locked');
         session()->put('auth.last_activity_time', time());
 
-        $targetRoute = session()->pull('auth.target_route') ?: session('url.intended');
-        if ($targetRoute) {
-            session()->put('auth.confirmed_route', $targetRoute);
-            session()->put('auth.is_single_page_confirm', true);
+        $rawTarget = session()->pull('auth.target_route') ?: session('url.intended');
+        $fallback = $this->redirectAfterLoginUrl();
+
+        if ($rawTarget && is_string($rawTarget)) {
+            $rawTarget = trim($rawTarget);
+            $appHost = parse_url(config('app.url'), PHP_URL_HOST);
+            $requestHost = request()->getHost();
+            $targetHost = parse_url($rawTarget, PHP_URL_HOST);
+
+            $isRouteName = \Illuminate\Support\Facades\Route::has($rawTarget);
+            $isSafe = $isRouteName
+                || (str_starts_with($rawTarget, '/') && ! str_starts_with($rawTarget, '//'))
+                || ($targetHost && in_array($targetHost, array_filter([$appHost, $requestHost, 'localhost', '127.0.0.1']), true));
+
+            if ($isSafe) {
+                session()->put('auth.confirmed_route', $rawTarget);
+                session()->put('auth.is_single_page_confirm', true);
+                session()->put('url.intended', $isRouteName ? route($rawTarget) : $rawTarget);
+            } else {
+                session()->put('auth.confirmed_route', $fallback);
+                session()->put('auth.is_single_page_confirm', true);
+                session()->put('url.intended', $fallback);
+            }
         }
 
         return redirect()->intended($this->redirectAfterLoginUrl());
+    }
+
+    /**
+     * Pastikan request konfirmasi tidak terkena rate limit.
+     */
+    protected function ensureIsNotRateLimited(): void
+    {
+        $key = Str::transliterate('confirm-password|' . (Auth::id() ?? 'guest') . '|' . request()->ip());
+
+        if (! RateLimiter::tooManyAttempts($key, 5)) {
+            return;
+        }
+
+        $seconds = RateLimiter::availableIn($key);
+
+        throw ValidationException::withMessages([
+            'password' => trans('auth/errors.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
     }
 
     /**
@@ -68,8 +117,7 @@ class ConfirmPassword extends Component
     public function logout()
     {
         Auth::guard('web')->logout();
-        session()->invalidate();
-        session()->regenerateToken();
+        $this->invalidateAuthSession();
 
         return redirect('/');
     }

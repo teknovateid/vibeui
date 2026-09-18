@@ -38,7 +38,12 @@ class ForgotPassword extends Component
      */
     public function sendResetLink()
     {
+        $this->ensureIsNotRateLimited();
+
         $this->validate();
+
+        $throttleKey = 'forgot-password|' . request()->ip();
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 900);
 
         $status = Password::sendResetLink(['email' => $this->email]);
 
@@ -51,6 +56,27 @@ class ForgotPassword extends Component
 
         throw ValidationException::withMessages([
             'email' => [trans($status)],
+        ]);
+    }
+
+    /**
+     * Pastikan permintaan reset password tidak melebihi batas percobaan.
+     */
+    protected function ensureIsNotRateLimited(): void
+    {
+        $key = 'forgot-password|' . request()->ip();
+
+        if (! \Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 5)) {
+            return;
+        }
+
+        $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+
+        throw ValidationException::withMessages([
+            'email' => trans('auth/errors.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
         ]);
     }
 

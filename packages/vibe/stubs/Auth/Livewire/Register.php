@@ -54,7 +54,12 @@ class Register extends Component
      */
     public function register()
     {
+        $this->ensureIsNotRateLimited();
+
         $validated = $this->validate();
+
+        $throttleKey = 'register|' . request()->ip();
+        \Illuminate\Support\Facades\RateLimiter::hit($throttleKey, 3600);
 
         $user = User::create([
             'name' => $validated['name'],
@@ -67,8 +72,30 @@ class Register extends Component
         event(new Registered($user));
 
         Auth::login($user);
+        $this->regenerateAuthSession();
 
         return redirect()->intended($this->redirectAfterLoginUrl());
+    }
+
+    /**
+     * Pastikan registrasi tidak melebihi batas percobaan.
+     */
+    protected function ensureIsNotRateLimited(): void
+    {
+        $key = 'register|' . request()->ip();
+
+        if (! \Illuminate\Support\Facades\RateLimiter::tooManyAttempts($key, 5)) {
+            return;
+        }
+
+        $seconds = \Illuminate\Support\Facades\RateLimiter::availableIn($key);
+
+        throw \Illuminate\Validation\ValidationException::withMessages([
+            'email' => trans('auth/errors.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
     }
 
     public function render()

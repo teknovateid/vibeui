@@ -33,8 +33,6 @@ return [
 
     'allowed_origins' => array_values(array_unique(array_filter([
         config('app.url'),
-        isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : null,
-        isset($_SERVER['HTTP_HOST']) ? ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . $_SERVER['HTTP_HOST']) : null,
         'http://localhost:8000',
         'http://127.0.0.1:8000',
         'http://localhost:8001',

@@ -94,6 +94,23 @@ function vibeSyncPlugin() {
             destDir: 'packages/vibe/stubs/Auth/Livewire/Settings',
             label: 'Settings Livewire Classes',
         },
+        {
+            srcPattern: '/app/Livewire/Auth/Concerns/',
+            destDir: 'packages/vibe/stubs/Auth/Concerns',
+            label: 'Auth Concerns',
+        },
+        {
+            srcPattern: '/app/Livewire/Auth/',
+            destDir: 'packages/vibe/stubs/Auth/Livewire',
+            label: 'Auth Livewire Classes',
+            ignore: ['Concerns'],
+        },
+        {
+            srcPattern: '/routes/',
+            destDir: 'packages/vibe/stubs/Auth/routes',
+            label: 'Auth Routes',
+            ignore: ['console.php', 'docs.php', 'web.php'],
+        },
     ];
 
     return {

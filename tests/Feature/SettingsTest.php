@@ -66,6 +66,8 @@ test('profile component updates user details in database', function () {
 });
 
 test('password component validates password confirmation correctly', function () {
+    session(['auth.password_confirmed_at' => time()]);
+
     Livewire::actingAs($this->user)
         ->test(Password::class)
         ->set('password', 'newpassword123')
@@ -79,6 +81,8 @@ test('password component validates password confirmation correctly', function ()
 });
 
 test('password component updates password in database when valid', function () {
+    session(['auth.password_confirmed_at' => time()]);
+
     Livewire::actingAs($this->user)
         ->test(Password::class)
         ->set('password', 'newpassword123')

@@ -6,6 +6,8 @@ use App\Livewire\Auth\Concerns\AuthenticatesUsers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 use Teknovate\VibeUi\Vibe;
@@ -254,6 +256,9 @@ class TwoFactorChallenge extends Component
             return redirect()->route('login');
         }
 
+        $this->ensureIsNotRateLimited($user);
+        $throttleKey = $this->twoFactorThrottleKey($user);
+
         $twoFactor = Vibe::twoFactor();
 
         // 1. Mode Kode Pemulihan Darurat
@@ -269,10 +274,14 @@ class TwoFactorChallenge extends Component
                 ->first();
 
             if (! $authenticator || ! $authenticator->verifyRecoveryCode($this->recovery_code)) {
+                RateLimiter::hit($throttleKey, 300);
+
                 throw ValidationException::withMessages([
                     'recovery_code' => __('auth/two_factor.invalid_recovery_code'),
                 ]);
             }
+
+            RateLimiter::clear($throttleKey);
 
             return $this->finishLogin($user);
         }
@@ -294,11 +303,14 @@ class TwoFactorChallenge extends Component
 
             $valid = $twoFactor->verifyOtp($authenticator->secret, $this->code);
             if (! $valid) {
+                RateLimiter::hit($throttleKey, 300);
+
                 throw ValidationException::withMessages([
                     'code' => __('auth/two_factor.invalid_totp_code'),
                 ]);
             }
 
+            RateLimiter::clear($throttleKey);
             $authenticator->touchUsage();
 
             return $this->finishLogin($user);
@@ -308,10 +320,14 @@ class TwoFactorChallenge extends Component
         if (in_array($this->selectedMethod, ['email', 'whatsapp', 'sms'])) {
             $valid = $twoFactor->verifyOtpForUser($user, $this->selectedMethod, $this->code);
             if (! $valid) {
+                RateLimiter::hit($throttleKey, 300);
+
                 throw ValidationException::withMessages([
                     'code' => __('auth/two_factor.invalid_code'),
                 ]);
             }
+
+            RateLimiter::clear($throttleKey);
 
             $authenticator = $user->getTwoFactorAuthenticator($this->selectedMethod);
             if ($authenticator) {
@@ -320,6 +336,37 @@ class TwoFactorChallenge extends Component
 
             return $this->finishLogin($user);
         }
+    }
+
+    /**
+     * Pastikan request verifikasi 2FA tidak terkena pembatasan laju (rate limit).
+     */
+    protected function ensureIsNotRateLimited($user): void
+    {
+        $key = $this->twoFactorThrottleKey($user);
+
+        if (! RateLimiter::tooManyAttempts($key, 5)) {
+            return;
+        }
+
+        $seconds = RateLimiter::availableIn($key);
+
+        throw ValidationException::withMessages([
+            $this->selectedMethod === 'recovery' ? 'recovery_code' : 'code' => trans('auth/errors.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
+    }
+
+    /**
+     * Dapatkan throttle key untuk rate limiting verifikasi 2FA.
+     */
+    protected function twoFactorThrottleKey($user): string
+    {
+        $userId = is_object($user) ? $user->getAuthIdentifier() : ($user ?? 'guest');
+
+        return Str::transliterate('2fa-challenge|' . $userId . '|' . request()->ip());
     }
 
     /**
@@ -345,9 +392,7 @@ class TwoFactorChallenge extends Component
         $remember = (bool) session('auth.2fa.remember', false);
 
         Auth::login($user, $remember);
-
-        session()->forget(['auth.2fa.user_id', 'auth.2fa.remember']);
-        session()->regenerate();
+        $this->regenerateAuthSession();
 
         return redirect()->intended($this->redirectAfterLoginUrl());
     }
