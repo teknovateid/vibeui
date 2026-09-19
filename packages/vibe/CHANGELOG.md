@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.5] - 2026-09-19
+
+### ⚡ Performance & Refactoring
+- refactor: dynamically publish stubs from directories in Auth and Layout commands (6ed7567)
+
+
 ## [0.2.4] - 2026-09-18
 
 ### 🐛 Bug Fixes
