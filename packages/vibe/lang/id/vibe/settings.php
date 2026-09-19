@@ -93,6 +93,7 @@ return [
         'confirm_password' => 'Konfirmasi Kata Sandi Baru',
         'confirm_password_placeholder' => 'Ulangi kata sandi baru',
         'update_password_btn' => 'Perbarui Kata Sandi',
+        'updating_password' => 'Memperbarui...',
         'password_updated_toast' => 'Kata sandi berhasil diperbarui.',
         'password_updated_title' => 'Diperbarui',
         'passkey_title' => 'Passkey (WebAuthn)',

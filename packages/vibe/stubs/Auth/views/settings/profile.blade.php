@@ -111,12 +111,12 @@
 
         {{-- Save Action --}}
         <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-            <vibe:button type="submit" variant="primary" size="sm" class="cursor-pointer" wire:loading.attr="disabled">
+            <vibe:button type="submit" variant="primary" size="sm" class="cursor-pointer" wire:loading.attr="disabled" wire:target="updateProfile">
                 <span wire:loading.remove wire:target="updateProfile">
                     {{ __('vibe/settings.profile.save_changes') }}
                 </span>
-                <span wire:loading wire:target="updateProfile" class="inline-flex items-center gap-1.5">
-                    <svg class="size-3.5 animate-spin" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span wire:loading.inline-flex wire:target="updateProfile" class="inline-flex items-center justify-center gap-1.5 leading-none">
+                    <svg class="size-3.5 animate-spin shrink-0 text-current" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                     <span>Menyimpan ke database...</span>
                 </span>
             </vibe:button>

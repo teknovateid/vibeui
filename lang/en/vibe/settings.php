@@ -93,6 +93,7 @@ return [
         'confirm_password' => 'Confirm New Password',
         'confirm_password_placeholder' => 'Repeat new password',
         'update_password_btn' => 'Update Password',
+        'updating_password' => 'Updating...',
         'password_updated_toast' => 'Password updated successfully.',
         'password_updated_title' => 'Updated',
         'passkey_title' => 'Passkey (WebAuthn)',
