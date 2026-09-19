@@ -5,14 +5,14 @@
     'size' => 'md',        // xs, sm, md, lg, xl, icon-xs, icon-sm, icon-md, icon-lg
     'type' => 'button',
     'href' => null,
-    'loading' => false,
+    'loading' => false,    // boolean, string loading text, or auto
     'disabled' => false,
     'pulse' => false,
     'animation' => false,
 ])
 
 @php
-    $baseClasses = 'inline-flex items-center justify-center font-medium select-none whitespace-nowrap cursor-pointer transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50';
+    $baseClasses = 'group/vbtn relative inline-flex items-center justify-center font-medium select-none whitespace-nowrap cursor-pointer transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[loading=true]:pointer-events-none data-[loading=true]:opacity-70';
 
     $variantClasses = match ($variant) {
         'tab', 'plain', 'unstyled' => '',
@@ -57,9 +57,37 @@
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$animationClass}");
     $hasCustomXData = $attributes->has('x-data');
-    $isDisabled = $disabled || $loading;
     $isIcon = str_starts_with($size, 'icon-');
     $hasSlotContent = $slot->isNotEmpty() && trim($slot) !== '';
+
+    $hasLoadingText = is_string($loading) && $loading !== '' && $loading !== 'auto' && $loading !== '1';
+    $loadingText = $hasLoadingText ? $loading : null;
+
+    $hasWireClick = $attributes->has('wire:click');
+    $hasWireTarget = $attributes->has('wire:target');
+    $hasWireSubmit = $attributes->has('wire:submit');
+    $isLivewireTarget = $hasWireClick || $hasWireTarget || $hasWireSubmit;
+
+    $isLivewireEvent = $isLivewireTarget && ($loading !== false || $attributes->has('loading'));
+    $isStaticLoading = ! $isLivewireEvent && (bool) $loading;
+    $isDisabled = $disabled || $isStaticLoading;
+
+    $wireTarget = $attributes->get('wire:target')
+        ?? ($hasWireClick ? preg_replace('/\(.*$/', '', (string) $attributes->get('wire:click')) : null);
+
+    $alpineLoading = $attributes->get('x-bind:loading')
+        ?? $attributes->get('::loading')
+        ?? $attributes->get(':loading')
+        ?? $attributes->get('x-loading');
+
+    $alpineDataLoading = $attributes->get(':data-loading')
+        ?? $attributes->get('x-bind:data-loading');
+
+    $alpineExpr = $alpineLoading ?? $alpineDataLoading;
+
+    if ($alpineLoading) {
+        $attributes = $attributes->except([':loading', '::loading', 'x-bind:loading', 'x-loading']);
+    }
 
     $spinnerSize = match ($size) {
         'xs', 'icon-xs' => 'size-3.5',
@@ -70,7 +98,7 @@
         default => 'size-3.5',
     };
 
-    $spinnerMargin = (!$isIcon && $hasSlotContent) ? '-ml-0.5 mr-2' : '';
+    $spinnerMargin = (! $isIcon && $hasSlotContent && ! $hasLoadingText) ? '-ml-0.5 mr-1.5' : '';
     $spinnerClasses = trim("animate-spin shrink-0 text-current {$spinnerSize} {$spinnerMargin}");
 @endphp
 
@@ -80,13 +108,100 @@
         href="{{ $isDisabled ? '#' : $href }}" 
         @if(!$hasCustomXData) x-data @endif 
         @if($isDisabled) aria-disabled="true" tabindex="-1" @endif
+        data-loading="{{ $isStaticLoading ? 'true' : 'false' }}"
+        @if($isStaticLoading) aria-busy="true" @endif
+        @if($alpineExpr)
+            :data-loading="Boolean({{ $alpineExpr }}) ? 'true' : 'false'"
+            :aria-busy="Boolean({{ $alpineExpr }})"
+            :aria-disabled="Boolean({{ $alpineExpr }})"
+        @endif
+        @if($isLivewireEvent)
+            wire:loading.attr="disabled"
+            @if($wireTarget) wire:target="{{ $wireTarget }}" @endif
+        @endif
         {{ $attributes->twMerge(['class' => $compiledClasses]) }}
-    >@if($loading)<svg class="{{ $spinnerClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>@endif@if(!$isIcon || !$loading){{ $slot }}@endif</a>
+    >
+        @if($hasLoadingText)
+            <span 
+                class="inline-flex items-center justify-center gap-1.5 group-data-[loading=true]/vbtn:hidden"
+                @if($isLivewireEvent) wire:loading.remove @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+            >
+                {{ $slot }}
+            </span>
+            <span 
+                class="hidden items-center justify-center gap-1.5 leading-none group-data-[loading=true]/vbtn:inline-flex"
+                @if($isLivewireEvent) wire:loading.inline-flex @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+            >
+                <svg class="{{ $spinnerClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span class="vibe-btn-loading-text">{{ $loadingText }}</span>
+            </span>
+        @else
+            <svg 
+                class="hidden {{ $spinnerClasses }} group-data-[loading=true]/vbtn:inline-flex" 
+                @if($isLivewireEvent) wire:loading.inline-flex @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24"
+            ><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            @if($isIcon)
+                <span class="group-data-[loading=true]/vbtn:hidden inline-flex items-center justify-center">
+                    {{ $slot }}
+                </span>
+            @else
+                {{ $slot }}
+            @endif
+        @endif
+    </a>
 @else
     <button 
         type="{{ $type }}" 
         @if($isDisabled) disabled @endif
         @if(!$hasCustomXData) x-data @endif 
+        data-loading="{{ $isStaticLoading ? 'true' : 'false' }}"
+        @if($isStaticLoading) aria-busy="true" @endif
+        @if($alpineExpr)
+            :data-loading="Boolean({{ $alpineExpr }}) ? 'true' : 'false'"
+            :aria-busy="Boolean({{ $alpineExpr }})"
+            @if(! $attributes->has(':disabled') && ! $attributes->has('x-bind:disabled'))
+                :disabled="Boolean({{ $alpineExpr }})"
+            @endif
+        @endif
+        @if($isLivewireEvent)
+            wire:loading.attr="disabled"
+            @if($wireTarget) wire:target="{{ $wireTarget }}" @endif
+        @endif
         {{ $attributes->twMerge(['class' => $compiledClasses]) }}
-    >@if($loading)<svg class="{{ $spinnerClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>@endif@if(!$isIcon || !$loading){{ $slot }}@endif</button>
+    >
+        @if($hasLoadingText)
+            <span 
+                class="inline-flex items-center justify-center gap-1.5 group-data-[loading=true]/vbtn:hidden"
+                @if($isLivewireEvent) wire:loading.remove @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+            >
+                {{ $slot }}
+            </span>
+            <span 
+                class="hidden items-center justify-center gap-1.5 leading-none group-data-[loading=true]/vbtn:inline-flex"
+                @if($isLivewireEvent) wire:loading.inline-flex @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+            >
+                <svg class="{{ $spinnerClasses }}" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <span class="vibe-btn-loading-text">{{ $loadingText }}</span>
+            </span>
+        @else
+            <svg 
+                class="hidden {{ $spinnerClasses }} group-data-[loading=true]/vbtn:inline-flex" 
+                @if($isLivewireEvent) wire:loading.inline-flex @if($wireTarget) wire:target="{{ $wireTarget }}" @endif @endif
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24"
+            ><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+            @if($isIcon)
+                <span class="group-data-[loading=true]/vbtn:hidden inline-flex items-center justify-center">
+                    {{ $slot }}
+                </span>
+            @else
+                {{ $slot }}
+            @endif
+        @endif
+    </button>
 @endif
+
