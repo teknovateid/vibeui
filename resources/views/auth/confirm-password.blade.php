@@ -64,15 +64,14 @@
 
         {{-- Submit Button --}}
         <div class="pt-2">
-            <vibe:button type="submit" variant="primary" class="w-full justify-center flex shadow-xs" wire:loading.attr="disabled" wire:target="confirmPassword">
-                <span wire:loading.remove wire:target="confirmPassword">{{ __('auth/actions.confirm') }}</span>
-                <span wire:loading.inline-flex wire:target="confirmPassword" class="inline-flex items-center justify-center gap-2">
-                    <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <span>{{ __('auth/actions.verifying') }}</span>
-                </span>
+            <vibe:button 
+                type="submit" 
+                variant="primary" 
+                class="w-full justify-center shadow-xs" 
+                wire:target="confirmPassword" 
+                :loading="__('auth/actions.verifying')"
+            >
+                {{ __('auth/actions.confirm') }}
             </vibe:button>
         </div>
     </form>
@@ -80,13 +79,19 @@
     {{-- Logout Option --}}
     <div class="pt-3 flex items-center justify-between border-t border-border text-xs">
         <span class="text-muted-foreground">{{ __('auth/messages.not_your_account') }}</span>
-        <button type="button" wire:click="logout" class="inline-flex items-center gap-1.5 font-medium text-destructive hover:text-destructive/80 transition-colors cursor-pointer py-1 px-2 rounded-md hover:bg-destructive/10">
+        <vibe:button 
+            type="button" 
+            variant="ghost" 
+            size="xs" 
+            wire:click="logout" 
+            class="text-destructive hover:bg-destructive/10 hover:text-destructive gap-1.5 font-medium cursor-pointer"
+        >
             <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
                 <polyline points="16 17 21 12 16 7"/>
                 <line x1="21" x2="9" y1="12" y2="12"/>
             </svg>
             <span>{{ __('auth/actions.logout') }}</span>
-        </button>
+        </vibe:button>
     </div>
 </div>

@@ -64,11 +64,15 @@ return [
 
     // Section 6: Loading State
     'loading' => [
-        'title' => 'Status Loading',
-        'desc' => 'Gunakan prop boolean <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> untuk menampilkan animasi spinner otomatis di sisi kiri teks dan secara langsung menonaktifkan interaksi klik pengguna.',
-        'preview_title' => 'Status Loading Spinner',
+        'title' => 'Status Loading (Realtime Alpine & Livewire)',
+        'desc' => 'Komponen Button mendukung indikator loading spinner yang sinkron secara realtime baik melalui prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> (boolean / custom text), binding reaktif Alpine.js (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">::loading="isBusy"</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">x-loading="isBusy"</code>), maupun Livewire auto-wiring.',
+        'preview_title' => 'Status Loading Spinner & Reaktif',
         'saving' => 'Menyimpan Data...',
         'deleting' => 'Menghapus...',
+        'alpine_demo_btn' => 'Klik untuk Simulasi Loading (2 Detik)',
+        'alpine_demo_busy' => 'Sedang Memproses Permintaan...',
+        'custom_text_btn' => 'Simpan Perubahan',
+        'custom_text_loading' => 'Menyimpan ke Server...',
     ],
 
     // Section 7: Animation & Attention
@@ -101,10 +105,11 @@ return [
 
     // Section 9: Livewire Integration
     'livewire' => [
-        'title' => 'Integrasi Livewire',
-        'desc' => 'Komponen Button mendukung seluruh direktif aksi Livewire secara mulus seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:click</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:loading.attr="disabled"</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:target</code>.',
-        'preview_title' => 'Aksi Livewire dengan Target Loading',
+        'title' => 'Integrasi Livewire (Auto-Wiring Loading)',
+        'desc' => 'Komponen Button secara otomatis mendeteksi aksi Livewire seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:click</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:target</code> saat prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> dicantumkan. Spinner dan status disabled akan aktif otomatis selama request berlangsung tanpa perlu menulis direktif tambahan secara manual.',
+        'preview_title' => 'Aksi Livewire dengan Target Loading Otomatis',
         'sync' => 'Sinkronisasi Aksi Livewire',
+        'auto_loading_desc' => 'Cukup tambahkan atribut <code>loading</code> pada tombol dengan <code>wire:click</code>:',
     ],
 
     // Section 10: Button Group

@@ -265,26 +265,51 @@
 
                 <vibe:preview :title="__('docs/button.loading.preview_title')">
                     <vibe:preview.code>
+                        {{-- 1. Static Boolean Loading --}}
                         <vibe:button loading variant="primary">
                             {{ __('docs/button.loading.saving') }}
                         </vibe:button>
 
-                        <vibe:button loading variant="outline">
-                            {{ __('docs/button.loading.deleting') }}
+                        {{-- 2. Custom Loading Text (String) --}}
+                        <vibe:button loading="{{ __('docs/button.loading.custom_text_loading') }}" variant="outline">
+                            {{ __('docs/button.loading.custom_text_btn') }}
                         </vibe:button>
 
+                        {{-- 3. Icon-only Loading --}}
                         <vibe:button loading variant="secondary" size="icon-md" aria-label="Loading action">
                         </vibe:button>
+
+                        {{-- 4. Interactive Realtime with Alpine.js --}}
+                        <div x-data="{ isProcessing: false }">
+                            <vibe:button 
+                                ::loading="isProcessing" 
+                                loading="{{ __('docs/button.loading.alpine_demo_busy') }}"
+                                @click="isProcessing = true; setTimeout(() => isProcessing = false, 2000)" 
+                                variant="primary"
+                            >
+                                {{ __('docs/button.loading.alpine_demo_btn') }}
+                            </vibe:button>
+                        </div>
                     </vibe:preview.code>
-                    <div class="flex flex-wrap items-center gap-3 justify-center">
+                    <div class="flex flex-col sm:flex-row flex-wrap items-center gap-3 justify-center">
                         <vibe:button loading variant="primary">
                             {{ __('docs/button.loading.saving') }}
                         </vibe:button>
-                        <vibe:button loading variant="outline">
-                            {{ __('docs/button.loading.deleting') }}
+                        <vibe:button loading="{{ __('docs/button.loading.custom_text_loading') }}" variant="outline">
+                            {{ __('docs/button.loading.custom_text_btn') }}
                         </vibe:button>
                         <vibe:button loading variant="secondary" size="icon-md" aria-label="Loading action">
                         </vibe:button>
+                        <div x-data="{ isProcessing: false }">
+                            <vibe:button 
+                                ::loading="isProcessing" 
+                                loading="{{ __('docs/button.loading.alpine_demo_busy') }}"
+                                @click="isProcessing = true; setTimeout(() => isProcessing = false, 2000)" 
+                                variant="accent"
+                            >
+                                {{ __('docs/button.loading.alpine_demo_btn') }}
+                            </vibe:button>
+                        </div>
                     </div>
                 </vibe:preview>
             </section>
@@ -406,14 +431,22 @@
 
                 <vibe:preview :title="__('docs/button.livewire.preview_title')">
                     <vibe:preview.code>
-                        {{-- In Blade template --}}
-                        <vibe:button wire:click="save" wire:loading.attr="disabled" wire:target="save" variant="primary">
+                        {{-- 1. Auto-wired loading on click --}}
+                        <vibe:button wire:click="save" loading variant="primary">
                             {{ __('docs/button.livewire.sync') }}
+                        </vibe:button>
+
+                        {{-- 2. With specific target & custom loading text --}}
+                        <vibe:button type="submit" wire:target="updatePassword" loading="Memperbarui..." variant="secondary">
+                            Perbarui Sandi
                         </vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
                         <vibe:button variant="primary">
                             {{ __('docs/button.livewire.sync') }}
+                        </vibe:button>
+                        <vibe:button variant="secondary">
+                            Perbarui Sandi
                         </vibe:button>
                     </div>
                 </vibe:preview>
@@ -638,7 +671,7 @@
                                 ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'],
                                 ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'],
                                 ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'],
-                                ['loading', 'bool', 'false', 'Menampilkan animasi spinner loading bawaan dan menonaktifkan klik.'],
+                                ['loading', 'bool|string', 'false', 'Menampilkan animasi spinner loading bawaan. Menerima boolean, teks string loading (misal: "Menyimpan..."), atau binding ekspresi Alpine (::loading="expr") & Livewire.'],
                                 ['disabled', 'bool', 'false', 'Menonaktifkan tombol serta menerapkan pengurangan opasitas.'],
                                 ['pulse', 'bool', 'false', 'Menambahkan efek denyut cincin bercahaya berkala (.animate-vibe-pulse) untuk tombol CTA.'],
                                 ['animation', "'pulse'|'shake'|'pop'|'wobble'|false", 'false', 'Efek animasi visual pada tombol. Default: false.'],

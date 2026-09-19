@@ -64,11 +64,15 @@ return [
 
     // Section 6: Loading State
     'loading' => [
-        'title' => 'Loading State',
-        'desc' => 'Use the boolean prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> to display an automated spinner animation next to button text and immediately disable user click interactions.',
-        'preview_title' => 'Loading Spinner State',
+        'title' => 'Loading State (Realtime Alpine & Livewire)',
+        'desc' => 'The Button component supports responsive realtime loading spinners via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> prop (boolean or custom text), reactive Alpine.js bindings (<code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">::loading="isBusy"</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">x-loading="isBusy"</code>), and native Livewire auto-wiring.',
+        'preview_title' => 'Loading Spinner & Reactive State',
         'saving' => 'Saving Data...',
         'deleting' => 'Deleting...',
+        'alpine_demo_btn' => 'Click for Loading Simulation (2s)',
+        'alpine_demo_busy' => 'Processing Request...',
+        'custom_text_btn' => 'Save Changes',
+        'custom_text_loading' => 'Saving to Server...',
     ],
 
     // Section 7: Animation & Attention
@@ -101,10 +105,11 @@ return [
 
     // Section 9: Livewire Integration
     'livewire' => [
-        'title' => 'Livewire Integration',
-        'desc' => 'The Button component supports all Livewire action directives seamlessly such as <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:click</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:loading.attr="disabled"</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:target</code>.',
-        'preview_title' => 'Livewire Action with Target Loading',
+        'title' => 'Livewire Integration (Auto-Wiring Loading)',
+        'desc' => 'The Button component automatically detects Livewire actions like <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:click</code> or <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">wire:target</code> when the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">loading</code> prop is present. The spinner and disabled state engage automatically during requests without needing manual boilerplate.',
+        'preview_title' => 'Livewire Action with Auto-Loading Target',
         'sync' => 'Sync Livewire Action',
+        'auto_loading_desc' => 'Simply add the <code>loading</code> attribute to your button with <code>wire:click</code>:',
     ],
 
     // Section 10: Button Group
