@@ -115,13 +115,15 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
         $pages = [
             'index' => 'pages/index.blade.php',
-            'settings.account' => 'settings/account.blade.php',
-            'settings.appearance' => 'settings/appearance.blade.php',
-            'settings.security' => 'settings/security.blade.php',
-            'settings.login-history' => 'settings/login-history.blade.php',
-            'settings.notifications' => 'settings/notifications.blade.php',
-            'settings.tabs' => 'settings/tabs.blade.php',
         ];
+
+        $settingsTemplatesDir = __DIR__.'/../../stubs/Templates/settings';
+        if (File::isDirectory($settingsTemplatesDir)) {
+            foreach (File::files($settingsTemplatesDir) as $file) {
+                $name = basename($file->getFilename(), '.blade.php');
+                $pages["settings.{$name}"] = "settings/{$file->getFilename()}";
+            }
+        }
 
         foreach ($pages as $component => $templatePath) {
             $templateFile = __DIR__."/../../stubs/Templates/{$templatePath}";
@@ -161,6 +163,30 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             if (File::exists($srcLang) && ! File::exists($destLang)) {
                 File::ensureDirectoryExists(dirname($destLang));
                 File::copy($srcLang, $destLang);
+            }
+        }
+
+        // Ensure settings Livewire components are published dynamically if not already present
+        $settingsLivewireDir = __DIR__.'/../../stubs/Auth/Livewire/Settings';
+        if (File::isDirectory($settingsLivewireDir)) {
+            File::ensureDirectoryExists(app_path('Livewire/Settings'));
+            foreach (File::files($settingsLivewireDir) as $file) {
+                $destComponent = app_path("Livewire/Settings/{$file->getFilename()}");
+                if (! File::exists($destComponent)) {
+                    File::copy($file->getPathname(), $destComponent);
+                }
+            }
+        }
+
+        // Ensure settings Livewire views are published dynamically if not already present
+        $settingsViewsDir = __DIR__.'/../../stubs/Auth/views/settings';
+        if (File::isDirectory($settingsViewsDir)) {
+            File::ensureDirectoryExists(resource_path('views/livewire/settings'));
+            foreach (File::files($settingsViewsDir) as $file) {
+                $destView = resource_path("views/livewire/settings/{$file->getFilename()}");
+                if (! File::exists($destView)) {
+                    File::copy($file->getPathname(), $destView);
+                }
             }
         }
 
