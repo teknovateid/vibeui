@@ -65,110 +65,89 @@ class AuthCommand extends Command
 
         $force = (bool) $this->option('force');
 
-        // 1. Publish Auth Layouts (card, simple, split)
+        // 1. Publish Auth Layouts
         $this->components->task('Publishing Auth Layouts', function () use ($force) {
-            $layouts = ['card.blade.php', 'simple.blade.php', 'split.blade.php'];
             $destDir = resource_path('views/auth/layouts');
             File::ensureDirectoryExists($destDir);
 
-            foreach ($layouts as $layout) {
-                $src = resource_path("views/auth/layouts/{$layout}");
-                if (! File::exists($src)) {
-                    $src = __DIR__."/../../stubs/Auth/layouts/{$layout}";
-                }
-                $dest = "{$destDir}/{$layout}";
-
-                if ($force || ! File::exists($dest)) {
-                    File::copy($src, $dest);
+            $layoutsDir = __DIR__.'/../../stubs/Auth/layouts';
+            if (File::isDirectory($layoutsDir)) {
+                foreach (File::files($layoutsDir) as $file) {
+                    $dest = "{$destDir}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
                 }
             }
         });
 
         // 2. Publish Livewire Concern Trait
         $this->components->task('Publishing AuthenticatesUsers Concern', function () use ($force) {
-            $src = app_path('Livewire/Auth/Concerns/AuthenticatesUsers.php');
-            if (! File::exists($src)) {
-                $src = __DIR__.'/../../stubs/Auth/Concerns/AuthenticatesUsers.php';
-            }
-            $dest = app_path('Livewire/Auth/Concerns/AuthenticatesUsers.php');
-
-            File::ensureDirectoryExists(dirname($dest));
-            if ($force || ! File::exists($dest)) {
-                File::copy($src, $dest);
-            }
-        });
-
-        // 3. Publish Livewire Components
-        $this->components->task('Publishing Livewire Auth Components', function () use ($force) {
-            $components = [
-                'Login.php',
-                'Register.php',
-                'ForgotPassword.php',
-                'ResetPassword.php',
-                'VerifyEmail.php',
-                'ConfirmPassword.php',
-                'TwoFactorChallenge.php',
-            ];
-
-            File::ensureDirectoryExists(app_path('Livewire/Auth'));
-
-            foreach ($components as $component) {
-                $src = app_path("Livewire/Auth/{$component}");
-                if (! File::exists($src)) {
-                    $src = __DIR__."/../../stubs/Auth/Livewire/{$component}";
-                }
-                $dest = app_path("Livewire/Auth/{$component}");
-
-                if ($force || ! File::exists($dest)) {
-                    File::copy($src, $dest);
-                }
-            }
-            File::ensureDirectoryExists(app_path('Livewire/Settings'));
-            $srcTwoFactor = app_path('Livewire/Settings/TwoFactor.php');
-            if (! File::exists($srcTwoFactor)) {
-                $srcTwoFactor = __DIR__.'/../../stubs/Auth/Livewire/Settings/TwoFactor.php';
-            }
-            $destTwoFactor = app_path('Livewire/Settings/TwoFactor.php');
-            if ($force || ! File::exists($destTwoFactor)) {
-                File::copy($srcTwoFactor, $destTwoFactor);
-            }
-        });
-
-        // 4. Publish Auth Views
-        $this->components->task('Publishing Auth Views', function () use ($force) {
-            $views = [
-                'login.blade.php',
-                'register.blade.php',
-                'forgot-password.blade.php',
-                'reset-password.blade.php',
-                'verify-email.blade.php',
-                'confirm-password.blade.php',
-                'two-factor-challenge.blade.php',
-            ];
-
-            $destDir = resource_path('views/auth');
+            $destDir = app_path('Livewire/Auth/Concerns');
             File::ensureDirectoryExists($destDir);
 
-            foreach ($views as $view) {
-                $src = resource_path("views/auth/{$view}");
-                if (! File::exists($src)) {
-                    $src = __DIR__."/../../stubs/Auth/views/{$view}";
+            $concernsDir = __DIR__.'/../../stubs/Auth/Concerns';
+            if (File::isDirectory($concernsDir)) {
+                foreach (File::files($concernsDir) as $file) {
+                    $dest = "{$destDir}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
                 }
-                $dest = "{$destDir}/{$view}";
+            }
+        });
 
-                if ($force || ! File::exists($dest)) {
-                    File::copy($src, $dest);
+        // 3. Publish Livewire Components (Auth & Settings)
+        $this->components->task('Publishing Livewire Auth & Settings Components', function () use ($force) {
+            $authLivewireDir = __DIR__.'/../../stubs/Auth/Livewire';
+            if (File::isDirectory($authLivewireDir)) {
+                $destAuth = app_path('Livewire/Auth');
+                File::ensureDirectoryExists($destAuth);
+                foreach (File::files($authLivewireDir) as $file) {
+                    $dest = "{$destAuth}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
                 }
             }
 
-            File::ensureDirectoryExists(resource_path('views/livewire/settings'));
-            $srcTfView = resource_path('views/livewire/settings/two-factor.blade.php');
-            if (! File::exists($srcTfView)) {
-                $srcTfView = __DIR__.'/../../stubs/Auth/views/settings/two-factor.blade.php';
+            $settingsLivewireDir = __DIR__.'/../../stubs/Auth/Livewire/Settings';
+            if (File::isDirectory($settingsLivewireDir)) {
+                $destSettings = app_path('Livewire/Settings');
+                File::ensureDirectoryExists($destSettings);
+                foreach (File::files($settingsLivewireDir) as $file) {
+                    $dest = "{$destSettings}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
+                }
             }
-            $destTfView = resource_path('views/livewire/settings/two-factor.blade.php');
-            if ($force || ! File::exists($destTfView)) {
-                File::copy($srcTfView, $destTfView);
+        });
+
+        // 4. Publish Auth & Settings Views
+        $this->components->task('Publishing Auth & Settings Views', function () use ($force) {
+            $authViewsDir = __DIR__.'/../../stubs/Auth/views';
+            if (File::isDirectory($authViewsDir)) {
+                $destAuthViews = resource_path('views/auth');
+                File::ensureDirectoryExists($destAuthViews);
+                foreach (File::files($authViewsDir) as $file) {
+                    $dest = "{$destAuthViews}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
+                }
+            }
+
+            $settingsViewsDir = __DIR__.'/../../stubs/Auth/views/settings';
+            if (File::isDirectory($settingsViewsDir)) {
+                $destSettingsViews = resource_path('views/livewire/settings');
+                File::ensureDirectoryExists($destSettingsViews);
+                foreach (File::files($settingsViewsDir) as $file) {
+                    $dest = "{$destSettingsViews}/{$file->getFilename()}";
+                    if ($force || ! File::exists($dest)) {
+                        File::copy($file->getPathname(), $dest);
+                    }
+                }
             }
         });
 

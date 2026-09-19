@@ -67,6 +67,16 @@ test('vibe:layout generates settings pages including appearance', function () {
     expect(File::exists(resource_path('views/admin-test/settings/login-history.blade.php')))->toBeTrue();
     expect(File::exists(resource_path('views/admin-test/settings/tabs.blade.php')))->toBeTrue();
 
+    // Verify Livewire settings components & views are published
+    expect(File::exists(app_path('Livewire/Settings/Profile.php')))->toBeTrue();
+    expect(File::exists(app_path('Livewire/Settings/Password.php')))->toBeTrue();
+    expect(File::exists(app_path('Livewire/Settings/TwoFactor.php')))->toBeTrue();
+    expect(File::exists(app_path('Livewire/Settings/LoginHistory.php')))->toBeTrue();
+    expect(File::exists(app_path('Livewire/Settings/DeleteUser.php')))->toBeTrue();
+    expect(File::exists(resource_path('views/livewire/settings/profile.blade.php')))->toBeTrue();
+    expect(File::exists(resource_path('views/livewire/settings/password.blade.php')))->toBeTrue();
+    expect(File::exists(resource_path('views/livewire/settings/two-factor.blade.php')))->toBeTrue();
+
     // Verify content contains converted path
     $appearanceContent = File::get(resource_path('views/admin-test/settings/appearance.blade.php'));
     expect($appearanceContent)->toContain('<x-admin-test.layouts.sidebar>');

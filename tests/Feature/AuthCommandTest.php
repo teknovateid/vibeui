@@ -247,4 +247,32 @@ test('passkeys migration publishing creates file if missing and prevents duplica
     File::deleteDirectory($tempDir);
 });
 
+test('settings components and views stubs exist for auth and layout publishing', function () {
+    $expectedComponents = [
+        'Profile.php',
+        'Password.php',
+        'TwoFactor.php',
+        'LoginHistory.php',
+        'DeleteUser.php',
+    ];
+
+    foreach ($expectedComponents as $component) {
+        $path = base_path("packages/vibe/stubs/Auth/Livewire/Settings/{$component}");
+        expect(File::exists($path))->toBeTrue("Expected {$component} to exist in stubs/Auth/Livewire/Settings");
+    }
+
+    $expectedViews = [
+        'profile.blade.php',
+        'password.blade.php',
+        'two-factor.blade.php',
+        'login-history.blade.php',
+        'delete-user.blade.php',
+    ];
+
+    foreach ($expectedViews as $view) {
+        $path = base_path("packages/vibe/stubs/Auth/views/settings/{$view}");
+        expect(File::exists($path))->toBeTrue("Expected {$view} to exist in stubs/Auth/views/settings");
+    }
+});
+
 
