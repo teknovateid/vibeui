@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.6] - 2026-09-19
+
+### 🚀 Features
+- feat: add loading states and text support to button component with tests and translations (3cd21e9)
+
+### ⚡ Performance & Refactoring
+- refactor: replace manual loading indicators with :loading attribute on button components in auth views (1783433)
+
+
 ## [0.2.5] - 2026-09-19
 
 ### ⚡ Performance & Refactoring
