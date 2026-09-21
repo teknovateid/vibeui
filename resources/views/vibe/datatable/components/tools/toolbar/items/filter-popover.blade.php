@@ -9,7 +9,7 @@
     x-transition:leave="transition ease-in duration-75"
     x-transition:leave-start="transform opacity-100 scale-100"
     x-transition:leave-end="transform opacity-0 scale-95"
-    class="absolute left-0 z-50 mt-2 w-72 rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-lg origin-top-left focus:outline-none space-y-4"
+    class="absolute left-0 z-50 mt-2 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-border bg-popover p-4 text-popover-foreground shadow-lg origin-top-left focus:outline-none space-y-4"
     role="menu"
     aria-orientation="vertical"
     aria-labelledby="filters-menu"

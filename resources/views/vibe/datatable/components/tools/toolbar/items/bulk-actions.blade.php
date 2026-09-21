@@ -1,10 +1,10 @@
 @aware(['tableName', 'isTailwind', 'isBootstrap', 'isBootstrap4', 'isBootstrap5', 'localisationPath'])
 
 @if ($this->bulkActionsAreEnabled() && $this->hasBulkActions())
-    <div x-cloak x-show="(selectedItems.length > 0 || hideBulkActionsWhenEmpty == false)" class="w-full md:w-auto" wire:key="{{ $tableName }}-bulk-actions-toolbar-wrapper">
+    <div x-cloak x-show="(selectedItems.length > 0 || hideBulkActionsWhenEmpty == false)" class="shrink-0" wire:key="{{ $tableName }}-bulk-actions-toolbar-wrapper">
         <vibe:dropdown align="right" width="56" keyboard>
             <vibe:dropdown.trigger>
-                <vibe:button variant="outline" size="md" class="gap-2 w-full md:w-auto shadow-2xs font-medium" aria-haspopup="true" x-bind:aria-expanded="open">
+                <vibe:button variant="outline" size="md" class="gap-2 shadow-2xs font-medium" aria-haspopup="true" x-bind:aria-expanded="open">
                     <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m3 7 3 3 3-3" />
                         <path d="M6 10V3" />

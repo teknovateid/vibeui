@@ -15,7 +15,7 @@
     @foreach($this->selectedVisibleColumns as $colIndex => $column)
         <td
             wire:key="{{ $tableName . '-footer-shown-' . $colIndex }}"
-            class="py-3 px-4 text-left text-xs font-semibold tracking-wider text-muted-foreground {{ $column->shouldCollapseAlways() ? 'hidden' : '' }} {{ $column->shouldCollapseOnMobile() ? 'hidden md:table-cell' : '' }} {{ $column->shouldCollapseOnTablet() ? 'hidden lg:table-cell' : '' }}"
+            class="py-3 px-4 text-left text-xs font-semibold tracking-wider text-muted-foreground whitespace-nowrap {{ $column->shouldCollapseAlways() ? 'hidden' : '' }} {{ $column->shouldCollapseOnMobile() ? 'hidden md:table-cell' : '' }} {{ $column->shouldCollapseOnTablet() ? 'hidden lg:table-cell' : '' }}"
         >
             @if($column->hasFooter() && $column->hasFooterCallback())
                 @if($column->footerCallbackIsFilter())

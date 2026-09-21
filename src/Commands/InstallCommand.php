@@ -307,6 +307,7 @@ class InstallCommand extends Command
             'resources/js/vibe/passkeys.js',
             'resources/js/vibe/qrcode.js',
             'resources/js/vibe/table.js',
+            'resources/js/vibe/datatable.js',
         ];
     }
 
