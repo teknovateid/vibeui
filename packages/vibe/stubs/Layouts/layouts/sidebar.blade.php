@@ -10,10 +10,10 @@
 <x-layouts.base>
     <div class="flex h-screen overflow-hidden relative">
         <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="150" minifiedSize="80" :persist="true">
-            <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
+            <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-dashed">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
-                <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
-                    <img src="{{ asset('vibe/logo/logo.svg') }}" class="aspect-square size-[60%]" alt="VibeUI Logo">
+                <div class="hidden minified:flex items-center justify-center size-8 rounded-md p-1.5 bg-muted text-foreground font-bold text-xl shrink-0">
+                    <img src="{{ asset('vibe/logo/logo.svg') }}" class="aspect-square size-full" alt="VibeUI Logo">
                 </div>
                 <vibe:button variant="ghost" class="md:hidden p-2 transition-colors block minified:hidden" @click="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                     <div class="flex items-center justify-center">
@@ -180,9 +180,9 @@
         </vibe:sheet>
 
         <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
-            <vibe:header variant="header" :sticky="$isHeaderSticky" class="shadow-none" size="sm">
-                <vibe:header.heading class="gap-2 flex items-center">
-                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
+            <vibe:header variant="header" :sticky="$isHeaderSticky" class="shadow-none border-dashed" size="sm">
+                <vibe:header.heading class="gap-2 flex items-center min-w-0">
+                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors shrink-0" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
                             <svg class="size-6 sidebar-collapsed:hidden sidebar-minified:hidden" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path d="M0 0h24v24H0z" fill="none" />
@@ -200,7 +200,17 @@
                             </svg>
                         </div>
                     </vibe:button>
-                    <vibe:button variant="default" type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="md:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
+                    @stack('breadcrump')
+                </vibe:header.heading>
+
+                <vibe:header.actions class="items-center h-full relative gap-1.5 shrink-0">
+                    <vibe:button variant="ghost" class="p-2 md:hidden text-muted-foreground hover:text-foreground transition-colors" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </vibe:button>
+                    <vibe:button variant="default" type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="hidden md:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
                         <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -210,9 +220,6 @@
                             <span class="text-xs">⌘</span>K
                         </kbd>
                     </vibe:button>
-                </vibe:header.heading>
-
-                <vibe:header.actions class="items-center h-full relative gap-1.5">
                     <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {

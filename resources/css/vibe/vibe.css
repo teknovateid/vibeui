@@ -35,7 +35,7 @@
 
 
     .vibe-breadcrumb>li:first-child>.breadcrumb-separator {
-        display: none;
+        display: none !important;
     }
 
     /* Hide Scrollbar */

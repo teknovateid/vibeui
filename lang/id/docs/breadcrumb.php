@@ -46,7 +46,21 @@ return [
         'invoice' => 'Faktur #INV-2026',
     ],
 
-    // Section 5: Props & Slots
+    // Section 5: Custom Styling
+    'custom_styling' => [
+        'title' => 'Kustomisasi Gaya (Custom Class)',
+        'desc' => 'Anda dapat menambahkan kelas utilitas Tailwind kustom langsung ke <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:breadcrumb.item&gt;</code> (misalnya ukuran teks <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">text-lg</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">text-2xl</code>, atau warna khusus). Gaya digabungkan secara cerdas via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">twMerge</code>.',
+        'preview_title' => 'Breadcrumb dengan Custom Class',
+    ],
+
+    // Section 6: Custom Separator
+    'custom_separator' => [
+        'title' => 'Kustomisasi Pemisah (Separator)',
+        'desc' => 'Pemisah antar item dapat diubah dengan prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">separator</code> pada <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:breadcrumb&gt;</code> atau per item pada <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:breadcrumb.item&gt;</code>. Mendukung preset icon seperti <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">/</code> atau <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">slash</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">chevron</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">arrow</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">dot</code>, teks kustom, maupun slot <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;x-slot:separator&gt;</code> kustom.',
+        'preview_title' => 'Pilihan Ikon Pemisah',
+    ],
+
+    // Section 7: Props & Slots
     'props' => [
         'title' => 'Referensi Props & Slot',
         'desc' => 'Daftar lengkap atribut dan slot yang tersedia pada komponen <code class="font-mono text-xs text-foreground">&lt;vibe:breadcrumb&gt;</code> dan <code class="font-mono text-xs text-foreground">&lt;vibe:breadcrumb.item&gt;</code>.',
@@ -71,11 +85,15 @@ return [
     'props_items' => [
         'breadcrumb' => [
             'title' => 'Judul halaman di atas navigasi remah roti. Berikan `false` untuk menyembunyikannya.',
+            'separator' => 'Ikon/karakter pemisah bawaan seluruh item. Pilihan: `chevron` (default), `/` atau `slash`, `arrow`, `dot`, atau teks kustom.',
             'class' => 'Kelas Tailwind tambahan yang diterapkan pada container pembungkus.',
         ],
         'item' => [
             'href' => 'URL tujuan. Jika diisi, item dirender sebagai `<a wire:navigate>`. Jika kosong, dirender sebagai `<span>`.',
             'active' => 'Menandakan halaman aktif saat ini (menerapkan gaya font tebal dan warna kontras).',
+            'separator' => 'Ikon/karakter pemisah khusus untuk item ini (mengabaikan konfigurasi pemisah dari parent).',
+            'class' => 'Kelas Tailwind kustom tambahan yang digabungkan via `twMerge` ke elemen item tautan/teks.',
+            'wrapperClass' => 'Kelas Tailwind tambahan untuk elemen pembungkus `<li>`.',
         ],
     ],
 ];

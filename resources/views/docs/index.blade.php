@@ -4,6 +4,10 @@
         ['name' => __('docs/index.breadcrumbs.docs'), 'url' => '/docs']
     ]" />
 
+    @push('breadcrump')
+        <vibe:breadcrumb :title="__('docs/index.title')" class="text-lg"/>
+    @endpush
+
 
 
     <div class="mx-auto w-full max-w-7xl">

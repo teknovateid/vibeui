@@ -213,7 +213,107 @@
                 </vibe:preview>
             </section>
 
-            {{-- 5. Props & Slots Reference --}}
+            {{-- 5. Custom Styling --}}
+            <section id="kustomisasi-gaya" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/breadcrumb.custom_styling.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/breadcrumb.custom_styling.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/breadcrumb.custom_styling.preview_title')">
+                    <vibe:preview.code>
+                        <vibe:breadcrumb :title="false">
+                            <vibe:breadcrumb.item class="text-2xl font-bold" href="/docs">
+                                {{ __('docs/breadcrumb.basic_usage.home') }}
+                            </vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item class="text-2xl text-primary" href="/docs">
+                                {{ __('docs/breadcrumb.basic_usage.products') }}
+                            </vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item class="text-2xl font-semibold" active>
+                                {{ __('docs/breadcrumb.basic_usage.item') }}
+                            </vibe:breadcrumb.item>
+                        </vibe:breadcrumb>
+                    </vibe:preview.code>
+                    <div class="w-full">
+                        <vibe:breadcrumb :title="false">
+                            <vibe:breadcrumb.item class="text-2xl font-bold" href="/docs">
+                                {{ __('docs/breadcrumb.basic_usage.home') }}
+                            </vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item class="text-2xl text-primary" href="/docs">
+                                {{ __('docs/breadcrumb.basic_usage.products') }}
+                            </vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item class="text-2xl font-semibold" active>
+                                {{ __('docs/breadcrumb.basic_usage.item') }}
+                            </vibe:breadcrumb.item>
+                        </vibe:breadcrumb>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 6. Custom Separator --}}
+            <section id="kustomisasi-pemisah" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/breadcrumb.custom_separator.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/breadcrumb.custom_separator.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/breadcrumb.custom_separator.preview_title')">
+                    <vibe:preview.code>
+                        {{-- Pemisah Slash (/) --}}
+                        <vibe:breadcrumb separator="/" :title="false">
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                        </vibe:breadcrumb>
+
+                        {{-- Pemisah Arrow (->) --}}
+                        <vibe:breadcrumb separator="arrow" :title="false">
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                        </vibe:breadcrumb>
+
+                        {{-- Pemisah Dot (•) --}}
+                        <vibe:breadcrumb separator="dot" :title="false">
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                            <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                        </vibe:breadcrumb>
+                    </vibe:preview.code>
+                    <div class="w-full space-y-4">
+                        <div class="p-3">
+                            <p class="text-xs text-muted-foreground mb-1.5 font-mono">separator="/"</p>
+                            <vibe:breadcrumb separator="/" :title="false">
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                            </vibe:breadcrumb>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs text-muted-foreground mb-1.5 font-mono">separator="arrow"</p>
+                            <vibe:breadcrumb separator="arrow" :title="false">
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                            </vibe:breadcrumb>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs text-muted-foreground mb-1.5 font-mono">separator="dot"</p>
+                            <vibe:breadcrumb separator="dot" :title="false">
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.home') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item href="/docs">{{ __('docs/breadcrumb.basic_usage.products') }}</vibe:breadcrumb.item>
+                                <vibe:breadcrumb.item active>{{ __('docs/breadcrumb.basic_usage.item') }}</vibe:breadcrumb.item>
+                            </vibe:breadcrumb>
+                        </div>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 7. Props & Slots Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/breadcrumb.props.title') }}</h2>
@@ -235,6 +335,7 @@
                         @php
                             $breadcrumbProps = [
                                 ['title', 'string|bool', "config('app.name')", __('docs/breadcrumb.props_items.breadcrumb.title')],
+                                ['separator', 'string', "'chevron'", __('docs/breadcrumb.props_items.breadcrumb.separator')],
                                 ['class', 'string|null', 'null', __('docs/breadcrumb.props_items.breadcrumb.class')],
                             ];
                         @endphp
@@ -263,6 +364,9 @@
                             $itemProps = [
                                 ['href', 'string|null', 'null', __('docs/breadcrumb.props_items.item.href')],
                                 ['active', 'bool', 'false', __('docs/breadcrumb.props_items.item.active')],
+                                ['separator', 'string|slot', 'null', __('docs/breadcrumb.props_items.item.separator')],
+                                ['class', 'string|null', 'null', __('docs/breadcrumb.props_items.item.class')],
+                                ['wrapperClass', 'string|null', 'null', __('docs/breadcrumb.props_items.item.wrapperClass')],
                             ];
                         @endphp
                         @foreach ($itemProps as [$prop, $type, $default, $desc])
@@ -291,6 +395,10 @@
                         <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-foreground">button</vibe:table.cell>
                             <vibe:table.cell class="text-muted-foreground">Slot opsional pada <code class="font-mono text-xs text-foreground">&lt;vibe:breadcrumb&gt;</code> untuk menyematkan tombol aksi di sisi kanan.</vibe:table.cell>
+                        </vibe:table.row>
+                        <vibe:table.row>
+                            <vibe:table.cell class="font-mono font-bold text-foreground">separator</vibe:table.cell>
+                            <vibe:table.cell class="text-muted-foreground">Slot opsional pada <code class="font-mono text-xs text-foreground">&lt;vibe:breadcrumb.item&gt;</code> untuk merender ikon/elemen pemisah kustom.</vibe:table.cell>
                         </vibe:table.row>
                     </vibe:table.rows>
                 </vibe:table>

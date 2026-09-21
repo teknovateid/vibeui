@@ -1,5 +1,5 @@
  <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" class="shadow-2xl" persist>
-     <vibe:sheet.header class="flex items-center justify-between">
+     <vibe:sheet.header class="flex items-center justify-between border-dashed">
          <div class="flex items-center gap-2">
              <span class="font-semibold text-sm text-foreground">{{ __('docs/sidebar.notifications.title') }}</span>
              <span class="text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{{ __('docs/sidebar.notifications.new', ['count' => 3]) }}</span>
