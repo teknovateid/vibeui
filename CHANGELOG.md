@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.7] - 2026-09-21
+
+### 🚀 Features
+- feat: add datatable JS component bundle and simple pagination view (cf74af8)
+- feat: add feature tests and custom styling support for breadcrumb component (f3a5e9b)
+
+
 ## [0.2.6] - 2026-09-19
 
 ### 🚀 Features
