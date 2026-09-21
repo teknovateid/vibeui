@@ -1,11 +1,11 @@
 @aware(['tableName', 'isTailwind', 'isBootstrap', 'isBootstrap4', 'isBootstrap5', 'localisationPath'])
 
-<div class="{{ $this->getColumnSelectIsHiddenOnMobile() ? 'hidden sm:block' : ($this->getColumnSelectIsHiddenOnTablet() ? 'hidden md:block' : '') }} w-full md:w-auto" wire:key="{{ $tableName }}-column-select-wrapper">
+<div class="{{ $this->getColumnSelectIsHiddenOnMobile() ? 'hidden sm:block' : ($this->getColumnSelectIsHiddenOnTablet() ? 'hidden md:block' : '') }} shrink-0" wire:key="{{ $tableName }}-column-select-wrapper">
     <vibe:dropdown align="right" width="56" keyboard>
         <vibe:dropdown.trigger>
             <button
                 type="button"
-                class="inline-flex items-center justify-center gap-2 h-9 px-3 w-full md:w-auto text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
+                class="inline-flex items-center justify-center gap-2 h-9 px-3 text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
                 aria-haspopup="true"
                 x-bind:aria-expanded="open"
             >

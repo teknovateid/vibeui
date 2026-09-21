@@ -14,6 +14,7 @@
 @pushOnce('head', 'vibe-datatable-scripts')
     @rappasoftTableScripts
     @rappasoftTableThirdPartyScripts
+    @vite('resources/js/vibe/datatable.js')
 @endPushOnce
 
 @php

@@ -49,13 +49,13 @@ abstract class VibeDataTableComponent extends DataTableComponent
 
         $this->setThAttributes(function ($column) {
             return [
-                'class' => 'py-3 px-4 font-semibold text-muted-foreground',
+                'class' => 'py-3 px-4 font-semibold text-muted-foreground whitespace-nowrap',
             ];
         });
 
         $this->setTdAttributes(function ($column, $row, $colIndex, $rowIndex) {
             return [
-                'class' => 'py-3.5 px-4 align-middle text-foreground',
+                'class' => 'py-3.5 px-4 align-middle text-foreground whitespace-nowrap',
             ];
         });
     }
@@ -136,6 +136,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
         HTML;
     }

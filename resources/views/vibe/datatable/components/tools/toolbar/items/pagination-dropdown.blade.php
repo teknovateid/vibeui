@@ -1,6 +1,6 @@
 @aware(['tableName', 'localisationPath'])
 
-<div class="w-full md:w-auto" wire:key="{{ $tableName }}-pagination-dropdown-wrapper">
+<div class="shrink-0" wire:key="{{ $tableName }}-pagination-dropdown-wrapper">
     <vibe:dropdown align="right" width="min" keyboard>
         <vibe:dropdown.trigger>
             <button

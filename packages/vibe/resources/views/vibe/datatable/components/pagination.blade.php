@@ -9,8 +9,8 @@
 
 <div {{ $this->getPaginationWrapperAttributesBag() }}>
     @if ($this->paginationVisibilityIsEnabled())
-        <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div class="text-xs text-muted-foreground order-2 sm:order-1">
+        <div class="mt-3.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="text-xs text-muted-foreground">
                 @if ($this->paginationIsEnabled && $this->isPaginationMethod('standard') && $currentRows->lastPage() > 1 && $this->showPaginationDetails)
                     <p class="paged-pagination-results">
                         <span>{{ __($localisationPath.'Showing') }}</span>
@@ -40,7 +40,7 @@
             </div>
 
             @if ($this->paginationIsEnabled)
-                <div class="order-1 sm:order-2">
+                <div class="shrink-0 ml-auto sm:ml-0">
                     {{ $currentRows->links('livewire-tables::specific.tailwind.'.(!$this->isPaginationMethod('standard') ? 'simple-' : '').'pagination', data: ['scrollTo' => false]) }}
                 </div>
             @endif

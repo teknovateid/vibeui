@@ -38,33 +38,34 @@
                     <vibe:nav.history persist class="max-h-30 pl-3 pr-1.5 minified:px-0 overflow-y-auto overflow-x-hidden vibe-scrollbar" />
                 </vibe:nav>
 
-                <vibe:dropdown keyboard class="w-full px-3 minified:px-0">
-                    <x-slot:trigger>
-                        <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/50 text-sidebar-foreground border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
-                            <div class="flex items-center gap-2 min-w-0">
-                                <div class="relative flex shrink-0 ">
-                                    <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=64&h=64&auto=format&fit=crop" alt="Masum Parvej" />
-                                    <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-sidebar"></span>
+                <div class="w-full px-3 minified:px-0">
+                    <vibe:dropdown keyboard class="w-full">
+                        <x-slot:trigger>
+                            <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/50 text-sidebar-foreground border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <div class="relative flex shrink-0 ">
+                                        <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=64&h=64&auto=format&fit=crop" alt="Masum Parvej" />
+                                        <span class="absolute minified:hidden bottom-0 right-0 size-2 bg-emerald-500 rounded-full ring-2 ring-sidebar"></span>
+                                    </div>
+
+                                    <div class="flex flex-col text-left min-w-0 minified:hidden ">
+                                        <span class="text-xs font-semibold text-foreground truncate leading-tight">Masum Parvej</span>
+                                        <span class="text-[10px] text-muted-foreground truncate leading-tight mt-0.5"><!--email_off-->masum@hugeicons.com<!--/email_off--></span>
+                                    </div>
                                 </div>
 
-                                <div class="flex flex-col text-left min-w-0 minified:hidden ">
-                                    <span class="text-xs font-semibold text-foreground truncate leading-tight">Masum Parvej</span>
-                                    <span class="text-[10px] text-muted-foreground truncate leading-tight mt-0.5"><!--email_off-->masum@hugeicons.com<!--/email_off--></span>
+                                <div class="shrink-0 minified:hidden ml-1">
+                                    <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-500/30">
+                                        <svg class="size-2.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                                        </svg>
+                                        PRO
+                                    </span>
                                 </div>
                             </div>
+                        </x-slot:trigger>
 
-                            <div class="shrink-0 minified:hidden ml-1">
-                                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 dark:bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-500/30">
-                                    <svg class="size-2.5 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                                    </svg>
-                                    PRO
-                                </span>
-                            </div>
-                        </div>
-                    </x-slot:trigger>
-
-                    <vibe:dropdown.content align="top" width="64">
+                        <vibe:dropdown.content align="top" width="64" class="max-h-[calc(100vh-6rem)] overflow-y-auto vibe-scrollbar">
                         <div class="flex flex-col gap-0.5">
                             <vibe:dropdown.item href="#" class="gap-3">
                                 <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -163,12 +164,13 @@
                                 Feedback
                             </vibe:button>
 
-                            <vibe:button type="button" class="rounded-full select:bg-red-100 dark:select:bg-red-900/30 select:text-red-500!" variant="ghost" size="sm">
+                            <vibe:button type="button" class="rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive" variant="ghost" size="sm">
                                 Logout
                             </vibe:button>
                         </div>
                     </vibe:dropdown.content>
                 </vibe:dropdown>
+                </div>
 
                 <div class="pt-2.5 px-3 minified:px-0 flex items-center justify-between minified:justify-center text-[11px] text-muted-foreground border-t border-sidebar-border/40 mt-2">
                     <span class="font-medium text-xs text-muted-foreground/80 minified:hidden">Vibe UI</span>

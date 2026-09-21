@@ -376,8 +376,8 @@
     @if ($layout === 'relative')
         {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0.
              overflow-hidden memastikan konten terpotong rapi saat animasi width/height. --}}
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden"
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
@@ -387,8 +387,8 @@
         </div>
     @else
         {{-- Fixed/absolute/sticky layout: clip-wrapper untuk content, tidak mempengaruhi resize handle. --}}
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden"
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'

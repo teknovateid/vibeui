@@ -1,15 +1,18 @@
  <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" class="shadow-2xl" persist>
      <vibe:sheet.header class="flex items-center justify-between border-dashed">
          <div class="flex items-center gap-2">
-             <span class="font-semibold text-sm text-foreground">{{ __('docs/sidebar.notifications.title') }}</span>
-             <span class="text-[10px] font-medium bg-muted text-muted-foreground px-2 py-0.5 rounded-full">{{ __('docs/sidebar.notifications.new', ['count' => 3]) }}</span>
+             <span class="font-semibold text-lg text-foreground">{{ __('docs/sidebar.notifications.title') }}
+                <sup>
+                    <vibe:badge size="sm" variant="primary" class="rounded-full">{{ __('docs/sidebar.notifications.new', ['count' => 3]) }}</vibe:badge>
+                </sup>
+             </span>
          </div>
          <vibe:sheet.close />
      </vibe:sheet.header>
 
-     <vibe:sheet.content class="p-2 divide-y divide-border">
+     <vibe:sheet.content class="p-2">
          <!-- Notification Item 1 -->
-         <div class="p-3 rounded-lg hover:bg-accent/60 transition-colors cursor-pointer flex flex-col gap-1">
+         <div class="p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer flex flex-col gap-1">
              <div class="flex items-center justify-between">
                  <span class="font-semibold text-xs text-foreground flex items-center gap-1.5">
                      <span class="size-2 rounded-full bg-primary"></span>
@@ -51,7 +54,7 @@
          </div>
      </vibe:sheet.content>
 
-     <vibe:sheet.footer class="p-3">
+     <vibe:sheet.footer class="p-3 border-dashed">
          <vibe:button variant="outline" size="sm" class="w-full text-xs">
              Tandai Semua Sudah Dibaca
          </vibe:button>

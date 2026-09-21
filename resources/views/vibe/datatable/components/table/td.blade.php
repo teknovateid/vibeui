@@ -15,7 +15,7 @@
     {{
         $attributes->merge($customAttributes)
             ->class([
-                'py-3.5 px-4 align-middle text-sm text-foreground' => ($customAttributes['default'] ?? true),
+                'py-3.5 px-4 align-middle text-sm text-foreground whitespace-nowrap' => ($customAttributes['default'] ?? true),
                 'hidden' => $column && $column->shouldCollapseAlways(),
                 'hidden md:table-cell' => $column && $column->shouldCollapseOnMobile(),
                 'hidden lg:table-cell' => $column && $column->shouldCollapseOnTablet(),
