@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.8] - 2026-09-22
+
+### 🚀 Features
+- feat: add show component and data binding engine with views, tests, and documentation (5e2ceff)
+
+
 ## [0.2.7] - 2026-09-21
 
 ### 🚀 Features
