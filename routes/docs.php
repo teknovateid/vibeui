@@ -71,6 +71,30 @@ Route::prefix('docs')->name('docs.')->group(function () {
     });
 
     Route::view('/button', 'docs.button.index')->name('button.index');
+    Route::get('/button/show-demo', function () {
+        return response()->json([
+            'id' => 1,
+            'name' => 'Masum Parvej',
+            'email' => 'masum@hugeicons.com',
+            'bio' => 'Senior Product Designer & Frontend Developer. Building high-quality design systems.',
+            'bio_html' => '<p class="text-sm">Senior <strong>Product Designer</strong> &amp; <em>Frontend Developer</em> at Hugeicons.</p>',
+            'website' => 'https://hugeicons.com',
+            'role' => 'admin',
+            'is_active' => true,
+            'gender' => 'male',
+            'skill_level' => 85,
+            'birth_date' => '1995-08-17',
+            'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+            'status' => 'Verified Member',
+            'skills' => ['Design Systems', 'Tailwind CSS', 'Alpine.js', 'Laravel Blade'],
+            'products' => [
+                ['id' => 101, 'name' => 'MacBook Pro M3 Max', 'price' => 'Rp 38.500.000', 'qty' => 1],
+                ['id' => 102, 'name' => 'Studio Display 27"', 'price' => 'Rp 24.999.000', 'qty' => 1],
+                ['id' => 103, 'name' => 'Magic Keyboard with Touch ID', 'price' => 'Rp 2.450.000', 'qty' => 2],
+            ]
+        ]);
+    })->name('button.show-demo');
+    Route::view('/show', 'docs.show.index')->name('show.index');
     Route::view('/dropdown', 'docs.dropdown.index')->name('dropdown.index');
     Route::view('/context', 'docs.context.index')->name('context.index');
     Route::view('/badge', 'docs.badge.index')->name('badge.index');

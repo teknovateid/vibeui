@@ -144,7 +144,37 @@ return [
         'props_desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button.group&gt;</code>.',
     ],
 
-    // Section 11: Props Reference
+    // Section 11: Button Show & Data Population
+    'button_show' => [
+        'title' => 'Tombol Show Data (<vibe:button.show>)',
+        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.show&gt;</code> mengambil data dari endpoint AJAX dan otomatis mempopulasikan elemen pada target container menggunakan tag <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:show key="..."&gt;</code>, atribut <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">vibe-show="..."</code>, perulangan array via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:show.each key="..."&gt;</code>, serta seluruh komponen form Vibe UI (input, textarea, select, switch, checkbox, radio, dll).',
+        'preview_title' => 'Fetch & Populate Data (Modal Target)',
+        'sheet_preview_title' => 'Fetch & Populate Data (Sheet / Drawer Target)',
+        'inline_preview_title' => 'Populasi Data Langsung ke Kontainer Inline',
+        'trigger_btn' => 'Tampilkan Data Demo',
+        'trigger_sheet_btn' => 'Lihat di Side Sheet',
+        'trigger_inline_btn' => 'Muat ke Kartu',
+        'modal_title' => 'Detail Data Pengguna',
+    ],
+
+    // Section 12: Button Delete & Confirmation
+    'button_delete' => [
+        'title' => 'Tombol Hapus (<vibe:button.delete>)',
+        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.delete&gt;</code> dirancang khusus untuk operasi destruktif (penghapusan) dengan proteksi dialog konfirmasi otomatis terintegrasi. Komponen ini mencegah hilangnya data akibat klik tidak sengaja dan mendukung eksekusi via Livewire (<code class="font-mono text-xs">wire:click</code>), form submit HTTP DELETE (<code class="font-mono text-xs">url</code>), atau callback JavaScript (<code class="font-mono text-xs">action</code>).',
+        'preview_title' => 'Tombol Hapus dengan Dialog Konfirmasi',
+        'preview_methods_title' => 'Dukungan Metode Eksekusi',
+        'preview_table_title' => 'Contoh Penggunaan pada Aksi Tabel',
+        'custom_dialog_title' => 'Kustomisasi Judul, Pesan, dan Tombol Konfirmasi',
+        'trigger_btn' => 'Hapus Item',
+        'trigger_account' => 'Hapus Akun Permanen',
+        'trigger_icon' => 'Hapus',
+        'alert_deleted' => 'Item berhasil dihapus!',
+        'alert_account_deleted' => 'Permintaan penghapusan akun telah diproses.',
+        'props_title' => 'Props <vibe:button.delete>',
+        'props_desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button.delete&gt;</code>.',
+    ],
+
+    // Section 13: Props Reference
     'props' => [
         'title' => 'Referensi Props',
         'desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button&gt;</code>.',
@@ -156,7 +186,7 @@ return [
         ],
     ],
 
-    // Section 11: Slots Reference
+    // Section 14: Slots Reference
     'slots' => [
         'title' => 'Slots',
         'desc' => 'Daftar slot yang diterima oleh komponen.',
@@ -166,3 +196,4 @@ return [
         ],
     ],
 ];
+

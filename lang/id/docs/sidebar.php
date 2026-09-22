@@ -32,6 +32,7 @@ return [
         'dynamic-form' => 'Dynamic Form',
         'filepond' => 'FilePond',
         'button' => 'Button',
+        'show' => 'Show',
         'dropdown' => 'Dropdown',
         'context' => 'Context Menu',
         'badge' => 'Badge',

@@ -144,7 +144,37 @@ return [
         'props_desc' => 'Listing of attributes and properties accepted by the <code class="font-mono text-xs text-foreground">&lt;vibe:button.group&gt;</code> component.',
     ],
 
-    // Section 11: Props Reference
+    // Section 11: Button Show & Data Population
+    'button_show' => [
+        'title' => 'Data Show Button (<vibe:button.show>)',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.show&gt;</code> component fetches data from an AJAX endpoint and automatically populates elements inside the target container using <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:show key="..."&gt;</code>, the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">vibe-show="..."</code> attribute, array looping via <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:show.each key="..."&gt;</code>, and all Vibe UI form components (input, textarea, select, switch, checkbox, radio, etc.).',
+        'preview_title' => 'Fetch & Populate Data (Modal Target)',
+        'sheet_preview_title' => 'Fetch & Populate Data (Sheet / Drawer Target)',
+        'inline_preview_title' => 'Direct Inline Container Population',
+        'trigger_btn' => 'Show Demo Data',
+        'trigger_sheet_btn' => 'View in Side Sheet',
+        'trigger_inline_btn' => 'Load into Card',
+        'modal_title' => 'User Details',
+    ],
+
+    // Section 12: Button Delete & Confirmation
+    'button_delete' => [
+        'title' => 'Delete Button (<vibe:button.delete>)',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.delete&gt;</code> component is built specifically for destructive actions, featuring an integrated confirmation dialog. It prevents accidental deletion and supports seamless execution via Livewire (<code class="font-mono text-xs">wire:click</code>), HTTP DELETE form submit (<code class="font-mono text-xs">url</code>), or custom JavaScript callbacks (<code class="font-mono text-xs">action</code>).',
+        'preview_title' => 'Delete Button with Confirmation Dialog',
+        'preview_methods_title' => 'Execution Method Support',
+        'preview_table_title' => 'Table Row Action Example (Icon Mode)',
+        'custom_dialog_title' => 'Customizing Dialog Title, Message, and Action Buttons',
+        'trigger_btn' => 'Delete Item',
+        'trigger_account' => 'Delete Account Permanently',
+        'trigger_icon' => 'Delete',
+        'alert_deleted' => 'Item successfully deleted!',
+        'alert_account_deleted' => 'Account deletion request has been processed.',
+        'props_title' => '<vibe:button.delete> Props',
+        'props_desc' => 'Listing of attributes and properties accepted by the <code class="font-mono text-xs text-foreground">&lt;vibe:button.delete&gt;</code> component.',
+    ],
+
+    // Section 13: Props Reference
     'props' => [
         'title' => 'Props Reference',
         'desc' => 'Complete list of attributes and properties supported by the <code class="font-mono text-xs text-foreground">&lt;vibe:button&gt;</code> component.',
@@ -156,7 +186,7 @@ return [
         ],
     ],
 
-    // Section 11: Slots Reference
+    // Section 14: Slots Reference
     'slots' => [
         'title' => 'Slots',
         'desc' => 'Listing of slots accepted by the component.',
@@ -166,3 +196,4 @@ return [
         ],
     ],
 ];
+

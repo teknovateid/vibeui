@@ -192,6 +192,7 @@ export default defineConfig({
                 'resources/js/vibe/idle.js',
                 'resources/js/vibe/qrcode.js',
                 'resources/js/vibe/datatable.js',
+                'resources/js/vibe/show.js',
             ],
             refresh: true,
             fonts: [

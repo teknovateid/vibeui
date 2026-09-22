@@ -222,6 +222,17 @@
             {{ __('docs/sidebar.nav.button') }}
         </vibe:nav.item>
 
+        <!-- Show -->
+        <vibe:nav.item href="{{ route('docs.show.index') }}" :active="request()->routeIs('docs.show.*')">
+            <x-slot:icon>
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.show') }}
+        </vibe:nav.item>
+
         <!-- Dropdown -->
         <vibe:nav.item href="{{ route('docs.dropdown.index') }}" :active="request()->routeIs('docs.dropdown.*')">
             <x-slot:icon>

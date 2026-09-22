@@ -5,4 +5,7 @@ return [
     'delete_message' => 'Are you sure you want to delete this data? This action cannot be undone.',
     'delete_confirm' => 'Yes, Delete',
     'delete_cancel' => 'Cancel',
+    'show_title' => 'View details',
+    'show_loading' => 'Loading...',
+    'show_error' => 'Failed to load data.',
 ];
