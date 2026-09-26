@@ -63,6 +63,11 @@ class VibeServiceProvider extends ServiceProvider
         $this->app->singleton(Services\TwoFactorManager::class, function () {
             return new Services\TwoFactorManager();
         });
+
+        // Suppress passkey routes if disabled
+        if (class_exists(\Laravel\Passkeys\Passkeys::class) && ! config('passkeys.enabled', config('vibe.passkeys_enabled', env('PASSKEYS_ENABLED', true)))) {
+            \Laravel\Passkeys\Passkeys::ignoreRoutes();
+        }
     }
 
     public function boot(): void

@@ -36,6 +36,7 @@
 
                     <vibe:separator />
 
+                    @if (config('passkeys.enabled', true))
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20" x-data="passkeyController()">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
@@ -173,6 +174,7 @@
                     </div>
 
                     <vibe:separator />
+                    @endif
 
                     {{-- 2FA Section (Livewire Component) --}}
                     <livewire:settings.two-factor />
@@ -187,83 +189,89 @@
     </div>
 
     @pushOnce('head', 'vibe-security-scripts')
-        @vite(['resources/js/vibe/qrcode.js', 'resources/js/vibe/passkeys.js'])
+        @if (config('passkeys.enabled', true))
+            @vite(['resources/js/vibe/qrcode.js', 'resources/js/vibe/passkeys.js'])
+        @else
+            @vite('resources/js/vibe/qrcode.js')
+        @endif
     @endPushOnce
 
-    @push('body')
-        <script>
-            function passkeyController() {
-                return {
-                    supported: false,
-                    isIpAddress: typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1'),
-                    localhostUrl: typeof window !== 'undefined' ? window.location.href.replace('127.0.0.1', 'localhost') : '',
-                    registerName: 'Perangkat Saya (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
-                    loading: false,
-                    registering: false,
-                    statusText: '',
-                    feedbackMessage: null,
-                    feedbackType: 'info',
-                    init() {
-                        this.supported = !!(window.PublicKeyCredential && (window.VibePasskeyService?.isSupported() ?? true));
-                    },
-                    async submitRegisterPasskey() {
-                        if (!this.registerName) {
-                            this.feedbackType = 'error';
-                            this.feedbackMessage = 'Harap masukkan nama perangkat.';
-                            return;
-                        }
-
-                        this.loading = true;
-                        this.registering = true;
-                        this.statusText = 'Menyiapkan sensor biometrik perangkat...';
-                        this.feedbackMessage = null;
-
-                        try {
-                            if (!window.VibePasskeyService) {
-                                throw new Error('Modul Passkey belum dimuat.');
-                            }
-
-                            const regRes = await window.VibePasskeyService.register(this.registerName || 'Perangkat Saya');
-                            if (regRes.success) {
-                                this.feedbackType = 'success';
-                                this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
-                                setTimeout(() => window.location.reload(), 1500);
-                            } else if (regRes.confirmationRequired) {
-                                const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
-                                this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
-                                window.location.href = confirmUrl;
-                            } else {
+    @if (config('passkeys.enabled', true))
+        @push('body')
+            <script>
+                function passkeyController() {
+                    return {
+                        supported: false,
+                        isIpAddress: typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1'),
+                        localhostUrl: typeof window !== 'undefined' ? window.location.href.replace('127.0.0.1', 'localhost') : '',
+                        registerName: 'Perangkat Saya (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
+                        loading: false,
+                        registering: false,
+                        statusText: '',
+                        feedbackMessage: null,
+                        feedbackType: 'info',
+                        init() {
+                            this.supported = !!(window.PublicKeyCredential && (window.VibePasskeyService?.isSupported() ?? true));
+                        },
+                        async submitRegisterPasskey() {
+                            if (!this.registerName) {
                                 this.feedbackType = 'error';
-                                this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
-                            }
-                        } catch (err) {
-                            if (err?.response?.status === 423 || err?.status === 423 || err?.message?.includes('423') || err?.message?.toLowerCase().includes('password confirmation')) {
-                                const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
-                                this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
-                                window.location.href = confirmUrl;
+                                this.feedbackMessage = 'Harap masukkan nama perangkat.';
                                 return;
                             }
-                            this.feedbackType = 'error';
-                            this.feedbackMessage = err.message || 'Terjadi kesalahan saat memproses pendaftaran passkey.';
-                        } finally {
-                            this.loading = false;
-                            this.registering = false;
-                            this.statusText = '';
-                        }
-                    }
-                };
-            }
 
-            if (typeof window !== 'undefined') {
-                window.passkeyController = passkeyController;
-                if (window.Alpine) {
-                    window.Alpine.data('passkeyController', passkeyController);
-                } else {
-                    document.addEventListener('alpine:init', () => {
-                        window.Alpine.data('passkeyController', passkeyController);
-                    });
+                            this.loading = true;
+                            this.registering = true;
+                            this.statusText = 'Menyiapkan sensor biometrik perangkat...';
+                            this.feedbackMessage = null;
+
+                            try {
+                                if (!window.VibePasskeyService) {
+                                    throw new Error('Modul Passkey belum dimuat.');
+                                }
+
+                                const regRes = await window.VibePasskeyService.register(this.registerName || 'Perangkat Saya');
+                                if (regRes.success) {
+                                    this.feedbackType = 'success';
+                                    this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
+                                    setTimeout(() => window.location.reload(), 1500);
+                                } else if (regRes.confirmationRequired) {
+                                    const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
+                                    this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                    window.location.href = confirmUrl;
+                                } else {
+                                    this.feedbackType = 'error';
+                                    this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
+                                }
+                            } catch (err) {
+                                if (err?.response?.status === 423 || err?.status === 423 || err?.message?.includes('423') || err?.message?.toLowerCase().includes('password confirmation')) {
+                                    const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
+                                    this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                    window.location.href = confirmUrl;
+                                    return;
+                                }
+                                this.feedbackType = 'error';
+                                this.feedbackMessage = err.message || 'Terjadi kesalahan saat memproses pendaftaran passkey.';
+                            } finally {
+                                this.loading = false;
+                                this.registering = false;
+                                this.statusText = '';
+                            }
+                        }
+                    };
                 }
-            }
-        </script>
-    @endpush
+
+                if (typeof window !== 'undefined') {
+                    window.passkeyController = passkeyController;
+                    if (window.Alpine) {
+                        window.Alpine.data('passkeyController', passkeyController);
+                    } else {
+                        document.addEventListener('alpine:init', () => {
+                            window.Alpine.data('passkeyController', passkeyController);
+                        });
+                    }
+                }
+            </script>
+        @endpush
+    @endif
 </x-[path].layouts.[style]>
