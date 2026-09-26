@@ -165,7 +165,6 @@ return [
             'exceptions_title' => '📌 Permitted Exceptions',
             'exceptions' => [
                 '<code class="font-mono">bg-black/50</code> color for modal overlay backdrops (an absolute dark overlay desired in both themes).',
-                'Pinned violet accent (<code class="font-mono">oklch(0.511 0.262 276.966)</code>) in range slider <code class="font-mono">accent</code> variant — because the <code class="font-mono">--accent</code> token in Vibe UI is reserved for hover surfaces (not violet).',
                 'Chart colors (<code class="font-mono">--chart-1</code> through <code class="font-mono">--chart-5</code>) which may differ between light and dark themes.',
             ],
         ],
@@ -185,7 +184,6 @@ return [
                 ['context' => 'Success / Done / Active / Saved', 'variant' => 'success', 'note' => 'Payment confirmation, active status badge, optimal slider range'],
                 ['context' => 'Warning / Threshold / Almost full', 'variant' => 'warning', 'note' => 'Usage quota alert, soft validation, important settings warning'],
                 ['context' => 'Information / Guide / System notice', 'variant' => 'info', 'note' => 'Informational alerts, info badges, system parameter ranges'],
-                ['context' => 'Accent / Premium / Special feature', 'variant' => 'accent', 'note' => 'Star ratings, premium feature toggles, special highlights'],
                 ['context' => 'Ghost action / inline in card or list', 'variant' => 'ghost', 'note' => 'Inline edit buttons, icon actions, context menus'],
                 ['context' => 'Card surface / panel / container action', 'variant' => 'surface', 'note' => 'Buttons matching the card surface, low priority actions'],
             ],

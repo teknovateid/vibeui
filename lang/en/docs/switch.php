@@ -16,7 +16,7 @@ return [
 
     'variants' => [
         'title' => 'Color Variants',
-        'desc' => 'Available in multiple semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Available in multiple semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'All Switch Color Variants',
         'primary_label' => 'Primary (Default High Contrast)',
         'secondary_label' => 'Secondary (Subtle Neutral)',
@@ -24,7 +24,6 @@ return [
         'warning_label' => 'Warning (Data Limit Alert)',
         'danger_label' => 'Danger / Destructive (Auto Delete Account)',
         'info_label' => 'Info (Cloud Synchronization)',
-        'accent_label' => 'Accent (Experimental Feature)',
     ],
 
     'sizes' => [
@@ -88,7 +87,7 @@ return [
             'description' => 'Optional guidance text displayed beneath the primary label.',
             'checked' => 'Initial active (ON) or inactive (OFF) state.',
             'size' => 'Track dimensions and sliding thumb size: <code>\'sm\'</code>, <code>\'md\'</code>, or <code>\'lg\'</code>.',
-            'variant' => 'Active track background color: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>/<code>\'destructive\'</code>, <code>\'info\'</code>, or <code>\'accent\'</code>.',
+            'variant' => 'Active track background color: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>/<code>\'destructive\'</code>, or <code>\'info\'</code>.',
             'labelPlacement' => 'Label position relative to the toggle: <code>\'right\'</code>, <code>\'left\'</code>, or <code>\'justify\'</code>.',
             'error' => 'Custom error message string or boolean flag to trigger red destructive styling.',
             'errorName' => 'Laravel validation error key in <code>$errors</code> to track automatically.',

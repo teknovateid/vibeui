@@ -27,7 +27,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sidebar', 'card', 'muted', 'accent'] as $v)
+                    @foreach (['sidebar', 'card', 'muted'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -251,7 +251,7 @@
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">Varian Tema & Warna (variant)</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen sheet mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sidebar"</code> yang otomatis mengaplikasikan palet warna surface sidebar (<code class="font-mono text-xs text-primary">bg-sidebar</code>, <code class="font-mono text-xs text-primary">text-sidebar-foreground</code>, dan <code class="font-mono text-xs text-primary">border-sidebar-border</code>), sehingga serasi dengan navigasi desktop aplikasi. Anda juga dapat memilih varian <code class="font-mono text-xs">card</code> (default), <code class="font-mono text-xs">muted</code>, maupun <code class="font-mono text-xs">accent</code>.
+                        Komponen sheet mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="sidebar"</code> yang otomatis mengaplikasikan palet warna surface sidebar (<code class="font-mono text-xs text-primary">bg-sidebar</code>, <code class="font-mono text-xs text-primary">text-sidebar-foreground</code>, dan <code class="font-mono text-xs text-primary">border-sidebar-border</code>), sehingga serasi dengan navigasi desktop aplikasi. Anda juga dapat memilih varian <code class="font-mono text-xs">card</code> (default) maupun <code class="font-mono text-xs">muted</code>.
                     </p>
                 </div>
 
@@ -489,7 +489,7 @@
 
                             {{-- Mobile App Background Content --}}
                             <div class="flex-1 p-4 space-y-3 overflow-y-auto">
-                                <div class="h-32 rounded-2xl bg-linear-to-br from-primary/15 via-accent/20 to-primary/5 border border-border p-4 flex flex-col justify-end">
+                                <div class="h-32 rounded-2xl bg-linear-to-br from-primary/15 via-primary/10 to-primary/5 border border-border p-4 flex flex-col justify-end">
                                     <span class="text-xs font-bold text-foreground">Mobile App Feed</span>
                                     <span class="text-[10px] text-muted-foreground">Antarmuka Aplikasi Smartphone</span>
                                 </div>

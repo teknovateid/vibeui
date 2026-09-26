@@ -16,7 +16,7 @@ return [
 
     'variants' => [
         'title' => 'Varian Warna',
-        'desc' => 'Tersedia dalam berbagai varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Tersedia dalam berbagai varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'Semua Varian Warna Switch',
         'primary_label' => 'Primary (Default Kontras Tinggi)',
         'secondary_label' => 'Secondary (Netral Lembut)',
@@ -24,7 +24,6 @@ return [
         'warning_label' => 'Warning (Peringatan Kuota Data)',
         'danger_label' => 'Danger / Destructive (Hapus Akun Otomatis)',
         'info_label' => 'Info (Sinkronisasi Cloud)',
-        'accent_label' => 'Accent (Fitur Eksperimental)',
     ],
 
     'sizes' => [
@@ -88,7 +87,7 @@ return [
             'description' => 'Teks panduan / keterangan tambahan di bawah label utama.',
             'checked' => 'Status awal apakah switch dalam kondisi aktif (ON) atau nonaktif (OFF).',
             'size' => 'Ukuran track dan bulatan geser thumb: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
-            'variant' => 'Warna latar track saat aktif: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>/<code>\'destructive\'</code>, <code>\'info\'</code>, atau <code>\'accent\'</code>.',
+            'variant' => 'Warna latar track saat aktif: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>/<code>\'destructive\'</code>, atau <code>\'info\'</code>.',
             'labelPlacement' => 'Penempatan label terhadap switch: <code>\'right\'</code>, <code>\'left\'</code>, atau <code>\'justify\'</code>.',
             'error' => 'Pesan error kustom atau flag boolean untuk memicu styling merah destructive.',
             'errorName' => 'Kunci error Laravel validation dalam <code>$errors</code> untuk deteksi error otomatis.',

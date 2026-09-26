@@ -26,7 +26,6 @@ return [
             'secondary' => 'Secondary',
             'outline' => 'Outline',
             'ghost' => 'Ghost',
-            'accent' => 'Accent',
             'destructive' => 'Destruktif',
             'success' => 'Sukses',
             'warning' => 'Peringatan',

@@ -32,7 +32,7 @@ return [
 
     'variants' => [
         'title' => 'Varian Warna Semantik',
-        'desc' => 'Checkbox mendukung beragam varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Checkbox mendukung beragam varian warna semantik: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'Varian Warna Checkbox',
     ],
 
@@ -78,7 +78,7 @@ return [
             'checked' => 'Status awal apakah checkbox dalam kondisi terpilih (checked).',
             'indeterminate' => 'Menampilkan garis minus horizontal untuk status pemilihan sebagian (misal: "Pilih Semua").',
             'size' => 'Ukuran kotak centang dan teks: <code>\'sm\'</code>, <code>\'md\'</code>, atau <code>\'lg\'</code>.',
-            'variant' => 'Varian warna atau bentuk: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, atau <code>\'card\'</code>.',
+            'variant' => 'Varian warna atau bentuk: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, atau <code>\'card\'</code>.',
             'color' => 'Warna aksen kustom jika menggunakan varian card (misal: <code>color="success"</code>).',
             'card' => 'Flag boolean alternatif untuk mengaktifkan tampilan kartu (card).',
             'indicator' => 'Mengontrol visibilitas kotak centang. Set ke <code>false</code> untuk kartu pilihan tanpa kotak centang.',

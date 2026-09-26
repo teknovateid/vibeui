@@ -113,7 +113,7 @@ return [
             'href' => 'Target URL tujuan link tautan.',
             'active' => 'Menandai status menu saat ini aktif dengan styling latar highlight tegas.',
             'badge' => 'Teks label badge indikator di sebelah kanan (misal counter angka atau status).',
-            'badgeColor' => 'Warna badge: `"success"`, `"info"`, `"destructive"`, `"warning"`, `"accent"`, atau default.',
+            'badgeColor' => 'Warna badge: `"success"`, `"info"`, `"destructive"`, `"warning"`, atau default.',
             'pinnable' => 'Menampilkan tombol pin secara spesifik pada item ini.',
             'id' => 'ID unik item untuk keperluan persistensi pintasan pin.',
         ],

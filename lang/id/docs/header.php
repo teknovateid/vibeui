@@ -75,7 +75,7 @@ return [
     ],
 
     'props_items' => [
-        'variant' => "Tema warna atau posisi header: `'header'` (menggunakan variabel warna header), `'default'` / `'card'` (warna kartu), `'muted'`, `'accent'`, atau `'sticky'`.",
+        'variant' => "Tema warna atau posisi header: `'header'` (menggunakan variabel warna header), `'default'` / `'card'` (warna kartu), `'muted'`, atau `'sticky'`.",
         'sticky' => "Jika diaktifkan (`true`), header akan menempel di bagian atas saat di-scroll (`sticky top-0 z-50`).",
         'size' => "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`).",
         'scrolledClass' => "Class utility yang ditambahkan saat header sticky di-scroll melebihi threshold.",

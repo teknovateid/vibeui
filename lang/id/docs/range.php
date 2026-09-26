@@ -24,7 +24,7 @@ return [
 
     'variants' => [
         'title' => 'Varian Warna Semantik',
-        'desc' => 'Mendukung berbagai varian tema warna aktif melalui prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code>: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Mendukung berbagai varian tema warna aktif melalui prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code>: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, dan <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'Koleksi Varian Warna',
         'primary_label' => 'Primary (Default Theme)',
         'secondary_label' => 'Secondary',
@@ -32,7 +32,6 @@ return [
         'warning_label' => 'Warning (Ambang Batas Peringatan)',
         'danger_label' => 'Danger / Destructive (Kritis)',
         'info_label' => 'Info (Informasi / Pengaturan Sistem)',
-        'accent_label' => 'Accent (Aksen Ungu Premium)',
     ],
 
     'sizes' => [
@@ -130,7 +129,7 @@ return [
             'checkpoints' => 'Array opsi diskrit (misal: <code>[\'10 GB\', \'20 GB\', \'30 GB\']</code>). Secara default mengunci pergeseran slider hanya ke titik checkpoint.',
             'strict' => 'Kontrol penguncian ketat: jika <code>true</code>, pengguna hanya bisa memilih checkpoint (tidak bisa memilih nilai antara). Jika <code>false</code>, pengguna bebas memilih nilai di antaranya.',
             'size' => 'Ukuran track dan thumb slider: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, atau <code>\'xl\'</code>.',
-            'variant' => 'Varian tema warna aktif slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, atau <code>\'accent\'</code>.',
+            'variant' => 'Varian tema warna aktif slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, atau <code>\'info\'</code>.',
             'showValue' => 'Menampilkan badge realtime nilai yang sedang aktif di sebelah kanan atas label.',
             'valuePrefix' => 'Teks awalan pada badge nilai live (contoh: <code>$</code> atau <code>Rp</code>).',
             'valueSuffix' => 'Teks akhiran/satuan pada badge nilai live (contoh: <code>GB</code>, <code>%</code>, <code>★</code>).',

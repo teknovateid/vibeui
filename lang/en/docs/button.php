@@ -18,7 +18,7 @@ return [
     // Section 2: Variants
     'variants' => [
         'title' => 'Visual Variants',
-        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop controls the color scheme and visual hierarchy of the button. 12 pre-configured variants are available for diverse UI needs.',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop controls the color scheme and visual hierarchy of the button. 11 pre-configured variants are available for diverse UI needs.',
         'preview_title' => 'Button Visual Variants',
         'items' => [
             'default' => 'Default',
@@ -27,7 +27,6 @@ return [
             'outline' => 'Outline',
             'ghost' => 'Ghost',
             'surface' => 'Surface',
-            'accent' => 'Accent',
             'destructive' => 'Destructive',
             'success' => 'Success',
             'warning' => 'Warning',

@@ -170,7 +170,7 @@
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">Varian Tema & Warna (variant)</h2>
                     <p class="text-sm text-muted-foreground">
-                        Komponen header mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="header"</code> yang otomatis mengaplikasikan palet variabel warna khusus header (<code class="font-mono text-xs text-primary">bg-header</code>, <code class="font-mono text-xs text-primary">text-header-foreground</code>, dan <code class="font-mono text-xs text-primary">border-header-border</code>). Sedangkan secara default (<code class="font-mono text-xs">variant="default"</code> atau <code class="font-mono text-xs">variant="card"</code>), header menggunakan token warna kanvas kartu (<code class="font-mono text-xs">bg-card</code>, <code class="font-mono text-xs">text-card-foreground</code>, <code class="font-mono text-xs">border-border</code>). Anda juga dapat memilih varian <code class="font-mono text-xs">muted</code> maupun <code class="font-mono text-xs">accent</code>.
+                        Komponen header mendukung prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant="header"</code> yang otomatis mengaplikasikan palet variabel warna khusus header (<code class="font-mono text-xs text-primary">bg-header</code>, <code class="font-mono text-xs text-primary">text-header-foreground</code>, dan <code class="font-mono text-xs text-primary">border-header-border</code>). Sedangkan secara default (<code class="font-mono text-xs">variant="default"</code> atau <code class="font-mono text-xs">variant="card"</code>), header menggunakan token warna kanvas kartu (<code class="font-mono text-xs">bg-card</code>, <code class="font-mono text-xs">text-card-foreground</code>, <code class="font-mono text-xs">border-border</code>). Anda juga dapat memilih varian <code class="font-mono text-xs">muted</code>.
                     </p>
                 </div>
 
@@ -453,7 +453,7 @@
                     <vibe:table.rows>
                         @php
                             $headerProps = [
-                                ['variant', 'string', "'default'", "Tema warna atau posisi header: `'default'`, `'sidebar'` (menggunakan warna surface sidebar), `'card'`, `'muted'`, `'accent'`, atau `'sticky'`."],
+                                ['variant', 'string', "'default'", "Tema warna atau posisi header: `'default'`, `'sidebar'` (menggunakan warna surface sidebar), `'card'`, `'muted'`, atau `'sticky'`."],
                                 ['sticky', 'bool', "false", "Jika `true`, header akan menempel di bagian atas saat di-scroll (`sticky top-0 z-50`)."],
                                 ['size', 'string', "'default'", "Ukuran padding header: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), atau `'lg'` (`py-6 px-8`)."],
                                 ['scrolledClass', 'string', "'data-[scrolled=true]:bg-header/80 data-[scrolled=true]:backdrop-blur-md...'", "Class utility kustom yang ditambahkan saat header sticky di-scroll melebihi threshold."],

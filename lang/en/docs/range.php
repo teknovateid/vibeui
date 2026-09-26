@@ -24,7 +24,7 @@ return [
 
     'variants' => [
         'title' => 'Semantic Color Variants',
-        'desc' => 'Supports multiple active theme color variants via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Supports multiple active theme color variants via the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> prop: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code> (default), <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'Color Variant Collection',
         'primary_label' => 'Primary (Default Theme)',
         'secondary_label' => 'Secondary',
@@ -32,7 +32,6 @@ return [
         'warning_label' => 'Warning (Warning Threshold)',
         'danger_label' => 'Danger / Destructive (Critical)',
         'info_label' => 'Info (Informational / System Settings)',
-        'accent_label' => 'Accent (Purple Accent)',
     ],
 
     'sizes' => [
@@ -130,7 +129,7 @@ return [
             'checkpoints' => 'Array of discrete choices (e.g. <code>[\'10 GB\', \'20 GB\', \'30 GB\']</code>). Strictly locks slider to predefined choices by default.',
             'strict' => 'Snap restriction mode: if <code>true</code>, slider only allows checkpoint values. If <code>false</code>, allows picking in-between values.',
             'size' => 'Track thickness and thumb size: <code>\'sm\'</code>, <code>\'md\'</code>, <code>\'lg\'</code>, or <code>\'xl\'</code>.',
-            'variant' => 'Active color theme variant for the slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, or <code>\'accent\'</code>.',
+            'variant' => 'Active color theme variant for the slider: <code>\'primary\'</code>, <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, or <code>\'info\'</code>.',
             'showValue' => 'Renders a real-time live value badge at the top-right corner of the label.',
             'valuePrefix' => 'Prefix text/symbol displayed on the live value badge (e.g. <code>$</code>).',
             'valueSuffix' => 'Suffix unit text displayed on the live value badge (e.g. <code>GB</code>, <code>%</code>, <code>★</code>).',

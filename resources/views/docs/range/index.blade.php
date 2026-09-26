@@ -33,7 +33,6 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:showValue="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">valuePrefix</vibe:badge>
@@ -113,7 +112,6 @@
                             <vibe:range variant="warning" name="v_warning" label="{{ __('docs/range.variants.warning_label') }}" :value="72" :showValue="true" valueSuffix="%" />
                             <vibe:range variant="danger" name="v_danger" label="{{ __('docs/range.variants.danger_label') }}" :value="88" :showValue="true" valueSuffix="%" />
                             <vibe:range variant="info" name="v_info" label="{{ __('docs/range.variants.info_label') }}" :value="30" :showValue="true" valueSuffix="%" />
-                            <vibe:range variant="accent" name="v_accent" label="{{ __('docs/range.variants.accent_label') }}" :value="50" :showValue="true" valueSuffix="%" />
                         </div>
                     </vibe:preview.code>
                     <div class="w-full max-w-md space-y-5">
@@ -123,7 +121,6 @@
                         <vibe:range variant="warning" name="v_warning_demo" :label="__('docs/range.variants.warning_label')" :value="72" :showValue="true" valueSuffix="%" />
                         <vibe:range variant="danger" name="v_danger_demo" :label="__('docs/range.variants.danger_label')" :value="88" :showValue="true" valueSuffix="%" />
                         <vibe:range variant="info" name="v_info_demo" :label="__('docs/range.variants.info_label')" :value="30" :showValue="true" valueSuffix="%" />
-                        <vibe:range variant="accent" name="v_accent_demo" :label="__('docs/range.variants.accent_label')" :value="50" :showValue="true" valueSuffix="%" />
                     </div>
                 </vibe:preview>
             </section>
@@ -426,7 +423,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [['name', 'string', 'null', __('docs/range.props.items.name')], ['id', 'string', 'auto', __('docs/range.props.items.id')], ['label', 'string', 'null', __('docs/range.props.items.label')], ['description', 'string', 'null', __('docs/range.props.items.description')], ['value', 'numeric|string', 'null', __('docs/range.props.items.value')], ['min', 'numeric', '0', __('docs/range.props.items.min')], ['max', 'numeric', '100', __('docs/range.props.items.max')], ['step', 'numeric', '1', __('docs/range.props.items.step')], ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')], ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')], ['strict', 'bool', 'auto', __('docs/range.props.items.strict')], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/range.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'", "'primary'", __('docs/range.props.items.variant')], ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')], ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')], ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')], ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')], ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')], ['info', 'string', 'null', __('docs/range.props.items.info')], ['error', 'string|bool', 'null', __('docs/range.props.items.error')], ['errorName', 'string', 'null', __('docs/range.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/range.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')]];
+                            $props = [['name', 'string', 'null', __('docs/range.props.items.name')], ['id', 'string', 'auto', __('docs/range.props.items.id')], ['label', 'string', 'null', __('docs/range.props.items.label')], ['description', 'string', 'null', __('docs/range.props.items.description')], ['value', 'numeric|string', 'null', __('docs/range.props.items.value')], ['min', 'numeric', '0', __('docs/range.props.items.min')], ['max', 'numeric', '100', __('docs/range.props.items.max')], ['step', 'numeric', '1', __('docs/range.props.items.step')], ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')], ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')], ['strict', 'bool', 'auto', __('docs/range.props.items.strict')], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/range.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/range.props.items.variant')], ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')], ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')], ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')], ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')], ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')], ['info', 'string', 'null', __('docs/range.props.items.info')], ['error', 'string|bool', 'null', __('docs/range.props.items.error')], ['errorName', 'string', 'null', __('docs/range.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/range.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
                             <vibe:table.row>

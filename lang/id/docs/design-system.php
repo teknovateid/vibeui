@@ -165,7 +165,6 @@ return [
             'exceptions_title' => '📌 Pengecualian yang Diizinkan',
             'exceptions' => [
                 'Warna <code class="font-mono">bg-black/50</code> untuk backdrop overlay modal (nilai absolut yang diinginkan di kedua tema).',
-                'Warna accent ungu/violet yang dipatok (<code class="font-mono">oklch(0.511 0.262 276.966)</code>) di range variant <code class="font-mono">accent</code> — karena token <code class="font-mono">--accent</code> di Vibe UI dipakai untuk surface hover (bukan warna ungu).',
                 'Warna chart (<code class="font-mono">--chart-1</code> s/d <code class="font-mono">--chart-5</code>) yang dapat berbeda antara light dan dark.',
             ],
         ],
@@ -185,7 +184,6 @@ return [
                 ['context' => 'Berhasil / Selesai / Aktif / Hemat', 'variant' => 'success', 'note' => 'Konfirmasi pembayaran, badge status aktif, slider kapasitas optimal'],
                 ['context' => 'Peringatan / Threshold / Hampir penuh', 'variant' => 'warning', 'note' => 'Ambang batas penggunaan, validasi ringan, konfigurasi penting'],
                 ['context' => 'Informasi / Panduan / Bantuan sistem', 'variant' => 'info', 'note' => 'Alert informatif, badge informasi, range parameter sistem'],
-                ['context' => 'Aksen / Premium / Fitur khusus', 'variant' => 'accent', 'note' => 'Slider rating bintang, toggle fitur premium, highlight spesial'],
                 ['context' => 'Aksi ghost/navigasi dalam card/list', 'variant' => 'ghost', 'note' => 'Tombol edit inline, icon action, menu konteks'],
                 ['context' => 'Surface card/panel/container', 'variant' => 'surface', 'note' => 'Tombol yang menyatu dengan kartu, aksi belum terlalu penting'],
             ],

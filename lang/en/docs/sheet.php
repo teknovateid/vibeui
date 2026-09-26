@@ -147,7 +147,7 @@ return [
                 'name' => 'variant',
                 'type' => 'string',
                 'default' => '\'default\'',
-                'desc' => 'Color theme: \'default\' / \'card\', \'sidebar\' (uses sidebar surface and border tokens), \'accent\', or \'muted\'.',
+                'desc' => 'Color theme: \'default\' / \'card\', \'sidebar\' (uses sidebar surface and border tokens), or \'muted\'.',
             ],
             [
                 'name' => 'behavior',

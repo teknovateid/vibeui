@@ -241,6 +241,6 @@ return [
         'pattern_c_title' => 'Pola C: Event Lokal pada Tag Komponen',
         'pattern_c_desc' => 'Langsung pasang listener shorthand pada tag komponen:',
         'pattern_d_title' => 'Pola D: Vanilla JavaScript Murni',
-        'pattern_d_desc' => 'Gunakan <code class="font-mono text-accent font-semibold">window.addEventListener</code> di file script JavaScript eksternal:',
+        'pattern_d_desc' => 'Gunakan <code class="font-mono text-primary font-semibold">window.addEventListener</code> di file script JavaScript eksternal:',
     ],
 ];

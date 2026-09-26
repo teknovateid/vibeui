@@ -9,7 +9,7 @@
     'step' => 1,
     'value' => null,
     'size' => 'md', // sm, md, lg, xl
-    'variant' => 'primary', // primary, secondary, success, warning, danger, info, accent
+    'variant' => 'primary', // primary, secondary, success, warning, danger, info
     'showValue' => false,
     'valuePrefix' => '',
     'valueSuffix' => '',
@@ -61,7 +61,6 @@
         'warning' => 'var(--warning, #f59e0b)',
         'danger', 'destructive' => 'var(--destructive)',
         'info' => 'var(--info, #0ea5e9)',
-        'accent' => 'var(--accent, #8b5cf6)',
         default => 'var(--primary)',
     };
 

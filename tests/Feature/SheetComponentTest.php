@@ -25,20 +25,13 @@ test('sheet renders sidebar variant with sidebar colors', function () {
         ->toContain('data-variant="sidebar"');
 });
 
-test('sheet renders muted and accent variants with respective colors', function () {
+test('sheet renders muted variant with respective colors', function () {
     $mutedHtml = Blade::render(
         '<vibe:sheet id="test-muted-sheet" variant="muted">Content</vibe:sheet>'
     );
     expect($mutedHtml)
         ->toContain('bg-muted')
         ->toContain('text-muted-foreground');
-
-    $accentHtml = Blade::render(
-        '<vibe:sheet id="test-accent-sheet" variant="accent">Content</vibe:sheet>'
-    );
-    expect($accentHtml)
-        ->toContain('bg-accent')
-        ->toContain('text-accent-foreground');
 });
 
 test('sheet header and footer support variant sidebar styling', function () {

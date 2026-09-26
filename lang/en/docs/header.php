@@ -75,7 +75,7 @@ return [
     ],
 
     'props_items' => [
-        'variant' => "Color theme or positioning variant: `'header'` (uses header color variables), `'default'` / `'card'` (card surface), `'muted'`, `'accent'`, or `'sticky'`.",
+        'variant' => "Color theme or positioning variant: `'header'` (uses header color variables), `'default'` / `'card'` (card surface), `'muted'`, or `'sticky'`.",
         'sticky' => "When enabled (`true`), pins the header to the top of the viewport (`sticky top-0 z-50`).",
         'size' => "Header padding size: `'sm'` (`py-2.5 px-4`), `'default'` (`py-4 px-6`), or `'lg'` (`py-6 px-8`).",
         'scrolledClass' => "Utility classes added when sticky header is scrolled past threshold.",

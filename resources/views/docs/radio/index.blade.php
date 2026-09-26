@@ -32,7 +32,6 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">card</vibe:badge>
                 </div>
             </div>
@@ -105,7 +104,6 @@
                             <vibe:radio name="v_color" variant="warning" label="Warning" />
                             <vibe:radio name="v_color" variant="danger" label="Danger" />
                             <vibe:radio name="v_color" variant="info" label="Info" />
-                            <vibe:radio name="v_color" variant="accent" label="Accent" />
                         </div>
                     </vibe:preview.code>
                     <div class="flex flex-wrap gap-4 sm:gap-6">
@@ -115,7 +113,6 @@
                         <vibe:radio name="v_color_live" variant="warning" label="Warning" />
                         <vibe:radio name="v_color_live" variant="danger" label="Danger" />
                         <vibe:radio name="v_color_live" variant="info" label="Info" />
-                        <vibe:radio name="v_color_live" variant="accent" label="Accent" />
                     </div>
                 </vibe:preview>
             </section>
@@ -266,7 +263,7 @@
                                 ['description', 'string', 'null', __('docs/radio.props.items.description')],
                                 ['checked', 'bool', 'false', __('docs/radio.props.items.checked')],
                                 ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')],
-                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'|'card'", "'primary'", __('docs/radio.props.items.variant')],
+                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'card'", "'primary'", __('docs/radio.props.items.variant')],
                                 ['color', 'string', 'null', __('docs/radio.props.items.color')],
                                 ['card', 'bool', 'false', __('docs/radio.props.items.card')],
                                 ['indicator', 'bool', 'true', __('docs/radio.props.items.indicator')],

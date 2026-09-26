@@ -241,6 +241,6 @@ return [
         'pattern_c_title' => 'Pattern C: Local Event on Component Tag',
         'pattern_c_desc' => 'Attach shorthand listeners directly on the component tag:',
         'pattern_d_title' => 'Pattern D: Pure Vanilla JavaScript',
-        'pattern_d_desc' => 'Use <code class="font-mono text-accent font-semibold">window.addEventListener</code> in external JavaScript script files:',
+        'pattern_d_desc' => 'Use <code class="font-mono text-primary font-semibold">window.addEventListener</code> in external JavaScript script files:',
     ],
 ];

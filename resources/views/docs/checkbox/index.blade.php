@@ -32,7 +32,6 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">card</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">indeterminate</vibe:badge>
@@ -118,7 +117,6 @@
                             <vibe:checkbox name="cb_warning" variant="warning" label="Warning" checked />
                             <vibe:checkbox name="cb_danger" variant="danger" label="Danger" checked />
                             <vibe:checkbox name="cb_info" variant="info" label="Info" checked />
-                            <vibe:checkbox name="cb_accent" variant="accent" label="Accent" checked />
                         </div>
                     </vibe:preview.code>
                     <div class="flex flex-wrap gap-4 sm:gap-6">
@@ -128,7 +126,6 @@
                         <vibe:checkbox name="cb_warning_live" variant="warning" label="Warning" checked />
                         <vibe:checkbox name="cb_danger_live" variant="danger" label="Danger" checked />
                         <vibe:checkbox name="cb_info_live" variant="info" label="Info" checked />
-                        <vibe:checkbox name="cb_accent_live" variant="accent" label="Accent" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -318,7 +315,7 @@
                                 ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')],
                                 ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')],
                                 ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')],
-                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'|'card'", "'primary'", __('docs/checkbox.props.items.variant')],
+                                ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'card'", "'primary'", __('docs/checkbox.props.items.variant')],
                                 ['color', 'string', 'null', __('docs/checkbox.props.items.color')],
                                 ['card', 'bool', 'false', __('docs/checkbox.props.items.card')],
                                 ['indicator', 'bool', 'true', __('docs/checkbox.props.items.indicator')],

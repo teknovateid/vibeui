@@ -215,7 +215,6 @@
                             <vibe:button variant="outline" size="sm" class="w-full">outline</vibe:button>
                             <vibe:button variant="ghost" size="sm" class="w-full">ghost</vibe:button>
                             <vibe:button variant="surface" size="sm" class="w-full">surface</vibe:button>
-                            <vibe:button variant="accent" size="sm" class="w-full">accent</vibe:button>
                             <vibe:button variant="danger" size="sm" class="w-full">danger</vibe:button>
                             <vibe:button variant="success" size="sm" class="w-full">success</vibe:button>
                             <vibe:button variant="warning" size="sm" class="w-full">warning</vibe:button>
@@ -236,7 +235,6 @@
                                         ['outline',   'border border-input bg-background text-foreground',   'hover:bg-accent hover:text-accent-foreground'],
                                         ['ghost',     'text-foreground',                                      'hover:bg-accent hover:text-accent-foreground'],
                                         ['surface',   'bg-card border border-border/80 text-card-foreground', 'hover:bg-accent/60'],
-                                        ['accent',    'bg-accent text-accent-foreground border border-accent','hover:bg-accent/80'],
                                         ['danger',    'bg-destructive text-destructive-foreground',           'hover:bg-destructive/90'],
                                         ['success',   'bg-success text-success-foreground',                   'hover:bg-success/90'],
                                         ['warning',   'bg-warning text-warning-foreground',                   'hover:bg-warning/90'],
@@ -268,7 +266,6 @@
                             <vibe:badge variant="secondary">secondary</vibe:badge>
                             <vibe:badge variant="outline">outline</vibe:badge>
                             <vibe:badge variant="ghost">ghost</vibe:badge>
-                            <vibe:badge variant="accent">accent</vibe:badge>
                             <vibe:badge variant="danger">danger</vibe:badge>
                             <vibe:badge variant="success">success</vibe:badge>
                             <vibe:badge variant="warning">warning</vibe:badge>
@@ -299,7 +296,6 @@
                             <vibe:switch name="sw_w" variant="warning" label="Warning" checked />
                             <vibe:switch name="sw_d" variant="danger" label="Danger" checked />
                             <vibe:switch name="sw_i" variant="info" label="Info" checked />
-                            <vibe:switch name="sw_a" variant="accent" label="Accent" checked />
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
                             <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.switch.formula_label') }}</p>
@@ -311,7 +307,6 @@ Track checked:
   'warning' => 'peer-checked:bg-warning peer-checked:border-warning'
   'danger'  => 'peer-checked:bg-destructive peer-checked:border-destructive'
   'info'    => 'peer-checked:bg-info peer-checked:border-info'
-  'accent'  => 'peer-checked:bg-accent-foreground peer-checked:border-accent-foreground'
 
 Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
                             <p class="text-[11px] text-muted-foreground">{!! __('docs/design-system.sections.components.switch.note') !!}</p>
@@ -332,7 +327,6 @@ Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
                             <vibe:range name="ds_r_w" variant="warning" label="Warning" :value="72" :showValue="true" valueSuffix="%" />
                             <vibe:range name="ds_r_d" variant="danger" label="Danger" :value="88" :showValue="true" valueSuffix="%" />
                             <vibe:range name="ds_r_i" variant="info" label="Info" :value="30" :showValue="true" valueSuffix="%" />
-                            <vibe:range name="ds_r_a" variant="accent" label="Accent" :value="50" :showValue="true" valueSuffix="%" />
                         </div>
                         <div class="rounded-lg bg-muted p-3 space-y-2">
                             <p class="text-xs text-muted-foreground font-semibold">{{ __('docs/design-system.sections.components.range.formula_label') }}</p>
@@ -344,7 +338,6 @@ Thumb       => 'bg-background' (selalu putih/hitam sesuai theme)</pre>
 'warning'   => 'var(--warning)'
 'danger'    => 'var(--destructive)'
 'info'      => 'var(--info)'
-'accent'    => 'oklch(0.511 0.262 276.966)' // dipatok agar konsisten
 
 // CSS mengonsumsi variable ini di vibe.css:
 track: linear-gradient(to right, var(--range-active-color) var(--progress), var(--range-track-color) var(--progress))

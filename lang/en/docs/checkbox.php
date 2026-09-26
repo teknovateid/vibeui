@@ -32,7 +32,7 @@ return [
 
     'variants' => [
         'title' => 'Semantic Color Variants',
-        'desc' => 'Checkboxes support full semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">accent</code>.',
+        'desc' => 'Checkboxes support full semantic color variants: <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">primary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">secondary</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">success</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">warning</code>, <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">danger</code>, and <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">info</code>.',
         'preview_title' => 'Checkbox Color Variants',
     ],
 
@@ -78,8 +78,8 @@ return [
             'checked' => 'Initial checked status of the checkbox.',
             'indeterminate' => 'Renders a horizontal dash representing a partially selected / indeterminate state.',
             'size' => 'Visual dimensions of the checkbox box and label: <code>\'sm\'</code>, <code>\'md\'</code>, or <code>\'lg\'</code>.',
-            'variant' => 'Visual color or layout variant: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, <code>\'accent\'</code>, or <code>\'card\'</code>.',
-            'color' => 'Custom accent color override when using card mode (e.g. <code>color="success"</code>).',
+            'variant' => 'Visual color or layout variant: <code>\'primary\'</code> (default), <code>\'secondary\'</code>, <code>\'success\'</code>, <code>\'warning\'</code>, <code>\'danger\'</code>, <code>\'info\'</code>, or <code>\'card\'</code>.',
+            'color' => 'Custom color override when using card mode (e.g. <code>color="success"</code>).',
             'card' => 'Alternative boolean flag to enable card-style layout.',
             'indicator' => 'Controls visibility of the visual checkbox box. Set to <code>false</code> to create border-only cards.',
             'hideIndicator' => 'Convenience boolean attribute to hide the checkbox box indicator on selectable cards.',

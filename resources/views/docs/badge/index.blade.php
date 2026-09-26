@@ -23,7 +23,7 @@
 
                 {{-- Quick Variants Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'accent', 'destructive', 'success', 'warning', 'info'] as $v)
+                    @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'destructive', 'success', 'warning', 'info'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -73,14 +73,13 @@
 <vibe:badge variant="secondary">Secondary</vibe:badge>
 <vibe:badge variant="outline">Outline</vibe:badge>
 <vibe:badge variant="ghost">Ghost</vibe:badge>
-<vibe:badge variant="accent">Accent</vibe:badge>
 <vibe:badge variant="destructive">Destructive</vibe:badge>
 <vibe:badge variant="success">Success</vibe:badge>
 <vibe:badge variant="warning">Warning</vibe:badge>
 <vibe:badge variant="info">Info</vibe:badge>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3">
-                        @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'accent', 'destructive', 'success', 'warning', 'info'] as $variant)
+                        @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'destructive', 'success', 'warning', 'info'] as $variant)
                             <vibe:badge :variant="$variant">{{ __('docs/badge.variants.items.' . $variant) }}</vibe:badge>
                         @endforeach
                     </div>
@@ -281,7 +280,7 @@
 
                 <vibe:preview :title="__('docs/badge.link.preview_title')">
                     <vibe:preview.code>
-<vibe:badge href="/docs/button" variant="accent">
+<vibe:badge href="/docs/button" variant="outline">
     {{ __('docs/badge.link.changelog') }}
     <x-slot:trailingIcon>
         <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -291,7 +290,7 @@
 </vibe:badge>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3">
-                        <vibe:badge href="/docs/button" variant="accent">
+                        <vibe:badge href="/docs/button" variant="outline">
                             {{ __('docs/badge.link.changelog') }}
                             <x-slot:trailingIcon>
                                 <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -322,7 +321,7 @@
                     <vibe:table.rows>
                         @php
                             $badgeProps = [
-                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'accent'|'destructive'|'success'|'warning'|'info'", "'default'", __('docs/badge.props_items.variant')],
+                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'destructive'|'success'|'warning'|'info'", "'default'", __('docs/badge.props_items.variant')],
                                 ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/badge.props_items.size')],
                                 ['icon', 'string|slot|null', 'null', __('docs/badge.props_items.icon')],
                                 ['trailingIcon', 'string|slot|null', 'null', __('docs/badge.props_items.trailingIcon')],

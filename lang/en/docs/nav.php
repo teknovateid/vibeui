@@ -113,7 +113,7 @@ return [
             'href' => 'Target destination URL for the link.',
             'active' => 'Mark the item as active with bold background styling.',
             'badge' => 'Indicator badge text on the right (e.g. numeric counter or status).',
-            'badgeColor' => 'Badge color variant: `"success"`, `"info"`, `"destructive"`, `"warning"`, `"accent"`, or default.',
+            'badgeColor' => 'Badge color variant: `"success"`, `"info"`, `"destructive"`, `"warning"`, or default.',
             'pinnable' => 'Display pin button specifically on this item.',
             'id' => 'Unique item ID for pin shortcut persistence.',
         ],

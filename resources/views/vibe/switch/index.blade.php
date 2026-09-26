@@ -8,7 +8,7 @@
     'checked' => false,
     'description' => null,
     'size' => 'md', // sm, md, lg
-    'variant' => 'primary', // primary, secondary, success, warning, danger/destructive, info, accent
+    'variant' => 'primary', // primary, secondary, success, warning, danger/destructive, info
     'labelPlacement' => 'right', // right, left, justify
     'disabled' => false,
     'error' => null,
@@ -69,9 +69,6 @@
         'info' => $hasError
             ? 'bg-destructive/20 border-destructive/40 peer-checked:bg-destructive peer-checked:border-destructive'
             : 'bg-input border-border/70 peer-checked:bg-info peer-checked:border-info hover:brightness-98 dark:hover:brightness-110',
-        'accent' => $hasError
-            ? 'bg-destructive/20 border-destructive/40 peer-checked:bg-destructive peer-checked:border-destructive'
-            : 'bg-input border-border/70 peer-checked:bg-primary peer-checked:border-primary hover:brightness-98 dark:hover:brightness-110',
         default => $hasError
             ? 'bg-destructive/20 border-destructive/40 peer-checked:bg-destructive peer-checked:border-destructive'
             : 'bg-input border-border/70 peer-checked:bg-primary peer-checked:border-primary hover:brightness-98 dark:hover:brightness-110',

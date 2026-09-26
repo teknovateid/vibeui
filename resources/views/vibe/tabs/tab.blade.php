@@ -22,7 +22,6 @@
         'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
         'ghost' => 'text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent/80',
         'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-accent/60',
-        'accent' => 'bg-accent text-accent-foreground border border-accent hover:bg-accent/80 shadow-2xs focus-visible:ring-accent',
         'destructive' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
         'danger' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
         'success' => 'bg-success text-success-foreground shadow-xs hover:bg-success/90 focus-visible:ring-success',

@@ -18,7 +18,7 @@ return [
     // Section 2: Variants
     'variants' => [
         'title' => 'Varian Tampilan',
-        'desc' => 'Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> mengontrol skema warna dan hierarki visual tombol. Tersedia 12 varian yang siap digunakan untuk berbagai kebutuhan antarmuka.',
+        'desc' => 'Prop <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">variant</code> mengontrol skema warna dan hierarki visual tombol. Tersedia 11 varian yang siap digunakan untuk berbagai kebutuhan antarmuka.',
         'preview_title' => 'Varian Tampilan Tombol',
         'items' => [
             'default' => 'Default',
@@ -27,7 +27,6 @@ return [
             'outline' => 'Outline',
             'ghost' => 'Ghost',
             'surface' => 'Surface',
-            'accent' => 'Accent',
             'destructive' => 'Destruktif',
             'success' => 'Sukses',
             'warning' => 'Peringatan',

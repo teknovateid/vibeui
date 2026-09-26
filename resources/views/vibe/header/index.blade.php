@@ -25,11 +25,6 @@
             'scrolled' => 'data-[scrolled=true]:bg-muted/80 data-[scrolled=true]:border-border/80',
             'text' => 'text-muted-foreground',
         ],
-        'accent' => [
-            'normal' => 'bg-accent text-accent-foreground border-b border-border',
-            'scrolled' => 'data-[scrolled=true]:bg-accent/80 data-[scrolled=true]:border-border/80',
-            'text' => 'text-accent-foreground',
-        ],
         'card', 'default' => [
             'normal' => 'bg-card text-card-foreground border-b border-border',
             'scrolled' => 'data-[scrolled=true]:bg-card/80 data-[scrolled=true]:border-border/80',

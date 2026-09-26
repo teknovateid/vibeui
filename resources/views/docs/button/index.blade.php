@@ -23,7 +23,7 @@
 
                 {{-- Quick Variants Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'accent', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
+                    @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -81,7 +81,6 @@
                         <vibe:button variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
                         <vibe:button variant="ghost">{{ __('docs/button.variants.items.ghost') }}</vibe:button>
                         <vibe:button variant="surface">{{ __('docs/button.variants.items.surface') }}</vibe:button>
-                        <vibe:button variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
 
                         {{-- Feedback / Status Variants --}}
                         <vibe:button variant="destructive">{{ __('docs/button.variants.items.destructive') }}</vibe:button>
@@ -93,7 +92,7 @@
                         <vibe:button variant="link">{{ __('docs/button.variants.items.link') }}</vibe:button>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3 justify-center">
-                        @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'accent', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
+                        @foreach (['default', 'primary', 'secondary', 'outline', 'ghost', 'surface', 'destructive', 'success', 'warning', 'info', 'link'] as $v)
                             <vibe:button :variant="$v">{{ __('docs/button.variants.items.' . $v) }}</vibe:button>
                         @endforeach
                     </div>
@@ -233,7 +232,6 @@
                         <vibe:button class="rounded-full" variant="primary">{{ __('docs/button.pill.popular') }}</vibe:button>
                         <vibe:button class="rounded-full" variant="secondary">{{ __('docs/button.pill.explore') }}</vibe:button>
                         <vibe:button class="rounded-full" variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
-                        <vibe:button class="rounded-full" variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
 
                         {{-- Circular Icon Button --}}
                         <vibe:button class="rounded-full" size="icon-md" variant="primary" aria-label="Add Item">
@@ -247,7 +245,6 @@
                         <vibe:button class="rounded-full" variant="primary">{{ __('docs/button.pill.popular') }}</vibe:button>
                         <vibe:button class="rounded-full" variant="secondary">{{ __('docs/button.pill.explore') }}</vibe:button>
                         <vibe:button class="rounded-full" variant="outline">{{ __('docs/button.variants.items.outline') }}</vibe:button>
-                        <vibe:button class="rounded-full" variant="accent">{{ __('docs/button.variants.items.accent') }}</vibe:button>
                         <vibe:button class="rounded-full" size="icon-md" variant="primary" aria-label="Add Item">
                             <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M5 12h14" />
@@ -309,7 +306,7 @@
                                 ::loading="isProcessing" 
                                 loading="{{ __('docs/button.loading.alpine_demo_busy') }}"
                                 @click="isProcessing = true; setTimeout(() => isProcessing = false, 2000)" 
-                                variant="accent"
+                                variant="primary"
                             >
                                 {{ __('docs/button.loading.alpine_demo_btn') }}
                             </vibe:button>
@@ -337,7 +334,7 @@
     {{ __('docs/button.animation.danger') }}
 </vibe:button>
 
-<vibe:button animation="pop" variant="accent">
+<vibe:button animation="pop" variant="secondary">
     {{ __('docs/button.animation.pop') }}
 </vibe:button>
                     </vibe:preview.code>
@@ -348,7 +345,7 @@
                         <vibe:button animation="shake" variant="destructive">
                             {{ __('docs/button.animation.danger') }}
                         </vibe:button>
-                        <vibe:button animation="pop" variant="accent">
+                        <vibe:button animation="pop" variant="secondary">
                             {{ __('docs/button.animation.pop') }}
                         </vibe:button>
                     </div>
@@ -1074,7 +1071,7 @@
                     <vibe:table.rows>
                         @php
                             $props = [
-                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'accent'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'],
+                                ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'],
                                 ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'],
                                 ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'],
                                 ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai link `<a wire:navigate>`.'],

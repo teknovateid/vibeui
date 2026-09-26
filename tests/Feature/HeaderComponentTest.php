@@ -25,20 +25,13 @@ test('header renders default and card variant with card colors', function ($vari
         ->toContain('border-border');
 })->with(['default', 'card']);
 
-test('header renders muted and accent variants with respective colors', function () {
+test('header renders muted variant with respective colors', function () {
     $mutedHtml = Blade::render(
         '<vibe:header variant="muted">Header Content</vibe:header>'
     );
     expect($mutedHtml)
         ->toContain('bg-muted')
         ->toContain('text-muted-foreground');
-
-    $accentHtml = Blade::render(
-        '<vibe:header variant="accent">Header Content</vibe:header>'
-    );
-    expect($accentHtml)
-        ->toContain('bg-accent')
-        ->toContain('text-accent-foreground');
 });
 
 test('header supports sticky variant and sticky prop with header colors', function () {

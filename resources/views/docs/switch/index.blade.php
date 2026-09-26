@@ -32,7 +32,6 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">warning</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">danger</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">info</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">accent</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">labelPlacement</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">disabled</vibe:badge>
@@ -76,7 +75,6 @@
                         <vibe:switch variant="warning" label="{{ __('docs/switch.variants.warning_label') }}" checked />
                         <vibe:switch variant="danger" label="{{ __('docs/switch.variants.danger_label') }}" checked />
                         <vibe:switch variant="info" label="{{ __('docs/switch.variants.info_label') }}" checked />
-                        <vibe:switch variant="accent" label="{{ __('docs/switch.variants.accent_label') }}" checked />
                     </vibe:preview.code>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
                         <vibe:switch variant="primary" :label="__('docs/switch.variants.primary_label')" checked />
@@ -85,7 +83,6 @@
                         <vibe:switch variant="warning" :label="__('docs/switch.variants.warning_label')" checked />
                         <vibe:switch variant="danger" :label="__('docs/switch.variants.danger_label')" checked />
                         <vibe:switch variant="info" :label="__('docs/switch.variants.info_label')" checked />
-                        <vibe:switch variant="accent" :label="__('docs/switch.variants.accent_label')" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -249,7 +246,7 @@
                                     <vibe:switch name="push_notifications" labelPlacement="justify" label="Notifikasi Push" description="Terima pembaruan penting secara real-time" checked />
                                     <vibe:switch name="auto_backup" labelPlacement="justify" label="Pencadangan Otomatis" description="Sinkronisasi data ke cloud setiap 24 jam" variant="success" checked />
                                     <vibe:switch name="security_alerts" labelPlacement="justify" label="Peringatan Keamanan Kritis" description="Kirim SMS darurat saat terdeteksi login baru" variant="danger" checked />
-                                    <vibe:switch name="marketing_emails" labelPlacement="justify" label="Email Promo & Buletin" description="Dapatkan tips mingguan dan info penawaran menarik" variant="accent" />
+                                    <vibe:switch name="marketing_emails" labelPlacement="justify" label="Email Promo & Buletin" description="Dapatkan tips mingguan dan info penawaran menarik" />
                                 </vibe:card.content>
 
                                 <vibe:card.footer>
@@ -273,7 +270,7 @@
                                 <vibe:switch name="push_notifications" labelPlacement="justify" label="Notifikasi Push" description="Terima pembaruan penting secara real-time" checked />
                                 <vibe:switch name="auto_backup" labelPlacement="justify" label="Pencadangan Otomatis" description="Sinkronisasi data ke cloud setiap 24 jam" variant="success" checked />
                                 <vibe:switch name="security_alerts" labelPlacement="justify" label="Peringatan Keamanan Kritis" description="Kirim SMS darurat saat terdeteksi login baru" variant="danger" checked />
-                                <vibe:switch name="marketing_emails" labelPlacement="justify" label="Email Promo & Buletin" description="Dapatkan tips mingguan dan info penawaran menarik" variant="accent" />
+                                <vibe:switch name="marketing_emails" labelPlacement="justify" label="Email Promo & Buletin" description="Dapatkan tips mingguan dan info penawaran menarik" />
                             </vibe:card.content>
 
                             <vibe:card.footer>
@@ -305,7 +302,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $switchProps = [['name', 'string', 'null', __('docs/switch.props.items.name')], ['id', 'string', 'auto', __('docs/switch.props.items.id')], ['value', 'string', "'1'", __('docs/switch.props.items.value')], ['label', 'string', 'null', __('docs/switch.props.items.label')], ['description', 'string', 'null', __('docs/switch.props.items.description')], ['checked', 'bool', 'false', __('docs/switch.props.items.checked')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/switch.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'accent'", "'primary'", __('docs/switch.props.items.variant')], ['labelPlacement', "'right'|'left'|'justify'", "'right'", __('docs/switch.props.items.labelPlacement')], ['error', 'string|bool', 'null', __('docs/switch.props.items.error')], ['errorName', 'string', 'null', __('docs/switch.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/switch.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/switch.props.items.wrapperClass')]];
+                            $switchProps = [['name', 'string', 'null', __('docs/switch.props.items.name')], ['id', 'string', 'auto', __('docs/switch.props.items.id')], ['value', 'string', "'1'", __('docs/switch.props.items.value')], ['label', 'string', 'null', __('docs/switch.props.items.label')], ['description', 'string', 'null', __('docs/switch.props.items.description')], ['checked', 'bool', 'false', __('docs/switch.props.items.checked')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/switch.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/switch.props.items.variant')], ['labelPlacement', "'right'|'left'|'justify'", "'right'", __('docs/switch.props.items.labelPlacement')], ['error', 'string|bool', 'null', __('docs/switch.props.items.error')], ['errorName', 'string', 'null', __('docs/switch.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/switch.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/switch.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($switchProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>
