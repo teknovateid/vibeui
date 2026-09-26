@@ -304,6 +304,58 @@ async function loginWithPasskey() {
 </vibe:highlightjs>
             </section>
 
+            {{-- 6. Disabling Passkeys Configuration --}}
+            <section id="disable-passkey" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-foreground">Menonaktifkan Passkey (WebAuthn)</h2>
+                    <p class="text-sm text-muted-foreground leading-relaxed">
+                        Jika aplikasi Anda hanya ingin mengandalkan autentikasi klasik (email/kata sandi) dan Two-Factor Authentication (2FA), Vibe UI menyediakan dua cara mudah untuk menonaktifkan Passkey secara menyeluruh.
+                    </p>
+                </div>
+
+                {{-- Option A: Runtime Environment Toggle --}}
+                <div class="space-y-3 p-5 rounded-2xl border border-border bg-card shadow-xs">
+                    <div class="flex items-center gap-2">
+                        <vibe:badge variant="primary" size="sm" class="rounded-full">Metode 1</vibe:badge>
+                        <h3 class="font-semibold text-foreground text-sm">Runtime Feature Flag (.env & Config)</h3>
+                    </div>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                        Cukup ubah variabel <code class="font-mono text-primary font-semibold">PASSKEYS_ENABLED</code> di dalam file <code class="font-mono">.env</code> Anda menjadi <code class="font-mono">false</code>:
+                    </p>
+                    <vibe:highlightjs language="ini" class="rounded-xl overflow-hidden text-xs">
+# Nonaktifkan autentikasi Passkey & WebAuthn secara global
+PASSKEYS_ENABLED=false
+</vibe:highlightjs>
+                    <p class="text-xs text-muted-foreground leading-relaxed pt-1">
+                        Secara otomatis sistem akan:
+                    </p>
+                    <ul class="list-disc list-inside text-xs text-muted-foreground space-y-1 pl-1">
+                        <li>Mematikan seluruh endpoint rute WebAuthn (<code class="font-mono">/passkeys/*</code> dan <code class="font-mono">/user/passkeys/*</code>) sehingga mengembalikan <strong>404 Not Found</strong>.</li>
+                        <li>Menyembunyikan tombol "Masuk dengan Passkey" dan garis pemisah di halaman Login.</li>
+                        <li>Menyembunyikan tombol "Konfirmasi dengan Passkey" di modal konfirmasi kata sandi (sudo mode).</li>
+                        <li>Menyembunyikan kartu manajemen dan pendaftaran Passkey di halaman <em>Pengaturan Keamanan</em>.</li>
+                        <li>Mencegah pemuatan berkas aset JavaScript <code class="font-mono">passkeys.js</code> ke peramban.</li>
+                    </ul>
+                </div>
+
+                {{-- Option B: CLI Scaffolding --}}
+                <div class="space-y-3 p-5 rounded-2xl border border-border bg-card shadow-xs">
+                    <div class="flex items-center gap-2">
+                        <vibe:badge variant="secondary" size="sm" class="rounded-full">Metode 2</vibe:badge>
+                        <h3 class="font-semibold text-foreground text-sm">CLI Scaffolding Generator (Proyek Baru)</h3>
+                    </div>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                        Saat men-scaffold sistem otentikasi Vibe UI pertama kali, gunakan opsi <code class="font-mono text-primary font-semibold">--without-passkeys</code>:
+                    </p>
+                    <vibe:highlightjs language="bash" class="rounded-xl overflow-hidden text-xs">
+php artisan vibe:auth --without-passkeys
+</vibe:highlightjs>
+                    <p class="text-xs text-muted-foreground leading-relaxed">
+                        Atau jawab <strong>No</strong> saat prompt interaktif CLI menanyakan: <em>"Do you want to enable Passkey (WebAuthn / Biometric) authentication?"</em>. Generator akan otomatis melewati migrasi passkey, trait pada model User, dan aset skrip passkey.
+                    </p>
+                </div>
+            </section>
+
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.two-factor') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">

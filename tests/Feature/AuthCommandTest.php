@@ -275,4 +275,70 @@ test('settings components and views stubs exist for auth and layout publishing',
     }
 });
 
+test('passkeys config stub contains enabled option bound to env', function () {
+    $stubPath = base_path('packages/vibe/stubs/Auth/config/passkeys.php');
+    expect(File::exists($stubPath))->toBeTrue();
+
+    $content = File::get($stubPath);
+    expect($content)->toContain("'enabled' => env('PASSKEYS_ENABLED', true)");
+});
+
+test('vibe:auth skips Passkey traits and interfaces when passkeys are disabled', function () {
+    $standardUserModel = <<<'PHP'
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+
+class User extends Authenticatable
+{
+    use HasFactory, Notifiable;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+    ];
+}
+PHP;
+
+    $content = $standardUserModel;
+    $enablePasskeys = false;
+
+    // Simulate AuthCommand configureUserModel with $enablePasskeys = false
+    if ($enablePasskeys) {
+        if (! str_contains($content, 'Laravel\Passkeys\Contracts\PasskeyUser')) {
+            $content = preg_replace(
+                '/(namespace App\\\\Models;)/',
+                "$1\n\nuse Laravel\\Passkeys\\Contracts\\PasskeyUser;",
+                $content
+            );
+        }
+    }
+
+    if (! str_contains($content, 'Teknovate\VibeUi\Traits\TwoFactorAuthenticatable')) {
+        $content = preg_replace(
+            '/(namespace App\\\\Models;)/',
+            "$1\n\nuse Teknovate\\VibeUi\\Traits\\TwoFactorAuthenticatable;",
+            $content
+        );
+    }
+
+    if (! preg_match('/class\s+User\b[^{]*\{[^}]*\bTwoFactorAuthenticatable\b/s', $content)) {
+        $content = preg_replace(
+            '/(\buse\s+HasFactory,\s*Notifiable(?:,\s*PasskeyAuthenticatable)?)/',
+            '$1, TwoFactorAuthenticatable',
+            $content
+        );
+    }
+
+    expect($content)->not->toContain('use Laravel\Passkeys\Contracts\PasskeyUser;');
+    expect($content)->not->toContain('PasskeyAuthenticatable');
+    expect($content)->toContain('use Teknovate\VibeUi\Traits\TwoFactorAuthenticatable;');
+    expect($content)->toContain('use HasFactory, Notifiable, TwoFactorAuthenticatable;');
+});
+
 

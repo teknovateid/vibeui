@@ -4,6 +4,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Passkeys Enabled
+    |--------------------------------------------------------------------------
+    |
+    | Set this to false to disable Passkey (WebAuthn / Biometric) authentication
+    | across the entire application. When disabled, WebAuthn routes and UI
+    | elements will be hidden and ignored.
+    |
+    */
+
+    'enabled' => env('PASSKEYS_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | Relying Party ID
     |--------------------------------------------------------------------------
     |

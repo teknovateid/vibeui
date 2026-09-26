@@ -144,9 +144,12 @@ Route::prefix('docs')->name('docs.')->group(function () {
                 ->middleware('confirm')
                 ->name('security');
 
-            Route::view('/passkey', 'docs.settings.security')
-                ->middleware('confirm')
-                ->name('passkey');
+            Route::get('/passkey', function () {
+                if (! config('passkeys.enabled', true)) {
+                    return redirect()->route('docs.settings.security');
+                }
+                return view('docs.settings.security');
+            })->middleware('confirm')->name('passkey');
 
             Route::view('/login-history', 'docs.settings.login-history')
                 ->middleware('idle:10')

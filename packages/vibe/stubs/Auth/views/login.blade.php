@@ -5,58 +5,60 @@
         <vibe:card.alert variant="success" size="sm" :description="session('status')" animation="pop" />
     @endif
 
-    {{-- Development IP Warning Notice --}}
-    @if (session('warning'))
-        <vibe:card.alert variant="warning" size="sm" dismissible :title="__('auth/passkey.dev_mode_title')" :description="session('warning')" animation="pulse">
-            @if (session('localhost_url'))
-                <x-slot:actions>
-                    <vibe:button href="{{ session('localhost_url') }}" size="xs" variant="primary">
-                        <span>{{ __('auth/passkey.switch_to_localhost') }}</span>
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </vibe:button>
-                </x-slot:actions>
-            @endif
-        </vibe:card.alert>
+    @if (config('passkeys.enabled', true))
+        {{-- Development IP Warning Notice --}}
+        @if (session('warning'))
+            <vibe:card.alert variant="warning" size="sm" dismissible :title="__('auth/passkey.dev_mode_title')" :description="session('warning')" animation="pulse">
+                @if (session('localhost_url'))
+                    <x-slot:actions>
+                        <vibe:button href="{{ session('localhost_url') }}" size="xs" variant="primary">
+                            <span>{{ __('auth/passkey.switch_to_localhost') }}</span>
+                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </vibe:button>
+                    </x-slot:actions>
+                @endif
+            </vibe:card.alert>
+        @endif
+
+        {{-- Passkey Error Notice --}}
+        @if (session('error'))
+            <vibe:card.alert variant="destructive" size="sm" dismissible :title="__('auth/passkey.failed_title')" :description="session('error')" animation="shake" />
+        @endif
+
+        {{-- Passkey Login Section --}}
+        <div class="space-y-3">
+            <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
+                <span class="vibe-passkey-text inline-flex items-center gap-2">
+                    <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
+                        <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
+                        <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
+                        <path d="M2 12a10 10 0 0 1 18-6" />
+                        <path d="M2 16h.01" />
+                        <path d="M21.8 16c.2-2 .131-5.354 0-6" />
+                        <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
+                        <path d="M8.65 22c.21-.66.45-1.32.57-2" />
+                        <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
+                    </svg>
+                    <span>{{ __('auth/passkey.login_button') }}</span>
+                </span>
+                <span class="vibe-passkey-loading inline-flex items-center justify-center gap-2" style="display: none;">
+                    <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>{{ __('auth/passkey.connecting') }}</span>
+                </span>
+            </vibe:button>
+
+            <vibe:separator text="{{ __('auth/passkey.separator') }}" />
+        </div>
     @endif
-
-    {{-- Passkey Error Notice --}}
-    @if (session('error'))
-        <vibe:card.alert variant="destructive" size="sm" dismissible :title="__('auth/passkey.failed_title')" :description="session('error')" animation="shake" />
-    @endif
-
-    {{-- Passkey Login Section --}}
-    <div class="space-y-3">
-        <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
-            <span class="vibe-passkey-text inline-flex items-center gap-2">
-                <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
-                    <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
-                    <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
-                    <path d="M2 12a10 10 0 0 1 18-6" />
-                    <path d="M2 16h.01" />
-                    <path d="M21.8 16c.2-2 .131-5.354 0-6" />
-                    <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
-                    <path d="M8.65 22c.21-.66.45-1.32.57-2" />
-                    <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
-                </svg>
-                <span>{{ __('auth/passkey.login_button') }}</span>
-            </span>
-            <span class="vibe-passkey-loading inline-flex items-center justify-center gap-2" style="display: none;">
-                <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-                <span>{{ __('auth/passkey.connecting') }}</span>
-            </span>
-        </vibe:button>
-
-        <vibe:separator text="{{ __('auth/passkey.separator') }}" />
-    </div>
 
     <form wire:submit="authenticate" class="space-y-4">
-        <vibe:input wire:model="login" id="login" name="login" label="{{ $loginLabel }}" placeholder="{{ $loginPlaceholder }}" type="{{ $this->isOnlyEmail() ? 'email' : 'text' }}" required autofocus autocomplete="username webauthn" />
+        <vibe:input wire:model="login" id="login" name="login" label="{{ $loginLabel }}" placeholder="{{ $loginPlaceholder }}" type="{{ $this->isOnlyEmail() ? 'email' : 'text' }}" required autofocus autocomplete="{{ config('passkeys.enabled', true) ? 'username webauthn' : 'username' }}" />
 
         {{-- Password Input with Viewable Toggle --}}
         <div class="space-y-1">

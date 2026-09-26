@@ -5,6 +5,7 @@ namespace Teknovate\VibeUi\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
 
 class AuthCommand extends Command
@@ -17,6 +18,8 @@ class AuthCommand extends Command
     protected $signature = 'vibe:auth
         {--layout= : The auth layout variant (card, simple, split)}
         {--login-by= : Login identifier mode (email, username, phone, email_or_username, any)}
+        {--without-passkeys : Scaffold authentication without Passkeys (WebAuthn)}
+        {--with-passkeys : Force enable Passkeys without prompting}
         {--migrate : Run database migrations after scaffolding}
         {--force : Overwrite existing files}';
 
@@ -61,6 +64,22 @@ class AuthCommand extends Command
                 ],
                 default: 'email'
             );
+        }
+
+        $withoutPasskeys = (bool) $this->option('without-passkeys');
+        $withPasskeys = (bool) $this->option('with-passkeys');
+
+        if ($withoutPasskeys) {
+            $enablePasskeys = false;
+        } elseif ($withPasskeys) {
+            $enablePasskeys = true;
+        } elseif ($this->input->isInteractive()) {
+            $enablePasskeys = confirm(
+                label: 'Do you want to enable Passkey (WebAuthn / Biometric) authentication?',
+                default: true
+            );
+        } else {
+            $enablePasskeys = true;
         }
 
         $force = (bool) $this->option('force');
@@ -199,7 +218,7 @@ class AuthCommand extends Command
         });
 
         // 7. Update Configuration
-        $this->components->task('Updating config/vibe.php settings', function () use ($loginBy, $layout) {
+        $this->components->task('Updating config/vibe.php settings', function () use ($loginBy, $layout, $enablePasskeys) {
             $configFile = config_path('vibe.php');
             if (File::exists($configFile)) {
                 $content = File::get($configFile);
@@ -222,47 +241,69 @@ class AuthCommand extends Command
                         "'default_layout' => '{$layout}'",
                         $content
                     );
+                    if (str_contains($content, "'passkeys_enabled'")) {
+                        $passkeyBool = $enablePasskeys ? 'true' : 'false';
+                        $content = preg_replace(
+                            "/'passkeys_enabled'\s*=>\s*[^,\n]+/",
+                            "'passkeys_enabled' => {$passkeyBool}",
+                            $content
+                        );
+                    }
                     File::put($configFile, $content);
+
+                    $envFile = base_path('.env');
+                    if (File::exists($envFile)) {
+                        $envContent = File::get($envFile);
+                        $passkeyValue = $enablePasskeys ? 'true' : 'false';
+                        if (str_contains($envContent, 'PASSKEYS_ENABLED=')) {
+                            $envContent = preg_replace('/PASSKEYS_ENABLED=[^\r\n]*/', "PASSKEYS_ENABLED={$passkeyValue}", $envContent);
+                        } else {
+                            $envContent .= "\nPASSKEYS_ENABLED={$passkeyValue}\n";
+                        }
+                        File::put($envFile, $envContent);
+                    }
                 }
             }
         });
 
-        // 8. Publish Passkeys Configuration
-        $this->components->task('Publishing Passkeys Configuration', function () use ($force) {
-            $dest = config_path('passkeys.php');
-            if ($force || ! File::exists($dest)) {
-                $src = __DIR__.'/../../stubs/Auth/config/passkeys.php';
-                if (! File::exists($src)) {
-                    $src = base_path('vendor/laravel/passkeys/config/passkeys.php');
+        if ($enablePasskeys) {
+            // 8. Publish Passkeys Configuration
+            $this->components->task('Publishing Passkeys Configuration', function () use ($force) {
+                $dest = config_path('passkeys.php');
+                if ($force || ! File::exists($dest)) {
+                    $src = __DIR__.'/../../stubs/Auth/config/passkeys.php';
+                    if (! File::exists($src)) {
+                        $src = base_path('vendor/laravel/passkeys/config/passkeys.php');
+                    }
+
+                    if (File::exists($src)) {
+                        File::ensureDirectoryExists(dirname($dest));
+                        File::copy($src, $dest);
+                    } else {
+                        $this->callSilent('vendor:publish', ['--tag' => 'passkeys-config', '--force' => true]);
+                    }
+                }
+            });
+
+            // 9. Ensure Vite Assets & NPM Dependencies for Passkeys
+            $this->components->task('Ensuring Vite assets and Passkeys dependencies', function () {
+                // Ensure passkeys.js is published if missing
+                $passkeysDest = resource_path('js/vibe/passkeys.js');
+                if (! File::exists($passkeysDest)) {
+                    $src = __DIR__.'/../../resources/js/vibe/passkeys.js';
+                    if (File::exists($src)) {
+                        File::ensureDirectoryExists(dirname($passkeysDest));
+                        File::copy($src, $passkeysDest);
+                    } else {
+                        $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
+                    }
                 }
 
-                if (File::exists($src)) {
-                    File::ensureDirectoryExists(dirname($dest));
-                    File::copy($src, $dest);
-                } else {
-                    $this->callSilent('vendor:publish', ['--tag' => 'passkeys-config', '--force' => true]);
-                }
-            }
-        });
-
-        // 9. Ensure Vite Assets & NPM Dependencies for Passkeys
-        $this->components->task('Ensuring Vite assets and Passkeys dependencies', function () {
-            // Ensure passkeys.js is published if missing
-            $passkeysDest = resource_path('js/vibe/passkeys.js');
-            if (! File::exists($passkeysDest)) {
-                $src = __DIR__.'/../../resources/js/vibe/passkeys.js';
-                if (File::exists($src)) {
-                    File::ensureDirectoryExists(dirname($passkeysDest));
-                    File::copy($src, $passkeysDest);
-                } else {
-                    $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
-                }
-            }
-
-            $installCmd = new InstallCommand;
-            $installCmd->registerViteAssets();
-            $installCmd->updateNpmDependencies();
-        });
+                $installCmd = new InstallCommand;
+                $installCmd->registerViteAssets();
+                $installCmd->updateNpmDependencies();
+            });
+        }
 
         // 10. Publish & Rewrite User and 2FA Migration
         $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () {
@@ -277,50 +318,54 @@ class AuthCommand extends Command
             File::copy($src, $dest);
         });
 
-        // 11. Publish Passkeys Migration
-        $this->components->task('Publishing Passkeys Migration', function () use ($force) {
-            $existing = File::glob(database_path('migrations/*_create_passkeys_table.php'));
+        if ($enablePasskeys) {
+            // 11. Publish Passkeys Migration
+            $this->components->task('Publishing Passkeys Migration', function () use ($force) {
+                $existing = File::glob(database_path('migrations/*_create_passkeys_table.php'));
 
-            if (empty($existing) || $force) {
-                $timestamp = date('Y_m_d_His');
-                $dest = ! empty($existing)
-                    ? $existing[0]
-                    : database_path("migrations/{$timestamp}_create_passkeys_table.php");
+                if (empty($existing) || $force) {
+                    $timestamp = date('Y_m_d_His');
+                    $dest = ! empty($existing)
+                        ? $existing[0]
+                        : database_path("migrations/{$timestamp}_create_passkeys_table.php");
 
-                $src = __DIR__.'/../../stubs/Auth/migrations/create_passkeys_table.php';
-                if (! File::exists($src)) {
-                    $src = base_path('vendor/laravel/passkeys/database/migrations/2024_01_01_000000_create_passkeys_table.php');
+                    $src = __DIR__.'/../../stubs/Auth/migrations/create_passkeys_table.php';
+                    if (! File::exists($src)) {
+                        $src = base_path('vendor/laravel/passkeys/database/migrations/2024_01_01_000000_create_passkeys_table.php');
+                    }
+
+                    if (File::exists($src)) {
+                        File::ensureDirectoryExists(dirname($dest));
+                        File::copy($src, $dest);
+                    } else {
+                        $this->callSilent('vendor:publish', ['--tag' => 'passkeys-migrations', '--force' => true]);
+                    }
                 }
-
-                if (File::exists($src)) {
-                    File::ensureDirectoryExists(dirname($dest));
-                    File::copy($src, $dest);
-                } else {
-                    $this->callSilent('vendor:publish', ['--tag' => 'passkeys-migrations', '--force' => true]);
-                }
-            }
-        });
+            });
+        }
 
         // 12. Ensure User Model has Passkey & TwoFactorAuthenticatable traits and required fillables
-        $this->components->task('Updating User Model Traits & Fillables', function () {
+        $this->components->task('Updating User Model Traits & Fillables', function () use ($enablePasskeys) {
             $userModel = app_path('Models/User.php');
             if (File::exists($userModel)) {
                 $content = File::get($userModel);
 
-                // Add Passkey imports if not present
-                if (! str_contains($content, 'Laravel\Passkeys\Contracts\PasskeyUser')) {
-                    $content = preg_replace(
-                        '/(namespace App\\\\Models;)/',
-                        "$1\n\nuse Laravel\\Passkeys\\Contracts\\PasskeyUser;",
-                        $content
-                    );
-                }
-                if (! str_contains($content, 'Laravel\Passkeys\PasskeyAuthenticatable')) {
-                    $content = preg_replace(
-                        '/(namespace App\\\\Models;)/',
-                        "$1\n\nuse Laravel\\Passkeys\\PasskeyAuthenticatable;",
-                        $content
-                    );
+                if ($enablePasskeys) {
+                    // Add Passkey imports if not present
+                    if (! str_contains($content, 'Laravel\Passkeys\Contracts\PasskeyUser')) {
+                        $content = preg_replace(
+                            '/(namespace App\\\\Models;)/',
+                            "$1\n\nuse Laravel\\Passkeys\\Contracts\\PasskeyUser;",
+                            $content
+                        );
+                    }
+                    if (! str_contains($content, 'Laravel\Passkeys\PasskeyAuthenticatable')) {
+                        $content = preg_replace(
+                            '/(namespace App\\\\Models;)/',
+                            "$1\n\nuse Laravel\\Passkeys\\PasskeyAuthenticatable;",
+                            $content
+                        );
+                    }
                 }
 
                 // Add trait import if not present
@@ -332,30 +377,32 @@ class AuthCommand extends Command
                     );
                 }
 
-                // Add PasskeyUser interface to class declaration if not present
-                if (! preg_match('/class\s+User\b[^{]*\bPasskeyUser\b/s', $content)) {
-                    if (preg_match('/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/', $content)) {
+                if ($enablePasskeys) {
+                    // Add PasskeyUser interface to class declaration if not present
+                    if (! preg_match('/class\s+User\b[^{]*\bPasskeyUser\b/s', $content)) {
+                        if (preg_match('/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/', $content)) {
+                            $content = preg_replace(
+                                '/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/',
+                                '$1$2, PasskeyUser',
+                                $content
+                            );
+                        } elseif (preg_match('/(class\s+User\s+extends\s+Authenticatable)/', $content)) {
+                            $content = preg_replace(
+                                '/(class\s+User\s+extends\s+Authenticatable)/',
+                                '$1 implements PasskeyUser',
+                                $content
+                            );
+                        }
+                    }
+
+                    // Add PasskeyAuthenticatable trait to class if not present
+                    if (! preg_match('/class\s+User\b[^{]*\{[^}]*\bPasskeyAuthenticatable\b/s', $content)) {
                         $content = preg_replace(
-                            '/(class\s+User\s+extends\s+Authenticatable\s+implements\s+)([^\{\n]+)/',
-                            '$1$2, PasskeyUser',
-                            $content
-                        );
-                    } elseif (preg_match('/(class\s+User\s+extends\s+Authenticatable)/', $content)) {
-                        $content = preg_replace(
-                            '/(class\s+User\s+extends\s+Authenticatable)/',
-                            '$1 implements PasskeyUser',
+                            '/(\buse\s+HasFactory,\s*Notifiable)/',
+                            '$1, PasskeyAuthenticatable',
                             $content
                         );
                     }
-                }
-
-                // Add PasskeyAuthenticatable trait to class if not present
-                if (! preg_match('/class\s+User\b[^{]*\{[^}]*\bPasskeyAuthenticatable\b/s', $content)) {
-                    $content = preg_replace(
-                        '/(\buse\s+HasFactory,\s*Notifiable)/',
-                        '$1, PasskeyAuthenticatable',
-                        $content
-                    );
                 }
 
                 // Add TwoFactorAuthenticatable trait to class if not present
@@ -393,7 +440,11 @@ class AuthCommand extends Command
         $this->line(' <fg=gray>You can now test the routes at: <fg=cyan>/login</>, <fg=cyan>/register</>, and <fg=cyan>/forgot-password</></>');
         if (! $this->option('migrate')) {
             $this->newLine();
-            $this->line(' <fg=yellow>Reminder:</> Run <fg=white;options=bold>php artisan migrate</> to create the user, 2FA, and passkeys database tables.');
+            if ($enablePasskeys) {
+                $this->line(' <fg=yellow>Reminder:</> Run <fg=white;options=bold>php artisan migrate</> to create the user, 2FA, and passkeys database tables.');
+            } else {
+                $this->line(' <fg=yellow>Reminder:</> Run <fg=white;options=bold>php artisan migrate</> to create the user and 2FA database tables.');
+            }
         }
         $this->newLine();
     }

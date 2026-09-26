@@ -16,7 +16,9 @@
     @vibeStyles
     @stack('seo')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @vite(['resources/js/vibe/passkeys.js'])
+    @if (config('passkeys.enabled', true))
+        @vite(['resources/js/vibe/passkeys.js'])
+    @endif
     @livewireStyles
     @stack('head')
 </head>
