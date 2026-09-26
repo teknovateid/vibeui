@@ -12,8 +12,8 @@
     'error' => null,
     'errorName' => null,
     'size' => 'md', // sm, md, lg
-    'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, accent, card
-    'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info, accent
+    'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, card
+    'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info
     'card' => false,
     'wrapperClass' => null,
     'indicator' => true,
@@ -89,9 +89,6 @@
         'info' => $hasError
             ? 'border-destructive bg-background text-destructive-foreground peer-checked:bg-destructive peer-checked:border-destructive peer-indeterminate:bg-destructive peer-indeterminate:border-destructive'
             : 'border-input bg-background text-info-foreground peer-checked:bg-info peer-checked:border-info peer-indeterminate:bg-info peer-indeterminate:border-info',
-        'accent' => $hasError
-            ? 'border-destructive bg-background text-destructive-foreground peer-checked:bg-destructive peer-checked:border-destructive peer-indeterminate:bg-destructive peer-indeterminate:border-destructive'
-            : 'border-input bg-background text-accent-foreground peer-checked:bg-accent peer-checked:border-accent peer-indeterminate:bg-accent peer-indeterminate:border-accent',
         default => $hasError
             ? 'border-destructive bg-background text-destructive-foreground peer-checked:bg-destructive peer-checked:border-destructive peer-indeterminate:bg-destructive peer-indeterminate:border-destructive'
             : 'border-input bg-background text-primary-foreground peer-checked:bg-primary peer-checked:border-primary peer-indeterminate:bg-primary peer-indeterminate:border-primary',
@@ -104,7 +101,6 @@
         'warning' => 'has-checked:border-warning has-checked:ring-1 has-checked:ring-warning/20 has-checked:bg-warning/5 has-checked:hover:border-warning has-checked:hover:bg-warning/10',
         'danger', 'destructive' => 'has-checked:border-destructive has-checked:ring-1 has-checked:ring-destructive/20 has-checked:bg-destructive/5 has-checked:hover:border-destructive has-checked:hover:bg-destructive/10',
         'info' => 'has-checked:border-info has-checked:ring-1 has-checked:ring-info/20 has-checked:bg-info/5 has-checked:hover:border-info has-checked:hover:bg-info/10',
-        'accent' => 'has-checked:border-accent has-checked:ring-1 has-checked:ring-accent/20 has-checked:bg-accent/10 has-checked:hover:border-accent has-checked:hover:bg-accent/15',
         default => 'has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-checked:hover:bg-primary/10',
     };
 

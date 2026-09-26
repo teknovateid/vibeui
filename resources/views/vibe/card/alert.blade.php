@@ -20,7 +20,7 @@
     };
 
     $normalizedAppearance = match (strtolower((string) $appearance)) {
-        'border-left', 'accent' => 'accent-left',
+        'border-left' => 'accent-left',
         'soft' => 'subtle',
         'filled' => 'solid',
         default => strtolower((string) $appearance),

@@ -50,7 +50,6 @@
         'blue', 'info' => 'bg-info/15 text-info border border-info/20',
         'red', 'danger', 'destructive' => 'bg-destructive/15 text-destructive border border-destructive/20',
         'yellow', 'warning' => 'bg-warning/15 text-warning border border-warning/20',
-        'accent' => 'bg-accent text-accent-foreground border border-accent-foreground/20 font-semibold',
         default => 'bg-secondary text-secondary-foreground',
     };
 @endphp

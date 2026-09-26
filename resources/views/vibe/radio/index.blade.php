@@ -8,8 +8,8 @@
     'checked' => false,
     'description' => null,
     'size' => 'md', // sm, md, lg
-    'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, accent, card
-    'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info, accent
+    'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, card
+    'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info
     'card' => false,
     'error' => null,
     'errorName' => null,
@@ -87,9 +87,6 @@
         'info' => $hasError
             ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
             : 'border-input bg-background peer-checked:border-info text-info peer-checked:bg-info/5',
-        'accent' => $hasError
-            ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
-            : 'border-input bg-background peer-checked:border-accent text-accent peer-checked:bg-accent/10',
         default => $hasError
             ? 'border-destructive bg-background peer-checked:border-destructive text-destructive'
             : 'border-input bg-background peer-checked:border-primary text-primary peer-checked:bg-primary/5',
@@ -102,7 +99,6 @@
         'warning' => 'bg-warning',
         'danger', 'destructive' => 'bg-destructive',
         'info' => 'bg-info',
-        'accent' => 'bg-accent',
         default => 'bg-primary',
     };
 
@@ -113,7 +109,6 @@
         'warning' => 'has-checked:border-warning has-checked:ring-1 has-checked:ring-warning/20 has-checked:bg-warning/5 has-checked:hover:border-warning has-checked:hover:bg-warning/10',
         'danger', 'destructive' => 'has-checked:border-destructive has-checked:ring-1 has-checked:ring-destructive/20 has-checked:bg-destructive/5 has-checked:hover:border-destructive has-checked:hover:bg-destructive/10',
         'info' => 'has-checked:border-info has-checked:ring-1 has-checked:ring-info/20 has-checked:bg-info/5 has-checked:hover:border-info has-checked:hover:bg-info/10',
-        'accent' => 'has-checked:border-accent has-checked:ring-1 has-checked:ring-accent/20 has-checked:bg-accent/10 has-checked:hover:border-accent has-checked:hover:bg-accent/15',
         default => 'has-checked:border-primary has-checked:ring-1 has-checked:ring-primary/20 has-checked:bg-primary/5 has-checked:hover:border-primary has-checked:hover:bg-primary/10',
     };
 @endphp

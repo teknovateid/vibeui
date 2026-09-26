@@ -28,7 +28,6 @@
 
     $variantClasses = match ($variant) {
         'sidebar' => 'bg-sidebar text-sidebar-foreground border-sidebar-border',
-        'accent' => 'bg-accent text-accent-foreground border-border',
         'muted' => 'bg-muted text-muted-foreground border-border',
         'card', 'default' => 'bg-card text-card-foreground border-border',
         default => 'bg-card text-card-foreground border-border',

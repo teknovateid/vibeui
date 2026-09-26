@@ -1,7 +1,7 @@
 @blaze
 
 @props([
-    'variant' => 'default', // default/primary, secondary, outline, ghost, accent, destructive/danger, success, warning, info
+    'variant' => 'default', // default/primary, secondary, outline, ghost, destructive/danger, success, warning, info
     'size' => 'md',         // sm, md, lg, xl
     'icon' => null,
     'trailingIcon' => null,
@@ -35,7 +35,6 @@
         'secondary' => 'bg-secondary text-secondary-foreground',
         'outline' => 'border border-border text-foreground bg-transparent',
         'ghost' => 'text-muted-foreground hover:bg-muted hover:text-foreground',
-        'accent' => 'bg-accent text-accent-foreground border border-border font-semibold shadow-2xs',
         'destructive', 'danger' => 'bg-destructive/15 text-destructive border border-destructive/20',
         'success' => 'bg-success/15 text-success border border-success/20',
         'warning' => 'bg-warning/15 text-warning border border-warning/20',
@@ -47,7 +46,6 @@
         'primary', 'default' => 'bg-primary-foreground',
         'secondary' => 'bg-secondary-foreground',
         'outline', 'ghost' => 'bg-foreground',
-        'accent' => 'bg-accent-foreground',
         'destructive', 'danger' => 'bg-destructive',
         'success' => 'bg-success',
         'warning' => 'bg-warning',
