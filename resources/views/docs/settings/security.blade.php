@@ -6,7 +6,7 @@
         ['name' => __('vibe/settings.breadcrumb.security'), 'url' => route('docs.settings.security')],
     ]" />
 
-    <div class="mx-auto w-full max-w-7xl space-y-6">
+    <div class="space-y-6 mx-auto w-full">
         <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
             <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
