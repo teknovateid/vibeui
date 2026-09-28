@@ -326,5 +326,139 @@
             "</vibe:form>"
         ],
         "description": "Vibe UI Form Wrapper Component"
+    },
+    "Vibe Accordion": {
+        "prefix": "vibe:accordion",
+        "body": [
+            "<vibe:accordion type=\"${1|single,multiple|}\" variant=\"${2|default,separated,card,flush,filled,muted|}\">",
+            "\t<vibe:accordion.item value=\"${3:item-1}\" title=\"${4:Item 1}\">",
+            "\t\t${5:Konten item 1...}",
+            "\t</vibe:accordion.item>",
+            "\t<vibe:accordion.item value=\"${6:item-2}\" title=\"${7:Item 2}\">",
+            "\t\t${8:Konten item 2...}",
+            "\t</vibe:accordion.item>",
+            "</vibe:accordion>"
+        ],
+        "description": "Vibe UI Accordion Component"
+    },
+    "Vibe Button Show": {
+        "prefix": "vibe:button:show",
+        "body": [
+            "<vibe:button.show url=\"${1:/api/users/1}\" target=\"${2:user-modal}\"${3: variant=\"ghost\"} />$0"
+        ],
+        "description": "Vibe UI AJAX Fetch and Show Trigger Button"
+    },
+    "Vibe Show": {
+        "prefix": "vibe:show",
+        "body": [
+            "<vibe:show key=\"${1:field.name}\"${2: as=\"span\"} />$0"
+        ],
+        "description": "Vibe UI Show Data Binding Component"
+    },
+    "Vibe Show Each": {
+        "prefix": "vibe:show:each",
+        "body": [
+            "<vibe:show.each key=\"${1:items}\" as=\"${2|tbody,div,ul|}\" empty=\"${3:Tidak ada data.}\">",
+            "\t$0",
+            "</vibe:show.each>"
+        ],
+        "description": "Vibe UI Show Each Iteration Component"
+    },
+    "Vibe Context Menu": {
+        "prefix": "vibe:context",
+        "body": [
+            "<vibe:context menu=\"${1:ctx-menu-id}\">",
+            "\t<div class=\"${2:p-4 border rounded-lg}\">",
+            "\t\t${3:Klik kanan pada area ini...}",
+            "\t</div>",
+            "</vibe:context>",
+            "",
+            "<vibe:context.menu id=\"${1:ctx-menu-id}\">",
+            "\t<vibe:context.item wire:click=\"${4:edit}\">${5:Edit}</vibe:context.item>",
+            "\t<vibe:context.divider />",
+            "\t<vibe:context.item.delete wire:click=\"${6:delete}\" />",
+            "</vibe:context.menu>"
+        ],
+        "description": "Vibe UI Context Menu Component"
+    },
+    "Vibe Input Currency": {
+        "prefix": "vibe:input:currency",
+        "body": [
+            "<vibe:input.currency wire:model=\"${1:amount}\" label=\"${2:Nominal}\" prefix=\"${3:Rp}\"${4:} />$0"
+        ],
+        "description": "Vibe UI Currency Input Component"
+    },
+    "Vibe Input OTP": {
+        "prefix": "vibe:input:otp",
+        "body": [
+            "<vibe:input.otp wire:model=\"${1:code}\" length=\"${2:6}\" label=\"${3:Kode Verifikasi}\"${4:} />$0"
+        ],
+        "description": "Vibe UI OTP Input Component"
+    },
+    "Vibe Input Phone": {
+        "prefix": "vibe:input:phone",
+        "body": [
+            "<vibe:input.phone wire:model=\"${1:phone}\" label=\"${2:Nomor Telepon}\" placeholder=\"${3:+62 812-3456-7890}\"${4:} />$0"
+        ],
+        "description": "Vibe UI Phone Input Component"
+    },
+    "Vibe Select Remote": {
+        "prefix": "vibe:select:remote",
+        "body": [
+            "<vibe:select.remote wire:model=\"${1:selected_id}\" api=\"${2:/api/search}\" label=\"${3:Pilih Data}\" placeholder=\"${4:Cari data...}\"${5:} />$0"
+        ],
+        "description": "Vibe UI Remote Search Select Component"
+    },
+    "Vibe Card Alert": {
+        "prefix": "vibe:card:alert",
+        "body": [
+            "<vibe:card.alert variant=\"${1|info,success,warning,destructive,primary,neutral|}\" appearance=\"${2|subtle,outline,solid,accent-left|}\" title=\"${3:Pemberitahuan}\" description=\"${4:Isi pesan pemberitahuan di sini.}\"${5: dismissible} />$0"
+        ],
+        "description": "Vibe UI Card Alert Component"
+    },
+    "Vibe Separator": {
+        "prefix": "vibe:separator",
+        "body": [
+            "<vibe:separator${1: text=\"${2:ATAU}\"} />$0"
+        ],
+        "description": "Vibe UI Separator Line Component"
+    },
+    "Vibe Display QRCode": {
+        "prefix": "vibe:display:qrcode",
+        "body": [
+            "<vibe:display.qrcode value=\"${1:https://example.com}\" size=\"${2:180}\"${3: downloadable copyable} />$0"
+        ],
+        "description": "Vibe UI QRCode Generator Component"
+    },
+    "Vibe Dynamic Form": {
+        "prefix": "vibe:dynamic:form",
+        "body": [
+            "<vibe:dynamic-form wire:model=\"${1:items}\" label=\"${2:Daftar Item}\" add-text=\"${3:Tambah Item}\">",
+            "\t<template x-for=\"(item, index) in items\" :key=\"item.id || index\">",
+            "\t\t<vibe:dynamic-form.item :index=\"index\" :title=\"item.name || `Item ${index + 1}`\">",
+            "\t\t\t$0",
+            "\t\t</vibe:dynamic-form.item>",
+            "\t</template>",
+            "</vibe:dynamic-form>"
+        ],
+        "description": "Vibe UI Dynamic Form (Repeater) Component"
+    },
+    "Vibe Breadcrumb": {
+        "prefix": "vibe:breadcrumb",
+        "body": [
+            "<vibe:breadcrumb>",
+            "\t<vibe:breadcrumb.item href=\"${1:/}\">${2:Home}</vibe:breadcrumb.item>",
+            "\t<vibe:breadcrumb.item href=\"${3:/docs}\">${4:Docs}</vibe:breadcrumb.item>",
+            "\t<vibe:breadcrumb.item current>${5:Halaman Saat Ini}</vibe:breadcrumb.item>",
+            "</vibe:breadcrumb>$0"
+        ],
+        "description": "Vibe UI Breadcrumb Navigation Component"
+    },
+    "Vibe Pagination": {
+        "prefix": "vibe:pagination",
+        "body": [
+            "<vibe:pagination :paginator=\"\\$${1:items}\" />$0"
+        ],
+        "description": "Vibe UI Pagination Component"
     }
 }
