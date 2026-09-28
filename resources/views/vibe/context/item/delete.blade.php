@@ -25,7 +25,7 @@
 
     // Build the JS callback matching vibe:button.delete
     $callbackJs = match (true) {
-        !empty($wireClick) => "\$wire.{$wireClick}",
+        !empty($wireClick) => str_contains($wireClick, '(') ? "\$wire.{$wireClick}" : "\$wire.{$wireClick}()",
         !empty($action)    => $action,
         !empty($url)       => "document.getElementById('{$formId}')?.submit()",
         default            => "\$el.closest('form')?.submit()",
