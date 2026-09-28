@@ -1,5 +1,6 @@
 {
     "name": "teknovate/vibeui",
+    "description": "A modern Laravel Blade and Livewire UI component library.",
     "keywords": [
         "teknovate",
         "livewire",
@@ -34,8 +35,8 @@
     ],
     "require": {
         "php": ">=8.3",
-        "livewire/livewire": "*",
-        "livewire/blaze": "*",
+        "livewire/livewire": "^3.0",
+        "livewire/blaze": "^1.0",
         "laravel/passkeys": "^0.2.1",
         "gehrisandro/tailwind-merge-php": "^1.1",
         "rappasoft/laravel-livewire-tables": "^3.0|^4.0"
