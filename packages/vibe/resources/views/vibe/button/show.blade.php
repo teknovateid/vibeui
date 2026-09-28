@@ -19,7 +19,7 @@
         'data-url' => $url,
         'data-target' => $target,
         'data-method' => $method,
-        'x-on:click.stop' => "vibeFetchAndShow(\$el, '{$url}', '{$target}', { method: '{$method}' })",
+        'x-on:click.stop' => 'vibeFetchAndShow($el)',
     ]);
 @endphp
 

@@ -10,8 +10,19 @@ test('button.show renders with data-url, data-target, and default eye icon', fun
     expect($html)
         ->toContain('data-url="/api/users/1"')
         ->toContain('data-target="user-detail-modal"')
-        ->toContain('vibeFetchAndShow')
+        ->toContain('x-on:click.stop="vibeFetchAndShow($el)"')
         ->toContain('<svg');
+});
+
+test('button.show safely handles URLs and targets containing single quotes', function () {
+    $html = Blade::render(
+        "<vibe:button.show url=\"/api/search?q='foo'\" target=\"modal-'target'\" />"
+    );
+
+    expect($html)
+        ->toContain('data-url="/api/search?q=&#039;foo&#039;"')
+        ->toContain('data-target="modal-&#039;target&#039;"')
+        ->toContain('x-on:click.stop="vibeFetchAndShow($el)"');
 });
 
 test('button.show supports custom slot content', function () {

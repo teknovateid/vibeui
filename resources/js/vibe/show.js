@@ -365,13 +365,15 @@
     async function fetchAndShow(triggerEl, options = {}) {
         let url = options.url;
         let target = options.target;
-        let method = options.method || 'GET';
+        let method = options.method;
 
         if (triggerEl instanceof Element) {
             url = url || triggerEl.getAttribute('data-url') || triggerEl.getAttribute('href');
             target = target || triggerEl.getAttribute('data-target');
-            method = method || triggerEl.getAttribute('data-method') || 'GET';
+            method = method || triggerEl.getAttribute('data-method');
         }
+
+        method = method || 'GET';
 
         if (!url) {
             console.error('[VibeShow] Missing URL in fetchAndShow');
@@ -472,6 +474,11 @@
     window.VibeShow = VibeShow;
     window.vibeShow = VibeShow;
     window.vibeFetchAndShow = function (el, url, target, opts = {}) {
+        if (typeof url === 'object' && url !== null) {
+            opts = url;
+            url = opts.url;
+            target = opts.target;
+        }
         return fetchAndShow(el, { url, target, ...opts });
     };
 

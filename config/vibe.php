@@ -130,13 +130,6 @@ return [
         | Developer juga dapat menonaktifkannya via .env: VIBE_CONFIRM_PASSWORD_FOR_2FA=false
         */
         'confirm_password_for_2fa' => env('VIBE_CONFIRM_PASSWORD_FOR_2FA', true),
-
-        /*
-        | Dukungan Autentikasi Biometrik Passkey (WebAuthn):
-        | - true  : (Default) Mengaktifkan login & konfirmasi password biometrik passkey.
-        | - false : Menonaktifkan seluruh rute WebAuthn, tombol passkey, dan kartu manajemen.
-        */
-        // 'passkeys_enabled' => env('PASSKEYS_ENABLED', false),
     ],
 
     /*
