@@ -18,10 +18,26 @@ test('button.delete renders with default trash icon and destructive styling', fu
 });
 
 test('button.delete supports wire:click action callback', function () {
-    $html = Blade::render('<vibe:button.delete wire:click="delete(42)" />');
-
-    expect($html)
+    $htmlWithArgs = Blade::render('<vibe:button.delete wire:click="delete(42)" />');
+    expect($htmlWithArgs)
         ->toContain('$wire.delete(42)')
+        ->not->toMatch('/<button[^>]*\swire:click[\s=>]/');
+
+    $htmlWithoutArgs = Blade::render('<vibe:button.delete wire:click="delete" />');
+    expect($htmlWithoutArgs)
+        ->toContain('$wire.delete()')
+        ->not->toMatch('/<button[^>]*\swire:click[\s=>]/');
+});
+
+test('context.item.delete supports wire:click with and without parentheses', function () {
+    $htmlWithoutArgs = Blade::render('<vibe:context.item.delete wire:click="destroy" />');
+    expect($htmlWithoutArgs)
+        ->toContain('$wire.destroy()')
+        ->not->toMatch('/<button[^>]*\swire:click[\s=>]/');
+
+    $htmlWithArgs = Blade::render('<vibe:context.item.delete wire:click="destroy(10)" />');
+    expect($htmlWithArgs)
+        ->toContain('$wire.destroy(10)')
         ->not->toMatch('/<button[^>]*\swire:click[\s=>]/');
 });
 

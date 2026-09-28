@@ -29,7 +29,7 @@
 
     $callbackJs = match (true) {
         !empty($url) => "window.vibeSubmitDelete('{$url}')",
-        !empty($wireClick) => "\$wire.{$wireClick}",
+        !empty($wireClick) => str_contains($wireClick, '(') ? "\$wire.{$wireClick}" : "\$wire.{$wireClick}()",
         !empty($action) => $action,
         default => "\$el.closest('form')?.submit()",
     };
