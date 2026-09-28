@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.11] - 2026-09-28
+
+### ⚡ Performance & Refactoring
+- refactor: migrate qrcode script to ES module and dispatch ready event for rendering (f6516ef)
+
+
 ## [0.2.10] - 2026-09-28
 
 ### 🚀 Features
