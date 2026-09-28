@@ -511,7 +511,7 @@ class VibeServiceProvider extends ServiceProvider
             $prefixes = $prefixesProp->getValue($tokenizer);
 
             // Only add if not already registered
-            if (! isset($prefixes['vibe:'])) {
+            if (is_array($prefixes) && ! isset($prefixes['vibe:'])) {
                 $prefixes = array_merge(
                     ['vibe:' => ['namespace' => 'vibe::', 'slot' => 'x-slot']],
                     $prefixes
@@ -519,9 +519,10 @@ class VibeServiceProvider extends ServiceProvider
                 $prefixesProp->setValue($tokenizer, $prefixes);
             }
         } catch (\Throwable $e) {
-            // Fail silently — the parser fallback via prepareStringsForCompilationUsing
-            // already handles tag conversion for non-folded templates.
-            report($e);
+            // Fail silently in production — fallback parser handles tag conversion.
+            if (config('app.debug')) {
+                logger()->debug('[VibeUI] Failed to inject Blaze prefix: ' . $e->getMessage());
+            }
         }
     }
 
