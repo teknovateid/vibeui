@@ -273,8 +273,10 @@
                     {{-- <div class="h-[80%] w-px bg-border" role="separator"></div> --}}
                 </vibe:header.actions>
             </vibe:header>
-            <main class="flex-1 px-4 py-10 min-w-0 w-full vibe-page-enter">
-                {{ $slot }}
+            <main class="flex-1 px-4 py-8 min-w-0 w-full vibe-page-enter">
+                <div class="mx-auto w-full max-w-[1600px] 2xl:max-w-[1800px]">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
 
