@@ -235,10 +235,8 @@
             class="flex w-full items-center justify-between font-medium text-card-foreground text-xs select-none"
         >
             <div class="flex items-center gap-2">
-                <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="21" x2="3" y1="6" y2="6"/>
-                    <line x1="15" x2="3" y1="12" y2="12"/>
-                    <line x1="17" x2="3" y1="18" y2="18"/>
+                <svg class="size-4 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 7H4M14 12H4M16 17H4" />
                 </svg>
                 <span>{{ $title }}</span>
             </div>
@@ -249,11 +247,11 @@
                 viewBox="0 0 24 24" 
                 fill="none" 
                 stroke="currentColor" 
-                stroke-width="2" 
+                stroke-width="1.5" 
                 stroke-linecap="round" 
                 stroke-linejoin="round"
             >
-                <polyline points="6 9 12 15 18 9"/>
+                <path d="M19 9l-7 6-7-6" />
             </svg>
         </button>
 
@@ -276,10 +274,8 @@
     <nav class="hidden md:flex flex-col gap-3">
         @if ($title)
             <div class="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-card-foreground">
-                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="21" x2="3" y1="6" y2="6"/>
-                    <line x1="15" x2="3" y1="12" y2="12"/>
-                    <line x1="17" x2="3" y1="18" y2="18"/>
+                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 7H4M14 12H4M16 17H4" />
                 </svg>
                 <span>{{ $title }}</span>
             </div>

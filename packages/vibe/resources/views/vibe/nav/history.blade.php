@@ -123,8 +123,8 @@
     {{-- Label / Toggle Header --}}
     <div class="minified:hidden! flex items-center justify-between w-full py-1 text-[11px] font-semibold text-muted-foreground uppercase tracking-wider group/nav-label select-none">
         <button type="button" @click="open = !open" class="flex items-center gap-2 hover:text-foreground cursor-pointer flex-1 min-w-0">
-            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $open ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 9l-7 6-7-6" />
             </svg>
             <span class="whitespace-nowrap truncate">{{ $title }}</span>
         </button>
@@ -132,8 +132,8 @@
         <div class="flex items-center justify-end shrink-0 pr-2">
             <!-- Trash icon (shown on hover) -->
             <button type="button" @click.stop="clearAllHistory()" title="{{ __('vibe/nav.clear_history') }}" class="hidden group-hover/nav-label:inline-flex items-center justify-center size-6 hover:text-red-500 rounded cursor-pointer">
-                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
                 </svg>
             </button>
             <!-- Counter (hidden on hover) -->
@@ -152,7 +152,7 @@
 <script>
     if (!window.VibeHistoryBuilder) {
         window.VibeHistoryBuilder = {
-            clockSvg: '<svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+            clockSvg: '<svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>',
             render: function(wrapper, items, currentUrl, onDeleted) {
                 if (!wrapper) return;
                 wrapper.innerHTML = '';
@@ -198,7 +198,7 @@
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = '{{ __('vibe/nav.remove_from_history') }}';
                     delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-accent text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
-                    delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+                    delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12" /></svg>';
                     
                     var handleDelete = function(e) {
                         e.preventDefault();

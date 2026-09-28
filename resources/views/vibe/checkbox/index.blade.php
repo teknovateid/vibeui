@@ -142,12 +142,12 @@
                     />
                     <div class="relative {{ $boxSizes }} {{ $boxColorClasses }} border transition-colors duration-150 flex items-center justify-center shadow-2xs peer-checked:[&_.vibe-check-icon]:opacity-100 peer-checked:[&_.vibe-check-icon]:scale-100 peer-indeterminate:[&_.vibe-check-icon]:opacity-0! peer-indeterminate:[&_.vibe-check-icon]:scale-75! peer-indeterminate:[&_.vibe-indeterminate-icon]:opacity-100 peer-indeterminate:[&_.vibe-indeterminate-icon]:scale-100">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"></polyline>
+                        <svg class="{{ $iconSizes }} stroke-2 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12l5 5L20 7" />
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <svg class="{{ $iconSizes }} stroke-2 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 12h12" />
                         </svg>
                     </div>
                 </div>
@@ -197,12 +197,12 @@
                     />
                     <div class="relative {{ $boxSizes }} {{ $boxColorClasses }} border transition-colors duration-150 flex items-center justify-center shadow-2xs peer-focus-visible:ring-2 peer-focus-visible:ring-ring/25 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-disabled:opacity-50 peer-disabled:pointer-events-none pointer-events-none peer-checked:[&_.vibe-check-icon]:opacity-100 peer-checked:[&_.vibe-check-icon]:scale-100 peer-indeterminate:[&_.vibe-check-icon]:opacity-0! peer-indeterminate:[&_.vibe-check-icon]:scale-75! peer-indeterminate:[&_.vibe-indeterminate-icon]:opacity-100 peer-indeterminate:[&_.vibe-indeterminate-icon]:scale-100">
                         {{-- Check Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24">
-                            <polyline points="20 6 9 17 4 12"></polyline>
+                        <svg class="{{ $iconSizes }} stroke-2 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-check-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12l5 5L20 7" />
                         </svg>
                         {{-- Indeterminate Minus Icon --}}
-                        <svg class="{{ $iconSizes }} stroke-3 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <svg class="{{ $iconSizes }} stroke-2 pointer-events-none fill-none stroke-current shrink-0 absolute inset-0 m-auto opacity-0 scale-75 transition-all duration-100 ease-out vibe-indeterminate-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 12h12" />
                         </svg>
                     </div>
                 </div>
@@ -235,8 +235,9 @@
     {{-- Error / Info Message --}}
     @if ($hasError && $errorMessage)
         <p class="mt-1 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" />
+            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 8v5M12 16h.01" />
             </svg>
             {{ $errorMessage }}
         </p>

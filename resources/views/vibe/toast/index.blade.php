@@ -37,10 +37,10 @@
         },
         
         icons: {
-            success: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M4.5 12.75l6 6 9-13.5' /></svg>`,
-            error: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01' /></svg>`,
-            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='3' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z' /></svg>`,
-            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor'><path stroke-linecap='round' stroke-linejoin='round' d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z' /></svg>`
+            success: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m8.5 12.5 2 2 5-5' /></svg>`,
+            error: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
+            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3L2 21h20L12 3Z' /><path d='M12 9v5M12 17h.01' /></svg>`,
+            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='M12 16v-4M12 8h.01' /></svg>`
         },
         
         getActivePosition() {
@@ -317,8 +317,8 @@
                 
                 <!-- Tombol Close -->
                 <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-accent hover:text-accent-foreground transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12" />
                     </svg>
                 </button>
             </div>

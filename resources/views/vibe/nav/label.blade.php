@@ -56,19 +56,18 @@
             @if ($pinnable)
                 <div @click.stop="if(typeof togglePin !== 'undefined') togglePin('{{ $labelId }}')" class="inline-flex items-center justify-center size-6 rounded hover:bg-accent hover:text-accent-foreground transition-colors" :class="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? 'text-foreground' : 'text-muted-foreground group-hover/nav-label:text-foreground'" :title="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}') ? '{{ __('vibe/nav.unpin') }}' : '{{ __('vibe/nav.pin') }}'" title="{{ __('vibe/nav.pin') }}" aria-label="{{ __('vibe/nav.pin') }}">
                     <!-- Pinned Icon -->
-                    <svg x-show="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}')" class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M14 4h-4v2h4v-2zm2 2h2c1.1 0 2 .9 2 2v2h-8v-2h4v-2zm-6 4v5h3v7l1 2 1-2v-7h3v-5h-8z" />
+                    <svg x-show="typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}')" class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13.5V11c0-1.657-1.343-3-3-3h-1V4c0-1.105-.895-2-2-2h-2c-1.105 0-2 .895-2 2v4H8c-1.657 0-3 1.343-3 3v2.5c0 .828.672 1.5 1.5 1.5H11v6l1 1 1-1v-6h4.5c.828 0 1.5-.672 1.5-1.5z" />
                     </svg>
                     <!-- Unpinned Icon -->
-                    <svg x-show="!(typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}'))" class="size-3" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="17" x2="12" y2="22"></line>
-                        <path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"></path>
+                    <svg x-show="!(typeof isPinned !== 'undefined' && isPinned('{{ $labelId }}'))" class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 13.5V11c0-1.657-1.343-3-3-3h-1V4c0-1.105-.895-2-2-2h-2c-1.105 0-2 .895-2 2v4H8c-1.657 0-3 1.343-3 3v2.5c0 .828.672 1.5 1.5 1.5H11v6l1 1 1-1v-6h4.5c.828 0 1.5-.672 1.5-1.5z" />
                     </svg>
                 </div>
             @endif
 
-            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"></polyline>
+            <svg id="{{ $chevronId }}" class="size-3 shrink-0" :class="ready ? 'transition-transform duration-300' : ''" style="transform: {{ $defaultOpenState ? 'none' : 'rotate(-90deg)' }};" x-bind:style="`transform: ${open ? 'none' : 'rotate(-90deg)'}`" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 9l-7 6-7-6" />
             </svg>
         </div>
         <div class="flex items-center gap-1 justify-between w-full">

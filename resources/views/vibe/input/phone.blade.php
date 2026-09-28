@@ -135,8 +135,9 @@
                     <span class="w-full h-1.5 bg-red-600"></span>
                     <span class="w-full h-1.5 bg-white"></span>
                 </span>
-            @else
-                <svg class="size-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <svg class="size-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.05 6a5 5 0 0 1 3.95 3.95M14.05 2a9 9 0 0 1 9 9m-4.5 9c-1.39 1.39-3.23 1.98-5.04 1.57-3.9-.88-7.53-4.51-8.41-8.41-.41-1.81.18-3.65 1.57-5.04l1.45-1.45a2 2 0 0 1 2.83 0l2.12 2.12a2 2 0 0 1 0 2.83l-1.06 1.06a8.6 8.6 0 0 0 3.44 3.44l1.06-1.06a2 2 0 0 1 2.83 0l2.12 2.12a2 2 0 0 1 0 2.83l-1.45 1.45z" />
+                </svg>
             @endif
         </div>
 
@@ -159,10 +160,9 @@
 
     @if ($hasError && $errorMessage)
         <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
+                <path d="M12 8v5M12 16h.01" />
             </svg>
             <span>{{ $errorMessage }}</span>
         </p>

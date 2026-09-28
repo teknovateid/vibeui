@@ -270,9 +270,8 @@
     {{-- Bottom Action Toolbar --}}
     <div class="pt-1 flex items-center justify-between gap-3">
         <vibe:button type="button" :variant="$addButtonVariant" :size="$addButtonSize" @click="addItem()" x-bind:disabled="!canAdd" x-bind:class="{ 'opacity-50 pointer-events-none': !canAdd }">
-            <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M5 12h14" />
-                <path d="M12 5v14" />
+            <svg class="size-3.5 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14M5 12h14" />
             </svg>
             <span>{{ $addText }}</span>
         </vibe:button>

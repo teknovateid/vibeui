@@ -460,5 +460,67 @@
             "<vibe:pagination :paginator=\"\\$${1:items}\" />$0"
         ],
         "description": "Vibe UI Pagination Component"
+    },
+    "Vibe Layout Sidebar": {
+        "prefix": "layout:sidebar",
+        "body": [
+            "<x-layouts.sidebar>",
+            "\t<x-slot:header>",
+            "\t\t<vibe:header title=\"${1:Dashboard}\" subtitle=\"${2:Selamat datang kembali}\" />",
+            "\t</x-slot:header>",
+            "",
+            "\t$0",
+            "</x-layouts.sidebar>"
+        ],
+        "description": "Vibe UI Layout Sidebar"
+    },
+    "Vibe Layout Sidebar Classic": {
+        "prefix": "layout:sidebar-classic",
+        "body": [
+            "<x-layouts.sidebar-classic>",
+            "\t<x-slot:header>",
+            "\t\t<vibe:header title=\"${1:Dashboard}\" subtitle=\"${2:Selamat datang kembali}\" />",
+            "\t</x-slot:header>",
+            "",
+            "\t$0",
+            "</x-layouts.sidebar-classic>"
+        ],
+        "description": "Vibe UI Layout Sidebar Classic"
+    },
+    "Vibe Layout Base": {
+        "prefix": "layout:base",
+        "body": [
+            "<x-layouts.base>",
+            "\t$0",
+            "</x-layouts.base>"
+        ],
+        "description": "Vibe UI Layout Base"
+    },
+    "Vibe Auth Layout Card": {
+        "prefix": "layout:auth:card",
+        "body": [
+            "<x-auth.layouts.card title=\"${1:Masuk}\" description=\"${2:Silakan masukkan akun Anda}\">",
+            "\t$0",
+            "</x-auth.layouts.card>"
+        ],
+        "description": "Vibe UI Auth Layout Card"
+    },
+    "Vibe Auth Layout Simple": {
+        "prefix": "layout:auth:simple",
+        "body": [
+            "<x-auth.layouts.simple title=\"${1:Masuk}\" description=\"${2:Silakan masukkan akun Anda}\">",
+            "\t$0",
+            "</x-auth.layouts.simple>"
+        ],
+        "description": "Vibe UI Auth Layout Simple"
+    },
+    "Vibe Auth Layout Split": {
+        "prefix": "layout:auth:split",
+        "body": [
+            "<x-auth.layouts.split title=\"${1:Masuk}\" description=\"${2:Silakan masukkan akun Anda}\">",
+            "\t$0",
+            "</x-auth.layouts.split>"
+        ],
+        "description": "Vibe UI Auth Layout Split"
     }
 }

@@ -132,9 +132,9 @@
                     'bg-background text-foreground shadow-xs font-semibold ring-1 ring-border/80': tab === 'preview',
                     'text-foreground/70 hover:text-foreground hover:bg-background/50 font-medium': tab !== 'preview'
                 }" class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-all duration-150 {{ $tab === 'preview' ? 'bg-background text-foreground shadow-xs font-semibold ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50 font-medium' }}" aria-label="{{ __('vibe/preview.show_preview') }}">
-                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                        <path d="M0 0h24v24H0z" fill="none" />
-                        <path fill="currentColor" d="M12 9.005a4 4 0 1 1 0 8a4 4 0 0 1 0-8m0 1.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 0 0 0-5M12 5.5c4.613 0 8.596 3.15 9.701 7.564a.75.75 0 1 1-1.455.365a8.504 8.504 0 0 0-16.493.004a.75.75 0 0 1-1.456-.363A10 10 0 0 1 12 5.5" />
+                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                        <circle cx="12" cy="12" r="3" />
                     </svg>
                     <span>{{ __('vibe/preview.preview') }}</span>
                 </vibe:button>
@@ -150,9 +150,8 @@
                     'bg-background text-foreground shadow-xs font-semibold ring-1 ring-border/80': tab === 'code',
                     'text-foreground/70 hover:text-foreground hover:bg-background/50 font-medium': tab !== 'code'
                 }" class="inline-flex items-center justify-center gap-1.5 px-3 min-h-7 rounded-md text-xs cursor-pointer focus:outline-none transition-all duration-150 {{ $tab === 'code' ? 'bg-background text-foreground shadow-xs font-semibold ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50 font-medium' }}" aria-label="{{ __('vibe/preview.show_code') }}">
-                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="16 18 22 12 16 6" />
-                        <polyline points="8 6 2 12 8 18" />
+                    <svg class="size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 17l5-5-5-5M7 7l-5 5 5 5" />
                     </svg>
                     <span>{{ __('vibe/preview.code') }}</span>
                 </vibe:button>
@@ -176,10 +175,9 @@
                         'bg-background text-foreground shadow-xs ring-1 ring-border/80': viewport === '100%',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': viewport !== '100%'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '100%' ? 'bg-background text-foreground shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.desktop_view') }}" aria-label="{{ __('vibe/preview.desktop_view') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="14" x="2" y="3" rx="2" />
-                            <line x1="8" x2="16" y1="21" y2="21" />
-                            <line x1="12" x2="12" y1="17" y2="21" />
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="3" rx="3" />
+                            <path d="M12 17v4M8 21h8" />
                         </svg>
                     </button>
 
@@ -188,9 +186,9 @@
                         'bg-background text-foreground shadow-xs ring-1 ring-border/80': viewport === '768px',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': viewport !== '768px'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '768px' ? 'bg-background text-foreground shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.tablet_view') }}" aria-label="{{ __('vibe/preview.tablet_view') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="18" height="14" x="3" y="5" rx="2" ry="2" />
-                            <line x1="12" x2="12.01" y1="16" y2="16" />
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="18" height="14" x="3" y="5" rx="3" />
+                            <circle cx="12" cy="16" r=".5" fill="currentColor" />
                         </svg>
                     </button>
 
@@ -199,9 +197,9 @@
                         'bg-background text-foreground shadow-xs ring-1 ring-border/80': viewport === '375px',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': viewport !== '375px'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $viewport === '375px' ? 'bg-background text-foreground shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.mobile_view') }}" aria-label="{{ __('vibe/preview.mobile_view') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                            <path d="M12 18h.01" />
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="12" height="18" x="6" y="3" rx="3" />
+                            <path d="M11 18h2" />
                         </svg>
                     </button>
                 </vibe:button.group>
@@ -215,10 +213,9 @@
                         'bg-background text-foreground shadow-xs ring-1 ring-border/80': canvasTheme === 'auto',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': canvasTheme !== 'auto'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'auto' ? 'bg-background text-foreground shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.theme_auto') }}" aria-label="{{ __('vibe/preview.theme_auto') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="20" height="14" x="2" y="3" rx="2" />
-                            <line x1="8" x2="16" y1="21" y2="21" />
-                            <line x1="12" x2="12" y1="17" y2="21" />
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="14" x="2" y="3" rx="3" />
+                            <path d="M12 17v4M8 21h8" />
                         </svg>
                     </button>
 
@@ -227,7 +224,7 @@
                         'bg-background text-amber-500 shadow-xs ring-1 ring-border/80': canvasTheme === 'light',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': canvasTheme !== 'light'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'light' ? 'bg-background text-amber-500 shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.theme_light') }}" aria-label="{{ __('vibe/preview.theme_light') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="4" />
                             <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
                         </svg>
@@ -238,7 +235,7 @@
                         'bg-background text-indigo-400 shadow-xs ring-1 ring-border/80': canvasTheme === 'dark',
                         'text-foreground/70 hover:text-foreground hover:bg-background/50': canvasTheme !== 'dark'
                     }" class="inline-flex items-center justify-center size-7 rounded-md cursor-pointer focus:outline-none transition-all duration-150 {{ $canvasTheme === 'dark' ? 'bg-background text-indigo-400 shadow-xs ring-1 ring-border/80' : 'text-foreground/70 hover:text-foreground hover:bg-background/50' }}" title="{{ __('vibe/preview.theme_dark') }}" aria-label="{{ __('vibe/preview.theme_dark') }}">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
                         </svg>
                     </button>

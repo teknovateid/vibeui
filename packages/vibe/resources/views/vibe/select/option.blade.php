@@ -82,8 +82,8 @@
                 class="size-4 rounded border flex items-center justify-center transition-colors"
                 :class="isSelected('{{ addslashes($value) }}') ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-background'"
             >
-                <svg x-show="isSelected('{{ addslashes($value) }}')" class="size-3 stroke-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
+                <svg x-show="isSelected('{{ addslashes($value) }}')" class="size-3 stroke-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12l5 5L20 7" />
                 </svg>
             </div>
         </template>
@@ -91,8 +91,8 @@
         {{-- Single-Select Checkmark --}}
         <template x-if="!multiple">
             <div x-cloak x-show="isSelected('{{ addslashes($value) }}')" class="text-primary">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="20 6 9 17 4 12" />
+                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12l5 5L20 7" />
                 </svg>
             </div>
         </template>
