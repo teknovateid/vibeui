@@ -46,14 +46,14 @@
                     <span class="text-base leading-none">🇮🇩</span>
                     {{ __('auth/language.id') }}
                     @if(app()->getLocale() === 'id')
-                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
                     @endif
                 </a>
                 <a href="{{ route('locale.switch', 'en') }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors {{ app()->getLocale() === 'en' ? 'text-primary bg-primary/8 font-semibold' : 'text-foreground/80 hover:bg-muted/50 hover:text-foreground' }}">
                     <span class="text-base leading-none">🇺🇸</span>
                     {{ __('auth/language.en') }}
                     @if(app()->getLocale() === 'en')
-                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
                     @endif
                 </a>
             </div>

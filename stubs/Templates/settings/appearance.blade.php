@@ -6,7 +6,7 @@
         ['name' => __('vibe/settings.tabs.appearance.label'), 'url' => route('[path].settings.appearance')],
     ]" />
 
-    <div class="mx-auto w-full space-y-6">
+    <div class="mx-auto w-full max-w-7xl space-y-6">
         <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
             <vibe:breadcrumb.item href="{{ route('[path].index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
@@ -1014,22 +1014,22 @@
                                                 <span class="h-2 w-7 bg-muted rounded-full"></span>
                                             </div>
                                             <div class="flex-1 flex flex-col justify-around py-0 divide-y divide-border/20">
-                                                <div class="flex items-center gap-1.5 py-0.25">
+                                                <div class="flex items-center gap-1.5 py-px">
                                                     <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
                                                     <span class="h-0.75 w-10 bg-muted-foreground/30 rounded-xs"></span>
                                                     <span class="h-0.75 w-14 bg-muted-foreground/20 rounded-xs"></span>
                                                 </div>
-                                                <div class="flex items-center gap-1.5 py-0.25">
+                                                <div class="flex items-center gap-1.5 py-px">
                                                     <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
                                                     <span class="h-0.75 w-12 bg-muted-foreground/30 rounded-xs"></span>
                                                     <span class="h-0.75 w-10 bg-muted-foreground/20 rounded-xs"></span>
                                                 </div>
-                                                <div class="flex items-center gap-1.5 py-0.25">
+                                                <div class="flex items-center gap-1.5 py-px">
                                                     <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
                                                     <span class="h-0.75 w-9 bg-muted-foreground/30 rounded-xs"></span>
                                                     <span class="h-0.75 w-12 bg-muted-foreground/20 rounded-xs"></span>
                                                 </div>
-                                                <div class="flex items-center gap-1.5 py-0.25">
+                                                <div class="flex items-center gap-1.5 py-px">
                                                     <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
                                                     <span class="h-0.75 w-11 bg-muted-foreground/30 rounded-xs"></span>
                                                     <span class="h-0.75 w-8 bg-muted-foreground/20 rounded-xs"></span>
