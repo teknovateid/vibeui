@@ -137,7 +137,7 @@
                         </div>
 
                         <div class="space-y-4 w-full">
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl 2xl:max-w-3xl">
                                 {{-- Card 1: System preference --}}
                                 <button 
                                     type="button" 
@@ -269,7 +269,7 @@
                             </div>
 
                             {{-- High Contrast Toggle --}}
-                            <vibe:card class="max-w-2xl p-3.5 border border-border/80 bg-card hover:border-border transition-all shadow-2xs">
+                            <vibe:card class="max-w-2xl 2xl:max-w-3xl p-3.5 border border-border/80 bg-card hover:border-border transition-all shadow-2xs">
                                 <div class="flex items-center gap-3">
                                     <div class="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0 ring-1 ring-primary/20">
                                         <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -304,14 +304,14 @@
                             <p class="text-muted-foreground text-xs">Pilih nuansa warna dasar kanvas (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--background</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--card</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--popover</code>) khusus untuk mode aktif saat ini.</p>
                         </div>
 
-                        <div class="space-y-3 w-full max-w-2xl">
+                        <div class="space-y-3 w-full max-w-2xl 2xl:max-w-3xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <template x-for="surface in surfacePresets" :key="surface.id">
                                     <button 
                                         type="button" 
                                         @click="selectSurfacePreset(surface.id)"
                                         class="p-3 rounded-xl border text-left flex items-start gap-3 transition-all cursor-pointer group"
-                                        :class="selectedSurface === surface.id ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
+                                       :class="selectedSurface === surface.id ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
                                     >
                                         {{-- Visual Surface Preview Dot --}}
                                         <div class="size-9 rounded-lg border border-border/80 p-1 flex items-center justify-center shrink-0 shadow-2xs" :style="{ backgroundColor: isDarkNow ? surface.dark.bg : surface.light.bg }">
