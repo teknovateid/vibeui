@@ -71,8 +71,8 @@
                 {{ $label }}
             @endif
         </span>
-        <svg class="w-4 h-4 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-90': subOpen }" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd" />
+        <svg class="w-4 h-4 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-90': subOpen }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 5l7 7-7 7" />
         </svg>
     </vibe:button>
 

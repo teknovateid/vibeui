@@ -38,19 +38,18 @@
             <span>{{ $slot }}</span>
             <span class="inline-flex shrink-0">
                 {{-- Ascending Icon --}}
-                <svg data-sort-icon="asc" @if($initialState !== 'asc') style="display: none;" @endif class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m18 15-6-6-6 6"/>
+                <svg data-sort-icon="asc" @if($initialState !== 'asc') style="display: none;" @endif class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 15l-7-6-7 6"/>
                 </svg>
 
                 {{-- Descending Icon --}}
-                <svg data-sort-icon="desc" @if($initialState !== 'desc') style="display: none;" @endif class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m6 9 6 6 6-6"/>
+                <svg data-sort-icon="desc" @if($initialState !== 'desc') style="display: none;" @endif class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 9l-7 6-7-6"/>
                 </svg>
 
                 {{-- Neutral Sortable Icon --}}
-                <svg data-sort-icon="neutral" @if($initialState !== 'neutral') style="display: none;" @endif class="size-3.5 text-muted-foreground/40 group-hover/col:text-muted-foreground transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m7 15 5 5 5-5"/>
-                    <path d="m7 9 5-5 5 5"/>
+                <svg data-sort-icon="neutral" @if($initialState !== 'neutral') style="display: none;" @endif class="size-3.5 text-muted-foreground/40 group-hover/col:text-muted-foreground transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 9.5l-4-4-4 4M8 14.5l4 4 4-4"/>
                 </svg>
             </span>
         </button>

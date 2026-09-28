@@ -429,8 +429,8 @@
                 'rotate-180': (position === 'left' && state !== 'expanded') || (position === 'right' && state === 'expanded'),
                 'rotate-90': (position === 'top' && state === 'expanded') || (position === 'bottom' && state !== 'expanded'),
                 '-rotate-90': (position === 'bottom' && state === 'expanded') || (position === 'top' && state !== 'expanded')
-            }" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd" />
+            }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 19l-7-7 7-7" />
             </svg>
         </vibe:button>
     @endif

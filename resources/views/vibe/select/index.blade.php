@@ -512,9 +512,8 @@
                             </template>
                             <span x-text="item.label" class="truncate max-w-30"></span>
                             <button type="button" @click.stop="removeTag(item.value)" :disabled="disabled || (min !== null && value.length <= min)" :class="{ 'opacity-30 cursor-not-allowed': min !== null && value.length <= min }" class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 text-muted-foreground transition-colors cursor-pointer" aria-label="{{ __('vibe/select.remove_tag') }}">
-                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
+                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L6 18M6 6l12 12" />
                                 </svg>
                             </button>
                         </span>
@@ -545,14 +544,13 @@
                         @click.stop="clearAll()"
                         class="size-4 hover:text-foreground inline-flex items-center justify-center transition-colors cursor-pointer mr-0.5"
                         aria-label="{{ __('vibe/select.clear') ?? 'Clear' }}">
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
+                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12" />
                         </svg>
                     </button>
                 @endif
-                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m6 9 6 6 6-6" />
+                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 9l-7 6-7-6" />
                 </svg>
             </div>
         </div>
@@ -563,17 +561,16 @@
             @if ($searchable)
                 <div class="p-2 border-b border-border bg-muted/20">
                     <div class="relative flex items-center">
-                        <svg class="size-3.5 absolute left-2.5 text-muted-foreground pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
+                        <svg class="size-3.5 absolute left-2.5 text-muted-foreground pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11.5" cy="11.5" r="9.5" />
+                            <path d="M18.5 18.5L22 22" />
                         </svg>
                         <input x-ref="searchInput" x-model="search" type="text" placeholder="{{ $searchPlaceholder }}" class="w-full h-8 pl-8 pr-7 text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors" @keydown.escape.stop="close()" @if ($keyboard) @keydown.down.stop.prevent="focusNext($event)"
                                 @keydown.up.stop.prevent=""
                                 @keydown.enter.stop.prevent="let items = getVisibleItems(); if (items[0]) { items[0].click(); }" @endif />
                         <button x-show="search.length > 0" @click="search = ''; $refs.searchInput.focus()" type="button" class="absolute right-2 text-muted-foreground hover:text-foreground size-4 flex items-center justify-center cursor-pointer">
-                            <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M18 6 6 18" />
-                                <path d="m6 6 12 12" />
+                            <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 6L6 18M6 6l12 12" />
                             </svg>
                         </button>
                     </div>
@@ -633,9 +630,9 @@
                 {{-- Empty Search Results Message --}}
                 <div x-cloak x-show="!hasVisibleOptions" class="py-6 px-3 text-center text-xs text-muted-foreground">
                     <svg class="size-6 mx-auto mb-1.5 text-muted-foreground/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" x2="16.65" y1="21" y2="16.65" />
-                        <line x1="8" x2="14" y1="11" y2="11" />
+                        <circle cx="11.5" cy="11.5" r="9.5" />
+                        <path d="M18.5 18.5L22 22" />
+                        <path d="M9 11.5h5" />
                     </svg>
                     <span>{{ __('vibe/select.no_options') }}</span>
                 </div>
@@ -646,10 +643,9 @@
     {{-- Error Message --}}
     @if ($hasError && $errorMessage)
         <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="8" y2="12" />
-                <line x1="12" x2="12.01" y1="16" y2="16" />
+                <path d="M12 8v5M12 16h.01" />
             </svg>
             <span>{{ $errorMessage }}</span>
         </p>

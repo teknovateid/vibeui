@@ -24,15 +24,15 @@
         @if ($isSeparatorSlot)
             {{ $separator }}
         @elseif ($separatorType === 'slash' || $separatorType === '/')
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 rtl:-scale-x-100"><path d="m16 4-8 16"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 rtl:-scale-x-100"><path d="M16 4L8 20"/></svg>
         @elseif ($separatorType === 'arrow' || $separatorType === '->' || $separatorType === '-->')
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 rtl:rotate-180"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 rtl:rotate-180"><path d="M4 12h16m0 0l-6-6m6 6l-6 6"/></svg>
         @elseif ($separatorType === 'dot' || $separatorType === 'bullet' || $separatorType === '•')
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="w-1.5 h-1.5"><circle cx="12" cy="12" r="4"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-1.5 h-1.5"><circle cx="12" cy="12" r="4"/></svg>
         @elseif (str_starts_with($separatorType, '<'))
             {!! $separator !!}
         @elseif ($separatorType === 'chevron' || $separatorType === '>')
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 rtl:rotate-180"><path d="m9 18 6-6-6-6"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 rtl:rotate-180"><path d="M9 5l7 7-7 7"/></svg>
         @else
             <span class="text-xs select-none leading-none">{{ $separator }}</span>
         @endif

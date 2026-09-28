@@ -552,9 +552,8 @@
                             </template>
                             <span x-text="item.label" class="truncate max-w-30"></span>
                             <button type="button" @click.stop="removeTag(item.value)" :disabled="disabled || (min !== null && value.length <= min)" :class="{ 'opacity-30 cursor-not-allowed': min !== null && value.length <= min }" class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 text-muted-foreground transition-colors cursor-pointer" aria-label="{{ __('vibe/select.remove_tag') }}">
-                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6 6 18" />
-                                    <path d="m6 6 12 12" />
+                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M18 6L6 18M6 6l12 12" />
                                 </svg>
                             </button>
                         </span>
@@ -590,14 +589,13 @@
                         @click.stop="clearAll()"
                         class="size-4 hover:text-foreground inline-flex items-center justify-center transition-colors cursor-pointer mr-0.5"
                         aria-label="{{ __('vibe/select.clear') ?? 'Clear' }}">
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
+                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12" />
                         </svg>
                     </button>
                 @endif
-                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m6 9 6 6 6-6" />
+                <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 9l-7 6-7-6" />
                 </svg>
             </div>
         </div>
@@ -621,9 +619,9 @@
                 <div class="relative flex items-center">
                     {{-- Search Icon or Loading Spinner --}}
                     <div class="size-3.5 absolute left-2.5 text-muted-foreground pointer-events-none flex items-center justify-center">
-                        <svg x-show="!loading" class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8" />
-                            <path d="m21 21-4.3-4.3" />
+                        <svg x-show="!loading" class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11.5" cy="11.5" r="9.5" />
+                            <path d="M18.5 18.5L22 22" />
                         </svg>
                         <svg x-show="loading" class="size-3.5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -651,9 +649,8 @@
                         @click="search = ''; fetchData(''); $refs.searchInput.focus()"
                         type="button"
                         class="absolute right-2 text-muted-foreground hover:text-foreground size-4 flex items-center justify-center cursor-pointer">
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6 6 18" />
-                            <path d="m6 6 12 12" />
+                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 6L6 18M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
@@ -705,10 +702,9 @@
 
                 {{-- Network Error State --}}
                 <div x-cloak x-show="hasNetworkError" class="py-6 px-3 text-center text-xs text-destructive flex flex-col items-center gap-1.5">
-                    <svg class="size-5 text-destructive/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="size-5 text-destructive/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                        <path d="M12 8v5M12 16h.01" />
                     </svg>
                     <span>{{ __('vibe/select.network_error') }}</span>
                     <button type="button" @click="fetchData()" class="mt-1 text-[11px] underline text-foreground hover:text-primary cursor-pointer">Coba lagi</button>
@@ -717,9 +713,9 @@
                 {{-- Empty Search Results Message --}}
                 <div x-cloak x-show="!loading && !hasNetworkError && items.length === 0 && search.length >= minChars && hasLoadedOnce" class="py-6 px-3 text-center text-xs text-muted-foreground">
                     <svg class="size-6 mx-auto mb-1.5 text-muted-foreground/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8" />
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                        <line x1="8" y1="11" x2="14" y2="11" />
+                        <circle cx="11.5" cy="11.5" r="9.5" />
+                        <path d="M18.5 18.5L22 22" />
+                        <path d="M9 11.5h5" />
                     </svg>
                     <span>{{ __('vibe/select.no_options') }}</span>
                 </div>
@@ -781,8 +777,8 @@
                                 <div
                                     class="size-4 rounded border flex items-center justify-center transition-colors"
                                     :class="isSelected(item.value) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-background'">
-                                    <svg x-show="isSelected(item.value)" class="size-3 stroke-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
+                                    <svg x-show="isSelected(item.value)" class="size-3 stroke-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 12l5 5L20 7" />
                                     </svg>
                                 </div>
                             </template>
@@ -790,8 +786,8 @@
                             {{-- Single-Select Checkmark --}}
                             <template x-if="!multiple">
                                 <div x-cloak x-show="isSelected(item.value)" class="text-primary">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="20 6 9 17 4 12" />
+                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 12l5 5L20 7" />
                                     </svg>
                                 </div>
                             </template>
@@ -805,10 +801,9 @@
     {{-- Error Message --}}
     @if ($hasError && $errorMessage)
         <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
+                <path d="M12 8v5M12 16h.01" />
             </svg>
             <span>{{ $errorMessage }}</span>
         </p>

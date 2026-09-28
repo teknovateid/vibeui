@@ -52,13 +52,13 @@
                 @if ($allowReorder)
                     {{-- Drag Handle --}}
                     <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="9" cy="5" r="1" />
-                            <circle cx="9" cy="12" r="1" />
-                            <circle cx="9" cy="19" r="1" />
-                            <circle cx="15" cy="5" r="1" />
-                            <circle cx="15" cy="12" r="1" />
-                            <circle cx="15" cy="19" r="1" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="9" cy="18" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="6" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="18" r="1" fill="currentColor" stroke="none" />
                         </svg>
                     </div>
                 @endif
@@ -77,15 +77,15 @@
                 @if ($allowReorder)
                     {{-- Move Up --}}
                     <button type="button" data-action-move-up @click="moveUp($el)" title="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}" aria-label="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m18 15-6-6-6 6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 15l-7-6-7 6" />
                         </svg>
                     </button>
 
                     {{-- Move Down --}}
                     <button type="button" data-action-move-down @click="moveDown($el)" title="{{ $i18n['move_down'] ?? __('vibe/dynamic-form.move_down', [], $resolvedLocale) }}" aria-label="{{ $i18n['move_down'] ?? __('vibe/dynamic-form.move_down', [], $resolvedLocale) }}" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 6-7-6" />
                         </svg>
                     </button>
 
@@ -95,9 +95,9 @@
                 @if ($allowDuplicate)
                     {{-- Duplicate --}}
                     <button type="button" data-action-duplicate @click="duplicateItem($el)" title="{{ $i18n['duplicate_row'] ?? __('vibe/dynamic-form.duplicate_row', [], $resolvedLocale) }}" aria-label="{{ $i18n['duplicate_row'] ?? __('vibe/dynamic-form.duplicate_row', [], $resolvedLocale) }}" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z" />
+                            <path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z" />
                         </svg>
                     </button>
                 @endif
@@ -105,18 +105,16 @@
                 @if ($collapsible)
                     {{-- Collapse Toggle --}}
                     <button type="button" data-action-collapse @click="toggleCollapse($el)" title="{{ $collapsed ? ($i18n['expand'] ?? __('vibe/dynamic-form.expand', [], $resolvedLocale)) : ($i18n['collapse'] ?? __('vibe/dynamic-form.collapse', [], $resolvedLocale)) }}" aria-label="{{ $collapsed ? ($i18n['expand'] ?? __('vibe/dynamic-form.expand', [], $resolvedLocale)) : ($i18n['collapse'] ?? __('vibe/dynamic-form.collapse', [], $resolvedLocale)) }}" class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer">
-                        <svg data-dynamic-form-chevron class="size-3.5 transition-transform duration-200 {{ $collapsed ? '-rotate-90' : '' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6" />
+                        <svg data-dynamic-form-chevron class="size-3.5 transition-transform duration-200 {{ $collapsed ? '-rotate-90' : '' }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 6-7-6" />
                         </svg>
                     </button>
                 @endif
 
                 {{-- Delete / Remove --}}
                 <button type="button" data-action-delete @click="removeItem($el)" x-bind:disabled="!canRemove" x-bind:class="{ 'opacity-40 pointer-events-none': !canRemove }" title="{{ $i18n['delete_row'] ?? __('vibe/dynamic-form.delete_row', [], $resolvedLocale) }}" aria-label="{{ $i18n['delete_row'] ?? __('vibe/dynamic-form.delete_row', [], $resolvedLocale) }}" class="p-1 rounded-md text-destructive/80 hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer ml-0.5">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 1-2h6c1 0 1 1 1 2v2" />
+                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
                     </svg>
                 </button>
             </div>
@@ -131,13 +129,13 @@
         <div class="flex flex-col md:flex-row items-start md:items-center gap-2.5">
             @if ($allowReorder)
                 <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 rounded transition-colors hidden md:flex items-center justify-center shrink-0 select-none">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="9" cy="5" r="1" />
-                        <circle cx="9" cy="12" r="1" />
-                        <circle cx="9" cy="19" r="1" />
-                        <circle cx="15" cy="5" r="1" />
-                        <circle cx="15" cy="12" r="1" />
-                        <circle cx="15" cy="19" r="1" />
+                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
+                        <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+                        <circle cx="9" cy="18" r="1" fill="currentColor" stroke="none" />
+                        <circle cx="15" cy="6" r="1" fill="currentColor" stroke="none" />
+                        <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
+                        <circle cx="15" cy="18" r="1" fill="currentColor" stroke="none" />
                     </svg>
                 </div>
             @endif
@@ -153,29 +151,27 @@
             <div class="flex items-center gap-1 shrink-0 self-end md:self-center">
                 @if ($allowReorder)
                     <button type="button" data-action-move-up @click="moveUp($el)" class="p-1.5 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m18 15-6-6-6 6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 15l-7-6-7 6" />
                         </svg>
                     </button>
                     <button type="button" data-action-move-down @click="moveDown($el)" class="p-1.5 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['move_down'] ?? __('vibe/dynamic-form.move_down', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m6 9 6 6 6-6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 6-7-6" />
                         </svg>
                     </button>
                 @endif
                 @if ($allowDuplicate)
                     <button type="button" data-action-duplicate @click="duplicateItem($el)" class="p-1.5 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['duplicate_row'] ?? __('vibe/dynamic-form.duplicate_row', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z" />
+                            <path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z" />
                         </svg>
                     </button>
                 @endif
                 <button type="button" data-action-delete @click="removeItem($el)" x-bind:disabled="!canRemove" x-bind:class="{ 'opacity-40 pointer-events-none': !canRemove }" class="p-1.5 rounded text-destructive/80 hover:bg-destructive/10 cursor-pointer" title="{{ $i18n['delete_row'] ?? __('vibe/dynamic-form.delete_row', [], $resolvedLocale) }}">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 1-2h6c1 0 1 1 1 2v2" />
+                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
                     </svg>
                 </button>
             </div>
@@ -194,13 +190,13 @@
             <div class="flex items-center gap-2 pointer-events-none">
                 @if ($allowReorder)
                     <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors items-center justify-center shrink-0 select-none">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="9" cy="5" r="1" />
-                            <circle cx="9" cy="12" r="1" />
-                            <circle cx="9" cy="19" r="1" />
-                            <circle cx="15" cy="5" r="1" />
-                            <circle cx="15" cy="12" r="1" />
-                            <circle cx="15" cy="19" r="1" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="9" cy="18" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="6" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="12" r="1" fill="currentColor" stroke="none" />
+                            <circle cx="15" cy="18" r="1" fill="currentColor" stroke="none" />
                         </svg>
                     </div>
                 @endif
@@ -210,29 +206,27 @@
             <div class="flex items-center gap-1 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
                 @if ($allowReorder)
                     <button type="button" data-action-move-up @click="moveUp($el)" class="p-1 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['move_up'] ?? __('vibe/dynamic-form.move_up', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m18 15-6-6-6 6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 15l-7-6-7 6" />
                         </svg>
                     </button>
                     <button type="button" data-action-move-down @click="moveDown($el)" class="p-1 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['move_down'] ?? __('vibe/dynamic-form.move_down', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m6 9 6 6 6-6" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 6-7-6" />
                         </svg>
                     </button>
                 @endif
                 @if ($allowDuplicate)
                     <button type="button" data-action-duplicate @click="duplicateItem($el)" class="p-1 rounded text-muted-foreground hover:bg-muted" title="{{ $i18n['duplicate_row'] ?? __('vibe/dynamic-form.duplicate_row', [], $resolvedLocale) }}">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-                            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z" />
+                            <path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z" />
                         </svg>
                     </button>
                 @endif
                 <button type="button" data-action-delete @click="removeItem($el)" x-bind:disabled="!canRemove" x-bind:class="{ 'opacity-40 pointer-events-none': !canRemove }" class="p-1 rounded text-destructive/80 hover:bg-destructive/10 cursor-pointer" title="{{ $i18n['delete_row'] ?? __('vibe/dynamic-form.delete_row', [], $resolvedLocale) }}">
-                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 6h18" />
-                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
-                        <path d="M8 6V4c0-1 1-2 1-2h6c1 0 1 1 1 2v2" />
+                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
                     </svg>
                 </button>
             </div>

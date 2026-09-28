@@ -9,8 +9,9 @@
             {{-- Start Time Card --}}
             <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-card border border-border/70 shadow-2xs">
                 <div class="flex items-center gap-1.5 min-w-0">
-                    <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
                     </svg>
                     <span class="text-xs font-semibold text-foreground truncate" x-text="dict.timeLabels.startTime"></span>
                 </div>
@@ -85,8 +86,9 @@
                         x-bind:aria-label="dict.timeLabels.now"
                         class="size-7.5 rounded-lg text-muted-foreground hover:text-foreground"
                     >
-                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
                         </svg>
                     </vibe:button>
                 </div>
@@ -95,8 +97,9 @@
             {{-- End Time Card --}}
             <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-xl bg-card border border-border/70 shadow-2xs">
                 <div class="flex items-center gap-1.5 min-w-0">
-                    <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 6v6l4 2"/>
                     </svg>
                     <span class="text-xs font-semibold text-foreground truncate" x-text="dict.timeLabels.endTime"></span>
                 </div>
@@ -171,8 +174,9 @@
                         x-bind:aria-label="dict.timeLabels.now"
                         class="size-7.5 rounded-lg text-muted-foreground hover:text-foreground"
                     >
-                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 6v6l4 2"/>
                         </svg>
                     </vibe:button>
                 </div>
@@ -184,8 +188,9 @@
     <template x-if="mode === 'datetime' || mode === 'time'">
         <div class="flex items-center justify-between gap-3 px-3 py-2 rounded-xl bg-card border border-border/70 shadow-2xs">
             <div class="flex items-center gap-2">
-                <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                <svg class="size-3.5 text-muted-foreground shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 6v6l4 2"/>
                 </svg>
                 <span class="text-xs font-semibold text-foreground truncate" x-text="dict.timeLabels.time"></span>
             </div>
