@@ -95,7 +95,7 @@ test('breadcrumb supports slash separator preset on parent and item', function (
     );
 
     expect($htmlParentSlash)
-        ->toContain('m16 4-8 16');
+        ->toContain('M16 4L8 20');
 
     // Via item separator="slash"
     $htmlItemSlash = Blade::render(
@@ -108,7 +108,7 @@ test('breadcrumb supports slash separator preset on parent and item', function (
     );
 
     expect($htmlItemSlash)
-        ->toContain('m16 4-8 16');
+        ->toContain('M16 4L8 20');
 });
 
 test('breadcrumb supports arrow and dot separator presets', function () {
@@ -122,7 +122,7 @@ test('breadcrumb supports arrow and dot separator presets', function () {
     );
 
     expect($htmlArrow)
-        ->toContain('M5 12h14');
+        ->toContain('M4 12h16');
 
     $htmlDot = Blade::render(
         <<<'BLADE'

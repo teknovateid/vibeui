@@ -30,9 +30,9 @@
                 <div class="flex justify-between items-center gap-3 bg-muted p-3 rounded-xl transition-colors">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="flex justify-center items-center bg-primary/10 rounded-lg size-9 text-primary shrink-0">
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
-                                <path d="M12 18h.01" />
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="14" height="20" x="5" y="2" rx="4" />
+                                <path d="M11 18h2" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -56,9 +56,9 @@
                 <div class="flex justify-between items-center gap-3 bg-muted p-3 rounded-xl transition-colors">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="flex justify-center items-center bg-blue-500/10 rounded-lg size-9 text-blue-600 dark:text-blue-400 shrink-0">
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="20" height="16" x="2" y="4" rx="2" />
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12c0-3.771 0-5.657 1.172-6.828C4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z" />
+                                <path d="m6 8 4.75 3.562a2.1 2.1 0 0 0 2.5 0L18 8" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -82,8 +82,9 @@
                 <div class="flex justify-between items-center gap-3 bg-muted/10 opacity-75 p-3 border border-border/70 border-dashed rounded-xl">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="flex justify-center items-center bg-emerald-500/10 rounded-lg size-9 text-emerald-600 dark:text-emerald-400 shrink-0">
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z" />
+                                <path d="M8 10.5h8M8 14h5.5" />
                             </svg>
                         </div>
                         <div class="min-w-0">
@@ -258,9 +259,9 @@
                 <div x-show="step === 0" class="space-y-5">
                     <div class="flex items-start gap-3.5 bg-blue-500/5 p-4 border border-blue-500/20 rounded-xl">
                         <div class="flex justify-center items-center bg-blue-500/10 mt-0.5 rounded-lg size-9 text-blue-600 dark:text-blue-400 shrink-0">
-                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="20" height="16" x="2" y="4" rx="2" />
-                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 12c0-3.771 0-5.657 1.172-6.828C4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z" />
+                                <path d="m6 8 4.75 3.562a2.1 2.1 0 0 0 2.5 0L18 8" />
                             </svg>
                         </div>
                         <div class="flex-1 space-y-1 text-xs">

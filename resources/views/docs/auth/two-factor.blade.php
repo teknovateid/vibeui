@@ -204,7 +204,7 @@
                     {{-- Step 3: 2FA Active State --}}
                     <div x-show="step === 3" x-cloak class="p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3 animate-in fade-in duration-200">
                         <div class="size-12 rounded-full bg-emerald-500 text-white flex items-center justify-center mx-auto">
-                            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.6111L8.92308 17.5L20 6.5"/></svg>
                         </div>
                         <h4 class="text-base font-bold text-foreground">Autentikasi Dua Faktor Aktif</h4>
                         <p class="text-xs text-muted-foreground max-w-md mx-auto">
@@ -280,7 +280,7 @@
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.idle') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
                         <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Idle Timeout &amp; Session Lock</span>

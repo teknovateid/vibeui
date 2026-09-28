@@ -26,8 +26,8 @@
                 {{-- Quick Links / Live Interactive Previews --}}
                 <div class="flex flex-wrap items-center gap-2 pt-2">
                     <vibe:button href="/login" variant="primary" size="sm">
-                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20a8 8 0 1 1 0-16M12 12h9m0 0-3-3m3 3-3 3" />
                         </svg>
                         Buka /login (Card)
                     </vibe:button>
@@ -231,7 +231,7 @@
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.index') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
                         <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Ikhtisar Autentikasi</span>

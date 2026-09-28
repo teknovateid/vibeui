@@ -6,6 +6,10 @@ use App\Models\User;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 
+afterEach(function () {
+    Config::set('passkeys.enabled', true);
+});
+
 test('passkey UI elements are displayed when passkeys are enabled', function () {
     Config::set('passkeys.enabled', true);
 

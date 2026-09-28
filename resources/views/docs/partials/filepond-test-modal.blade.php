@@ -91,10 +91,9 @@
         <vibe:modal.header>
             <div class="flex items-start gap-3">
                 <span class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
-                        <path d="m8 17 4-4 4 4" />
-                        <path d="M12 13v9" />
+                    <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8.667 11.243A4.5 4.5 0 0 0 6.286 10.53C3.919 10.53 2 12.426 2 14.765C2 17.104 3.919 19 6.286 19M14.38 8.027A6.4 6.4 0 0 1 16.286 7.7c.655 0 1.284.108 1.87.308M7.116 10.609A6.7 6.7 0 0 1 6.762 8.647C6.762 5.528 9.32 3 12.476 3c2.94 0 5.361 2.194 5.68 5.015a6.5 6.5 0 0 1 3.844 5.338c0 2.707-1.927 4.97-4.5 5.519" />
+                        <path d="M12 16v6m-2-4 2-2 2 2" />
                     </svg>
                 </span>
                 <div class="space-y-1">
@@ -145,9 +144,9 @@
                                 type="button"
                                 @click="copyJson()"
                                 class="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium rounded-md bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer">
-                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16v-5Z" />
+                                <path d="M6 19c-1.657 0-3-1.343-3-3V10c0-3.771 0-5.657 1.172-6.828C5.343 2 7.229 2 11 2h4c1.657 0 3 1.343 3 3" />
                             </svg>
                             <span x-text="copied ? '{{ __('docs/test_modal.copied') }}' : '{{ __('docs/test_modal.copy_json') }}'"></span>
                         </button>
@@ -156,10 +155,9 @@
                     {{-- Tab 1: File Summary Cards --}}
                     <div x-show="activeTab === 'summary'" class="space-y-3">
                         <div class="p-3 rounded-xl bg-primary/10 border border-primary/20 text-primary text-xs flex items-start gap-2.5">
-                            <svg class="size-4 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="12" cy="12" r="10"/>
-                                <line x1="12" x2="12" y1="8" y2="12"/>
-                                <line x1="12" x2="12.01" y1="16" y2="16"/>
+                            <svg class="size-4 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 8v.01M12 11v5" />
                             </svg>
                             <div class="space-y-0.5">
                                 <p class="font-semibold text-foreground">{{ __('docs/test_modal.filepond_flow_success_title') }}</p>
@@ -182,9 +180,9 @@
                                         <button type="button"
                                                 @click="copyText(item.value)"
                                                 class="text-[11px] text-muted-foreground hover:text-primary transition-colors cursor-pointer flex items-center gap-1">
-                                            <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-                                                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                                            <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <path d="M6 11c0-2.828 0-4.243.879-5.121C7.757 5 9.172 5 12 5h3c2.828 0 4.243 0 5.121.879C21 6.757 21 8.172 21 11v5c0 2.828 0 4.243-.879 5.121C19.243 22 17.828 22 15 22h-3c-2.828 0-4.243 0-5.121-.879C6 20.243 6 18.828 6 16v-5Z" />
+                                                <path d="M6 19c-1.657 0-3-1.343-3-3V10c0-3.771 0-5.657 1.172-6.828C5.343 2 7.229 2 11 2h4c1.657 0 3 1.343 3 3" />
                                             </svg>
                                             {{ __('docs/test_modal.copy') }}
                                         </button>

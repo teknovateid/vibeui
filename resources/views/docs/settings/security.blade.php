@@ -6,7 +6,7 @@
         ['name' => __('vibe/settings.breadcrumb.security'), 'url' => route('docs.settings.security')],
     ]" />
 
-    <div class="space-y-6 mx-auto w-full">
+    <div class="mx-auto w-full max-w-7xl space-y-6">
         <vibe:breadcrumb title="{!! __('vibe/settings.title') !!}">
             <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('vibe/settings.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('vibe/settings.breadcrumb.pages') }}</vibe:breadcrumb.item>
@@ -91,7 +91,7 @@
                                 @if ($userPasskeys->isEmpty())
                                     <div class="flex items-center gap-3.5 bg-muted p-3.5 rounded-xl">
                                         <div class="flex justify-center items-center bg-primary/10 rounded-xl size-9 shrink-0">
-                                            <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                                 <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
                                                 <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
                                                 <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
@@ -114,7 +114,7 @@
                                             <div class="flex justify-between items-center gap-3 bg-muted p-3">
                                                 <div class="flex items-center gap-3 min-w-0">
                                                     <div class="flex justify-center items-center bg-primary/10 rounded-lg size-8 text-primary shrink-0">
-                                                        <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                        <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                                             <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
                                                             <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
                                                             <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />

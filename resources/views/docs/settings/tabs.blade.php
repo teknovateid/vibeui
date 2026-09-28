@@ -8,9 +8,10 @@
 
         <vibe:tabs.tab name="account" href="{{ route('docs.settings.account') }}" variant="sidebar" :active="$active === 'account'">
             <x-slot:icon>
-                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="8" r="5" />
-                    <path d="M20 21a8 8 0 0 0-16 0" />
+                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="9" r="3" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M17.969 20C17.81 17.109 16.925 15 12 15s-5.81 2.109-5.969 5" />
                 </svg>
             </x-slot:icon>
             {{ __('vibe/settings.tabs.account.label') }}
@@ -18,26 +19,27 @@
 
         <vibe:tabs.tab name="security" href="{{ route('docs.settings.security') }}" variant="sidebar" :active="$active === 'security'">
             <x-slot:icon>
-                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                    <circle cx="12" cy="16" r="2" />
+                    <path d="M6 10V8a6 6 0 1 1 12 0v2" />
                 </svg>
             </x-slot:icon>
             {{ __('vibe/settings.tabs.security.label') }}
             <x-slot:right>
-                <svg class="size-3 text-muted-foreground/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect width="18" height="11" x="3" y="11" rx="2" />
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                <svg class="size-3 text-muted-foreground/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                    <circle cx="12" cy="16" r="2" />
+                    <path d="M6 10V8a6 6 0 1 1 12 0v2" />
                 </svg>
             </x-slot:right>
         </vibe:tabs.tab>
 
         <vibe:tabs.tab name="login-history" href="{{ route('docs.settings.login-history') }}" variant="sidebar" :active="$active === 'login-history'">
             <x-slot:icon>
-                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                    <path d="M3 3v5h5" />
-                    <path d="M12 7v5l4 2" />
+                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
                 </svg>
             </x-slot:icon>
             {{ __('vibe/settings.tabs.login_history.label') }}
@@ -49,7 +51,7 @@
 
     <vibe:tabs.tab name="appearance" href="{{ route('docs.settings.appearance') }}" variant="sidebar" :active="$active === 'appearance'" badge="Live" badgeVariant="primary">
         <x-slot:icon>
-            <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
                 <path d="M5 3v4" />
                 <path d="M19 17v4" />
@@ -65,10 +67,8 @@
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <vibe:button type="submit" variant="ghost" class="w-full justify-start text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all">
-                    <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-                        <polyline points="16 17 21 12 16 7" />
-                        <line x1="2" x2="9" y1="12" y2="12" />
+                    <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 20a8 8 0 1 1 0-16M12 12h9m0 0-3-3m3 3-3 3" />
                     </svg>
                     <span>{{ __('vibe/settings.tabs.logout') }}</span>
                 </vibe:button>

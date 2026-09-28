@@ -29,8 +29,8 @@
 
                 <div class="flex flex-wrap items-center gap-2 pt-2">
                     <vibe:button href="/login" variant="primary" size="sm">
-                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20a8 8 0 1 1 0-16M12 12h9m0 0-3-3m3 3-3 3" />
                         </svg>
                         Uji Login dengan Passkey
                     </vibe:button>
@@ -43,8 +43,9 @@
             {{-- Important WebAuthn Security Notice --}}
             <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 space-y-2 leading-relaxed">
                 <div class="flex items-center gap-2 font-semibold">
-                    <svg class="size-4 shrink-0 text-amber-600 dark:text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    <svg class="size-4 shrink-0 text-amber-600 dark:text-amber-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z" />
+                        <path d="M12 8v5M12 16h.01" />
                     </svg>
                     <span>Aturan Keamanan WebAuthn & Pendaftaran Passkey:</span>
                 </div>
@@ -121,11 +122,16 @@
                     <div class="flex items-center justify-between border-b border-border pb-3">
                         <div class="flex items-center gap-2.5">
                             <div class="p-2 rounded-lg bg-primary/10 text-primary">
-                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
                                     <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
                                     <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
                                     <path d="M2 12a10 10 0 0 1 18-6" />
+                                    <path d="M2 16h.01" />
+                                    <path d="M21.8 16c.2-2 .131-5.354 0-6" />
+                                    <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
+                                    <path d="M8.65 22c.21-.66.45-1.32.57-2" />
+                                    <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
                                 </svg>
                             </div>
                             <div>
@@ -186,8 +192,10 @@
                                             <div class="p-3 bg-card flex items-center justify-between text-xs">
                                                 <div class="space-y-0.5">
                                                     <div class="font-medium text-foreground flex items-center gap-1.5">
-                                                        <svg class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                        <svg class="size-3.5 text-primary" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                                             <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
+                                                            <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
+                                                            <path d="M2 12a10 10 0 0 1 18-6" />
                                                         </svg>
                                                         {{ $key->name }}
                                                     </div>
@@ -221,14 +229,14 @@
 
                                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pt-1">
                                         <div class="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                                            <svg class="size-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M2 12a10 10 0 0 1 18-6"/></svg>
+                                            <svg class="size-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88"/><path d="M2 12a10 10 0 0 1 18-6"/></svg>
                                             <span>Sensor biometrik perangkat akan langsung dipicu saat tombol ditekan.</span>
                                         </div>
 
                                         <vibe:button type="submit" variant="primary" size="sm" ::disabled="loading || !registerName" class="shrink-0 cursor-pointer">
                                             <template x-if="!loading">
                                                 <span class="inline-flex items-center gap-1.5">
-                                                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" /></svg>
+                                                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16m8-8H4" /></svg>
                                                     <span>Daftarkan Passkey</span>
                                                 </span>
                                             </template>
@@ -359,7 +367,7 @@ php artisan vibe:auth --without-passkeys
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.two-factor') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
                         <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Two-Factor Authentication (2FA)</span>

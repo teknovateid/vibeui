@@ -34,8 +34,8 @@
                     <p class="text-xs font-semibold text-foreground uppercase tracking-wider mb-2">Pratinjau Halaman Nyata:</p>
                     <div class="flex flex-wrap items-center gap-2">
                         <vibe:button href="/login" variant="primary" size="sm">
-                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                            <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 20a8 8 0 1 1 0-16M12 12h9m0 0-3-3m3 3-3 3" />
                             </svg>
                             /login (Card)
                         </vibe:button>
@@ -77,9 +77,9 @@
                     <a href="{{ route('docs.auth.installation') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-primary/10 text-primary group-hover:scale-105 transition-transform">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <polyline points="4 17 10 11 4 5"></polyline>
-                                    <line x1="12" y1="19" x2="20" y2="19"></line>
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
+                                    <path d="m8 9.5 2.5 2.5L8 14.5M13 14.5h3" />
                                 </svg>
                             </div>
                             <vibe:badge variant="outline" size="xs" class="rounded-full">CLI & Form</vibe:badge>
@@ -98,9 +98,10 @@
                     <a href="{{ route('docs.auth.confirm') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                                    <circle cx="12" cy="16" r="2" />
+                                    <path d="M6 10V8a6 6 0 1 1 12 0v2" />
                                 </svg>
                             </div>
                             <vibe:badge variant="outline" size="xs" class="rounded-full">Sudo Mode</vibe:badge>
@@ -119,9 +120,9 @@
                     <a href="{{ route('docs.auth.idle') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 group-hover:scale-105 transition-transform">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/>
-                                    <polyline points="12 6 12 12 16 14"/>
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
                                 </svg>
                             </div>
                             <vibe:badge variant="outline" size="xs" class="rounded-full">Auto Lock</vibe:badge>
@@ -140,9 +141,9 @@
                     <a href="{{ route('docs.auth.two-factor') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 group-hover:scale-105 transition-transform">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"/>
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M15.5 2H8.5C6.01472 2 4 4.01472 4 6.5v11C4 19.9853 6.01472 22 8.5 22h7c2.4853 0 4.5-2.0147 4.5-4.5v-11C20 4.01472 17.9853 2 15.5 2Z" />
+                                    <path d="M11.995 18h.009" />
                                 </svg>
                             </div>
                             <vibe:badge variant="outline" size="xs" class="rounded-full">TOTP RFC 6238</vibe:badge>
@@ -161,11 +162,16 @@
                     <a href="{{ route('docs.auth.passkey') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3 md:col-span-2">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4"/>
-                                    <path d="M14 13.12c0 2.38 0 6.38-1 8.88"/>
-                                    <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02"/>
-                                    <path d="M2 12a10 10 0 0 1 18-6"/>
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
+                                    <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
+                                    <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
+                                    <path d="M2 12a10 10 0 0 1 18-6" />
+                                    <path d="M2 16h.01" />
+                                    <path d="M21.8 16c.2-2 .131-5.354 0-6" />
+                                    <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
+                                    <path d="M8.65 22c.21-.66.45-1.32.57-2" />
+                                    <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
                                 </svg>
                             </div>
                             <div class="flex items-center gap-2">

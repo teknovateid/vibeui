@@ -7,10 +7,10 @@
         <!-- Docs -->
         <vibe:nav.item href="{{ route('docs.index') }}" :active="request()->routeIs('docs.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 8c0-2.828 0-4.243.879-5.121C5.757 2 7.172 2 10 2h4c2.828 0 4.243 0 5.121.879C20 3.757 20 5.172 20 8v8c0 2.828 0 4.243-.879 5.121C18.243 22 16.828 22 14 22h-4c-2.828 0-4.243 0-5.121-.879C4 20.243 4 18.828 4 16V8Z" />
+                    <path d="M19.898 16H7.898c-.93 0-1.395 0-1.777.102A3.003 3.003 0 0 0 4 18.224" />
+                    <path d="M8 7h8M8 10.5h5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.docs') }}
@@ -19,10 +19,10 @@
         <!-- Instalation -->
         <vibe:nav.item href="{{ route('docs.instalation.index') }}" :active="request()->routeIs('docs.instalation.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke-linejoin="round" d="M12 7v7m-3-3 3 3 3-3" />
+                    <path d="M16 17H8" />
+                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.instalation') }}
@@ -31,10 +31,9 @@
         <!-- Directories -->
         <vibe:nav.item href="{{ route('docs.directories.index') }}" :active="request()->routeIs('docs.directories.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 10h-5" />
+                    <path d="M2 6.95C2 6.067 2 5.626 2.069 5.258A3.75 3.75 0 0 1 5.258 2.07C5.626 2 6.067 2 6.95 2c.386 0 .58 0 .765.017a4.5 4.5 0 0 1 2.181.904c.144.119.28.256.554.529l.55.55c.816.816 1.224 1.224 1.712 1.495.269.15.553.268.849.352.537.153 1.114.153 2.268.153h.373c2.633 0 3.949 0 4.805.77a3 3 0 0 1 .224.224C22 7.85 22 9.166 22 11.798V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14V6.95Z" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.directories') }}
@@ -43,9 +42,10 @@
         <!-- Authentication -->
         <vibe:nav.group :title="__('docs/sidebar.nav.auth.group')" :active="request()->routeIs('docs.auth.*')" persist>
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                    <circle cx="12" cy="16" r="2" />
+                    <path d="M6 10V8a6 6 0 1 1 12 0v2" />
                 </svg>
             </x-slot:icon>
             <vibe:nav.item href="{{ route('docs.auth.index') }}" :active="request()->routeIs('docs.auth.index')">
@@ -75,11 +75,9 @@
         <!-- Form -->
         <vibe:nav.item href="{{ route('docs.form.index') }}" :active="request()->routeIs('docs.form.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M7 8h10" />
-                    <path d="M7 12h10" />
-                    <path d="M7 16h6" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 10c0-3.771 0-5.657 1.172-6.828C5.343 2 7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172C21 4.343 21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828C18.657 22 16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172C3 19.657 3 17.771 3 14v-4Z" />
+                    <path d="M8 10h8M8 14h5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.form') }}
@@ -88,9 +86,9 @@
         <!-- Input Group -->
         <vibe:nav.group :title="__('docs/sidebar.nav.input_group.group')" :active="request()->routeIs('docs.input.*')" persist>
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="6" width="18" height="12" rx="3"></rect>
-                    <path d="M8 12h8"></path>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-3.771 0-5.657 1.172-6.828C4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z" />
+                    <path d="M9 8.5H7.925C7.055 8.5 6.62 8.5 6.336 8.752a.7.7 0 0 0-.083.084C6 9.12 6 9.555 6 10.425M9 8.5h1.075c.87 0 1.305 0 1.589.252a.7.7 0 0 1 .083.084c.253.284.253.719.253 1.589M9 8.5v7m-2 0h4" />
                 </svg>
             </x-slot:icon>
             <vibe:nav.item href="{{ route('docs.input.index') }}" :active="request()->routeIs('docs.input.index')">
@@ -110,8 +108,9 @@
         <!-- Textarea -->
         <vibe:nav.item href="{{ route('docs.textarea.index') }}" :active="request()->routeIs('docs.textarea.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z" />
+                    <path d="M8 10.5h8M8 14h5.5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.textarea') }}
@@ -120,9 +119,9 @@
         <!-- Select -->
         <vibe:nav.item href="{{ route('docs.select.index') }}" :active="request()->routeIs('docs.select.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                    <path d="m8 10 4 4 4-4"></path>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="M8 12h.01M12 12h.01M16 12h.01" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.select') }}
@@ -131,9 +130,9 @@
         <!-- Checkbox -->
         <vibe:nav.item href="{{ route('docs.checkbox.index') }}" :active="request()->routeIs('docs.checkbox.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                    <path d="m9 12 2 2 4-4"></path>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
+                    <path d="m8.5 12.5 2 2 5-5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.checkbox') }}
@@ -142,9 +141,9 @@
         <!-- Radio -->
         <vibe:nav.item href="{{ route('docs.radio.index') }}" :active="request()->routeIs('docs.radio.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="9"></circle>
-                    <circle cx="12" cy="12" r="3"></circle>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="4" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.radio') }}
@@ -153,9 +152,9 @@
         <!-- Switch -->
         <vibe:nav.item href="{{ route('docs.switch.index') }}" :active="request()->routeIs('docs.switch.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="20" height="12" x="2" y="6" rx="6" ry="6"></rect>
-                    <circle cx="16" cy="12" r="2"></circle>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="20" height="12" x="2" y="6" rx="6" />
+                    <circle cx="16" cy="12" r="2.5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.switch') }}
@@ -164,9 +163,9 @@
         <!-- Range Slider -->
         <vibe:nav.item href="{{ route('docs.range.index') }}" :active="request()->routeIs('docs.range.index')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="4" x2="20" y1="12" y2="12"></line>
-                    <circle cx="14" cy="12" r="3"></circle>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 12h18" />
+                    <circle cx="14" cy="12" r="3" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.range') }}
@@ -175,12 +174,9 @@
         <!-- Date & Time -->
         <vibe:nav.item href="{{ route('docs.date-time.index') }}" :active="request()->routeIs('docs.date-time.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M8 2v4" />
-                    <path d="M16 2v4" />
-                    <rect width="18" height="18" x="3" y="4" rx="2" />
-                    <path d="M3 10h18" />
-                    <path d="M12 14v3l2 1" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-3.771 0-5.657 1.172-6.828C4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12v2c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14v-2Z" />
+                    <path d="M7 4V2.5M17 4V2.5M2.5 9h19" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.date-time') }}
@@ -189,11 +185,10 @@
         <!-- Dynamic Form -->
         <vibe:nav.item href="{{ route('docs.dynamic-form.index') }}" :active="request()->routeIs('docs.dynamic-form.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M16 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8Z" />
-                    <path d="M15 3v5h5" />
-                    <path d="M12 12v6" />
-                    <path d="M9 15h6" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 15H9M9 15L7 15M9 15L9 13M9 15L9 17" />
+                    <path d="M13 2.263V5c0 2.357 0 3.536.732 4.268C14.464 10 15.643 10 18 10h3.58" />
+                    <path stroke-linejoin="round" d="M3.171 3.172C4.343 2 6.239 2 10.03 2c1.525 0 2.287 0 2.979.266.692.265 1.256.772 2.384 1.787l3.959 3.563c1.304 1.174 1.956 1.761 2.302 2.538.346.777.346 1.654.346 3.408V14c0 3.771 0 5.657-1.172 6.828C19.657 22 17.771 22 14 22h-4c-3.772 0-5.657 0-6.828-1.172C2 19.657 2 17.771 2 14V9.998C2 6.228 2 4.343 3.171 3.172Z" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.dynamic-form') }}
@@ -202,10 +197,9 @@
         <!-- FilePond -->
         <vibe:nav.item href="{{ route('docs.filepond.index') }}" :active="request()->routeIs('docs.filepond.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242" />
-                    <path d="M12 12v9" />
-                    <path d="m16 16-4-4-4 4" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8.667 11.243A4.5 4.5 0 0 0 6.286 10.53C3.919 10.53 2 12.426 2 14.765C2 17.104 3.919 19 6.286 19M14.38 8.027A6.4 6.4 0 0 1 16.286 7.7c.655 0 1.284.108 1.87.308M7.116 10.609A6.7 6.7 0 0 1 6.762 8.647C6.762 5.528 9.32 3 12.476 3c2.94 0 5.361 2.194 5.68 5.015a6.5 6.5 0 0 1 3.844 5.338c0 2.707-1.927 4.97-4.5 5.519" />
+                    <path d="M12 16v6m-2-4 2-2 2 2" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.filepond') }}
@@ -214,9 +208,9 @@
         <!-- Button -->
         <vibe:nav.item href="{{ route('docs.button.index') }}" :active="request()->routeIs('docs.button.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="6" width="18" height="12" rx="3"></rect>
-                    <path d="M8 12h8"></path>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
+                    <path d="M8 12h8" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.button') }}
@@ -225,8 +219,8 @@
         <!-- Show -->
         <vibe:nav.item href="{{ route('docs.show.index') }}" :active="request()->routeIs('docs.show.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3.275 15.296C2.425 14.192 2 13.639 2 12c0-1.639.425-2.192 1.275-3.296C4.972 6.5 7.818 4 12 4s7.028 2.5 8.725 4.704C21.575 9.808 22 10.36 22 12c0 1.639-.425 2.192-1.275 3.296C19.028 17.5 16.182 20 12 20s-7.028-2.5-8.725-4.704Z" />
                     <circle cx="12" cy="12" r="3" />
                 </svg>
             </x-slot:icon>
@@ -236,9 +230,9 @@
         <!-- Dropdown -->
         <vibe:nav.item href="{{ route('docs.dropdown.index') }}" :active="request()->routeIs('docs.dropdown.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="m9 10 3 3 3-3" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="m8 10 4 4 4-4" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.dropdown') }}
@@ -247,11 +241,8 @@
         <!-- Context Menu -->
         <vibe:nav.item href="{{ route('docs.context.index') }}" :active="request()->routeIs('docs.context.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M9 9h.01" />
-                    <path d="M9 12h6" />
-                    <path d="M9 15h4" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 7H4M15 12H4M9 17H4" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.context') }}
@@ -260,8 +251,9 @@
         <!-- Badge -->
         <vibe:nav.item href="{{ route('docs.badge.index') }}" :active="request()->routeIs('docs.badge.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.728 16.137C3.183 14.591 2.41 13.819 2.123 12.816c-.288-1.003-.042-2.068.45-4.197l.283-1.229C3.27 5.599 3.476 4.703 4.09 4.09c.613-.614 1.51-.82 3.301-1.234l1.228-.284c2.13-.491 3.195-.737 4.197-.45 1.003.288 1.776 1.061 3.321 2.606l1.83 1.83C20.655 9.247 22 10.592 22 12.262c0 1.67-1.345 3.015-4.034 5.704C15.278 20.655 13.933 22 12.262 22c-1.67 0-3.015-1.345-5.704-4.034L4.728 16.137Z" />
+                    <circle cx="8.607" cy="8.879" r="2" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.badge') }}
@@ -270,9 +262,10 @@
         <!-- Avatar -->
         <vibe:nav.item href="{{ route('docs.avatar.index') }}" :active="request()->routeIs('docs.avatar.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-                    <circle cx="12" cy="7" r="4" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="9" r="3" />
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M17.969 20C17.81 17.109 16.925 15 12 15s-5.81 2.109-5.969 5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.avatar') }}
@@ -281,10 +274,10 @@
         <!-- Image -->
         <vibe:nav.item href="{{ route('docs.image.index') }}" :active="request()->routeIs('docs.image.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
-                    <circle cx="9" cy="9" r="2"/>
-                    <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
+                    <circle cx="16" cy="8" r="2" />
+                    <path d="m2 12.5 1.752-1.533a3 3 0 0 1 3.14 0l4.29 4.29a3 3 0 0 0 2.564.222l.298-.21a3 3 0 0 1 3.732.225L21 18.5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.image') }}
@@ -293,9 +286,9 @@
         <!-- Card -->
         <vibe:nav.item href="{{ route('docs.card.index') }}" :active="request()->routeIs('docs.card.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="14" x="3" y="5" rx="2" />
-                    <path d="M3 10h18" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-8 0-8 8-8h4c8 0 8 0 8 8s0 8-8 8h-4c-8 0-8 0-8-8Z" />
+                    <path d="M10 16H6M14 16h-1.5M2 10h20" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.card') }}
@@ -304,11 +297,11 @@
         <!-- Grid List -->
         <vibe:nav.item href="{{ route('docs.grid-list.index') }}" :active="request()->routeIs('docs.grid-list.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="2" />
+                    <rect x="14" y="3" width="7" height="7" rx="2" />
+                    <rect x="14" y="14" width="7" height="7" rx="2" />
+                    <rect x="3" y="14" width="7" height="7" rx="2" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.grid-list') }}
@@ -317,8 +310,8 @@
         <!-- Header -->
         <vibe:nav.item href="{{ route('docs.header.index') }}" :active="request()->routeIs('docs.header.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
                     <path d="M3 9h18" />
                 </svg>
             </x-slot:icon>
@@ -328,10 +321,9 @@
         <!-- Nav -->
         <vibe:nav.item href="{{ route('docs.nav.index') }}" :active="request()->routeIs('docs.nav.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"/>
-                    <path d="M9 3v18"/>
-                    <path d="m14 9 3 3-3 3"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="M9 3v18M14 9l3 3-3 3" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.nav') }}
@@ -340,8 +332,8 @@
         <!-- Breadcrumb -->
         <vibe:nav.item href="{{ route('docs.breadcrumb.index') }}" :active="request()->routeIs('docs.breadcrumb.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m9 18 6-6-6-6"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 19 6-7-6-7" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.breadcrumb') }}
@@ -350,11 +342,9 @@
         <!-- Table -->
         <vibe:nav.item href="{{ route('docs.table.index') }}" :active="request()->routeIs('docs.table.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M3 9h18" />
-                    <path d="M3 15h18" />
-                    <path d="M12 3v18" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="M3 9h18M9 21V9" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.table') }}
@@ -363,12 +353,11 @@
         <!-- Grid -->
         <vibe:nav.item href="{{ route('docs.grid.index') }}" :active="request()->routeIs('docs.grid.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M9 3v18" />
-                    <path d="M15 3v18" />
-                    <path d="M3 9h18" />
-                    <path d="M3 15h18" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="7" height="7" rx="2" />
+                    <rect x="14" y="3" width="7" height="7" rx="2" />
+                    <rect x="14" y="14" width="7" height="7" rx="2" />
+                    <rect x="3" y="14" width="7" height="7" rx="2" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.grid') }}
@@ -377,10 +366,9 @@
         <!-- DataTable -->
         <vibe:nav.item href="{{ route('docs.datatable.index') }}" :active="request()->routeIs('docs.datatable.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M3 9h18" />
-                    <path d="M9 21V9" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="M3 9h18M9 21V9M15 21V9" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.datatable') }}
@@ -390,22 +378,18 @@
         <vibe:nav.item href="{{ route('docs.alert.index') }}" :active="request()->routeIs('docs.alert.*')">
             <x-slot:icon>
                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                    <path d="M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z" />
+                    <path d="M12 8v5M12 16h.01" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.alert') }}
         </vibe:nav.item>
 
-
         <!-- Toast -->
         <vibe:nav.item href="{{ route('docs.toast.index') }}" :active="request()->routeIs('docs.toast.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18.75 9.71V9c0-3.864-3.022-7-6.75-7S5.25 5.136 5.25 9v.71c0 .845-.24 1.672-.693 2.375L3.45 13.81c-1.012 1.575-.24 3.715 1.52 4.213 4.602 1.303 9.458 1.303 14.06 0 1.76-.498 2.532-2.638 1.52-4.213l-1.107-1.725c-.452-.703-.693-1.53-.693-2.375ZM8.5 19c.7 1.5 2 2.5 3.5 2.5s2.8-1 3.5-2.5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.toast') }}
@@ -414,21 +398,19 @@
         <!-- Modal -->
         <vibe:nav.item href="{{ route('docs.modal.index') }}" :active="request()->routeIs('docs.modal.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="3" y1="9" x2="21" y2="9"></line>
-                    <line x1="9" y1="21" x2="9" y2="9"></line>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
+                    <path d="M3 8h18M8 5.5h.01M11 5.5h.01" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.modal') }}
         </vibe:nav.item>
 
-
         <!-- Sheet -->
         <vibe:nav.item href="{{ route('docs.sheet.index') }}" :active="request()->routeIs('docs.sheet.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4" />
                     <path d="M15 3v18" />
                 </svg>
             </x-slot:icon>
@@ -438,10 +420,9 @@
         <!-- Tabs -->
         <vibe:nav.item href="{{ route('docs.tabs.index') }}" :active="request()->routeIs('docs.tabs.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 6h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" />
-                    <path d="M2 10h20" />
-                    <path d="M8 6v4" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.979 9.685C2.993 8.89 2 8.494 2 8c0-.494.993-.89 2.979-1.685l2.808-1.124C9.773 4.397 10.766 4 12 4s2.227.397 4.213 1.191l2.808 1.124C21.007 7.11 22 7.506 22 8c0 .494-.993.89-2.979 1.685l-2.808 1.124C14.227 11.603 13.234 12 12 12s-2.227-.397-4.213-1.191L4.979 9.685Z" />
+                    <path d="M22 12c0 0-.993.89-2.979 1.685l-2.808 1.124C14.227 15.603 13.234 16 12 16s-2.227-.397-4.213-1.191L4.979 13.685C2.993 12.89 2 12 2 12M22 16c0 0-.993.89-2.979 1.685l-2.808 1.124C14.227 19.603 13.234 20 12 20s-2.227-.397-4.213-1.191L4.979 17.685C2.993 16.89 2 16 2 16" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.tabs') }}
@@ -450,11 +431,11 @@
         <!-- Accordion -->
         <vibe:nav.item href="{{ route('docs.accordion.index') }}" :active="request()->routeIs('docs.accordion.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2" />
-                    <path d="M3 9h18" />
-                    <path d="M3 15h18" />
-                    <path d="m16 6-2 2-2-2" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 6L3 6" />
+                    <path d="M20 11L3 11" />
+                    <path d="M10 16H3" />
+                    <path stroke-linejoin="round" d="m14 15 3.5 3 3.5-3" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.accordion') }}
@@ -463,9 +444,8 @@
         <!-- Highlight.js -->
         <vibe:nav.item href="{{ route('docs.highlightjs.index') }}" :active="request()->routeIs('docs.highlightjs.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="16 18 22 12 16 6" />
-                    <polyline points="8 6 2 12 8 18" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m17 7.83 1.696 1.527c1.543 1.388 2.314 2.082 2.314 2.973s-.771 1.585-2.314 2.973L17 16.83M13.987 5 12 12.415 10.013 19.83M7 7.83 5.304 9.357C3.76 10.745 2.99 11.439 2.99 12.33s.77 1.585 2.314 2.973L7 16.83" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.highlightjs') }}
@@ -474,19 +454,11 @@
         <!-- Display Group -->
         <vibe:nav.group :title="__('docs/sidebar.nav.display.group')" :active="request()->routeIs('docs.display.*')" persist>
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="5" height="5" x="3" y="3" rx="1"/>
-                    <rect width="5" height="5" x="16" y="3" rx="1"/>
-                    <rect width="5" height="5" x="3" y="16" rx="1"/>
-                    <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
-                    <path d="M21 21v.01"/>
-                    <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
-                    <path d="M3 12h.01"/>
-                    <path d="M12 3h.01"/>
-                    <path d="M12 16v.01"/>
-                    <path d="M16 12h1"/>
-                    <path d="M21 12v.01"/>
-                    <path d="M12 21v-1"/>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="6" height="6" x="3" y="3" rx="1.5" />
+                    <rect width="6" height="6" x="15" y="3" rx="1.5" />
+                    <rect width="6" height="6" x="3" y="15" rx="1.5" />
+                    <path d="M15 15h2v2h-2zM19 15h2v2h-2zM15 19h2v2h-2zM19 19h2v2h-2z" />
                 </svg>
             </x-slot:icon>
             <vibe:nav.item href="{{ route('docs.display.qrcode') }}" :active="request()->routeIs('docs.display.qrcode')">
@@ -497,17 +469,14 @@
         <!-- Chart -->
         <vibe:nav.item href="{{ route('docs.chart.index') }}" :active="request()->routeIs('docs.chart.*')">
             <x-slot:icon>
-                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 3v18h18" />
-                    <path d="m19 9-5 5-4-4-3 3" />
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12c0-4.714 0-7.071 1.464-8.536C4.93 2 7.286 2 12 2c4.714 0 7.071 0 8.536 1.464C22 4.93 22 7.286 22 12c0 4.714 0 7.071-1.464 8.536C19.07 22 16.714 22 12 22c-4.714 0-7.071 0-8.536-1.464C2 19.07 2 16.714 2 12Z" />
+                    <path d="M7 18v-9M12 18V6M17 18v-5" />
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.chart') }}
         </vibe:nav.item>
 
     </vibe:nav.label>
-
-
-
 
 </vibe:nav>

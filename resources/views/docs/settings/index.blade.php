@@ -9,7 +9,7 @@
         @vite('resources/js/vibe/passkeys.js')
     @endpush
 
-    <div class="mx-auto w-full space-y-6">
+    <div class="mx-auto w-full max-w-7xl space-y-6">
         <vibe:breadcrumb title="{!! __('docs/page/settings/index.title') !!}">
             <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('docs/page/settings/index.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('docs/page/settings/index.breadcrumb.pages') }}</vibe:breadcrumb.item>

@@ -25,9 +25,10 @@
 
                 <div class="flex flex-wrap items-center gap-2 pt-2">
                     <vibe:button href="/confirm-password" variant="outline" size="sm">
-                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        <svg class="size-4 mr-1.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                            <circle cx="12" cy="16" r="2" />
+                            <path d="M6 10V8a6 6 0 1 1 12 0v2" />
                         </svg>
                         Buka Halaman /confirm-password
                     </vibe:button>
@@ -176,7 +177,7 @@
                         <div class="flex items-center gap-2">
                             <template x-if="isConfirmed">
                                 <vibe:button type="button" variant="outline" size="xs" @click="lockSession()" class="cursor-pointer">
-                                    <svg class="size-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <svg class="size-3.5 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" /><circle cx="12" cy="16" r="2" /><path d="M6 10V8a6 6 0 1 1 12 0v2" /></svg>
                                     Kunci Sesi Kembali
                                 </vibe:button>
                             </template>
@@ -197,7 +198,7 @@
                             </div>
 
                             <vibe:button type="button" variant="primary" size="sm" @click="triggerSensitiveAction()" class="cursor-pointer">
-                                <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                                <svg class="size-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></svg>
                                 Eksekusi Aksi Sensitif
                             </vibe:button>
                         </div>
@@ -208,7 +209,7 @@
                         <div @click.away="modalOpen = false" class="w-full max-w-md p-6 rounded-2xl border border-border bg-card shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
                             <div class="flex items-center gap-3">
                                 <div class="p-2.5 rounded-xl bg-primary/10 text-primary">
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z"/><circle cx="12" cy="16" r="2"/><path d="M6 10V8a6 6 0 1 1 12 0v2"/></svg>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-foreground">Konfirmasi Kata Sandi Akun</h4>
@@ -222,8 +223,8 @@
                                     <div class="relative">
                                         <input :type="showPassword ? 'text' : 'password'" x-model="password" placeholder="Masukkan kata sandi..." class="w-full px-3 py-2 pr-9 text-xs rounded-lg border border-input bg-background text-foreground shadow-2xs focus:ring-1 focus:ring-primary focus:outline-none" required autofocus />
                                         <button type="button" @click="showPassword = !showPassword" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer" tabindex="-1">
-                                            <svg x-show="!showPassword" class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                            <svg x-show="showPassword" x-cloak class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" x2="22" y1="2" y2="22"/></svg>
+                                            <svg x-show="!showPassword" class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.275 15.296C2.425 14.192 2 13.639 2 12c0-1.639.425-2.192 1.275-3.296C4.972 6.5 7.818 4 12 4s7.028 2.5 8.725 4.704C21.575 9.808 22 10.36 22 12c0 1.639-.425 2.192-1.275 3.296C19.028 17.5 16.182 20 12 20s-7.028-2.5-8.725-4.704Z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            <svg x-show="showPassword" x-cloak class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14C5 14 2 7 2 7M22 7C22 7 21.059 9.197 19 11.129c-.913.857-2.045 1.662-3.413 2.2a9.7 9.7 0 0 1-3.587.671m0 0V16.5m3.587-3.171L17 15.5m2-4.371L20.5 12.63M8.413 13.329L7 15.5M5 11.129 3.5 12.63"/></svg>
                                         </button>
                                     </div>
                                 </div>
@@ -307,7 +308,7 @@ Route::middleware(['auth', 'confirm:300'])->group(function () {
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.installation') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
                         <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Instalasi &amp; Scaffolding CLI</span>

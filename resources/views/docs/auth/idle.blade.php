@@ -81,7 +81,7 @@
                     {{-- Lock screen overlay simulation --}}
                     <div x-show="isLocked" x-cloak class="absolute inset-0 z-30 bg-background/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center animate-in fade-in zoom-in-95 duration-200">
                         <div class="size-14 rounded-2xl bg-destructive/10 text-destructive flex items-center justify-center mb-3">
-                            <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            <svg class="size-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z"/><circle cx="12" cy="16" r="2"/><path d="M6 10V8a6 6 0 1 1 12 0v2"/></svg>
                         </div>
                         <h4 class="text-base font-bold text-foreground">Sesi Terkunci Karena Tidak Aktif</h4>
                         <p class="text-xs text-muted-foreground max-w-sm mt-1 mb-4">
@@ -195,7 +195,7 @@ fetch('/keep-alive', {
             {{-- Navigation Footer --}}
             <div class="pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 <a href="{{ route('docs.auth.confirm') }}" class="w-full sm:w-auto inline-flex items-center gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group">
-                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                    <svg class="size-4 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
                     <div>
                         <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Sebelumnya</span>
                         <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Konfirmasi Password (Sudo Mode)</span>
