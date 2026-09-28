@@ -2,6 +2,19 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.10] - 2026-09-28
+
+### 🚀 Features
+- feat: add widescreen and ultrawide screen layout scaling support (dc85997)
+
+### ⚡ Performance & Refactoring
+- refactor: update UI layout structures and navigation icons across views and stubs (5285584)
+
+### 🧰 Maintenance & Documentation
+- style: remove max-w-7xl from settings container layouts (a528bd9)
+- style: update SVG icon paths and stroke attributes across UI components (f1f8737)
+
+
 ## [0.2.9] - 2026-09-28
 
 ### 🚀 Features
