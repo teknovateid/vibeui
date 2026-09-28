@@ -121,7 +121,7 @@ function vibeSyncPlugin() {
 
                 for (const rule of syncRules) {
                     if (normalizedFile.includes(rule.srcPattern)) {
-                        const relativePath = normalizedFile.split(rule.srcPattern)[1];
+                        const relativePath = normalizedFile.substring(normalizedFile.indexOf(rule.srcPattern) + rule.srcPattern.length);
                         if (rule.ignore && rule.ignore.includes(relativePath)) {
                             break;
                         }
