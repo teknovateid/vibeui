@@ -2,16 +2,7 @@
  * Vibe UI - Standalone QR Code Engine (ISO/IEC 18004 compliant)
  * Zero external dependencies. Outputs crisp vector SVG or Canvas/PNG.
  */
-(function(root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        define([], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        module.exports = factory();
-    } else {
-        root.VibeQrCode = factory();
-    }
-}(typeof self !== 'undefined' ? self : this, function() {
-    'use strict';
+'use strict';
 
     var PAD0 = 0xEC;
     var PAD1 = 0x11;
@@ -598,5 +589,10 @@
         }
     };
 
-    return VibeQrCode;
-}));
+if (typeof window !== 'undefined') {
+    window.VibeQrCode = VibeQrCode;
+    window.dispatchEvent(new CustomEvent('vibe-qrcode-ready'));
+}
+
+export default VibeQrCode;
+export { VibeQrCode };

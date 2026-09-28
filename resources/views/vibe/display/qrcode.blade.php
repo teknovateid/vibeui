@@ -83,6 +83,7 @@
             });
             observer.observe(this.$el, { attributes: true, attributeFilter: ['value', 'size', 'level'] });
 
+            window.addEventListener('vibe-qrcode-ready', () => this.render());
             this.render();
             this.$watch('value', () => this.render());
             this.$watch('size', () => this.render());
