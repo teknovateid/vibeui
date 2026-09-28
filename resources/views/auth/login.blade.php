@@ -13,8 +13,8 @@
                     <x-slot:actions>
                         <vibe:button href="{{ session('localhost_url') }}" size="xs" variant="primary">
                             <span>{{ __('auth/passkey.switch_to_localhost') }}</span>
-                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 12h16m0 0l-6-6m6 6l-6 6" />
                             </svg>
                         </vibe:button>
                     </x-slot:actions>
@@ -31,7 +31,7 @@
         <div class="space-y-3">
             <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
                 <span class="vibe-passkey-text inline-flex items-center gap-2">
-                    <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
                         <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
                         <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />

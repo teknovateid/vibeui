@@ -34,8 +34,8 @@
                     x-on:click="filtersOpen = !filtersOpen"
                 @endif
             >
-                <svg class="h-3.5 w-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                <svg class="h-3.5 w-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c.8 0 1.2 1 .6 1.6l-5.6 6.5v6.4l-4 2v-8.4L3.4 5.6C2.8 5 3.2 4 4 4z" />
                 </svg>
 
                 <span>{{ __($localisationPath.'Filters') }}</span>

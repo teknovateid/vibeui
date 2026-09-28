@@ -9,16 +9,16 @@
                 aria-haspopup="true"
                 x-bind:aria-expanded="open"
             >
-                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="2"/>
+                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="4"/>
                     <path d="M9 3v18"/>
                     <path d="M15 3v18"/>
                 </svg>
 
                 <span>{{ __($localisationPath.'Columns') }}</span>
 
-                <svg class="size-3.5 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m6 9 6 6 6-6"/>
+                <svg class="size-3.5 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 9l-7 6-7-6"/>
                 </svg>
             </button>
         </vibe:dropdown.trigger>
@@ -39,8 +39,8 @@
                         @if($allSelected) wire:click="deselectAllColumns" @else wire:click="selectAllColumns" @endif
                     >
                     <span class="size-4 shrink-0 rounded-md border border-input bg-background transition-colors flex items-center justify-center shadow-2xs peer-checked:bg-primary peer-checked:border-primary text-transparent peer-checked:text-primary-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-ring/20">
-                        <svg class="size-2.5 stroke-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="20 6 9 17 4 12"/>
+                        <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 12l5 5L20 7"/>
                         </svg>
                     </span>
                     <span>{{ __($localisationPath.'All Columns') }}</span>
@@ -65,8 +65,8 @@
                                 value="{{ $columnSlug }}"
                             />
                             <span class="size-4 shrink-0 rounded-md border border-input bg-background transition-colors flex items-center justify-center shadow-2xs peer-checked:bg-primary peer-checked:border-primary text-transparent peer-checked:text-primary-foreground peer-focus-visible:ring-2 peer-focus-visible:ring-ring/20">
-                                <svg class="size-2.5 stroke-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="20 6 9 17 4 12"/>
+                                <svg class="size-2.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 12l5 5L20 7"/>
                                 </svg>
                             </span>
                             <span class="truncate">{{ $columnTitle }}</span>

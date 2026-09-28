@@ -2,6 +2,6 @@
 
 <vibe:button variant="ghost" size="sm" aria-label="{{ __('vibe/sheet.close') }}" {{ $attributes->twMerge(['class' => 'p-1.5 rounded-lg text-muted-foreground hover:text-foreground']) }} @click="close()">
     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 6L6 18M6 6l12 12" />
+        <path d="M19 5L5 19M19 19L5 5" />
     </svg>
 </vibe:button>

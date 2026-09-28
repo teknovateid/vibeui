@@ -94,7 +94,7 @@
         x-cloak
         class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-xs font-mono font-bold shadow-lg pointer-events-none z-30 flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100"
     >
-        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10l7-7m0 0h-5m5 0v5M10 14l-7 7m0 0h5m-5 0v-5"/></svg>
         <span x-text="(previewCols || (spans['{{ $cardId }}'] ? spans['{{ $cardId }}'].col : '{{ $colSpan }}')) + ' / ' + cols + ' Kolom'"></span>
     </div>
 
@@ -115,9 +115,8 @@
             <div class="absolute inset-0 flex flex-col items-center justify-center gap-2.5">
                 {{-- Swap icon — small & soft --}}
                 <div class="size-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
-                    <svg class="size-4 text-primary/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m16 3 4 4-4 4"/><path d="M20 7H4"/>
-                        <path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
+                    <svg class="size-4 text-primary/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 7H4m0 0l4-4M4 7l4 4M4 17h16m0 0l-4-4m4 4l-4 4"/>
                     </svg>
                 </div>
 
@@ -138,9 +137,8 @@
             class="absolute inset-0 rounded-xl pointer-events-none z-20 flex items-center justify-center"
         >
             <div class="px-2.5 py-1 rounded-full bg-muted/80 text-muted-foreground text-[10px] font-medium flex items-center gap-1.5 backdrop-blur-sm border border-border/50">
-                <svg class="size-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points="5 9 2 12 5 15"/><polyline points="19 9 22 12 19 15"/>
-                    <line x1="2" y1="12" x2="22" y2="12"/>
+                <svg class="size-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M5 9l-3 3 3 3M19 9l3 3-3 3M2 12h20"/>
                 </svg>
                 <span>Dipindahkan</span>
             </div>
@@ -197,23 +195,23 @@
                         >
                             @if ($lockType === 'reorder')
                                 {{-- Position locked, can still resize: padlock with dot inside --}}
-                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="12" x="3" y="10" rx="3"/>
+                                    <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
                                     <circle cx="12" cy="16" r="1" fill="currentColor"/>
                                 </svg>
                             @elseif ($lockType === 'resize')
                                 {{-- Size locked, can still move: lock with horizontal bar --}}
-                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="12" x="3" y="10" rx="3"/>
+                                    <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
                                     <path d="M10 16h4"/>
                                 </svg>
                             @else
                                 {{-- Fully locked: solid padlock --}}
-                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                <svg class="size-3.5 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="12" x="3" y="10" rx="3"/>
+                                    <path d="M7 10V7a5 5 0 0 1 10 0v3"/>
                                 </svg>
                             @endif
                         </div>
@@ -225,9 +223,13 @@
                             title="Tarik header untuk menukar posisi kartu"
                             class="hidden group-hover/header:flex size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
                         >
-                            <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/>
-                                <circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/>
+                            <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <circle cx="9" cy="6" r="1.2" fill="currentColor"/>
+                                <circle cx="9" cy="12" r="1.2" fill="currentColor"/>
+                                <circle cx="9" cy="18" r="1.2" fill="currentColor"/>
+                                <circle cx="15" cy="6" r="1.2" fill="currentColor"/>
+                                <circle cx="15" cy="12" r="1.2" fill="currentColor"/>
+                                <circle cx="15" cy="18" r="1.2" fill="currentColor"/>
                             </svg>
                         </div>
                     @endif
@@ -257,9 +259,8 @@
             title="Tarik sudut untuk mengubah ukuran kartu"
             class="hidden lg:flex absolute bottom-0 right-0 size-10 cursor-se-resize items-end justify-end p-2.5 text-muted-foreground/0 group-hover:text-muted-foreground/35 hover:text-primary! hover:bg-primary/10 rounded-tl-xl transition-all select-none z-20 group/resize touch-none"
         >
-            <svg class="size-3.5 pointer-events-none group-hover/resize:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="21" y1="15" x2="15" y2="21" />
-                <line x1="21" y1="9" x2="9" y2="21" />
+            <svg class="size-3.5 pointer-events-none group-hover/resize:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15l-6 6M21 9l-12 12"/>
             </svg>
         </div>
     @endif

@@ -39,8 +39,8 @@
         icons: {
             success: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m8.5 12.5 2 2 5-5' /></svg>`,
             error: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
-            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3L2 21h20L12 3Z' /><path d='M12 9v5M12 17h.01' /></svg>`,
-            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='M12 16v-4M12 8h.01' /></svg>`
+            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><path d='M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z' /><path d='M12 8v5M12 16h.01' /></svg>`,
+            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='M12 7v6M12 16h.01' /></svg>`
         },
         
         getActivePosition() {
@@ -318,7 +318,7 @@
                 <!-- Tombol Close -->
                 <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-accent hover:text-accent-foreground transition-all">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 5L5 19M19 19L5 5" />
                     </svg>
                 </button>
             </div>

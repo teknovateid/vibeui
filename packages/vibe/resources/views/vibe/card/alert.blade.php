@@ -162,8 +162,8 @@
                         @break
                     @case('warning')
                         <svg class="size-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 3L2 21h20L12 3Z" />
-                            <path d="M12 9v5M12 17h.01" />
+                            <path d="M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z" />
+                            <path d="M12 8v5M12 16h.01" />
                         </svg>
                         @break
                     @case('destructive')
@@ -174,14 +174,14 @@
                         @break
                     @case('primary')
                         <svg class="size-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />
+                            <path d="M9.153 5.408C10.42 3.136 11.053 2 12 2c.947 0 1.58 3.136 2.847 5.408l.328.588c.36.646.54.969.82 1.182.282.213.631.292 1.33.45l.637.144c2.459.557 3.689.835 3.981 1.776.293.94-.545 1.921-2.222 3.882l-.434.507c-.476.557-.714.836-.821 1.18-.108.345-.072.717 0 1.46l.066.677c.253 2.617.38 3.925-.386 4.507-.766.581-1.918.051-4.22-1.009l-.596-.275C12.674 20.176 12.347 20.025 12 20.025s-.674.15-1.329.452l-.595.274c-2.303 1.06-3.455 1.59-4.221 1.01-.766-.582-.64-1.89-.386-4.508l.065-.677c.072-.743.036-1.115-.072-1.46-.107-.344-.345-.623-.82-1.18l-.435-.507C2.96 11.42 2.122 10.44 2.415 9.5c.292-.941 1.522-1.22 3.98-1.776l.637-.144c.7-.158 1.049-.237 1.33-.45.28-.213.46-.536.82-1.182l.328-.588Z" />
                         </svg>
                         @break
                     @default
                         {{-- Info & Default --}}
                         <svg class="size-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
-                            <path d="M12 16v-4M12 8h.01" />
+                            <path d="M12 7v6M12 16h.01" />
                         </svg>
                 @endswitch
             @endif
@@ -232,7 +232,7 @@
             aria-label="Close"
         >
             <svg class="{{ $sizeClasses['close'] }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 6L6 18M6 6l12 12" />
+                <path d="M19 5L5 19M19 19L5 5" />
             </svg>
         </button>
     @endif

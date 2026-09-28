@@ -56,8 +56,8 @@
     @if ($sentMessage && in_array($selectedMethod, ['email', 'whatsapp', 'sms']))
         <div class="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-400 flex items-start justify-between gap-3">
             <div class="flex items-start gap-2">
-                <svg class="size-4 shrink-0 mt-0.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="20 6 9 17 4 12"/>
+                <svg class="size-4 shrink-0 mt-0.5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 12l5 5L20 6"/>
                 </svg>
                 <div class="space-y-0.5">
                     <p class="font-semibold">{{ $sentMessage }}</p>
@@ -88,7 +88,7 @@
                             <div class="flex items-center gap-2.5 min-w-0">
                                 @if ($selectedMethod === 'totp')
                                     <div class="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10C4 6.229 4 4.343 5.172 3.172 6.343 2 8.229 2 12 2c3.771 0 5.657 0 6.828 1.172C20 4.343 20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828C17.657 22 15.771 22 12 22c-3.771 0-5.657 0-6.828-1.172C4 19.657 4 17.771 4 14v-4Z"/><path d="M15 19H9"/></svg>
                                     </div>
                                     <div class="min-w-0">
                                         <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.totp_title') }}</p>
@@ -96,7 +96,7 @@
                                     </div>
                                 @elseif ($selectedMethod === 'email')
                                     <div class="size-8 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 8.229 2 6.343 3.172 5.172 4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z"/><path d="m6 8 2.159 1.799C9.996 11.33 10.914 12.095 12 12.095c1.086 0 2.005-.765 3.841-2.296L18 8"/></svg>
                                     </div>
                                     <div class="min-w-0">
                                         <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.email_title') }}</p>
@@ -104,7 +104,7 @@
                                     </div>
                                 @elseif ($selectedMethod === 'whatsapp')
                                     <div class="size-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z"/><path d="M8 10.5h8M8 14h5.5"/></svg>
                                     </div>
                                     <div class="min-w-0">
                                         <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.whatsapp_title') }}</p>
@@ -112,7 +112,7 @@
                                     </div>
                                 @elseif ($selectedMethod === 'sms')
                                     <div class="size-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.676 19.963c.516-.05 1.014-.329 1.325-.709l1.42-1.496c.96-1.01.69-2.74-.537-3.447l-1.91-1.1c-.806-.464-1.787-.327-2.417.336l-.455.48s-1.083 1.14-4.038-1.972c-2.955-3.11-1.873-4.25-1.873-4.25l.287-.302c.707-.744.773-1.938.157-2.81L9.373 2.91C8.61 1.83 7.136 1.688 6.261 2.609L4.692 4.261c-.434.457-.724 1.048-.689 1.705.09 1.68.808 5.293 4.812 9.51 4.247 4.47 8.232 4.648 9.861 4.487Z"/></svg>
                                     </div>
                                     <div class="min-w-0">
                                         <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.sms_title') }}</p>
@@ -171,8 +171,8 @@
                     <div class="space-y-3">
                         <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 space-y-1">
                             <p class="font-semibold flex items-center gap-1.5">
-                                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                                <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/><path d="M12 8v5M12 16h.01"/>
                                 </svg>
                                 <span>{{ __('auth/two_factor.recovery_box_title') }}</span>
                             </p>
@@ -217,13 +217,13 @@
                         class="w-full py-2.5 px-3 rounded-xl border border-border/80 bg-muted/30 hover:bg-muted/70 text-xs font-semibold text-foreground flex items-center justify-between transition-all cursor-pointer group"
                     >
                         <span class="flex items-center gap-2">
-                            <svg class="size-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M7 8h10"/><path d="M7 12h10"/><path d="M7 16h10"/>
+                            <svg class="size-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 7H4M15 12H4M9 17H4"/>
                             </svg>
                             <span>{{ __('auth/two_factor.choose_another_way') }}</span>
                         </span>
-                        <svg class="size-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="m9 18 6-6-6-6"/>
+                        <svg class="size-4 text-muted-foreground group-hover:text-foreground group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 5l7 7-7 7"/>
                         </svg>
                     </button>
                 </div>
@@ -232,8 +232,8 @@
             {{-- Cancel Link (Hanya ada di layar verifikasi) --}}
             <div class="pt-1 flex items-center justify-center text-xs">
                 <button type="button" wire:click="cancel" class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="m15 18-6-6 6-6"/>
+                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 19l-7-7 7-7"/>
                     </svg>
                     <span>{{ __('auth/two_factor.cancel_and_login') }}</span>
                 </button>
@@ -254,15 +254,15 @@
                         <div class="flex items-center gap-3.5 min-w-0">
                             <div class="size-10 rounded-xl flex items-center justify-center shrink-0 {{ $selectedMethod === $methodKey ? 'bg-primary text-primary-foreground shadow-xs' : 'bg-muted text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors' }}">
                                 @if ($methodKey === 'totp')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10C4 6.229 4 4.343 5.172 3.172 6.343 2 8.229 2 12 2c3.771 0 5.657 0 6.828 1.172C20 4.343 20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828C17.657 22 15.771 22 12 22c-3.771 0-5.657 0-6.828-1.172C4 19.657 4 17.771 4 14v-4Z"/><path d="M15 19H9"/></svg>
                                 @elseif ($methodKey === 'email')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 8.229 2 6.343 3.172 5.172 4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z"/><path d="m6 8 2.159 1.799C9.996 11.33 10.914 12.095 12 12.095c1.086 0 2.005-.765 3.841-2.296L18 8"/></svg>
                                 @elseif ($methodKey === 'whatsapp')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z"/><path d="M8 10.5h8M8 14h5.5"/></svg>
                                 @elseif ($methodKey === 'sms')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.676 19.963c.516-.05 1.014-.329 1.325-.709l1.42-1.496c.96-1.01.69-2.74-.537-3.447l-1.91-1.1c-.806-.464-1.787-.327-2.417.336l-.455.48s-1.083 1.14-4.038-1.972c-2.955-3.11-1.873-4.25-1.873-4.25l.287-.302c.707-.744.773-1.938.157-2.81L9.373 2.91C8.61 1.83 7.136 1.688 6.261 2.609L4.692 4.261c-.434.457-.724 1.048-.689 1.705.09 1.68.808 5.293 4.812 9.51 4.247 4.47 8.232 4.648 9.861 4.487Z"/></svg>
                                 @elseif ($methodKey === 'recovery')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7.5" cy="15.5" r="5.5"/><path d="m21 2-9.6 9.6"/><path d="m15.5 7.5 3 3L22 7l-3-3"/></svg>
+                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.681 14.587C19.171 14.587 22 11.769 22 8.293 22 4.818 19.171 2 15.681 2c-3.49 0-6.32 2.818-6.32 6.293 0 1.61.735 2.781.735 2.781L2.454 18.685a2.036 2.036 0 0 0 0 2.049l.882.878c.343.293 1.205.703 1.91.001l1.029-1.025c1.029 1.025 2.204.439 2.645-.146.735-1.025-.147-2.049-.147-2.049l.294-.293c1.41 1.405 2.645.586 3.086 0 .735-1.024 0-2.049 0-2.049-.294-.585-.882-.585-.147-1.317l.882-.878c.705.586 2.155.732 2.792.732Z"/><circle cx="15.681" cy="8.294" r="2.195"/></svg>
                                 @endif
                             </div>
                             <div class="min-w-0 flex-1">
@@ -285,8 +285,8 @@
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
                             </span>
-                            <svg wire:loading.remove wire:target="selectMethod('{{ $methodKey }}')" class="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="m9 18 6-6-6-6"/>
+                            <svg wire:loading.remove wire:target="selectMethod('{{ $methodKey }}')" class="size-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 5l7 7-7 7"/>
                             </svg>
                         </div>
                     </button>
@@ -301,8 +301,8 @@
                     wire:click="toggleMethodSelector" 
                     class="w-full justify-center text-xs font-semibold cursor-pointer shadow-2xs"
                 >
-                    <svg class="size-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="m15 18-6-6 6-6"/>
+                    <svg class="size-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 19l-7-7 7-7"/>
                     </svg>
                     <span>{{ __('auth/two_factor.back_to_challenge') }}</span>
                 </vibe:button>

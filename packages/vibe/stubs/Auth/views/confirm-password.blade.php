@@ -36,7 +36,7 @@
         <div class="space-y-3">
             <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">
                 <span class="vibe-passkey-text inline-flex items-center gap-2">
-                    <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
                         <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
                         <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
@@ -90,10 +90,9 @@
             wire:click="logout" 
             class="text-destructive hover:bg-destructive/10 hover:text-destructive gap-1.5 font-medium cursor-pointer"
         >
-            <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                <polyline points="16 17 21 12 16 7"/>
-                <line x1="21" x2="9" y1="12" y2="12"/>
+            <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 7c0-2.175.1-3.353.879-4.121C10.758 2 12.172 2 15 2h1c2.828 0 4.243 0 5.121.879C22 3.757 22 5.172 22 8v8c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22h-1c-2.828 0-4.242 0-5.121-.879C9.1 20.353 9 19.175 9 17" />
+                <path d="M15 12H2m3.5 3L2 12l3.5-3" />
             </svg>
             <span>{{ __('auth/actions.logout') }}</span>
         </vibe:button>

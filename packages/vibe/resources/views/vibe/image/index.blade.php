@@ -77,8 +77,11 @@
             <img x-show="error" src="{{ $fallback }}" alt="{{ $alt }}" class="{{ $hasAspect ? 'absolute inset-0 ' : '' }}{{ $imgClass }} transition-opacity duration-300" />
         @else
             <div x-show="error" class="{{ $hasAspect ? 'absolute inset-0' : 'w-full h-full min-h-25' }} flex flex-col items-center justify-center p-4 bg-muted/50 border border-dashed border-border text-muted-foreground rounded-[inherit]">
-                <svg class="size-7 stroke-[1.5]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                <svg class="size-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8.5" cy="8.5" r="1.5" />
+                    <path d="M2.5 12c0-4.714 0-7.071 1.464-8.536C5.43 2 7.786 2 12.5 2c4.714 0 7.071 0 8.536 1.464C22.5 4.93 22.5 7.286 22.5 12c0 4.714 0 7.071-1.464 8.536C19.57 22 17.214 22 12.5 22c-4.714 0-7.071 0-8.536-1.464C2.5 19.07 2.5 16.714 2.5 12Z" />
+                    <path d="m2.5 16.5 5.5-5.5a2 2 0 0 1 2.8 0l7.2 7.2" />
+                    <path d="m15.5 15.5 1.8-1.8a2 2 0 0 1 2.8 0l2.4 2.3" />
                 </svg>
                 <span class="text-xs mt-1 font-medium text-center">{{ $alt ?: __('vibe/image.failed_to_load') }}</span>
             </div>

@@ -68,38 +68,39 @@
                         <vibe:dropdown.content align="top" width="64" class="max-h-[calc(100vh-6rem)] overflow-y-auto vibe-scrollbar">
                         <div class="flex flex-col gap-0.5">
                             <vibe:dropdown.item href="#" class="gap-3">
-                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                    <polyline points="9 22 9 12 15 12 15 22" />
+                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 12.204C2 9.915 2 8.771 2.52 7.823c.519-.949 1.467-1.537 3.364-2.715l2-1.241C9.889 2.622 10.892 2 12 2s2.11.622 4.116 1.867l2 1.241c1.897 1.178 2.845 1.766 3.364 2.715C22 8.771 22 9.915 22 12.204v1.521c0 3.901 0 5.851-1.172 7.063C19.657 22 17.771 22 14 22h-4c-3.771 0-5.657 0-6.828-1.212C2 19.576 2 17.626 2 13.725v-1.521Z" />
+                                    <path d="M12 15v3" />
                                 </svg>
                                 Home
                             </vibe:dropdown.item>
 
                             <!-- Pages -->
                             <vibe:dropdown.item href="#" class="gap-3">
-                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
-                                    <polyline points="14 2 14 8 20 8" />
+                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 10c0-3.771 0-5.657 1.172-6.828C5.343 2 7.229 2 11 2h2c3.771 0 5.657 0 6.828 1.172C21 4.343 21 6.229 21 10v4c0 3.771 0 5.657-1.172 6.828C18.657 22 16.771 22 13 22h-2c-3.771 0-5.657 0-6.828-1.172C3 19.657 3 17.771 3 14v-4Z" />
+                                    <path d="M8 12h8M8 8h8M8 16h5" />
                                 </svg>
                                 Pages
                             </vibe:dropdown.item>
 
                             <!-- Active stream -->
                             <vibe:dropdown.item href="#" class="gap-3">
-                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="m22 8-6 4 6 4V8Z" />
-                                    <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m17 9.5.658-.329c1.946-.973 2.92-1.46 3.63-.42.712.44.712 1.527.712 3.703v.292c0 2.176 0 3.263-.712 3.703-.711.44-1.684-.047-3.63-1.02L17 14.5V9.5Z" />
+                                    <circle cx="12.5" cy="8.5" r="1.5" />
+                                    <path d="M2 11.5c0-3.288 0-4.931.908-6.038.166-.202.352-.388.554-.554C4.569 4 6.213 4 9.5 4c3.288 0 4.931 0 6.038.908.202.166.388.352.554.554.908 1.107.908 2.75.908 6.038v1c0 3.288 0 4.931-.908 6.038a4.8 4.8 0 0 1-.554.554C14.431 20 12.788 20 9.5 20c-3.288 0-4.931 0-6.038-.908a4.8 4.8 0 0 1-.554-.554C2 17.431 2 15.788 2 12.5v-1Z" />
                                 </svg>
                                 Active stream
                             </vibe:dropdown.item>
 
                             <!-- People -->
                             <vibe:dropdown.item href="#" class="gap-3">
-                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-                                    <circle cx="9" cy="7" r="4" />
-                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-                                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="6" r="4" />
+                                    <path d="M15 9a4 4 0 0 0 3-3 4 4 0 0 0-3-3" />
+                                    <ellipse cx="9" cy="17" rx="7" ry="4" />
+                                    <path d="M18 14c1.754.385 3 1.359 3 2.5 0 1.03-.986 1.923-2.47 2.37" />
                                 </svg>
                                 People
                             </vibe:dropdown.item>
@@ -109,9 +110,9 @@
 
                         <!-- Site settings -->
                         <vibe:dropdown.item href="#" class="gap-3">
-                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3" />
+                                <path d="M13.765 2.152C13.398 2 12.932 2 12 2c-.932 0-1.398 0-1.765.152a2.6 2.6 0 0 0-1.083.916 3.6 3.6 0 0 1-.143.864c-.02.557-.306 1.074-.79 1.353-.483.279-1.073.268-1.566.008a3.2 3.2 0 0 0-.82-.308 2.6 2.6 0 0 0-1.478.396 6.3 6.3 0 0 0-1.015 1.453c-.466.807-.7 1.21-.752 1.605a2.6 2.6 0 0 0 .396 1.478c.148.193.355.354.676.556.473.297.777.803.777 1.361s-.304 1.064-.777 1.361c-.321.202-.529.363-.676.556a2.6 2.6 0 0 0-.396 1.478c.052.395.286.798.752 1.605.466.807.7 1.21 1.015 1.453a2.6 2.6 0 0 0 1.478.396 3.2 3.2 0 0 0 .82-.308c.493-.26 1.083-.27 1.566.008.483.279.77.796.79 1.353.014.38.05.64.143.864a2.6 2.6 0 0 0 1.083.916C10.602 22 11.068 22 12 22c.932 0 1.398 0 1.765-.152a2.6 2.6 0 0 0 1.083-.916c.092-.224.129-.484.143-.864.02-.557.306-1.074.79-1.353.483-.279 1.073-.268 1.566-.008.336.177.58.276.82.308a2.6 2.6 0 0 0 1.479-.396c.315-.242.549-.646 1.014-1.453.466-.807.7-1.21.752-1.605a2.6 2.6 0 0 0-.396-1.478c-.148-.193-.355-.354-.676-.556a1.6 1.6 0 0 1-.777-1.361c0-.558.304-1.064.777-1.361.321-.202.528-.363.676-.556a2.6 2.6 0 0 0 .396-1.478c-.052-.395-.286-.798-.752-1.605-.465-.807-.7-1.21-1.014-1.453a2.6 2.6 0 0 0-1.479-.396 3.2 3.2 0 0 0-.82.308c-.493.26-1.083.27-1.566-.008-.483-.279-.77-.796-.79-1.353-.014-.38-.05-.64-.143-.864a2.6 2.6 0 0 0-1.083-.916Z" />
                             </svg>
                             Site settings
                         </vibe:dropdown.item>
@@ -125,8 +126,8 @@
                             }
                         }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')" @click.stop="toggleTheme($event)">
                             <div class="flex items-center gap-3">
-                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+                                <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 22C17.523 22 22 17.523 22 12c0-.463-.693-.539-.933-.143C19.929 13.74 17.862 15 15.5 15 11.91 15 9 12.09 9 8.5c0-2.362 1.26-4.429 3.143-5.567.396-.24.32-.933-.143-.933C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10Z" />
                                 </svg>
                                 <span>Dark mode</span>
                             </div>
@@ -139,20 +140,20 @@
 
                         <!-- My profile & preferences -->
                         <vibe:dropdown.item href="#" class="gap-3">
-                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="9" r="3" />
                                 <circle cx="12" cy="12" r="10" />
-                                <circle cx="12" cy="10" r="3" />
-                                <path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662" />
+                                <path d="M17.969 20C17.81 17.109 16.925 15 12 15s-5.81 2.109-5.969 5" />
                             </svg>
                             My profile & preferences
                         </vibe:dropdown.item>
 
                         <!-- Help center -->
                         <vibe:dropdown.item href="#" class="gap-3">
-                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                                <path d="M12 8v3" />
-                                <circle cx="12" cy="14" r="0.5" fill="currentColor" />
+                            <svg class="size-4 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M10.125 8.875A1.875 1.875 0 0 1 12 7c1.036 0 1.875.84 1.875 1.875 0 .687-.37 1.288-.922 1.615-.475.281-.953.708-.953 1.26V13" />
+                                <circle cx="12" cy="16" r=".5" fill="currentColor" />
                             </svg>
                             Help center
                         </vibe:dropdown.item>
@@ -199,9 +200,9 @@
                 <vibe:header.actions class="items-center h-full relative gap-1.5">
                     <!-- Search Trigger Button -->
                     <button type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="hidden sm:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground bg-accent/40 hover:bg-accent/80 hover:text-foreground border border-border/60 rounded-full transition-all duration-200 cursor-pointer shadow-2xs hover:border-border mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
-                        <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11.5" cy="11.5" r="9.5" />
+                            <path d="M18.5 18.5L22 22" />
                         </svg>
                         <span class="inline-block font-normal">{{ __('docs/sidebar.search') }}</span>
                         <kbd class="hidden md:inline-flex items-center gap-0.5 text-[10px] font-mono font-medium text-muted-foreground bg-background/80 px-1.5 py-0.5 rounded-full border border-border/80 shadow-2xs">
@@ -209,9 +210,9 @@
                         </kbd>
                     </button>
                     <vibe:button variant="ghost" class="p-2 sm:hidden rounded-full" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
-                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11.5" cy="11.5" r="9.5" />
+                            <path d="M18.5 18.5L22 22" />
                         </svg>
                     </vibe:button>
 

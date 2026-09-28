@@ -101,8 +101,8 @@
                             '{{ $activeBtnClass }}': layout === 'grid',
                             '{{ $inactiveBtnClass }}': layout !== 'grid'
                         }" class="{{ $baseBtnClass }} {{ $defaultLayout === 'grid' ? $activeBtnClass : $inactiveBtnClass }}">
-                            <svg class="size-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                            <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="7" height="7" x="3" y="3" rx="2" /><rect width="7" height="7" x="14" y="3" rx="2" /><rect width="7" height="7" x="3" y="14" rx="2" /><rect width="7" height="7" x="14" y="14" rx="2" />
                             </svg>
                             <span>{{ __('vibe/grid.grid') }}</span>
                         </vibe:button>
@@ -111,8 +111,8 @@
                             '{{ $activeBtnClass }}': layout === 'list',
                             '{{ $inactiveBtnClass }}': layout !== 'list'
                         }" class="{{ $baseBtnClass }} {{ $defaultLayout === 'list' ? $activeBtnClass : $inactiveBtnClass }}">
-                            <svg class="size-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/>
                             </svg>
                             <span>{{ __('vibe/grid.list') }}</span>
                         </vibe:button>
