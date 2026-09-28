@@ -2,6 +2,28 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.9] - 2026-09-28
+
+### 🚀 Features
+- feat: add Vibe UI component definitions to VS Code HTML data and snippets (0ee04fd)
+- feat: support wire:click without parentheses in delete components (6755cd3)
+- feat: add global passkey toggle configuration and conditional UI rendering (f999497)
+
+### 🐛 Bug Fixes
+- fix: use substring instead of split for relative path extraction in vite config (95e345d)
+- fix: check if prefixes is an array and conditionally log exceptions in debug mode (e222f24)
+- fix: use right instead of left positioning for right-positioned sheet component (f66a1fd)
+
+### ⚡ Performance & Refactoring
+- refactor: update SVG icons across UI components (b13d689)
+- refactor: pass element directly to vibeFetchAndShow to support special characters in button attributes (8a1fb6f)
+- refactor: simplify passkeys config logic and format code spacing (4178ff1)
+- refactor: remove accent variant from components and documentation (5fbe9a9)
+
+### 🧰 Maintenance & Documentation
+- chore: add package description and update livewire dependency constraints (f1ce084)
+
+
 ## [0.2.8] - 2026-09-22
 
 ### 🚀 Features
