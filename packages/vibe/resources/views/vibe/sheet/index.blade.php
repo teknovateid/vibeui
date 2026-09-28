@@ -74,7 +74,7 @@
 
     $innerStyle = $behavior !== 'minify'
         ? match ($position) {
-            'right' => "top: 0; left: 0; bottom: 0; width: {$defaultSize}px",
+            'right' => "top: 0; right: 0; bottom: 0; width: {$defaultSize}px",
             'bottom' => "left: 0; right: 0; top: 0; height: {$defaultSize}px",
             'top' => "left: 0; right: 0; bottom: 0; height: {$defaultSize}px",
             default => "top: 0; left: 0; bottom: 0; width: {$defaultSize}px",
@@ -391,7 +391,7 @@
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
-                         ? `top: 0; left: 0; bottom: 0; width: ${size}px`
+                         ? `top: 0; right: 0; bottom: 0; width: ${size}px`
                          : position === 'bottom'
                          ? `left: 0; right: 0; top: 0; height: ${size}px`
                          : position === 'top'

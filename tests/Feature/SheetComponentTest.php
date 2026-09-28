@@ -48,3 +48,13 @@ test('sheet header and footer support variant sidebar styling', function () {
     expect($html)
         ->toContain('group-data-[variant=sidebar]/sheet:border-sidebar-border');
 });
+
+test('sheet with position right uses right: 0 in inner styling', function () {
+    $html = Blade::render(
+        '<vibe:sheet id="test-right-sheet" position="right" layout="fixed" default-size="400">Content</vibe:sheet>'
+    );
+
+    expect($html)
+        ->toContain('top: 0; right: 0; bottom: 0; width: 400px')
+        ->toContain('top: 0; right: 0; bottom: 0; width: ${size}px');
+});
