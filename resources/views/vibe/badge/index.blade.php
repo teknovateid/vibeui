@@ -128,9 +128,8 @@
                 class="shrink-0 -mr-0.5 {{ $dismissSizeClass }} rounded-full inline-flex items-center justify-center opacity-70 hover:opacity-100 hover:bg-foreground/10 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 aria-label="{{ __('vibe/badge.dismiss') }}"
             >
-                <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 5L5 19M19 19L5 5" />
                 </svg>
             </button>
         @endif
@@ -173,9 +172,8 @@
                 class="shrink-0 -mr-0.5 {{ $dismissSizeClass }} rounded-full inline-flex items-center justify-center opacity-70 hover:opacity-100 hover:bg-foreground/10 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                 aria-label="{{ __('vibe/badge.dismiss') }}"
             >
-                <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                <svg class="stroke-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 5L5 19M19 19L5 5" />
                 </svg>
             </button>
         @endif

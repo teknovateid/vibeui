@@ -55,7 +55,7 @@
 
 <vibe:button :variant="$variant" :attributes="$mergedAttributes">
     <svg class="size-4 mr-2 shrink-0 text-destructive" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+        <path d="M9.17 4a3.001 3.001 0 0 1 5.66 0M20.5 6H3.5m15.333 2.5l-.46 6.899c-.177 2.655-.265 3.983-1.13 4.792C16.378 21 15.047 21 12.387 21h-.774c-2.66 0-3.991 0-4.856-.809-.865-.809-.953-2.137-1.13-4.792L5.167 8.5M9.5 11l.5 5m4.5-5l-.5 5" />
     </svg>
     @if ($slot->isNotEmpty())
         {{ $slot }}

@@ -102,16 +102,16 @@
     };
 
     if ($isAvatar) {
-        $resolvedLabelIdle = $fpLang('label_avatar_idle', '<div class="w-full h-full flex flex-col items-center justify-center gap-2 p-2 select-none cursor-pointer"><div class="size-9 rounded-full bg-muted/70 border border-border/60 flex items-center justify-center text-muted-foreground"><svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="filepond--label-action text-[11px] font-semibold text-primary cursor-pointer">Pilih Foto</span></div>');
+        $resolvedLabelIdle = $fpLang('label_avatar_idle', '<div class="w-full h-full flex flex-col items-center justify-center gap-2 p-2 select-none cursor-pointer"><div class="size-9 rounded-full bg-muted/70 border border-border/60 flex items-center justify-center text-muted-foreground"><svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="4"/><path d="M20 18c0-2.761-3.582-5-8-5s-8 2.239-8 5"/></svg></div><span class="filepond--label-action text-[11px] font-semibold text-primary cursor-pointer">Pilih Foto</span></div>');
     } else {
         // Resolve Icon SVG
         $iconSvg = '';
         if ($icon === 'cloud' || empty($icon)) {
-            $iconSvg = '<svg class="size-11 text-foreground/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16.5A5.5 5.5 0 0 1 7 5.5a5.5 5.5 0 0 1 10 2 4.5 4.5 0 0 1 1.5 8.5"/><circle cx="12" cy="15" r="3.5" fill="var(--card, #ffffff)" stroke-width="1.6"/><path d="m10.5 15 1.1 1.1 2.2-2.2" stroke-width="1.6"/></svg>';
+            $iconSvg = '<svg class="size-11 text-foreground/80" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96Z"/><path d="m8.5 14.5 3.5-3.5 3.5 3.5M12 11v7"/></svg>';
         } elseif ($icon === 'upload') {
-            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></svg>';
+            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0l-4 4m4-4l4 4M2 17l.621 2.485A3.987 3.987 0 0 0 6.5 22h11a3.987 3.987 0 0 0 3.879-2.515L22 17"/></svg>';
         } elseif ($icon === 'folder') {
-            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>';
+            $iconSvg = '<svg class="size-9 text-foreground/75" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 7c0-1.886 0-2.828.586-3.414C3.172 3 4.114 3 6 3h2.172a3 3 0 0 1 2.121.879l1.414 1.414A3 3 0 0 0 13.828 6H18c1.886 0 2.828 0 3.414.586C22 7.172 22 8.114 22 10v7c0 1.886 0 2.828-.586 3.414C20.828 21 19.886 21 18 21H6c-1.886 0-2.828 0-3.414-.586C2 19.828 2 18.886 2 17V7Z"/></svg>';
         } elseif ($icon !== 'none') {
             $iconSvg = $icon;
         }
@@ -381,10 +381,9 @@
        id="{{ $id }}-error"
        class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1 {{ $isAvatar ? 'justify-center' : '' }}"
        @if (!$hasError || !$errorMessage) style="display:none" @endif>
-        <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" x2="12.01" y1="16" y2="16" />
+            <path d="M12 8v5M12 16h.01" />
         </svg>
         <span x-text="serverError">{{ $errorMessage }}</span>
     </p>

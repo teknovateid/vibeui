@@ -54,8 +54,8 @@
                         title="{{ __('vibe/datatable.select_page_or_all') }}"
                         aria-label="{{ __('vibe/datatable.select_page_or_all') }}"
                     >
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m6 9 6 6 6-6"/>
+                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 9l-7 6-7-6"/>
                         </svg>
                     </button>
                 </vibe:dropdown.trigger>
@@ -64,9 +64,9 @@
                     {{-- Opsi 1: Pilih 1 Halaman yang Kelihatan Saja --}}
                     <vibe:dropdown.item @click="selectAllOnPage(); close()" class="justify-between text-xs">
                         <span class="flex items-center gap-1.5 font-medium">
-                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="18" x="3" y="3" rx="2"/>
-                                <path d="M9 12h6"/>
+                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="4"/>
+                                <path d="M8 12h8"/>
                             </svg>
                             <span>{{ __('vibe/datatable.select_this_page') }}</span>
                         </span>
@@ -76,9 +76,9 @@
                     {{-- Opsi 2: Pilih Semua Data di Seluruh Halaman --}}
                     <vibe:dropdown.item @click="setAllSelected(); close()" class="justify-between text-xs">
                         <span class="flex items-center gap-1.5 font-medium">
-                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="18" x="3" y="3" rx="2"/>
-                                <path d="m9 12 2 2 4-4"/>
+                            <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="18" x="3" y="3" rx="4"/>
+                                <path d="m8 12 3 3 5-5"/>
                             </svg>
                             <span>{{ __('vibe/datatable.select_all') }}</span>
                         </span>
@@ -90,10 +90,9 @@
                         <div>
                             <vibe:dropdown.divider />
                             <vibe:dropdown.item @click="clearSelected(); close()" destructive class="text-xs font-medium gap-1.5">
-                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <circle cx="12" cy="12" r="10"/>
-                                    <path d="m15 9-6 6"/>
-                                    <path d="m9 9 6 6"/>
+                                    <path d="m15 9-6 6M9 9l6 6"/>
                                 </svg>
                                 <span>{{ __('vibe/datatable.deselect_all') }}</span>
                             </vibe:dropdown.item>
