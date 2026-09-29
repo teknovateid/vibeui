@@ -94,6 +94,21 @@
                     };
                 }
 
+                var safeCb = function() {
+                    if (typeof cb === 'function') {
+                        try {
+                            var res = cb();
+                            if (res && typeof res.catch === 'function') {
+                                res.catch(function(e) {
+                                    console.error('Error executing delete action promise:', e);
+                                });
+                            }
+                        } catch (e) {
+                            console.error('Error executing delete action:', e);
+                        }
+                    }
+                };
+
                 if (typeof vibeAlert !== 'undefined') {
                     vibeAlert({
                         type: 'confirm',
@@ -102,16 +117,14 @@
                         confirmButton: {
                             text: options.confirmText,
                             class: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-                            action: cb
+                            action: safeCb
                         },
                         closeButton: {
                             text: options.cancelText
                         }
                     });
                 } else if (confirm(options.message)) {
-                    if (typeof cb === 'function') {
-                        cb();
-                    }
+                    safeCb();
                 }
             };
         }

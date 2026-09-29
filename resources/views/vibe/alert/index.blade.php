@@ -392,7 +392,11 @@
     },
     executeCallback(cb) {
         if (typeof cb === 'function') {
-            cb();
+            try {
+                cb();
+            } catch (e) {
+                console.error('Error executing alert callback:', e);
+            }
         } else if (typeof cb === 'string') {
             try {
                 if (cb.trim().startsWith('function') || cb.includes('=>')) {
@@ -444,7 +448,7 @@
                     'justify-end gap-2.5 sm:gap-3': !alert.buttonLayout && (alert.align || globalAlign) !== 'center',
                 }">
 
-                    <vibe:button variant="secondary" size="md" x-show="alert.closeButton" @click="if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); remove(alert.id)" x-bind:class="[
+                    <vibe:button variant="secondary" size="md" x-show="alert.closeButton" @click="try { if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); } finally { remove(alert.id); }" x-bind:class="[
                         (alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : '',
                         (alert.closeButton && alert.closeButton.class && alert.closeButton.class.includes('bg-transparent')) ? 'bg-transparent! border-transparent! shadow-none!' : '',
                         (alert.buttonLayout === 'col' && alert.closeButton && alert.closeButton.class && alert.closeButton.class.includes('bg-transparent')) ?
@@ -455,7 +459,7 @@
                         <span x-text="alert.closeButton ? alert.closeButton.text : ''"></span>
                     </vibe:button>
 
-                    <vibe:button variant="primary" size="md" x-show="alert.confirmButton" @click="if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); remove(alert.id)" x-bind:class="[
+                    <vibe:button variant="primary" size="md" x-show="alert.confirmButton" @click="try { if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); } finally { remove(alert.id); }" x-bind:class="[
                         (alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : '',
                         alert.buttonLayout === 'col' ? 'w-full h-12! text-sm sm:text-base font-semibold' : 'h-9 px-4 text-sm font-medium',
                         (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1' : ''

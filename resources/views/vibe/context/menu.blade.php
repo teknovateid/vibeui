@@ -42,17 +42,11 @@
             return { data: this.data };
         },
 
-        init() {
-            // Close context menu on ANY scroll across the document or inside scrollable containers (capture: true)
-            const handleScroll = () => {
-                if (this.open && Date.now() - this.lastOpenTime > 60) {
-                    this.close();
-                }
-            };
-            window.addEventListener('scroll', handleScroll, true);
-            this.$cleanup(() => {
-                window.removeEventListener('scroll', handleScroll, true);
-            });
+        handleScroll() {
+            // Close context menu on ANY scroll across the document or inside scrollable containers
+            if (this.open && Date.now() - this.lastOpenTime > 60) {
+                this.close();
+            }
         },
 
         show(x, y, data = {}) {
@@ -136,6 +130,7 @@
     @click.outside="closeOutside()"
     @keydown.escape.window="close()"
     @contextmenu.window="closeOnContextmenu()"
+    @scroll.window.capture.passive="handleScroll()"
 >
     {{-- Portal overlay: fixed position, rendered at body level via absolute stacking --}}
     <div
