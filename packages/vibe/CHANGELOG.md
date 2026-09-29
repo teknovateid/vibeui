@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.13] - 2026-09-29
+
+### 🚀 Features
+- feat: add robust error handling to action callbacks and enhance avatar component with fallback and auto-coloring features (adc293a)
+
+
 ## [0.2.12] - 2026-09-29
 
 
