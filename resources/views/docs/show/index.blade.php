@@ -643,7 +643,173 @@
                 </vibe:preview>
             </section>
 
-            {{-- 7. Props Reference --}}
+            {{-- 7. Integrasi Livewire & Alpine ($this->dispatch) --}}
+            <section id="integrasi-livewire" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/show.livewire_dispatch.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/show.livewire_dispatch.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/show.livewire_dispatch.preview_title')">
+                    <vibe:preview.code>
+{{-- 1. Di dalam Livewire Component (PHP): --}}
+public function showDetail($id)
+{
+    $user = User::with('department')->findOrFail($id);
+
+    // Livewire 3: Named arguments (Otomatis membuka modal/sheet jika open: true)
+    $this->dispatch('vibe:show', 
+        target: 'livewire-detail-sheet', 
+        data: $user,
+        open: true // opsional, default true
+    );
+}
+
+{{-- 2. Target Sheet di Blade: --}}
+<\vibe:sheet id="livewire-detail-sheet" position="right" size="md">
+    <div class="p-6 space-y-4">
+        <div class="flex items-center gap-3">
+            <\vibe:avatar vibe-show="avatar" size="lg" />
+            <div>
+                <h4 class="font-bold text-foreground" vibe-show="name"></h4>
+                <p class="text-xs text-muted-foreground" vibe-show="email"></p>
+            </div>
+            <\vibe:badge vibe-show="role" variant="success" class="ml-auto" />
+        </div>
+        <\vibe:separator />
+        <div class="space-y-2 text-xs">
+            <div>
+                <span class="text-muted-foreground block">Telepon:</span>
+                <\vibe:show key="phone" class="font-mono" />
+            </div>
+            <div>
+                <span class="text-muted-foreground block">Departemen:</span>
+                <\vibe:show key="department" class="font-medium" />
+            </div>
+        </div>
+    </div>
+</\vibe:sheet>
+
+{{-- 3. Di Blade Template (Memicu via wire:click atau Alpine $dispatch): --}}
+<\vibe:button wire:click="showDetail(1)">
+    Buka Sheet via Livewire
+</\vibe:button>
+                    </vibe:preview.code>
+
+                    <div class="flex flex-wrap items-center gap-3 p-4">
+                        {{-- Simulasi Dispatch ke Modal --}}
+                        <vibe:button
+                            variant="primary"
+                            size="sm"
+                            @click="$dispatch('vibe:show', {
+                                target: 'demo-dispatch-modal',
+                                data: {
+                                    name: 'Fahril Kurniawan',
+                                    email: 'fahril@teknovate.id',
+                                    role: 'Staff Engineer',
+                                    status: 'Aktif',
+                                    phone: '+62 821-9876-5432'
+                                }
+                            })"
+                        >
+                            Dispatch ke Modal
+                        </vibe:button>
+
+                        {{-- Simulasi Dispatch ke Sheet (Drawer) --}}
+                        <vibe:button
+                            variant="outline"
+                            size="sm"
+                            @click="$dispatch('vibe:show', {
+                                target: 'demo-dispatch-sheet',
+                                data: {
+                                    name: 'Sarah Montgomery',
+                                    email: 'sarah.m@teknovate.id',
+                                    role: 'Lead UI/UX Designer',
+                                    status: 'Verified',
+                                    phone: '+62 812-3456-7890',
+                                    department: 'Product Design',
+                                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+                                    bio: 'Merancang interaksi desain modern dan sistem komponen Blade berkinerja tinggi.'
+                                }
+                            })"
+                        >
+                            Dispatch ke Sheet (Drawer)
+                        </vibe:button>
+
+                        {{-- Target Modal --}}
+                        <vibe:modal id="demo-dispatch-modal" title="Detail Pengguna (Modal via Dispatch)">
+                            <div class="p-6 space-y-4">
+                                <div class="space-y-1">
+                                    <span class="text-xs text-muted-foreground font-mono">&lt;vibe:show key="name"&gt;:</span>
+                                    <vibe:show key="name" class="text-base font-bold text-foreground block" />
+                                </div>
+                                <vibe:separator />
+                                <div class="grid grid-cols-2 gap-4 text-xs">
+                                    <div>
+                                        <span class="text-muted-foreground block">Email:</span>
+                                        <vibe:show key="email" class="font-medium" />
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground block">Peran:</span>
+                                        <vibe:show key="role" class="font-semibold text-primary" />
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground block">Telepon:</span>
+                                        <vibe:show key="phone" class="font-mono" />
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground block">Status:</span>
+                                        <vibe:badge vibe-show="status" variant="success" size="sm" />
+                                    </div>
+                                </div>
+                            </div>
+                        </vibe:modal>
+
+                        {{-- Target Sheet --}}
+                        <vibe:sheet id="demo-dispatch-sheet" position="right" size="md">
+                            <div class="p-6 space-y-6 flex flex-col h-full">
+                                <div class="flex items-center gap-3 border-b border-border pb-4">
+                                    <vibe:avatar vibe-show="avatar" size="xl" />
+                                    <div class="min-w-0">
+                                        <h3 class="text-base font-bold text-foreground truncate" vibe-show="name"></h3>
+                                        <p class="text-xs text-muted-foreground truncate" vibe-show="email"></p>
+                                    </div>
+                                    <vibe:badge vibe-show="status" variant="success" size="sm" class="ml-auto" />
+                                </div>
+
+                                <div class="space-y-3 text-xs">
+                                    <div>
+                                        <span class="text-muted-foreground block">Peran &amp; Departemen:</span>
+                                        <div class="flex items-center gap-1.5 mt-0.5">
+                                            <span class="font-medium" vibe-show="role"></span>
+                                            <span class="text-muted-foreground/50">&bull;</span>
+                                            <span class="text-muted-foreground" vibe-show="department"></span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground block">Nomor Telepon:</span>
+                                        <span class="font-mono font-medium" vibe-show="phone"></span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground block">Biografi:</span>
+                                        <p class="text-muted-foreground mt-0.5 leading-relaxed" vibe-show="bio"></p>
+                                    </div>
+                                </div>
+
+                                <div class="mt-auto pt-4 border-t border-border flex justify-end">
+                                    <vibe:button size="sm" variant="outline" @click="$dispatch('close-sheet', 'demo-dispatch-sheet')">
+                                        Tutup Sheet
+                                    </vibe:button>
+                                </div>
+                            </div>
+                        </vibe:sheet>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 8. Props Reference --}}
             <section id="referensi-props" class="space-y-6">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/show.props.title') }}</h2>
@@ -773,6 +939,36 @@
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $item }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- Livewire & Alpine Event: vibe:show --}}
+                <div class="space-y-2 pt-2">
+                    <p class="text-sm font-semibold text-foreground">Parameter Event Livewire &amp; Alpine &lt;vibe:show&gt;</p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/show.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/show.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/show.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/show.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $eventParams = [
+                                    ['target', 'string|Element', '(Wajib)', 'ID kontainer target atau CSS selector elemen (misal: "user-sheet" atau "#detail-modal") yang akan diisi data.'],
+                                    ['data', 'object|array', '{}', 'Objek atau array data (Model Eloquent, Resource, atau associative array) yang dipetakan ke elemen di dalam target.'],
+                                    ['open', 'bool', 'true', 'Jika true, engine otomatis mengirimkan event open-modal dan open-sheet untuk membuka Modal atau Sheet target.'],
+                                ];
+                            @endphp
+                            @foreach ($eventParams as [$param, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $param }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
                                     <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
                                 </vibe:table.row>
                             @endforeach

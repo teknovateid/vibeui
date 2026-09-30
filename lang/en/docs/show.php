@@ -48,6 +48,12 @@ return [
         'preview_title' => 'Programmatic Population & Event Listening',
     ],
 
+    'livewire_dispatch' => [
+        'title' => 'Livewire & Alpine Integration ($this->dispatch)',
+        'desc' => 'Dispatch data directly from a Livewire component method using <code class="font-mono text-xs">$this-&gt;dispatch(\'vibe:show\', target: \'...\', data: $data)</code> or Alpine.js <code class="font-mono text-xs">$dispatch(\'vibe:show\', { target: \'...\', data: data })</code>. Data is instantly bound to the target container and automatically opens the <strong>Modal</strong> or <strong>Sheet</strong> without defining extra API endpoints.',
+        'preview_title' => 'Dispatch to Modal & Sheet from Livewire',
+    ],
+
     'props' => [
         'title' => 'Props & Attributes Reference',
         'desc' => 'Comprehensive reference of component props, HTML attributes, and template variables supported by the VibeShow ecosystem.',

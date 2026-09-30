@@ -90,3 +90,50 @@ test('show.each component renders template and empty state', function () {
         ->toContain('colspan="3"')
         ->toContain('Belum ada produk.');
 });
+
+test('show.js contains vibe:show event listener for Livewire and Alpine dispatch', function () {
+    $script = file_get_contents(resource_path('js/vibe/show.js'));
+
+    expect($script)
+        ->toContain("window.addEventListener('vibe:show', handleVibeShowEvent)")
+        ->toContain("window.dispatchEvent(new CustomEvent('open-modal'")
+        ->toContain("window.dispatchEvent(new CustomEvent('open-sheet'")
+        ->toContain('VibeShow = {')
+        ->toContain('handleEvent: handleVibeShowEvent')
+        ->toContain('dispatch: handleVibeShowEvent');
+});
+
+test('sheet and modal components seamlessly host vibe:show elements', function () {
+    $sheetHtml = Blade::render(
+        <<<'BLADE'
+        <vibe:sheet id="user-sheet" position="right">
+            <div>
+                <vibe:show key="name" class="font-bold" />
+                <vibe:show key="email" />
+            </div>
+        </vibe:sheet>
+        BLADE
+    );
+
+    expect($sheetHtml)
+        ->toContain('id="user-sheet"')
+        ->toContain('@open-sheet.window')
+        ->toContain('vibe-show="name"')
+        ->toContain('vibe-show="email"');
+
+    $modalHtml = Blade::render(
+        <<<'BLADE'
+        <vibe:modal id="user-modal">
+            <div>
+                <vibe:show key="user.name" class="font-semibold" />
+            </div>
+        </vibe:modal>
+        BLADE
+    );
+
+    expect($modalHtml)
+        ->toContain('vibe-modal-root')
+        ->toContain('@open-modal.window')
+        ->toContain('vibe-show="user.name"');
+});
+

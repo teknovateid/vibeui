@@ -470,12 +470,101 @@
         }
     }
 
+    /**
+     * Handler for vibe:show events dispatched via Livewire ($this->dispatch), Alpine ($dispatch), or CustomEvent.
+     * Supports:
+     * - $this->dispatch('vibe:show', target: 'user-sheet', data: $user)
+     * - $this->dispatch('vibe:show', ['target' => 'user-sheet', 'data' => $user, 'open' => true])
+     * - $this->dispatch('vibe:show', 'user-sheet', $user)
+     * - $dispatch('vibe:show', { target: 'user-sheet', data: user })
+     */
+    function handleVibeShowEvent(eventOrPayload) {
+        let payload = eventOrPayload;
+        if (payload && typeof payload === 'object' && 'detail' in payload) {
+            payload = payload.detail;
+        }
+
+        // Handle array wrapping from Livewire 3
+        if (Array.isArray(payload)) {
+            if (payload.length > 0 && typeof payload[0] === 'object' && payload[0] !== null) {
+                payload = payload[0];
+            } else if (payload.length >= 2 && typeof payload[0] === 'string') {
+                payload = {
+                    target: payload[0],
+                    data: payload[1],
+                    open: payload[2] !== undefined ? payload[2] : true
+                };
+            }
+        }
+
+        if (!payload || typeof payload !== 'object') {
+            return;
+        }
+
+        const target = payload.target || payload.to;
+        let data = payload.data !== undefined ? payload.data : payload;
+        const shouldOpen = payload.open !== false;
+
+        // If data is payload itself, strip meta keys
+        if (data === payload) {
+            data = { ...payload };
+            delete data.target;
+            delete data.to;
+            delete data.open;
+        }
+
+        if (!target) {
+            console.warn('[VibeShow] Missing target in vibe:show event:', payload);
+            return;
+        }
+
+        let targetEl = null;
+        if (typeof target === 'string') {
+            const sel = target.startsWith('#') || target.startsWith('.') || target.includes(' ')
+                ? target
+                : '#' + target;
+            targetEl = document.querySelector(sel) || document.getElementById(target);
+        } else if (target instanceof Element) {
+            targetEl = target;
+        }
+
+        if (!targetEl) {
+            console.warn('[VibeShow] Target element not found for vibe:show event:', target);
+            return;
+        }
+
+        // Unwrap Laravel resource wrapper { data: { ... } } if present
+        let cleanData = data;
+        if (data && typeof data === 'object' && 'data' in data && typeof data.data === 'object' && data.data !== null && Object.keys(data).length <= 2) {
+            cleanData = data.data;
+        }
+
+        // 1. Populate data into target
+        populate(cleanData, targetEl);
+
+        // 2. Auto-open Modal or Sheet if requested
+        if (shouldOpen) {
+            const targetId = typeof target === 'string' ? target.replace(/^#/, '') : (targetEl ? targetEl.id : null);
+            if (targetId) {
+                window.dispatchEvent(new CustomEvent('open-modal', { detail: targetId }));
+                window.dispatchEvent(new CustomEvent('open-sheet', { detail: targetId }));
+            }
+        }
+
+        return targetEl;
+    }
+
+    // Register event listener for Livewire ($this->dispatch), Alpine ($dispatch), and native CustomEvent
+    window.addEventListener('vibe:show', handleVibeShowEvent);
+
     const VibeShow = {
         get,
         setElementValue,
         populateEach,
         populate,
-        fetchAndShow
+        fetchAndShow,
+        handleEvent: handleVibeShowEvent,
+        dispatch: handleVibeShowEvent
     };
 
     window.VibeShow = VibeShow;

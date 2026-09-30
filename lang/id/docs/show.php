@@ -48,6 +48,12 @@ return [
         'preview_title' => 'Populasi Terprogram & Listening Event',
     ],
 
+    'livewire_dispatch' => [
+        'title' => 'Integrasi Livewire & Alpine ($this->dispatch)',
+        'desc' => 'Kirim data langsung dari method komponen Livewire menggunakan <code class="font-mono text-xs">$this-&gt;dispatch(\'vibe:show\', target: \'...\', data: $data)</code> atau Alpine.js <code class="font-mono text-xs">$dispatch(\'vibe:show\', { target: \'...\', data: data })</code>. Data langsung terikat ke elemen target dan otomatis membuka <strong>Modal</strong> atau <strong>Sheet</strong> tanpa perlu membuat endpoint API tambahan.',
+        'preview_title' => 'Dispatch ke Modal & Sheet dari Livewire',
+    ],
+
     'props' => [
         'title' => 'Referensi Props & Atribut',
         'desc' => 'Daftar lengkap atribut, properti, dan variabel template yang didukung oleh ekosistem VibeShow.',
