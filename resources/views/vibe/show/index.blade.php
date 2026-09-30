@@ -12,7 +12,7 @@
     $showKey = $key ?? $attributes->get('vibe-show');
 @endphp
 
-@pushOnce('body')
+@pushOnce('body', 'vibe-show')
     @vite('resources/js/vibe/show.js')
 @endPushOnce
 
