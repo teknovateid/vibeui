@@ -19,6 +19,7 @@
     'dismissible' => null, // alias for closeOnOutsideClick
     'backdrop' => null, // smart default: true for fixed, false for relative/absolute/sticky
     'backdropClass' => null,
+    'teleport' => null, // smart default: true for fixed, false for relative/absolute/sticky
 ])
 
 @php
@@ -58,6 +59,10 @@
 
     if ($backdrop === null) {
         $backdrop = ($layout === 'fixed');
+    }
+
+    if ($teleport === null) {
+        $teleport = ($layout === 'fixed');
     }
 
     $positionClasses = match ($position) {
@@ -128,6 +133,10 @@
         }
         : 'top: 0; left: 0; right: 0; bottom: 0';
 @endphp
+
+@if ($teleport)
+    <template x-teleport="body">
+@endif
 
 <div id="{{ $id }}" x-data="{
     id: '{{ $id }}',
@@ -553,3 +562,6 @@
         </div>
     @endif
 </div>
+@if ($teleport)
+    </template>
+@endif
