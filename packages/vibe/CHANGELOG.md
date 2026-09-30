@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.18] - 2026-09-30
+
+### 🚀 Features
+- feat: add robust target element resolution with retry logic for delayed rendering (dde25fc)
+
+### 🐛 Bug Fixes
+- fix: update default post-login redirect path to root (e106ff3)
+
+
 ## [0.2.17] - 2026-09-30
 
 ### 🚀 Features
