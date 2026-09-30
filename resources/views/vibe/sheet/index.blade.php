@@ -104,9 +104,9 @@
     };
 
     $zIndexClasses = match ($layout) {
-        'fixed' => 'z-40',
+        'fixed' => 'z-60',
+        'absolute' => 'z-60',
         'sticky' => 'z-20',
-        'absolute' => 'z-20',
         default => 'z-10',
     };
 
@@ -413,7 +413,7 @@
                 x-transition:leave="transition-opacity ease-in duration-200"
                 x-transition:leave-start="opacity-100"
                 x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-black/50 backdrop-blur-xs z-30 {{ $backdropClass }}"
+                class="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 {{ $backdropClass }}"
                 aria-hidden="true"
                 @click="if ({{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }"
             ></div>

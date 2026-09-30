@@ -183,7 +183,7 @@
             }
         }
     }"
-    {{ $attributes->twMerge(['class' => "group/highlight relative flex flex-col rounded-xl bg-card text-card-foreground border border-border overflow-hidden shadow-xs {$themeClass}"]) }}
+    {{ $attributes->twMerge(['class' => "group/highlight relative isolate flex flex-col rounded-xl bg-card text-card-foreground border border-border overflow-hidden shadow-xs {$themeClass}"]) }}
 >
     @if ($showHeader)
         <div data-vibe-header class="flex items-center justify-between px-4 py-2.5 bg-muted/60 border-b border-border text-xs text-muted-foreground">

@@ -1,23 +1,25 @@
 @aware(['tableName', 'isTailwind', 'isBootstrap', 'isBootstrap4', 'isBootstrap5', 'localisationPath'])
 
-<div class="{{ $this->getColumnSelectIsHiddenOnMobile() ? 'hidden sm:block' : ($this->getColumnSelectIsHiddenOnTablet() ? 'hidden md:block' : '') }} shrink-0" wire:key="{{ $tableName }}-column-select-wrapper">
-    <vibe:dropdown align="right" width="56" keyboard>
-        <vibe:dropdown.trigger>
+<div class="{{ $this->getColumnSelectIsHiddenOnMobile() ? 'hidden sm:block' : ($this->getColumnSelectIsHiddenOnTablet() ? 'hidden md:block' : '') }} w-full sm:w-auto shrink-0" wire:key="{{ $tableName }}-column-select-wrapper">
+    <vibe:dropdown align="right" width="56" keyboard class="w-full sm:w-auto">
+        <vibe:dropdown.trigger class="w-full sm:w-auto">
             <button
                 type="button"
-                class="inline-flex items-center justify-center gap-2 h-9 px-3 text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
+                class="inline-flex items-center justify-between sm:justify-center gap-2 h-9 px-3 w-full sm:w-auto text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
                 aria-haspopup="true"
                 x-bind:aria-expanded="open"
             >
-                <svg class="size-3.5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <rect width="18" height="18" x="3" y="3" rx="4"/>
-                    <path d="M9 3v18"/>
-                    <path d="M15 3v18"/>
-                </svg>
+                <div class="inline-flex items-center gap-2">
+                    <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="18" height="18" x="3" y="3" rx="4"/>
+                        <path d="M9 3v18"/>
+                        <path d="M15 3v18"/>
+                    </svg>
 
-                <span>{{ __($localisationPath.'Columns') }}</span>
+                    <span>{{ __($localisationPath.'Columns') }}</span>
+                </div>
 
-                <svg class="size-3.5 text-muted-foreground transition-transform duration-200" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="size-3.5 text-muted-foreground transition-transform duration-200 shrink-0" :class="{ 'rotate-180': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M19 9l-7 6-7-6"/>
                 </svg>
             </button>
