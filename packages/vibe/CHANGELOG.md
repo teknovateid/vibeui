@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.19] - 2026-09-30
+
+### 🚀 Features
+- feat: add DemoShowDispatch Livewire component and update sheet component persistence and login redirect (022a664)
+
+
 ## [0.2.18] - 2026-09-30
 
 ### 🚀 Features
