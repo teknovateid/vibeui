@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.16] - 2026-09-30
+
+### 🚀 Features
+- feat: add mobile sidebar backdrop and datatable bulk actions customization support (2496d9d)
+
+
 ## [0.2.15] - 2026-09-30
 
 ### ⚡ Performance & Refactoring
