@@ -9,7 +9,7 @@
 
 <x-layouts.base>
     <div class="flex h-screen overflow-hidden relative">
-        <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
+        <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 z-60 md:z-auto shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
@@ -180,6 +180,38 @@
             </vibe:sheet.footer>
 
         </vibe:sheet>
+
+        {{-- Mobile Backdrop for Sidebar --}}
+        <div
+            x-data="{
+                isOpen: false,
+                checkState() {
+                    let el = document.getElementById('sidebar-menu');
+                    this.isOpen = el && el.getAttribute('data-state') === 'expanded' && window.innerWidth < 768;
+                }
+            }"
+            x-init="
+                checkState();
+                let obs = new MutationObserver(() => checkState());
+                let el = document.getElementById('sidebar-menu');
+                if (el) obs.observe(el, { attributes: true, attributeFilter: ['data-state'] });
+            "
+            @resize.window="checkState()"
+            @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === 'sidebar-menu' && window.innerWidth < 768) isOpen = true;"
+            @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === 'sidebar-menu' || t === '*' || !t) isOpen = false;"
+            @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === 'sidebar-menu') { setTimeout(() => checkState(), 60); }"
+            x-show="isOpen"
+            x-transition:enter="transition-opacity ease-out duration-300"
+            x-transition:enter-start="opacity-0"
+            x-transition:enter-end="opacity-100"
+            x-transition:leave="transition-opacity ease-in duration-200"
+            x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black/50 backdrop-blur-xs z-55 md:hidden"
+            aria-hidden="true"
+            @click="$dispatch('close-sheet', 'sidebar-menu')"
+            style="display: none;"
+        ></div>
 
         <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header variant="header" :sticky="$isHeaderSticky" size="sm" class="{{ $isHeaderSticky ? '' : 'bg-transparent! border-none' }}" x-data>

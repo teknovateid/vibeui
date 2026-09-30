@@ -122,11 +122,11 @@
             });
         }
     }
-}" {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-border bg-card text-card-foreground shadow-xs']) }}>
+}" {{ $attributes->twMerge(['class' => 'group/preview relative isolate flex flex-col rounded-2xl border border-border bg-card text-card-foreground shadow-xs']) }}>
     {{-- Preview Toolbar Header --}}
     <div class="relative flex items-center justify-between min-h-10.5 px-3.5 py-2 bg-muted/40 dark:bg-muted/20 border-b border-border text-xs">
         {{-- Left: Segmented Tab Buttons --}}
-        <div class="relative z-10 flex items-center gap-2 shrink-0">
+        <div class="relative flex items-center gap-2 shrink-0">
             <vibe:button.group>
                 <vibe:button size="xs" variant="plain" :x-data="false" data-vibe-btn-tab="preview" type="button" @click="tab = 'preview'" x-bind:class="{
                     'bg-background text-foreground shadow-xs font-semibold ring-1 ring-border/80': tab === 'preview',
@@ -166,7 +166,7 @@
         @endif
 
         {{-- Right: Toolbar Controls (Viewport Resizer + Dark/Light Mode Switcher) --}}
-        <div class="relative z-10 flex items-center justify-end gap-1.5 shrink-0">
+        <div class="relative flex items-center justify-end gap-1.5 shrink-0">
             {{-- Viewport Switcher (Only visible in Preview tab) --}}
             @if ($viewports)
                 <vibe:button.group id="{{ $viewportGroupId }}" x-show="tab === 'preview'" class="hidden sm:inline-flex" style="{{ $tab === 'code' ? 'display: none;' : '' }}">
@@ -257,7 +257,7 @@
         @endif
 
         {{-- Resizable Inner Wrapper --}}
-        <div id="{{ $wrapperId }}" class="relative transition-all duration-300 mx-auto w-full p-6 {{ $center ? 'flex items-center justify-center sm:p-10' : 'sm:p-8' }}" style="max-width: {{ $viewport }}; {{ $minHeightStyle }}" :style="{ maxWidth: viewport }">
+        <div id="{{ $wrapperId }}" class="@container relative transition-all duration-300 mx-auto w-full p-6 {{ $center ? 'flex items-center justify-center sm:p-10' : 'sm:p-8' }}" style="max-width: {{ $viewport }}; {{ $minHeightStyle }}" :style="{ maxWidth: viewport }">
             {{ $slot }}
         </div>
     </div>

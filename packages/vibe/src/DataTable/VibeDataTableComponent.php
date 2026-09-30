@@ -19,10 +19,11 @@ abstract class VibeDataTableComponent extends DataTableComponent
         $this->setPerPageAccepted([10, 25, 50, 100]);
         $this->setDefaultPerPage(10);
         $this->setLoadingPlaceholderEnabled();
+        $this->setHideBulkActionsWhenEmptyEnabled();
 
         // Custom default attributes tailored to Vibe UI design tokens
         $this->setComponentWrapperAttributes([
-            'class' => 'w-full space-y-4 text-foreground antialiased',
+            'class' => 'w-full space-y-4 text-foreground antialiased @container',
         ]);
 
         $this->setTableWrapperAttributes([
@@ -217,5 +218,114 @@ abstract class VibeDataTableComponent extends DataTableComponent
             </vibe:context.item>
             <vibe:context.item.delete wire:click="delete($context.data.id)" />
         HTML;
+    }
+
+    /**
+     * Custom Bulk Actions template view (Blade HTML string).
+     */
+    public ?string $bulkActionsView = null;
+
+    /**
+     * Whether to render bulk actions as a traditional dropdown instead of button group.
+     */
+    public bool $bulkActionsAsDropdown = false;
+
+    public function setBulkActionsView(?string $view): self
+    {
+        $this->bulkActionsView = $view;
+
+        return $this;
+    }
+
+    public function setBulkActionsAsDropdown(bool $status = true): self
+    {
+        $this->bulkActionsAsDropdown = $status;
+
+        return $this;
+    }
+
+    public function isBulkActionsAsDropdown(): bool
+    {
+        return $this->bulkActionsAsDropdown;
+    }
+
+    /**
+     * Default Bulk Actions template (mirip placeholder() dan contextMenu()).
+     * Secara bawaan langsung merender Button Group dengan vibe:button.group dan vibe:button.delete.
+     * Dapat di-override oleh child table jika ingin kustomisasi tata letak.
+     */
+    public function bulkActionsView(): ?string
+    {
+        if ($this->bulkActionsView !== null) {
+            return $this->bulkActionsView;
+        }
+
+        return <<<'HTML'
+            <div x-cloak x-show="selectedItems.length > 0 || hideBulkActionsWhenEmpty == false" class="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:justify-end">
+                @foreach ($table->getBulkActions() as $action => $title)
+                    @php
+                        $actionLower = strtolower($action);
+                        $titleLower = strtolower($title);
+                        $isExport = str_contains($actionLower, 'export') || str_contains($titleLower, 'export') || str_contains($titleLower, 'ekspor') || str_contains($titleLower, 'csv');
+                        $isDelete = str_contains($actionLower, 'delete') || str_contains($titleLower, 'delete') || str_contains($titleLower, 'hapus') || str_contains($titleLower, 'trash');
+                    @endphp
+
+                    @if ($isDelete)
+                        <vibe:button.delete
+                            variant="outline"
+                            size="sm"
+                            wire:click="{{ $action }}"
+                            :message="$table->hasConfirmationMessage($action) ? $table->getBulkActionConfirmMessage($action) : null"
+                            wire:key="{{ $table->getTableName() }}-bulk-action-btn-{{ $action }}"
+                            wire:loading.attr="disabled"
+                            x-bind:disabled="selectedItems.length === 0"
+                            class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 text-destructive hover:bg-destructive/10 hover:text-destructive shadow-2xs"
+                            title="{{ $title }}"
+                            aria-label="{{ $title }}"
+                        >
+                            <svg class="size-3.5 text-destructive shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
+                            </svg>
+                            <span class="text-xs">{{ $title }}<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                        </vibe:button.delete>
+                    @else
+                        <vibe:button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            wire:click="{{ $action }}"
+                            :wire:confirm="$table->hasConfirmationMessage($action) ? $table->getBulkActionConfirmMessage($action) : null"
+                            wire:key="{{ $table->getTableName() }}-bulk-action-btn-{{ $action }}"
+                            wire:loading.attr="disabled"
+                            x-bind:disabled="selectedItems.length === 0"
+                            class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 shadow-2xs"
+                            title="{{ $title }}"
+                            aria-label="{{ $title }}"
+                        >
+                            @if ($isExport)
+                                <svg class="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 7c0-1.886 0-2.828.586-3.414C5.172 3 6.114 3 8 3h6.172a3 3 0 0 1 2.121.879l2.828 2.828A3 3 0 0 1 20 8.828V17c0 1.886 0 2.828-.586 3.414C18.828 21 17.886 21 16 21H8c-1.886 0-2.828 0-3.414-.586C4 19.828 4 18.886 4 17V7z" />
+                                    <path d="M8 12h8M8 16h5" />
+                                </svg>
+                            @else
+                                <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M8 12l3 3 5-5" />
+                                </svg>
+                            @endif
+                            <span class="text-xs">{{ $title }}<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                        </vibe:button>
+                    @endif
+                @endforeach
+            </div>
+        HTML;
+    }
+
+    /**
+     * Determine if bulk actions should be considered present.
+     */
+    public function hasBulkActions(): bool
+    {
+        return count($this->bulkActions()) > 0 || ! empty($this->bulkActionsView());
     }
 }

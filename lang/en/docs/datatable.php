@@ -40,6 +40,7 @@ return [
         'blade_call_binding' => 'Method 2: Using Dynamic Boolean Binding (:lazy)',
         'blade_call_native_lazy' => 'Method 3: Using Native Livewire Tag with lazy Attribute',
         'comment_placeholder' => 'Custom loading placeholder view before table enters the viewport',
+        'comment_custom_bulk_actions_view' => 'Customize bulk action buttons / view (optional)',
         'loading_text' => 'Loading table data...',
     ],
 
@@ -90,10 +91,12 @@ return [
 
     'bulk_actions' => [
         'title' => 'Bulk Actions',
-        'desc' => 'Enables users to select multiple or all table rows using checkboxes, then execute batch actions such as CSV export or bulk record deletion.',
+        'desc' => 'Enables users to select multiple or all table rows using checkboxes, then execute batch actions such as CSV export or bulk record deletion. By default, bulk actions are automatically presented as a sleek <strong>Button Group</strong>.',
         'preview_title' => 'Preview: Bulk Actions',
         'livewire_title' => 'Livewire Component',
         'livewire_desc' => 'Complete PHP class code defining <code class="font-mono text-xs">setBulkActions()</code> and bulk action handler methods.',
+        'custom_title' => 'Custom Bulk Actions View (bulkActionsView)',
+        'custom_desc' => 'By default, Vibe UI renders bulk actions as a cohesive Button Group using <code class="font-mono text-xs">&lt;vibe:button.group&gt;</code> and <code class="font-mono text-xs">&lt;vibe:button.delete&gt;</code> for delete actions. If you want to customize the design, add bespoke buttons, adjust count badges, or alter the layout, you can override the <code class="font-mono text-xs">bulkActionsView(): ?string</code> method in your DataTable class (similar to <code class="font-mono text-xs">contextMenu()</code> or <code class="font-mono text-xs">placeholder()</code>).',
     ],
 
     'column_search' => [
@@ -173,6 +176,7 @@ return [
                 'set_bordered_enabled' => 'Enables full border dividers around every cell.',
                 'set_default_sort' => 'Sets initial default sort column and direction.',
                 'set_bulk_actions' => 'Defines mass checkbox row actions (e.g. CSV export or bulk delete).',
+                'bulk_actions_view' => 'Overrides the default Button Group bulk actions layout with custom HTML/Blade markup.',
                 'set_secondary_header_status' => 'Enables secondary header row directly below column titles for per-column search inputs.',
                 'set_footer_status' => 'Enables table footer row for aggregation / totals.',
                 'set_use_header_as_footer_status' => 'Reuses header column titles as the table footer.',

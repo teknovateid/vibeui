@@ -29,7 +29,7 @@
         'outline' => 'bg-background border border-input rounded-lg shadow-2xs',
         'surface' => 'bg-card border border-border/80 rounded-lg shadow-2xs',
         'attached', 'plain', 'unstyled' => 'bg-transparent border-transparent shadow-none',
-        default => 'bg-muted border border-border rounded-lg shadow-2xs',
+        default => $isAttached ? 'bg-transparent border-transparent shadow-none' : 'bg-muted border border-border rounded-lg shadow-2xs',
     };
 
     $cornerClasses = '';

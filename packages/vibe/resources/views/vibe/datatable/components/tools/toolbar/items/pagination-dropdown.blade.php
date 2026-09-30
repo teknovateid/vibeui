@@ -1,11 +1,11 @@
 @aware(['tableName', 'localisationPath'])
 
-<div class="shrink-0" wire:key="{{ $tableName }}-pagination-dropdown-wrapper">
-    <vibe:dropdown align="right" width="min" keyboard>
-        <vibe:dropdown.trigger>
+<div class="w-full sm:w-auto shrink-0" wire:key="{{ $tableName }}-pagination-dropdown-wrapper">
+    <vibe:dropdown align="right" width="min" keyboard class="w-full sm:w-auto">
+        <vibe:dropdown.trigger class="w-full sm:w-auto">
             <button
                 type="button"
-                class="inline-flex items-center justify-between gap-2 h-9 px-3 min-w-18 text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
+                class="inline-flex items-center justify-between gap-2 h-9 px-3 w-full sm:w-auto min-w-18 text-xs font-medium rounded-lg border border-border bg-background text-foreground shadow-2xs hover:bg-muted transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring select-none"
                 aria-haspopup="true"
                 x-bind:aria-expanded="open"
             >

@@ -494,6 +494,109 @@
                     @endphp
                     <vibe:highlightjs language="php" title="app/Livewire/DemoBulkTable.php" :lineNumbers="true" :code="$bulkPhpCode" />
                 </div>
+
+                {{-- Kustomisasi Tampilan Aksi Massal (bulkActionsView) --}}
+                <div id="bulk-custom-view" class="space-y-3">
+                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/datatable.bulk_actions.custom_title') }}</h3>
+                    <p class="text-xs text-muted-foreground">
+                        {!! __('docs/datatable.bulk_actions.custom_desc') !!}
+                    </p>
+
+                    @php
+                        $customBulkPhpCode = <<<PHP
+                        namespace App\Livewire;
+
+                        use App\Models\User;
+                        use Illuminate\Database\Eloquent\Builder;
+                        use Rappasoft\LaravelLivewireTables\Views\Column;
+                        use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
+
+                        class CustomBulkTable extends VibeDataTableComponent
+                        {
+                            public string \$tableName = 'custom_bulk_table';
+
+                            public function configure(): void
+                            {
+                                parent::configure();
+
+                                \$this->setPrimaryKey('id')
+                                    ->setBulkActions([
+                                        'exportSelected' => 'Ekspor Data (CSV)',
+                                        'deleteSelected' => 'Hapus Terpilih',
+                                    ]);
+                            }
+
+                            /**
+                             * {$c('comment_custom_bulk_actions_view')}
+                             */
+                            public function bulkActionsView(): ?string
+                            {
+                                return <<<'HTML'
+                                <div x-cloak x-show="selectedItems.length > 0" class="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:justify-end">
+                                    <vibe:button
+                                        type="button"
+                                        variant="outline"
+                                        size="sm"
+                                        wire:click="exportSelected"
+                                        wire:loading.attr="disabled"
+                                        class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 shadow-2xs"
+                                        title="Ekspor Data (CSV)"
+                                        aria-label="Ekspor Data (CSV)"
+                                    >
+                                        <svg class="size-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 7c0-1.886 0-2.828.586-3.414C5.172 3 6.114 3 8 3h6.172a3 3 0 0 1 2.121.879l2.828 2.828A3 3 0 0 1 20 8.828V17c0 1.886 0 2.828-.586 3.414C18.828 21 17.886 21 16 21H8c-1.886 0-2.828 0-3.414-.586C4 19.828 4 18.886 4 17V7z" />
+                                            <path d="M8 12h8M8 16h5" />
+                                        </svg>
+                                        <span class="text-xs">Ekspor Data (CSV)<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                                    </vibe:button>
+
+                                    <vibe:button.delete
+                                        variant="outline"
+                                        size="sm"
+                                        wire:click="deleteSelected"
+                                        wire:loading.attr="disabled"
+                                        class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 text-destructive hover:bg-destructive/10 hover:text-destructive shadow-2xs"
+                                        title="Hapus Terpilih"
+                                        aria-label="Hapus Terpilih"
+                                    >
+                                        <span class="text-xs">Hapus Terpilih<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                                    </vibe:button.delete>
+                                </div>
+                                HTML;
+                            }
+
+                            public function exportSelected(): void
+                            {
+                                \$selectedIds = \$this->getSelected();
+                                // {$c('comment_export_csv')}
+                                \$this->clearSelected();
+                            }
+
+                            public function deleteSelected(): void
+                            {
+                                \$selectedIds = \$this->getSelected();
+                                // {$c('comment_delete_selected')}
+                                \$this->clearSelected();
+                            }
+
+                            public function builder(): Builder
+                            {
+                                return User::query();
+                            }
+
+                            public function columns(): array
+                            {
+                                return [
+                                    Column::make('ID', 'id')->sortable(),
+                                    Column::make('Name', 'name')->sortable()->searchable(),
+                                    Column::make('Email', 'email')->sortable()->searchable(),
+                                ];
+                            }
+                        }
+                        PHP;
+                    @endphp
+                    <vibe:highlightjs language="php" title="app/Livewire/CustomBulkTable.php" :lineNumbers="true" :code="$customBulkPhpCode" />
+                </div>
             </section>
 
             {{-- Pencarian di Setiap Kolom --}}
@@ -1218,6 +1321,10 @@
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">$this-&gt;setBulkActions([...])</vibe:table.cell>
                                 <vibe:table.cell class="text-muted-foreground">{{ __('docs/datatable.api_reference.configure_table.methods.set_bulk_actions') }}</vibe:table.cell>
+                            </vibe:table.row>
+                            <vibe:table.row>
+                                <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">bulkActionsView(): ?string</vibe:table.cell>
+                                <vibe:table.cell class="text-muted-foreground">{{ __('docs/datatable.api_reference.configure_table.methods.bulk_actions_view') }}</vibe:table.cell>
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">$this-&gt;setSecondaryHeaderStatus(true)</vibe:table.cell>

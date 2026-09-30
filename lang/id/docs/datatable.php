@@ -40,6 +40,7 @@ return [
         'blade_call_binding' => 'Cara 2: Menggunakan Dynamic Boolean Binding (:lazy)',
         'blade_call_native_lazy' => 'Cara 3: Menggunakan Tag Asli Livewire dengan Atribut lazy',
         'comment_placeholder' => 'Tampilan placeholder loading kustom sebelum tabel masuk ke viewport',
+        'comment_custom_bulk_actions_view' => 'Kustomisasi tampilan tombol aksi massal (opsional)',
         'loading_text' => 'Memuat data tabel...',
     ],
 
@@ -90,10 +91,12 @@ return [
 
     'bulk_actions' => [
         'title' => 'Aksi Massal (Bulk Actions)',
-        'desc' => 'Memungkinkan pengguna memilih beberapa atau seluruh baris data menggunakan checkbox, lalu mengeksekusi aksi massal seperti ekspor CSV atau hapus data secara serentak.',
+        'desc' => 'Memungkinkan pengguna memilih beberapa atau seluruh baris data menggunakan checkbox, lalu mengeksekusi aksi massal seperti ekspor CSV atau hapus data secara serentak. Secara bawaan aksi massal otomatis ditampilkan sebagai <strong>Button Group</strong> yang rapi.',
         'preview_title' => 'Preview: Aksi Massal (Bulk Actions)',
         'livewire_title' => 'Komponen Livewire',
         'livewire_desc' => 'Kode PHP class lengkap dengan pendefinisian <code class="font-mono text-xs">setBulkActions()</code> dan method handler aksi massal.',
+        'custom_title' => 'Kustomisasi Tampilan Aksi Massal (bulkActionsView)',
+        'custom_desc' => 'Secara bawaan, Vibe UI merender aksi massal sebagai Button Group dengan <code class="font-mono text-xs">&lt;vibe:button.group&gt;</code> dan tombol <code class="font-mono text-xs">&lt;vibe:button.delete&gt;</code> untuk aksi penghapusan. Jika Anda membutuhkan tata letak kustom, tombol tambahan, atau komponen aksi lain, cukup override method <code class="font-mono text-xs">bulkActionsView(): ?string</code> pada class DataTable Anda (serupa dengan method <code class="font-mono text-xs">contextMenu()</code> atau <code class="font-mono text-xs">placeholder()</code>).',
     ],
 
     'column_search' => [
@@ -173,6 +176,7 @@ return [
                 'set_bordered_enabled' => 'Mengaktifkan garis batas pembatas (border) vertikal dan horizontal pada setiap sel tabel.',
                 'set_default_sort' => 'Menetapkan kolom dan arah pengurutan bawaan saat pertama kali dimuat.',
                 'set_bulk_actions' => 'Mendefinisikan aksi massal checkbox baris (seperti export CSV atau hapus terpilih).',
+                'bulk_actions_view' => 'Meng-override tampilan bawaan Button Group aksi massal dengan template HTML/Blade kustom.',
                 'set_secondary_header_status' => 'Mengaktifkan baris header sekunder tepat di bawah judul kolom untuk input pencarian per kolom.',
                 'set_footer_status' => 'Mengaktifkan baris footer di bagian bawah tabel untuk agregasi / total baris.',
                 'set_use_header_as_footer_status' => 'Menjadikan dan menampilkan baris judul header kolom juga sebagai footer di bagian bawah tabel.',
