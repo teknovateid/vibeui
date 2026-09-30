@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.14] - 2026-09-30
+
+### 🚀 Features
+- feat: enhance sheet component with smart overlay defaults and expand documentation for auth and UI features (6dad0cd)
+
+
 ## [0.2.13] - 2026-09-29
 
 ### 🚀 Features
