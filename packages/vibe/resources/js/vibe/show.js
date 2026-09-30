@@ -518,40 +518,85 @@
             return;
         }
 
-        let targetEl = null;
-        if (typeof target === 'string') {
-            const sel = target.startsWith('#') || target.startsWith('.') || target.includes(' ')
-                ? target
-                : '#' + target;
-            targetEl = document.querySelector(sel) || document.getElementById(target);
-        } else if (target instanceof Element) {
-            targetEl = target;
-        }
-
-        if (!targetEl) {
-            console.warn('[VibeShow] Target element not found for vibe:show event:', target);
-            return;
-        }
-
         // Unwrap Laravel resource wrapper { data: { ... } } if present
         let cleanData = data;
         if (data && typeof data === 'object' && 'data' in data && typeof data.data === 'object' && data.data !== null && Object.keys(data).length <= 2) {
             cleanData = data.data;
         }
 
-        // 1. Populate data into target
-        populate(cleanData, targetEl);
+        function findTargetElement(t) {
+            if (!t) return null;
+            if (t instanceof Element) return t;
+            if (typeof t !== 'string') return null;
 
-        // 2. Auto-open Modal or Sheet if requested
-        if (shouldOpen) {
-            const targetId = typeof target === 'string' ? target.replace(/^#/, '') : (targetEl ? targetEl.id : null);
-            if (targetId) {
-                window.dispatchEvent(new CustomEvent('open-modal', { detail: targetId }));
-                window.dispatchEvent(new CustomEvent('open-sheet', { detail: targetId }));
+            const clean = t.trim();
+            if (!clean) return null;
+
+            const plainId = clean.replace(/^#/, '');
+
+            // 1. Direct getElementById (fastest and most reliable for plain IDs)
+            let el = document.getElementById(plainId);
+            if (el) return el;
+
+            // 2. Query selector
+            try {
+                const sel = clean.startsWith('#') || clean.startsWith('.') || clean.includes(' ') || clean.includes('[')
+                    ? clean
+                    : '#' + clean;
+                el = document.querySelector(sel);
+                if (el) return el;
+            } catch (e) {}
+
+            // 3. Fallback to [id="..."], [name="..."], [data-id="..."]
+            try {
+                el = document.querySelector(`[id="${plainId}"], [name="${plainId}"], [data-id="${plainId}"], [data-sheet="${plainId}"], [data-modal="${plainId}"]`);
+                if (el) return el;
+            } catch (e) {}
+
+            return null;
+        }
+
+        function executePopulate(el) {
+            // 1. Populate data into target
+            populate(cleanData, el);
+
+            // 2. Auto-open Modal or Sheet if requested
+            if (shouldOpen) {
+                const targetId = typeof target === 'string' ? target.replace(/^#/, '') : (el ? el.id : null);
+                if (targetId) {
+                    window.dispatchEvent(new CustomEvent('open-modal', { detail: targetId }));
+                    window.dispatchEvent(new CustomEvent('open-sheet', { detail: targetId }));
+                }
+            }
+
+            return el;
+        }
+
+        // Try immediate lookup first (0ms synchronous)
+        let targetEl = findTargetElement(target);
+        if (targetEl) {
+            return executePopulate(targetEl);
+        }
+
+        // If not found immediately (e.g. Livewire DOM morph in progress, Alpine x-teleport initializing,
+        // or sheet conditionally rendered), retry on animation frames up to 350ms.
+        const startTime = Date.now();
+        const maxWaitMs = 350;
+
+        function retryFind() {
+            targetEl = findTargetElement(target);
+            if (targetEl) {
+                return executePopulate(targetEl);
+            }
+
+            if (Date.now() - startTime < maxWaitMs) {
+                requestAnimationFrame(retryFind);
+            } else {
+                console.warn('[VibeShow] Target element not found for vibe:show event:', target);
             }
         }
 
-        return targetEl;
+        requestAnimationFrame(retryFind);
     }
 
     // Register event listener for Livewire ($this->dispatch), Alpine ($dispatch), and native CustomEvent
