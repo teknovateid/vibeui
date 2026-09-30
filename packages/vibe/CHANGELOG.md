@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.15] - 2026-09-30
+
+### ⚡ Performance & Refactoring
+- refactor: support flexible argument order in populate function and update blade directives (bdd2f0a)
+
+
 ## [0.2.14] - 2026-09-30
 
 ### 🚀 Features
