@@ -68,7 +68,7 @@ test('user can complete two factor challenge with valid totp code', function () 
         ->set('code', $validOtp)
         ->call('challenge')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(TwoFactorChallenge::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
     $this->assertNull(session('auth.2fa.user_id'));
@@ -126,7 +126,7 @@ test('user can complete two factor challenge with recovery code', function () {
         ->set('recovery_code', $codeToUse)
         ->call('challenge')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(TwoFactorChallenge::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 
@@ -284,7 +284,7 @@ test('user can switch provider to email and complete challenge via email otp', f
             $test->set('code', $otp)
                 ->call('challenge')
                 ->assertHasNoErrors()
-                ->assertRedirect(route('docs.index'));
+                ->assertRedirect(TwoFactorChallenge::redirectUrl());
 
             return true;
         }
@@ -323,7 +323,7 @@ test('whatsapp and sms otp stubs are prepared and verify otp successfully', func
     $test->set('code', $otp)
         ->call('challenge')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(TwoFactorChallenge::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });

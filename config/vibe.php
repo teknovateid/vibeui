@@ -119,7 +119,7 @@ return [
         | Pengalihan Setelah Login / Registrasi Berhasil:
         | Gunakan path seperti '/docs' atau URL tujuan setelah otentikasi.
         */
-        'redirect_after_login' => '/docs',
+        'redirect_after_login' => '/',
 
         /*
         | Konfirmasi Kata Sandi untuk Aksi Sensitif 2FA (Livewire - Cara A):

@@ -41,7 +41,7 @@ test('users can authenticate using email', function () {
         ->set('password', 'password123')
         ->call('authenticate')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Login::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });
@@ -59,7 +59,7 @@ test('users can authenticate using username when configured with array', functio
         ->set('password', 'password123')
         ->call('authenticate')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Login::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });
@@ -77,7 +77,7 @@ test('users can authenticate using phone when configured with array', function (
         ->set('password', 'password123')
         ->call('authenticate')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Login::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });
@@ -95,7 +95,7 @@ test('users can authenticate using username when configured with legacy string',
         ->set('password', 'password123')
         ->call('authenticate')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Login::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });
@@ -113,7 +113,7 @@ test('users can authenticate using phone when configured with legacy any', funct
         ->set('password', 'password123')
         ->call('authenticate')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Login::redirectUrl());
 
     $this->assertAuthenticatedAs($user);
 });
@@ -150,7 +150,7 @@ test('new users can register', function () {
         ->set('password_confirmation', 'password123')
         ->call('register')
         ->assertHasNoErrors()
-        ->assertRedirect(route('docs.index'));
+        ->assertRedirect(Register::redirectUrl());
 
     $this->assertAuthenticated();
     $this->assertDatabaseHas('users', [

@@ -135,10 +135,7 @@
 @endphp
 
 @if ($teleport)
-    <template x-teleport="body">
-@endif
-
-<div id="{{ $id }}" x-data="{
+<div class="vibe-sheet-root contents" x-data="{
     id: '{{ $id }}',
     layout: '{{ $layout }}',
     behavior: '{{ $behavior }}',
@@ -173,23 +170,25 @@
             }
         });
 
-        @if ($persist) let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
-                let stored = localStorage.getItem(key);
-                if (stored) {
-                    try {
-                        let data = JSON.parse(stored);
-                        if (Array.isArray(data)) {
-                            let item = data.find(i => i.id === this.id);
-                            if (item) {
-                                this.size = item.size ?? this.size;
-                                this.state = item.status ?? this.state;
-                            }
-                        } else if (data[this.id]) {
-                            this.size = data[this.id].size ?? this.size;
-                            this.state = data[this.id].status ?? this.state;
-                        }
-                    } catch (e) {}
-                } @endif
+        @if ($persist)
+        let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
+        let stored = localStorage.getItem(key);
+        if (stored) {
+            try {
+                let data = JSON.parse(stored);
+                if (Array.isArray(data)) {
+                    let item = data.find(i => i.id === this.id);
+                    if (item) {
+                        this.size = item.size ?? this.size;
+                        this.state = item.status ?? this.state;
+                    }
+                } else if (data[this.id]) {
+                    this.size = data[this.id].size ?? this.size;
+                    this.state = data[this.id].status ?? this.state;
+                }
+            } catch (e) {}
+        }
+        @endif
 
         if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
             this.state = 'collapsed';
@@ -276,7 +275,6 @@
     startResize(e) {
         if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
         this.isResizing = true;
-
         this.startSize = this.currentSize;
 
         let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
@@ -351,7 +349,7 @@
             } else {
                 if (this.size < this.minifiedSize / 2) {
                     this.state = 'collapsed';
-                } else if (this.size <= this.minifiedSize + 20) { // Snap zone +20px
+                } else if (this.size <= this.minifiedSize + 20) {
                     this.state = 'minified';
                 } else {
                     this.state = 'expanded';
@@ -369,10 +367,398 @@
     stopResize() {
         if (this.isResizing) {
             this.isResizing = false;
-
             document.body.style.cursor = '';
             document.body.style.userSelect = '';
+            this.saveToStorage();
+        }
+    },
 
+    toggle() {
+        this.lastTriggerTime = Date.now();
+        if (this.behavior === 'static') return;
+
+        if (this.behavior === 'collapsible' || (this.behavior === 'minify' && this.isMobile)) {
+            this.state = this.state === 'expanded' ? 'collapsed' : 'expanded';
+        } else if (this.behavior === 'minify') {
+            this.state = this.state === 'expanded' ? 'minified' : 'expanded';
+        }
+
+        if (this.state === 'expanded' && this.size < this.minifiedSize + 50) {
+            this.size = {{ $defaultSize }};
+        }
+
+        this.saveToStorage();
+    },
+
+    close() {
+        if (this.behavior === 'static') return;
+        this.state = 'collapsed';
+        this.saveToStorage();
+    },
+
+    open() {
+        this.lastTriggerTime = Date.now();
+        if (this.behavior === 'static') return;
+        this.state = 'expanded';
+        this.saveToStorage();
+    }
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }">
+    <template x-teleport="body">
+        <div class="vibe-sheet-overlay-container fixed inset-0 z-60 pointer-events-none" :class="{ 'pointer-events-none': state === 'collapsed' }">
+            @if ($backdrop)
+                <div
+                    x-show="state !== 'collapsed'"
+                    x-transition:enter="transition-opacity ease-out duration-300"
+                    x-transition:enter-start="opacity-0"
+                    x-transition:enter-end="opacity-100"
+                    x-transition:leave="transition-opacity ease-in duration-200"
+                    x-transition:leave-start="opacity-100"
+                    x-transition:leave-end="opacity-0"
+                    class="fixed inset-0 bg-black/50 backdrop-blur-xs z-10 pointer-events-auto {{ $backdropClass }}"
+                    aria-hidden="true"
+                    @click="if ({{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }"
+                ></div>
+            @endif
+
+            <div
+                id="{{ $id }}"
+                style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}"
+                :style="[
+                    isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
+                    currentSize === 0 ? 'border-width: 0' : ''
+                ].filter(Boolean).join('; ')"
+                data-state="{{ $defaultState }}"
+                :data-state="state"
+                data-variant="{{ $variant }}"
+                data-layout="{{ $layout }}"
+                data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}"
+                :class="{
+                    'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
+                }"
+                @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { state = 'collapsed'; saveToStorage(); }"
+                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
+            >
+                @if ($persist)
+                    <script>
+                        (function() {
+                            try {
+                                let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
+                                let stored = localStorage.getItem(key);
+                                if (stored) {
+                                    let data = JSON.parse(stored);
+                                    let id = '{{ $id }}';
+                                    let item = Array.isArray(data) ? data.find(i => i.id === id) : (data[id] ? data[id] : null);
+                                    if (item) {
+                                        let el = document.getElementById(id);
+                                        if (el) {
+                                            let size = item.size !== undefined ? item.size : {{ $defaultSize }};
+                                            let state = item.status !== undefined ? item.status : '{{ $defaultState }}';
+                                            let minSize = {{ $minSize }};
+                                            let maxSize = {{ $maxSize }};
+                                            let isMobile = window.innerWidth < 768;
+
+                                            if (isMobile && '{{ $behavior }}' === 'minify' && state === 'minified') {
+                                                state = 'collapsed';
+                                            }
+
+                                            if (size > maxSize) size = maxSize;
+                                            if (state === 'expanded' && size < minSize) size = minSize;
+
+                                            let currentSize = size;
+                                            if ('{{ $behavior }}' !== 'static') {
+                                                if (state === 'collapsed') currentSize = 0;
+                                                else if (state === 'minified') currentSize = isMobile ? 0 : {{ $minifiedSize }};
+                                            }
+                                            let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
+                                            el.style[isHorizontal ? 'width' : 'height'] = currentSize + 'px';
+                                            if (currentSize === 0) el.style.borderWidth = '0px';
+                                            el.setAttribute('data-state', state);
+                                            el.classList.add('group/sheet');
+                                        }
+                                    }
+                                }
+                            } catch (e) {}
+                        })();
+                    </script>
+                @endif
+
+                <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
+                         style="{{ $innerStyle }}"
+                         :style="behavior !== 'minify'
+                             ? (position === 'right'
+                                 ? `top: 0; right: 0; bottom: 0; width: ${size}px`
+                                 : position === 'bottom'
+                                 ? `left: 0; right: 0; top: 0; height: ${size}px`
+                                 : position === 'top'
+                                 ? `left: 0; right: 0; bottom: 0; height: ${size}px`
+                                 : `top: 0; left: 0; bottom: 0; width: ${size}px`)
+                             : 'top: 0; left: 0; right: 0; bottom: 0'">
+                        {{ $slot }}
+                    </div>
+                </div>
+
+                @if ($showToggle && $behavior !== 'static')
+                    @php
+                        $togglePositionClasses = match ($position) {
+                            'left' => '-right-3 top-4',
+                            'right' => '-left-3 top-4',
+                            'top' => '-bottom-3 left-1/2 -translate-x-1/2',
+                            'bottom' => '-top-3 left-1/2 -translate-x-1/2',
+                            default => '-right-3 top-4',
+                        };
+                    @endphp
+                    <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-30 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
+                        '-right-3 top-4': position === 'left',
+                        '-left-3 top-4': position === 'right',
+                        '-bottom-3 left-1/2 -translate-x-1/2': position === 'top',
+                        '-top-3 left-1/2 -translate-x-1/2': position === 'bottom'
+                    }">
+                        <svg class="w-4 h-4" :class="{
+                            'transition-transform duration-300': isInitialized,
+                            'rotate-180': (position === 'left' && state !== 'expanded') || (position === 'right' && state === 'expanded'),
+                            'rotate-90': (position === 'top' && state === 'expanded') || (position === 'bottom' && state !== 'expanded'),
+                            '-rotate-90': (position === 'bottom' && state === 'expanded') || (position === 'top' && state !== 'expanded')
+                        }" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </vibe:button>
+                @endif
+
+                @if ($resizable)
+                    <div
+                        @mousedown.prevent="startResize($event)"
+                        @touchstart.prevent="startResize($event)"
+                        class="absolute z-20 flex items-center justify-center group/resizer touch-none select-none"
+                        :class="{
+                            'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
+                            'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',
+                            'left-0 right-0 -bottom-2.5 h-5 cursor-row-resize': position === 'top',
+                            'left-0 right-0 -top-2.5 h-5 cursor-row-resize': position === 'bottom'
+                        }"
+                    >
+                        <div
+                            class="transition-all duration-200 rounded-full group-hover/resizer:opacity-100"
+                            :class="[
+                                isResizing ? 'opacity-100' : 'opacity-0',
+                                isHorizontal
+                                    ? 'h-full w-0.5 group-hover/resizer:bg-muted-foreground/60 ' + (isResizing ? 'bg-primary' : '')
+                                    : 'w-full h-0.5 group-hover/resizer:bg-muted-foreground/60 ' + (isResizing ? 'bg-primary' : '')
+                            ]"
+                        ></div>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </template>
+</div>
+@else
+<div id="{{ $id }}" x-data="{
+    id: '{{ $id }}',
+    layout: '{{ $layout }}',
+    behavior: '{{ $behavior }}',
+    position: '{{ $position }}',
+    isResizing: false,
+    isInitialized: false,
+    lastTriggerTime: 0,
+    startSize: 0,
+    startPos: 0,
+    minifiedSize: {{ $minifiedSize }},
+    minSize: {{ $minSize }},
+    maxSize: {{ $maxSize }},
+
+    size: {{ $defaultSize }},
+    state: '{{ $defaultState }}',
+    isMobile: window.innerWidth < 768,
+
+    get isHorizontal() {
+        return this.position === 'left' || this.position === 'right';
+    },
+
+    init() {
+        window.addEventListener('resize', () => {
+            this.isMobile = window.innerWidth < 768;
+            if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
+                this.state = 'collapsed';
+            }
+        });
+
+        @if ($persist)
+        let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
+        let stored = localStorage.getItem(key);
+        if (stored) {
+            try {
+                let data = JSON.parse(stored);
+                if (Array.isArray(data)) {
+                    let item = data.find(i => i.id === this.id);
+                    if (item) {
+                        this.size = item.size ?? this.size;
+                        this.state = item.status ?? this.state;
+                    }
+                } else if (data[this.id]) {
+                    this.size = data[this.id].size ?? this.size;
+                    this.state = data[this.id].status ?? this.state;
+                }
+            } catch (e) {}
+        }
+        @endif
+
+        if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
+            this.state = 'collapsed';
+        }
+
+        this.$nextTick(() => {
+            setTimeout(() => {
+                this.isInitialized = true;
+            }, 50);
+        });
+
+        this.$watch('state', value => {
+            if (value === 'expanded' || value === 'minified') {
+                setTimeout(() => {
+                    let input = this.$el.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])');
+                    if (input) input.focus();
+                }, 100);
+            }
+        });
+    },
+
+    saveToStorage() {
+        @if($persist)
+        let key = '{{ config('vibe.prefix', 'vibe') }}-sheet';
+        let stored = localStorage.getItem(key);
+        let data = [];
+        if (stored) {
+            try {
+                let parsed = JSON.parse(stored);
+                if (Array.isArray(parsed)) {
+                    data = parsed;
+                }
+            } catch (e) {}
+        }
+
+        let index = data.findIndex(i => i.id === this.id);
+        let newItem = {
+            id: this.id,
+            size: this.size,
+            status: this.state
+        };
+
+        if (index !== -1) {
+            data[index] = newItem;
+        } else {
+            data.push(newItem);
+        }
+
+        localStorage.setItem(key, JSON.stringify(data));
+        @endif
+    },
+
+    get currentSize() {
+        if (this.isResizing) return this.size;
+        if (this.behavior === 'static') return this.size;
+        if (this.state === 'collapsed') return 0;
+        if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize;
+        return this.size;
+    },
+
+    startResize(e) {
+        if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
+        this.isResizing = true;
+        this.startSize = this.currentSize;
+
+        let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
+        let clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : (e.clientY !== undefined ? e.clientY : 0);
+
+        if (this.isHorizontal) {
+            this.startPos = clientX;
+            document.body.style.cursor = 'col-resize';
+        } else {
+            this.startPos = clientY;
+            document.body.style.cursor = 'row-resize';
+        }
+
+        document.body.style.userSelect = 'none';
+    },
+
+    doResize(e) {
+        if (!this.isResizing) return;
+
+        let clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : (e.clientX !== undefined ? e.clientX : 0);
+        let clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : (e.clientY !== undefined ? e.clientY : 0);
+
+        let delta = 0;
+        if (this.position === 'left') delta = clientX - this.startPos;
+        else if (this.position === 'right') delta = this.startPos - clientX;
+        else if (this.position === 'top') delta = clientY - this.startPos;
+        else if (this.position === 'bottom') delta = this.startPos - clientY;
+
+        let newSize = this.startSize + delta;
+
+        let dynamicMaxSize = this.maxSize;
+        if (this.isHorizontal) {
+            if (window.innerWidth - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerWidth - 16);
+        } else {
+            if (window.innerHeight - 16 < dynamicMaxSize) dynamicMaxSize = Math.max(0, window.innerHeight - 16);
+        }
+
+        let effectiveMinSize = Math.min(this.minSize, dynamicMaxSize);
+
+        if (newSize > dynamicMaxSize) newSize = dynamicMaxSize;
+
+        if (this.behavior === 'static') {
+            if (newSize < effectiveMinSize) newSize = effectiveMinSize;
+        } else if (this.behavior === 'collapsible') {
+            if (effectiveMinSize > 0) {
+                if (newSize < effectiveMinSize) newSize = effectiveMinSize;
+            } else {
+                if (newSize < 0) newSize = 0;
+            }
+        } else if (this.behavior === 'minify') {
+            if (this.isMobile) {
+                if (newSize < 0) newSize = 0;
+            } else {
+                if (effectiveMinSize > 0 && newSize < effectiveMinSize && newSize > this.minifiedSize + 20) {
+                    newSize = effectiveMinSize;
+                }
+                if (newSize < 0) newSize = 0;
+            }
+        } else {
+            if (newSize < 0) newSize = 0;
+        }
+
+        this.size = newSize;
+
+        if (this.behavior === 'minify') {
+            if (this.isMobile) {
+                if (this.size < (effectiveMinSize > 0 ? effectiveMinSize / 2 : 80)) {
+                    this.state = 'collapsed';
+                } else {
+                    this.state = 'expanded';
+                }
+            } else {
+                if (this.size < this.minifiedSize / 2) {
+                    this.state = 'collapsed';
+                } else if (this.size <= this.minifiedSize + 20) {
+                    this.state = 'minified';
+                } else {
+                    this.state = 'expanded';
+                }
+            }
+        } else {
+            if (this.size === 0) {
+                this.state = 'collapsed';
+            } else {
+                this.state = 'expanded';
+            }
+        }
+    },
+
+    stopResize() {
+        if (this.isResizing) {
+            this.isResizing = false;
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
             this.saveToStorage();
         }
     },
@@ -412,22 +798,6 @@
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
 }" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
-    @if ($backdrop && $layout === 'fixed')
-        <template x-teleport="body">
-            <div
-                x-show="state !== 'collapsed'"
-                x-transition:enter="transition-opacity ease-out duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="transition-opacity ease-in duration-200"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-                class="fixed inset-0 bg-black/50 backdrop-blur-xs z-40 {{ $backdropClass }}"
-                aria-hidden="true"
-                @click="if ({{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }"
-            ></div>
-        </template>
-    @endif
     @if ($persist)
         <script>
             (function() {
@@ -472,10 +842,7 @@
         </script>
     @endif
 
-
     @if ($layout === 'relative')
-        {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0.
-             overflow-hidden memastikan konten terpotong rapi saat animasi width/height. --}}
         <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
             <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
                  style="{{ $innerStyle }}"
@@ -486,7 +853,6 @@
             </div>
         </div>
     @else
-        {{-- Fixed/absolute/sticky layout: clip-wrapper untuk content, tidak mempengaruhi resize handle. --}}
         <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
             <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
                  style="{{ $innerStyle }}"
@@ -503,11 +869,6 @@
             </div>
         </div>
     @endif
-
-
-
-
-
 
     @if ($showToggle && $behavior !== 'static')
         @php
@@ -536,7 +897,6 @@
         </vibe:button>
     @endif
 
-    <!-- Resize Handle -->
     @if ($resizable)
         <div
             @mousedown.prevent="startResize($event)"
@@ -549,7 +909,6 @@
                 'left-0 right-0 -top-2.5 h-5 cursor-row-resize': position === 'bottom'
             }"
         >
-            {{-- Garis visual: transparan by default, muncul saat hover atau sedang di-resize --}}
             <div
                 class="transition-all duration-200 rounded-full group-hover/resizer:opacity-100"
                 :class="[
@@ -562,6 +921,4 @@
         </div>
     @endif
 </div>
-@if ($teleport)
-    </template>
 @endif
