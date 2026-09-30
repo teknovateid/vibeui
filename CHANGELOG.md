@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.17] - 2026-09-30
+
+### 🚀 Features
+- feat: add teleport support to sheet component and update demo markup with sub-components (d97281e)
+- feat: add vibe:show event handler to support Livewire and Alpine integration (e5269a0)
+
+
 ## [0.2.16] - 2026-09-30
 
 ### 🚀 Features
