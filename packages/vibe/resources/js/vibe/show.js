@@ -290,6 +290,13 @@
      * Populate target element with data.
      */
     function populate(data, rootEl) {
+        // Automatically support flexible argument order: populate(data, rootEl) or populate(rootEl, data)
+        if (typeof data === 'string' || (data instanceof Element && !(rootEl instanceof Element) && typeof rootEl === 'object')) {
+            const temp = data;
+            data = rootEl;
+            rootEl = temp;
+        }
+
         if (!rootEl) return;
 
         if (typeof rootEl === 'string') {
