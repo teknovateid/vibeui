@@ -769,11 +769,16 @@ public function showDetail($id)
 
                         {{-- Target Sheet --}}
                         <vibe:sheet id="demo-dispatch-sheet" position="right" size="md">
-                            <div class="p-6 space-y-6 flex flex-col h-full">
+                            <vibe:sheet.header class="flex items-center justify-between">
+                                <h3 class="font-bold text-base text-foreground">Detail Pengguna (Sheet via Dispatch)</h3>
+                                <vibe:sheet.close />
+                            </vibe:sheet.header>
+
+                            <vibe:sheet.content class="p-6 space-y-6">
                                 <div class="flex items-center gap-3 border-b border-border pb-4">
                                     <vibe:avatar vibe-show="avatar" size="xl" />
                                     <div class="min-w-0">
-                                        <h3 class="text-base font-bold text-foreground truncate" vibe-show="name"></h3>
+                                        <h4 class="text-base font-bold text-foreground truncate" vibe-show="name"></h4>
                                         <p class="text-xs text-muted-foreground truncate" vibe-show="email"></p>
                                     </div>
                                     <vibe:badge vibe-show="status" variant="success" size="sm" class="ml-auto" />
@@ -797,13 +802,13 @@ public function showDetail($id)
                                         <p class="text-muted-foreground mt-0.5 leading-relaxed" vibe-show="bio"></p>
                                     </div>
                                 </div>
+                            </vibe:sheet.content>
 
-                                <div class="mt-auto pt-4 border-t border-border flex justify-end">
-                                    <vibe:button size="sm" variant="outline" @click="$dispatch('close-sheet', 'demo-dispatch-sheet')">
-                                        Tutup Sheet
-                                    </vibe:button>
-                                </div>
-                            </div>
+                            <vibe:sheet.footer class="flex justify-end">
+                                <vibe:button size="sm" variant="outline" @click="$dispatch('close-sheet', 'demo-dispatch-sheet')">
+                                    Tutup Sheet
+                                </vibe:button>
+                            </vibe:sheet.footer>
                         </vibe:sheet>
                     </div>
                 </vibe:preview>
