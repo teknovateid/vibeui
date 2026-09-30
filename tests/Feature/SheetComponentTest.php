@@ -58,3 +58,47 @@ test('sheet with position right uses right: 0 in inner styling', function () {
         ->toContain('top: 0; right: 0; bottom: 0; width: 400px')
         ->toContain('top: 0; right: 0; bottom: 0; width: ${size}px');
 });
+
+test('sheet defaults to fixed full height drawer with backdrop and collapsed state', function () {
+    $html = Blade::render(
+        '<vibe:sheet id="demo-sheet-basic" position="right" behavior="collapsible" :defaultSize="320">Content</vibe:sheet>'
+    );
+
+    expect($html)
+        ->toContain('fixed right-0 top-0 bottom-0 h-dvh shadow-2xl')
+        ->toContain('data-layout="fixed"')
+        ->toContain('data-state="collapsed"')
+        ->toContain('data-dismissible="true"')
+        ->toContain('x-teleport="body"')
+        ->toContain('backdrop-blur-xs');
+});
+
+test('sheet supports size presets', function () {
+    $htmlSm = Blade::render(
+        '<vibe:sheet id="test-sm" size="sm">Content</vibe:sheet>'
+    );
+    expect($htmlSm)->toContain('width: 300px');
+
+    $htmlMd = Blade::render(
+        '<vibe:sheet id="test-md" size="md">Content</vibe:sheet>'
+    );
+    expect($htmlMd)->toContain('width: 380px');
+
+    $htmlLg = Blade::render(
+        '<vibe:sheet id="test-lg" size="lg">Content</vibe:sheet>'
+    );
+    expect($htmlLg)->toContain('width: 500px');
+});
+
+test('sheet with layout relative defaults to expanded state without backdrop', function () {
+    $html = Blade::render(
+        '<vibe:sheet id="test-relative-sheet" layout="relative">Content</vibe:sheet>'
+    );
+
+    expect($html)
+        ->toContain('data-layout="relative"')
+        ->toContain('data-state="expanded"')
+        ->toContain('data-dismissible="false"')
+        ->not->toContain('x-teleport="body"');
+});
+

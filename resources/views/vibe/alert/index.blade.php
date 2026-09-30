@@ -5,7 +5,7 @@
     'align' => 'center', // start, center, end
     'timeout' => 3000,
     'sound' => false,
-    'blur' => false, // false, true, xs, sm, md, lg, xl, 2xl, 3xl, none
+    'blur' => true, // false, true, xs, sm, md, lg, xl, 2xl, 3xl, none
     'closeOnOutside' => null, // null (auto: true for non-confirm, false for confirm), or boolean
     'persist' => false, // simpan status tampil alert ke storage
     'animation' => false, // false (default), shake, pop/bounce, pulse, wobble, auto
@@ -96,8 +96,28 @@
         return pos === 'center';
     },
 
+    hasBackdrop() {
+        return this.alerts.some(a => {
+            if (a.blocking === false || a.blocking === 'false') {
+                return false;
+            }
+            if (a.blocking === true || a.blocking === 'true') {
+                return true;
+            }
+            let b = a.blur !== undefined ? a.blur : this.globalBlur;
+            if (b !== false && b !== 'none' && b !== 'false' && b !== null && b !== undefined && b !== '') {
+                return true;
+            }
+            return a.type === 'confirm';
+        });
+    },
+
     getBackdropBlurClass() {
-        let activeAlert = this.alerts.slice().reverse().find(a => a.blocking || a.blur);
+        let activeAlert = this.alerts.slice().reverse().find(a => {
+            if (a.blocking === false || a.blocking === 'false') return false;
+            let b = a.blur !== undefined ? a.blur : this.globalBlur;
+            return a.blocking || (b !== false && b !== 'none' && b !== 'false' && b !== null && b !== undefined && b !== '');
+        });
         let blurVal = activeAlert && activeAlert.blur !== undefined ? activeAlert.blur : this.globalBlur;
 
         if (blurVal === false || blurVal === 'none' || blurVal === 'false') {
@@ -165,8 +185,13 @@
             alert.blocking = alert.blocking !== undefined ? alert.blocking : true;
         }
 
-        if (alert.blur !== undefined && alert.blocking === undefined) {
-            alert.blocking = (alert.blur !== false && alert.blur !== 'none');
+        if (alert.blur === undefined && this.globalBlur !== undefined) {
+            alert.blur = this.globalBlur;
+        }
+
+        if (alert.blocking === undefined) {
+            let b = alert.blur !== undefined ? alert.blur : this.globalBlur;
+            alert.blocking = (b !== false && b !== 'none' && b !== 'false' && b !== null && b !== undefined && b !== '');
         }
 
         if (alert.confirmButton !== undefined) {
@@ -390,6 +415,24 @@
         }
         this.alerts = this.alerts.filter(a => a.id !== id);
     },
+    handleClose(alert) {
+        try {
+            if (alert.closeButton && alert.closeButton.action) {
+                this.executeCallback(alert.closeButton.action);
+            }
+        } finally {
+            this.remove(alert.id);
+        }
+    },
+    handleConfirm(alert) {
+        try {
+            if (alert.confirmButton && alert.confirmButton.action) {
+                this.executeCallback(alert.confirmButton.action);
+            }
+        } finally {
+            this.remove(alert.id);
+        }
+    },
     executeCallback(cb) {
         if (typeof cb === 'function') {
             try {
@@ -429,7 +472,7 @@
     @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/alert.info') }}' }); @endif"></div>
 
     <!-- Backdrop -->
-    <div x-show="alerts.some(a => a.blocking || (a.blur && a.blur !== false && a.blur !== 'none'))" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" @click="closeOutsideAlerts()" style="display: none; z-index: -1;"></div>
+    <div x-show="hasBackdrop()" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" @click="closeOutsideAlerts()" style="display: none; z-index: -1;"></div>
 
 
     <div class="w-full max-w-88 sm:max-w-md flex flex-col gap-4 pointer-events-none">
@@ -448,7 +491,7 @@
                     'justify-end gap-2.5 sm:gap-3': !alert.buttonLayout && (alert.align || globalAlign) !== 'center',
                 }">
 
-                    <vibe:button variant="secondary" size="md" x-show="alert.closeButton" @click="try { if(alert.closeButton && alert.closeButton.action) executeCallback(alert.closeButton.action); } finally { remove(alert.id); }" x-bind:class="[
+                    <vibe:button variant="secondary" size="md" x-show="alert.closeButton" @click="handleClose(alert)" x-bind:class="[
                         (alert.closeButton && alert.closeButton.class) ? alert.closeButton.class : '',
                         (alert.closeButton && alert.closeButton.class && alert.closeButton.class.includes('bg-transparent')) ? 'bg-transparent! border-transparent! shadow-none!' : '',
                         (alert.buttonLayout === 'col' && alert.closeButton && alert.closeButton.class && alert.closeButton.class.includes('bg-transparent')) ?
@@ -459,7 +502,7 @@
                         <span x-text="alert.closeButton ? alert.closeButton.text : ''"></span>
                     </vibe:button>
 
-                    <vibe:button variant="primary" size="md" x-show="alert.confirmButton" @click="try { if(alert.confirmButton && alert.confirmButton.action) executeCallback(alert.confirmButton.action); } finally { remove(alert.id); }" x-bind:class="[
+                    <vibe:button variant="primary" size="md" x-show="alert.confirmButton" @click="handleConfirm(alert)" x-bind:class="[
                         (alert.confirmButton && alert.confirmButton.class) ? alert.confirmButton.class : '',
                         alert.buttonLayout === 'col' ? 'w-full h-12! text-sm sm:text-base font-semibold' : 'h-9 px-4 text-sm font-medium',
                         (alert.buttonLayout === 'col' || alert.buttonLayout === 'row' || (!alert.buttonLayout && (alert.align || globalAlign) === 'center')) ? 'flex-1' : ''

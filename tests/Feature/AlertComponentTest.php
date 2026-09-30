@@ -34,3 +34,29 @@ test('alert docs page returns successful response and contains animation section
         ->toContain('animation: \'pulse\'')
         ->toContain('animation: \'wobble\'');
 });
+
+test('alert component button click handlers use clean method calls without inline try statement', function () {
+    $html = Blade::render('<vibe:alert />');
+
+    expect($html)
+        ->toContain('@click="handleClose(alert)"')
+        ->toContain('@click="handleConfirm(alert)"')
+        ->not->toContain('@click="try');
+});
+
+test('renders alert component with backdrop and blur support for all alert types', function () {
+    $html = Blade::render('<vibe:alert :blur="true" />');
+
+    expect($html)
+        ->toContain('globalBlur: true')
+        ->toContain('hasBackdrop()')
+        ->toContain('x-show="hasBackdrop()"')
+        ->toContain('getBackdropBlurClass()');
+
+    $htmlString = Blade::render('<vibe:alert blur="lg" />');
+    expect($htmlString)
+        ->toContain("globalBlur: 'lg'");
+});
+
+
+

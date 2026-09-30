@@ -23,6 +23,7 @@ return [
 
     'sections' => [
         'start' => 'Getting Started',
+        'auth' => 'Authentication',
         'forms' => 'Form Components',
         'ui' => 'UI Components',
         'navigation' => 'Navigation Components',
@@ -30,6 +31,7 @@ return [
         'data' => 'Data Components',
         'feedback' => 'Feedback Components',
         'extra' => 'Extra Components',
+        'display' => 'Display Components',
         'dashboard' => 'Dashboard Pages',
         'settings' => 'Settings Pages',
         'quick_actions' => 'Quick Shortcuts',
@@ -224,6 +226,82 @@ return [
         'settings' => [
             'title' => 'Appearance Settings',
             'subtitle' => 'Customize theme colors, palette, sidebar, and header',
+        ],
+        'auth_overview' => [
+            'title' => 'Authentication Overview',
+            'subtitle' => 'Architecture, starter kit, and feature guide for Vibe UI authentication',
+        ],
+        'auth_installation' => [
+            'title' => 'Auth Installation',
+            'subtitle' => 'CLI vibe:auth scaffolding, starter kit, and WebAuthn dependency setup',
+        ],
+        'auth_confirm' => [
+            'title' => 'Password Confirmation',
+            'subtitle' => 'Sudo mode password verification before sensitive actions run',
+        ],
+        'auth_idle' => [
+            'title' => 'Idle Timeout',
+            'subtitle' => 'Automatic session lockout with countdown timer upon inactivity',
+        ],
+        'auth_two_factor' => [
+            'title' => 'Two-Factor Authentication (2FA)',
+            'subtitle' => 'Two-step verification using TOTP and QR Code scanning',
+        ],
+        'auth_passkey' => [
+            'title' => 'Passkey (WebAuthn)',
+            'subtitle' => 'Modern biometric passwordless login via TouchID, FaceID, & FIDO2',
+        ],
+        'input_standard' => [
+            'title' => 'Standard Input',
+            'subtitle' => 'Text, password, email, prefix icons, and helper text',
+        ],
+        'input_otp' => [
+            'title' => 'Input OTP',
+            'subtitle' => 'Interactive multi-box One-Time Password input with auto-focus',
+        ],
+        'input_currency' => [
+            'title' => 'Input Currency',
+            'subtitle' => 'Automatic real-time currency formatting and numerical input',
+        ],
+        'input_phone' => [
+            'title' => 'Input Phone',
+            'subtitle' => 'Telephone number input with automatic country code picker',
+        ],
+        'show' => [
+            'title' => 'Show Component',
+            'subtitle' => 'Reactive client-side data binding and automated population into HTML',
+        ],
+        'accordion' => [
+            'title' => 'Accordion',
+            'subtitle' => 'Collapsible disclosure panels & interactive FAQ lists',
+        ],
+        'dynamic_form' => [
+            'title' => 'Dynamic Form',
+            'subtitle' => 'Form repeater for adding and removing dynamic input rows',
+        ],
+        'display_qrcode' => [
+            'title' => 'Display QR Code',
+            'subtitle' => 'ISO/IEC 18004 conforming SVG QR Code generator without third-party dependencies',
+        ],
+        'settings_appearance' => [
+            'title' => 'Appearance Settings',
+            'subtitle' => 'Customize theme colors, palette, sidebar, and header studio',
+        ],
+        'settings_account' => [
+            'title' => 'Account Settings',
+            'subtitle' => 'User profile, username, email, and personal information',
+        ],
+        'settings_security' => [
+            'title' => 'Security Settings',
+            'subtitle' => 'Change password, sudo mode, and user account protection',
+        ],
+        'settings_passkey' => [
+            'title' => 'Passkey Settings',
+            'subtitle' => 'Biometric security key and FIDO2 credential management',
+        ],
+        'settings_login_history' => [
+            'title' => 'Login History',
+            'subtitle' => 'User login sessions, browser client, and IP address log',
         ],
     ],
 ];

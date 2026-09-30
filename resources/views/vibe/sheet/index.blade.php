@@ -2,28 +2,70 @@
 
 @props([
     'variant' => 'default',
-    'layout' => 'relative', // relative, fixed, sticky, absolute
-    'id' => uniqid('sheet-'),
-    'position' => 'left', // left, right, top, bottom
-    'behavior' => 'static', // static, collapsible, minify
+    'layout' => 'fixed', // relative, fixed, sticky, absolute (default: fixed for slide-over drawer)
+    'id' => null,
+    'position' => 'right', // left, right, top, bottom (default: right)
+    'behavior' => 'collapsible', // static, collapsible, minify (default: collapsible)
     'resizable' => false,
-    'defaultSize' => 350,
+    'size' => null, // preset: sm, md, lg, xl, 2xl, or numeric px
+    'defaultSize' => null, // explicit default size in px
     'minSize' => 0,
     'maxSize' => 600,
     'minifiedSize' => 80,
     'showToggle' => false,
     'persist' => false, // save to localstorage
-    'defaultState' => 'expanded',
-    'closeOnOutsideClick' => false,
+    'defaultState' => null, // smart default: 'collapsed' for fixed/absolute, 'expanded' for relative/sticky
+    'closeOnOutsideClick' => null, // smart default: true for fixed/absolute, false for relative/sticky
+    'dismissible' => null, // alias for closeOnOutsideClick
+    'backdrop' => null, // smart default: true for fixed, false for relative/absolute/sticky
+    'backdropClass' => null,
 ])
 
 @php
+    $id = $id ?? uniqid('sheet-');
+
+    $resolvedSize = 350;
+    if ($defaultSize !== null) {
+        $resolvedSize = (int) $defaultSize;
+    } elseif ($size !== null) {
+        $resolvedSize = match ($size) {
+            'sm' => 300,
+            'md' => 380,
+            'lg' => 500,
+            'xl' => 640,
+            '2xl' => 768,
+            default => is_numeric($size) ? (int) $size : 350,
+        };
+    }
+    $defaultSize = $resolvedSize;
+    if ($maxSize < $defaultSize) {
+        $maxSize = $defaultSize + 200;
+    }
+
+    $isOverlay = in_array($layout, ['fixed', 'absolute']);
+
+    if ($defaultState === null) {
+        $defaultState = $isOverlay ? 'collapsed' : 'expanded';
+    }
+
+    if ($closeOnOutsideClick === null) {
+        if ($dismissible !== null) {
+            $closeOnOutsideClick = (bool) $dismissible;
+        } else {
+            $closeOnOutsideClick = $isOverlay;
+        }
+    }
+
+    if ($backdrop === null) {
+        $backdrop = ($layout === 'fixed');
+    }
+
     $positionClasses = match ($position) {
         'left' => 'border-r',
         'right' => 'border-l',
         'top' => 'border-b',
         'bottom' => 'border-t',
-        default => 'border-r',
+        default => 'border-l',
     };
 
     $variantClasses = match ($variant) {
@@ -35,30 +77,37 @@
 
     $layoutClasses = match ($layout) {
         'fixed' => match ($position) {
-            'left' => 'fixed left-0 top-0 bottom-0 h-screen',
-            'right' => 'fixed right-0 top-0 bottom-0 h-screen',
-            'top' => 'fixed top-0 left-0 right-0 w-full',
-            'bottom' => 'fixed bottom-0 left-0 right-0 w-full',
-            default => 'fixed left-0 top-0 bottom-0 h-screen',
+            'left' => 'fixed left-0 top-0 bottom-0 h-screen h-dvh shadow-2xl',
+            'right' => 'fixed right-0 top-0 bottom-0 h-screen h-dvh shadow-2xl',
+            'top' => 'fixed top-0 left-0 right-0 w-full shadow-2xl',
+            'bottom' => 'fixed bottom-0 left-0 right-0 w-full shadow-2xl',
+            default => 'fixed right-0 top-0 bottom-0 h-screen h-dvh shadow-2xl',
         },
         'absolute' => match ($position) {
-            'left' => 'absolute left-0 top-0 bottom-0 h-full',
-            'right' => 'absolute right-0 top-0 bottom-0 h-full',
-            'top' => 'absolute top-0 left-0 right-0 w-full',
-            'bottom' => 'absolute bottom-0 left-0 right-0 w-full',
-            default => 'absolute left-0 top-0 bottom-0 h-full',
+            'left' => 'absolute left-0 top-0 bottom-0 h-full shadow-2xl',
+            'right' => 'absolute right-0 top-0 bottom-0 h-full shadow-2xl',
+            'top' => 'absolute top-0 left-0 right-0 w-full shadow-2xl',
+            'bottom' => 'absolute bottom-0 left-0 right-0 w-full shadow-2xl',
+            default => 'absolute right-0 top-0 bottom-0 h-full shadow-2xl',
         },
         'sticky' => match ($position) {
-            'left', 'right' => 'sticky top-0 h-screen',
+            'left', 'right' => 'sticky top-0 h-screen h-dvh',
             'top', 'bottom' => 'sticky left-0 w-full',
-            default => 'sticky top-0 h-screen',
+            default => 'sticky top-0 h-screen h-dvh',
         },
         default => match ($position) {
-            'right' => 'relative order-last h-full self-stretch',
+            'right' => 'relative order-last h-full self-stretch min-h-0',
             'bottom' => 'relative order-last w-full',
             'top' => 'relative w-full',
-            default => 'relative h-full self-stretch',
+            default => 'relative h-full self-stretch min-h-0',
         },
+    };
+
+    $zIndexClasses = match ($layout) {
+        'fixed' => 'z-40',
+        'sticky' => 'z-20',
+        'absolute' => 'z-20',
+        default => 'z-10',
     };
 
     $initialSize = $defaultSize;
@@ -69,8 +118,6 @@
             $initialSize = $minifiedSize;
         }
     }
-
-    $overflowClasses = 'overflow-visible data-[state=collapsed]:overflow-hidden';
 
     $innerStyle = $behavior !== 'minify'
         ? match ($position) {
@@ -84,6 +131,7 @@
 
 <div id="{{ $id }}" x-data="{
     id: '{{ $id }}',
+    layout: '{{ $layout }}',
     behavior: '{{ $behavior }}',
     position: '{{ $position }}',
     isResizing: false,
@@ -104,6 +152,11 @@
     },
 
     init() {
+        if (this.layout === 'fixed' && this.state !== 'collapsed') {
+            window._vibeOpenSheetCount = (window._vibeOpenSheetCount || 0) + 1;
+            document.body.classList.add('overflow-hidden');
+        }
+
         window.addEventListener('resize', () => {
             this.isMobile = window.innerWidth < 768;
             if (this.isMobile && this.behavior === 'minify' && this.state === 'minified') {
@@ -140,6 +193,18 @@
         });
 
         this.$watch('state', value => {
+            if (this.layout === 'fixed') {
+                if (value !== 'collapsed') {
+                    window._vibeOpenSheetCount = (window._vibeOpenSheetCount || 0) + 1;
+                    document.body.classList.add('overflow-hidden');
+                } else {
+                    window._vibeOpenSheetCount = Math.max(0, (window._vibeOpenSheetCount || 1) - 1);
+                    if (window._vibeOpenSheetCount <= 0 && (!window._vibeOpenModalCount || window._vibeOpenModalCount <= 0)) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                }
+            }
+
             if (value === 'expanded' || value === 'minified') {
                 setTimeout(() => {
                     let input = this.$el.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])');
@@ -147,6 +212,17 @@
                 }, 100);
             }
         });
+
+        if (typeof this.$cleanup === 'function') {
+            this.$cleanup(() => {
+                if (this.layout === 'fixed' && this.state !== 'collapsed') {
+                    window._vibeOpenSheetCount = Math.max(0, (window._vibeOpenSheetCount || 1) - 1);
+                    if (window._vibeOpenSheetCount <= 0 && (!window._vibeOpenModalCount || window._vibeOpenModalCount <= 0)) {
+                        document.body.classList.remove('overflow-hidden');
+                    }
+                }
+            });
+        }
     },
 
     saveToStorage() {
@@ -321,12 +397,28 @@
         this.state = 'expanded';
         this.saveToStorage();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { state = 'collapsed'; saveToStorage(); }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
-].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
+].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-60 $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
+    @if ($backdrop && $layout === 'fixed')
+        <template x-teleport="body">
+            <div
+                x-show="state !== 'collapsed'"
+                x-transition:enter="transition-opacity ease-out duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition-opacity ease-in duration-200"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0"
+                class="fixed inset-0 bg-black/50 backdrop-blur-xs z-30 {{ $backdropClass }}"
+                aria-hidden="true"
+                @click="if ({{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }"
+            ></div>
+        </template>
+    @endif
     @if ($persist)
         <script>
             (function() {
@@ -375,8 +467,8 @@
     @if ($layout === 'relative')
         {{-- Relative layout: normal flex flow, contained so nothing bleeds when size is 0.
              overflow-hidden memastikan konten terpotong rapi saat animasi width/height. --}}
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden"
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
@@ -386,8 +478,8 @@
         </div>
     @else
         {{-- Fixed/absolute/sticky layout: clip-wrapper untuk content, tidak mempengaruhi resize handle. --}}
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden"
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
@@ -418,7 +510,7 @@
                 default => '-right-3 top-4',
             };
         @endphp
-        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-60 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
+        <vibe:button @click="toggle()" aria-label="{{ __('vibe/sheet.toggle') }}" class="absolute rounded-full w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-foreground shadow-sm z-30 transition-colors {{ $togglePositionClasses }}" x-bind:class="{
             '-right-3 top-4': position === 'left',
             '-left-3 top-4': position === 'right',
             '-bottom-3 left-1/2 -translate-x-1/2': position === 'top',

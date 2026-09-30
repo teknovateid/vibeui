@@ -62,7 +62,7 @@
                         </vibe:button>
 
                         {{-- Komponen Sheet --}}
-                        <vibe:sheet id="demo-sheet-basic" position="right" behavior="collapsible" :defaultSize="320">
+                        <vibe:sheet id="demo-sheet-basic" position="right" :defaultSize="320">
                             <vibe:sheet.header class="flex items-center justify-between">
                                 <h3 class="font-semibold text-foreground text-sm">{{ __('docs/sheet.basic_usage.header_title') }}</h3>
                                 <vibe:sheet.close />
@@ -85,7 +85,7 @@
                         </vibe:sheet>
                     </vibe:preview.code>
 
-                    <div class="relative h-96 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                    <div class="relative h-96 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
                         <div class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-3 min-w-0">
                             <div class="p-3 rounded-full bg-primary/10 text-primary">
                                 <svg class="size-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -109,7 +109,7 @@
                             </vibe:button>
                         </div>
 
-                        <vibe:sheet id="demo-sheet-basic" position="right" behavior="collapsible" :defaultSize="320">
+                        <vibe:sheet id="demo-sheet-basic" position="right" layout="relative" :defaultSize="320">
                             <vibe:sheet.header class="flex items-center justify-between">
                                 <div class="space-y-0.5">
                                     <h3 class="font-semibold text-foreground text-sm">{{ __('docs/sheet.basic_usage.header_title') }}</h3>
@@ -153,22 +153,22 @@
                 <vibe:preview :title="__('docs/sheet.positions.preview_title')">
                     <vibe:preview.code>
                         {{-- 1. Sisi Kiri (Left) --}}
-                        <vibe:sheet id="sheet-pos-left" position="left" behavior="collapsible" :defaultSize="260">
+                        <vibe:sheet id="sheet-pos-left" position="left" :defaultSize="260">
                             ...
                         </vibe:sheet>
 
                         {{-- 2. Sisi Kanan (Right) --}}
-                        <vibe:sheet id="sheet-pos-right" position="right" behavior="collapsible" :defaultSize="260">
+                        <vibe:sheet id="sheet-pos-right" position="right" :defaultSize="260">
                             ...
                         </vibe:sheet>
 
                         {{-- 3. Sisi Atas (Top) --}}
-                        <vibe:sheet id="sheet-pos-top" position="top" behavior="collapsible" :defaultSize="160">
+                        <vibe:sheet id="sheet-pos-top" position="top" :defaultSize="160">
                             ...
                         </vibe:sheet>
 
                         {{-- 4. Sisi Bawah (Bottom) --}}
-                        <vibe:sheet id="sheet-pos-bottom" position="bottom" behavior="collapsible" :defaultSize="160">
+                        <vibe:sheet id="sheet-pos-bottom" position="bottom" :defaultSize="160">
                             ...
                         </vibe:sheet>
                     </vibe:preview.code>
@@ -202,9 +202,9 @@
                         </div>
 
                         {{-- Sandbox Container --}}
-                        <div class="relative h-90 w-full overflow-hidden border border-border rounded-xl bg-muted/15 flex flex-col">
+                        <div class="relative h-90 w-full overflow-hidden border border-border rounded-xl bg-muted/15 flex flex-col isolate">
                             {{-- Top Sheet --}}
-                            <vibe:sheet id="demo-pos-top" position="top" behavior="collapsible" defaultState="collapsed" :defaultSize="120">
+                            <vibe:sheet id="demo-pos-top" position="top" layout="relative" defaultState="collapsed" :defaultSize="120">
                                 <div class="p-3 flex items-center justify-between w-full">
                                     <span class="text-xs font-semibold text-foreground">{{ __('docs/sheet.positions.sheet_title', ['pos' => 'Top']) }}</span>
                                     <vibe:sheet.close />
@@ -213,7 +213,7 @@
 
                             <div class="flex-1 flex min-h-0 w-full overflow-hidden">
                                 {{-- Left Sheet --}}
-                                <vibe:sheet id="demo-pos-left" position="left" behavior="collapsible" defaultState="collapsed" :defaultSize="220">
+                                <vibe:sheet id="demo-pos-left" position="left" layout="relative" defaultState="collapsed" :defaultSize="220">
                                     <div class="p-3 flex items-center justify-between w-full">
                                         <span class="text-xs font-semibold text-foreground">{{ __('docs/sheet.positions.sheet_title', ['pos' => 'Left']) }}</span>
                                         <vibe:sheet.close />
@@ -226,7 +226,7 @@
                                 </div>
 
                                 {{-- Right Sheet --}}
-                                <vibe:sheet id="demo-pos-right" position="right" behavior="collapsible" defaultState="collapsed" :defaultSize="220">
+                                <vibe:sheet id="demo-pos-right" position="right" layout="relative" defaultState="collapsed" :defaultSize="220">
                                     <div class="p-3 flex items-center justify-between w-full">
                                         <span class="text-xs font-semibold text-foreground">{{ __('docs/sheet.positions.sheet_title', ['pos' => 'Right']) }}</span>
                                         <vibe:sheet.close />
@@ -235,7 +235,7 @@
                             </div>
 
                             {{-- Bottom Sheet --}}
-                            <vibe:sheet id="demo-pos-bottom" position="bottom" behavior="collapsible" defaultState="collapsed" :defaultSize="120">
+                            <vibe:sheet id="demo-pos-bottom" position="bottom" layout="relative" defaultState="collapsed" :defaultSize="120">
                                 <div class="p-3 flex items-center justify-between w-full">
                                     <span class="text-xs font-semibold text-foreground">{{ __('docs/sheet.positions.sheet_title', ['pos' => 'Bottom']) }}</span>
                                     <vibe:sheet.close />
@@ -280,7 +280,7 @@
                         </vibe:sheet>
                     </vibe:preview.code>
 
-                    <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                    <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
                         <div class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-3 min-w-0">
                             <div class="flex flex-wrap items-center justify-center gap-2">
                                 <vibe:button @click="$dispatch('toggle-sheet', 'demo-sheet-sidebar-var')" variant="primary" size="sm">
@@ -295,7 +295,7 @@
                             </p>
                         </div>
 
-                        <vibe:sheet id="demo-sheet-sidebar-var" variant="sidebar" position="right" behavior="collapsible" :defaultSize="280">
+                        <vibe:sheet id="demo-sheet-sidebar-var" variant="sidebar" position="right" layout="relative" behavior="collapsible" :defaultSize="280">
                             <vibe:sheet.header class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="size-2 rounded-full bg-primary"></span>
@@ -313,7 +313,7 @@
                             </vibe:sheet.content>
                         </vibe:sheet>
 
-                        <vibe:sheet id="demo-sheet-card-var" variant="card" position="right" behavior="collapsible" defaultState="collapsed" :defaultSize="280">
+                        <vibe:sheet id="demo-sheet-card-var" variant="card" position="right" layout="relative" behavior="collapsible" defaultState="collapsed" :defaultSize="280">
                             <vibe:sheet.header class="flex items-center justify-between">
                                 <div class="flex items-center gap-2">
                                     <span class="size-2 rounded-full bg-zinc-400"></span>
@@ -366,9 +366,9 @@
                             {{ __('docs/sheet.resizable.hint') }}
                         </div>
 
-                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
                             {{-- Resizable Sheet --}}
-                            <vibe:sheet id="demo-sheet-resizable" position="left" :resizable="true" :defaultSize="260" :minSize="180" :maxSize="420">
+                            <vibe:sheet id="demo-sheet-resizable" position="left" layout="relative" :resizable="true" :defaultSize="260" :minSize="180" :maxSize="420">
                                 <vibe:sheet.header class="flex items-center justify-between">
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.resizable.sheet_title') }}</span>
                                     <span class="px-1.5 py-0.5 rounded text-[10px] font-mono bg-primary/10 text-primary">min:180 / max:420</span>
@@ -472,7 +472,7 @@
                         </div>
 
                         {{-- Mobile Smartphone Mockup Frame --}}
-                        <div class="max-w-xs mx-auto h-115 rounded-[2.5rem] border-4 border-muted-foreground/25 shadow-2xl bg-muted/20 relative overflow-hidden flex flex-col">
+                        <div class="max-w-xs mx-auto h-115 rounded-[2.5rem] border-4 border-muted-foreground/25 shadow-2xl bg-muted/20 relative overflow-hidden flex flex-col isolate">
                             {{-- Phone Notch / Dynamic Island & Status Bar --}}
                             <div class="h-10 shrink-0 px-6 flex items-center justify-between z-30 select-none pointer-events-none">
                                 <span class="text-[11px] font-semibold text-foreground">9:41</span>
@@ -602,9 +602,9 @@
                             </vibe:button>
                         </div>
 
-                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
                             {{-- Minify Sheet --}}
-                            <vibe:sheet id="demo-sheet-minify" position="left" behavior="minify" :defaultSize="220" :minifiedSize="64">
+                            <vibe:sheet id="demo-sheet-minify" position="left" layout="relative" behavior="minify" :defaultSize="220" :minifiedSize="64">
                                 <vibe:sheet.header class="flex items-center justify-between px-3 py-3">
                                     <div class="flex items-center gap-2 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:w-full">
                                         <div class="size-7 rounded-lg bg-primary text-primary-foreground flex items-center justify-center font-bold text-xs shrink-0">
@@ -672,9 +672,9 @@
                         </vibe:sheet>
                     </vibe:preview.code>
 
-                    <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
+                    <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
                         {{-- Sheet with Show Toggle --}}
-                        <vibe:sheet id="demo-sheet-toggle" position="left" behavior="collapsible" :showToggle="true" :defaultSize="260">
+                        <vibe:sheet id="demo-sheet-toggle" position="left" layout="relative" behavior="collapsible" :showToggle="true" :defaultSize="260">
                             <vibe:sheet.header>
                                 <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.toggle.sheet_title') }}</span>
                             </vibe:sheet.header>
@@ -726,7 +726,7 @@
                             </vibe:button>
                         </div>
 
-                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-card flex">
+                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-card flex isolate">
                             {{-- Konten Latar Belakang --}}
                             <div class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-2">
                                 <span class="text-xs font-semibold text-foreground">Konten Dasar Halaman</span>
@@ -820,7 +820,7 @@
                         </div>
 
                         {{-- Sandbox Container --}}
-                        <div class="relative h-88 w-full overflow-hidden border border-border rounded-xl bg-card flex">
+                        <div class="relative h-88 w-full overflow-hidden border border-border rounded-xl bg-card flex isolate">
                             {{-- Area Luar (Content) yang memicu tutup saat diklik --}}
                             <div class="flex-1 flex flex-col items-center justify-center p-6 text-center space-y-2 cursor-pointer select-none bg-muted/10 hover:bg-muted/20 transition-colors" title="{{ __('docs/sheet.outside_click.outside_instruction') }}">
                                 <div class="px-3 py-1.5 rounded-full bg-muted border border-border text-xs text-muted-foreground font-medium flex items-center gap-1.5">
@@ -833,7 +833,7 @@
                             </div>
 
                             {{-- Sheet 1: Tanpa backdrop (relative flow) --}}
-                            <vibe:sheet id="demo-outside-clean" position="right" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="280" class="shadow-xl">
+                            <vibe:sheet id="demo-outside-clean" position="right" layout="relative" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="280" class="shadow-xl">
                                 <vibe:sheet.header class="flex items-center justify-between">
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.outside_click.panel_title') }}</span>
                                     <vibe:sheet.close />
@@ -929,8 +929,8 @@
                             </vibe:button>
                         </div>
 
-                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
-                            <vibe:sheet id="demo-sheet-persist" position="left" behavior="collapsible" :resizable="true" :persist="true" :defaultSize="260" :minSize="180" :maxSize="400">
+                        <div class="relative h-80 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
+                            <vibe:sheet id="demo-sheet-persist" position="left" layout="relative" behavior="collapsible" :resizable="true" :persist="true" :defaultSize="260" :minSize="180" :maxSize="400">
                                 <vibe:sheet.header class="flex items-center justify-between">
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.persist.sheet_title') }}</span>
                                     <vibe:sheet.close />
@@ -1016,8 +1016,8 @@
                             </vibe:button>
                         </div>
 
-                        <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex">
-                            <vibe:sheet id="demo-programmatic-sheet" position="left" behavior="collapsible" :resizable="true" :defaultSize="260" defaultState="collapsed">
+                        <div class="relative h-72 w-full overflow-hidden border border-border rounded-xl bg-muted/10 flex isolate">
+                            <vibe:sheet id="demo-programmatic-sheet" position="left" layout="relative" behavior="collapsible" :resizable="true" :defaultSize="260" defaultState="collapsed">
                                 <vibe:sheet.header class="flex items-center justify-between">
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.programmatic.panel_title') }}</span>
                                     <vibe:button size="icon" variant="ghost" class="size-7" @click="$vibe.sheet('demo-programmatic-sheet').close()">

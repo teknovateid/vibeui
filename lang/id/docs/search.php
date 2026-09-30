@@ -23,6 +23,7 @@ return [
 
     'sections' => [
         'start' => 'Mulai',
+        'auth' => 'Autentikasi',
         'forms' => 'Komponen Form',
         'ui' => 'Komponen UI',
         'navigation' => 'Komponen Navigasi',
@@ -30,6 +31,7 @@ return [
         'data' => 'Komponen Data',
         'feedback' => 'Komponen Feedback',
         'extra' => 'Komponen Ekstra',
+        'display' => 'Komponen Display',
         'dashboard' => 'Halaman Dashboard',
         'settings' => 'Halaman Pengaturan',
         'quick_actions' => 'Pintasan Cepat',
@@ -224,6 +226,82 @@ return [
         'settings' => [
             'title' => 'Pengaturan Tampilan',
             'subtitle' => 'Kustomisasi tema warna, palet, sidebar, dan header',
+        ],
+        'auth_overview' => [
+            'title' => 'Ikhtisar Autentikasi',
+            'subtitle' => 'Arsitektur, starter kit, dan panduan fitur sistem autentikasi Vibe UI',
+        ],
+        'auth_installation' => [
+            'title' => 'Instalasi Autentikasi',
+            'subtitle' => 'Scaffolding CLI vibe:auth, starter kit, dan setup dependensi WebAuthn',
+        ],
+        'auth_confirm' => [
+            'title' => 'Konfirmasi Password',
+            'subtitle' => 'Sudo mode konfirmasi kata sandi sebelum aksi sensitif dijalankan',
+        ],
+        'auth_idle' => [
+            'title' => 'Idle Timeout',
+            'subtitle' => 'Kunci sesi otomatis dengan hitung mundur karena inaktivitas pengguna',
+        ],
+        'auth_two_factor' => [
+            'title' => 'Two-Factor Authentication (2FA)',
+            'subtitle' => 'Verifikasi dua langkah berbasis TOTP dan pemindaian QR Code',
+        ],
+        'auth_passkey' => [
+            'title' => 'Passkey (WebAuthn)',
+            'subtitle' => 'Autentikasi biometrik modern tanpa password via TouchID, FaceID, & FIDO2',
+        ],
+        'input_standard' => [
+            'title' => 'Input Standar',
+            'subtitle' => 'Input teks, password, email, prefix icon, dan helper text',
+        ],
+        'input_otp' => [
+            'title' => 'Input OTP',
+            'subtitle' => 'Input One-Time Password multi-kotak interaktif dengan auto-focus',
+        ],
+        'input_currency' => [
+            'title' => 'Input Currency',
+            'subtitle' => 'Input format mata uang Rupiah dan angka terformat otomatis secara real-time',
+        ],
+        'input_phone' => [
+            'title' => 'Input Phone',
+            'subtitle' => 'Input nomor telepon dengan pemilih kode negara otomatis',
+        ],
+        'show' => [
+            'title' => 'Show Component',
+            'subtitle' => 'Data binding reaktif dan populating data klien otomatis ke elemen HTML',
+        ],
+        'accordion' => [
+            'title' => 'Accordion',
+            'subtitle' => 'Panel lipat collapsible disclosure & daftar FAQ interaktif',
+        ],
+        'dynamic_form' => [
+            'title' => 'Dynamic Form',
+            'subtitle' => 'Form repeater penambahan baris input dinamis (add more row)',
+        ],
+        'display_qrcode' => [
+            'title' => 'Display QR Code',
+            'subtitle' => 'Generator SVG QR Code vektor standar ISO/IEC 18004 tanpa dependensi pihak ketiga',
+        ],
+        'settings_appearance' => [
+            'title' => 'Pengaturan Tampilan',
+            'subtitle' => 'Kustomisasi tema warna, palet, sidebar, dan header studio',
+        ],
+        'settings_account' => [
+            'title' => 'Pengaturan Akun',
+            'subtitle' => 'Profil pengguna, username, email, dan informasi akun',
+        ],
+        'settings_security' => [
+            'title' => 'Pengaturan Keamanan',
+            'subtitle' => 'Ubah kata sandi, sudo mode, dan proteksi akun pengguna',
+        ],
+        'settings_passkey' => [
+            'title' => 'Pengaturan Passkey',
+            'subtitle' => 'Manajemen kunci keamanan biometrik dan kredensial FIDO2',
+        ],
+        'settings_login_history' => [
+            'title' => 'Riwayat Login',
+            'subtitle' => 'Log aktivitas sesi login, browser, dan alamat IP pengguna',
         ],
     ],
 ];

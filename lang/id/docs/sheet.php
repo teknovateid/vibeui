@@ -134,14 +134,14 @@ return [
             [
                 'name' => 'position',
                 'type' => 'string',
-                'default' => '\'left\'',
+                'default' => '\'right\'',
                 'desc' => 'Sisi penempatan panel: \'left\', \'right\', \'top\', atau \'bottom\'.',
             ],
             [
                 'name' => 'layout',
                 'type' => 'string',
-                'default' => '\'relative\'',
-                'desc' => 'Model tata letak: \'relative\' (inline flex), \'fixed\' (viewport fixed), \'absolute\' (container overlay), atau \'sticky\'.',
+                'default' => '\'fixed\'',
+                'desc' => 'Model tata letak: \'fixed\' (slide-over drawer layar penuh), \'relative\' (inline flex), \'absolute\' (container overlay), atau \'sticky\'.',
             ],
             [
                 'name' => 'variant',
@@ -152,14 +152,20 @@ return [
             [
                 'name' => 'behavior',
                 'type' => 'string',
-                'default' => '\'static\'',
-                'desc' => 'Perilaku lipatan: \'static\' (tetap), \'collapsible\' (dapat ditutup hingga 0px), atau \'minify\' (dapat diperkecil ke mode ikon).',
+                'default' => '\'collapsible\'',
+                'desc' => 'Perilaku lipatan: \'collapsible\' (dapat dibuka/ditutup), \'minify\' (menyusut ke mode ikon), atau \'static\' (selalu terbuka).',
             ],
             [
                 'name' => 'defaultState',
                 'type' => 'string',
-                'default' => '\'expanded\'',
-                'desc' => 'Status awal saat render: \'expanded\', \'collapsed\', atau \'minified\'.',
+                'default' => '\'collapsed\' (fixed) / \'expanded\' (relative)',
+                'desc' => 'Status awal saat render: \'collapsed\', \'expanded\', atau \'minified\'.',
+            ],
+            [
+                'name' => 'size',
+                'type' => 'string',
+                'default' => 'null',
+                'desc' => 'Preset ukuran cepat: \'sm\' (300px), \'md\' (380px), \'lg\' (500px), \'xl\' (640px), atau \'2xl\' (768px).',
             ],
             [
                 'name' => 'resizable',
@@ -200,8 +206,14 @@ return [
             [
                 'name' => 'closeOnOutsideClick',
                 'type' => 'bool',
-                'default' => 'false',
-                'desc' => 'Menutup panel secara otomatis saat area luar sheet diklik.',
+                'default' => 'true (fixed) / false (relative)',
+                'desc' => 'Menutup panel secara otomatis saat area luar atau backdrop diklik.',
+            ],
+            [
+                'name' => 'backdrop',
+                'type' => 'bool',
+                'default' => 'true (fixed) / false (relative)',
+                'desc' => 'Menampilkan overlay latar belakang gelap transparan dengan efek blur.',
             ],
             [
                 'name' => 'persist',

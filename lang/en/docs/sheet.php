@@ -134,14 +134,14 @@ return [
             [
                 'name' => 'position',
                 'type' => 'string',
-                'default' => '\'left\'',
+                'default' => '\'right\'',
                 'desc' => 'Panel edge placement: \'left\', \'right\', \'top\', or \'bottom\'.',
             ],
             [
                 'name' => 'layout',
                 'type' => 'string',
-                'default' => '\'relative\'',
-                'desc' => 'Layout flow model: \'relative\' (inline flex), \'fixed\' (viewport fixed), \'absolute\' (container overlay), or \'sticky\'.',
+                'default' => '\'fixed\'',
+                'desc' => 'Layout flow model: \'fixed\' (viewport full-height slide-over drawer), \'relative\' (inline flex), \'absolute\' (container overlay), or \'sticky\'.',
             ],
             [
                 'name' => 'variant',
@@ -152,14 +152,20 @@ return [
             [
                 'name' => 'behavior',
                 'type' => 'string',
-                'default' => '\'static\'',
-                'desc' => 'Collapse behavior: \'static\' (fixed), \'collapsible\' (collapses to 0px), or \'minify\' (shrinks to icon bar).',
+                'default' => '\'collapsible\'',
+                'desc' => 'Collapse behavior: \'collapsible\' (can open/close), \'minify\' (shrinks to icon bar), or \'static\' (always open).',
             ],
             [
                 'name' => 'defaultState',
                 'type' => 'string',
-                'default' => '\'expanded\'',
-                'desc' => 'Initial render state: \'expanded\', \'collapsed\', or \'minified\'.',
+                'default' => '\'collapsed\' (fixed) / \'expanded\' (relative)',
+                'desc' => 'Initial render state: \'collapsed\', \'expanded\', or \'minified\'.',
+            ],
+            [
+                'name' => 'size',
+                'type' => 'string',
+                'default' => 'null',
+                'desc' => 'Quick size presets: \'sm\' (300px), \'md\' (380px), \'lg\' (500px), \'xl\' (640px), or \'2xl\' (768px).',
             ],
             [
                 'name' => 'resizable',
@@ -200,8 +206,14 @@ return [
             [
                 'name' => 'closeOnOutsideClick',
                 'type' => 'bool',
-                'default' => 'false',
-                'desc' => 'Automatically closes the sheet when clicking outside its bounds.',
+                'default' => 'true (fixed) / false (relative)',
+                'desc' => 'Automatically closes the sheet when clicking outside its bounds or backdrop.',
+            ],
+            [
+                'name' => 'backdrop',
+                'type' => 'bool',
+                'default' => 'true (fixed) / false (relative)',
+                'desc' => 'Renders a dim, blurred backdrop behind the fixed drawer.',
             ],
             [
                 'name' => 'persist',
