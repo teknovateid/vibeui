@@ -39,20 +39,25 @@ export function vibeForm(config = {}) {
         if (statusMode === 'alert') {
             // Use vibe:alert pop-up
             window.dispatchEvent(new CustomEvent('alert', {
-                detail: { type, title, message }
+                detail: { type, title: title || (type === 'error' ? 'Terjadi Kesalahan' : 'Pemberitahuan'), message }
             }));
         } else {
             // Default: Toast notification
             if (window.$vibe && window.$vibe.toast) {
                 if (typeof window.$vibe.toast[type] === 'function') {
-                    window.$vibe.toast[type](message, title);
+                    if (title && title !== message) {
+                        window.$vibe.toast[type](message, title);
+                    } else {
+                        window.$vibe.toast[type](message);
+                    }
                 } else {
-                    window.$vibe.toast(message, type, { title });
+                    const opts = (title && title !== message) ? { title } : {};
+                    window.$vibe.toast(message, type, opts);
                 }
             } else {
-                window.dispatchEvent(new CustomEvent('toast', {
-                    detail: { type, title, message }
-                }));
+                const detail = { type, message };
+                if (title && title !== message) detail.title = title;
+                window.dispatchEvent(new CustomEvent('toast', { detail }));
             }
         }
     }
@@ -63,22 +68,28 @@ export function vibeForm(config = {}) {
     function parseErrorMessage(status, data) {
         // 422 - Laravel Validation Error
         if (status === 422) {
-            let title = (data && data.message) ? data.message : 'Gagal Validasi';
             let message = '';
-            if (data && data.errors && typeof data.errors === 'object') {
+            if (data && data.message) {
+                message = data.message;
+            } else if (data && data.errors && typeof data.errors === 'object') {
                 const errorLines = [];
                 Object.values(data.errors).forEach(fieldErrors => {
                     if (Array.isArray(fieldErrors)) {
-                        fieldErrors.forEach(e => errorLines.push('• ' + e));
+                        fieldErrors.forEach(e => errorLines.push(e));
                     } else if (typeof fieldErrors === 'string') {
-                        errorLines.push('• ' + fieldErrors);
+                        errorLines.push(fieldErrors);
                     }
                 });
-                message = errorLines.join('\n');
-            } else if (data && data.message) {
-                message = data.message;
+                if (errorLines.length > 0) {
+                    const first = errorLines[0];
+                    const remaining = errorLines.length - 1;
+                    message = remaining > 0 ? `${first} (and ${remaining} more errors)` : first;
+                }
             }
-            return { title, message };
+            if (!message) {
+                message = 'Gagal Validasi';
+            }
+            return { title: null, message };
         }
 
         // 405 - Method Not Allowed
@@ -221,6 +232,43 @@ export function vibeForm(config = {}) {
             return ctx.handleSubmit(null);
         },
 
+        handleKeydownEnter(event) {
+            const target = event.target;
+            if (!target || event.defaultPrevented) return;
+
+            // Do not submit if inside textarea or contenteditable element (Enter should make a newline)
+            if (target.tagName === 'TEXTAREA' || target.isContentEditable) {
+                return;
+            }
+
+            // Do not submit if focused on a button or link (normal activation)
+            if (['BUTTON', 'A'].includes(target.tagName)) {
+                return;
+            }
+
+            // Only trigger for input fields or select
+            if (target.tagName === 'INPUT' || target.tagName === 'SELECT') {
+                event.preventDefault();
+
+                const form = (_self && _self.$el) ? _self.$el : this.$el;
+                if (!form) return;
+
+                // If form has an explicit submit button, click it to trigger native button clicks and validation
+                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.click();
+                    return;
+                }
+
+                // If no explicit submit button exists, validate form constraint validation first
+                if (typeof form.reportValidity === 'function' && !form.reportValidity()) {
+                    return;
+                }
+
+                this.submit();
+            }
+        },
+
         async handleSubmit(event) {
             // Use _self.$el (closure-captured proxy) as primary source.
             // Falls back to this.$el if called normally via @submit.
@@ -235,6 +283,9 @@ export function vibeForm(config = {}) {
             if (!isAjax) {
                 if (saveToStorage) {
                     this.clearStorage();
+                }
+                if (!event) {
+                    form.submit();
                 }
                 return; // Let standard browser submit proceed
             }
