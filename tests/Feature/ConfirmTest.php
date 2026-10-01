@@ -285,7 +285,7 @@ test('confirm on PUT route with parameterized URI without target_url relying on 
     $response->assertStatus(423);
 
     // Session must have saved route path, not naked route name that would trigger UrlGenerationException
-    expect(session('auth.target_route'))->toBe('dashboard/users/update-pure/77');
+    expect(session('auth.target_route'))->toBe('/dashboard/users/update-pure/77');
 
     // 2. Client confirms password without target_url (relying strictly on session auth.target_route)
     $response = $this->actingAs($user)->postJson('/confirm-password', [
@@ -353,5 +353,31 @@ test('passkeys confirm options requires authentication', function () {
     $response = $this->actingAs($user)->getJson('/passkeys/confirm/options');
     $response->assertStatus(200);
     $response->assertJsonStructure(['options']);
+});
+
+test('resource group protected by confirm middleware properly confirms parameterized PUT route', function () {
+    $user = User::factory()->create();
+
+    \Illuminate\Support\Facades\Route::prefix('dashboard/users')->name('users.')->middleware(['web', 'auth', 'confirm'])->group(function () {
+        \Illuminate\Support\Facades\Route::get('/', fn () => response()->json(['page' => 'index']))->name('index');
+        \Illuminate\Support\Facades\Route::post('/store', fn () => response()->json(['created' => true]))->name('store');
+        \Illuminate\Support\Facades\Route::put('/update/{id}', fn ($id) => response()->json(['updated' => $id]))->name('update');
+    });
+
+    // 1. Initial PUT request without confirmation returns 423
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update/1');
+    $response->assertStatus(423);
+
+    // 2. Confirm password via POST /confirm-password endpoint with target_url
+    $confirmResponse = $this->actingAs($user)->postJson('/confirm-password', [
+        'password' => 'password',
+        'target_url' => '/dashboard/users/update/1',
+    ]);
+    $confirmResponse->assertNoContent();
+
+    // 3. Replay PUT request succeeds with 200 OK
+    $replayResponse = $this->actingAs($user)->putJson('/dashboard/users/update/1');
+    $replayResponse->assertStatus(200);
+    $replayResponse->assertJson(['updated' => '1']);
 });
 

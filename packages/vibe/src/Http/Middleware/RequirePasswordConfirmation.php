@@ -85,7 +85,7 @@ class RequirePasswordConfirmation
         // dapat di-match ulang setelah konfirmasi dan tidak menyebabkan missing parameter error.
         $routeHasUriParams = ! empty($request->route()?->parameterNames());
         $isMutation = ! $request->isMethod('GET');
-        $currentIdentifier = ($routeHasUriParams || $isMutation || ! $routeName) ? $routePath : $routeName;
+        $currentIdentifier = ($routeHasUriParams || $isMutation || ! $routeName) ? '/' . $routePath : $routeName;
 
         $confirmedRoute = $request->session()->get('auth.confirmed_route');
         $targetRoute = $request->session()->get('auth.target_route');
@@ -94,12 +94,21 @@ class RequirePasswordConfirmation
         // Jika baru saja terkonfirmasi (misal via passkey callback / redirect setelah confirm)
         // dan route target atau intended URL cocok dengan request saat ini, otorisasi confirmed_route
         $possibleTargets = array_filter([$targetRoute, $intendedUrl]);
-        if (! $confirmedRoute && $confirmedAt && count($possibleTargets) > 0) {
+        $isConfirmedRouteValid = $confirmedRoute && $confirmedRoute !== '/' && (
+            $confirmedRoute === $routeName ||
+            $confirmedRoute === $routePath ||
+            $confirmedRoute === ('/' . $routePath) ||
+            $confirmedRoute === $currentUrl ||
+            trim(parse_url($confirmedRoute, PHP_URL_PATH) ?? '', '/') === $routePath
+        );
+
+        if (! $isConfirmedRouteValid && $confirmedAt && count($possibleTargets) > 0) {
             foreach ($possibleTargets as $candidate) {
                 $candidatePath = trim(parse_url($candidate, PHP_URL_PATH) ?? '', '/');
                 $isTargetMatch = (
                     $candidate === $routeName ||
                     $candidate === $routePath ||
+                    $candidate === ('/' . $routePath) ||
                     $candidate === $currentUrl ||
                     ($candidatePath && $candidatePath === $routePath)
                 );
@@ -110,6 +119,7 @@ class RequirePasswordConfirmation
                     $request->session()->forget('auth.target_route');
                     $request->session()->forget('auth.session_locked');
                     $confirmedRoute = $candidate;
+                    $isConfirmedRouteValid = true;
                     break;
                 }
             }
@@ -118,6 +128,7 @@ class RequirePasswordConfirmation
         $isRouteMatched = $confirmedRoute && (
             $confirmedRoute === $routeName ||
             $confirmedRoute === $routePath ||
+            $confirmedRoute === ('/' . $routePath) ||
             $confirmedRoute === $currentUrl ||
             trim(parse_url($confirmedRoute, PHP_URL_PATH) ?? '', '/') === $routePath
         );

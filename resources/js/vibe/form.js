@@ -265,7 +265,14 @@ export function vibeForm(config = {}) {
                 // Resolve form action URL as target_url for replay authorization
                 let targetUrl = null;
                 if (form) {
-                    targetUrl = form.getAttribute('action') || (form.action ? new URL(form.action, window.location.origin).pathname : null);
+                    const rawAction = form.getAttribute('action') || (form.action ? form.action : null);
+                    if (rawAction) {
+                        try {
+                            targetUrl = new URL(rawAction, window.location.origin).pathname;
+                        } catch (e) {
+                            targetUrl = rawAction;
+                        }
+                    }
                 }
                 if (!targetUrl) {
                     targetUrl = window.location.pathname;
@@ -342,8 +349,18 @@ export function vibeForm(config = {}) {
                 const form = (_self && _self.$el) ? _self.$el : this.$el;
                 if (!form) return;
 
-                // If form has an explicit submit button, click it to trigger native button clicks and validation
-                const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+                // If form has an explicit submit button or button calling submit()/alert, click it to trigger click handler & validation
+                let submitBtn = form.querySelector('button[type="submit"], input[type="submit"]')
+                    || form.querySelector('button[data-submit], button[data-action="submit"], [data-vibe-submit]');
+
+                if (!submitBtn) {
+                    const buttons = Array.from(form.querySelectorAll('button:not([data-dismiss]):not([data-sheet-close]):not([data-modal-close])'));
+                    submitBtn = buttons.find(btn => {
+                        const clickAttr = btn.getAttribute('@click') || btn.getAttribute('x-on:click') || '';
+                        return clickAttr.includes('submit()') || clickAttr.includes('submit(') || clickAttr.includes('$vibe.alert.confirm');
+                    });
+                }
+
                 if (submitBtn) {
                     submitBtn.click();
                     return;
