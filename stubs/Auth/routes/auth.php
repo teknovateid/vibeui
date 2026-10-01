@@ -38,9 +38,13 @@ Route::middleware('auth')->group(function () {
 
         $url = trim($url);
 
-        // Jika nama route internal yang valid
+        // Jika nama route internal yang valid tanpa parameter wajib
         if (\Illuminate\Support\Facades\Route::has($url)) {
-            return route($url);
+            try {
+                return route($url);
+            } catch (\Throwable $e) {
+                // Route butuh parameter wajib yang tidak disediakan
+            }
         }
 
         // Path relatif aman (diawali / dan bukan //)
@@ -77,7 +81,8 @@ Route::middleware('auth')->group(function () {
         $request->session()->put('auth.one_time_confirmed', true);
 
         $isSinglePage = (bool) $request->session()->get('auth.is_single_page_confirm', false);
-        $rawTarget = $request->session()->pull('auth.target_route') ?: $request->session()->get('url.intended');
+        $rawTarget = $request->input('target_url')
+            ?: ($request->session()->pull('auth.target_route') ?: $request->session()->get('url.intended'));
         $target = $rawTarget ? $sanitizeIntendedUrl($rawTarget, '/') : null;
 
         if ($target) {

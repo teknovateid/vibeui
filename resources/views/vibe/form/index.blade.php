@@ -25,11 +25,18 @@
         $rawTranslations = trans('vibe::vibe/form', [], $resolvedLocale);
     }
     $i18n = is_array($rawTranslations) ? $rawTranslations : [];
+    $formUid = $id ?: 'form-' . \Illuminate\Support\Str::random(8);
 @endphp
 
 @pushOnce('head', 'vibe-form')
     @vite(['resources/js/vibe/form.js'])
 @endPushOnce
+
+@if(config('passkeys.enabled', true))
+    @pushOnce('head', 'vibe-passkeys')
+        @vite(['resources/js/vibe/passkeys.js'])
+    @endPushOnce
+@endif
 
 <form 
     @if($id) id="{{ $id }}" @endif
@@ -86,9 +93,11 @@
         showConfirmPasswordModal: false,
         confirmPasswordInput: '',
         confirmPasswordLoading: false,
+        confirmPasskeyLoading: false,
         confirmPasswordError: null,
         showConfirmPasswordText: false,
         submitConfirmPassword() {},
+        confirmWithPasskey() {},
         closeConfirmPasswordModal() {}
     }"
     @submit="handleSubmit($event)"
@@ -115,53 +124,113 @@
                          x-transition:leave-start="opacity-100 scale-100"
                          x-transition:leave-end="opacity-0 scale-95"
                          @keydown.escape.window="if (showConfirmPasswordModal) closeConfirmPasswordModal()"
-                         class="relative w-full max-w-md p-6 overflow-hidden text-left bg-card text-card-foreground border border-border rounded-2xl shadow-2xl space-y-4">
+                         class="relative w-full max-w-md p-6 overflow-hidden text-left bg-card text-card-foreground border border-border/80 rounded-2xl shadow-2xl space-y-4">
                         
-                        <div class="flex items-start gap-3">
-                            <div class="p-2.5 rounded-xl bg-primary/10 text-primary shrink-0">
-                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
-                                    <circle cx="12" cy="16" r="2" />
-                                    <path d="M6 10V8a6 6 0 1 1 12 0v2" />
+                        {{-- Header with Icon --}}
+                        <div class="flex items-start gap-3.5">
+                            <div class="size-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0 border border-primary/20 shadow-xs">
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                                 </svg>
                             </div>
-                            <div>
-                                <h4 class="text-sm font-bold text-foreground">{{ $i18n['confirm_password'] ?? 'Konfirmasi Kata Sandi' }}</h4>
-                                <p class="text-xs text-muted-foreground mt-0.5">{{ $i18n['confirm_password_description'] ?? 'Ini adalah area aman aplikasi. Harap konfirmasi kata sandi Anda sebelum melanjutkan.' }}</p>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-base font-semibold text-foreground tracking-tight">{{ $i18n['confirm_password'] ?? __('auth/titles.confirm_password') }}</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5 leading-relaxed">{{ $i18n['confirm_password_description'] ?? __('auth/titles.confirm_password_description') }}</p>
                             </div>
                         </div>
 
-                        <div class="space-y-3 pt-1">
-                            <template x-if="confirmPasswordError">
-                                <div class="p-2.5 rounded-lg bg-destructive/10 text-destructive text-xs border border-destructive/20 font-medium" x-text="confirmPasswordError"></div>
-                            </template>
-
-                            <div class="space-y-1">
-                                <label class="text-xs font-semibold text-foreground">{{ $i18n['password'] ?? 'Kata Sandi' }}</label>
-                                <div class="relative">
-                                    <input 
-                                        :type="showConfirmPasswordText ? 'text' : 'password'" 
-                                        x-model="confirmPasswordInput" 
-                                        x-ref="confirmPasswordInputRef"
-                                        @keydown.enter.prevent.stop="submitConfirmPassword()"
-                                        placeholder="{{ $i18n['password_placeholder'] ?? '••••••••' }}" 
-                                        class="w-full px-3 py-2 pr-9 text-xs rounded-lg border border-input bg-background text-foreground shadow-2xs focus:ring-1 focus:ring-primary focus:outline-none" 
-                                    />
-                                    <button type="button" @click="showConfirmPasswordText = !showConfirmPasswordText" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer" tabindex="-1">
-                                        <svg x-show="!showConfirmPasswordText" class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.275 15.296C2.425 14.192 2 13.639 2 12c0-1.639.425-2.192 1.275-3.296C4.972 6.5 7.818 4 12 4s7.028 2.5 8.725 4.704C21.575 9.808 22 10.36 22 12c0 1.639-.425 2.192-1.275 3.296C19.028 17.5 16.182 20 12 20s-7.028-2.5-8.725-4.704Z"/><circle cx="12" cy="12" r="3"/></svg>
-                                        <svg x-show="showConfirmPasswordText" x-cloak class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14C5 14 2 7 2 7M22 7C22 7 21.059 9.197 19 11.129c-.913.857-2.045 1.662-3.413 2.2a9.7 9.7 0 0 1-3.587.671m0 0V16.5m3.587-3.171L17 15.5m2-4.371L20.5 12.63M8.413 13.329L7 15.5M5 11.129 3.5 12.63"/></svg>
-                                    </button>
-                                </div>
+                        {{-- Error Alert --}}
+                        <template x-if="confirmPasswordError">
+                            <div class="p-3 rounded-xl bg-destructive/10 text-destructive text-xs border border-destructive/20 font-medium flex items-start gap-2.5 animate-vibe-shake">
+                                <svg class="size-4 shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <line x1="12" y1="8" x2="12" y2="12"/>
+                                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                                </svg>
+                                <span class="flex-1 leading-relaxed" x-text="confirmPasswordError"></span>
                             </div>
+                        </template>
 
-                            <div class="flex items-center justify-end gap-2 pt-2">
-                                <button type="button" @click="closeConfirmPasswordModal()" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-border hover:bg-muted cursor-pointer transition-colors">
-                                    {{ $i18n['cancel'] ?? 'Batal' }}
-                                </button>
-                                <button type="button" @click="submitConfirmPassword()" :disabled="confirmPasswordLoading" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors inline-flex items-center gap-1.5 disabled:opacity-50">
-                                    <svg x-show="confirmPasswordLoading" class="size-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    <span x-text="confirmPasswordLoading ? '{{ addslashes($i18n['verifying'] ?? 'Memverifikasi...') }}' : '{{ addslashes($i18n['confirm_and_continue'] ?? 'Konfirmasi & Lanjutkan') }}'"></span>
-                                </button>
+                        {{-- Passkey Confirm Button --}}
+                        @if (config('passkeys.enabled', true))
+                            <div class="space-y-3 pt-1">
+                                <vibe:button 
+                                    type="button" 
+                                    variant="outline" 
+                                    size="md" 
+                                    class="w-full justify-center shadow-2xs font-medium cursor-pointer" 
+                                    @click="confirmWithPasskey()"
+                                    ::disabled="confirmPasskeyLoading"
+                                >
+                                    <span x-show="!confirmPasskeyLoading" class="inline-flex items-center gap-2">
+                                        <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
+                                            <path d="M14 13.12c0 2.38 0 6.38-1 8.88" />
+                                            <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
+                                            <path d="M2 12a10 10 0 0 1 18-6" />
+                                            <path d="M2 16h.01" />
+                                            <path d="M21.8 16c.2-2 .131-5.354 0-6" />
+                                            <path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" />
+                                            <path d="M8.65 22c.21-.66.45-1.32.57-2" />
+                                            <path d="M9 6.8a6 6 0 0 1 9 5.2v2" />
+                                        </svg>
+                                        <span>{{ __('auth/passkey.confirm_button') }}</span>
+                                    </span>
+                                    <span x-show="confirmPasskeyLoading" x-cloak class="inline-flex items-center justify-center gap-2">
+                                        <svg class="animate-spin size-4 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                        </svg>
+                                        <span>{{ __('auth/passkey.connecting') }}</span>
+                                    </span>
+                                </vibe:button>
+
+                                <vibe:separator text="{{ __('auth/passkey.confirm_separator') }}" />
+                            </div>
+                        @endif
+
+                        {{-- Password Input with <vibe:input> --}}
+                        <div class="space-y-4">
+                            <vibe:input 
+                                id="vibe-confirm-pwd-{{ $formUid }}"
+                                name="password"
+                                type="password" 
+                                size="md"
+                                viewable 
+                                autocomplete="current-password"
+                                :label="$i18n['password'] ?? __('auth/fields.password')" 
+                                :placeholder="$i18n['password_placeholder'] ?? __('auth/fields.password_placeholder')"
+                                x-model="confirmPasswordInput" 
+                                x-ref="confirmPasswordInputRef"
+                                @keydown.enter.prevent.stop="submitConfirmPassword()"
+                            />
+
+                            {{-- Footer Buttons (vibe:button size md) --}}
+                            <div class="flex items-center justify-end gap-2.5 pt-2">
+                                <vibe:button 
+                                    type="button" 
+                                    variant="outline" 
+                                    size="md" 
+                                    @click="closeConfirmPasswordModal()"
+                                >
+                                    {{ $i18n['cancel'] ?? __('auth/actions.cancel') }}
+                                </vibe:button>
+
+                                <vibe:button 
+                                    type="button" 
+                                    variant="primary" 
+                                    size="md" 
+                                    @click="submitConfirmPassword()" 
+                                    ::disabled="confirmPasswordLoading"
+                                    class="shadow-xs"
+                                >
+                                    <svg x-show="confirmPasswordLoading" x-cloak class="size-4 animate-spin shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    <span x-text="confirmPasswordLoading ? '{{ addslashes($i18n['verifying'] ?? __('auth/actions.verifying')) }}' : '{{ addslashes($i18n['confirm_and_continue'] ?? __('auth/actions.confirm')) }}'"></span>
+                                </vibe:button>
                             </div>
                         </div>
                     </div>

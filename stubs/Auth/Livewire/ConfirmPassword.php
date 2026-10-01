@@ -78,7 +78,14 @@ class ConfirmPassword extends Component
                 || ($targetHost && in_array($targetHost, array_filter([$appHost, $requestHost, 'localhost', '127.0.0.1']), true));
 
             $destination = $isSafe ? $rawTarget : $fallback;
-            $destinationUrl = $isRouteName ? route($destination) : $destination;
+            $destinationUrl = $destination;
+            if ($isRouteName) {
+                try {
+                    $destinationUrl = route($destination);
+                } catch (\Throwable $e) {
+                    $destinationUrl = $fallback;
+                }
+            }
 
             if ($isSinglePage) {
                 session()->put('auth.confirmed_route', $destination);
