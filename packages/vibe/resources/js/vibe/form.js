@@ -9,6 +9,8 @@ export function vibeForm(config = {}) {
     let redirectTo = null;    // URL string or null
     let onSuccess = null;     // JS expression string or null
     let onError = null;       // JS expression string or null
+    let confirmPassword = true;
+    let confirmPasswordUrl = '/confirm-password';
     let _self = null;         // Captured Alpine proxy (set in init) — ensures correct $el even when submit() is called from alert callbacks
 
     if (typeof config === 'string') {
@@ -28,6 +30,8 @@ export function vibeForm(config = {}) {
         redirectTo = config.redirectTo || null;
         onSuccess = config.onSuccess || null;
         onError = config.onError || null;
+        confirmPassword = config.confirmPassword !== undefined ? Boolean(config.confirmPassword) : true;
+        confirmPasswordUrl = config.confirmPasswordUrl || '/confirm-password';
     }
 
     // ==========================================
@@ -132,6 +136,14 @@ export function vibeForm(config = {}) {
             };
         }
 
+        // 423 - Password Confirmation Required (Locked)
+        if (status === 423) {
+            return {
+                title: '423 Konfirmasi Kata Sandi Diperlukan',
+                message: (data && data.message) ? data.message : 'Konfirmasi kata sandi diperlukan untuk melanjutkan aksi ini.'
+            };
+        }
+
         // 429 - Too Many Requests
         if (status === 429) {
             return {
@@ -219,6 +231,68 @@ export function vibeForm(config = {}) {
                         window.removeEventListener('open-modal', this._modalHandler);
                     });
                 }
+            }
+        },
+
+        showConfirmPasswordModal: false,
+        confirmPasswordInput: '',
+        confirmPasswordLoading: false,
+        confirmPasswordError: null,
+        showConfirmPasswordText: false,
+
+        closeConfirmPasswordModal() {
+            this.showConfirmPasswordModal = false;
+            this.confirmPasswordInput = '';
+            this.confirmPasswordError = null;
+            this.loading = false;
+        },
+
+        async submitConfirmPassword() {
+            if (!this.confirmPasswordInput) return;
+            this.confirmPasswordLoading = true;
+            this.confirmPasswordError = null;
+
+            try {
+                const form = (_self && _self.$el) ? _self.$el : this.$el;
+                let csrfToken = null;
+                const csrfInput = form ? form.querySelector('input[name="_token"]') : null;
+                if (csrfInput && csrfInput.value) {
+                    csrfToken = csrfInput.value;
+                }
+                if (!csrfToken) {
+                    const metaCsrf = document.querySelector('meta[name="csrf-token"]');
+                    if (metaCsrf) csrfToken = metaCsrf.getAttribute('content');
+                }
+
+                const res = await fetch(confirmPasswordUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken || '',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({ password: this.confirmPasswordInput })
+                });
+
+                if (res.ok || res.status === 204) {
+                    this.showConfirmPasswordModal = false;
+                    this.confirmPasswordInput = '';
+                    this.confirmPasswordError = null;
+
+                    // Automatically replay the form submission!
+                    setTimeout(() => {
+                        this.submit();
+                    }, 100);
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    this.confirmPasswordError = (data && data.errors && data.errors.password && data.errors.password[0])
+                        || (data && data.message)
+                        || 'Kata sandi salah. Silakan coba lagi.';
+                }
+            } catch (err) {
+                this.confirmPasswordError = 'Gagal memverifikasi kata sandi.';
+            } finally {
+                this.confirmPasswordLoading = false;
             }
         },
 
@@ -431,13 +505,26 @@ export function vibeForm(config = {}) {
                 this.loading = false;
                 this.error = err.data || err;
 
+                const httpStatus = err.response ? err.response.status : null;
+
+                // Auto intercept HTTP 423 (Password confirmation required)
+                if (httpStatus === 423 && confirmPassword && isAjax) {
+                    this.confirmPasswordInput = '';
+                    this.confirmPasswordError = null;
+                    this.showConfirmPasswordModal = true;
+                    setTimeout(() => {
+                        const input = this.$refs && this.$refs.confirmPasswordInputRef;
+                        if (input) input.focus();
+                    }, 100);
+                    return;
+                }
+
                 const errorDetail = { form, id: formId, error: this.error, response: err.response };
                 window.dispatchEvent(new CustomEvent('vibe-form-error', { detail: errorDetail }));
                 form.dispatchEvent(new CustomEvent('vibe-error', { detail: errorDetail }));
 
                 // ------ ERROR NOTIFICATION ------
                 if (statusMode) {
-                    const httpStatus = err.response ? err.response.status : null;
                     const { title, message } = parseErrorMessage(httpStatus, err.data);
                     notify('error', title, message);
                 }
