@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.29] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: enhance form submission handling and fix password confirmation route matching for parameterized paths (1dba0ea)
+
+
 ## [0.2.28] - 2026-10-01
 
 ### 🐛 Bug Fixes
