@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.28] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: safely handle null or undefined selectedItems in datatable components using optional chaining (9f7583b)
+
+### ⚡ Performance & Refactoring
+- refactor: extract inline outside-click logic into a dedicated handleOutsideClick method (8433875)
+
+
 ## [0.2.27] - 2026-10-01
 
 ### 🐛 Bug Fixes
