@@ -409,6 +409,14 @@
         if (this.behavior === 'static') return;
         this.state = 'expanded';
         this.saveToStorage();
+    },
+
+    handleOutsideClick(event) {
+        if (!{{ $closeOnOutsideClick ? 'true' : 'false' }}) return;
+        if (this.state === 'collapsed') return;
+        if (Date.now() - this.lastTriggerTime <= 150) return;
+        if (event && event.target && event.target.closest('[role=dialog], [role=alertdialog], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) return;
+        this.close();
     }
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }">
     <template x-teleport="body">
@@ -443,7 +451,7 @@
                 :class="{
                     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
                 }"
-                @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { if (!$event.target.closest('[role=\"dialog\"], [role=\"alertdialog\"], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) { state = 'collapsed'; saveToStorage(); } }"
+                @click.outside="handleOutsideClick($event)"
                 {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
             >
                 @if ($persist)
@@ -805,8 +813,16 @@
         if (this.behavior === 'static') return;
         this.state = 'expanded';
         this.saveToStorage();
+    },
+
+    handleOutsideClick(event) {
+        if (!{{ $closeOnOutsideClick ? 'true' : 'false' }}) return;
+        if (this.state === 'collapsed') return;
+        if (Date.now() - this.lastTriggerTime <= 150) return;
+        if (event && event.target && event.target.closest('[role=dialog], [role=alertdialog], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) return;
+        this.close();
     }
-}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }" @click.outside="if ({{ $closeOnOutsideClick ? 'true' : 'false' }} && state !== 'collapsed' && Date.now() - lastTriggerTime > 150) { if (!$event.target.closest('[role=\"dialog\"], [role=\"alertdialog\"], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) { state = 'collapsed'; saveToStorage(); } }" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
+}" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }" @click.outside="handleOutsideClick($event)" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
     isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
