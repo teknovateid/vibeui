@@ -51,9 +51,24 @@ test('vibe:button.edit supports wire:click combined with target', function () {
         '<vibe:button.edit wire:click="edit(12)" target="user-sheet" />'
     );
 
-    expect($rendered)->toContain('$wire.edit(12)');
+    expect($rendered)->toContain('$wire.edit(12);');
+    expect($rendered)->not->toContain('$wire.edit(12)();');
     expect($rendered)->toContain('window.vibeTriggerEdit($el)');
     expect($rendered)->toContain('x-on:click.stop');
+});
+
+test('vibe:button.edit with wire:click method alone does not append duplicate parentheses', function () {
+    $renderedWithParam = Blade::render('<vibe:button.edit wire:click="edit(1)" />');
+    expect($renderedWithParam)->toContain('$wire.edit(1);');
+    expect($renderedWithParam)->not->toContain('$wire.edit(1)();');
+
+    $renderedNoParam = Blade::render('<vibe:button.edit wire:click="edit" />');
+    expect($renderedNoParam)->toContain('$wire.edit();');
+    expect($renderedNoParam)->not->toContain('$wire.edit()();');
+
+    $renderedInterpolated = Blade::render('<vibe:button.edit wire:click="edit({{ $id }})" />', ['id' => 99]);
+    expect($renderedInterpolated)->toContain('$wire.edit(99);');
+    expect($renderedInterpolated)->not->toContain('$wire.edit(99)();');
 });
 
 test('vibe:button.edit supports custom slot content and variant styling', function () {

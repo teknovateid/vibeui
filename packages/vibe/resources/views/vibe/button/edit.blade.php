@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze()
 
 @props([
     'variant' => 'ghost',
@@ -27,7 +27,18 @@
     $hasWireClick = !empty($wireClick);
 
     // Build trigger JS expression
-    $wirePart = $hasWireClick ? (str_contains($wireClick, '(') ? "\$wire.{$wireClick}; " : "\$wire.{$wireClick}(); ") : '';
+    $wirePart = '';
+    if ($hasWireClick) {
+        $cleanWire = rtrim(trim((string) $wireClick), ';');
+        if (!str_starts_with($cleanWire, '$wire.') && !str_starts_with($cleanWire, 'Livewire.')) {
+            if (str_contains($cleanWire, '(') || str_ends_with($cleanWire, ')')) {
+                $cleanWire = "\$wire.{$cleanWire}";
+            } else {
+                $cleanWire = "\$wire.{$cleanWire}()";
+            }
+        }
+        $wirePart = "{$cleanWire}; ";
+    }
 
     if ($hasTarget || $hasUrl || $hasData) {
         $clickJs = $wirePart . "window.vibeTriggerEdit(\$el)";
