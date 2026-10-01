@@ -8,4 +8,7 @@ return [
     'show_title' => 'Lihat detail',
     'show_loading' => 'Memuat...',
     'show_error' => 'Gagal memuat data.',
+    'edit_title' => 'Ubah',
+    'edit_loading' => 'Memuat...',
+    'edit_error' => 'Gagal memuat data edit.',
 ];

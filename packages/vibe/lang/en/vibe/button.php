@@ -8,4 +8,7 @@ return [
     'show_title' => 'View details',
     'show_loading' => 'Loading...',
     'show_error' => 'Failed to load data.',
+    'edit_title' => 'Edit',
+    'edit_loading' => 'Loading...',
+    'edit_error' => 'Failed to load edit data.',
 ];
