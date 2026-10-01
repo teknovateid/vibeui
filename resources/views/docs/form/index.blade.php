@@ -618,9 +618,8 @@
                             >
                                 @csrf
 
-                                <vibe:sheet.header class="flex items-center justify-between">
+                                <vibe:sheet.header>
                                     <h3 class="font-semibold text-foreground">Form di dalam Sheet</h3>
-                                    <vibe:sheet.close />
                                 </vibe:sheet.header>
 
                                 <vibe:sheet.content class="space-y-3">
@@ -639,9 +638,8 @@
                         <vibe:sheet id="demo-form-sheet" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="400">
                             <vibe:form action="{{ route('docs.form.store') }}" method="POST" :status="true" onSuccess="$vibe.sheet('demo-form-sheet').close(); $vibe.toast.success('Data berhasil disimpan!')">
                                 @csrf
-                                <vibe:sheet.header class="flex items-center justify-between">
+                                <vibe:sheet.header>
                                     <h3 class="font-semibold text-foreground">Form di dalam Sheet</h3>
-                                    <vibe:sheet.close />
                                 </vibe:sheet.header>
                                 <vibe:sheet.content class="space-y-3">
                                     <vibe:input name="demo_sheet_name" label="Nama" placeholder="Enter your name" />

@@ -23,7 +23,7 @@
 
                 {{-- Quick props badge strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
-                    @foreach (['variant', 'layout', 'position', 'behavior', 'resizable', 'defaultSize', 'showToggle', 'persist', 'closeOnOutsideClick'] as $p)
+                    @foreach (['variant', 'layout', 'position', 'behavior', 'resizable', 'defaultSize', 'showToggle', 'persist', 'closeOnOutsideClick', 'dismissibleButton'] as $p)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $p }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -63,9 +63,8 @@
 
                         {{-- Komponen Sheet --}}
                         <vibe:sheet id="demo-sheet-basic" position="right" :defaultSize="320">
-                            <vibe:sheet.header class="flex items-center justify-between">
+                            <vibe:sheet.header>
                                 <h3 class="font-semibold text-foreground text-sm">{{ __('docs/sheet.basic_usage.header_title') }}</h3>
-                                <vibe:sheet.close />
                             </vibe:sheet.header>
 
                             <vibe:sheet.content class="space-y-3">
@@ -705,9 +704,8 @@
                     <vibe:preview.code>
                         {{-- Drawer dengan layout="absolute" & closeOnOutsideClick="true" --}}
                         <vibe:sheet id="overlay-drawer-demo" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="320">
-                            <vibe:sheet.header class="flex items-center justify-between">
+                            <vibe:sheet.header>
                                 <h3 class="font-semibold text-sm">{{ __('docs/sheet.layouts.drawer_title') }}</h3>
-                                <vibe:sheet.close />
                             </vibe:sheet.header>
                             <vibe:sheet.content>
                                 <p class="text-xs text-muted-foreground">{{ __('docs/sheet.layouts.drawer_desc') }}</p>
@@ -737,9 +735,8 @@
 
                             {{-- Overlay Sheet --}}
                             <vibe:sheet id="demo-sheet-overlay" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="300" class="shadow-2xl">
-                                <vibe:sheet.header class="flex items-center justify-between">
+                                <vibe:sheet.header>
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.layouts.drawer_title') }}</span>
-                                    <vibe:sheet.close />
                                 </vibe:sheet.header>
                                 <vibe:sheet.content class="space-y-2">
                                     <p class="text-xs text-muted-foreground leading-relaxed">
@@ -795,7 +792,7 @@
                             {{-- Backdrop Gelap Transparan --}}
                             <div x-show="openDrawer" x-transition.opacity class="fixed inset-0 bg-black/50 backdrop-blur-xs z-30" @click="openDrawer = false; $dispatch('close-sheet', 'demo-outside-backdrop')"></div>
 
-                            <vibe:sheet id="demo-outside-backdrop" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="320" @close-sheet.window="openDrawer = false">
+                            <vibe:sheet id="demo-outside-backdrop" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" :defaultSize="320" @close-sheet.window="openDrawer = false">
                                 ...
                             </vibe:sheet>
                         </div>
@@ -862,7 +859,7 @@
                             </div>
 
                             {{-- Sheet 2: Dengan backdrop (absolute overlay) --}}
-                            <vibe:sheet id="demo-outside-backdrop" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="300" class="shadow-2xl z-40" @close-sheet.window="backdropOpen = false">
+                            <vibe:sheet id="demo-outside-backdrop" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" :defaultSize="300" class="shadow-2xl z-40" @close-sheet.window="backdropOpen = false">
                                 <vibe:sheet.header class="flex items-center justify-between">
                                     <span class="font-semibold text-xs text-foreground">{{ __('docs/sheet.outside_click.drawer_title') }}</span>
                                     <vibe:sheet.close @click="backdropOpen = false" />

@@ -210,6 +210,12 @@ return [
                 'desc' => 'Menutup panel secara otomatis saat area luar atau backdrop diklik.',
             ],
             [
+                'name' => 'dismissibleButton',
+                'type' => 'bool',
+                'default' => 'true (fixed/absolute) / false (relative/sticky)',
+                'desc' => 'Menampilkan tombol silang penutup (X) bawaan otomatis di pojok kanan atas sheet. Otomatis aktif untuk layout overlay.',
+            ],
+            [
                 'name' => 'backdrop',
                 'type' => 'bool',
                 'default' => 'true (fixed) / false (relative)',

@@ -210,6 +210,12 @@ return [
                 'desc' => 'Automatically closes the sheet when clicking outside its bounds or backdrop.',
             ],
             [
+                'name' => 'dismissibleButton',
+                'type' => 'bool',
+                'default' => 'true (fixed/absolute) / false (relative/sticky)',
+                'desc' => 'Displays the built-in close cross button (X) automatically at the top-right corner of the sheet. Enabled by default for overlay layouts.',
+            ],
+            [
                 'name' => 'backdrop',
                 'type' => 'bool',
                 'default' => 'true (fixed) / false (relative)',

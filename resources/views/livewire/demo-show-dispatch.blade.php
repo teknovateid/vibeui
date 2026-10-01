@@ -68,9 +68,8 @@
 
     {{-- Target Sheet --}}
     <vibe:sheet id="demo-livewire-sheet" position="right" size="md">
-        <vibe:sheet.header class="flex items-center justify-between">
+        <vibe:sheet.header>
             <h3 class="font-bold text-base text-foreground">Detail Pengguna (Livewire $this->dispatch)</h3>
-            <vibe:sheet.close />
         </vibe:sheet.header>
 
         <vibe:sheet.content class="p-6 space-y-6">
