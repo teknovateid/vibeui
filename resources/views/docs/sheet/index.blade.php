@@ -856,7 +856,7 @@
                                 <div class="px-3 py-1 rounded-full bg-black/60 text-white text-xs backdrop-blur-md border border-white/20 select-none pointer-events-none">
                                     {{ __('docs/sheet.outside_click.backdrop_instruction') }}
                                 </div>
-                            </div>
+                            </div> 
 
                             {{-- Sheet 2: Dengan backdrop (absolute overlay) --}}
                             <vibe:sheet id="demo-outside-backdrop" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" :defaultSize="300" class="shadow-2xl z-40" @close-sheet.window="backdropOpen = false">

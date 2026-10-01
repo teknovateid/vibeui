@@ -82,7 +82,7 @@
                 <vibe:badge vibe-show="status" variant="success" size="sm" class="ml-auto" />
             </div>
 
-            <div class="space-y-3 text-xs">
+            <div class="space-y-3 text-xs"> 
                 <div>
                     <span class="text-muted-foreground block">Peran &amp; Departemen:</span>
                     <div class="flex items-center gap-1.5 mt-0.5">

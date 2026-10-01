@@ -203,7 +203,7 @@ return [
                 'default' => 'false',
                 'desc' => 'Menampilkan tombol panah toggle bulat otomatis di tepi sheet.',
             ],
-            [
+            [ 
                 'name' => 'closeOnOutsideClick',
                 'type' => 'bool',
                 'default' => 'true (fixed) / false (relative)',

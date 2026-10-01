@@ -203,7 +203,7 @@ return [
                 'default' => 'false',
                 'desc' => 'Displays the integrated circular arrow toggle button on the sheet edge.',
             ],
-            [
+            [ 
                 'name' => 'closeOnOutsideClick',
                 'type' => 'bool',
                 'default' => 'true (fixed) / false (relative)',
