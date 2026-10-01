@@ -9,7 +9,7 @@ class Vibe
     /**
      * The current version of Vibe UI.
      */
-    const VERSION = '0.2.33';
+    const VERSION = '0.2.34';
 
     /**
      * The custom model class for Two Factor Authenticator.

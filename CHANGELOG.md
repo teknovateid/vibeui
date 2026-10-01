@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.34] - 2026-10-01
+
+### 🚀 Features
+- feat: add mobileSize and dismissibleButton support to sheet component with responsive constraints (2b37a33)
+
+
 ## [0.2.33] - 2026-10-01
 
 ### 🐛 Bug Fixes
