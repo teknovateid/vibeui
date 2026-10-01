@@ -110,10 +110,10 @@
 
     @if($confirmPassword && $ajax)
         <template x-teleport="body">
-            <div x-show="showConfirmPasswordModal" x-cloak class="fixed inset-0 z-60 overflow-y-auto" role="dialog" aria-modal="true" style="display: none;">
+            <div x-show="showConfirmPasswordModal" x-cloak class="fixed inset-0 z-60 overflow-y-auto" role="dialog" aria-modal="true" data-vibe-sheet-ignore="true" style="display: none;">
                 <div class="flex justify-center min-h-screen p-4 text-center items-center">
                     {{-- Backdrop --}}
-                    <div x-show="showConfirmPasswordModal" x-transition.opacity class="fixed inset-0 bg-black/60 backdrop-blur-xs" @click="closeConfirmPasswordModal()"></div>
+                    <div x-show="showConfirmPasswordModal" x-transition.opacity class="fixed inset-0 bg-black/60 backdrop-blur-xs" data-vibe-sheet-ignore="true" @click="closeConfirmPasswordModal()"></div>
 
                     {{-- Modal Card --}}
                     <div x-show="showConfirmPasswordModal" 
