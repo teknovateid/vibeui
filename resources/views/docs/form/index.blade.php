@@ -58,12 +58,12 @@
                                 </svg>
                             </span>
                             <div>
-                                <p class="text-xs font-semibold text-foreground">Pengujian Form (AJAX / Fetch) Berhasil Diposting ke FormController!</p>
-                                <p class="text-[11px] text-muted-foreground">Waktu: <span class="font-mono" x-text="submittedAt"></span> • <span x-text="Object.keys(submittedData || {}).length"></span> fields diterima via JSON (tanpa refresh)</p>
+                                <p class="text-xs font-semibold text-foreground">{{ __('docs/form.ajax_alert.success_title') }}</p>
+                                <p class="text-[11px] text-muted-foreground">{{ __('docs/form.ajax_alert.time_prefix') }} <span class="font-mono" x-text="submittedAt"></span> • <span x-text="Object.keys(submittedData || {}).length"></span> {{ __('docs/form.ajax_alert.fields_suffix') }}</p>
                             </div>
                         </div>
                         <vibe:button @click="window.dispatchEvent(new CustomEvent('open-modal', { detail: 'form-test-submission-modal' }))" variant="outline" size="sm" class="shrink-0 text-xs">
-                            Lihat Modal $request->all()
+                            {{ __('docs/form.ajax_alert.view_payload_btn') }}
                         </vibe:button>
                     </div>
                 </template>

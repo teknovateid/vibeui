@@ -11,6 +11,7 @@ export function vibeForm(config = {}) {
     let onError = null;       // JS expression string or null
     let confirmPassword = true;
     let confirmPasswordUrl = '/confirm-password';
+    let i18n = {};
     let _self = null;         // Captured Alpine proxy (set in init) — ensures correct $el even when submit() is called from alert callbacks
 
     if (typeof config === 'string') {
@@ -32,6 +33,7 @@ export function vibeForm(config = {}) {
         onError = config.onError || null;
         confirmPassword = config.confirmPassword !== undefined ? Boolean(config.confirmPassword) : true;
         confirmPasswordUrl = config.confirmPasswordUrl || '/confirm-password';
+        i18n = config.i18n || {};
     }
 
     // ==========================================
@@ -70,6 +72,8 @@ export function vibeForm(config = {}) {
     // HELPER: Parse HTTP error response into title + message
     // ==========================================
     function parseErrorMessage(status, data) {
+        const isEn = Boolean(document.documentElement.lang && document.documentElement.lang.startsWith('en'));
+
         // 422 - Laravel Validation Error
         if (status === 422) {
             let message = '';
@@ -91,7 +95,7 @@ export function vibeForm(config = {}) {
                 }
             }
             if (!message) {
-                message = 'Gagal Validasi';
+                message = isEn ? 'Validation Failed' : 'Gagal Validasi';
             }
             return { title: null, message };
         }
@@ -100,63 +104,79 @@ export function vibeForm(config = {}) {
         if (status === 405) {
             return {
                 title: '405 Method Not Allowed',
-                message: 'Metode HTTP tidak didukung untuk endpoint ini. Periksa method form atau route controller Anda.'
+                message: isEn
+                    ? 'HTTP method is not supported for this endpoint. Check your form method or controller route.'
+                    : 'Metode HTTP tidak didukung untuk endpoint ini. Periksa method form atau route controller Anda.'
             };
         }
 
         // 419 - Page Expired / CSRF Token Mismatch
         if (status === 419) {
             return {
-                title: '419 Sesi Kedaluwarsa',
-                message: 'Token CSRF kedaluwarsa atau tidak valid. Silakan muat ulang halaman (refresh) dan coba lagi.'
+                title: isEn ? '419 Page Expired' : '419 Sesi Kedaluwarsa',
+                message: isEn
+                    ? 'CSRF token expired or invalid. Please reload the page (refresh) and try again.'
+                    : 'Token CSRF kedaluwarsa atau tidak valid. Silakan muat ulang halaman (refresh) dan coba lagi.'
             };
         }
 
         // 401 - Unauthorized
         if (status === 401) {
             return {
-                title: '401 Tidak Terautentikasi',
-                message: 'Sesi login Anda telah berakhir. Silakan login kembali.'
+                title: isEn ? '401 Unauthenticated' : '401 Tidak Terautentikasi',
+                message: isEn
+                    ? 'Your login session has ended. Please log in again.'
+                    : 'Sesi login Anda telah berakhir. Silakan login kembali.'
             };
         }
 
         // 403 - Forbidden
         if (status === 403) {
             return {
-                title: '403 Akses Ditolak',
-                message: (data && data.message) ? data.message : 'Anda tidak memiliki izin untuk melakukan aksi ini.'
+                title: isEn ? '403 Forbidden' : '403 Akses Ditolak',
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? 'You do not have permission to perform this action.' : 'Anda tidak memiliki izin untuk melakukan aksi ini.')
             };
         }
 
         // 404 - Not Found
         if (status === 404) {
             return {
-                title: '404 Endpoint Tidak Ditemukan',
-                message: (data && data.message) ? data.message : 'Endpoint atau data yang dituju tidak ditemukan di server.'
+                title: isEn ? '404 Endpoint Not Found' : '404 Endpoint Tidak Ditemukan',
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? 'The requested endpoint or data was not found on the server.' : 'Endpoint atau data yang dituju tidak ditemukan di server.')
             };
         }
 
         // 423 - Password Confirmation Required (Locked)
         if (status === 423) {
             return {
-                title: '423 Konfirmasi Kata Sandi Diperlukan',
-                message: (data && data.message) ? data.message : 'Konfirmasi kata sandi diperlukan untuk melanjutkan aksi ini.'
+                title: isEn ? '423 Password Confirmation Required' : '423 Konfirmasi Kata Sandi Diperlukan',
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? 'Password confirmation is required to proceed with this action.' : 'Konfirmasi kata sandi diperlukan untuk melanjutkan aksi ini.')
             };
         }
 
         // 429 - Too Many Requests
         if (status === 429) {
             return {
-                title: '429 Terlalu Banyak Permintaan',
-                message: (data && data.message) ? data.message : 'Terlalu banyak permintaan dalam waktu singkat. Harap tunggu beberapa saat.'
+                title: isEn ? '429 Too Many Requests' : '429 Terlalu Banyak Permintaan',
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? 'Too many requests. Please wait a moment and try again.' : 'Terlalu banyak permintaan dalam waktu singkat. Harap tunggu beberapa saat.')
             };
         }
 
         // 500 - Internal Server Error
         if (status === 500) {
             return {
-                title: '500 Terjadi Kesalahan Server',
-                message: (data && data.message) ? data.message : 'Terjadi kesalahan internal pada server. Silakan coba beberapa saat lagi.'
+                title: isEn ? '500 Internal Server Error' : '500 Terjadi Kesalahan Server',
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? 'An internal server error occurred. Please try again later.' : 'Terjadi kesalahan internal pada server. Silakan coba beberapa saat lagi.')
             };
         }
 
@@ -164,14 +184,18 @@ export function vibeForm(config = {}) {
         if (status) {
             return {
                 title: `Error ${status}`,
-                message: (data && data.message) ? data.message : `Permintaan gagal dengan status ${status}.`
+                message: (data && data.message)
+                    ? data.message
+                    : (isEn ? `Request failed with status ${status}.` : `Permintaan gagal dengan status ${status}.`)
             };
         }
 
         // Network Failure (no status)
         return {
-            title: 'Kesalahan Jaringan',
-            message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'
+            title: isEn ? 'Network Error' : 'Kesalahan Jaringan',
+            message: isEn
+                ? 'Unable to connect to the server. Please check your internet connection.'
+                : 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'
         };
     }
 
@@ -283,14 +307,15 @@ export function vibeForm(config = {}) {
                     setTimeout(() => {
                         this.submit();
                     }, 100);
-                } else {
+                    const isEn = Boolean(document.documentElement.lang && document.documentElement.lang.startsWith('en'));
                     const data = await res.json().catch(() => ({}));
                     this.confirmPasswordError = (data && data.errors && data.errors.password && data.errors.password[0])
                         || (data && data.message)
-                        || 'Kata sandi salah. Silakan coba lagi.';
+                        || (i18n.password_incorrect || (isEn ? 'Incorrect password. Please try again.' : 'Kata sandi salah. Silakan coba lagi.'));
                 }
             } catch (err) {
-                this.confirmPasswordError = 'Gagal memverifikasi kata sandi.';
+                const isEn = Boolean(document.documentElement.lang && document.documentElement.lang.startsWith('en'));
+                this.confirmPasswordError = i18n.network_error || (isEn ? 'Failed to verify password.' : 'Gagal memverifikasi kata sandi.');
             } finally {
                 this.confirmPasswordLoading = false;
             }

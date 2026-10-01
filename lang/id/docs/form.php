@@ -120,9 +120,17 @@ return [
 
     'props_items' => [
         'id' => 'ID unik formulir. Wajib diisi jika `saveToStorage` diaktifkan sebagai kunci pembeda draf di storage.',
+        'ajax' => 'Aktifkan AJAX/fetch submission. Jika <code>false</code>, form melakukan submit browser standar (full page reload).',
         'saveToStorage' => 'Jika `true`, secara otomatis menyimpan draf isian formulir ke browser storage setiap ada ketikan.',
         'storageType' => "Jenis penyimpanan browser: `'session'` (sessionStorage, aman & terhapus saat tab ditutup) atau `'local'` (localStorage, permanen).",
         'expireHours' => 'Masa berlaku draf dalam hitungan jam sebelum otomatis dibersihkan saat kedaluwarsa.',
+        'status' => 'Notifikasi otomatis setelah submit. <code>true</code> atau <code>\'toast\'</code> = tampilkan <strong>Toast</strong> (default). <code>\'alert\'</code> = tampilkan pop-up <strong>Alert</strong>.',
+        'delay' => 'Jeda waktu (milidetik) sebelum aksi <code>onSuccess</code> atau <code>redirect-to</code> dieksekusi. Default auto <code>1000ms</code> jika status aktif dan ada aksi lanjutan.',
+        'redirectTo' => 'URL tujuan redirect setelah submit sukses. Juga mendukung otomatis membaca <code>data.redirect</code> dari JSON respons server.',
+        'onSuccess' => 'Ekspresi JS yang dieksekusi setelah <code>delay</code> saat sukses. Contoh: <code>$vibe.sheet(\'id\').close()</code> atau <code>$vibe.modal(\'id\').close()</code>.',
+        'onError' => 'Ekspresi JS yang dieksekusi saat request gagal/error.',
+        'confirmPassword' => 'Secara otomatis menampilkan modal konfirmasi kata sandi in-place saat server merespons HTTP 423 (Password Confirmation Required), lalu otomatis melanjutkan (replay) submit form setelah kata sandi terverifikasi tanpa me-reload halaman.',
+        'confirmPasswordUrl' => 'Endpoint URL verifikasi kata sandi (POST). Default menggunakan <code>/confirm-password</code> atau rute <code>password.confirm.post</code>.',
     ],
 
     'storage_comparison' => [
@@ -147,5 +155,88 @@ return [
         'clear' => 'Menghapus draf form dari storage secara otomatis ketika form berhasil dikirimkan.',
         'modal_sheet' => 'Memulihkan draf form secara otomatis saat modal atau slide-out drawer dibuka.',
         'sanitize' => 'Secara otomatis menyaring dan mengabaikan file biner, token CSRF (<code class="font-mono text-xs text-foreground">_token</code>), dan state internal Livewire.',
+    ],
+
+    'notifications' => [
+        'title' => 'Notifikasi Error Otomatis (:status="true")',
+        'desc' => 'Aktifkan atribut <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">:status="true"</code> agar form otomatis menampilkan notifikasi <strong>error</strong> saat request gagal (validasi, CSRF expired, server error, dll). Secara default menggunakan <strong>Toast</strong>. Gunakan <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">status="alert"</code> untuk menampilkan pop-up Alert. Notifikasi saat <strong>sukses</strong> tidak ditampilkan secara otomatis — gunakan <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-muted">onSuccess</code> untuk mengaturnya.',
+        'toast_preview' => 'status="toast" — Error Toast (default)',
+        'alert_preview' => 'status="alert" — Error Alert Pop-up',
+        'error_parsing_title' => 'Error Parsing Otomatis',
+        'error_parsing_desc' => 'Saat request gagal, sistem secara otomatis mengurai respons server dan menampilkan pesan yang jelas.',
+        'columns' => [
+            'status' => 'HTTP Status',
+            'title' => 'Judul Notifikasi',
+            'message' => 'Pesan',
+        ],
+        'rows' => [
+            ['422 Unprocessable Entity', 'Gagal Validasi', 'Menampilkan ringkasan pesan error validasi per-field dari Laravel.'],
+            ['405 Method Not Allowed', '405 Method Not Allowed', 'Metode HTTP tidak didukung. Periksa method form atau route.'],
+            ['419 Page Expired', '419 Sesi Kedaluwarsa', 'Token CSRF kedaluwarsa. Silakan refresh halaman.'],
+            ['401 Unauthorized', '401 Tidak Terautentikasi', 'Sesi login Anda telah berakhir.'],
+            ['403 Forbidden', '403 Akses Ditolak', 'Anda tidak memiliki izin untuk aksi ini.'],
+            ['404 Not Found', '404 Endpoint Tidak Ditemukan', 'Endpoint yang dituju tidak ditemukan di server.'],
+            ['423 Locked', '423 Konfirmasi Kata Sandi Diperlukan', 'Konfirmasi kata sandi diperlukan untuk melanjutkan aksi ini.'],
+            ['429 Too Many Requests', '429 Terlalu Banyak Permintaan', 'Terlalu banyak permintaan. Harap tunggu beberapa saat.'],
+            ['500 Server Error', '500 Terjadi Kesalahan Server', 'Error dari server (data.message) atau pesan generik.'],
+            ['Network Failure', 'Kesalahan Jaringan', 'Tidak dapat terhubung ke server. Periksa koneksi.'],
+        ],
+    ],
+
+    'post_submit' => [
+        'title' => 'Aksi Pasca-Submit (onSuccess, delay, redirect-to)',
+        'desc' => 'Gunakan atribut <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> untuk menjalankan ekspresi JavaScript setelah submit sukses. <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> hanya menampilkan notifikasi <strong>error</strong> secara otomatis — notifikasi sukses, penutupan modal/sheet, dan redirect sepenuhnya diatur dari <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
+        'preview_sheet' => 'onSuccess: Toast + Tutup Sheet setelah submit',
+        'sheet_btn' => 'Buka Sheet Form',
+        'sheet_title' => 'Form di dalam Sheet',
+        'sheet_save' => 'Simpan',
+        'columns' => [
+            'prop' => 'Atribut',
+            'example' => 'Contoh Nilai',
+            'desc' => 'Keterangan',
+        ],
+        'rows' => [
+            ['onSuccess / on-success', '\$vibe.sheet(\'demo-form-sheet\').close(); \$vibe.toast.success(\'Data berhasil disimpan!\')', 'Tutup sheet + tampilkan toast sukses setelah submit.'],
+            ['onSuccess / on-success', '\$vibe.modal(\'demo-form-modal\').close(); \$vibe.toast.success(\'Data berhasil disimpan!\')', 'Tutup modal + tampilkan toast sukses setelah submit.'],
+            ['delay', '500', 'Jeda (ms) sebelum onSuccess dieksekusi. Default 0.'],
+            ['redirect-to', '/users', 'URL tujuan setelah submit sukses (atau dari data.redirect respons server).'],
+        ],
+    ],
+
+    'confirm_submit' => [
+        'title' => 'Konfirmasi Submit (submit())',
+        'desc' => 'Untuk meminta konfirmasi sebelum form dikirim, gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe.alert.confirm(message, callback, title?)</code> bersama method <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">submit()</code> yang tersedia secara built-in di dalam scope form. Gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">() => submit()</code> <strong>tanpa</strong> <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">this</code>.',
+        'preview_confirm' => 'Konfirmasi via $vibe.alert.confirm + submit()',
+        'preview_custom' => 'Konfirmasi dengan Judul Kustom',
+        'btn_confirm' => 'Simpan dengan Konfirmasi',
+        'btn_delete' => 'Hapus Data',
+        'confirm_message' => 'Apakah Anda yakin ingin menyimpan data ini?',
+        'delete_confirm_message' => 'Tindakan ini tidak dapat dibatalkan. Yakin ingin menghapus?',
+        'delete_confirm_title' => 'Konfirmasi Penghapusan',
+        'columns' => [
+            'api' => 'API',
+            'signature' => 'Signature',
+            'desc' => 'Keterangan',
+        ],
+        'rows' => [
+            ['submit()', 'submit()', 'Method built-in form. Panggil dari @click tanpa this: () => submit(). Mengirim form via AJAX tanpa event browser.'],
+            ['$vibe.alert.confirm()', 'confirm(message, onConfirm, title?)', 'Memunculkan dialog Alert konfirmasi. Jika user klik Konfirmasi, onConfirm callback dieksekusi.'],
+            ['$vibe.alert.confirm()', 'confirm({ message, title, confirmButton, ... })', 'Object form — mendukung penuh konfigurasi Alert kustom.'],
+        ],
+    ],
+
+    'password_confirm' => [
+        'title' => 'Konfirmasi Kata Sandi In-Place (Sudo Mode / HTTP 423)',
+        'desc' => 'Ketika form mengirimkan permintaan (POST/PUT/DELETE) ke rute yang dilindungi oleh middleware konfirmasi kata sandi (seperti <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">confirm</code> atau <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">confirm:100</code>) dan sesi konfirmasi telah kedaluwarsa, server merespon dengan status <strong>HTTP 423</strong> (Locked). Komponen <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">&lt;vibe:form&gt;</code> secara otomatis menangkap status tersebut, memunculkan modal verifikasi kata sandi secara in-place tanpa me-reload halaman, lalu otomatis melanjutkan (replay) pengiriman form setelah kata sandi terverifikasi!',
+        'preview_title' => 'Auto-Replay Submit dengan Konfirmasi Kata Sandi In-Place',
+        'btn_submit' => 'Simpan Data Terlindungi',
+        'card_title' => 'Area Berisiko Tinggi / Terlindungi',
+        'card_desc' => 'Formulir ini dilindungi oleh middleware keamanan. Jika sesi kedaluwarsa, modal konfirmasi kata sandi akan otomatis muncul di tempat.',
+        'features_title' => 'Keunggulan Konfirmasi In-Place',
+        'features' => [
+            'no_reload' => 'Tidak Pernah Kehilangan Input: Pengguna tidak dialihkan ke halaman lain sehingga semua data input tetap aman.',
+            'auto_replay' => 'Otomatis Melanjutkan Submit: Setelah verifikasi berhasil, form langsung mengirimkan ulang data POST/PUT tanpa perlu klik tombol submit lagi.',
+            'zero_config' => 'Nol Konfigurasi: Fitur ini aktif secara bawaan pada form AJAX dan dapat dimatikan dengan :confirm-password="false".',
+        ],
     ],
 ];

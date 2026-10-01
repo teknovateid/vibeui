@@ -120,9 +120,17 @@ return [
 
     'props_items' => [
         'id' => 'Unique form ID. Required if `saveToStorage` is enabled as draft storage key.',
+        'ajax' => 'Enable AJAX/fetch submission. If <code>false</code>, the form performs a standard browser submit (full page reload).',
         'saveToStorage' => 'If `true`, automatically persists form input drafts to browser storage on every keystroke.',
         'storageType' => "Browser storage mechanism: `'session'` (sessionStorage, secure & cleared when tab closes) or `'local'` (localStorage, persistent).",
         'expireHours' => 'Draft expiration duration in hours before automatically cleaned up.',
+        'status' => 'Automatic notification after submission. <code>true</code> or <code>\'toast\'</code> = display <strong>Toast</strong> (default). <code>\'alert\'</code> = display pop-up <strong>Alert</strong>.',
+        'delay' => 'Delay duration (milliseconds) before executing <code>onSuccess</code> or <code>redirect-to</code>. Auto-defaults to <code>1000ms</code> if status is active with follow-up action.',
+        'redirectTo' => 'Destination redirect URL after successful submit. Also supports auto-resolving <code>data.redirect</code> from server JSON response.',
+        'onSuccess' => 'JavaScript expression executed after <code>delay</code> upon success. Example: <code>$vibe.sheet(\'id\').close()</code> or <code>$vibe.modal(\'id\').close()</code>.',
+        'onError' => 'JavaScript expression executed when the request fails/errors.',
+        'confirmPassword' => 'Automatically displays an in-place password confirmation modal when the server responds with HTTP 423 (Password Confirmation Required), then auto-replays the pending form submission upon verification without page reload.',
+        'confirmPasswordUrl' => 'Password verification endpoint URL (POST). Defaults to <code>/confirm-password</code> or route <code>password.confirm.post</code>.',
     ],
 
     'storage_comparison' => [
@@ -147,5 +155,88 @@ return [
         'clear' => 'Automatically deletes form drafts from storage when the form is submitted successfully.',
         'modal_sheet' => 'Automatically restores form drafts when modal dialogs or slide-out drawers open.',
         'sanitize' => 'Automatically sanitizes and excludes binary files, CSRF tokens (<code class="font-mono text-xs text-foreground">_token</code>), and Livewire internal state.',
+    ],
+
+    'notifications' => [
+        'title' => 'Automatic Error Notifications (:status="true")',
+        'desc' => 'Enable the <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">:status="true"</code> attribute so the form automatically displays <strong>error</strong> notifications when requests fail (validation, expired CSRF, server error, etc.). Defaults to <strong>Toast</strong>. Use <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">status="alert"</code> to display an Alert pop-up. <strong>Success</strong> notifications are not displayed automatically — use <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-muted">onSuccess</code> to configure them.',
+        'toast_preview' => 'status="toast" — Error Toast (default)',
+        'alert_preview' => 'status="alert" — Error Alert Pop-up',
+        'error_parsing_title' => 'Automatic Error Parsing',
+        'error_parsing_desc' => 'When a request fails, the system automatically parses server responses and presents clear user-facing messages.',
+        'columns' => [
+            'status' => 'HTTP Status',
+            'title' => 'Notification Title',
+            'message' => 'Message',
+        ],
+        'rows' => [
+            ['422 Unprocessable Entity', 'Validation Failed', 'Displays clean Laravel validation error summaries per field.'],
+            ['405 Method Not Allowed', '405 Method Not Allowed', 'HTTP method not supported. Check form method or route definition.'],
+            ['419 Page Expired', '419 Page Expired', 'CSRF token expired or invalid. Please refresh the page.'],
+            ['401 Unauthorized', '401 Unauthenticated', 'Your login session has ended. Please log in again.'],
+            ['403 Forbidden', '403 Forbidden', 'You do not have permission to perform this action.'],
+            ['404 Not Found', '404 Endpoint Not Found', 'The requested endpoint or record was not found on the server.'],
+            ['423 Locked', '423 Password Confirmation Required', 'Password confirmation is required to proceed with this action.'],
+            ['429 Too Many Requests', '429 Too Many Requests', 'Too many requests. Please wait a moment and try again.'],
+            ['500 Server Error', '500 Internal Server Error', 'Server error message or generic failure fallback.'],
+            ['Network Failure', 'Network Error', 'Unable to reach the server. Please check your internet connection.'],
+        ],
+    ],
+
+    'post_submit' => [
+        'title' => 'Post-Submit Actions (onSuccess, delay, redirect-to)',
+        'desc' => 'Use the <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> attribute to execute JavaScript expressions after successful submission. The <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> prop only triggers on <strong>errors</strong> automatically — success alerts, closing modals/sheets, and redirects are managed via <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
+        'preview_sheet' => 'onSuccess: Toast + Close Sheet after submit',
+        'sheet_btn' => 'Open Form Sheet',
+        'sheet_title' => 'Form inside Sheet Drawer',
+        'sheet_save' => 'Save Changes',
+        'columns' => [
+            'prop' => 'Attribute',
+            'example' => 'Example Value',
+            'desc' => 'Description',
+        ],
+        'rows' => [
+            ['onSuccess / on-success', '\$vibe.sheet(\'demo-form-sheet\').close(); \$vibe.toast.success(\'Successfully saved!\')', 'Closes sheet + displays success toast after submission.'],
+            ['onSuccess / on-success', '\$vibe.modal(\'demo-form-modal\').close(); \$vibe.toast.success(\'Successfully saved!\')', 'Closes modal + displays success toast after submission.'],
+            ['delay', '500', 'Delay (ms) before onSuccess is executed. Default 0.'],
+            ['redirect-to', '/users', 'Destination URL after successful submit (or resolved from server data.redirect).'],
+        ],
+    ],
+
+    'confirm_submit' => [
+        'title' => 'Submit Confirmation (submit())',
+        'desc' => 'To require user confirmation before submitting a form, use <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe.alert.confirm(message, callback, title?)</code> alongside the built-in <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">submit()</code> method available in the form scope. Call <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">() => submit()</code> <strong>without</strong> <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">this</code>.',
+        'preview_confirm' => 'Confirmation via $vibe.alert.confirm + submit()',
+        'preview_custom' => 'Confirmation with Custom Title',
+        'btn_confirm' => 'Save with Confirmation',
+        'btn_delete' => 'Delete Data',
+        'confirm_message' => 'Are you sure you want to save this data?',
+        'delete_confirm_message' => 'This action cannot be undone. Are you sure you want to delete?',
+        'delete_confirm_title' => 'Confirm Deletion',
+        'columns' => [
+            'api' => 'API',
+            'signature' => 'Signature',
+            'desc' => 'Description',
+        ],
+        'rows' => [
+            ['submit()', 'submit()', 'Built-in form method. Call from @click without this: () => submit(). Sends form via AJAX without browser submission events.'],
+            ['$vibe.alert.confirm()', 'confirm(message, onConfirm, title?)', 'Triggers an Alert confirmation dialog. If confirmed, the onConfirm callback executes.'],
+            ['$vibe.alert.confirm()', 'confirm({ message, title, confirmButton, ... })', 'Object configuration — supports comprehensive custom Alert settings.'],
+        ],
+    ],
+
+    'password_confirm' => [
+        'title' => 'In-Place Password Confirmation (Sudo Mode / HTTP 423)',
+        'desc' => 'When a form dispatches a request (POST/PUT/DELETE) to routes protected by password confirmation middleware (such as <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">confirm</code> or <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">confirm:100</code>) and the confirmation session has expired, the server responds with <strong>HTTP 423</strong> (Locked). The <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">&lt;vibe:form&gt;</code> component automatically intercepts this response, opens an in-place password verification modal without reloading the page, and automatically replays the pending form submission once verified!',
+        'preview_title' => 'Auto-Replay Submit with In-Place Password Confirmation',
+        'btn_submit' => 'Submit Protected Data',
+        'card_title' => 'High-Risk / Protected Area',
+        'card_desc' => 'This form is protected by security middleware. If the session expires, a password confirmation modal appears in-place.',
+        'features_title' => 'Benefits of In-Place Confirmation',
+        'features' => [
+            'no_reload' => 'Zero Input Loss: Users are never redirected to another page, preserving all form inputs and file uploads.',
+            'auto_replay' => 'Seamless Auto-Replay: Once confirmed, the form immediately retries the POST/PUT without needing to click submit again.',
+            'zero_config' => 'Zero Configuration: Enabled out of the box on all AJAX forms, and can be toggled off via :confirm-password="false".',
+        ],
     ],
 ];
