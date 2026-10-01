@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.23] - 2026-10-01
+
+### 🚀 Features
+- feat: add clean numeric value mode with hidden input support to phone component (38c737b)
+
+
 ## [0.2.22] - 2026-10-01
 
 ### 🐛 Bug Fixes
