@@ -12,7 +12,7 @@
 ])
 
 @php
-    $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
+    $resolvedLocale = $locale ?? app()->getLocale();
     $rawTranslations = trans('vibe/dynamic-form', [], $resolvedLocale);
     if (!is_array($rawTranslations)) {
         $rawTranslations = trans('vibe::vibe/dynamic-form', [], $resolvedLocale);

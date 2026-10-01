@@ -15,4 +15,18 @@ return [
     'password_required' => 'Silakan masukkan kata sandi Anda.',
     'password_incorrect' => 'Kata sandi salah. Silakan coba lagi.',
     'network_error' => 'Gagal terhubung ke server. Periksa koneksi Anda.',
+    'http_errors' => [
+        '401' => ['title' => '401 Tidak Terautentikasi', 'message' => 'Sesi login Anda telah berakhir. Silakan login kembali.'],
+        '403' => ['title' => '403 Akses Ditolak', 'message' => 'Anda tidak memiliki izin untuk melakukan aksi ini.'],
+        '404' => ['title' => '404 Endpoint Tidak Ditemukan', 'message' => 'Endpoint atau data yang dituju tidak ditemukan di server.'],
+        '405' => ['title' => '405 Method Not Allowed', 'message' => 'Metode HTTP tidak didukung untuk endpoint ini. Periksa method form atau route controller Anda.'],
+        '419' => ['title' => '419 Sesi Kedaluwarsa', 'message' => 'Token CSRF kedaluwarsa atau tidak valid. Silakan muat ulang halaman (refresh) dan coba lagi.'],
+        '422' => ['title' => null, 'message' => 'Gagal Validasi'],
+        '423' => ['title' => '423 Konfirmasi Kata Sandi Diperlukan', 'message' => 'Konfirmasi kata sandi diperlukan untuk melanjutkan aksi ini.'],
+        '429' => ['title' => '429 Terlalu Banyak Permintaan', 'message' => 'Terlalu banyak permintaan dalam waktu singkat. Harap tunggu beberapa saat.'],
+        '500' => ['title' => '500 Terjadi Kesalahan Server', 'message' => 'Terjadi kesalahan internal pada server. Silakan coba beberapa saat lagi.'],
+        'network' => ['title' => 'Kesalahan Jaringan', 'message' => 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'],
+        'generic' => ['title' => 'Error :status', 'message' => 'Permintaan gagal dengan status :status.'],
+        'and_more_errors' => '(dan :count error lainnya)',
+    ],
 ];
