@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.3.0] - 2026-10-01
+
+### ⚡ Performance & Refactoring
+- refactor: update component hover and background states to use muted colors (3d8a538)
+
+
 ## [0.2.34] - 2026-10-01
 
 ### 🚀 Features
