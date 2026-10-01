@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.3.2] - 2026-10-01
+
+### 🧰 Maintenance & Documentation
+- style: update button and navigation item sizing classes (594224b)
+
+
 ## [0.3.1] - 2026-10-01
 
 ### 🧰 Maintenance & Documentation
