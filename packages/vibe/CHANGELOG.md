@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.27] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: store URL path in session for password confirmation and prevent sheet closure on overlay clicks (25f245a)
+
+
 ## [0.2.26] - 2026-10-01
 
 ### 🚀 Features
