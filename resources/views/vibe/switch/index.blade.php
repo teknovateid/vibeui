@@ -76,10 +76,9 @@
 
     // Thumb colors
     $thumbColors = match ($variant) {
-        'success', 'danger', 'destructive', 'info' => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-primary-foreground shadow-xs',
-        'warning' => 'bg-white dark:bg-vibe-100 dark:peer-checked:bg-vibe-950 shadow-xs',
-        'secondary' => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-vibe-950 shadow-xs',
-        default => 'bg-white dark:bg-vibe-200 dark:peer-checked:bg-primary-foreground shadow-xs',
+        'warning' => 'bg-white dark:bg-zinc-200 dark:peer-checked:bg-warning-foreground shadow-xs',
+        'secondary' => 'bg-white dark:bg-zinc-200 dark:peer-checked:bg-secondary-foreground shadow-xs',
+        default => 'bg-white dark:bg-zinc-200 dark:peer-checked:bg-primary-foreground shadow-xs',
     };
 
     $isJustify = $labelPlacement === 'justify';

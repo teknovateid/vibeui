@@ -25,7 +25,6 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">--warning</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">--destructive</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">--info</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">--accent</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">match($variant)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">color-mix()</vibe:badge>
@@ -47,14 +46,13 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                     @php
                         $palette = [
-                            ['name' => 'primary',     'bg' => 'bg-primary',     'text' => 'text-primary-foreground',     'token' => '--primary',     'value' => '#0a0b0a / #f9fafa (dark)', 'role' => __('docs/design-system.sections.tokens.palette.primary.role')],
-                            ['name' => 'secondary',   'bg' => 'bg-secondary',   'text' => 'text-secondary-foreground',   'token' => '--secondary',   'value' => '#f4f5f5 / #262726 (dark)', 'role' => __('docs/design-system.sections.tokens.palette.secondary.role')],
+                            ['name' => 'primary',     'bg' => 'bg-primary',     'text' => 'text-primary-foreground',     'token' => '--primary',     'value' => '#18181b / #fafafa (dark)', 'role' => __('docs/design-system.sections.tokens.palette.primary.role')],
+                            ['name' => 'secondary',   'bg' => 'bg-secondary',   'text' => 'text-secondary-foreground',   'token' => '--secondary',   'value' => '#f4f4f5 / #27272a (dark)', 'role' => __('docs/design-system.sections.tokens.palette.secondary.role')],
                             ['name' => 'success',     'bg' => 'bg-success',     'text' => 'text-success-foreground',     'token' => '--success',     'value' => '#10b981',                  'role' => __('docs/design-system.sections.tokens.palette.success.role')],
                             ['name' => 'warning',     'bg' => 'bg-warning',     'text' => 'text-warning-foreground',     'token' => '--warning',     'value' => '#f59e0b',                  'role' => __('docs/design-system.sections.tokens.palette.warning.role')],
                             ['name' => 'destructive', 'bg' => 'bg-destructive', 'text' => 'text-destructive-foreground', 'token' => '--destructive', 'value' => '#ef4444',                  'role' => __('docs/design-system.sections.tokens.palette.destructive.role')],
                             ['name' => 'info',        'bg' => 'bg-info',        'text' => 'text-info-foreground',        'token' => '--info',        'value' => '#0ea5e9',                  'role' => __('docs/design-system.sections.tokens.palette.info.role')],
-                            ['name' => 'accent',      'bg' => 'bg-accent',      'text' => 'text-accent-foreground',      'token' => '--accent',      'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => __('docs/design-system.sections.tokens.palette.accent.role')],
-                            ['name' => 'muted',       'bg' => 'bg-muted',       'text' => 'text-muted-foreground',       'token' => '--muted',       'value' => '#f4f5f5 / #1e1f1e (dark)', 'role' => __('docs/design-system.sections.tokens.palette.muted.role')],
+                            ['name' => 'muted',       'bg' => 'bg-muted',       'text' => 'text-muted-foreground',       'token' => '--muted',       'value' => '#f4f4f5 / #1f1f23 (dark)', 'role' => __('docs/design-system.sections.tokens.palette.muted.role')],
                         ];
                     @endphp
                     @foreach ($palette as $color)
@@ -84,17 +82,17 @@
                         <vibe:table.rows>
                             @php
                                 $surfaceTokens = [
-                                    ['--background',       '#f9fafa', '#0a0b0a', __('docs/design-system.sections.tokens.surface_table.items.background')],
-                                    ['--foreground',       '#0a0b0a', '#f9fafa', __('docs/design-system.sections.tokens.surface_table.items.foreground')],
-                                    ['--card',             '#ffffff', '#181918', __('docs/design-system.sections.tokens.surface_table.items.card')],
-                                    ['--card-foreground',  '#0a0b0a', '#f9fafa', __('docs/design-system.sections.tokens.surface_table.items.card_foreground')],
-                                    ['--popover',          '#ffffff', '#181918', __('docs/design-system.sections.tokens.surface_table.items.popover')],
-                                    ['--border',           '#e5e6e5', '#262726', __('docs/design-system.sections.tokens.surface_table.items.border')],
-                                    ['--input',            '#e5e6e5', '#262726', __('docs/design-system.sections.tokens.surface_table.items.input')],
-                                    ['--ring',             '#0a0b0a', '#a2a4a3', __('docs/design-system.sections.tokens.surface_table.items.ring')],
-                                    ['--muted-foreground', '#717372', '#a2a4a3', __('docs/design-system.sections.tokens.surface_table.items.muted_foreground')],
-                                    ['--sidebar',          '#ffffff', '#121312', __('docs/design-system.sections.tokens.surface_table.items.sidebar')],
-                                    ['--header',           '#ffffff', '#121312', __('docs/design-system.sections.tokens.surface_table.items.header')],
+                                    ['--background',       '#fafafa', '#09090b', __('docs/design-system.sections.tokens.surface_table.items.background')],
+                                    ['--foreground',       '#09090b', '#fafafa', __('docs/design-system.sections.tokens.surface_table.items.foreground')],
+                                    ['--card',             '#ffffff', '#121215', __('docs/design-system.sections.tokens.surface_table.items.card')],
+                                    ['--card-foreground',  '#09090b', '#fafafa', __('docs/design-system.sections.tokens.surface_table.items.card_foreground')],
+                                    ['--popover',          '#ffffff', '#121215', __('docs/design-system.sections.tokens.surface_table.items.popover')],
+                                    ['--border',           '#e4e4e7', '#27272a', __('docs/design-system.sections.tokens.surface_table.items.border')],
+                                    ['--input',            '#e4e4e7', '#27272a', __('docs/design-system.sections.tokens.surface_table.items.input')],
+                                    ['--ring',             '#18181b', '#a1a1aa', __('docs/design-system.sections.tokens.surface_table.items.ring')],
+                                    ['--muted-foreground', '#71717a', '#a1a1aa', __('docs/design-system.sections.tokens.surface_table.items.muted_foreground')],
+                                    ['--sidebar',          '#ffffff', '#0f0f12', __('docs/design-system.sections.tokens.surface_table.items.sidebar')],
+                                    ['--header',           '#ffffff', '#0f0f12', __('docs/design-system.sections.tokens.surface_table.items.header')],
                                 ];
                             @endphp
                             @foreach ($surfaceTokens as [$token, $light, $dark, $usage])

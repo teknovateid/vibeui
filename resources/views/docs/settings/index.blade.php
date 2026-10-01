@@ -1484,17 +1484,17 @@
                             name: 'Default',
                             light: {
                                 bg: '#ffffff',
-                                fg: '#0a0b0a',
-                                border: '#e5e6e5',
-                                accent: '#f4f5f5',
-                                accentFg: '#0a0b0a'
+                                fg: '#09090b',
+                                border: '#e4e4e7',
+                                accent: '#f4f4f5',
+                                accentFg: '#09090b'
                             },
                             dark: {
-                                bg: '#121312',
-                                fg: '#f9fafa',
-                                border: '#262726',
-                                accent: '#1e1f1e',
-                                accentFg: '#f9fafa'
+                                bg: '#0f0f12',
+                                fg: '#fafafa',
+                                border: '#27272a',
+                                accent: '#18181b',
+                                accentFg: '#fafafa'
                             }
                         },
                         dark: {

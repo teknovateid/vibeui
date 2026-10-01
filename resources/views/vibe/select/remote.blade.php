@@ -733,9 +733,9 @@
                             @keydown.space.prevent="selectItem(item)"
                         @endif
                         :aria-selected="isSelected(item.value)"
-                        class="relative flex items-center gap-2.5 w-full px-2.5 py-1.5 text-xs rounded-lg select-none transition-colors group focus:outline-none cursor-pointer focus:bg-accent focus:text-accent-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset"
+                        class="relative flex items-center gap-2.5 w-full px-2.5 py-1.5 text-xs rounded-lg select-none transition-colors group focus:outline-none cursor-pointer focus:bg-muted focus:text-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset"
                         :class="{
-                            'bg-accent/50 text-accent-foreground font-medium': !multiple && isSelected(item.value),
+                            'bg-muted text-foreground font-medium': !multiple && isSelected(item.value),
                             'font-medium text-foreground': multiple && isSelected(item.value),
                             'text-popover-foreground hover:bg-muted/60': !isSelected(item.value) && !isOptionDisabled(item.value, item.disabled),
                             'hover:bg-muted/60': multiple && isSelected(item.value) && !isOptionDisabled(item.value, item.disabled),

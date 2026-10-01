@@ -20,7 +20,7 @@
 
     $itemClasses = $isDestructive
         ? 'w-full justify-start font-normal px-3 py-1.5 text-sm rounded-md transition-colors text-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:bg-destructive/10 focus-visible:text-destructive active:bg-destructive/20'
-        : 'w-full justify-start font-normal px-3 py-1.5 text-sm rounded-md transition-colors text-popover-foreground hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground';
+        : 'w-full justify-start font-normal px-3 py-1.5 text-sm rounded-md transition-colors text-popover-foreground hover:bg-muted hover:text-foreground focus-visible:bg-muted focus-visible:text-foreground';
 
     $disabledClasses = $disabled ? 'opacity-50 pointer-events-none' : '';
 @endphp

@@ -37,10 +37,10 @@
     @class([
         'relative flex items-center gap-2.5 w-full px-2.5 py-1.5 text-xs rounded-lg select-none transition-colors group focus:outline-none',
         'opacity-40 cursor-not-allowed pointer-events-none' => $disabled,
-        'cursor-pointer focus:bg-accent focus:text-accent-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset' => !$disabled,
+        'cursor-pointer focus:bg-muted focus:text-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset' => !$disabled,
     ])
     :class="{
-        'bg-accent/50 text-accent-foreground font-medium': !multiple && isSelected('{{ addslashes($value) }}'),
+        'bg-muted text-foreground font-medium': !multiple && isSelected('{{ addslashes($value) }}'),
         'font-medium text-foreground': multiple && isSelected('{{ addslashes($value) }}'),
         'text-popover-foreground hover:bg-muted/60': !isSelected('{{ addslashes($value) }}') && !isOptionDisabled('{{ addslashes($value) }}', {{ $disabled ? 'true' : 'false' }}),
         'hover:bg-muted/60': multiple && isSelected('{{ addslashes($value) }}') && !isOptionDisabled('{{ addslashes($value) }}', {{ $disabled ? 'true' : 'false' }}),

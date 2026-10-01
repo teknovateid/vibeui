@@ -175,10 +175,10 @@
                 links.forEach(link => {
                     let isCurrent = link.dataset.tocHref === id;
                     if (isCurrent) {
-                        link.classList.add('text-card-foreground', 'font-semibold', 'border-primary', 'bg-accent/40');
+                        link.classList.add('text-card-foreground', 'font-semibold', 'border-primary', 'bg-muted/60');
                         link.classList.remove('text-muted-foreground', 'border-transparent');
                     } else {
-                        link.classList.remove('text-card-foreground', 'font-semibold', 'border-primary', 'bg-accent/40');
+                        link.classList.remove('text-card-foreground', 'font-semibold', 'border-primary', 'bg-muted/60');
                         link.classList.add('text-muted-foreground', 'border-transparent');
                     }
                 });
@@ -406,7 +406,7 @@
                             let isH4 = el.tagName.toLowerCase() === 'h4';
                             let depthPadding = isH3 ? 'padding-left: 1.25rem; font-size: 0.725rem;' : (isH4 ? 'padding-left: 2rem; font-size: 0.7rem;' : 'padding-left: 0.75rem;');
 
-                            let activeClasses = 'text-card-foreground font-semibold border-primary bg-accent/40';
+                            let activeClasses = 'text-card-foreground font-semibold border-primary bg-muted/60';
                             let inactiveClasses = 'text-muted-foreground hover:text-card-foreground hover:border-border border-transparent';
 
                             // 1. Desktop item
@@ -456,7 +456,7 @@
                                 let mA = document.createElement('a');
                                 mA.href = '#' + targetId;
                                 mA.dataset.tocHref = targetId;
-                                mA.className = 'block py-1.5 px-2 rounded-md transition-colors text-xs cursor-pointer ' + (isCurrent ? 'bg-accent text-accent-foreground font-semibold' : 'text-muted-foreground hover:text-card-foreground hover:bg-accent/40');
+                                mA.className = 'block py-1.5 px-2 rounded-md transition-colors text-xs cursor-pointer ' + (isCurrent ? 'bg-muted text-foreground font-semibold' : 'text-muted-foreground hover:text-card-foreground hover:bg-muted/60');
                                 if (isH3) mA.style.paddingLeft = '1.5rem';
                                 if (isH4) mA.style.paddingLeft = '2.25rem';
                                 mA.textContent = text;

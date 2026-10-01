@@ -36,8 +36,8 @@
                                 :class="{
                                     'bg-primary text-primary-foreground font-bold shadow-xs hover:bg-primary/90': cell.isSelected || cell.isRangeStart || cell.isRangeEnd,
                                     'text-primary font-semibold hover:bg-primary/20': cell.isInRange && !cell.isSelected && !cell.isRangeStart && !cell.isRangeEnd,
-                                    'hover:bg-accent text-foreground': !cell.isSelected && !cell.isInRange && cell.isCurrentMonth && !cell.isDisabled,
-                                    'text-muted-foreground/40 hover:bg-accent/50': !cell.isSelected && !cell.isInRange && !cell.isCurrentMonth && !cell.isDisabled,
+                                    'hover:bg-muted text-foreground': !cell.isSelected && !cell.isInRange && cell.isCurrentMonth && !cell.isDisabled,
+                                    'text-muted-foreground/40 hover:bg-muted/50': !cell.isSelected && !cell.isInRange && !cell.isCurrentMonth && !cell.isDisabled,
                                     'ring-1 ring-primary/40 font-semibold': cell.isToday && !cell.isSelected && !cell.isInRange,
                                     'opacity-25 cursor-not-allowed pointer-events-none line-through': cell.isDisabled
                                 }"
@@ -95,8 +95,8 @@
                                     :class="{
                                         'bg-primary text-primary-foreground font-bold shadow-xs hover:bg-primary/90': cell.isSelected || cell.isRangeStart || cell.isRangeEnd,
                                         'text-primary font-semibold hover:bg-primary/20': cell.isInRange && !cell.isSelected && !cell.isRangeStart && !cell.isRangeEnd,
-                                        'hover:bg-accent text-foreground': !cell.isSelected && !cell.isInRange && cell.isCurrentMonth && !cell.isDisabled,
-                                        'text-muted-foreground/40 hover:bg-accent/50': !cell.isSelected && !cell.isInRange && !cell.isCurrentMonth && !cell.isDisabled,
+                                        'hover:bg-muted text-foreground': !cell.isSelected && !cell.isInRange && cell.isCurrentMonth && !cell.isDisabled,
+                                        'text-muted-foreground/40 hover:bg-muted/50': !cell.isSelected && !cell.isInRange && !cell.isCurrentMonth && !cell.isDisabled,
                                         'ring-1 ring-primary/40 font-semibold': cell.isToday && !cell.isSelected && !cell.isInRange,
                                         'opacity-25 cursor-not-allowed pointer-events-none line-through': cell.isDisabled
                                     }"
@@ -124,7 +124,7 @@
                 class="py-2.5 px-2 text-xs rounded-lg font-medium transition-colors text-center cursor-pointer"
                 :class="{
                     'bg-primary text-primary-foreground font-bold shadow-xs': currentMonth === mIdx,
-                    'hover:bg-accent text-foreground': currentMonth !== mIdx && !isMonthDisabled(mIdx),
+                    'hover:bg-muted text-foreground': currentMonth !== mIdx && !isMonthDisabled(mIdx),
                     'opacity-25 cursor-not-allowed pointer-events-none line-through': isMonthDisabled(mIdx)
                 }"
                 x-text="mName"
@@ -142,7 +142,7 @@
                 class="py-2.5 px-2 text-xs rounded-lg font-medium transition-colors text-center cursor-pointer font-mono"
                 :class="{
                     'bg-primary text-primary-foreground font-bold shadow-xs': currentYear === yNum,
-                    'hover:bg-accent text-foreground': currentYear !== yNum && !isYearDisabled(yNum),
+                    'hover:bg-muted text-foreground': currentYear !== yNum && !isYearDisabled(yNum),
                     'opacity-25 cursor-not-allowed pointer-events-none': isYearDisabled(yNum)
                 }"
                 x-text="yNum"

@@ -22,7 +22,7 @@
             'py-3.5 px-4 text-sm gap-3': size !== 'sm' && size !== 'lg',
             'flex-row-reverse': chevronPosition === 'left',
             'cursor-not-allowed opacity-50': accordionDisabled || itemDisabled,
-            'cursor-pointer hover:bg-accent/40 text-foreground': !accordionDisabled && !itemDisabled
+            'cursor-pointer hover:bg-muted/40 text-foreground': !accordionDisabled && !itemDisabled
         }"
         {{ $attributes->twMerge([
             'class' => 'w-full flex items-center justify-between text-left font-medium transition-all duration-200 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-1'

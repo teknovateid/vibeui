@@ -19,15 +19,15 @@
     $buttonVariantMap = [
         'primary' => 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
         'secondary' => 'bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80',
-        'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
-        'ghost' => 'text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent/80',
-        'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-accent/60',
+        'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-muted hover:text-foreground',
+        'ghost' => 'text-foreground hover:bg-muted hover:text-foreground active:bg-muted/80',
+        'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-muted/60',
         'destructive' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
         'danger' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
         'success' => 'bg-success text-success-foreground shadow-xs hover:bg-success/90 focus-visible:ring-success',
         'warning' => 'bg-warning text-warning-foreground shadow-xs hover:bg-warning/90 focus-visible:ring-warning',
         'info' => 'bg-info text-info-foreground shadow-xs hover:bg-info/90 focus-visible:ring-info',
-        'default' => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
+        'default' => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-muted hover:text-foreground',
     ];
 
     $activeBtn = $activeVariant ?? $variant ?? 'primary';
@@ -40,8 +40,8 @@
     if ($active !== null) {
         $ssrClasses = match ($variant) {
             'sidebar' => $isSsrActive
-                ? 'w-full justify-start text-left bg-accent text-accent-foreground font-semibold rounded-lg shadow-2xs'
-                : 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium',
+                ? 'w-full justify-start text-left bg-muted text-foreground font-semibold rounded-lg shadow-2xs'
+                : 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium',
             'underline' => $isSsrActive
                 ? 'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent px-3 pb-2.5 pt-2 hover:bg-transparent'
                 : 'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 pb-2.5 pt-2 font-medium hover:bg-transparent',
@@ -50,10 +50,10 @@
                 : "{$inactiveBtnClasses} font-medium rounded-lg",
             default => $isSsrActive
                 ? 'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50'
-                : 'text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium',
+                : 'text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium',
         };
     } elseif ($variant === 'sidebar') {
-        $ssrClasses = 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium';
+        $ssrClasses = 'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium';
     }
 @endphp
 
@@ -78,7 +78,7 @@
     x-bind:class="{
         {{-- Layout 2 Baris (Horizontal / Rows) --}}
         'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'rows' && variant === 'pill' && activeTab === '{{ $name }}',
-        'text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
 
         'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent px-3 pb-2.5 pt-2 hover:bg-transparent': layout === 'rows' && variant === 'underline' && activeTab === '{{ $name }}',
         'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 pb-2.5 pt-2 font-medium hover:bg-transparent': layout === 'rows' && variant === 'underline' && activeTab !== '{{ $name }}',
@@ -88,7 +88,7 @@
 
         {{-- Layout 2 Kolom (Vertical / Cols) --}}
         'w-full justify-start text-left bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'cols' && variant === 'pill' && activeTab === '{{ $name }}',
-        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': layout === 'cols' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': layout === 'cols' && variant === 'pill' && activeTab !== '{{ $name }}',
 
         'w-full justify-start text-left border-r-2 border-primary text-foreground font-semibold -mr-px rounded-none bg-transparent px-3 py-2 hover:bg-transparent': layout === 'cols' && variant === 'underline' && activeTab === '{{ $name }}',
         'w-full justify-start text-left border-r-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent px-3 py-2 font-medium hover:bg-transparent': layout === 'cols' && variant === 'underline' && activeTab !== '{{ $name }}',
@@ -97,8 +97,8 @@
         'w-full justify-start text-left {{ $inactiveBtnClasses }} font-medium rounded-lg': layout === 'cols' && variant === 'button' && activeTab !== '{{ $name }}',
 
         {{-- Layout Sidebar --}}
-        'w-full justify-start text-left bg-accent text-accent-foreground font-semibold rounded-lg shadow-2xs': variant === 'sidebar' && activeTab === '{{ $name }}',
-        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-accent/60 rounded-lg font-medium': variant === 'sidebar' && activeTab !== '{{ $name }}',
+        'w-full justify-start text-left bg-muted text-foreground font-semibold rounded-lg shadow-2xs': variant === 'sidebar' && activeTab === '{{ $name }}',
+        'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': variant === 'sidebar' && activeTab !== '{{ $name }}',
     }"
 >
     @if (isset($icon))

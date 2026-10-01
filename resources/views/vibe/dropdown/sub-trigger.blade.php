@@ -3,7 +3,7 @@
 <vibe:button 
     x-ref="trigger"
     variant="ghost" 
-    class="w-full justify-between font-normal px-3 py-1.5 text-sm text-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+    class="w-full justify-between font-normal px-3 py-1.5 text-sm text-foreground hover:bg-muted hover:text-foreground focus:bg-muted focus:text-foreground"
     role="menuitem"
     @click.stop.prevent="subOpen = !subOpen"
     {{ $attributes }}

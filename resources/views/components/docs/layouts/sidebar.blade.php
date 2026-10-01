@@ -42,7 +42,7 @@
                 <div class="w-full px-3 minified:px-0">
                     <vibe:dropdown keyboard class="w-full">
                         <x-slot:trigger>
-                            <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-sidebar-accent/50 text-sidebar-foreground border border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group cursor-pointer minified:p-0 minified:border-none">
+                            <div class="w-full minified:w-fit minified:mx-auto minified:rounded-full flex items-center justify-between p-3 rounded-lg bg-muted/50 text-sidebar-foreground border border-sidebar-border hover:bg-muted group cursor-pointer minified:p-0 minified:border-none">
                                 <div class="flex items-center gap-2 min-w-0">
                                     <div class="relative flex shrink-0 ">
                                         <vibe:avatar size="sm" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=64&h=64&auto=format&fit=crop" alt="Masum Parvej" />
@@ -176,7 +176,7 @@
 
                 <div class="pt-2.5 px-3 minified:px-0 flex items-center justify-between minified:justify-center text-[11px] text-muted-foreground border-t border-sidebar-border/40 mt-2">
                     <span class="font-medium text-xs text-muted-foreground/80 minified:hidden">Vibe UI</span>
-                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-sidebar-accent/60 text-muted-foreground font-semibold border border-sidebar-border/50">v{{ \Teknovate\VibeUi\Vibe::version() }}</span>
+                    <span class="font-mono text-[10px] px-1.5 py-0.5 rounded-md bg-muted text-muted-foreground font-semibold border border-sidebar-border/50">v{{ \Teknovate\VibeUi\Vibe::version() }}</span>
                 </div>
             </vibe:sheet.footer>
 
