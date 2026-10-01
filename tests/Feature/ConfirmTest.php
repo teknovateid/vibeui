@@ -194,6 +194,54 @@ test('idle timeout middleware locks session on server-side inactivity and preven
     $response->assertRedirect(route('password.confirm'));
 });
 
+test('confirm with timeout duration allows cross page navigation within timeout window', function () {
+    $user = User::factory()->create();
 
+    \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'confirm:100'])->group(function () {
+        \Illuminate\Support\Facades\Route::get('/test-users', fn () => response('users index'))->name('test-users.index');
+        \Illuminate\Support\Facades\Route::put('/test-users/update', fn () => response('users updated'))->name('test-users.update');
+    });
+    \Illuminate\Support\Facades\Route::middleware(['web', 'auth'])->get('/test-dashboard', fn () => response('dashboard'))->name('test-dashboard');
 
+    // 1. Visit /test-users -> redirected to /confirm-password
+    $response = $this->actingAs($user)->get('/test-users');
+    $response->assertRedirect('/confirm-password');
 
+    // 2. User confirms password via Livewire component
+    Livewire::actingAs($user)
+        ->test(ConfirmPassword::class)
+        ->set('password', 'password')
+        ->call('confirmPassword')
+        ->assertRedirect('/test-users');
+
+    // 3. User visits /test-users -> 200 OK
+    $response = $this->actingAs($user)->get('/test-users');
+    $response->assertStatus(200);
+
+    // 4. User performs update
+    $response = $this->actingAs($user)->put('/test-users/update');
+    $response->assertStatus(200);
+
+    // 5. User visits /test-dashboard
+    $response = $this->actingAs($user)->get('/test-dashboard');
+    $response->assertStatus(200);
+
+    // 6. User visits /test-users again within 100s -> should still be 200 OK without redirecting to confirm!
+    $response = $this->actingAs($user)->get('/test-users');
+    $response->assertStatus(200);
+
+    // 7. Fast forward time past 100 seconds (105s ago)
+    session(['auth.password_confirmed_at' => time() - 105]);
+
+    // 8. User visits /test-users after timeout expired -> redirected to confirm
+    $response = $this->actingAs($user)->get('/test-users');
+    $response->assertRedirect('/confirm-password');
+
+    // 9. Re-confirm via POST /confirm-password endpoint
+    $response = $this->actingAs($user)->post('/confirm-password', ['password' => 'password']);
+    $response->assertRedirect('/test-users');
+
+    // 10. Visit dashboard and back to users -> remains accessible
+    $this->actingAs($user)->get('/test-dashboard')->assertStatus(200);
+    $this->actingAs($user)->get('/test-users')->assertStatus(200);
+});

@@ -62,6 +62,7 @@ class ConfirmPassword extends Component
         session()->forget('auth.session_locked');
         session()->put('auth.last_activity_time', time());
 
+        $isSinglePage = (bool) session('auth.is_single_page_confirm', false);
         $rawTarget = session()->pull('auth.target_route') ?: session('url.intended');
         $fallback = $this->redirectAfterLoginUrl();
 
@@ -76,15 +77,18 @@ class ConfirmPassword extends Component
                 || (str_starts_with($rawTarget, '/') && ! str_starts_with($rawTarget, '//'))
                 || ($targetHost && in_array($targetHost, array_filter([$appHost, $requestHost, 'localhost', '127.0.0.1']), true));
 
-            if ($isSafe) {
-                session()->put('auth.confirmed_route', $rawTarget);
+            $destination = $isSafe ? $rawTarget : $fallback;
+            $destinationUrl = $isRouteName ? route($destination) : $destination;
+
+            if ($isSinglePage) {
+                session()->put('auth.confirmed_route', $destination);
                 session()->put('auth.is_single_page_confirm', true);
-                session()->put('url.intended', $isRouteName ? route($rawTarget) : $rawTarget);
             } else {
-                session()->put('auth.confirmed_route', $fallback);
-                session()->put('auth.is_single_page_confirm', true);
-                session()->put('url.intended', $fallback);
+                session()->forget('auth.confirmed_route');
+                session()->forget('auth.is_single_page_confirm');
             }
+
+            session()->put('url.intended', $destinationUrl);
         }
 
         return redirect()->intended($this->redirectAfterLoginUrl());
