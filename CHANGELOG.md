@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.21] - 2026-10-01
+
+### 🚀 Features
+- feat: add status notifications, error parsing, and post-submit actions to form component (9600a54)
+
+
 ## [0.2.20] - 2026-10-01
 
 ### 🐛 Bug Fixes
