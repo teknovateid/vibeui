@@ -20,6 +20,7 @@
     'backdrop' => null, // smart default: true for fixed, false for relative/absolute/sticky
     'backdropClass' => null,
     'teleport' => null, // smart default: true for fixed, false for relative/absolute/sticky
+    'dismissibleButton' => null, // smart default: true for fixed/absolute, false for relative/sticky
 ])
 
 @php
@@ -63,6 +64,13 @@
 
     if ($teleport === null) {
         $teleport = ($layout === 'fixed');
+    }
+
+    if ($dismissibleButton === null) {
+        $dismissibleButton = $isOverlay;
+    } else {
+        $parsed = filter_var($dismissibleButton, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+        $dismissibleButton = $parsed !== null ? $parsed : (bool) $dismissibleButton;
     }
 
     $positionClasses = match ($position) {
@@ -498,6 +506,12 @@
                     </div>
                 </div>
 
+                @if ($dismissibleButton)
+                    <div class="absolute top-3 right-3 z-30 pointer-events-auto group-data-[state=collapsed]/sheet:hidden group-data-[state=minified]/sheet:hidden">
+                        <vibe:sheet.close />
+                    </div>
+                @endif
+
                 @if ($showToggle && $behavior !== 'static')
                     @php
                         $togglePositionClasses = match ($position) {
@@ -867,6 +881,12 @@
                      : 'top: 0; left: 0; right: 0; bottom: 0'">
                 {{ $slot }}
             </div>
+        </div>
+    @endif
+
+    @if ($dismissibleButton)
+        <div class="absolute top-3 right-3 z-30 pointer-events-auto group-data-[state=collapsed]/sheet:hidden group-data-[state=minified]/sheet:hidden">
+            <vibe:sheet.close />
         </div>
     @endif
 
