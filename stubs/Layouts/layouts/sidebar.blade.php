@@ -217,16 +217,16 @@
         <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header variant="header" :sticky="$isHeaderSticky" class="shadow-none border-dashed" size="sm">
                 <vibe:header.heading class="gap-2 flex items-center min-w-0">
-                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors shrink-0" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
+                    <vibe:button variant="ghost" size="icon-md" class="text-muted-foreground hover:text-foreground transition-colors shrink-0" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">
                         <div class="flex items-center justify-center">
-                            <svg class="size-6 sidebar-collapsed:hidden sidebar-minified:hidden" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <svg class="size-5 sidebar-collapsed:hidden sidebar-minified:hidden" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path d="M0 0h24v24H0z" fill="none" />
                                 <g fill="none" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 9L10.5 12L13.5 15" />
                                     <path d="M2 12C2 7.28595 2 4.92893 3.46447 3.46447C4.92893 2 7.28595 2 12 2C16.714 2 19.0711 2 20.5355 3.46447C22 4.92893 22 7.28595 22 12C22 16.714 22 19.0711 20.5355 20.5355C19.0711 22 16.714 22 12 22C7.28595 22 4.92893 22 3.46447 20.5355C2 19.0711 2 16.714 2 12Z" opacity=".5" />
                                 </g>
                             </svg>
-                            <svg class="size-6 hidden sidebar-collapsed:block sidebar-minified:block" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <svg class="size-5 hidden sidebar-collapsed:block sidebar-minified:block" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                                 <path d="M0 0h24v24H0z" fill="none" />
                                 <g fill="none" stroke="currentColor" stroke-width="1.5">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 9L13.5 12L10.5 15" />
@@ -238,13 +238,13 @@
                 </vibe:header.heading>
 
                 <vibe:header.actions class="items-center h-full relative gap-1.5 shrink-0">
-                    <vibe:button variant="ghost" class="p-2 md:hidden text-muted-foreground hover:text-foreground transition-colors" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
-                        <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <vibe:button variant="ghost" size="icon-md" class="md:hidden text-muted-foreground hover:text-foreground transition-colors" @click="$dispatch('open-modal', 'global-search-modal')" aria-label="Search">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11.5" cy="11.5" r="9.5" />
                             <path d="M18.5 18.5L22 22" />
                         </svg>
                     </vibe:button>
-                    <vibe:button variant="default" type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="hidden md:inline-flex items-center gap-2 px-2.5 py-1.5 text-xs text-muted-foreground rounded-full transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
+                    <vibe:button variant="default" size="sm" type="button" @click="$dispatch('open-modal', 'global-search-modal')" class="hidden md:inline-flex items-center gap-2 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer mr-0.5" title="Pencarian Cepat (⌘K / Ctrl+K)">
                         <svg class="size-3.5 text-muted-foreground shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11.5" cy="11.5" r="9.5" />
                             <path d="M18.5 18.5L22 22" />
@@ -254,7 +254,7 @@
                             <span class="text-xs">⌘</span>K
                         </kbd>
                     </vibe:button>
-                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors" x-data="{
+                    <vibe:button variant="ghost" size="icon-md" class="text-muted-foreground hover:text-foreground transition-colors" x-data="{
                         isFullscreen: false,
                         toggleFullscreen() {
                             if (!document.fullscreenElement) {
@@ -267,7 +267,7 @@
                         }
                     }" @fullscreenchange.window="isFullscreen = !!document.fullscreenElement" @click="toggleFullscreen()" aria-label="Toggle fullscreen" title="Toggle Fullscreen">
 
-                        <svg x-show="!isFullscreen" class="size-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <svg x-show="!isFullscreen" class="size-5" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none" />
                             <g fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" d="M6 9.99739C6.01447 8.29083 6.10921 7.35004 6.72963 6.72963C7.35004 6.10921 8.29083 6.01447 9.99739 6" />
@@ -278,8 +278,7 @@
                             </g>
                         </svg>
 
-
-                        <svg x-show="isFullscreen" class="size-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <svg x-show="isFullscreen" class="size-5" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none" />
                             <g fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path stroke-linecap="round" d="M9.99756 6.00065C9.98309 7.70722 9.88834 8.64801 9.26793 9.26842C8.64752 9.88883 7.70673 9.98358 6.00017 9.99805" />
@@ -291,15 +290,15 @@
                         </svg>
                     </vibe:button>
 
-                    <vibe:button variant="ghost" class="p-2 text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'notification-sheet')" aria-label="Toggle notifications" title="Notifications">
-                        <svg class="size-6" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                    <vibe:button variant="ghost" size="icon-md" class="text-muted-foreground hover:text-foreground transition-colors relative" @click.stop="$dispatch('toggle-sheet', 'notification-sheet')" aria-label="Toggle notifications" title="Notifications">
+                        <svg class="size-5" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                             <path d="M0 0h24v24H0z" fill="none" />
                             <g fill="none" stroke="currentColor" stroke-width="1.5">
                                 <path d="M18.7491 9.70957V9.00496C18.7491 5.13623 15.7274 2 12 2C8.27256 2 5.25087 5.13623 5.25087 9.00496V9.70957C5.25087 10.5552 5.00972 11.3818 4.5578 12.0854L3.45036 13.8095C2.43882 15.3843 3.21105 17.5249 4.97036 18.0229C9.57274 19.3257 14.4273 19.3257 19.0296 18.0229C20.789 17.5249 21.5612 15.3843 20.5496 13.8095L19.4422 12.0854C18.9903 11.3818 18.7491 10.5552 18.7491 9.70957Z" />
                                 <path stroke-linecap="round" d="M7.5 19C8.15503 20.7478 9.92246 22 12 22C14.0775 22 15.845 20.7478 16.5 19" opacity=".5" />
                             </g>
                         </svg>
-                        <span class="absolute top-1.5 right-1.5 size-2 bg-red-500 rounded-full ring-2 ring-background"></span>
+                        <span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full ring-2 ring-background"></span>
                     </vibe:button>
 
                     {{-- <div class="h-[80%] w-px bg-border" role="separator"></div> --}}

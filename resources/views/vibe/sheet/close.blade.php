@@ -3,10 +3,10 @@
 <vibe:button
     type="button"
     variant="ghost"
-    size="sm"
+    size="icon-sm"
     aria-label="{{ __('vibe/sheet.close') }}"
     @click="close()"
-    {{ $attributes->twMerge(['class' => 'p-1.5 rounded-lg text-muted-foreground hover:text-foreground cursor-pointer']) }}
+    {{ $attributes->twMerge(['class' => 'text-muted-foreground hover:text-foreground cursor-pointer rounded-lg']) }}
 >
     <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M19 5L5 19M19 19L5 5" />

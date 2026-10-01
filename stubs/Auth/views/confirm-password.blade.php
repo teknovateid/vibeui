@@ -42,7 +42,7 @@
             $intendedPasskeyUrl = session('url.intended') ?: $resolveRouteUrl($targetRouteName, $fallbackUrl);
         @endphp
         <div class="space-y-3">
-            <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">
+            <vibe:button size="xl" type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">
                 <span class="vibe-passkey-text inline-flex items-center gap-2">
                     <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
@@ -72,11 +72,12 @@
 
     <form wire:submit="confirmPassword" class="space-y-4">
         {{-- Password Input --}}
-        <vibe:input wire:model="password" id="password" name="password" :label="__('auth/fields.password')" type="password" viewable required autofocus autocomplete="current-password" :placeholder="__('auth/fields.password_placeholder')" />
+        <vibe:input size="xl" wire:model="password" id="password" name="password" :label="__('auth/fields.password')" type="password" viewable required autofocus autocomplete="current-password" :placeholder="__('auth/fields.password_placeholder')" />
 
         {{-- Submit Button --}}
         <div class="pt-2">
             <vibe:button 
+                size="xl"
                 type="submit" 
                 variant="primary" 
                 class="w-full justify-center shadow-xs" 
