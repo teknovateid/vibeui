@@ -851,7 +851,7 @@
                                 <label class="text-xs font-bold uppercase tracking-wider text-foreground block">
                                     {{ __('docs/page/settings/index.profile.language') }}
                                 </label>
-                                <span class="text-xs text-muted-foreground font-medium">{{ app()->getLocale() === 'id' ? 'Bahasa Indonesia (Aktif)' : 'English (Active)' }}</span>
+                                <span class="text-xs text-muted-foreground font-medium">{{ __('docs/page/settings/index.profile.language_active') }}</span>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
                                 <a href="{{ route('locale.switch', 'id') }}" class="p-3 rounded-xl border transition-all flex items-center gap-3 {{ app()->getLocale() === 'id' ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:bg-muted/40 text-muted-foreground hover:text-foreground' }}">

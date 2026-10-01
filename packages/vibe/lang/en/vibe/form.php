@@ -15,4 +15,18 @@ return [
     'password_required' => 'Please enter your password.',
     'password_incorrect' => 'The provided password was incorrect.',
     'network_error' => 'Network error. Could not reach server.',
+    'http_errors' => [
+        '401' => ['title' => '401 Unauthenticated', 'message' => 'Your login session has ended. Please log in again.'],
+        '403' => ['title' => '403 Forbidden', 'message' => 'You do not have permission to perform this action.'],
+        '404' => ['title' => '404 Endpoint Not Found', 'message' => 'The requested endpoint or data was not found on the server.'],
+        '405' => ['title' => '405 Method Not Allowed', 'message' => 'HTTP method is not supported for this endpoint. Check your form method or controller route.'],
+        '419' => ['title' => '419 Page Expired', 'message' => 'CSRF token expired or invalid. Please reload the page (refresh) and try again.'],
+        '422' => ['title' => null, 'message' => 'Validation Failed'],
+        '423' => ['title' => '423 Password Confirmation Required', 'message' => 'Password confirmation is required to proceed with this action.'],
+        '429' => ['title' => '429 Too Many Requests', 'message' => 'Too many requests. Please wait a moment and try again.'],
+        '500' => ['title' => '500 Internal Server Error', 'message' => 'An internal server error occurred. Please try again later.'],
+        'network' => ['title' => 'Network Error', 'message' => 'Unable to connect to the server. Please check your internet connection.'],
+        'generic' => ['title' => 'Error :status', 'message' => 'Request failed with status :status.'],
+        'and_more_errors' => '(and :count more errors)',
+    ],
 ];

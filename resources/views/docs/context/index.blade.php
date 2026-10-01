@@ -115,9 +115,7 @@
 
                 <vibe:preview data-toc-ignore :title="__('docs/context.blade_table.preview_title')" minHeight="240px">
                     <vibe:preview.code>
-@if (app()->getLocale() === 'id')
-@verbatim
-{{-- Instans context menu global tunggal di luar tabel --}}
+{{-- {{ __('docs/context.blade_table.title') }} --}}
 <vibe:context.menu id="table-row-menu" width="52">
     <vibe:context.label>
         <span x-text="$context.data?.name ?? 'User'"></span>
@@ -125,7 +123,7 @@
     <vibe:context.divider />
     <vibe:context.item @click="editUser($context.data.id)">
         <svg class="size-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-        Edit Pengguna
+        {{ __('docs/context.blade_table.edit') }}
     </vibe:context.item>
     <vibe:context.divider />
     <vibe:context.item.delete @click="deleteUser($context.data.id)" />
@@ -133,77 +131,31 @@
 
 <vibe:table>
     <vibe:table.header>
-        <vibe:table.column>ID</vibe:table.column>
-        <vibe:table.column>Nama Pengguna</vibe:table.column>
-        <vibe:table.column>Email</vibe:table.column>
-        <vibe:table.column>Peran</vibe:table.column>
+        <vibe:table.column>{{ __('docs/context.blade_table.col_id') }}</vibe:table.column>
+        <vibe:table.column>{{ __('docs/context.blade_table.col_name') }}</vibe:table.column>
+        <vibe:table.column>{{ __('docs/context.blade_table.col_email') }}</vibe:table.column>
+        <vibe:table.column>{{ __('docs/context.blade_table.col_role') }}</vibe:table.column>
     </vibe:table.header>
     <vibe:table.rows>
-        @foreach ($users as $user)
-            {{-- Setiap baris memancarkan event open-context dengan payload data baris --}}
+        @{{-- {{ __('docs/context.blade_table.preview_title') }} --}}
+        @@foreach ($users as $user)
             <vibe:table.row
                 class="cursor-context-menu select-none"
                 @contextmenu.prevent="$dispatch('open-context', {
                     menu: 'table-row-menu',
                     x: $event.clientX,
                     y: $event.clientY,
-                    data: {{ json_encode(['id' => $user->id, 'name' => $user->name]) }}
+                    data: @{{ json_encode(['id' => $user->id, 'name' => $user->name]) }}
                 })"
             >
-                <vibe:table.cell>{{ $user->id }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->name }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->email }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->role }}</vibe:table.cell>
+                <vibe:table.cell>@{{ $user->id }}</vibe:table.cell>
+                <vibe:table.cell>@{{ $user->name }}</vibe:table.cell>
+                <vibe:table.cell>@{{ $user->email }}</vibe:table.cell>
+                <vibe:table.cell>@{{ $user->role }}</vibe:table.cell>
             </vibe:table.row>
-        @endforeach
+        @@endforeach
     </vibe:table.rows>
 </vibe:table>
-@endverbatim
-@else
-@verbatim
-{{-- Single global context menu instance placed outside the table --}}
-<vibe:context.menu id="table-row-menu" width="52">
-    <vibe:context.label>
-        <span x-text="$context.data?.name ?? 'User'"></span>
-    </vibe:context.label>
-    <vibe:context.divider />
-    <vibe:context.item @click="editUser($context.data.id)">
-        <svg class="size-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-        Edit User
-    </vibe:context.item>
-    <vibe:context.divider />
-    <vibe:context.item.delete @click="deleteUser($context.data.id)" />
-</vibe:context.menu>
-
-<vibe:table>
-    <vibe:table.header>
-        <vibe:table.column>ID</vibe:table.column>
-        <vibe:table.column>User Name</vibe:table.column>
-        <vibe:table.column>Email</vibe:table.column>
-        <vibe:table.column>Role</vibe:table.column>
-    </vibe:table.header>
-    <vibe:table.rows>
-        @foreach ($users as $user)
-            {{-- Each row dispatches open-context event with row data payload --}}
-            <vibe:table.row
-                class="cursor-context-menu select-none"
-                @contextmenu.prevent="$dispatch('open-context', {
-                    menu: 'table-row-menu',
-                    x: $event.clientX,
-                    y: $event.clientY,
-                    data: {{ json_encode(['id' => $user->id, 'name' => $user->name]) }}
-                })"
-            >
-                <vibe:table.cell>{{ $user->id }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->name }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->email }}</vibe:table.cell>
-                <vibe:table.cell>{{ $user->role }}</vibe:table.cell>
-            </vibe:table.row>
-        @endforeach
-    </vibe:table.rows>
-</vibe:table>
-@endverbatim
-@endif
                     </vibe:preview.code>
                     <div class="w-full p-4 overflow-x-auto">
                         <vibe:table>
@@ -269,8 +221,6 @@
 
                 <vibe:preview data-toc-ignore :title="__('docs/context.datatable.preview_title')" minHeight="280px">
                     <vibe:preview.code language="php">
-@if (app()->getLocale() === 'id')
-@verbatim
 use Rappasoft\LaravelLivewireTables\Views\Column;
 use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
 
@@ -281,14 +231,14 @@ class UserTable extends VibeDataTableComponent
         parent::configure();
         $this->setPrimaryKey('id');
 
-        // 1. Aktifkan context menu baris otomatis
+        // {{ __('docs/context.datatable.step_1') }}
         $this->contextMenu = true;
 
-        // 2. (Opsional) Sesuaikan lebar dropdown menu (default: 48)
+        // {{ __('docs/context.datatable.step_2') }}
         $this->contextMenuWidth = '52';
     }
 
-    // 3. Payload data yang dikirim ke Alpine $context.data saat baris diklik kanan
+    // {{ __('docs/context.datatable.step_3') }}
     public function contextData($row): array
     {
         return [
@@ -297,7 +247,7 @@ class UserTable extends VibeDataTableComponent
         ];
     }
 
-    // 4. Struktur menu kontekstual baris
+    // {{ __('docs/context.datatable.step_4') }}
     public function contextMenu(): string
     {
         return <<<'HTML'
@@ -308,12 +258,12 @@ class UserTable extends VibeDataTableComponent
 
             <vibe:context.item @click="$wire.edit($context.data.id)">
                 <svg class="size-4 mr-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                Edit Data
+                {{ __('docs/context.datatable.edit_action') }}
             </vibe:context.item>
 
             <vibe:context.item :href="'https://github.com/teknovateid/vibeui'" target="_blank">
                 <svg class="size-4 mr-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Buka Pratinjau
+                {{ __('docs/context.datatable.preview_action') }}
             </vibe:context.item>
 
             <vibe:context.divider />
@@ -322,62 +272,6 @@ class UserTable extends VibeDataTableComponent
         HTML;
     }
 }
-@endverbatim
-@else
-@verbatim
-use Rappasoft\LaravelLivewireTables\Views\Column;
-use Teknovate\VibeUi\DataTable\VibeDataTableComponent;
-
-class UserTable extends VibeDataTableComponent
-{
-    public function configure(): void
-    {
-        parent::configure();
-        $this->setPrimaryKey('id');
-
-        // 1. Enable automatic row context menu
-        $this->contextMenu = true;
-
-        // 2. (Optional) Customize menu dropdown width (default: 48)
-        $this->contextMenuWidth = '52';
-    }
-
-    // 3. Payload sent to Alpine $context.data when right-clicking a row
-    public function contextData($row): array
-    {
-        return [
-            'id'   => $row->id,
-            'name' => $row->name,
-        ];
-    }
-
-    // 4. Custom context menu structure
-    public function contextMenu(): string
-    {
-        return <<<'HTML'
-            <vibe:context.label>
-                <span x-text="$context.data.name"></span>
-            </vibe:context.label>
-            <vibe:context.divider />
-
-            <vibe:context.item @click="$wire.edit($context.data.id)">
-                <svg class="size-4 mr-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                Edit Data
-            </vibe:context.item>
-
-            <vibe:context.item :href="'https://github.com/teknovateid/vibeui'" target="_blank">
-                <svg class="size-4 mr-2 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                Preview Link
-            </vibe:context.item>
-
-            <vibe:context.divider />
-
-            <vibe:context.item.delete wire:click="delete($context.data.id)" />
-        HTML;
-    }
-}
-@endverbatim
-@endif
                     </vibe:preview.code>
                     <div class="w-full p-4">
                         <livewire:demo-context-menu-table />

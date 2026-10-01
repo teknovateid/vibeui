@@ -340,7 +340,7 @@
                             </vibe:card.content>
 
                             <vibe:card.footer class="flex justify-end gap-2">
-                                <vibe:button variant="outline">Batal</vibe:button>
+                                <vibe:button variant="outline">{{ __('docs/form.card_form.cancel_btn') }}</vibe:button>
                                 <vibe:button variant="primary">{{ __('docs/form.card_form.save_changes') }}</vibe:button>
                             </vibe:card.footer>
                         </vibe:card>
@@ -363,7 +363,7 @@
                                 </vibe:card.content>
 
                                 <vibe:card.footer class="flex justify-end gap-2">
-                                    <vibe:button type="reset" variant="outline">Batal</vibe:button>
+                                    <vibe:button type="reset" variant="outline">{{ __('docs/form.card_form.cancel_btn') }}</vibe:button>
                                     <vibe:button type="submit" variant="primary">{{ __('docs/form.card_form.save_changes') }}</vibe:button>
                                 </vibe:card.footer>
                             </vibe:form>
@@ -389,12 +389,12 @@
                             </svg>
                         </span>
                         <div>
-                            <h3 class="text-sm font-semibold text-foreground">Dukungan Otomatis Window Events</h3>
-                            <p class="text-xs text-muted-foreground">Kompatibel dengan Livewire reset dan dialog modal dinamis.</p>
+                            <h3 class="text-sm font-semibold text-foreground">{{ __('docs/form.modal_sheet.card_title') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/form.modal_sheet.card_subtitle') }}</p>
                         </div>
                     </div>
                     <p class="text-xs text-muted-foreground leading-relaxed">
-                        Saat <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:form&gt;</code> disematkan di dalam <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:modal&gt;</code> atau <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:sheet&gt;</code>, script otomatis mendeteksi event browser <code class="font-mono text-foreground">open-modal</code> dan <code class="font-mono text-foreground">open-sheet</code> untuk mengembalikan draf isian pengguna meskipun komponen Livewire baru saja menjalankan inisialisasi ulang.
+                        {!! __('docs/form.modal_sheet.card_desc') !!}
                     </p>
                 </vibe:card>
             </section>
@@ -421,15 +421,17 @@
                         @php
                             $formProps = [
                                 ['id', 'string|null', 'null', __('docs/form.props_items.id')],
-                                ['ajax', 'bool', 'true', 'Aktifkan AJAX/fetch submission. Jika <code>false</code>, form melakukan submit browser standar (full page reload).'],
+                                ['ajax', 'bool', 'true', __('docs/form.props_items.ajax')],
                                 ['saveToStorage', 'bool', 'false', __('docs/form.props_items.saveToStorage')],
                                 ['storageType', 'string', "'session'", __('docs/form.props_items.storageType')],
                                 ['expireHours', 'int', '24', __('docs/form.props_items.expireHours')],
-                                ['status', 'bool|string', 'false', 'Notifikasi otomatis setelah submit. <code>true</code> atau <code>\'toast\'</code> = tampilkan <strong>Toast</strong> (default). <code>\'alert\'</code> = tampilkan pop-up <strong>Alert</strong>.'],
-                                ['delay', 'int|null', 'null', 'Jeda waktu (milidetik) sebelum aksi <code>onSuccess</code> atau <code>redirect-to</code> dieksekusi. Default auto <code>1000ms</code> jika status aktif dan ada aksi lanjutan.'],
-                                ['redirect-to / redirectTo', 'string|null', 'null', 'URL tujuan redirect setelah submit sukses. Juga mendukung otomatis membaca <code>data.redirect</code> dari JSON respons server.'],
-                                ['on-success / onSuccess', 'string|null', 'null', 'Ekspresi JS yang dieksekusi setelah <code>delay</code> saat sukses. Contoh: <code>$vibe.sheet(\'id\').close()</code> atau <code>$vibe.modal(\'id\').close()</code>.'],
-                                ['on-error / onError', 'string|null', 'null', 'Ekspresi JS yang dieksekusi saat request gagal/error.'],
+                                ['status', 'bool|string', 'false', __('docs/form.props_items.status')],
+                                ['delay', 'int|null', 'null', __('docs/form.props_items.delay')],
+                                ['redirect-to / redirectTo', 'string|null', 'null', __('docs/form.props_items.redirectTo')],
+                                ['on-success / onSuccess', 'string|null', 'null', __('docs/form.props_items.onSuccess')],
+                                ['on-error / onError', 'string|null', 'null', __('docs/form.props_items.onError')],
+                                ['confirm-password / confirmPassword', 'bool', 'true', __('docs/form.props_items.confirmPassword')],
+                                ['confirm-password-url / confirmPasswordUrl', 'string|null', 'null', __('docs/form.props_items.confirmPasswordUrl')],
                             ];
                         @endphp
                         @foreach ($formProps as [$prop, $type, $default, $desc])
@@ -498,18 +500,17 @@
 
 
             {{-- 9. Status & Notification --}}
+            {{-- 9. Status & Notification --}}
             <section id="notifikasi-status" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Notifikasi Error Otomatis (<code class="font-mono text-lg">:status="true"</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/form.notifications.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Aktifkan atribut <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">:status="true"</code> agar form otomatis menampilkan notifikasi <strong>error</strong> saat request gagal (validasi, CSRF expired, server error, dll). Secara default menggunakan <strong>Toast</strong>. Gunakan <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">status="alert"</code> untuk menampilkan pop-up Alert.
-                        Notifikasi saat <strong>sukses</strong> tidak ditampilkan secara otomatis — gunakan <code class="font-mono text-[11px] px-1 py-0.5 rounded bg-muted">onSuccess</code> untuk mengaturnya.
+                        {!! __('docs/form.notifications.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="status='toast' — Error Toast (default)">
+                <vibe:preview :title="__('docs/form.notifications.toast_preview')">
                     <vibe:preview.code>
-                        {{-- Coba submit dengan field kosong atau email tidak valid untuk melihat toast error --}}
                         <vibe:form class="space-y-4 max-w-md mx-auto" action="{{ route('docs.form.store') }}" method="POST" :status="true"
                             onSuccess="$vibe.toast.success('Data berhasil disimpan!')"
                         >
@@ -531,9 +532,8 @@
                     </div>
                 </vibe:preview>
 
-                <vibe:preview title="status='alert' — Error Alert Pop-up">
+                <vibe:preview :title="__('docs/form.notifications.alert_preview')">
                     <vibe:preview.code>
-                        {{-- Coba submit dengan field kosong untuk melihat alert error pop-up --}}
                         <vibe:form class="space-y-4 max-w-md mx-auto" action="{{ route('docs.form.store') }}" method="POST" status="alert"
                             onSuccess="$vibe.alert.success('Data berhasil disimpan!')"
                         >
@@ -560,28 +560,18 @@
                             <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m14.5 9.5-5 5m0-5 5 5"/></svg>
                         </span>
                         <div>
-                            <h3 class="text-sm font-semibold text-foreground">Error Parsing Otomatis</h3>
-                            <p class="text-xs text-muted-foreground">Saat request gagal, sistem secara otomatis mengurai respons server dan menampilkan pesan yang jelas.</p>
+                            <h3 class="text-sm font-semibold text-foreground">{{ __('docs/form.notifications.error_parsing_title') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/form.notifications.error_parsing_desc') }}</p>
                         </div>
                     </div>
                     <vibe:table>
                         <vibe:table.header>
-                            <vibe:table.column>HTTP Status</vibe:table.column>
-                            <vibe:table.column>Judul Notifikasi</vibe:table.column>
-                            <vibe:table.column>Pesan</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/form.notifications.columns.status') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/form.notifications.columns.title') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/form.notifications.columns.message') }}</vibe:table.column>
                         </vibe:table.header>
                         <vibe:table.rows>
-                            @foreach([
-                                ['422 Unprocessable Entity', 'Gagal Validasi', 'Menampilkan daftar error per-field dari Laravel validation (bullet points).'],
-                                ['405 Method Not Allowed', '405 Method Not Allowed', 'Metode HTTP tidak didukung. Periksa method form atau route.'],
-                                ['419 Page Expired', '419 Sesi Kedaluwarsa', 'Token CSRF kedaluwarsa. Silakan refresh halaman.'],
-                                ['401 Unauthorized', '401 Tidak Terautentikasi', 'Sesi login Anda telah berakhir.'],
-                                ['403 Forbidden', '403 Akses Ditolak', 'Anda tidak memiliki izin untuk aksi ini.'],
-                                ['404 Not Found', '404 Endpoint Tidak Ditemukan', 'Endpoint yang dituju tidak ditemukan di server.'],
-                                ['429 Too Many Requests', '429 Terlalu Banyak Permintaan', 'Terlalu banyak permintaan. Harap tunggu beberapa saat.'],
-                                ['500 Server Error', '500 Terjadi Kesalahan Server', 'Error dari server (data.message) atau pesan generik.'],
-                                ['Network Failure', 'Kesalahan Jaringan', 'Tidak dapat terhubung ke server. Periksa koneksi.'],
-                            ] as [$status, $title, $message])
+                            @foreach(__('docs/form.notifications.rows') as [$status, $title, $message])
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap text-xs">{{ $status }}</vibe:table.cell>
                                     <vibe:table.cell class="font-semibold text-foreground text-xs whitespace-nowrap">{{ $title }}</vibe:table.cell>
@@ -596,17 +586,16 @@
             {{-- 10. Post-Submit Actions --}}
             <section id="aksi-pasca-submit" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Aksi Pasca-Submit (<code class="font-mono text-lg">onSuccess</code>, <code class="font-mono text-lg">delay</code>, <code class="font-mono text-lg">redirect-to</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/form.post_submit.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Gunakan atribut <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> untuk menjalankan ekspresi JavaScript setelah submit sukses.
-                        <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> hanya menampilkan notifikasi <strong>error</strong> secara otomatis — notifikasi sukses, penutupan modal/sheet, dan redirect sepenuhnya diatur dari <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.
+                        {!! __('docs/form.post_submit.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="onSuccess: Toast + Tutup Sheet setelah submit">
+                <vibe:preview :title="__('docs/form.post_submit.preview_sheet')">
                     <vibe:preview.code>
                         <vibe:button variant="primary" size="sm" @click="$vibe.sheet('demo-form-sheet').open()">
-                            Buka Sheet Form
+                            {{ __('docs/form.post_submit.sheet_btn') }}
                         </vibe:button>
 
                         <vibe:sheet id="demo-form-sheet" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="400">
@@ -619,7 +608,7 @@
                                 @csrf
 
                                 <vibe:sheet.header>
-                                    <h3 class="font-semibold text-foreground">Form di dalam Sheet</h3>
+                                    <h3 class="font-semibold text-foreground">{{ __('docs/form.post_submit.sheet_title') }}</h3>
                                 </vibe:sheet.header>
 
                                 <vibe:sheet.content class="space-y-3">
@@ -628,25 +617,25 @@
                                 </vibe:sheet.content>
 
                                 <vibe:sheet.footer>
-                                    <vibe:button type="submit" variant="primary" class="w-full">Simpan</vibe:button>
+                                    <vibe:button type="submit" variant="primary" class="w-full">{{ __('docs/form.post_submit.sheet_save') }}</vibe:button>
                                 </vibe:sheet.footer>
                             </vibe:form>
                         </vibe:sheet>
                     </vibe:preview.code>
                     <div class="p-4 flex justify-center">
-                        <vibe:button variant="primary" size="sm" @click="$vibe.sheet('demo-form-sheet').open()">Buka Sheet Form</vibe:button>
+                        <vibe:button variant="primary" size="sm" @click="$vibe.sheet('demo-form-sheet').open()">{{ __('docs/form.post_submit.sheet_btn') }}</vibe:button>
                         <vibe:sheet id="demo-form-sheet" position="right" layout="fixed" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :defaultSize="400">
                             <vibe:form action="{{ route('docs.form.store') }}" method="POST" :status="true" onSuccess="$vibe.sheet('demo-form-sheet').close(); $vibe.toast.success('Data berhasil disimpan!')">
                                 @csrf
                                 <vibe:sheet.header>
-                                    <h3 class="font-semibold text-foreground">Form di dalam Sheet</h3>
+                                    <h3 class="font-semibold text-foreground">{{ __('docs/form.post_submit.sheet_title') }}</h3>
                                 </vibe:sheet.header>
                                 <vibe:sheet.content class="space-y-3">
                                     <vibe:input name="demo_sheet_name" label="Nama" placeholder="Enter your name" />
                                     <vibe:input type="email" name="demo_sheet_email" label="Email" placeholder="Enter your email" />
                                 </vibe:sheet.content>
                                 <vibe:sheet.footer>
-                                    <vibe:button type="submit" variant="primary" class="w-full">Simpan</vibe:button>
+                                    <vibe:button type="submit" variant="primary" class="w-full">{{ __('docs/form.post_submit.sheet_save') }}</vibe:button>
                                 </vibe:sheet.footer>
                             </vibe:form>
                         </vibe:sheet>
@@ -656,17 +645,12 @@
                 {{-- Reference Table --}}
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column>Atribut</vibe:table.column>
-                        <vibe:table.column>Contoh Nilai</vibe:table.column>
-                        <vibe:table.column>Keterangan</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.post_submit.columns.prop') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.post_submit.columns.example') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.post_submit.columns.desc') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
-                        @foreach([
-                            ['onSuccess / on-success', '$vibe.sheet(\'id\').close(); $vibe.toast.success(\'Berhasil!\')', 'Tutup sheet + tampilkan toast sukses setelah submit.'],
-                            ['onSuccess / on-success', '$vibe.modal(\'id\').close(); $vibe.toast.success(\'Berhasil!\')', 'Tutup modal + tampilkan toast sukses setelah submit.'],
-                            ['delay', '500', 'Jeda (ms) sebelum onSuccess dieksekusi. Default 0.'],
-                            ['redirect-to', '/users', 'URL tujuan setelah submit sukses (atau dari data.redirect respons server).'],
-                        ] as [$prop, $example, $desc])
+                        @foreach(__('docs/form.post_submit.rows') as [$prop, $example, $desc])
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-xs text-muted-foreground">{{ $example }}</vibe:table.cell>
@@ -680,15 +664,13 @@
             {{-- 11. Confirm Submit --}}
             <section id="konfirmasi-submit" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Konfirmasi Submit (<code class="font-mono text-lg">submit()</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/form.confirm_submit.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        Untuk meminta konfirmasi sebelum form dikirim, gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe.alert.confirm(message, callback, title?)</code>
-                        bersama method <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">submit()</code> yang tersedia secara built-in di dalam scope form.
-                        Gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">() => submit()</code> <strong>tanpa</strong> <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">this</code> — dalam Alpine v3, ekspresi <code>@click</code> dievaluasi dalam scope data komponen sehingga <code>submit</code> sudah tersedia langsung.
+                        {!! __('docs/form.confirm_submit.desc') !!}
                     </p>
                 </div>
 
-                <vibe:preview title="Konfirmasi via $vibe.alert.confirm + submit()">
+                <vibe:preview :title="__('docs/form.confirm_submit.preview_confirm')">
                     <vibe:preview.code>
                         <vibe:form
                             action="{{ route('docs.form.store') }}"
@@ -704,9 +686,9 @@
                             <vibe:button
                                 type="button"
                                 variant="primary"
-                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => submit())"
+                                @click="$vibe.alert.confirm('{{ __('docs/form.confirm_submit.confirm_message') }}', () => submit())"
                             >
-                                Simpan dengan Konfirmasi
+                                {{ __('docs/form.confirm_submit.btn_confirm') }}
                             </vibe:button>
                         </vibe:form>
                     </vibe:preview.code>
@@ -720,27 +702,27 @@
                             <vibe:button
                                 type="button"
                                 variant="primary"
-                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => submit())"
+                                @click="$vibe.alert.confirm('{{ __('docs/form.confirm_submit.confirm_message') }}', () => submit())"
                             >
-                                Simpan dengan Konfirmasi
+                                {{ __('docs/form.confirm_submit.btn_confirm') }}
                             </vibe:button>
                         </vibe:form>
                     </div>
                 </vibe:preview>
 
                 {{-- Full contoh dengan judul kustom --}}
-                <vibe:preview title="Konfirmasi dengan Judul Kustom">
+                <vibe:preview :title="__('docs/form.confirm_submit.preview_custom')">
                     <vibe:preview.code>
                         <vibe:button
                             type="button"
                             variant="destructive"
                             @click="$vibe.alert.confirm(
-                                'Tindakan ini tidak dapat dibatalkan. Yakin ingin menghapus?',
+                                '{{ __('docs/form.confirm_submit.delete_confirm_message') }}',
                                 () => submit(),
-                                'Konfirmasi Penghapusan'
+                                '{{ __('docs/form.confirm_submit.delete_confirm_title') }}'
                             )"
                         >
-                            Hapus Data
+                            {{ __('docs/form.confirm_submit.btn_delete') }}
                         </vibe:button>
                     </vibe:preview.code>
                 </vibe:preview>
@@ -748,16 +730,12 @@
                 {{-- API Reference --}}
                 <vibe:table>
                     <vibe:table.header>
-                        <vibe:table.column>API</vibe:table.column>
-                        <vibe:table.column>Signature</vibe:table.column>
-                        <vibe:table.column>Keterangan</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.confirm_submit.columns.api') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.confirm_submit.columns.signature') }}</vibe:table.column>
+                        <vibe:table.column>{{ __('docs/form.confirm_submit.columns.desc') }}</vibe:table.column>
                     </vibe:table.header>
                     <vibe:table.rows>
-                        @foreach([
-                            ['submit()', 'submit()', 'Method built-in form. Panggil dari @click tanpa this: () => submit(). Mengirim form via AJAX tanpa event browser.'],
-                            ['$vibe.alert.confirm()', 'confirm(message, onConfirm, title?)', 'Memunculkan dialog Alert konfirmasi. Jika user klik Konfirmasi, onConfirm callback dieksekusi.'],
-                            ['$vibe.alert.confirm()', 'confirm({ message, title, confirmButton, ... })', 'Object form — mendukung penuh konfigurasi Alert kustom.'],
-                        ] as [$api, $signature, $desc])
+                        @foreach(__('docs/form.confirm_submit.rows') as [$api, $signature, $desc])
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap text-xs">{{ $api }}</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-xs text-muted-foreground">{{ $signature }}</vibe:table.cell>
@@ -766,6 +744,75 @@
                         @endforeach
                     </vibe:table.rows>
                 </vibe:table>
+            </section>
+
+            {{-- 12. In-Place Password Confirmation (HTTP 423 / Sudo Mode) --}}
+            <section id="konfirmasi-kata-sandi-in-place" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/form.password_confirm.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/form.password_confirm.desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/form.password_confirm.preview_title')">
+                    <vibe:preview.code>
+                        {{-- Secara bawaan, confirm-password="true" aktif otomatis pada form AJAX --}}
+                        <vibe:form
+                            action="/admin/security-settings"
+                            method="POST"
+                            :confirm-password="true"
+                            :status="true"
+                            onSuccess="$vibe.toast.success('Pengaturan keamanan berhasil diperbarui!')"
+                        >
+                            @csrf
+                            <vibe:input name="apiKey" label="API Secret Key" value="sk_live_98374982348" />
+
+                            <vibe:button type="submit" variant="primary">
+                                {{ __('docs/form.password_confirm.btn_submit') }}
+                            </vibe:button>
+                        </vibe:form>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md mx-auto p-4 sm:p-6">
+                        <vibe:form
+                            class="space-y-4"
+                            action="{{ route('docs.form.store') }}"
+                            method="POST"
+                            :confirm-password="true"
+                            :status="true"
+                            onSuccess="$vibe.toast.success('Pengaturan keamanan berhasil diperbarui!')"
+                        >
+                            @csrf
+                            <vibe:input name="demo_api_key" label="API Secret Key" value="sk_live_98374982348" />
+
+                            <vibe:button type="submit" variant="primary">
+                                {{ __('docs/form.password_confirm.btn_submit') }}
+                            </vibe:button>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+
+                {{-- Keunggulan Fitur --}}
+                <vibe:card class="p-5 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="flex size-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                            <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16Z" />
+                                <circle cx="12" cy="16" r="2" />
+                                <path d="M6 10V8a6 6 0 1 1 12 0v2" />
+                            </svg>
+                        </span>
+                        <div>
+                            <h3 class="text-sm font-semibold text-foreground">{{ __('docs/form.password_confirm.features_title') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ __('docs/form.password_confirm.card_desc') }}</p>
+                        </div>
+                    </div>
+                    <ul class="text-xs text-muted-foreground space-y-2 list-disc list-inside">
+                        @foreach(__('docs/form.password_confirm.features') as $feature)
+                            <li><strong class="text-foreground">{{ $feature['title'] }}:</strong> {{ $feature['desc'] }}</li>
+                        @endforeach
+                    </ul>
+                </vibe:card>
             </section>
 
         </div>

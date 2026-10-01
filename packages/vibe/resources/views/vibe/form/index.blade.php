@@ -19,7 +19,7 @@
 @php
     $confirmPasswordPostUrl = $confirmPasswordUrl ?: (Route::has('password.confirm.post') ? route('password.confirm.post') : '/confirm-password');
 
-    $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
+    $resolvedLocale = $locale ?? app()->getLocale();
     $rawTranslations = trans('vibe/form', [], $resolvedLocale);
     if (!is_array($rawTranslations)) {
         $rawTranslations = trans('vibe::vibe/form', [], $resolvedLocale);

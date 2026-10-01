@@ -46,6 +46,7 @@ return [
         'bio_placeholder' => 'Write a short description about yourself or your role...',
         'timezone' => 'Timezone',
         'language' => 'System Language',
+        'language_active' => 'English (Active)',
         'save_btn' => 'Save Changes',
     ],
     'appearance' => [

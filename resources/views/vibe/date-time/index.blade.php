@@ -65,7 +65,7 @@
     $effectiveMaxDate = $normalizeDate($maxDate ?? $max);
     $resolvedValue = $normalizeDate($value);
     $resolvedMode = $mode ?? $type;
-    $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
+    $resolvedLocale = $locale ?? app()->getLocale();
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
     $dtId = $id ?? ($name ? 'dt-' . str_replace(['[', ']', '.'], ['-', '', '-'], $name) : 'vibe-dt-' . Str::random(8));
 

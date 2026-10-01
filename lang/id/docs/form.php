@@ -83,12 +83,16 @@ return [
         'bio' => 'Bio Singkat',
         'bio_placeholder' => 'Ceritakan sedikit tentang keahlian atau pekerjaan Anda...',
         'save_changes' => 'Simpan Perubahan',
+        'cancel_btn' => 'Batal',
     ],
 
     // Section 6: Modal & Sheet Awareness
     'modal_sheet' => [
         'title' => 'Integrasi dengan Modal & Sheet',
         'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:form&gt;</code> secara otomatis mendengarkan event <code class="font-mono text-xs text-foreground">open-modal</code> dan <code class="font-mono text-xs text-foreground">open-sheet</code>, sehingga saat formulir dibuka di dalam dialog atau drawer geser, nilai draf otomatis terisi tanpa terhapus oleh inisialisasi Livewire/Alpine.',
+        'card_title' => 'Dukungan Otomatis Window Events',
+        'card_subtitle' => 'Kompatibel dengan Livewire reset dan dialog modal dinamis.',
+        'card_desc' => 'Saat <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:form&gt;</code> disematkan di dalam <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:modal&gt;</code> atau <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:sheet&gt;</code>, script otomatis mendeteksi event browser <code class="font-mono text-foreground">open-modal</code> dan <code class="font-mono text-foreground">open-sheet</code> untuk mengembalikan draf isian pengguna meskipun komponen Livewire baru saja menjalankan inisialisasi ulang.',
     ],
 
     // Section 7: Props Reference
@@ -234,9 +238,18 @@ return [
         'card_desc' => 'Formulir ini dilindungi oleh middleware keamanan. Jika sesi kedaluwarsa, modal konfirmasi kata sandi akan otomatis muncul di tempat.',
         'features_title' => 'Keunggulan Konfirmasi In-Place',
         'features' => [
-            'no_reload' => 'Tidak Pernah Kehilangan Input: Pengguna tidak dialihkan ke halaman lain sehingga semua data input tetap aman.',
-            'auto_replay' => 'Otomatis Melanjutkan Submit: Setelah verifikasi berhasil, form langsung mengirimkan ulang data POST/PUT tanpa perlu klik tombol submit lagi.',
-            'zero_config' => 'Nol Konfigurasi: Fitur ini aktif secara bawaan pada form AJAX dan dapat dimatikan dengan :confirm-password="false".',
+            [
+                'title' => 'Tidak Pernah Kehilangan Input',
+                'desc' => 'Pengguna tidak dialihkan ke halaman lain sehingga semua data input tetap aman.',
+            ],
+            [
+                'title' => 'Otomatis Melanjutkan Submit',
+                'desc' => 'Setelah verifikasi berhasil, form langsung mengirimkan ulang data POST/PUT tanpa perlu klik tombol submit lagi.',
+            ],
+            [
+                'title' => 'Nol Konfigurasi',
+                'desc' => 'Fitur ini aktif secara bawaan pada form AJAX dan dapat dimatikan dengan :confirm-password="false".',
+            ],
         ],
     ],
 ];

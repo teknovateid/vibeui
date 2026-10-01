@@ -83,12 +83,16 @@ return [
         'bio' => 'Short Bio',
         'bio_placeholder' => 'Tell us briefly about your role and expertise...',
         'save_changes' => 'Save Changes',
+        'cancel_btn' => 'Cancel',
     ],
 
     // Section 6: Modal & Sheet Awareness
     'modal_sheet' => [
         'title' => 'Modal & Sheet Integration',
         'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:form&gt;</code> component automatically listens to <code class="font-mono text-xs text-foreground">open-modal</code> and <code class="font-mono text-xs text-foreground">open-sheet</code> events, ensuring drafts are restored whenever a dialog or slide-out drawer is opened without interference from Livewire/Alpine resets.',
+        'card_title' => 'Automatic Window Events Support',
+        'card_subtitle' => 'Compatible with Livewire resets and dynamic modal dialogs.',
+        'card_desc' => 'When <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:form&gt;</code> is nested inside <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:modal&gt;</code> or <code class="px-1 py-0.5 rounded bg-muted text-[11px] font-mono text-foreground">&lt;vibe:sheet&gt;</code>, the script automatically listens for browser <code class="font-mono text-foreground">open-modal</code> and <code class="font-mono text-foreground">open-sheet</code> events to restore draft inputs even after Livewire component re-initializations.',
     ],
 
     // Section 7: Props Reference
@@ -234,9 +238,18 @@ return [
         'card_desc' => 'This form is protected by security middleware. If the session expires, a password confirmation modal appears in-place.',
         'features_title' => 'Benefits of In-Place Confirmation',
         'features' => [
-            'no_reload' => 'Zero Input Loss: Users are never redirected to another page, preserving all form inputs and file uploads.',
-            'auto_replay' => 'Seamless Auto-Replay: Once confirmed, the form immediately retries the POST/PUT without needing to click submit again.',
-            'zero_config' => 'Zero Configuration: Enabled out of the box on all AJAX forms, and can be toggled off via :confirm-password="false".',
+            [
+                'title' => 'Zero Input Loss',
+                'desc' => 'Users are never redirected to another page, preserving all form inputs and file uploads.',
+            ],
+            [
+                'title' => 'Seamless Auto-Replay',
+                'desc' => 'Once confirmed, the form immediately retries the POST/PUT without needing to click submit again.',
+            ],
+            [
+                'title' => 'Zero Configuration',
+                'desc' => 'Enabled out of the box on all AJAX forms, and can be toggled off via :confirm-password="false".',
+            ],
         ],
     ],
 ];

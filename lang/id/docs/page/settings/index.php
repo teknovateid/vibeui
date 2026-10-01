@@ -46,6 +46,7 @@ return [
         'bio_placeholder' => 'Tuliskan deskripsi singkat mengenai diri atau peran Anda...',
         'timezone' => 'Zona Waktu',
         'language' => 'Bahasa Sistem',
+        'language_active' => 'Bahasa Indonesia (Aktif)',
         'save_btn' => 'Simpan Perubahan',
     ],
     'appearance' => [
