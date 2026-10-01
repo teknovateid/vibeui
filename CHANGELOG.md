@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.20] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: improve form handling with CSRF support, method spoofing, and sheet layout styling (6dc62df)
+
+
 ## [0.2.19] - 2026-09-30
 
 ### 🚀 Features
