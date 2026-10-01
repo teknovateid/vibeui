@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.32] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: clear single-page confirmation and route session keys in RequirePasswordConfirmation middleware (c053db9)
+
+
 ## [0.2.31] - 2026-10-01
 
 ### 🚀 Features
