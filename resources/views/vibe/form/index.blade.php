@@ -13,10 +13,18 @@
     'onError' => null,        // JS expression executed on error
     'confirmPassword' => true, // Auto show confirm password modal on HTTP 423
     'confirmPasswordUrl' => null,
+    'locale' => null,
 ])
 
 @php
     $confirmPasswordPostUrl = $confirmPasswordUrl ?: (Route::has('password.confirm.post') ? route('password.confirm.post') : '/confirm-password');
+
+    $resolvedLocale = $locale ?? (app()->getLocale() === 'en' ? 'en' : 'id');
+    $rawTranslations = trans('vibe/form', [], $resolvedLocale);
+    if (!is_array($rawTranslations)) {
+        $rawTranslations = trans('vibe::vibe/form', [], $resolvedLocale);
+    }
+    $i18n = is_array($rawTranslations) ? $rawTranslations : [];
 @endphp
 
 @pushOnce('head', 'vibe-form')
@@ -38,7 +46,8 @@
         onSuccess: {{ $onSuccess ? "'" . addslashes($onSuccess) . "'" : 'null' }},
         onError: {{ $onError ? "'" . addslashes($onError) . "'" : 'null' }},
         confirmPassword: {{ $confirmPassword ? 'true' : 'false' }},
-        confirmPasswordUrl: '{{ $confirmPasswordPostUrl }}'
+        confirmPasswordUrl: '{{ $confirmPasswordPostUrl }}',
+        i18n: {{ \Illuminate\Support\Js::from($i18n) }}
     }) : {
         loading: false,
         submitted: false,
@@ -117,8 +126,8 @@
                                 </svg>
                             </div>
                             <div>
-                                <h4 class="text-sm font-bold text-foreground">{{ __('auth.titles.confirm_password', [], null) ?: 'Konfirmasi Kata Sandi' }}</h4>
-                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('auth.titles.confirm_password_description', [], null) ?: 'Ini adalah area aman aplikasi. Harap konfirmasi kata sandi Anda sebelum melanjutkan.' }}</p>
+                                <h4 class="text-sm font-bold text-foreground">{{ $i18n['confirm_password'] ?? 'Konfirmasi Kata Sandi' }}</h4>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ $i18n['confirm_password_description'] ?? 'Ini adalah area aman aplikasi. Harap konfirmasi kata sandi Anda sebelum melanjutkan.' }}</p>
                             </div>
                         </div>
 
@@ -128,14 +137,14 @@
                             </template>
 
                             <div class="space-y-1">
-                                <label class="text-xs font-semibold text-foreground">{{ __('auth.fields.password', [], null) ?: 'Kata Sandi' }}</label>
+                                <label class="text-xs font-semibold text-foreground">{{ $i18n['password'] ?? 'Kata Sandi' }}</label>
                                 <div class="relative">
                                     <input 
                                         :type="showConfirmPasswordText ? 'text' : 'password'" 
                                         x-model="confirmPasswordInput" 
                                         x-ref="confirmPasswordInputRef"
                                         @keydown.enter.prevent.stop="submitConfirmPassword()"
-                                        placeholder="{{ __('auth.fields.password_placeholder', [], null) ?: '••••••••' }}" 
+                                        placeholder="{{ $i18n['password_placeholder'] ?? '••••••••' }}" 
                                         class="w-full px-3 py-2 pr-9 text-xs rounded-lg border border-input bg-background text-foreground shadow-2xs focus:ring-1 focus:ring-primary focus:outline-none" 
                                     />
                                     <button type="button" @click="showConfirmPasswordText = !showConfirmPasswordText" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer" tabindex="-1">
@@ -147,11 +156,11 @@
 
                             <div class="flex items-center justify-end gap-2 pt-2">
                                 <button type="button" @click="closeConfirmPasswordModal()" class="px-3 py-1.5 text-xs font-medium rounded-lg border border-border hover:bg-muted cursor-pointer transition-colors">
-                                    Batal
+                                    {{ $i18n['cancel'] ?? 'Batal' }}
                                 </button>
                                 <button type="button" @click="submitConfirmPassword()" :disabled="confirmPasswordLoading" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer transition-colors inline-flex items-center gap-1.5 disabled:opacity-50">
                                     <svg x-show="confirmPasswordLoading" class="size-3 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                    <span x-text="confirmPasswordLoading ? '{{ __('auth.actions.verifying', [], null) ?: 'Memverifikasi...' }}' : '{{ __('auth.actions.confirm', [], null) ?: 'Konfirmasi & Lanjutkan' }}'"></span>
+                                    <span x-text="confirmPasswordLoading ? '{{ addslashes($i18n['verifying'] ?? 'Memverifikasi...') }}' : '{{ addslashes($i18n['confirm_and_continue'] ?? 'Konfirmasi & Lanjutkan') }}'"></span>
                                 </button>
                             </div>
                         </div>
