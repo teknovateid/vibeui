@@ -9,7 +9,7 @@
 
 <x-layouts.base>
     <div class="flex h-screen overflow-hidden relative">
-        <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 z-60 md:z-auto shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" :persist="true">
+        <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 z-60 md:z-auto shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" defaultSize="260" mobileSize="280" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
                 <div class="hidden minified:flex items-center justify-center size-9 rounded-lg bg-muted text-foreground font-bold text-xl shrink-0">
