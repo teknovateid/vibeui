@@ -2,6 +2,22 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.24] - 2026-10-01
+
+### 🚀 Features
+- feat: add internationalization support for form error messages and password confirmation (5683c43)
+- feat: implement password confirmation modal and HTTP 423 response handling for form component (b1523c8)
+- feat: add form submission on enter key and refine validation error and toast handling (8e9ba03)
+- feat: add dismissibleButton prop to sheet component and update close button attributes (943563a)
+- feat: add dismissibleButton prop to automatically render close buttons in sheet components (aea1fa1)
+
+### 🐛 Bug Fixes
+- fix: allow cross-page navigation within password confirmation timeout window (2250ef7)
+
+### ⚡ Performance & Refactoring
+- refactor: streamline HTTP error parsing with dictionary lookup and dynamic locale resolution (db09f46)
+
+
 ## [0.2.23] - 2026-10-01
 
 ### 🚀 Features
