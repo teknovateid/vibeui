@@ -15,7 +15,7 @@
     @if ($this->showBulkActionsDropdownAlpine() && $this->shouldAlwaysHideBulkActionsDropdownOption != true)
         <div 
             x-cloak 
-            x-show="!currentlyReorderingStatus && (selectedItems.length > 0 || hideBulkActionsWhenEmpty == false)" 
+            x-show="!currentlyReorderingStatus && ((selectedItems?.length ?? 0) > 0 || hideBulkActionsWhenEmpty == false)" 
             class="flex items-center justify-end w-full"
         >
             <x-livewire-tables::tools.toolbar.items.bulk-actions />
