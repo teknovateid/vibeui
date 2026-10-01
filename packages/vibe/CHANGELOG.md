@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.33] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: prevent duplicate parentheses in wire:click expressions for button edit component (d6b3a8b)
+
+
 ## [0.2.32] - 2026-10-01
 
 ### 🐛 Bug Fixes
