@@ -4,6 +4,11 @@ export function vibeForm(config = {}) {
     let storageType = 'session';
     let isAjax = true;
     let saveToStorage = false;
+    let statusMode = false;   // false | true | 'toast' | 'alert'
+    let delay = null;         // ms
+    let redirectTo = null;    // URL string or null
+    let onSuccess = null;     // JS expression string or null
+    let onError = null;       // JS expression string or null
 
     if (typeof config === 'string') {
         formId = config;
@@ -17,6 +22,154 @@ export function vibeForm(config = {}) {
         storageType = config.storageType || 'session';
         isAjax = config.ajax !== undefined ? Boolean(config.ajax) : true;
         saveToStorage = Boolean(config.saveToStorage);
+        statusMode = config.status !== undefined ? config.status : false;
+        delay = config.delay !== undefined ? config.delay : null;
+        redirectTo = config.redirectTo || null;
+        onSuccess = config.onSuccess || null;
+        onError = config.onError || null;
+    }
+
+    // ==========================================
+    // HELPER: Dispatch notification (toast or alert)
+    // ==========================================
+    function notify(type, title, message) {
+        if (!statusMode) return;
+
+        if (statusMode === 'alert') {
+            // Use vibe:alert pop-up
+            window.dispatchEvent(new CustomEvent('alert', {
+                detail: { type, title, message }
+            }));
+        } else {
+            // Default: Toast notification
+            if (window.$vibe && window.$vibe.toast) {
+                if (typeof window.$vibe.toast[type] === 'function') {
+                    window.$vibe.toast[type](message, title);
+                } else {
+                    window.$vibe.toast(message, type, { title });
+                }
+            } else {
+                window.dispatchEvent(new CustomEvent('toast', {
+                    detail: { type, title, message }
+                }));
+            }
+        }
+    }
+
+    // ==========================================
+    // HELPER: Parse HTTP error response into title + message
+    // ==========================================
+    function parseErrorMessage(status, data) {
+        // 422 - Laravel Validation Error
+        if (status === 422) {
+            let title = (data && data.message) ? data.message : 'Gagal Validasi';
+            let message = '';
+            if (data && data.errors && typeof data.errors === 'object') {
+                const errorLines = [];
+                Object.values(data.errors).forEach(fieldErrors => {
+                    if (Array.isArray(fieldErrors)) {
+                        fieldErrors.forEach(e => errorLines.push('• ' + e));
+                    } else if (typeof fieldErrors === 'string') {
+                        errorLines.push('• ' + fieldErrors);
+                    }
+                });
+                message = errorLines.join('\n');
+            } else if (data && data.message) {
+                message = data.message;
+            }
+            return { title, message };
+        }
+
+        // 405 - Method Not Allowed
+        if (status === 405) {
+            return {
+                title: '405 Method Not Allowed',
+                message: 'Metode HTTP tidak didukung untuk endpoint ini. Periksa method form atau route controller Anda.'
+            };
+        }
+
+        // 419 - Page Expired / CSRF Token Mismatch
+        if (status === 419) {
+            return {
+                title: '419 Sesi Kedaluwarsa',
+                message: 'Token CSRF kedaluwarsa atau tidak valid. Silakan muat ulang halaman (refresh) dan coba lagi.'
+            };
+        }
+
+        // 401 - Unauthorized
+        if (status === 401) {
+            return {
+                title: '401 Tidak Terautentikasi',
+                message: 'Sesi login Anda telah berakhir. Silakan login kembali.'
+            };
+        }
+
+        // 403 - Forbidden
+        if (status === 403) {
+            return {
+                title: '403 Akses Ditolak',
+                message: (data && data.message) ? data.message : 'Anda tidak memiliki izin untuk melakukan aksi ini.'
+            };
+        }
+
+        // 404 - Not Found
+        if (status === 404) {
+            return {
+                title: '404 Endpoint Tidak Ditemukan',
+                message: (data && data.message) ? data.message : 'Endpoint atau data yang dituju tidak ditemukan di server.'
+            };
+        }
+
+        // 429 - Too Many Requests
+        if (status === 429) {
+            return {
+                title: '429 Terlalu Banyak Permintaan',
+                message: (data && data.message) ? data.message : 'Terlalu banyak permintaan dalam waktu singkat. Harap tunggu beberapa saat.'
+            };
+        }
+
+        // 500 - Internal Server Error
+        if (status === 500) {
+            return {
+                title: '500 Terjadi Kesalahan Server',
+                message: (data && data.message) ? data.message : 'Terjadi kesalahan internal pada server. Silakan coba beberapa saat lagi.'
+            };
+        }
+
+        // Generic HTTP Error
+        if (status) {
+            return {
+                title: `Error ${status}`,
+                message: (data && data.message) ? data.message : `Permintaan gagal dengan status ${status}.`
+            };
+        }
+
+        // Network Failure (no status)
+        return {
+            title: 'Kesalahan Jaringan',
+            message: 'Tidak dapat terhubung ke server. Periksa koneksi internet Anda.'
+        };
+    }
+
+    // ==========================================
+    // HELPER: Execute onSuccess / onError callback string
+    // ==========================================
+    function executeCallback(code, data, response) {
+        if (!code) return;
+        try {
+            if (typeof code === 'function') {
+                code(data, response);
+                return;
+            }
+            if (typeof code === 'string') {
+                // Make $vibe available in scope
+                const $vibe = window.$vibe;
+                // eslint-disable-next-line no-new-func
+                (new Function('$vibe', 'data', 'response', code))($vibe, data, response);
+            }
+        } catch (e) {
+            console.error('[vibeForm] onSuccess/onError callback error:', e);
+        }
     }
 
     return {
@@ -51,6 +204,14 @@ export function vibeForm(config = {}) {
                     });
                 }
             }
+        },
+
+        // ==========================================
+        // PUBLIC: submit() — can be called from buttons inside the form
+        // e.g. @click="$vibe.alert.confirm('Yakin?', () => this.submit())"
+        // ==========================================
+        submit() {
+            return this.handleSubmit(null);
         },
 
         async handleSubmit(event) {
@@ -166,12 +327,44 @@ export function vibeForm(config = {}) {
                 if (saveToStorage) {
                     this.clearStorage();
                 }
-                
+
                 // Dispatch success events with payload
                 const successDetail = { form, id: formId, data, response: res };
                 window.dispatchEvent(new CustomEvent('vibe-form-success', { detail: successDetail }));
                 window.dispatchEvent(new CustomEvent('vibe-form-submitted', { detail: successDetail }));
                 form.dispatchEvent(new CustomEvent('vibe-success', { detail: successDetail }));
+
+                // ------ POST-SUBMIT ACTIONS (onSuccess, redirectTo, delay) ------
+                // NOTE: status only shows ERROR notifications. Success toast/close/redirect
+                // is handled via onSuccess callback by the developer.
+                const hasAction = onSuccess || redirectTo || (data && (data.redirect || data.redirect_to));
+                const effectiveDelay = delay !== null ? parseInt(delay) : 0;
+
+                if (hasAction || onSuccess) {
+                    const doActions = () => {
+                        // Execute onSuccess callback
+                        if (onSuccess) {
+                            executeCallback(onSuccess, data, res);
+                        }
+
+                        // Redirect: prop > server json
+                        const finalRedirect = redirectTo || (data && (data.redirect || data.redirect_to)) || null;
+                        if (finalRedirect) {
+                            // Use Livewire.navigate if available for SPA-style nav
+                            if (window.Livewire && typeof window.Livewire.navigate === 'function') {
+                                window.Livewire.navigate(finalRedirect);
+                            } else {
+                                window.location.href = finalRedirect;
+                            }
+                        }
+                    };
+
+                    if (effectiveDelay > 0) {
+                        setTimeout(doActions, effectiveDelay);
+                    } else {
+                        doActions();
+                    }
+                }
 
             } catch (err) {
                 console.error('vibeForm: error caught!', err);
@@ -181,6 +374,18 @@ export function vibeForm(config = {}) {
                 const errorDetail = { form, id: formId, error: this.error, response: err.response };
                 window.dispatchEvent(new CustomEvent('vibe-form-error', { detail: errorDetail }));
                 form.dispatchEvent(new CustomEvent('vibe-error', { detail: errorDetail }));
+
+                // ------ ERROR NOTIFICATION ------
+                if (statusMode) {
+                    const httpStatus = err.response ? err.response.status : null;
+                    const { title, message } = parseErrorMessage(httpStatus, err.data);
+                    notify('error', title, message);
+                }
+
+                // Execute onError callback
+                if (onError) {
+                    executeCallback(onError, err.data, err.response);
+                }
             }
         },
 

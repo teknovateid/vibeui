@@ -6,6 +6,11 @@
     'saveToStorage' => false,
     'storageType' => 'session', // local, session
     'expireHours' => 24,
+    'status' => 'toast',        // false | true | 'toast' | 'alert'
+    'delay' => null,          // milliseconds (int|string), null = auto (1000ms if status active + has onSuccess/redirectTo)
+    'redirectTo' => null,     // URL to redirect after successful submit
+    'onSuccess' => null,      // JS expression executed after delay on success, e.g. "$vibe.sheet('id').close()"
+    'onError' => null,        // JS expression executed on error
 ])
 
 @pushOnce('head', 'vibe-form')
@@ -20,7 +25,12 @@
         ajax: {{ $ajax ? 'true' : 'false' }},
         saveToStorage: {{ ($saveToStorage && $id) ? 'true' : 'false' }},
         storageType: '{{ $storageType }}',
-        expireHours: {{ $expireHours }}
+        expireHours: {{ $expireHours }},
+        status: {{ $status ? (is_string($status) ? "'" . $status . "'" : 'true') : 'false' }},
+        delay: {{ $delay !== null ? (int)$delay : 'null' }},
+        redirectTo: {{ $redirectTo ? "'" . $redirectTo . "'" : 'null' }},
+        onSuccess: {{ $onSuccess ? "'" . addslashes($onSuccess) . "'" : 'null' }},
+        onError: {{ $onError ? "'" . addslashes($onError) . "'" : 'null' }}
     }) : {
         loading: false,
         submitted: false,
@@ -47,6 +57,7 @@
             }, 25);
             setTimeout(function() { clearInterval(timer); }, 3000);
         },
+        submit() {},
         handleSubmit(e) {
             if ({{ $ajax ? 'true' : 'false' }}) {
                 e.preventDefault();

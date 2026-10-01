@@ -275,7 +275,22 @@ const vibeManager = {
         error: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'error', ...opts }),
         warning: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'warning', ...opts }),
         info: (msg, title, opts) => vibeManager.alert({ message: msg, title, type: 'info', ...opts }),
-        confirm: (opts) => vibeManager.alert(typeof opts === 'string' ? { message: opts, type: 'confirm' } : { type: 'confirm', ...opts }),
+        confirm: (opts, onConfirm, title) => {
+            // Shorthand: $vibe.alert.confirm('message', () => submit(), 'Optional Title')
+            if (typeof opts === 'string') {
+                return vibeManager.alert({
+                    type: 'confirm',
+                    title: title || 'Konfirmasi',
+                    message: opts,
+                    confirmButton: {
+                        text: 'Konfirmasi',
+                        action: onConfirm
+                    }
+                });
+            }
+            // Object form: $vibe.alert.confirm({ message, title, confirmButton, ... })
+            return vibeManager.alert({ type: 'confirm', ...opts });
+        },
         close: (id) => window.dispatchEvent(new CustomEvent('close-alert', { detail: id }))
     }),
     alerts: {
