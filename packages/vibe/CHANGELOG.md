@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.26] - 2026-10-01
+
+### 🚀 Features
+- feat: add demo user auto-login middleware and enhance session expiration handling for form confirmations (15ecb1f)
+- feat: add passkey verification support for password confirmation flow (ff0be6d)
+
+
 ## [0.2.25] - 2026-10-01
 
 ### ⚡ Performance & Refactoring
