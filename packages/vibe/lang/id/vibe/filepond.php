@@ -32,4 +32,5 @@ return [
     'protect_navigation_message' => 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?',
     'protect_stay_button' => 'Tetap di Sini',
     'protect_leave_button' => 'Tinggalkan Halaman',
+    'presigned_max_size' => 'Ukuran berkas tidak boleh lebih dari 50MB.',
 ];

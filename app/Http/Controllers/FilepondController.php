@@ -129,9 +129,7 @@ class FilepondController extends Controller
             'type' => ['nullable', 'string'],
             'size' => ['nullable', 'integer', 'max:' . $maxBytes],
         ], [
-            'size.max' => app()->getLocale() === 'id'
-                ? 'Ukuran berkas tidak boleh lebih dari 50MB.'
-                : 'The file size must not be greater than 50MB.',
+            'size.max' => __('vibe/filepond.presigned_max_size'),
         ]);
 
         $rawFilename = $request->filename ?? Str::random(10);

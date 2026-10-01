@@ -32,4 +32,5 @@ return [
     'protect_navigation_message' => 'Files are still uploading. If you leave this page now, the upload will be cancelled. Are you sure you want to leave?',
     'protect_stay_button' => 'Stay on Page',
     'protect_leave_button' => 'Leave Page',
+    'presigned_max_size' => 'The file size must not be greater than 50MB.',
 ];

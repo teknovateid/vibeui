@@ -42,6 +42,8 @@ return [
     'no_results' => [
         'title' => 'Tidak ada hasil ditemukan',
         'desc' => 'Tidak ada kecocokan untuk kata kunci ":query". Coba kata kunci lain atau pilih tab filter di atas.',
+        'desc_prefix' => 'Tidak ada kecocokan untuk kata kunci "',
+        'desc_suffix' => '". Coba kata kunci lain atau pilih tab filter di atas.',
     ],
 
     'footer' => [
@@ -58,6 +60,8 @@ return [
         'theme_subtitle' => 'Beralih antara tema Dark Mode dan Light Mode',
         'switch_lang_en' => 'Ganti Bahasa ke English (EN)',
         'switch_lang_id' => 'Ganti Bahasa ke Indonesia (ID)',
+        'switch_lang_target' => 'Ganti Bahasa ke English (EN)',
+        'target_locale' => 'en',
         'switch_lang_subtitle' => 'Ubah bahasa antarmuka aplikasi',
         'settings_title' => 'Kustomisasi Tampilan & Warna',
         'settings_subtitle' => 'Buka studio pengaturan kustom sidebar dan header',

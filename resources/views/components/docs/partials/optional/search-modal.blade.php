@@ -608,11 +608,11 @@
         ],
         [
             'id' => 'action-switch-language',
-            'title' => app()->getLocale() === 'id' ? __('docs/search.actions.switch_lang_en') : __('docs/search.actions.switch_lang_id'),
+            'title' => __('docs/search.actions.switch_lang_target'),
             'subtitle' => __('docs/search.actions.switch_lang_subtitle'),
             'category' => $catAction,
             'section' => $navSections['quick_actions'],
-            'url' => route('locale.switch', app()->getLocale() === 'id' ? 'en' : 'id'),
+            'url' => route('locale.switch', __('docs/search.actions.target_locale')),
             'icon' => 'globe',
             'shortcut' => 'Locale',
             'keywords' => 'bahasa language english indonesia locale switch translate',
@@ -758,15 +758,9 @@
                         </svg>
                     </div>
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/search.no_results.title') }}</h3>
-                    @if (app()->getLocale() === 'en')
-                        <p class="text-xs text-muted-foreground max-w-xs mt-1">
-                            No matching results for "<span class="font-medium text-foreground" x-text="query"></span>". Try another search term or switch category filters above.
-                        </p>
-                    @else
-                        <p class="text-xs text-muted-foreground max-w-xs mt-1">
-                            Tidak ada kecocokan untuk kata kunci "<span class="font-medium text-foreground" x-text="query"></span>". Coba kata kunci lain atau pilih tab filter di atas.
-                        </p>
-                    @endif
+                    <p class="text-xs text-muted-foreground max-w-xs mt-1">
+                        {{ __('docs/search.no_results.desc_prefix') }}<span class="font-medium text-foreground" x-text="query"></span>{{ __('docs/search.no_results.desc_suffix') }}
+                    </p>
                 </div>
             </template>
         </vibe:modal.content>

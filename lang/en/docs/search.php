@@ -42,6 +42,8 @@ return [
     'no_results' => [
         'title' => 'No results found',
         'desc' => 'No matching results for ":query". Try another search term or switch category filters above.',
+        'desc_prefix' => 'No matching results for "',
+        'desc_suffix' => '". Try another search term or switch category filters above.',
     ],
 
     'footer' => [
@@ -58,6 +60,8 @@ return [
         'theme_subtitle' => 'Switch between Dark Mode and Light Mode',
         'switch_lang_en' => 'Switch Language to English (EN)',
         'switch_lang_id' => 'Switch Language to Indonesia (ID)',
+        'switch_lang_target' => 'Switch Language to Indonesia (ID)',
+        'target_locale' => 'id',
         'switch_lang_subtitle' => 'Change application interface language',
         'settings_title' => 'Customize Appearance & Colors',
         'settings_subtitle' => 'Open sidebar and header styling studio',
