@@ -261,7 +261,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
         }
 
         return <<<'HTML'
-            <div x-cloak x-show="selectedItems.length > 0 || hideBulkActionsWhenEmpty == false" class="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:justify-end">
+            <div x-cloak x-show="(selectedItems?.length ?? 0) > 0 || hideBulkActionsWhenEmpty == false" class="flex flex-wrap items-center gap-2 w-full sm:w-auto sm:justify-end">
                 @foreach ($table->getBulkActions() as $action => $title)
                     @php
                         $actionLower = strtolower($action);
@@ -278,7 +278,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
                             :message="$table->hasConfirmationMessage($action) ? $table->getBulkActionConfirmMessage($action) : null"
                             wire:key="{{ $table->getTableName() }}-bulk-action-btn-{{ $action }}"
                             wire:loading.attr="disabled"
-                            x-bind:disabled="selectedItems.length === 0"
+                            x-bind:disabled="(selectedItems?.length ?? 0) === 0"
                             class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 text-destructive hover:bg-destructive/10 hover:text-destructive shadow-2xs"
                             title="{{ $title }}"
                             aria-label="{{ $title }}"
@@ -286,7 +286,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
                             <svg class="size-3.5 text-destructive shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2l1-12M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />
                             </svg>
-                            <span class="text-xs">{{ $title }}<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                            <span class="text-xs">{{ $title }}<span x-show="(selectedItems?.length ?? 0) > 0" x-text="' (' + (selectedItems?.length ?? 0) + ')'"></span></span>
                         </vibe:button.delete>
                     @else
                         <vibe:button
@@ -297,7 +297,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
                             :wire:confirm="$table->hasConfirmationMessage($action) ? $table->getBulkActionConfirmMessage($action) : null"
                             wire:key="{{ $table->getTableName() }}-bulk-action-btn-{{ $action }}"
                             wire:loading.attr="disabled"
-                            x-bind:disabled="selectedItems.length === 0"
+                            x-bind:disabled="(selectedItems?.length ?? 0) === 0"
                             class="flex-1 sm:flex-none justify-center gap-1.5 font-medium px-3 shadow-2xs"
                             title="{{ $title }}"
                             aria-label="{{ $title }}"
@@ -313,7 +313,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
                                     <path d="M8 12l3 3 5-5" />
                                 </svg>
                             @endif
-                            <span class="text-xs">{{ $title }}<span x-show="selectedItems.length > 0" x-text="' (' + selectedItems.length + ')'"></span></span>
+                            <span class="text-xs">{{ $title }}<span x-show="(selectedItems?.length ?? 0) > 0" x-text="' (' + (selectedItems?.length ?? 0) + ')'"></span></span>
                         </vibe:button>
                     @endif
                 @endforeach
@@ -326,6 +326,10 @@ abstract class VibeDataTableComponent extends DataTableComponent
      */
     public function hasBulkActions(): bool
     {
-        return count($this->bulkActions()) > 0 || ! empty($this->bulkActionsView());
+        if ($this->bulkActionsView !== null) {
+            return ! empty($this->bulkActionsView);
+        }
+
+        return count($this->bulkActions()) > 0;
     }
 }

@@ -31,9 +31,9 @@
             <vibe:checkbox
                 x-ref="checkbox"
                 aria-label="{{ __($localisationPath.'Select All') }}"
-                x-bind:checked="selectAllStatus || (selectedItems.length > 0 && selectedItems.length >= paginationCurrentCount)"
+                x-bind:checked="selectAllStatus || ((selectedItems?.length ?? 0) > 0 && (selectedItems?.length ?? 0) >= paginationCurrentCount)"
                 x-on:click="
-                    if (selectAllStatus || selectedItems.length > 0) {
+                    if (selectAllStatus || (selectedItems?.length ?? 0) > 0) {
                         $el.indeterminate = false;
                         clearSelected();
                         bulkActionHeaderChecked = false;
@@ -86,7 +86,7 @@
                     </vibe:dropdown.item>
 
                     {{-- Opsi 3: Batalkan Pilihan --}}
-                    <template x-if="selectedItems.length > 0 || selectAllStatus">
+                    <template x-if="(selectedItems?.length ?? 0) > 0 || selectAllStatus">
                         <div>
                             <vibe:dropdown.divider />
                             <vibe:dropdown.item @click="clearSelected(); close()" destructive class="text-xs font-medium gap-1.5">
