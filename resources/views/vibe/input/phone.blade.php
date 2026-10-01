@@ -16,6 +16,8 @@
     'disabled' => false,
     'readonly' => false,
     'value' => null,
+    'clean' => false,       // Jika true: POST/Livewire menerima digits saja (tanpa +, -, spasi)
+    'cleanPrefix' => true,  // Jika true + clean=true: sertakan country code (misal 628xx). false = lokal saja (8xx)
 ])
 
 @php
@@ -36,6 +38,11 @@
         $initialVal = (string) $value;
     }
     $wireModel = $attributes->wire('model')->value();
+
+    // When clean=true, visible input uses a dummy name (won't be POSTed/read by Livewire).
+    // A hidden input with the real name carries the clean digits value.
+    $displayName = ($clean && $name) ? '_phone_display_' . $name : $name;
+
 
     $sizeClasses = match ($size) {
         'sm' => 'h-8 text-xs rounded-md px-2.5',
@@ -71,6 +78,20 @@
         x-data="{
             phoneVal: '{{ addslashes((string) $initialVal) }}',
             maskPattern: '{{ $mask }}',
+            cleanMode: {{ $clean ? 'true' : 'false' }},
+            withPrefix: {{ $cleanPrefix ? 'true' : 'false' }},
+
+            get cleanVal() {
+                // Strip all non-digit characters from the formatted value
+                let digits = String(this.phoneVal).replace(/\D/g, '');
+                if (!digits) return '';
+                // Optionally strip leading country code to get local format
+                // e.g. withPrefix=false: 628123456789 -> 08123456789
+                if (!this.withPrefix && digits.startsWith('62')) {
+                    digits = '0' + digits.slice(2);
+                }
+                return digits;
+            },
 
             init() {
                 if (this.phoneVal) {
@@ -141,21 +162,27 @@
             @endif
         </div>
 
-        {{-- Phone Input --}}
+        {{-- Phone Input (visible, handles formatting) --}}
         <input 
             type="tel"
             x-ref="phoneInput"
             id="{{ $id }}"
-            @if($name) name="{{ $name }}" @endif
+            @if($displayName) name="{{ $displayName }}" @endif
             x-model="phoneVal"
             @input="handleInput($event)"
             placeholder="{{ $placeholder }}"
-            @if($wireModel) wire:model="{{ $wireModel }}" @endif
+            @if($wireModel && !$clean) wire:model="{{ $wireModel }}" @endif
+            @if($wireModel && $clean) wire:model="cleanVal" @endif
             @if($isDisabled) disabled @endif
             @if($isReadonly) readonly @endif
             @if($hasError) aria-invalid="true" @endif
             class="w-full bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-medium text-left"
         />
+
+        @if($clean && $name)
+            {{-- Hidden input carries the clean digits value for POST / non-Livewire forms --}}
+            <input type="hidden" :name="'{{ $name }}'" :value="cleanVal" />
+        @endif
     </div>
 
     @if ($hasError && $errorMessage)
