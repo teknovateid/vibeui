@@ -100,12 +100,18 @@
         <div class="space-y-2 pt-2">
             <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">{{ __('vibe/settings.profile.interface_language') }}</label>
             <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
-                <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'id' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                    🇮🇩 Bahasa Indonesia
-                </vibe:button>
-                <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'en' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                    🇺🇸 English (US)
-                </vibe:button>
+                @php
+                    $localeOptions = [
+                        'id' => '🇮🇩 Bahasa Indonesia',
+                        'en' => '🇺🇸 English (US)',
+                    ];
+                    $currentLocale = app()->getLocale();
+                @endphp
+                @foreach ($localeOptions as $code => $label)
+                    <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', $code) }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ $currentLocale === $code ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
+                        {{ $label }}
+                    </vibe:button>
+                @endforeach
             </div>
         </div>
 
