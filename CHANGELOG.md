@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.3.1] - 2026-10-01
+
+### 🧰 Maintenance & Documentation
+- style: update component sizing and text classes for responsive layouts (53f8761)
+
+
 ## [0.3.0] - 2026-10-01
 
 ### ⚡ Performance & Refactoring
