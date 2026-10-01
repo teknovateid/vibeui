@@ -76,12 +76,19 @@ Route::middleware('auth')->group(function () {
         $request->session()->put('auth.password_confirmed_at', time());
         $request->session()->put('auth.one_time_confirmed', true);
 
+        $isSinglePage = (bool) $request->session()->get('auth.is_single_page_confirm', false);
         $rawTarget = $request->session()->pull('auth.target_route') ?: $request->session()->get('url.intended');
         $target = $rawTarget ? $sanitizeIntendedUrl($rawTarget, '/') : null;
 
         if ($target) {
-            $request->session()->put('auth.confirmed_route', $target);
-            $request->session()->put('auth.is_single_page_confirm', true);
+            if ($isSinglePage) {
+                $request->session()->put('auth.confirmed_route', $target);
+                $request->session()->put('auth.is_single_page_confirm', true);
+            } else {
+                $request->session()->forget('auth.confirmed_route');
+                $request->session()->forget('auth.is_single_page_confirm');
+            }
+
             $request->session()->put('url.intended', $target);
         }
 
