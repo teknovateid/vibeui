@@ -29,6 +29,7 @@
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:button.group&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:button.show&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:button.edit&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:button.delete&gt;</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">pulse</vibe:badge>
@@ -1052,7 +1053,199 @@
                 </div>
             </section>
 
-            {{-- 13. Props Reference --}}
+            {{-- 13. Button Edit & Polymorphic Sheet/Modal Trigger --}}
+            <section id="button-edit" class="space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.button_edit.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/button.button_edit.desc') !!}
+                    </p>
+                </div>
+
+                {{-- Preview 13A: In-place Sheet Trigger with Instant Row Data --}}
+                <vibe:preview :title="__('docs/button.button_edit.preview_instant_title')">
+                    <vibe:preview.code>
+{{-- 1. Injeksi Data Baris Instan ke Target Sheet (0ms Delay Tanpa Request Jaringan) --}}
+@php
+    $sampleUser = [
+        'name' => 'Fahril Royanza',
+        'email' => 'fahril@teknovate.co.id',
+        'role' => 'Administrator',
+    ];
+@endphp
+
+<div class="flex items-center gap-3">
+    <\vibe:button.edit
+        target="demo-edit-sheet"
+        :data="$sampleUser"
+        action="/dashboard/users/update/1"
+        onSuccess="$vibe.toast.info('Formulir siap diedit!')"
+    >
+        Edit User (Instant Sheet)
+    </\vibe:button.edit>
+
+    {{-- Mode Ikon Saja untuk Kolom Aksi Tabel --}}
+    <\vibe:button.edit
+        target="demo-edit-modal"
+        :data="$sampleUser"
+        action="/dashboard/users/update/1"
+        size="icon-sm"
+        title="Edit Pengguna"
+    />
+</div>
+                    </vibe:preview.code>
+
+                    @php
+                        $sampleUser = [
+                            'name' => 'Fahril Royanza',
+                            'email' => 'fahril@teknovate.co.id',
+                            'role' => 'Administrator',
+                        ];
+                    @endphp
+
+                    <div class="flex flex-wrap items-center gap-3 p-4">
+                        <vibe:button.edit
+                            target="demo-edit-sheet"
+                            :data="$sampleUser"
+                            action="/dashboard/users/update/1"
+                            onSuccess="$vibe.toast.info('Formulir siap diedit!')"
+                        >
+                            Edit User (Instant Sheet)
+                        </vibe:button.edit>
+
+                        <vibe:button.edit
+                            target="demo-edit-modal"
+                            :data="$sampleUser"
+                            action="/dashboard/users/update/1"
+                            size="icon-sm"
+                            title="Edit Pengguna"
+                        />
+                    </div>
+
+                    {{-- Target Sheet Demo --}}
+                    <vibe:sheet id="demo-edit-sheet" size="md">
+                        <div class="p-6 space-y-5">
+                            <div>
+                                <h3 class="text-base font-bold text-foreground">Edit Pengguna (Sheet)</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Data disuntikkan secara instan ke dalam formulir.</p>
+                            </div>
+                            <form action="/dashboard/users/update/1" method="POST" class="space-y-4" @submit.prevent="$vibe.sheet('demo-edit-sheet').close(); $vibe.toast.success('Perubahan disimpan!');">
+                                @csrf
+                                <vibe:input name="name" label="Nama Lengkap" placeholder="Masukkan nama" />
+                                <vibe:input name="email" label="Email" type="email" placeholder="Masukkan email" />
+                                <vibe:input name="role" label="Peran / Role" placeholder="Role pengguna" />
+                                <div class="flex justify-end gap-2 pt-2">
+                                    <vibe:button type="button" variant="outline" size="sm" @click="$vibe.sheet('demo-edit-sheet').close()">Batal</vibe:button>
+                                    <vibe:button type="submit" variant="primary" size="sm">Simpan</vibe:button>
+                                </div>
+                            </form>
+                        </div>
+                    </vibe:sheet>
+
+                    {{-- Target Modal Demo --}}
+                    <vibe:modal id="demo-edit-modal">
+                        <div class="p-6 space-y-5">
+                            <div>
+                                <h3 class="text-base font-bold text-foreground">Edit Pengguna (Modal)</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Target polimorfik mendukung ID Modal yang sama.</p>
+                            </div>
+                            <form action="/dashboard/users/update/1" method="POST" class="space-y-4" @submit.prevent="$vibe.modal('demo-edit-modal').close(); $vibe.toast.success('Perubahan disimpan!');">
+                                @csrf
+                                <vibe:input name="name" label="Nama Lengkap" />
+                                <vibe:input name="email" label="Email" type="email" />
+                                <div class="flex justify-end gap-2 pt-2">
+                                    <vibe:button type="button" variant="outline" size="sm" @click="$vibe.modal('demo-edit-modal').close()">Batal</vibe:button>
+                                    <vibe:button type="submit" variant="primary" size="sm">Simpan</vibe:button>
+                                </div>
+                            </form>
+                        </div>
+                    </vibe:modal>
+                </vibe:preview>
+
+                {{-- Preview 13B: Berbagai Skenario Eksekusi --}}
+                <div class="p-5 rounded-2xl border border-border bg-card space-y-4">
+                    <h3 class="text-base font-bold text-foreground">{{ __('docs/button.button_edit.props_title') }} - Skenario Eksekusi</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+                        <div class="p-3.5 rounded-xl border border-border bg-background space-y-2">
+                            <span class="font-bold text-foreground font-mono">1. Instant Data + Target</span>
+                            <p class="text-muted-foreground">Mengisi form seketika dengan data baris tabel yang ada dan membuka sheet/modal tanpa request jaringan:</p>
+                            <pre class="p-2 rounded bg-muted font-mono text-[11px] overflow-x-auto text-foreground">&lt;vibe:button.edit
+    target="user-sheet"
+    :data="$user"
+    :action="route('users.update', $user)"
+/&gt;</pre>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-border bg-background space-y-2">
+                            <span class="font-bold text-foreground font-mono">2. API Fetch (url) + Target</span>
+                            <p class="text-muted-foreground">Menampilkan loading spinner pada tombol, mengambil JSON via AJAX, mengisi form, lalu membuka container:</p>
+                            <pre class="p-2 rounded bg-muted font-mono text-[11px] overflow-x-auto text-foreground">&lt;vibe:button.edit
+    target="user-modal"
+    url="/api/users/1"
+    action="/users/update/1"
+/&gt;</pre>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-border bg-background space-y-2">
+                            <span class="font-bold text-foreground font-mono">3. Livewire (wire:click)</span>
+                            <p class="text-muted-foreground">Mengeksekusi method Livewire di backend dengan event isolation (<code class="font-mono text-primary">.stop</code>) agar tidak memicu reload datatable:</p>
+                            <pre class="p-2 rounded bg-muted font-mono text-[11px] overflow-x-auto text-foreground">&lt;vibe:button.edit
+    wire:click="edit({{ '$user->id' }})"
+    size="icon-sm"
+/&gt;</pre>
+                        </div>
+                        <div class="p-3.5 rounded-xl border border-border bg-background space-y-2">
+                            <span class="font-bold text-foreground font-mono">4. Page Redirect (href)</span>
+                            <p class="text-muted-foreground">Navigasi langsung ke URL halaman edit lengkap dengan SPA navigation (<code class="font-mono text-primary">wire:navigate</code>):</p>
+                            <pre class="p-2 rounded bg-muted font-mono text-[11px] overflow-x-auto text-foreground">&lt;vibe:button.edit
+    :href="route('users.edit', $user)"
+    variant="outline"
+&gt;
+    Edit
+&lt;/vibe:button.edit&gt;</pre>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Preview 13C: Props Table for Button Edit --}}
+                <div class="space-y-2 pt-2">
+                    <p class="text-sm font-semibold text-foreground">{{ __('docs/button.button_edit.props_title') }}</p>
+                    <p class="text-xs text-muted-foreground">{{ __('docs/button.button_edit.props_desc') }}</p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/button.props.columns.default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/button.props.columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $editProps = [
+                                    ['target', 'string|null', 'null', 'ID komponen Sheet atau Modal yang akan dibuka (polimorfik).'],
+                                    ['href', 'string|null', 'null', 'URL tujuan jika tombol digunakan untuk redirect ke halaman edit mandiri.'],
+                                    ['url', 'string|null', 'null', 'URL endpoint API untuk mengambil data edit via AJAX GET sebelum membuka modal/sheet.'],
+                                    ['action', 'string|null', 'null', 'URL yang akan disuntikkan ke atribut form.action pada form di dalam target (tanpa memaksakan method PUT).'],
+                                    ['data', 'array|object|null', 'null', 'Data baris lokal untuk disuntikkan seketika (0ms) tanpa request jaringan.'],
+                                    ['onSuccess', 'string|null', 'null', 'Ekspresi JavaScript yang dijalankan setelah target berhasil dibuka dan data terisi.'],
+                                    ['onError', 'string|null', 'null', 'Ekspresi JavaScript yang dijalankan jika fetch API gagal.'],
+                                    ['resetErrors', 'bool', 'true', 'Membersihkan pesan error validasi sisa submission sebelumnya pada form target.'],
+                                    ['variant', 'string', "'ghost'", 'Skema visual tombol Vibe UI (default: ghost).'],
+                                    ['size', 'string', "'md'", 'Ukuran tombol (xs, sm, md, lg, icon-xs, icon-sm, dll).'],
+                                    ['title', 'string|null', 'null', 'Teks tooltip saat tombol di-hover (default: trans "vibe/button.edit_title").'],
+                                ];
+                            @endphp
+                            @foreach ($editProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground">{{ $desc }}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+            </section>
+
+            {{-- 14. Props Reference --}}
             <section id="referensi-props" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/button.props.title') }}</h2>

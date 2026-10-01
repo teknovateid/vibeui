@@ -173,6 +173,20 @@ return [
         'props_desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button.delete&gt;</code>.',
     ],
 
+    // Section 13: Button Edit
+    'button_edit' => [
+        'title' => 'Tombol Edit (<vibe:button.edit>)',
+        'desc' => 'Komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.edit&gt;</code> menyediakan pemicu aksi edit terpadu dan reaktif yang dirancang khusus untuk tabel dan operasi CRUD. Komponen ini mendukung pembukaan kontainer polimorfik (<code class="font-mono text-xs">target</code> untuk Sheet maupun Modal), injeksi data baris instan (<code class="font-mono text-xs">:data</code>), pengambilan data API (<code class="font-mono text-xs">url</code>), redirect halaman mandiri (<code class="font-mono text-xs">href</code>), pembaruan action form dinamis (<code class="font-mono text-xs">action</code>), serta integrasi Livewire (<code class="font-mono text-xs">wire:click</code>) dengan proteksi isolasi <code class="font-mono text-xs">click.stop</code> bawaan agar tidak memicu reload atau klik baris pada Datatable.',
+        'preview_title' => 'Tombol Edit dengan Target Sheet & Modal',
+        'preview_instant_title' => 'Injeksi Data Baris Instan (Tanpa Latensi Jaringan)',
+        'preview_url_title' => 'Pengambilan Data API (AJAX) sebelum Buka',
+        'preview_href_title' => 'Mode Navigasi Halaman Langsung',
+        'trigger_btn' => 'Edit Data',
+        'trigger_icon' => 'Edit',
+        'props_title' => 'Props <vibe:button.edit>',
+        'props_desc' => 'Daftar atribut dan properti yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:button.edit&gt;</code>.',
+    ],
+
     // Section 13: Props Reference
     'props' => [
         'title' => 'Referensi Props',

@@ -173,6 +173,20 @@ return [
         'props_desc' => 'Listing of attributes and properties accepted by the <code class="font-mono text-xs text-foreground">&lt;vibe:button.delete&gt;</code> component.',
     ],
 
+    // Section 13: Button Edit
+    'button_edit' => [
+        'title' => 'Edit Button (<vibe:button.edit>)',
+        'desc' => 'The <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:button.edit&gt;</code> component provides a unified, reactive edit trigger designed especially for tables and CRUD operations. It supports opening polymorphic containers (<code class="font-mono text-xs">target</code> for Sheet or Modal), instant local data population (<code class="font-mono text-xs">:data</code>), API data fetching (<code class="font-mono text-xs">url</code>), direct page navigation (<code class="font-mono text-xs">href</code>), dynamic form action updates (<code class="font-mono text-xs">action</code>), and full Livewire integration (<code class="font-mono text-xs">wire:click</code>) with built-in <code class="font-mono text-xs">click.stop</code> isolation to prevent Datatable row clicks or reloads.',
+        'preview_title' => 'Edit Button with Sheet & Modal Target',
+        'preview_instant_title' => 'Instant Row Data Population (Zero Latency)',
+        'preview_url_title' => 'API Fetch & Populate before Open',
+        'preview_href_title' => 'Direct Page Navigation Mode',
+        'trigger_btn' => 'Edit Data',
+        'trigger_icon' => 'Edit',
+        'props_title' => '<vibe:button.edit> Props',
+        'props_desc' => 'Listing of attributes and properties accepted by the <code class="font-mono text-xs text-foreground">&lt;vibe:button.edit&gt;</code> component.',
+    ],
+
     // Section 13: Props Reference
     'props' => [
         'title' => 'Props Reference',

@@ -11,10 +11,15 @@
     x-on:drop.prevent="currentlyReorderingStatus && dropEvent(event)"
     x-on:dragover.prevent.throttle.500ms="currentlyReorderingStatus && dragOverEvent(event)"
     x-on:dragleave.prevent.throttle.500ms="currentlyReorderingStatus && dragLeaveEvent(event)"
+    @php
+        $tableLoadingTargets = 'search, filterComponents, setSort, sortBy, setPage, nextPage, previousPage, gotoPage, setPerPage, resetFilter, setFilterDefaults, clearSearch, perPage';
+    @endphp
     @if($this->hasDisplayLoadingPlaceholder()) 
         wire:loading.class.add="hidden"
+        wire:target="{{ $tableLoadingTargets }}"
     @else
         wire:loading.class.delay="opacity-50"
+        wire:target="{{ $tableLoadingTargets }}"
     @endif
     id="{{ $tableName }}-row-{{ $row->{$primaryKey} }}"
     :draggable="currentlyReorderingStatus"
