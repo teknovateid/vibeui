@@ -79,7 +79,13 @@ class RequirePasswordConfirmation
         $routeName = $request->route()?->getName();
         $routePath = trim($request->path(), '/');
         $currentUrl = $request->url();
-        $currentIdentifier = $routeName ?: $routePath;
+
+        // Gunakan URL path (bukan route name) sebagai identifier jika rute memiliki parameter
+        // atau jika metode request bukan GET (mutasi data), agar URL aktual beserta nilainya (seperti /users/update/42)
+        // dapat di-match ulang setelah konfirmasi dan tidak menyebabkan missing parameter error.
+        $routeHasUriParams = ! empty($request->route()?->parameterNames());
+        $isMutation = ! $request->isMethod('GET');
+        $currentIdentifier = ($routeHasUriParams || $isMutation || ! $routeName) ? $routePath : $routeName;
 
         $confirmedRoute = $request->session()->get('auth.confirmed_route');
         $targetRoute = $request->session()->get('auth.target_route');

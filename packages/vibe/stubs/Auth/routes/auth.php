@@ -52,6 +52,11 @@ Route::middleware('auth')->group(function () {
             return $url;
         }
 
+        // Path relatif tanpa leading slash (misal 'dashboard/users/update/42')
+        if (! str_contains($url, '://') && ! str_starts_with($url, '//')) {
+            return '/' . ltrim($url, '/');
+        }
+
         // Host eksternal harus cocok dengan host aplikasi internal
         $appHost = parse_url(config('app.url'), PHP_URL_HOST);
         $requestHost = request()->getHost();
@@ -86,8 +91,11 @@ Route::middleware('auth')->group(function () {
         $target = $rawTarget ? $sanitizeIntendedUrl($rawTarget, '/') : null;
 
         if ($target) {
-            if ($isSinglePage) {
-                $request->session()->put('auth.confirmed_route', $target);
+            if ($isSinglePage || $request->filled('target_url')) {
+                // Simpan URL path (bukan route name) agar middleware dapat me-match ulang
+                // rute berparameter seperti /users/update/42 setelah konfirmasi.
+                $confirmedIdentifier = trim(parse_url($target, PHP_URL_PATH) ?: $target, '/');
+                $request->session()->put('auth.confirmed_route', $confirmedIdentifier);
                 $request->session()->put('auth.is_single_page_confirm', true);
             } else {
                 $request->session()->forget('auth.confirmed_route');

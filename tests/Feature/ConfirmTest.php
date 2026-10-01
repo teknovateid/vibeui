@@ -14,6 +14,7 @@ test('livewire confirm password flow and navigation away', function () {
     // Check session after step 1
     $targetRoute = session('auth.target_route');
     $isSinglePage = session('auth.is_single_page_confirm');
+    // Rute docs.settings.security tidak punya {param} URI, jadi disimpan sebagai route name
     expect($targetRoute)->toBe('docs.settings.security');
     expect($isSinglePage)->toBeTrue();
 
@@ -104,7 +105,8 @@ test('passkey confirmation authorizes target route and does not wipe state', fun
     \Laravel\Passkeys\Events\PasskeyVerified::dispatch($user, $passkey);
 
     // Verify session state updated by event listener
-    expect(session('auth.confirmed_route'))->toBe('docs.settings.security');
+    // auth.confirmed_route sekarang selalu menyimpan URL path agar middleware bisa matching
+    expect(session('auth.confirmed_route'))->toBe('docs/settings/security');
     expect(session('auth.is_single_page_confirm'))->toBeTrue();
     expect(session('auth.session_locked'))->toBeNull();
 
@@ -127,7 +129,8 @@ test('passkey confirmation unlocks session after idle timeout lock', function ()
     \Laravel\Passkeys\Events\PasskeyVerified::dispatch($user, $passkey);
 
     expect(session('auth.session_locked'))->toBeNull();
-    expect(session('auth.confirmed_route'))->toBe('/docs/settings/security');
+    // auth.confirmed_route menyimpan URL path tanpa leading slash (konsisten dengan $routePath di middleware)
+    expect(session('auth.confirmed_route'))->toBe('docs/settings/security');
 
     // 3. User visits security area -> 200 OK
     $response = $this->actingAs($user)->get('/docs/settings/security');
@@ -268,6 +271,32 @@ test('confirm on PUT route with parameterized URI succeeds without missing param
     $response = $this->actingAs($user)->putJson('/dashboard/users/update/42');
     $response->assertStatus(200);
     $response->assertJson(['updated' => '42']);
+});
+
+test('confirm on PUT route with parameterized URI without target_url relying on session succeeds', function () {
+    $user = User::factory()->create();
+
+    \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'confirm'])->group(function () {
+        \Illuminate\Support\Facades\Route::put('/dashboard/users/update-pure/{id}', fn ($id) => response()->json(['updated' => $id]))->name('dashboard.users.update-pure');
+    });
+
+    // 1. AJAX PUT request without confirmed session returns 423
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update-pure/77');
+    $response->assertStatus(423);
+
+    // Session must have saved route path, not naked route name that would trigger UrlGenerationException
+    expect(session('auth.target_route'))->toBe('dashboard/users/update-pure/77');
+
+    // 2. Client confirms password without target_url (relying strictly on session auth.target_route)
+    $response = $this->actingAs($user)->postJson('/confirm-password', [
+        'password' => 'password',
+    ]);
+    $response->assertNoContent();
+
+    // 3. Replay AJAX PUT request succeeds with 200 OK!
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update-pure/77');
+    $response->assertStatus(200);
+    $response->assertJson(['updated' => '77']);
 });
 
 test('confirm on parameterized PUT route via passkey succeeds', function () {

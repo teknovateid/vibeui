@@ -75,6 +75,7 @@ class ConfirmPassword extends Component
             $isRouteName = \Illuminate\Support\Facades\Route::has($rawTarget);
             $isSafe = $isRouteName
                 || (str_starts_with($rawTarget, '/') && ! str_starts_with($rawTarget, '//'))
+                || (! str_contains($rawTarget, '://') && ! str_starts_with($rawTarget, '//'))
                 || ($targetHost && in_array($targetHost, array_filter([$appHost, $requestHost, 'localhost', '127.0.0.1']), true));
 
             $destination = $isSafe ? $rawTarget : $fallback;
@@ -83,12 +84,20 @@ class ConfirmPassword extends Component
                 try {
                     $destinationUrl = route($destination);
                 } catch (\Throwable $e) {
-                    $destinationUrl = $fallback;
+                    $destinationUrl = (! str_contains($destination, '://') && ! str_starts_with($destination, '//'))
+                        ? '/' . ltrim($destination, '/')
+                        : $fallback;
                 }
+            } elseif (! str_contains($destinationUrl, '://') && ! str_starts_with($destinationUrl, '//')) {
+                $destinationUrl = '/' . ltrim($destinationUrl, '/');
             }
 
             if ($isSinglePage) {
-                session()->put('auth.confirmed_route', $destination);
+                // Simpan URL path (bukan route name) agar middleware dapat me-match ulang
+                // rute berparameter seperti /users/update/42 setelah konfirmasi.
+                $confirmedIdentifier = parse_url($destinationUrl, PHP_URL_PATH) ?: $destinationUrl;
+                $confirmedIdentifier = trim($confirmedIdentifier, '/');
+                session()->put('auth.confirmed_route', $confirmedIdentifier);
                 session()->put('auth.is_single_page_confirm', true);
             } else {
                 session()->forget('auth.confirmed_route');

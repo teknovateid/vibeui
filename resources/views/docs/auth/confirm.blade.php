@@ -295,6 +295,23 @@ Route::post('/confirm-password', function (Request $request) {
     </\vibe:button>
 </\vibe:form>
 </vibe:highlightjs>
+
+                    {{-- Tips Integrasi dengan Sheet --}}
+                    <div class="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3 mt-4">
+                        <div class="p-1.5 rounded-lg bg-primary/10 text-primary shrink-0 mt-0.5">
+                            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                        </div>
+                        <div class="space-y-1">
+                            <h4 class="text-xs font-bold text-foreground">Integrasi Aman di dalam &lt;vibe:sheet&gt; &amp; Dialog</h4>
+                            <p class="text-[11px] text-muted-foreground leading-relaxed">
+                                Ketika <code class="font-mono text-foreground">&lt;vibe:form&gt;</code> diletakkan di dalam <code class="font-mono text-foreground">&lt;vibe:sheet&gt;</code> (misalnya pada drawer <em>Edit Pengguna</em>), kemunculan modal konfirmasi password in-place tidak akan memicu penutupan sheet secara tidak sengaja. Vibe UI otomatis mengisolasi event klik pada seluruh elemen dialog dan modal.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
 

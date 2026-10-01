@@ -132,7 +132,20 @@ class VibeServiceProvider extends ServiceProvider
 
                     $target = $session->get('auth.target_route') ?: $session->get('url.intended');
                     if ($target) {
-                        $session->put('auth.confirmed_route', $target);
+                        // Simpan URL path (bukan route name) agar middleware dapat me-match ulang
+                        // rute berparameter setelah passkey confirmation.
+                        // Jika $target berupa route name, resolve ke URL path-nya.
+                        if (! str_contains($target, '/') && \Illuminate\Support\Facades\Route::has($target)) {
+                            try {
+                                $resolved = route($target);
+                                $confirmedIdentifier = trim(parse_url($resolved, PHP_URL_PATH) ?: $resolved, '/');
+                            } catch (\Throwable $e) {
+                                $confirmedIdentifier = $target;
+                            }
+                        } else {
+                            $confirmedIdentifier = trim(parse_url($target, PHP_URL_PATH) ?: $target, '/');
+                        }
+                        $session->put('auth.confirmed_route', $confirmedIdentifier);
                         $session->put('auth.is_single_page_confirm', true);
                     }
                 }
