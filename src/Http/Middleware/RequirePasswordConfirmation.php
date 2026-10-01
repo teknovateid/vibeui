@@ -47,11 +47,18 @@ class RequirePasswordConfirmation
             $isExpired = $isSessionLocked || ! $confirmedAt || ($now - (int) $confirmedAt) >= $timeoutSeconds;
 
             if ($isExpired) {
-                $request->session()->forget('auth.password_confirmed_at');
+                $request->session()->forget([
+                    'auth.password_confirmed_at',
+                    'auth.is_single_page_confirm',
+                    'auth.confirmed_route',
+                    'auth.target_route',
+                ]);
 
                 return $this->requireConfirmation($request, $redirectToRoute);
             }
 
+            // Mode waktu aktif: bersihkan flag single-page agar TrackNavigationState tidak menghanguskan password_confirmed_at
+            $request->session()->forget('auth.is_single_page_confirm');
             $request->attributes->set('vibeIdleTimeout', $timeoutSeconds);
 
             return $next($request);
