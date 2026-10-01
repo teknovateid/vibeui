@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.22] - 2026-10-01
+
+### 🐛 Bug Fixes
+- fix: capture Alpine proxy in closure to preserve form context during submit callbacks (65e1e40)
+
+
 ## [0.2.21] - 2026-10-01
 
 ### 🚀 Features
