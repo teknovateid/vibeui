@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.25] - 2026-10-01
+
+### ⚡ Performance & Refactoring
+- refactor: replace inline locale checks with translation keys in filepond controller and search modal (3938ba3)
+- refactor: iterate over supported locales array for language switchers (8fc9cdd)
+
+
 ## [0.2.24] - 2026-10-01
 
 ### 🚀 Features
