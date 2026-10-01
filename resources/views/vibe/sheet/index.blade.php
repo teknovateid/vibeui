@@ -9,6 +9,7 @@
     'resizable' => false,
     'size' => null, // preset: sm, md, lg, xl, 2xl, or numeric px
     'defaultSize' => null, // explicit default size in px
+    'mobileSize' => null, // explicit mobile size in px (default: min(defaultSize, 280))
     'minSize' => 0,
     'maxSize' => 600,
     'minifiedSize' => 80,
@@ -43,6 +44,25 @@
     if ($maxSize < $defaultSize) {
         $maxSize = $defaultSize + 200;
     }
+
+    $hasWFullClass = str_contains($attributes->get('class', ''), 'w-full');
+    $resolvedMobileSize = 280;
+    if ($mobileSize !== null) {
+        $resolvedMobileSize = $mobileSize === 'full' ? 'full' : (is_numeric($mobileSize) ? (int) $mobileSize : $mobileSize);
+    } elseif ($hasWFullClass) {
+        $resolvedMobileSize = 'full';
+    } elseif ($variant === 'sidebar') {
+        $resolvedMobileSize = min($defaultSize, 280);
+    } else {
+        $resolvedMobileSize = min($defaultSize, 280);
+    }
+    $mobileSize = $resolvedMobileSize;
+
+    $dimensionLimitClasses = ($variant === 'sidebar')
+        ? (in_array($position, ['left', 'right'])
+            ? 'max-w-[calc(100vw-3rem)] md:max-w-full max-h-full'
+            : 'max-h-[calc(100dvh-3rem)] md:max-h-full max-w-full')
+        : 'max-w-full max-h-full';
 
     $isOverlay = in_array($layout, ['fixed', 'absolute']);
 
@@ -156,6 +176,7 @@
     minifiedSize: {{ $minifiedSize }},
     minSize: {{ $minSize }},
     maxSize: {{ $maxSize }},
+    mobileSize: '{{ $mobileSize }}',
 
     size: {{ $defaultSize }},
     state: '{{ $defaultState }}',
@@ -277,10 +298,21 @@
         if (this.behavior === 'static') return this.size;
         if (this.state === 'collapsed') return 0;
         if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize;
+        if (this.isMobile) {
+            if (this.mobileSize === 'full') {
+                return '100%';
+            }
+            let numericMobileSize = parseInt(this.mobileSize, 10) || 280;
+            let maxMobile = this.isHorizontal
+                ? Math.min(numericMobileSize, window.innerWidth - 48)
+                : Math.min(numericMobileSize, window.innerHeight - 48);
+            return Math.max(0, maxMobile);
+        }
         return this.size;
     },
 
     startResize(e) {
+        if (this.isMobile) return;
         if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
         this.isResizing = true;
         this.startSize = this.currentSize;
@@ -440,7 +472,9 @@
                 id="{{ $id }}"
                 style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}"
                 :style="[
-                    isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
+                    isHorizontal
+                        ? (typeof currentSize === 'string' ? `width: ${currentSize}` : `width: ${currentSize}px`)
+                        : (typeof currentSize === 'string' ? `height: ${currentSize}` : `height: ${currentSize}px`),
                     currentSize === 0 ? 'border-width: 0' : ''
                 ].filter(Boolean).join('; ')"
                 data-state="{{ $defaultState }}"
@@ -452,7 +486,7 @@
                     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
                 }"
                 @click.outside="handleOutsideClick($event)"
-                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
+                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
             >
                 @if ($persist)
                     <script>
@@ -471,7 +505,9 @@
                                             let state = item.status !== undefined ? item.status : '{{ $defaultState }}';
                                             let minSize = {{ $minSize }};
                                             let maxSize = {{ $maxSize }};
+                                            let mobileSize = '{{ $mobileSize }}';
                                             let isMobile = window.innerWidth < 768;
+                                            let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
 
                                             if (isMobile && '{{ $behavior }}' === 'minify' && state === 'minified') {
                                                 state = 'collapsed';
@@ -481,12 +517,23 @@
                                             if (state === 'expanded' && size < minSize) size = minSize;
 
                                             let currentSize = size;
+                                            if (isMobile) {
+                                                if (mobileSize === 'full') {
+                                                    currentSize = '100%';
+                                                } else {
+                                                    let numericMobileSize = parseInt(mobileSize, 10) || 280;
+                                                    let maxMobile = isHorizontal
+                                                        ? Math.min(numericMobileSize, window.innerWidth - 48)
+                                                        : Math.min(numericMobileSize, window.innerHeight - 48);
+                                                    currentSize = Math.max(0, maxMobile);
+                                                }
+                                            }
                                             if ('{{ $behavior }}' !== 'static') {
                                                 if (state === 'collapsed') currentSize = 0;
                                                 else if (state === 'minified') currentSize = isMobile ? 0 : {{ $minifiedSize }};
                                             }
-                                            let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
-                                            el.style[isHorizontal ? 'width' : 'height'] = currentSize + 'px';
+                                            let sizeStyle = typeof currentSize === 'string' ? currentSize : currentSize + 'px';
+                                            el.style[isHorizontal ? 'width' : 'height'] = sizeStyle;
                                             if (currentSize === 0) el.style.borderWidth = '0px';
                                             el.setAttribute('data-state', state);
                                             el.classList.add('group/sheet');
@@ -503,12 +550,12 @@
                          style="{{ $innerStyle }}"
                          :style="behavior !== 'minify'
                              ? (position === 'right'
-                                 ? `top: 0; right: 0; bottom: 0; width: ${size}px`
+                                 ? (isMobile ? 'top: 0; right: 0; bottom: 0; width: 100%' : `top: 0; right: 0; bottom: 0; width: ${size}px`)
                                  : position === 'bottom'
-                                 ? `left: 0; right: 0; top: 0; height: ${size}px`
+                                 ? (isMobile ? 'left: 0; right: 0; top: 0; height: 100%' : `left: 0; right: 0; top: 0; height: ${size}px`)
                                  : position === 'top'
-                                 ? `left: 0; right: 0; bottom: 0; height: ${size}px`
-                                 : `top: 0; left: 0; bottom: 0; width: ${size}px`)
+                                 ? (isMobile ? 'left: 0; right: 0; bottom: 0; height: 100%' : `left: 0; right: 0; bottom: 0; height: ${size}px`)
+                                 : (isMobile ? 'top: 0; left: 0; bottom: 0; width: 100%' : `top: 0; left: 0; bottom: 0; width: ${size}px`))
                              : 'top: 0; left: 0; right: 0; bottom: 0'">
                         {{ $slot }}
                     </div>
@@ -551,7 +598,7 @@
                     <div
                         @mousedown.prevent="startResize($event)"
                         @touchstart.prevent="startResize($event)"
-                        class="absolute z-20 flex items-center justify-center group/resizer touch-none select-none"
+                        class="hidden md:flex absolute z-20 items-center justify-center group/resizer touch-none select-none"
                         :class="{
                             'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
                             'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',
@@ -588,6 +635,7 @@
     minifiedSize: {{ $minifiedSize }},
     minSize: {{ $minSize }},
     maxSize: {{ $maxSize }},
+    mobileSize: '{{ $mobileSize }}',
 
     size: {{ $defaultSize }},
     state: '{{ $defaultState }}',
@@ -681,10 +729,21 @@
         if (this.behavior === 'static') return this.size;
         if (this.state === 'collapsed') return 0;
         if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize;
+        if (this.isMobile) {
+            if (this.mobileSize === 'full') {
+                return '100%';
+            }
+            let numericMobileSize = parseInt(this.mobileSize, 10) || 280;
+            let maxMobile = this.isHorizontal
+                ? Math.min(numericMobileSize, window.innerWidth - 48)
+                : Math.min(numericMobileSize, window.innerHeight - 48);
+            return Math.max(0, maxMobile);
+        }
         return this.size;
     },
 
     startResize(e) {
+        if (this.isMobile) return;
         if (this.behavior === 'static' && !{{ $resizable ? 'true' : 'false' }}) return;
         this.isResizing = true;
         this.startSize = this.currentSize;
@@ -823,11 +882,13 @@
         this.close();
     }
 }" @mouseup.window="stopResize()" @touchend.window="stopResize()" @touchcancel.window="stopResize()" @mousemove.window="doResize($event)" @touchmove.window="doResize($event)" @open-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); state = 'expanded'; saveToStorage(); }" @close-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}' || t === '*' || !t) { state = 'collapsed'; saveToStorage(); }" @toggle-sheet.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === '{{ $id }}') { lastTriggerTime = Date.now(); toggle(); }" @keydown.escape.window="if (state !== 'collapsed' && {{ $closeOnOutsideClick ? 'true' : 'false' }}) { close(); }" @click.outside="handleOutsideClick($event)" style="{{ ($position === 'left' || $position === 'right' ? "width: {$initialSize}px" : "height: {$initialSize}px") . ($initialSize === 0 ? '; border-width: 0px' : '') }}" :style="[
-    isHorizontal ? `width: ${currentSize}px` : `height: ${currentSize}px`,
+    isHorizontal
+        ? (typeof currentSize === 'string' ? `width: ${currentSize}` : `width: ${currentSize}px`)
+        : (typeof currentSize === 'string' ? `height: ${currentSize}` : `height: ${currentSize}px`),
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet max-w-full max-h-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -845,7 +906,9 @@
                                 let state = item.status !== undefined ? item.status : '{{ $defaultState }}';
                                 let minSize = {{ $minSize }};
                                 let maxSize = {{ $maxSize }};
+                                let mobileSize = '{{ $mobileSize }}';
                                 let isMobile = window.innerWidth < 768;
+                                let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
 
                                 if (isMobile && '{{ $behavior }}' === 'minify' && state === 'minified') {
                                     state = 'collapsed';
@@ -855,12 +918,23 @@
                                 if (state === 'expanded' && size < minSize) size = minSize;
 
                                 let currentSize = size;
+                                if (isMobile) {
+                                    if (mobileSize === 'full') {
+                                        currentSize = '100%';
+                                    } else {
+                                        let numericMobileSize = parseInt(mobileSize, 10) || 280;
+                                        let maxMobile = isHorizontal
+                                            ? Math.min(numericMobileSize, window.innerWidth - 48)
+                                            : Math.min(numericMobileSize, window.innerHeight - 48);
+                                        currentSize = Math.max(0, maxMobile);
+                                    }
+                                }
                                 if ('{{ $behavior }}' !== 'static') {
                                     if (state === 'collapsed') currentSize = 0;
                                     else if (state === 'minified') currentSize = isMobile ? 0 : {{ $minifiedSize }};
                                 }
-                                let isHorizontal = '{{ $position }}' === 'left' || '{{ $position }}' === 'right';
-                                el.style[isHorizontal ? 'width' : 'height'] = currentSize + 'px';
+                                let sizeStyle = typeof currentSize === 'string' ? currentSize : currentSize + 'px';
+                                el.style[isHorizontal ? 'width' : 'height'] = sizeStyle;
                                 if (currentSize === 0) el.style.borderWidth = '0px';
                                 el.setAttribute('data-state', state);
                                 el.classList.add('group/sheet');
@@ -877,7 +951,9 @@
             <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
-                     ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
+                     ? (isHorizontal
+                         ? (isMobile ? 'width: 100%' : `width: ${size}px`)
+                         : (isMobile ? 'height: 100%' : `height: ${size}px`))
                      : ''">
                 {{ $slot }}
             </div>
@@ -888,12 +964,12 @@
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
-                         ? `top: 0; right: 0; bottom: 0; width: ${size}px`
+                         ? (isMobile ? 'top: 0; right: 0; bottom: 0; width: 100%' : `top: 0; right: 0; bottom: 0; width: ${size}px`)
                          : position === 'bottom'
-                         ? `left: 0; right: 0; top: 0; height: ${size}px`
+                         ? (isMobile ? 'left: 0; right: 0; top: 0; height: 100%' : `left: 0; right: 0; top: 0; height: ${size}px`)
                          : position === 'top'
-                         ? `left: 0; right: 0; bottom: 0; height: ${size}px`
-                         : `top: 0; left: 0; bottom: 0; width: ${size}px`)
+                         ? (isMobile ? 'left: 0; right: 0; bottom: 0; height: 100%' : `left: 0; right: 0; bottom: 0; height: ${size}px`)
+                         : (isMobile ? 'top: 0; left: 0; bottom: 0; width: 100%' : `top: 0; left: 0; bottom: 0; width: ${size}px`))
                      : 'top: 0; left: 0; right: 0; bottom: 0'">
                 {{ $slot }}
             </div>
@@ -937,7 +1013,7 @@
         <div
             @mousedown.prevent="startResize($event)"
             @touchstart.prevent="startResize($event)"
-            class="absolute z-20 flex items-center justify-center group/resizer touch-none select-none"
+            class="hidden md:flex absolute z-20 items-center justify-center group/resizer touch-none select-none"
             :class="{
                 'top-0 bottom-0 -right-2.5 w-5 cursor-col-resize': position === 'left',
                 'top-0 bottom-0 -left-2.5 w-5 cursor-col-resize': position === 'right',

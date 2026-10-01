@@ -102,3 +102,42 @@ test('sheet with layout relative defaults to expanded state without backdrop', f
         ->not->toContain('x-teleport="body"');
 });
 
+test('sheet applies responsive mobile width constraint on sidebar variant and supports mobileSize prop', function () {
+    $htmlSidebar = Blade::render(
+        '<vibe:sheet id="test-mobile-sheet" variant="sidebar" position="left" layout="relative">Content</vibe:sheet>'
+    );
+
+    expect($htmlSidebar)
+        ->toContain('max-w-[calc(100vw-3rem)]')
+        ->toContain('md:max-w-full')
+        ->toContain("mobileSize: '280'");
+
+    $htmlCustom = Blade::render(
+        '<vibe:sheet id="test-custom-mobile" position="left" layout="relative" mobileSize="260">Content</vibe:sheet>'
+    );
+
+    expect($htmlCustom)
+        ->toContain("mobileSize: '260'");
+});
+
+test('sheet supports mobileSize full and w-full class on mobile with max-w on larger screens', function () {
+    $htmlFull = Blade::render(
+        '<vibe:sheet id="test-full-sheet" position="right" layout="absolute" mobileSize="full" class="w-full sm:max-w-md">Content</vibe:sheet>'
+    );
+
+    expect($htmlFull)
+        ->toContain("mobileSize: 'full'")
+        ->toContain('w-full')
+        ->toContain('sm:max-w-md')
+        ->not->toContain('max-w-[calc(100vw-3rem)]');
+});
+
+test('sheet with dismissibleButton false does not render outer floating close button', function () {
+    $htmlWithoutBtn = Blade::render(
+        '<vibe:sheet id="test-no-dismiss-btn" layout="absolute" :dismissibleButton="false"><vibe:sheet.header>Header</vibe:sheet.header></vibe:sheet>'
+    );
+
+    expect($htmlWithoutBtn)
+        ->not->toContain('absolute top-3 right-3 z-30');
+});
+

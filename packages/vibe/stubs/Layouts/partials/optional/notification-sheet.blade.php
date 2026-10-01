@@ -1,4 +1,4 @@
-<vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" persist>
+<vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" class="w-full sm:max-w-md shadow-2xl" mobileSize="full" :defaultSize="400" persist>
     <vibe:sheet.header class="flex items-center justify-between">
         <div class="flex items-center gap-2">
             <span class="font-semibold text-sm text-foreground">Notifications</span>
@@ -52,7 +52,7 @@
     </vibe:sheet.content>
 
     <vibe:sheet.footer class="p-3">
-        <vibe:button variant="outline" size="sm" class="w-full text-xs">
+        <vibe:button class="w-full text-xs">
             Mark all as read
         </vibe:button>
     </vibe:sheet.footer>

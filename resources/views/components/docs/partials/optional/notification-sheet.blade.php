@@ -1,4 +1,4 @@
- <vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" class="shadow-2xl" persist>
+<vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" class="w-full sm:max-w-md shadow-2xl" mobileSize="full" :defaultSize="400" persist>
      <vibe:sheet.header class="flex items-center justify-between border-dashed">
          <div class="flex items-center gap-2">
              <span class="font-semibold text-lg text-foreground">{{ __('docs/sidebar.notifications.title') }}
@@ -55,7 +55,7 @@
      </vibe:sheet.content>
 
      <vibe:sheet.footer class="p-3 border-dashed">
-         <vibe:button variant="outline" size="sm" class="w-full text-xs">
+         <vibe:button class="w-full text-xs">
              Tandai Semua Sudah Dibaca
          </vibe:button>
      </vibe:sheet.footer>
