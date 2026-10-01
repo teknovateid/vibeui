@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.2.30] - 2026-10-01
+
+### 🚀 Features
+- feat: add edit button component with translations and feature tests (2770c76)
+
+
 ## [0.2.29] - 2026-10-01
 
 ### 🐛 Bug Fixes
