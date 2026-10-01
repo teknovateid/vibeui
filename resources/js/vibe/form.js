@@ -81,16 +81,34 @@ export function vibeForm(config = {}) {
             const action = form.getAttribute('action') || window.location.href;
             const method = (form.getAttribute('method') || 'POST').toUpperCase();
 
-            // Extract CSRF token
+            // Extract CSRF token from input or meta tag
             let csrfToken = null;
             const csrfInput = form.querySelector('input[name="_token"]');
-            if (csrfInput) {
+            if (csrfInput && csrfInput.value) {
                 csrfToken = csrfInput.value;
-            } else {
+            }
+            if (!csrfToken) {
                 const metaCsrf = document.querySelector('meta[name="csrf-token"]');
                 if (metaCsrf) {
                     csrfToken = metaCsrf.getAttribute('content');
                 }
+            }
+
+            // Ensure CSRF token is restored in input and formData
+            if (csrfToken) {
+                if (csrfInput && !csrfInput.value) {
+                    csrfInput.value = csrfToken;
+                }
+                if (!formData.get('_token')) {
+                    formData.set('_token', csrfToken);
+                }
+            }
+
+            // Extract HTTP method override (supports @method('PUT'|'PATCH'|'DELETE') or form method attribute)
+            const methodInput = form.querySelector('input[name="_method"]');
+            let spoofedMethod = (methodInput && methodInput.value ? methodInput.value : formData.get('_method') || '').toUpperCase();
+            if (['PUT', 'PATCH', 'DELETE'].includes(method) && !spoofedMethod) {
+                spoofedMethod = method;
             }
 
             this.loading = true;
@@ -103,6 +121,10 @@ export function vibeForm(config = {}) {
                 };
                 if (csrfToken) {
                     headers['X-CSRF-TOKEN'] = csrfToken;
+                }
+                if (spoofedMethod) {
+                    formData.set('_method', spoofedMethod);
+                    headers['X-HTTP-Method-Override'] = spoofedMethod;
                 }
 
                 let fetchOptions = {
