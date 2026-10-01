@@ -9,6 +9,7 @@ export function vibeForm(config = {}) {
     let redirectTo = null;    // URL string or null
     let onSuccess = null;     // JS expression string or null
     let onError = null;       // JS expression string or null
+    let _self = null;         // Captured Alpine proxy (set in init) — ensures correct $el even when submit() is called from alert callbacks
 
     if (typeof config === 'string') {
         formId = config;
@@ -185,6 +186,10 @@ export function vibeForm(config = {}) {
         },
 
         init() {
+            // Capture Alpine proxy in closure so submit() always has the right $el,
+            // regardless of how/where it's called (e.g., from an alert confirm callback).
+            _self = this;
+
             if (saveToStorage && formId) {
                 this.restoreFromStorage();
 
@@ -207,15 +212,19 @@ export function vibeForm(config = {}) {
         },
 
         // ==========================================
-        // PUBLIC: submit() — can be called from buttons inside the form
-        // e.g. @click="$vibe.alert.confirm('Yakin?', () => this.submit())"
+        // PUBLIC: submit() — call as `submit()` (no `this`) from Alpine @click expressions
+        // e.g. @click="$vibe.alert.confirm('Yakin?', () => submit())"
+        // Uses _self (closure-captured proxy) to guarantee correct $el context.
         // ==========================================
         submit() {
-            return this.handleSubmit(null);
+            const ctx = _self || this;
+            return ctx.handleSubmit(null);
         },
 
         async handleSubmit(event) {
-            const form = this.$el;
+            // Use _self.$el (closure-captured proxy) as primary source.
+            // Falls back to this.$el if called normally via @submit.
+            const form = (_self && _self.$el) ? _self.$el : this.$el;
             const formData = new FormData(form);
             const submitDetail = { form, id: formId, formData, event };
 

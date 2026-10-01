@@ -682,15 +682,15 @@
             {{-- 11. Confirm Submit --}}
             <section id="konfirmasi-submit" class="space-y-6">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">Konfirmasi Submit (<code class="font-mono text-lg">this.submit()</code>)</h2>
+                    <h2 class="text-xl font-bold text-foreground">Konfirmasi Submit (<code class="font-mono text-lg">submit()</code>)</h2>
                     <p class="text-sm text-muted-foreground">
                         Untuk meminta konfirmasi sebelum form dikirim, gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe.alert.confirm(message, callback, title?)</code>
-                        bersama method <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">this.submit()</code> yang tersedia secara built-in di dalam scope form.
-                        Tombol cukup bertipe <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">type="button"</code> agar tidak langsung submit.
+                        bersama method <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">submit()</code> yang tersedia secara built-in di dalam scope form.
+                        Gunakan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">() => submit()</code> <strong>tanpa</strong> <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">this</code> — dalam Alpine v3, ekspresi <code>@click</code> dievaluasi dalam scope data komponen sehingga <code>submit</code> sudah tersedia langsung.
                     </p>
                 </div>
 
-                <vibe:preview title="Konfirmasi via $vibe.alert.confirm + this.submit()">
+                <vibe:preview title="Konfirmasi via $vibe.alert.confirm + submit()">
                     <vibe:preview.code>
                         <vibe:form
                             action="{{ route('docs.form.store') }}"
@@ -702,11 +702,11 @@
                             <vibe:input name="name" label="Nama" placeholder="Enter your name" />
                             <vibe:input type="email" name="email" label="Email" placeholder="Enter your email" />
 
-                            {{-- Tombol type="button", memicu alert konfirmasi, lalu this.submit() --}}
+                            {{-- type="button" agar tidak auto-submit. Gunakan submit() tanpa this! --}}
                             <vibe:button
                                 type="button"
                                 variant="primary"
-                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => this.submit())"
+                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => submit())"
                             >
                                 Simpan dengan Konfirmasi
                             </vibe:button>
@@ -722,7 +722,7 @@
                             <vibe:button
                                 type="button"
                                 variant="primary"
-                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => this.submit())"
+                                @click="$vibe.alert.confirm('Apakah Anda yakin ingin menyimpan data ini?', () => submit())"
                             >
                                 Simpan dengan Konfirmasi
                             </vibe:button>
@@ -738,7 +738,7 @@
                             variant="destructive"
                             @click="$vibe.alert.confirm(
                                 'Tindakan ini tidak dapat dibatalkan. Yakin ingin menghapus?',
-                                () => this.submit(),
+                                () => submit(),
                                 'Konfirmasi Penghapusan'
                             )"
                         >
@@ -756,7 +756,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @foreach([
-                            ['this.submit()', 'submit()', 'Method built-in form. Mengirim form via AJAX (sama seperti @submit) tanpa memerlukan event dari browser.'],
+                            ['submit()', 'submit()', 'Method built-in form. Panggil dari @click tanpa this: () => submit(). Mengirim form via AJAX tanpa event browser.'],
                             ['$vibe.alert.confirm()', 'confirm(message, onConfirm, title?)', 'Memunculkan dialog Alert konfirmasi. Jika user klik Konfirmasi, onConfirm callback dieksekusi.'],
                             ['$vibe.alert.confirm()', 'confirm({ message, title, confirmButton, ... })', 'Object form — mendukung penuh konfigurasi Alert kustom.'],
                         ] as [$api, $signature, $desc])
