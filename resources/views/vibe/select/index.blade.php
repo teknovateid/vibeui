@@ -38,20 +38,20 @@
     $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus:outline-none focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
     $sizeClasses = match ($size) {
-        'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs rounded-md pl-3 pr-8 gap-1.5',
-        'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
-        'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm rounded-lg pl-4 pr-10 gap-2',
-        'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base rounded-xl pl-5 pr-11 gap-2.5',
-        default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
+        'sm' => ($multiple ? 'min-h-9 sm:min-h-8 py-1' : 'h-9 sm:h-8') . ' text-sm sm:text-xs rounded-md pl-3 pr-8 gap-1.5',
+        'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5' : 'h-11 sm:h-9') . ' text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 pr-9 gap-2',
+        'lg' => ($multiple ? 'min-h-12 sm:min-h-10 py-1.5' : 'h-12 sm:h-10') . ' text-base sm:text-sm rounded-lg pl-4.5 sm:pl-4 pr-10 gap-2',
+        'xl' => ($multiple ? 'min-h-14 sm:min-h-11 py-2' : 'h-14 sm:h-11') . ' text-lg sm:text-base rounded-xl pl-5.5 sm:pl-5 pr-11 gap-2.5',
+        default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5' : 'h-11 sm:h-9') . ' text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 pr-9 gap-2',
     };
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
-            'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs px-0 rounded-none pr-6',
-            'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
-            'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm px-0 rounded-none pr-8',
-            'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base px-0 rounded-none pr-9',
-            default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
+            'sm' => ($multiple ? 'min-h-9 sm:min-h-8 py-1' : 'h-9 sm:h-8') . ' text-sm sm:text-xs px-0 rounded-none pr-6',
+            'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5' : 'h-11 sm:h-9') . ' text-base sm:text-sm px-0 rounded-none pr-7',
+            'lg' => ($multiple ? 'min-h-12 sm:min-h-10 py-1.5' : 'h-12 sm:h-10') . ' text-base sm:text-sm px-0 rounded-none pr-8',
+            'xl' => ($multiple ? 'min-h-14 sm:min-h-11 py-2' : 'h-14 sm:h-11') . ' text-lg sm:text-base px-0 rounded-none pr-9',
+            default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5' : 'h-11 sm:h-9') . ' text-base sm:text-sm px-0 rounded-none pr-7',
         };
     }
 
@@ -565,7 +565,7 @@
                             <circle cx="11.5" cy="11.5" r="9.5" />
                             <path d="M18.5 18.5L22 22" />
                         </svg>
-                        <input x-ref="searchInput" x-model="search" type="text" placeholder="{{ $searchPlaceholder }}" class="w-full h-8 pl-8 pr-7 text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors" @keydown.escape.stop="close()" @if ($keyboard) @keydown.down.stop.prevent="focusNext($event)"
+                        <input x-ref="searchInput" x-model="search" type="text" placeholder="{{ $searchPlaceholder }}" class="w-full h-9 sm:h-8 pl-8 pr-7 text-sm sm:text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors" @keydown.escape.stop="close()" @if ($keyboard) @keydown.down.stop.prevent="focusNext($event)"
                                 @keydown.up.stop.prevent=""
                                 @keydown.enter.stop.prevent="let items = getVisibleItems(); if (items[0]) { items[0].click(); }" @endif />
                         <button x-show="search.length > 0" @click="search = ''; $refs.searchInput.focus()" type="button" class="absolute right-2 text-muted-foreground hover:text-foreground size-4 flex items-center justify-center cursor-pointer">

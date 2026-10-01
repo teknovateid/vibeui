@@ -30,18 +30,18 @@
     $baseClasses = 'block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 read-only:bg-muted/20 read-only:cursor-default';
 
     $sizeClasses = match ($size) {
-        'sm' => 'text-xs rounded-md px-3 py-1.5',
-        'lg' => 'text-sm rounded-lg px-4 py-2.5',
-        'xl' => 'text-base rounded-xl px-5 py-3',
-        default => 'text-sm rounded-lg px-3.5 py-2',
+        'sm' => 'text-sm sm:text-xs rounded-md px-3 py-2 sm:py-1.5',
+        'lg' => 'text-base sm:text-sm rounded-lg px-4.5 sm:px-4 py-3 sm:py-2.5',
+        'xl' => 'text-lg sm:text-base rounded-xl px-5.5 sm:px-5 py-3.5 sm:py-3',
+        default => 'text-base sm:text-sm rounded-lg px-4 sm:px-3.5 py-2.5 sm:py-2',
     };
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
-            'sm' => 'text-xs px-0 py-1.5 rounded-none',
-            'lg' => 'text-sm px-0 py-2.5 rounded-none',
-            'xl' => 'text-base px-0 py-3 rounded-none',
-            default => 'text-sm px-0 py-2 rounded-none',
+            'sm' => 'text-sm sm:text-xs px-0 py-2 sm:py-1.5 rounded-none',
+            'lg' => 'text-base sm:text-sm px-0 py-3 sm:py-2.5 rounded-none',
+            'xl' => 'text-lg sm:text-base px-0 py-3.5 sm:py-3 rounded-none',
+            default => 'text-base sm:text-sm px-0 py-2.5 sm:py-2 rounded-none',
         };
     }
 

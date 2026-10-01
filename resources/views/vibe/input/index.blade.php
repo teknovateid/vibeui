@@ -41,20 +41,20 @@
     $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
 
     $sizeControlClasses = match ($size) {
-        'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-9 text-sm rounded-lg',
-        'lg' => 'h-10 text-sm rounded-lg',
-        'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-9 text-sm rounded-lg',
+        'sm' => 'h-9 sm:h-8 text-sm sm:text-xs rounded-md',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
+        'lg' => 'h-12 sm:h-10 text-base sm:text-sm rounded-lg',
+        'xl' => 'h-14 sm:h-11 text-lg sm:text-base rounded-xl',
+        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
     };
 
     if ($variant === 'flush') {
         $sizeControlClasses = match ($size) {
-            'sm' => 'h-8 text-xs rounded-none px-0',
-            'md' => 'h-9 text-sm rounded-none px-0',
-            'lg' => 'h-10 text-sm rounded-none px-0',
-            'xl' => 'h-11 text-base rounded-none px-0',
-            default => 'h-9 text-sm rounded-none px-0',
+            'sm' => 'h-9 sm:h-8 text-sm sm:text-xs rounded-none px-0',
+            'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
+            'lg' => 'h-12 sm:h-10 text-base sm:text-sm rounded-none px-0',
+            'xl' => 'h-14 sm:h-11 text-lg sm:text-base rounded-none px-0',
+            default => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
         };
     }
 
@@ -93,39 +93,39 @@
     } else {
         $leadingPadding = match ($size) {
             'sm' => 'pl-2.5 pr-1.5',
-            'lg' => 'pl-3.5 pr-2',
-            'xl' => 'pl-4 pr-2.5',
-            default => 'pl-3 pr-1.5',
+            'lg' => 'pl-4 sm:pl-3.5 pr-2',
+            'xl' => 'pl-4.5 sm:pl-4 pr-2.5',
+            default => 'pl-3.5 sm:pl-3 pr-1.5',
         };
         $trailingPadding = match ($size) {
             'sm' => 'pr-2.5 pl-1.5',
-            'lg' => 'pr-3.5 pr-2',
-            'xl' => 'pr-4 pl-2.5',
-            default => 'pr-3 pl-1.5',
+            'lg' => 'pr-4 sm:pr-3.5 pl-2',
+            'xl' => 'pr-4.5 sm:pr-4 pl-2.5',
+            default => 'pr-3.5 sm:pr-3 pl-1.5',
         };
         $inputPadding =
             ($hasLeading
                 ? 'pl-0 '
                 : match ($size) {
-                    'sm' => 'pl-2.5 ',
-                    'lg' => 'pl-4 ',
-                    'xl' => 'pl-5 ',
-                    default => 'pl-3.5 ',
+                    'sm' => 'pl-3 sm:pl-2.5 ',
+                    'lg' => 'pl-4.5 sm:pl-4 ',
+                    'xl' => 'pl-5.5 sm:pl-5 ',
+                    default => 'pl-4 sm:pl-3.5 ',
                 }) .
             ($hasTrailing
                 ? 'pr-0'
                 : match ($size) {
-                    'sm' => 'pr-2.5',
-                    'lg' => 'pr-4',
-                    'xl' => 'pr-5',
-                    default => 'pr-3.5',
+                    'sm' => 'pr-3 sm:pr-2.5',
+                    'lg' => 'pr-4.5 sm:pr-4',
+                    'xl' => 'pr-5.5 sm:pr-5',
+                    default => 'pr-4 sm:pr-3.5',
                 });
     }
 
     $inputFontSize = match ($size) {
-        'sm' => 'text-xs',
-        'xl' => 'text-base',
-        default => 'text-sm',
+        'sm' => 'text-sm sm:text-xs',
+        'xl' => 'text-lg sm:text-base',
+        default => 'text-base sm:text-sm',
     };
 
     $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';
@@ -185,7 +185,7 @@
                         type="button" 
                         tabindex="-1"
                         @click.stop="showPassword = !showPassword" 
-                        class="text-muted-foreground hover:text-foreground p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
+                        class="text-muted-foreground hover:text-foreground p-1 sm:p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
                         aria-label="Toggle password visibility"
                         :aria-pressed="showPassword"
                     >

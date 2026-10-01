@@ -30,16 +30,17 @@
     };
 
     $sizeClasses = match ($size) {
-        'xs' => 'h-7 px-2.5 text-xs gap-1 rounded-sm',
-        'sm' => 'h-8 px-3 text-xs gap-1.5 rounded-md',
-        'md' => 'h-9 px-3.5 text-sm gap-2 rounded-lg',
-        'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
-        'xl' => 'h-11 px-5 text-base gap-3 rounded-xl',
-        'icon-xs' => 'size-7 p-0 rounded-sm',
-        'icon-sm' => 'size-8 p-0 rounded-md',
-        'icon-md' => 'size-9 p-0 rounded-lg',
-        'icon-lg' => 'size-10 p-0 rounded-lg',
-        default => 'h-9 px-3.5 text-sm gap-2 rounded-lg',
+        'xs' => 'h-8 sm:h-7 px-2.5 text-xs gap-1 rounded-sm',
+        'sm' => 'h-9 sm:h-8 px-3 text-sm sm:text-xs gap-1.5 rounded-md',
+        'md' => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
+        'lg' => 'h-12 sm:h-10 px-4.5 sm:px-4 text-base sm:text-sm gap-2.5 rounded-lg',
+        'xl' => 'h-14 sm:h-11 px-5 text-lg sm:text-base gap-3 rounded-xl',
+        'icon-xs' => 'size-8 sm:size-7 p-0 rounded-sm',
+        'icon-sm' => 'size-9 sm:size-8 p-0 rounded-md',
+        'icon-md' => 'size-11 sm:size-9 p-0 rounded-lg',
+        'icon-lg' => 'size-12 sm:size-10 p-0 rounded-lg',
+        'icon-xl' => 'size-14 sm:size-11 p-0 rounded-xl',
+        default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
     };
 
     if ($variant === 'link') {
@@ -92,9 +93,9 @@
         'xs', 'icon-xs' => 'size-3.5',
         'sm', 'icon-sm' => 'size-3.5',
         'md', 'icon-md' => 'size-4',
-        'lg', 'icon-lg' => 'size-4',
-        'xl' => 'size-4.5',
-        default => 'size-3.5',
+        'lg', 'icon-lg' => 'size-4.5 sm:size-4',
+        'xl', 'icon-xl' => 'size-5 sm:size-4.5',
+        default => 'size-4',
     };
 
     $spinnerMargin = (! $isIcon && $hasSlotContent && ! $hasLoadingText) ? '-ml-0.5 mr-1.5' : '';
