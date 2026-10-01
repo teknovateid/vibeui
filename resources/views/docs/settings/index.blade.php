@@ -208,12 +208,15 @@
                             <div class="space-y-2 pt-2">
                                 <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
-                                    <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'id' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                                        🇮🇩 Bahasa Indonesia
-                                    </vibe:button>
-                                    <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'en' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                                        🇺🇸 English (US)
-                                    </vibe:button>
+                                    @php
+                                        $locOpts = ['id' => '🇮🇩 Bahasa Indonesia', 'en' => '🇺🇸 English (US)'];
+                                        $curLoc = app()->getLocale();
+                                    @endphp
+                                    @foreach ($locOpts as $c => $l)
+                                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', $c) }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ $curLoc === $c ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
+                                            {{ $l }}
+                                        </vibe:button>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -263,12 +266,15 @@
                             <div class="space-y-2 pt-2">
                                 <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
-                                    <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'id') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'id' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                                        🇮🇩 Bahasa Indonesia
-                                    </vibe:button>
-                                    <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', 'en') }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ app()->getLocale() === 'en' ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
-                                        🇺🇸 English (US)
-                                    </vibe:button>
+                                    @php
+                                        $locOpts2 = ['id' => '🇮🇩 Bahasa Indonesia', 'en' => '🇺🇸 English (US)'];
+                                        $curLoc2 = app()->getLocale();
+                                    @endphp
+                                    @foreach ($locOpts2 as $c => $l)
+                                        <vibe:button variant="ghost" size="sm" href="{{ route('locale.switch', $c) }}" class="px-3 py-1.5 rounded-lg text-xs transition-all {{ $curLoc2 === $c ? 'bg-card text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground' }}">
+                                            {{ $l }}
+                                        </vibe:button>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -854,26 +860,26 @@
                                 <span class="text-xs text-muted-foreground font-medium">{{ __('docs/page/settings/index.profile.language_active') }}</span>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md">
-                                <a href="{{ route('locale.switch', 'id') }}" class="p-3 rounded-xl border transition-all flex items-center gap-3 {{ app()->getLocale() === 'id' ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:bg-muted/40 text-muted-foreground hover:text-foreground' }}">
-                                    <span class="text-xl">🇮🇩</span>
-                                    <div>
-                                        <p class="text-xs font-semibold text-foreground">Bahasa Indonesia</p>
-                                        <p class="text-[10px] text-muted-foreground">ID - Standar Nasional</p>
-                                    </div>
-                                    @if (app()->getLocale() === 'id')
-                                        <span class="ml-auto size-1.5 rounded-full bg-primary"></span>
-                                    @endif
-                                </a>
-                                <a href="{{ route('locale.switch', 'en') }}" class="p-3 rounded-xl border transition-all flex items-center gap-3 {{ app()->getLocale() === 'en' ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:bg-muted/40 text-muted-foreground hover:text-foreground' }}">
-                                    <span class="text-xl">🇺🇸</span>
-                                    <div>
-                                        <p class="text-xs font-semibold text-foreground">English</p>
-                                        <p class="text-[10px] text-muted-foreground">US - International</p>
-                                    </div>
-                                    @if (app()->getLocale() === 'en')
-                                        <span class="ml-auto size-1.5 rounded-full bg-primary"></span>
-                                    @endif
-                                </a>
+                                @php
+                                    $languageCards = [
+                                        'id' => ['flag' => '🇮🇩', 'title' => 'Bahasa Indonesia', 'sub' => 'ID - Standar Nasional'],
+                                        'en' => ['flag' => '🇺🇸', 'title' => 'English', 'sub' => 'US - International'],
+                                    ];
+                                    $activeLang = app()->getLocale();
+                                @endphp
+                                @foreach ($languageCards as $code => $card)
+                                    @php $isSelected = ($activeLang === $code); @endphp
+                                    <a href="{{ route('locale.switch', $code) }}" class="p-3 rounded-xl border transition-all flex items-center gap-3 {{ $isSelected ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:bg-muted/40 text-muted-foreground hover:text-foreground' }}">
+                                        <span class="text-xl">{{ $card['flag'] }}</span>
+                                        <div>
+                                            <p class="text-xs font-semibold text-foreground">{{ $card['title'] }}</p>
+                                            <p class="text-[10px] text-muted-foreground">{{ $card['sub'] }}</p>
+                                        </div>
+                                        @if ($isSelected)
+                                            <span class="ml-auto size-1.5 rounded-full bg-primary"></span>
+                                        @endif
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </div>

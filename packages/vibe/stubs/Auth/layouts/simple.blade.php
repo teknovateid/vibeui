@@ -42,20 +42,23 @@
                 </svg>
             </button>
             <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute right-0 mt-1.5 w-36 rounded-xl border border-border bg-card shadow-md z-50 overflow-hidden">
-                <a href="{{ route('locale.switch', 'id') }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors {{ app()->getLocale() === 'id' ? 'text-primary bg-primary/8 font-semibold' : 'text-foreground/80 hover:bg-muted/50 hover:text-foreground' }}">
-                    <span class="text-base leading-none">🇮🇩</span>
-                    {{ __('auth/language.id') }}
-                    @if(app()->getLocale() === 'id')
-                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                    @endif
-                </a>
-                <a href="{{ route('locale.switch', 'en') }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors {{ app()->getLocale() === 'en' ? 'text-primary bg-primary/8 font-semibold' : 'text-foreground/80 hover:bg-muted/50 hover:text-foreground' }}">
-                    <span class="text-base leading-none">🇺🇸</span>
-                    {{ __('auth/language.en') }}
-                    @if(app()->getLocale() === 'en')
-                        <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                    @endif
-                </a>
+                @php
+                    $supportedLocales = [
+                        'id' => ['flag' => '🇮🇩', 'label' => __('auth/language.id')],
+                        'en' => ['flag' => '🇺🇸', 'label' => __('auth/language.en')],
+                    ];
+                    $activeLocale = app()->getLocale();
+                @endphp
+                @foreach ($supportedLocales as $code => $loc)
+                    @php $isActive = ($activeLocale === $code); @endphp
+                    <a href="{{ route('locale.switch', $code) }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors {{ $isActive ? 'text-primary bg-primary/8 font-semibold' : 'text-foreground/80 hover:bg-muted/50 hover:text-foreground' }}">
+                        <span class="text-base leading-none">{{ $loc['flag'] }}</span>
+                        {{ $loc['label'] }}
+                        @if($isActive)
+                            <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
+                        @endif
+                    </a>
+                @endforeach
             </div>
         </div>
         {{-- Theme Toggle --}}
