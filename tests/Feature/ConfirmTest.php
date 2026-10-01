@@ -290,3 +290,39 @@ test('confirm on parameterized PUT route via passkey succeeds', function () {
     $response->assertStatus(200);
     $response->assertJson(['updated' => '99']);
 });
+
+test('docs confirm demo auto-logs in demo user in local/testing and handles confirmation', function () {
+    // 1. Visit docs confirm as guest in testing environment -> automatically logs in demo user
+    $response = $this->get('/docs/auth/confirm');
+    $response->assertStatus(200);
+    $this->assertAuthenticated();
+
+    // 2. Initial PUT request without confirmed password gets 423
+    $response = $this->putJson('/docs/auth/confirm/demo-update/42', ['name' => 'Demo User']);
+    $response->assertStatus(423);
+
+    // 3. Confirm password
+    $confirmResponse = $this->postJson('/confirm-password', [
+        'password' => 'password',
+        'target_url' => '/docs/auth/confirm/demo-update/42',
+    ]);
+    $confirmResponse->assertNoContent();
+
+    // 4. Replay PUT request succeeds
+    $response = $this->putJson('/docs/auth/confirm/demo-update/42', ['name' => 'Alex Rivera']);
+    $response->assertStatus(200);
+    $response->assertJson(['success' => true]);
+});
+
+test('passkeys confirm options requires authentication', function () {
+    // Unauthenticated request receives 401 Unauthorized
+    $response = $this->getJson('/passkeys/confirm/options');
+    $response->assertStatus(401);
+
+    // Authenticated request receives 200 OK with options
+    $user = User::factory()->create();
+    $response = $this->actingAs($user)->getJson('/passkeys/confirm/options');
+    $response->assertStatus(200);
+    $response->assertJsonStructure(['options']);
+});
+

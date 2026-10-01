@@ -33,14 +33,29 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::view('/', 'docs.auth.index')->name('index');
         Route::view('/installation', 'docs.auth.installation')->name('installation');
-        Route::view('/confirm', 'docs.auth.confirm')->name('confirm');
+        Route::get('/confirm', function () {
+            if (! Auth::check() && app()->environment('local', 'testing')) {
+                $user = \App\Models\User::firstOrCreate(
+                    ['email' => 'demo@vibeui.test'],
+                    [
+                        'name' => 'Demo User',
+                        'username' => 'demouser',
+                        'phone' => '08123456789',
+                        'password' => bcrypt('password'),
+                        'email_verified_at' => now(),
+                    ]
+                );
+                Auth::login($user);
+            }
+            return view('docs.auth.confirm');
+        })->name('confirm');
         Route::put('/confirm/demo-update/{id}', function (\Illuminate\Http\Request $request, $id) {
             $name = $request->input('name') ?: 'Pengguna Demo';
             return response()->json([
                 'success' => true,
                 'message' => "Data pengguna #{$id} ({$name}) berhasil diperbarui setelah konfirmasi sandi/passkey!",
             ]);
-        })->middleware(['confirm:60'])->name('confirm.demo_update');
+        })->middleware([\App\Http\Middleware\EnsureDemoUserIsLoggedIn::class, 'confirm:60'])->name('confirm.demo_update');
         Route::view('/idle', 'docs.auth.idle')->name('idle');
         Route::view('/two-factor', 'docs.auth.two-factor')->name('two-factor');
         Route::view('/passkey', 'docs.auth.passkey')->name('passkey');

@@ -227,8 +227,16 @@ export function vibeForm(config = {}) {
                 }, 100);
             } catch (err) {
                 console.warn('Passkey modal confirmation error:', err);
+                const errMsg = (err?.message || '').toLowerCase();
+                const isUnauthenticated = errMsg.includes('unauthenticated') 
+                    || errMsg.includes('unauthorized') 
+                    || err?.status === 401 
+                    || err?.response?.status === 401;
+
                 if (err?.name === 'NotAllowedError' || err?.name === 'UserCancelledError') {
                     this.confirmPasswordError = i18n.passkey_cancelled || 'Autentikasi Passkey dibatalkan atau belum ada Passkey yang terdaftar di perangkat ini.';
+                } else if (isUnauthenticated) {
+                    this.confirmPasswordError = i18n.passkey_unauthenticated || 'Sesi login Anda belum aktif atau telah berakhir. Harap login terlebih dahulu untuk mengonfirmasi menggunakan Passkey.';
                 } else {
                     this.confirmPasswordError = err.message || (i18n.passkey_failed || 'Gagal mengonfirmasi dengan Passkey.');
                 }
@@ -288,9 +296,13 @@ export function vibeForm(config = {}) {
                     }, 100);
                 } else {
                     const data = await res.json().catch(() => ({}));
-                    this.confirmPasswordError = (data && data.errors && data.errors.password && data.errors.password[0])
-                        || (data && data.message)
-                        || (i18n.password_incorrect || 'Kata sandi salah.');
+                    if (res.status === 401 || (data && (data.message === 'Unauthenticated.' || data.message === 'Unauthenticated'))) {
+                        this.confirmPasswordError = i18n.session_expired || 'Sesi login Anda telah berakhir. Harap login kembali.';
+                    } else {
+                        this.confirmPasswordError = (data && data.errors && data.errors.password && data.errors.password[0])
+                            || (data && data.message)
+                            || (i18n.password_incorrect || 'Kata sandi salah.');
+                    }
                 }
             } catch (err) {
                 this.confirmPasswordError = i18n.network_error || 'Gagal memverifikasi kata sandi.';
@@ -504,14 +516,11 @@ export function vibeForm(config = {}) {
                 }
 
             } catch (err) {
-                console.error('vibeForm: error caught!', err);
-                this.loading = false;
-                this.error = err.data || err;
-
                 const httpStatus = err.response ? err.response.status : null;
 
                 // Auto intercept HTTP 423 (Password confirmation required)
                 if (httpStatus === 423 && confirmPassword && isAjax) {
+                    this.loading = false;
                     this.confirmPasswordInput = '';
                     this.confirmPasswordError = null;
                     this.confirmPasskeyLoading = false;
@@ -529,6 +538,10 @@ export function vibeForm(config = {}) {
                     }, 100);
                     return;
                 }
+
+                console.error('vibeForm: error caught!', err);
+                this.loading = false;
+                this.error = err.data || err;
 
                 const errorDetail = { form, id: formId, error: this.error, response: err.response };
                 window.dispatchEvent(new CustomEvent('vibe-form-error', { detail: errorDetail }));

@@ -16,8 +16,10 @@ return [
     'password_incorrect' => 'The provided password was incorrect.',
     'network_error' => 'Network error. Could not reach server.',
     'passkey_not_loaded' => 'Passkey module has not loaded yet.',
+    'passkey_unauthenticated' => 'Your login session is not active or has expired. Please log in first to confirm with a Passkey.',
     'passkey_cancelled' => 'Passkey authentication was cancelled or no passkey is registered on this device.',
     'passkey_failed' => 'Failed to verify with Passkey.',
+    'session_expired' => 'Your login session has expired. Please log in again.',
     'http_errors' => [
         '401' => ['title' => '401 Unauthenticated', 'message' => 'Your login session has ended. Please log in again.'],
         '403' => ['title' => '403 Forbidden', 'message' => 'You do not have permission to perform this action.'],

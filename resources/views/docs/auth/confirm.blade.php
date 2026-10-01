@@ -265,7 +265,7 @@ Route::post('/confirm-password', function (Request $request) {
 
                         <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
                             <span class="text-xs text-muted-foreground">
-                                💡 Jika sesi aman belum aktif, menekan tombol di samping akan memunculkan modal konfirmasi dengan Passkey dan Sandi.
+                                💡 Sandi demo: <code class="font-mono text-primary font-bold">password</code>. Sesi aman berlaku 60 detik (dapat dikunci ulang di bilah atas).
                             </span>
 
                             <vibe:button type="submit" variant="primary" size="md">
@@ -286,14 +286,14 @@ Route::post('/confirm-password', function (Request $request) {
                         Cukup gunakan tag <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">&lt;vibe:form&gt;</code> seperti biasa. Fitur <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">confirmPassword</code> aktif secara bawaan (<code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">true</code>):
                     </p>
                     <vibe:highlightjs language="blade">
-&lt;vibe:form method="PUT" action="&#123;&#123; route('users.update', $user-&gt;id) &#125;&#125;" status="toast"&gt;
-    &lt;vibe:input name="name" label="Nama" :value="$user-&gt;name" required /&gt;
-    &lt;vibe:input name="email" label="Email" :value="$user-&gt;email" required /&gt;
+<\vibe:form method="PUT" action="@{{ route('users.update', $user->id) }}" status="toast">
+    <\vibe:input name="name" label="Nama" :value="$user->name" required />
+    <\vibe:input name="email" label="Email" :value="$user->email" required />
 
-    &lt;vibe:button type="submit" variant="primary" size="md"&gt;
+    <\vibe:button type="submit" variant="primary" size="md">
         Simpan Perubahan
-    &lt;/vibe:button&gt;
-&lt;/vibe:form&gt;
+    </\vibe:button>
+</\vibe:form>
 </vibe:highlightjs>
                 </div>
             </section>
