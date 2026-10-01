@@ -1,9 +1,10 @@
 @php
     $skeletonRowCount = min(max((int) ($this->perPage ?? 5), 3), 10);
     $widths = [30, 65, 45, 75, 40, 55, 80, 50];
+    $tableLoadingTargets = 'search, filterComponents, setSort, sortBy, setPage, nextPage, previousPage, gotoPage, setPerPage, resetFilter, setFilterDefaults, clearSearch, perPage';
 @endphp
 @for($skIdx = 0; $skIdx < $skeletonRowCount; $skIdx++)
-    <tr wire:key="{{ $tableName }}-skeleton-loader-{{ $skIdx }}" wire:loading.class.remove="hidden" class="hidden animate-pulse border-b border-border/60 select-none">
+    <tr wire:key="{{ $tableName }}-skeleton-loader-{{ $skIdx }}" wire:loading.class.remove="hidden" wire:target="{{ $tableLoadingTargets }}" class="hidden animate-pulse border-b border-border/60 select-none">
         @if($this->getCurrentlyReorderingStatus)
             <td class="py-3.5 px-4"><div class="size-4 rounded bg-muted-foreground/15 dark:bg-muted-foreground/20"></div></td>
         @endif
