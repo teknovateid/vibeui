@@ -164,8 +164,8 @@
                     a.dataset.pinTitle = item.title || item.url;
                     a.dataset.navTooltip = item.title || item.url;
                     a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer ' + minCls + ' ' +
-                        (isActive ? 'bg-accent text-accent-foreground font-semibold'
-                                  : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground');
+                        (isActive ? 'bg-muted text-foreground font-semibold'
+                                  : 'text-muted-foreground hover:bg-muted hover:text-foreground');
 
                     a.addEventListener('click', function(e) {
                         if (e.target.closest('[data-history-delete]')) {
@@ -197,7 +197,7 @@
                     delBtn.type = 'button';
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = '{{ __('vibe/nav.remove_from_history') }}';
-                    delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-accent text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
+                    delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
                     delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M19 19L5 5" /></svg>';
                     
                     var handleDelete = function(e) {

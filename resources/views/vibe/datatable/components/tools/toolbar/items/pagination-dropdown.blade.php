@@ -25,7 +25,7 @@
                         type="button"
                         wire:click="$set('perPage', {{ $item }})"
                         @click="close()"
-                        class="w-full text-center px-3 py-1.5 text-xs rounded-lg transition-colors cursor-pointer select-none {{ $isCurrent ? 'bg-accent text-accent-foreground font-semibold' : 'text-popover-foreground hover:bg-muted/70 font-medium' }}"
+                        class="w-full text-center px-3 py-1.5 text-xs rounded-lg transition-colors cursor-pointer select-none {{ $isCurrent ? 'bg-muted text-foreground font-semibold' : 'text-popover-foreground hover:bg-muted/70 font-medium' }}"
                     >
                         {{ $item === -1 ? __($localisationPath.'All') : $item }}
                     </button>

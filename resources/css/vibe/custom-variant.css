@@ -35,36 +35,36 @@
 [data-pinned-container] [data-pinned-shortcut-for] button,
 [data-pinned-container] a[data-pinned-shortcut-for] {
     background-color: transparent !important;
-    color: var(--muted-foreground, #717372) !important;
+    color: var(--muted-foreground, #71717a) !important;
 }
 
 [data-pinned-container] [data-pinned-shortcut-for] a:hover,
 [data-pinned-container] [data-pinned-shortcut-for] button:hover,
 [data-pinned-container] a[data-pinned-shortcut-for]:hover {
-    background-color: var(--accent, #e5e6e5) !important;
-    color: var(--accent-foreground, #0a0b0a) !important;
+    background-color: var(--muted, #f4f4f5) !important;
+    color: var(--foreground, #09090b) !important;
 }
 
 /* Scoped preview canvas explicit styles */
 [data-canvas-theme="light"] {
     background-color: #ffffff !important;
-    color: #0a0b0a !important;
+    color: #09090b !important;
 }
 
 [data-canvas-theme="dark"] {
-    background-color: #0a0b0a !important;
-    color: #f9fafa !important;
+    background-color: #09090b !important;
+    color: #fafafa !important;
 }
 
 [data-canvas-theme="auto"] {
     background-color: #ffffff;
-    color: #0a0b0a;
+    color: #09090b;
 }
 
 .dark [data-canvas-theme="auto"],
 :where(.dark, .dark *) [data-canvas-theme="auto"] {
-    background-color: #0a0b0a !important;
-    color: #f9fafa !important;
+    background-color: #09090b !important;
+    color: #fafafa !important;
 }
 
 

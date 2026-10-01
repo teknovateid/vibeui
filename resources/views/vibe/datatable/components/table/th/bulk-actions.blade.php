@@ -50,7 +50,7 @@
                 <vibe:dropdown.trigger>
                     <button
                         type="button"
-                        class="flex items-center justify-center size-4 rounded text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors focus-visible:outline-none cursor-pointer"
+                        class="flex items-center justify-center size-4 rounded text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors focus-visible:outline-none cursor-pointer"
                         title="{{ __('vibe/datatable.select_page_or_all') }}"
                         aria-label="{{ __('vibe/datatable.select_page_or_all') }}"
                     >

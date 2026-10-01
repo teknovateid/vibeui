@@ -226,7 +226,7 @@
                     <button
                         type="button"
                         @click="copyCode()"
-                        class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-muted-foreground hover:text-foreground hover:bg-accent transition-colors focus:outline-none cursor-pointer"
+                        class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus:outline-none cursor-pointer"
                         aria-label="{{ __('vibe/preview.copy') }}"
                     >
                         <span x-show="!copied" class="inline-flex items-center gap-1.5">
@@ -252,7 +252,7 @@
             <button
                 type="button"
                 @click="copyCode()"
-                class="inline-flex items-center justify-center size-8 rounded-lg bg-muted/80 backdrop-blur-xs text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-accent transition-all border border-border shadow-xs focus:outline-none cursor-pointer"
+                class="inline-flex items-center justify-center size-8 rounded-lg bg-muted/80 backdrop-blur-xs text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-border shadow-xs focus:outline-none cursor-pointer"
                 aria-label="{{ __('vibe/preview.copy') }}"
                 title="{{ __('vibe/preview.copy') }}"
             >

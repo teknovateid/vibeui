@@ -169,7 +169,7 @@
                     // Reset active state on shortcut clones
                     let targets = [clone, ...clone.querySelectorAll('a, button')];
                     targets.forEach(t => {
-                        t.classList.remove('bg-accent', 'text-accent-foreground', 'font-semibold', 'bg-primary', 'text-primary-foreground', 'bg-muted', 'nav-item-active', 'shadow-xs');
+                        t.classList.remove('font-semibold', 'bg-primary', 'text-primary-foreground', 'bg-muted', 'nav-item-active', 'shadow-xs');
                         t.classList.add('text-muted-foreground');
                     });
 

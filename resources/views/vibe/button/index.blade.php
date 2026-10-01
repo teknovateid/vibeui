@@ -18,15 +18,15 @@
         'tab', 'plain', 'unstyled' => '',
         'primary' => 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
         'secondary' => 'bg-secondary text-secondary-foreground shadow-2xs hover:bg-secondary/80',
-        'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
-        'ghost' => 'text-foreground hover:bg-accent hover:text-accent-foreground active:bg-accent/80',
-        'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-accent/60',
+        'outline' => 'border border-input bg-background text-foreground shadow-2xs hover:bg-muted hover:text-foreground',
+        'ghost' => 'text-foreground hover:bg-muted hover:text-foreground active:bg-muted/80',
+        'surface' => 'bg-card border border-border/80 text-card-foreground shadow-2xs hover:bg-muted/60',
         'destructive', 'danger' => 'bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive',
         'success' => 'bg-success text-success-foreground shadow-xs hover:bg-success/90 focus-visible:ring-success',
         'warning' => 'bg-warning text-warning-foreground shadow-xs hover:bg-warning/90 focus-visible:ring-warning',
         'info' => 'bg-info text-info-foreground shadow-xs hover:bg-info/90 focus-visible:ring-info',
         'link' => 'text-primary underline-offset-4 hover:underline p-0 h-auto font-medium shadow-none active:scale-100',
-        default => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-accent hover:text-accent-foreground',
+        default => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-muted hover:text-foreground',
     };
 
     $sizeClasses = match ($size) {

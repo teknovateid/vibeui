@@ -10,7 +10,7 @@
                 class="justify-between text-left whitespace-nowrap px-2.5 py-1.5 h-auto rounded-lg text-xs font-medium shrink-0 transition-colors"
                 x-bind:class="{
                     'bg-primary text-primary-foreground font-semibold shadow-2xs hover:bg-primary/90': activePreset === preset.key,
-                    'text-muted-foreground hover:text-foreground hover:bg-accent': activePreset !== preset.key
+                    'text-muted-foreground hover:text-foreground hover:bg-muted': activePreset !== preset.key
                 }"
             >
                 <span x-text="preset.label"></span>
