@@ -10,6 +10,7 @@
     <form wire:submit="sendResetLink" class="space-y-4">
         {{-- Email Input --}}
         <vibe:input 
+            size="xl"
             wire:model="email" 
             id="email" 
             name="email" 
@@ -24,6 +25,7 @@
         {{-- Submit Button --}}
         <div class="pt-2">
             <vibe:button 
+                size="xl"
                 type="submit" 
                 variant="primary" 
                 class="w-full justify-center shadow-xs" 

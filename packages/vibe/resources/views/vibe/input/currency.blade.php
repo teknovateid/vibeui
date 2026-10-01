@@ -42,11 +42,11 @@
     $wireModel = $attributes->wire('model')->value();
 
     $sizeClasses = match ($size) {
-        'sm' => 'h-9 sm:h-8 text-sm sm:text-xs rounded-md px-2.5',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3',
-        'lg' => 'h-12 sm:h-10 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
-        'xl' => 'h-14 sm:h-11 text-lg sm:text-base rounded-xl px-4.5 sm:px-4',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3',
+        'sm' => 'h-8 text-xs rounded-md px-2.5',
+        'md' => 'h-9 text-sm rounded-lg px-3.5',
+        'lg' => 'h-10 text-sm rounded-lg px-4',
+        'xl' => 'h-11 text-base rounded-xl px-4.5',
+        default => 'h-9 text-sm rounded-lg px-3.5',
     };
 
     $variantClasses = match ($variant) {

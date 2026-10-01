@@ -26,7 +26,7 @@
          </div>
 
          <!-- Notification Item 2 -->
-         <div class="p-3 rounded-lg hover:bg-accent/60 transition-colors cursor-pointer flex flex-col gap-1">
+         <div class="p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer flex flex-col gap-1">
              <div class="flex items-center justify-between">
                  <span class="font-semibold text-xs text-foreground flex items-center gap-1.5">
                      <span class="size-2 rounded-full bg-green-500"></span>
@@ -40,7 +40,7 @@
          </div>
 
          <!-- Notification Item 3 -->
-         <div class="p-3 rounded-lg hover:bg-accent/60 transition-colors cursor-pointer flex flex-col gap-1">
+         <div class="p-3 rounded-lg hover:bg-muted transition-colors cursor-pointer flex flex-col gap-1">
              <div class="flex items-center justify-between">
                  <span class="font-semibold text-xs text-foreground flex items-center gap-1.5">
                      <span class="size-2 rounded-full bg-amber-500"></span>
@@ -55,7 +55,7 @@
      </vibe:sheet.content>
 
      <vibe:sheet.footer class="p-3 border-dashed">
-         <vibe:button class="w-full text-xs">
+         <vibe:button class="w-full">
              Tandai Semua Sudah Dibaca
          </vibe:button>
      </vibe:sheet.footer>

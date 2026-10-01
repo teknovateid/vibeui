@@ -29,7 +29,7 @@
 
         {{-- Passkey Login Section --}}
         <div class="space-y-3">
-            <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
+            <vibe:button size="xl" type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" data-vibe-passkey="{{ $this->redirectAfterLoginUrl() }}" onclick="window.vibeLoginWithPasskey(this, '{{ $this->redirectAfterLoginUrl() }}')">
                 <span class="vibe-passkey-text inline-flex items-center gap-2">
                     <svg class="size-4 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" />
@@ -58,7 +58,7 @@
     @endif
 
     <form wire:submit="authenticate" class="space-y-4">
-        <vibe:input wire:model="login" id="login" name="login" label="{{ $loginLabel }}" placeholder="{{ $loginPlaceholder }}" type="{{ $this->isOnlyEmail() ? 'email' : 'text' }}" required autofocus autocomplete="{{ config('passkeys.enabled', true) ? 'username webauthn' : 'username' }}" />
+        <vibe:input size="xl" wire:model="login" id="login" name="login" label="{{ $loginLabel }}" placeholder="{{ $loginPlaceholder }}" type="{{ $this->isOnlyEmail() ? 'email' : 'text' }}" required autofocus autocomplete="{{ config('passkeys.enabled', true) ? 'username webauthn' : 'username' }}" />
 
         {{-- Password Input with Viewable Toggle --}}
         <div class="space-y-1">
@@ -73,7 +73,7 @@
                 @endif
             </div>
 
-            <vibe:input wire:model="password" id="password" name="password" type="password" viewable required autocomplete="current-password" placeholder="••••••••" />
+            <vibe:input size="xl" wire:model="password" id="password" name="password" type="password" viewable required autocomplete="current-password" placeholder="••••••••" />
         </div>
 
         {{-- Remember Me Checkbox --}}
@@ -84,6 +84,7 @@
         {{-- Submit Button with Loading State --}}
         <div class="pt-2">
             <vibe:button 
+                size="xl"
                 type="submit" 
                 variant="primary" 
                 class="w-full justify-center shadow-xs" 
