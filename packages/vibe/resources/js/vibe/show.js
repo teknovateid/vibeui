@@ -349,6 +349,8 @@
             if (el.hasAttribute('vibe-show')) return;
 
             const rawName = el.getAttribute('name') || '';
+            // Skip Laravel/framework internal inputs starting with '_' (e.g. _token, _method)
+            if (rawName.startsWith('_')) return;
             // Convert bracket name notation: user[profile][phone] -> user.profile.phone
             const keyPath = rawName.replace(/\[(\w+)\]/g, '.$1').replace(/\[\]/g, '').replace(/^\./, '');
             if (!keyPath) return;

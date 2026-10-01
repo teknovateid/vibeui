@@ -483,7 +483,7 @@
                 @endif
 
                 <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
+                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                          style="{{ $innerStyle }}"
                          :style="behavior !== 'minify'
                              ? (position === 'right'
@@ -844,7 +844,7 @@
 
     @if ($layout === 'relative')
         <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal ? `width: ${size}px` : `height: ${size}px`)
@@ -854,7 +854,7 @@
         </div>
     @else
         <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible"
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
