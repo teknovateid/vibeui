@@ -63,10 +63,12 @@
                 e.preventDefault();
             }
         },
+        handleKeydownEnter(e) {},
         saveToStorage() {},
         clearStorage() {}
     }"
     @submit="handleSubmit($event)"
+    @keydown.enter="handleKeydownEnter($event)"
     @if($saveToStorage && $id)
         @input.debounce.500ms="saveToStorage($el)"
     @endif
