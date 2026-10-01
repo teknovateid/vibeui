@@ -28,10 +28,18 @@
             $fallbackUrl = Route::has('docs.settings.security')
                 ? route('docs.settings.security')
                 : (Route::has('settings.security') ? route('settings.security') : url('/'));
-            $intendedPasskeyUrl = session('url.intended')
-                ?: ($targetRouteName
-                    ? (Route::has($targetRouteName) ? route($targetRouteName) : url($targetRouteName))
-                    : $fallbackUrl);
+            $resolveRouteUrl = function (?string $name, string $fallback): string {
+                if (! $name) return $fallback;
+                if (\Illuminate\Support\Facades\Route::has($name)) {
+                    try {
+                        return route($name);
+                    } catch (\Throwable) {
+                        return $fallback;
+                    }
+                }
+                return url($name);
+            };
+            $intendedPasskeyUrl = session('url.intended') ?: $resolveRouteUrl($targetRouteName, $fallbackUrl);
         @endphp
         <div class="space-y-3">
             <vibe:button type="button" variant="outline" class="w-full justify-center shadow-2xs font-medium cursor-pointer" onclick="window.vibeConfirmWithPasskey(this, '{{ $intendedPasskeyUrl }}')">

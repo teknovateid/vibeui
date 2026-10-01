@@ -15,6 +15,9 @@ return [
     'password_required' => 'Silakan masukkan kata sandi Anda.',
     'password_incorrect' => 'Kata sandi salah. Silakan coba lagi.',
     'network_error' => 'Gagal terhubung ke server. Periksa koneksi Anda.',
+    'passkey_not_loaded' => 'Modul Passkey belum dimuat.',
+    'passkey_cancelled' => 'Autentikasi Passkey dibatalkan atau belum ada Passkey yang terdaftar di perangkat ini.',
+    'passkey_failed' => 'Gagal mengonfirmasi dengan Passkey.',
     'http_errors' => [
         '401' => ['title' => '401 Tidak Terautentikasi', 'message' => 'Sesi login Anda telah berakhir. Silakan login kembali.'],
         '403' => ['title' => '403 Akses Ditolak', 'message' => 'Anda tidak memiliki izin untuk melakukan aksi ini.'],

@@ -185,6 +185,7 @@ export function vibeForm(config = {}) {
         showConfirmPasswordModal: false,
         confirmPasswordInput: '',
         confirmPasswordLoading: false,
+        confirmPasskeyLoading: false,
         confirmPasswordError: null,
         showConfirmPasswordText: false,
 
@@ -192,7 +193,48 @@ export function vibeForm(config = {}) {
             this.showConfirmPasswordModal = false;
             this.confirmPasswordInput = '';
             this.confirmPasswordError = null;
+            this.confirmPasskeyLoading = false;
             this.loading = false;
+        },
+
+        async confirmWithPasskey() {
+            if (this.confirmPasskeyLoading) return;
+            this.confirmPasskeyLoading = true;
+            this.confirmPasswordError = null;
+
+            try {
+                const passkeysClient = window.Passkeys || (typeof Passkeys !== 'undefined' ? Passkeys : null);
+                if (!passkeysClient) {
+                    throw new Error(i18n.passkey_not_loaded || 'Modul Passkey belum dimuat.');
+                }
+
+                await passkeysClient.verify({
+                    routes: {
+                        options: '/passkeys/confirm/options',
+                        submit: '/passkeys/confirm',
+                    },
+                });
+
+                // Passkey confirmation succeeded!
+                this.showConfirmPasswordModal = false;
+                this.confirmPasswordInput = '';
+                this.confirmPasswordError = null;
+                this.confirmPasskeyLoading = false;
+
+                // Replay form submission automatically
+                setTimeout(() => {
+                    this.submit();
+                }, 100);
+            } catch (err) {
+                console.warn('Passkey modal confirmation error:', err);
+                if (err?.name === 'NotAllowedError' || err?.name === 'UserCancelledError') {
+                    this.confirmPasswordError = i18n.passkey_cancelled || 'Autentikasi Passkey dibatalkan atau belum ada Passkey yang terdaftar di perangkat ini.';
+                } else {
+                    this.confirmPasswordError = err.message || (i18n.passkey_failed || 'Gagal mengonfirmasi dengan Passkey.');
+                }
+            } finally {
+                this.confirmPasskeyLoading = false;
+            }
         },
 
         async submitConfirmPassword() {
@@ -212,6 +254,15 @@ export function vibeForm(config = {}) {
                     if (metaCsrf) csrfToken = metaCsrf.getAttribute('content');
                 }
 
+                // Resolve form action URL as target_url for replay authorization
+                let targetUrl = null;
+                if (form) {
+                    targetUrl = form.getAttribute('action') || (form.action ? new URL(form.action, window.location.origin).pathname : null);
+                }
+                if (!targetUrl) {
+                    targetUrl = window.location.pathname;
+                }
+
                 const res = await fetch(confirmPasswordUrl, {
                     method: 'POST',
                     headers: {
@@ -219,13 +270,17 @@ export function vibeForm(config = {}) {
                         'X-CSRF-TOKEN': csrfToken || '',
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({ password: this.confirmPasswordInput })
+                    body: JSON.stringify({
+                        password: this.confirmPasswordInput,
+                        target_url: targetUrl
+                    })
                 });
 
                 if (res.ok || res.status === 204) {
                     this.showConfirmPasswordModal = false;
                     this.confirmPasswordInput = '';
                     this.confirmPasswordError = null;
+                    this.confirmPasskeyLoading = false;
 
                     // Automatically replay the form submission!
                     setTimeout(() => {
@@ -459,10 +514,18 @@ export function vibeForm(config = {}) {
                 if (httpStatus === 423 && confirmPassword && isAjax) {
                     this.confirmPasswordInput = '';
                     this.confirmPasswordError = null;
+                    this.confirmPasskeyLoading = false;
                     this.showConfirmPasswordModal = true;
                     setTimeout(() => {
                         const input = this.$refs && this.$refs.confirmPasswordInputRef;
-                        if (input) input.focus();
+                        if (input) {
+                            if (typeof input.focus === 'function') {
+                                input.focus();
+                            } else if (input.querySelector) {
+                                const realInput = input.querySelector('input');
+                                if (realInput) realInput.focus();
+                            }
+                        }
                     }, 100);
                     return;
                 }

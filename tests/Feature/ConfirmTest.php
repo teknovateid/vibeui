@@ -245,3 +245,48 @@ test('confirm with timeout duration allows cross page navigation within timeout 
     $this->actingAs($user)->get('/test-dashboard')->assertStatus(200);
     $this->actingAs($user)->get('/test-users')->assertStatus(200);
 });
+
+test('confirm on PUT route with parameterized URI succeeds without missing parameter error', function () {
+    $user = User::factory()->create();
+
+    \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'confirm:100'])->group(function () {
+        \Illuminate\Support\Facades\Route::put('/dashboard/users/update/{id}', fn ($id) => response()->json(['updated' => $id]))->name('dashboard.users.update');
+    });
+
+    // 1. AJAX PUT request without confirmed session returns 423
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update/42');
+    $response->assertStatus(423);
+
+    // 2. Client confirms password and passes target_url
+    $response = $this->actingAs($user)->postJson('/confirm-password', [
+        'password' => 'password',
+        'target_url' => '/dashboard/users/update/42',
+    ]);
+    $response->assertNoContent();
+
+    // 3. Replay AJAX PUT request succeeds with 200 OK!
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update/42');
+    $response->assertStatus(200);
+    $response->assertJson(['updated' => '42']);
+});
+
+test('confirm on parameterized PUT route via passkey succeeds', function () {
+    $user = User::factory()->create();
+
+    \Illuminate\Support\Facades\Route::middleware(['web', 'auth', 'confirm:100'])->group(function () {
+        \Illuminate\Support\Facades\Route::put('/dashboard/users/update/{id}', fn ($id) => response()->json(['updated' => $id]))->name('dashboard.users.update.passkey');
+    });
+
+    // 1. Initial PUT gets 423
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update/99');
+    $response->assertStatus(423);
+
+    // 2. Verify with Passkey event
+    $passkey = new \Laravel\Passkeys\Passkey;
+    \Laravel\Passkeys\Events\PasskeyVerified::dispatch($user, $passkey);
+
+    // 3. Replay PUT request succeeds!
+    $response = $this->actingAs($user)->putJson('/dashboard/users/update/99');
+    $response->assertStatus(200);
+    $response->assertJson(['updated' => '99']);
+});

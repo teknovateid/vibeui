@@ -34,6 +34,13 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/', 'docs.auth.index')->name('index');
         Route::view('/installation', 'docs.auth.installation')->name('installation');
         Route::view('/confirm', 'docs.auth.confirm')->name('confirm');
+        Route::put('/confirm/demo-update/{id}', function (\Illuminate\Http\Request $request, $id) {
+            $name = $request->input('name') ?: 'Pengguna Demo';
+            return response()->json([
+                'success' => true,
+                'message' => "Data pengguna #{$id} ({$name}) berhasil diperbarui setelah konfirmasi sandi/passkey!",
+            ]);
+        })->middleware(['confirm:60'])->name('confirm.demo_update');
         Route::view('/idle', 'docs.auth.idle')->name('idle');
         Route::view('/two-factor', 'docs.auth.two-factor')->name('two-factor');
         Route::view('/passkey', 'docs.auth.passkey')->name('passkey');

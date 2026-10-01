@@ -46,3 +46,13 @@ test('vibe:form accepts custom confirm password url', function () {
     expect($html)
         ->toContain("confirmPasswordUrl: '/custom-confirm'");
 });
+
+test('vibe:form confirm password modal renders passkey button and medium buttons', function () {
+    $html = Blade::render(
+        '<vibe:form id="test-form" action="/test">Fields</vibe:form>'
+    );
+
+    expect($html)
+        ->toContain('confirmWithPasskey()')
+        ->toContain('h-9 px-3.5 text-sm gap-2 rounded-lg');
+});

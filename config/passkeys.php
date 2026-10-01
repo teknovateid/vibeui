@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'enabled' => env('PASSKEYS_ENABLED', false),
+    'enabled' => env('PASSKEYS_ENABLED', true),
 
     /*
     |--------------------------------------------------------------------------
