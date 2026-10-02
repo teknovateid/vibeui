@@ -7,7 +7,7 @@
     'value' => null,
     'checked' => false,
     'description' => null,
-    'size' => 'md', // sm, md, lg
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, secondary, success, warning, danger/destructive, info
     'labelPlacement' => 'right', // right, left, justify
     'disabled' => false,
@@ -27,28 +27,33 @@
 
     // Track dimensions
     $trackSizes = match ($size) {
+        'xs' => 'h-3.5 w-6',
         'sm' => 'h-4 w-7',
         'lg' => 'h-6 w-11',
+        'xl' => 'h-7 w-12',
         default => 'h-5 w-9',
     };
 
     // Thumb dimensions
     $thumbSizes = match ($size) {
+        'xs' => 'size-2.5 peer-checked:translate-x-2.5',
         'sm' => 'size-3 peer-checked:translate-x-3',
         'lg' => 'size-5 peer-checked:translate-x-5',
+        'xl' => 'size-6 peer-checked:translate-x-5',
         default => 'size-4 peer-checked:translate-x-4',
     };
 
     // Text sizes
     $labelSizes = match ($size) {
-        'sm' => 'text-xs',
-        'lg' => 'text-base',
+        'xs', 'sm' => 'text-xs',
+        'xl' => 'text-base',
         default => 'text-sm',
     };
 
     $descSizes = match ($size) {
+        'xs' => 'text-[10px]',
         'sm' => 'text-[11px]',
-        'lg' => 'text-sm',
+        'xl' => 'text-sm',
         default => 'text-xs',
     };
 

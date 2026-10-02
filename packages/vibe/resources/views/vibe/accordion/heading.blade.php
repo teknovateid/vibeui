@@ -17,9 +17,11 @@
         :aria-controls="'accordion-content-' + itemValue"
         :id="'accordion-trigger-' + itemValue"
         :class="{
+            'py-2 px-3 text-xs gap-2': size === 'xs',
             'py-2.5 px-3.5 text-xs gap-2.5': size === 'sm',
             'py-4 px-5 text-base gap-3.5': size === 'lg',
-            'py-3.5 px-4 text-sm gap-3': size !== 'sm' && size !== 'lg',
+            'py-4.5 px-5.5 text-base gap-4': size === 'xl',
+            'py-3.5 px-4 text-sm gap-3': size !== 'xs' && size !== 'sm' && size !== 'lg' && size !== 'xl',
             'flex-row-reverse': chevronPosition === 'left',
             'cursor-not-allowed opacity-50': accordionDisabled || itemDisabled,
             'cursor-pointer hover:bg-muted/40 text-foreground': !accordionDisabled && !itemDisabled
@@ -72,9 +74,11 @@
                 class="shrink-0 text-muted-foreground transition-transform duration-200 ease-out"
                 :class="{
                     'rotate-180 text-foreground': isOpen(itemValue),
+                    'size-3': size === 'xs',
                     'size-3.5': size === 'sm',
                     'size-4.5': size === 'lg',
-                    'size-4': size !== 'sm' && size !== 'lg'
+                    'size-5': size === 'xl',
+                    'size-4': size !== 'xs' && size !== 'sm' && size !== 'lg' && size !== 'xl'
                 }"
             >
                 <svg class="size-full" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

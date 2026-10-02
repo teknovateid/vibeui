@@ -22,9 +22,11 @@
 
                 {{-- Quick Props Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xl</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
@@ -87,14 +89,18 @@
 
                 <vibe:preview :title="__('docs/checkbox.sizes.preview_title')">
                     <vibe:preview.code>
+                        <vibe:checkbox size="xs" label="Ekstra Kecil (xs)" checked />
                         <vibe:checkbox size="sm" label="{{ __('docs/checkbox.sizes.sm') }}" checked />
                         <vibe:checkbox size="md" label="{{ __('docs/checkbox.sizes.md') }}" checked />
                         <vibe:checkbox size="lg" label="{{ __('docs/checkbox.sizes.lg') }}" checked />
+                        <vibe:checkbox size="xl" label="Ekstra Besar (xl)" checked />
                     </vibe:preview.code>
                     <div class="flex flex-col gap-3">
+                        <vibe:checkbox size="xs" label="Ekstra Kecil (xs)" checked />
                         <vibe:checkbox size="sm" :label="__('docs/checkbox.sizes.sm')" checked />
                         <vibe:checkbox size="md" :label="__('docs/checkbox.sizes.md')" checked />
                         <vibe:checkbox size="lg" :label="__('docs/checkbox.sizes.lg')" checked />
+                        <vibe:checkbox size="xl" label="Ekstra Besar (xl)" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -314,7 +320,7 @@
                                 ['description', 'string', 'null', __('docs/checkbox.props.items.description')],
                                 ['checked', 'bool', 'false', __('docs/checkbox.props.items.checked')],
                                 ['indeterminate', 'bool', 'false', __('docs/checkbox.props.items.indeterminate')],
-                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/checkbox.props.items.size')],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/checkbox.props.items.size')],
                                 ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'card'", "'primary'", __('docs/checkbox.props.items.variant')],
                                 ['color', 'string', 'null', __('docs/checkbox.props.items.color')],
                                 ['card', 'bool', 'false', __('docs/checkbox.props.items.card')],

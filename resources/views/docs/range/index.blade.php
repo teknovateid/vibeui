@@ -22,6 +22,7 @@
 
                 {{-- Quick Props Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
@@ -137,6 +138,7 @@
                 <vibe:preview :title="__('docs/range.sizes.preview_title')">
                     <vibe:preview.code>
                         <div class="space-y-6">
+                            <vibe:range name="sz_xs" label="Extra Small (xs - track 3px)" size="xs" :value="25" />
                             <vibe:range name="sz_sm" label="{{ __('docs/range.sizes.sm_label') }}" size="sm" :value="40" />
                             <vibe:range name="sz_md" label="{{ __('docs/range.sizes.md_label') }}" size="md" :value="55" />
                             <vibe:range name="sz_lg" label="{{ __('docs/range.sizes.lg_label') }}" size="lg" :value="70" />
@@ -144,6 +146,7 @@
                         </div>
                     </vibe:preview.code>
                     <div class="w-full max-w-md space-y-6">
+                        <vibe:range name="sz_xs_demo" label="Extra Small (xs - track 3px)" size="xs" :value="25" />
                         <vibe:range name="sz_sm_demo" :label="__('docs/range.sizes.sm_label')" size="sm" :value="40" />
                         <vibe:range name="sz_md_demo" :label="__('docs/range.sizes.md_label')" size="md" :value="55" />
                         <vibe:range name="sz_lg_demo" :label="__('docs/range.sizes.lg_label')" size="lg" :value="70" />
@@ -423,7 +426,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $props = [['name', 'string', 'null', __('docs/range.props.items.name')], ['id', 'string', 'auto', __('docs/range.props.items.id')], ['label', 'string', 'null', __('docs/range.props.items.label')], ['description', 'string', 'null', __('docs/range.props.items.description')], ['value', 'numeric|string', 'null', __('docs/range.props.items.value')], ['min', 'numeric', '0', __('docs/range.props.items.min')], ['max', 'numeric', '100', __('docs/range.props.items.max')], ['step', 'numeric', '1', __('docs/range.props.items.step')], ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')], ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')], ['strict', 'bool', 'auto', __('docs/range.props.items.strict')], ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/range.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/range.props.items.variant')], ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')], ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')], ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')], ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')], ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')], ['info', 'string', 'null', __('docs/range.props.items.info')], ['error', 'string|bool', 'null', __('docs/range.props.items.error')], ['errorName', 'string', 'null', __('docs/range.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/range.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')]];
+                            $props = [['name', 'string', 'null', __('docs/range.props.items.name')], ['id', 'string', 'auto', __('docs/range.props.items.id')], ['label', 'string', 'null', __('docs/range.props.items.label')], ['description', 'string', 'null', __('docs/range.props.items.description')], ['value', 'numeric|string', 'null', __('docs/range.props.items.value')], ['min', 'numeric', '0', __('docs/range.props.items.min')], ['max', 'numeric', '100', __('docs/range.props.items.max')], ['step', 'numeric', '1', __('docs/range.props.items.step')], ['checkpoints', 'array', 'null', __('docs/range.props.items.checkpoints')], ['marks', 'bool|array', 'null', __('docs/range.props.items.marks')], ['strict', 'bool', 'auto', __('docs/range.props.items.strict')], ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/range.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/range.props.items.variant')], ['showValue', 'bool', 'false', __('docs/range.props.items.showValue')], ['valuePrefix', 'string', "''", __('docs/range.props.items.valuePrefix')], ['valueSuffix', 'string', "''", __('docs/range.props.items.valueSuffix')], ['minLabel', 'string', 'null', __('docs/range.props.items.minLabel')], ['maxLabel', 'string', 'null', __('docs/range.props.items.maxLabel')], ['info', 'string', 'null', __('docs/range.props.items.info')], ['error', 'string|bool', 'null', __('docs/range.props.items.error')], ['errorName', 'string', 'null', __('docs/range.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/range.props.items.disabled')], ['readonly', 'bool', 'false', __('docs/range.props.items.readonly')], ['wrapperClass', 'string', 'null', __('docs/range.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($props as [$prop, $type, $default, $desc])
                             <vibe:table.row>

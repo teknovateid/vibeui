@@ -8,7 +8,7 @@
     'max' => null,
     'step' => 1,
     'value' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, secondary, success, warning, danger, info
     'showValue' => false,
     'valuePrefix' => '',
@@ -40,6 +40,7 @@
 
     // Track height
     $trackHeight = match ($size) {
+        'xs' => '3px',
         'sm' => '4px',
         'lg' => '8px',
         'xl' => '10px',
@@ -48,6 +49,7 @@
 
     // Thumb size
     $thumbSize = match ($size) {
+        'xs' => '12px',
         'sm' => '14px',
         'lg' => '20px',
         'xl' => '24px',

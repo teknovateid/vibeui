@@ -7,7 +7,7 @@
     'value' => null, // Alias untuk selected
     'default' => null, // Alias untuk selected
     'variant' => 'default', // 'default' | 'separated' | 'card' | 'flush' | 'filled' | 'muted'
-    'size' => 'md', // 'sm' | 'md' | 'lg'
+    'size' => 'md', // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     'chevron' => true, // Tampilkan chevron icon
     'chevronPosition' => 'right', // 'right' | 'left'
     'disabled' => false,

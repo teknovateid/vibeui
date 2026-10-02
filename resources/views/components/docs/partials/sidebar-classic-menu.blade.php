@@ -103,6 +103,9 @@
             <vibe:nav.item href="{{ route('docs.input.phone') }}" :active="request()->routeIs('docs.input.phone')">
                 {{ __('docs/sidebar.nav.input_group.phone') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.quantity') }}" :active="request()->routeIs('docs.input.quantity')">
+                {{ __('docs/sidebar.nav.input_group.quantity') }}
+            </vibe:nav.item>
         </vibe:nav.group>
 
         <!-- Textarea -->
@@ -214,6 +217,19 @@
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.button') }}
+        </vibe:nav.item>
+
+        <!-- Swipe Button -->
+        <vibe:nav.item href="{{ route('docs.swipe.index') }}" :active="request()->routeIs('docs.swipe.*')">
+            <x-slot:icon>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="7" width="20" height="10" rx="5" />
+                    <circle cx="8" cy="12" r="2.5" />
+                    <path d="m14 12 2 0" />
+                    <path d="m15 10 2 2-2 2" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.swipe') }}
         </vibe:nav.item>
 
         <!-- Show -->

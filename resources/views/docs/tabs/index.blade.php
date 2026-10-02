@@ -32,7 +32,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sm', 'md', 'lg'] as $s)
+                    @foreach (['xs', 'sm', 'md', 'lg', 'xl'] as $s)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>

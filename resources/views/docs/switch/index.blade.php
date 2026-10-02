@@ -22,9 +22,11 @@
 
                 {{-- Quick Props Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xl</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
@@ -98,14 +100,18 @@
 
                 <vibe:preview :title="__('docs/switch.sizes.preview_title')">
                     <vibe:preview.code>
+                        <vibe:switch size="xs" label="Ekstra Kecil (xs)" checked />
                         <vibe:switch size="sm" label="{{ __('docs/switch.sizes.sm') }}" checked />
                         <vibe:switch size="md" label="{{ __('docs/switch.sizes.md') }}" checked />
                         <vibe:switch size="lg" label="{{ __('docs/switch.sizes.lg') }}" checked />
+                        <vibe:switch size="xl" label="Ekstra Besar (xl)" checked />
                     </vibe:preview.code>
                     <div class="flex flex-col gap-3">
+                        <vibe:switch size="xs" label="Ekstra Kecil (xs)" checked />
                         <vibe:switch size="sm" :label="__('docs/switch.sizes.sm')" checked />
                         <vibe:switch size="md" :label="__('docs/switch.sizes.md')" checked />
                         <vibe:switch size="lg" :label="__('docs/switch.sizes.lg')" checked />
+                        <vibe:switch size="xl" label="Ekstra Besar (xl)" checked />
                     </div>
                 </vibe:preview>
             </section>
@@ -302,7 +308,7 @@
                     </vibe:table.header>
                     <vibe:table.rows>
                         @php
-                            $switchProps = [['name', 'string', 'null', __('docs/switch.props.items.name')], ['id', 'string', 'auto', __('docs/switch.props.items.id')], ['value', 'string', "'1'", __('docs/switch.props.items.value')], ['label', 'string', 'null', __('docs/switch.props.items.label')], ['description', 'string', 'null', __('docs/switch.props.items.description')], ['checked', 'bool', 'false', __('docs/switch.props.items.checked')], ['size', "'sm'|'md'|'lg'", "'md'", __('docs/switch.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/switch.props.items.variant')], ['labelPlacement', "'right'|'left'|'justify'", "'right'", __('docs/switch.props.items.labelPlacement')], ['error', 'string|bool', 'null', __('docs/switch.props.items.error')], ['errorName', 'string', 'null', __('docs/switch.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/switch.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/switch.props.items.wrapperClass')]];
+                            $switchProps = [['name', 'string', 'null', __('docs/switch.props.items.name')], ['id', 'string', 'auto', __('docs/switch.props.items.id')], ['value', 'string', "'1'", __('docs/switch.props.items.value')], ['label', 'string', 'null', __('docs/switch.props.items.label')], ['description', 'string', 'null', __('docs/switch.props.items.description')], ['checked', 'bool', 'false', __('docs/switch.props.items.checked')], ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/switch.props.items.size')], ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'", "'primary'", __('docs/switch.props.items.variant')], ['labelPlacement', "'right'|'left'|'justify'", "'right'", __('docs/switch.props.items.labelPlacement')], ['error', 'string|bool', 'null', __('docs/switch.props.items.error')], ['errorName', 'string', 'null', __('docs/switch.props.items.errorName')], ['disabled', 'bool', 'false', __('docs/switch.props.items.disabled')], ['wrapperClass', 'string', 'null', __('docs/switch.props.items.wrapperClass')]];
                         @endphp
                         @foreach ($switchProps as [$prop, $type, $default, $desc])
                             <vibe:table.row>

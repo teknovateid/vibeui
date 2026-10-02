@@ -95,12 +95,17 @@
 
                 <vibe:preview title="Variasi Ukuran Slot Digit">
                     <vibe:preview.code>
+<\vibe:input.otp name="otp_xs" length="4" size="xs" />
 <\vibe:input.otp name="otp_sm" length="4" size="sm" />
 <\vibe:input.otp name="otp_md" length="4" size="md" />
 <\vibe:input.otp name="otp_lg" length="4" size="lg" />
 <\vibe:input.otp name="otp_xl" length="4" size="xl" />
                     </vibe:preview.code>
                     <div class="space-y-6">
+                        <div class="space-y-1">
+                            <span class="text-xs text-muted-foreground font-mono">size="xs" (Ekstra Kecil)</span>
+                            <vibe:input.otp name="otp_xs" length="4" size="xs" />
+                        </div>
                         <div class="space-y-1">
                             <span class="text-xs text-muted-foreground font-mono">size="sm" (Kecil)</span>
                             <vibe:input.otp name="otp_sm" length="4" size="sm" />

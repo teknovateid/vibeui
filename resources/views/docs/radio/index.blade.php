@@ -22,9 +22,11 @@
 
                 {{-- Quick Props Strip --}}
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">md (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">lg</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xl</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">primary (default)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">secondary</vibe:badge>
@@ -74,14 +76,18 @@
 
                 <vibe:preview :title="__('docs/radio.sizes.preview_title')">
                     <vibe:preview.code>
-                        <vibe:radio name="demo_size" value="sm" size="sm" label="{{ __('docs/radio.sizes.sm') }}" checked />
+                        <vibe:radio name="demo_size" value="xs" size="xs" label="Ekstra Kecil (xs)" checked />
+                        <vibe:radio name="demo_size" value="sm" size="sm" label="{{ __('docs/radio.sizes.sm') }}" />
                         <vibe:radio name="demo_size" value="md" size="md" label="{{ __('docs/radio.sizes.md') }}" />
                         <vibe:radio name="demo_size" value="lg" size="lg" label="{{ __('docs/radio.sizes.lg') }}" />
+                        <vibe:radio name="demo_size" value="xl" size="xl" label="Ekstra Besar (xl)" />
                     </vibe:preview.code>
                     <div class="flex flex-col gap-3">
-                        <vibe:radio name="demo_size_live" value="sm" size="sm" :label="__('docs/radio.sizes.sm')" checked />
+                        <vibe:radio name="demo_size_live" value="xs" size="xs" label="Ekstra Kecil (xs)" checked />
+                        <vibe:radio name="demo_size_live" value="sm" size="sm" :label="__('docs/radio.sizes.sm')" />
                         <vibe:radio name="demo_size_live" value="md" size="md" :label="__('docs/radio.sizes.md')" />
                         <vibe:radio name="demo_size_live" value="lg" size="lg" :label="__('docs/radio.sizes.lg')" />
+                        <vibe:radio name="demo_size_live" value="xl" size="xl" label="Ekstra Besar (xl)" />
                     </div>
                 </vibe:preview>
             </section>
@@ -262,7 +268,7 @@
                                 ['label', 'string', 'null', __('docs/radio.props.items.label')],
                                 ['description', 'string', 'null', __('docs/radio.props.items.description')],
                                 ['checked', 'bool', 'false', __('docs/radio.props.items.checked')],
-                                ['size', "'sm'|'md'|'lg'", "'md'", __('docs/radio.props.items.size')],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/radio.props.items.size')],
                                 ['variant', "'primary'|'secondary'|'success'|'warning'|'danger'|'info'|'card'", "'primary'", __('docs/radio.props.items.variant')],
                                 ['color', 'string', 'null', __('docs/radio.props.items.color')],
                                 ['card', 'bool', 'false', __('docs/radio.props.items.card')],

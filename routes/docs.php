@@ -71,6 +71,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/otp', 'docs.input.otp')->name('otp');
         Route::view('/currency', 'docs.input.currency')->name('currency');
         Route::view('/phone', 'docs.input.phone')->name('phone');
+        Route::view('/quantity', 'docs.input.quantity')->name('quantity');
     });
 
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
@@ -93,6 +94,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     });
 
     Route::view('/button', 'docs.button.index')->name('button.index');
+    Route::view('/swipe', 'docs.swipe.index')->name('swipe.index');
     Route::get('/button/show-demo', function () {
         return response()->json([
             'id' => 1,

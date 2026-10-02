@@ -32,7 +32,7 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">flush</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">filled / muted</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm / md / lg</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs / sm / md / lg / xl</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:collapsible="false"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">chevronPosition="left"</vibe:badge>
@@ -232,6 +232,13 @@
 
                 <vibe:preview :title="__('docs/accordion.sizes.preview_title')">
                     <vibe:preview.code>
+                        {{-- Extra Small (xs) --}}
+                        <vibe:accordion size="xs">
+                            <vibe:accordion.item value="xs-1" title="Extra Small (xs)">
+                                {{ __('docs/accordion.sizes.sample_content') }}
+                            </vibe:accordion.item>
+                        </vibe:accordion>
+
                         {{-- Small (sm) --}}
                         <vibe:accordion size="sm">
                             <vibe:accordion.item value="s-1" title="{{ __('docs/accordion.sizes.size_sm') }}">
@@ -252,9 +259,25 @@
                                 {{ __('docs/accordion.sizes.sample_content') }}
                             </vibe:accordion.item>
                         </vibe:accordion>
+
+                        {{-- Extra Large (xl) --}}
+                        <vibe:accordion size="xl">
+                            <vibe:accordion.item value="xl-1" title="Extra Large (xl)">
+                                {{ __('docs/accordion.sizes.sample_content') }}
+                            </vibe:accordion.item>
+                        </vibe:accordion>
                     </vibe:preview.code>
 
                     <div class="w-full max-w-2xl mx-auto p-4 space-y-6">
+                        <div>
+                            <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-2">Size: Extra Small (xs)</span>
+                            <vibe:accordion size="xs">
+                                <vibe:accordion.item value="xs-1" title="Extra Small (xs)">
+                                    {{ __('docs/accordion.sizes.sample_content') }}
+                                </vibe:accordion.item>
+                            </vibe:accordion>
+                        </div>
+
                         <div>
                             <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-2">Size: Small (sm)</span>
                             <vibe:accordion size="sm">
@@ -277,6 +300,15 @@
                             <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-2">Size: Large (lg)</span>
                             <vibe:accordion size="lg">
                                 <vibe:accordion.item value="l-1" title="{{ __('docs/accordion.sizes.size_lg') }}">
+                                    {{ __('docs/accordion.sizes.sample_content') }}
+                                </vibe:accordion.item>
+                            </vibe:accordion>
+                        </div>
+
+                        <div>
+                            <span class="text-xs font-semibold text-muted-foreground uppercase tracking-wider block mb-2">Size: Extra Large (xl)</span>
+                            <vibe:accordion size="xl">
+                                <vibe:accordion.item value="xl-1" title="Extra Large (xl)">
                                     {{ __('docs/accordion.sizes.sample_content') }}
                                 </vibe:accordion.item>
                             </vibe:accordion>
@@ -552,7 +584,7 @@
                             </vibe:table.row>
                             <vibe:table.row>
                                 <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">size</vibe:table.cell>
-                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">'sm' | 'md' | 'lg'</vibe:table.cell>
+                                <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">'xs' | 'sm' | 'md' | 'lg' | 'xl'</vibe:table.cell>
                                 <vibe:table.cell class="font-mono text-primary whitespace-nowrap">'md'</vibe:table.cell>
                                 <vibe:table.cell class="text-muted-foreground">{{ __('docs/accordion.props.items.size') }}</vibe:table.cell>
                             </vibe:table.row>

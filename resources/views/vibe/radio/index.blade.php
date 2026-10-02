@@ -7,7 +7,7 @@
     'value' => null,
     'checked' => false,
     'description' => null,
-    'size' => 'md', // sm, md, lg
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, card
     'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info
     'card' => false,
@@ -45,28 +45,35 @@
 
     // Outer circle sizes
     $outerSizes = match ($size) {
+        'xs' => 'size-3',
         'sm' => 'size-3.5',
-        'lg' => 'size-5',
+        'lg' => 'size-4.5',
+        'xl' => 'size-5',
         default => 'size-4',
     };
 
     // Inner dot sizes
     $dotSizes = match ($size) {
+        'xs' => 'size-1',
         'sm' => 'size-1.5',
-        'lg' => 'size-2.5',
+        'lg' => 'size-2',
+        'xl' => 'size-2.5',
         default => 'size-2',
     };
 
     // Text sizes
     $labelSizes = match ($size) {
-        'sm' => 'text-xs',
-        'lg' => 'text-base',
+        'xs', 'sm' => 'text-xs',
+        'lg' => 'text-sm',
+        'xl' => 'text-base',
         default => 'text-sm',
     };
 
     $descSizes = match ($size) {
+        'xs' => 'text-[10px]',
         'sm' => 'text-[11px]',
-        'lg' => 'text-sm',
+        'lg' => 'text-xs',
+        'xl' => 'text-sm',
         default => 'text-xs',
     };
 

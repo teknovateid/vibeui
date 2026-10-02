@@ -27,7 +27,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sm', 'md', 'lg', 'xl'] as $s)
+                    @foreach (['xs', 'sm', 'md', 'lg', 'xl'] as $s)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -97,12 +97,14 @@
 
                 <vibe:preview :title="__('docs/badge.sizes.preview_title')">
                     <vibe:preview.code>
+<vibe:badge size="xs" variant="primary">Extra Small (xs)</vibe:badge>
 <vibe:badge size="sm" variant="primary">Small (sm)</vibe:badge>
 <vibe:badge size="md" variant="primary">Medium (md)</vibe:badge>
 <vibe:badge size="lg" variant="primary">Large (lg)</vibe:badge>
 <vibe:badge size="xl" variant="primary">Extra Large (xl)</vibe:badge>
                     </vibe:preview.code>
                     <div class="flex flex-wrap items-center gap-3">
+                        <vibe:badge size="xs" variant="primary">Extra Small (xs)</vibe:badge>
                         <vibe:badge size="sm" variant="primary">Small (sm)</vibe:badge>
                         <vibe:badge size="md" variant="primary">Medium (md)</vibe:badge>
                         <vibe:badge size="lg" variant="primary">Large (lg)</vibe:badge>
@@ -322,7 +324,7 @@
                         @php
                             $badgeProps = [
                                 ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'destructive'|'success'|'warning'|'info'", "'default'", __('docs/badge.props_items.variant')],
-                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/badge.props_items.size')],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/badge.props_items.size')],
                                 ['icon', 'string|slot|null', 'null', __('docs/badge.props_items.icon')],
                                 ['trailingIcon', 'string|slot|null', 'null', __('docs/badge.props_items.trailingIcon')],
                                 ['prefix', 'string|null', 'null', __('docs/badge.props_items.prefix')],

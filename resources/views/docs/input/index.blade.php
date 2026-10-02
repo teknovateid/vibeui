@@ -26,7 +26,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sm', 'md', 'lg', 'xl'] as $s)
+                    @foreach (['xs', 'sm', 'md', 'lg', 'xl'] as $s)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                 </div>
@@ -112,12 +112,14 @@
 
                 <vibe:preview :title="__('docs/input.sizes.preview_title')">
                     <vibe:preview.code>
+                        <vibe:input size="xs" label="Size XS (28px)" placeholder="Extra small input..." />
                         <vibe:input size="sm" label="{{ __('docs/input.sizes.sm.label') }}" placeholder="{{ __('docs/input.sizes.sm.placeholder') }}" />
                         <vibe:input size="md" label="{{ __('docs/input.sizes.md.label') }}" placeholder="{{ __('docs/input.sizes.md.placeholder') }}" />
                         <vibe:input size="lg" label="{{ __('docs/input.sizes.lg.label') }}" placeholder="{{ __('docs/input.sizes.lg.placeholder') }}" />
                         <vibe:input size="xl" label="{{ __('docs/input.sizes.xl.label') }}" placeholder="{{ __('docs/input.sizes.xl.placeholder') }}" />
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
+                        <vibe:input size="xs" label="Size XS (28px)" placeholder="Extra small input..." />
                         <vibe:input size="sm" :label="__('docs/input.sizes.sm.label')" :placeholder="__('docs/input.sizes.sm.placeholder')" />
                         <vibe:input size="md" :label="__('docs/input.sizes.md.label')" :placeholder="__('docs/input.sizes.md.placeholder')" />
                         <vibe:input size="lg" :label="__('docs/input.sizes.lg.label')" :placeholder="__('docs/input.sizes.lg.placeholder')" />
@@ -410,7 +412,7 @@
                                 ['id', 'string', 'auto', __('docs/input.props_items.id')],
                                 ['name', 'string', 'null', __('docs/input.props_items.name')],
                                 ['type', 'string', "'text'", __('docs/input.props_items.type')],
-                                ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/input.props_items.size')],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/input.props_items.size')],
                                 ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", __('docs/input.props_items.variant')],
                                 ['description', 'string', 'null', __('docs/input.props_items.description')],
                                 ['info', 'string', 'null', __('docs/input.props_items.info')],

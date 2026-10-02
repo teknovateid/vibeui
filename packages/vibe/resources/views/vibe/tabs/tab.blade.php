@@ -79,30 +79,38 @@
         {{-- Layout 2 Baris (Horizontal / Rows) - Pill --}}
         'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'rows' && variant === 'pill' && activeTab === '{{ $name }}',
         'text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'h-6 px-2 text-xs rounded-md': variant === 'pill' && size === 'xs',
         'h-7 px-2.5 text-xs rounded-md': variant === 'pill' && size === 'sm',
         'h-8 px-3 text-sm rounded-lg': variant === 'pill' && (size === 'md' || !size),
         'h-9 px-3.5 text-sm rounded-lg': variant === 'pill' && size === 'lg',
+        'h-10 px-4 text-base rounded-xl': variant === 'pill' && size === 'xl',
 
         {{-- Layout 2 Baris (Horizontal / Rows) - Underline --}}
         'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent hover:bg-transparent active:scale-100 shadow-none': layout === 'rows' && variant === 'underline' && activeTab === '{{ $name }}',
         'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent font-medium hover:bg-transparent active:scale-100 shadow-none': layout === 'rows' && variant === 'underline' && activeTab !== '{{ $name }}',
+        'h-7 px-2 text-xs pb-1.5 pt-1': variant === 'underline' && size === 'xs',
         'h-8 px-2.5 text-xs pb-2 pt-1.5': variant === 'underline' && size === 'sm',
         'h-9 px-3 text-sm pb-2.5 pt-2': variant === 'underline' && (size === 'md' || !size),
         'h-10 px-4 text-sm pb-3 pt-2.5': variant === 'underline' && size === 'lg',
+        'h-11 px-4.5 text-base pb-3.5 pt-3': variant === 'underline' && size === 'xl',
 
         {{-- Layout 2 Baris (Horizontal / Rows) - Button --}}
         '{{ $activeBtnClasses }} font-medium rounded-lg shadow-xs': layout === 'rows' && variant === 'button' && activeTab === '{{ $name }}',
         '{{ $inactiveBtnClasses }} font-medium rounded-lg shadow-2xs': layout === 'rows' && variant === 'button' && activeTab !== '{{ $name }}',
+        'h-7 px-2 text-xs rounded-sm': variant === 'button' && size === 'xs',
         'h-8 px-2.5 text-xs rounded-md': variant === 'button' && size === 'sm',
         'h-9 px-3.5 text-sm rounded-lg': variant === 'button' && (size === 'md' || !size),
         'h-10 px-4 text-sm rounded-lg': variant === 'button' && size === 'lg',
+        'h-11 px-4.5 text-base rounded-xl': variant === 'button' && size === 'xl',
 
         {{-- Layout 2 Kolom (Vertical / Cols) - Pill --}}
         'w-full justify-start text-left bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'cols' && variant === 'pill' && activeTab === '{{ $name }}',
         'w-full justify-start text-left text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': layout === 'cols' && variant === 'pill' && activeTab !== '{{ $name }}',
+        'min-h-6 px-2 text-xs rounded-md': layout === 'cols' && variant === 'pill' && size === 'xs',
         'min-h-7 px-2.5 text-xs rounded-md': layout === 'cols' && variant === 'pill' && size === 'sm',
         'min-h-8 px-3 text-sm rounded-lg': layout === 'cols' && variant === 'pill' && (size === 'md' || !size),
         'min-h-9 px-3.5 text-sm rounded-lg': layout === 'cols' && variant === 'pill' && size === 'lg',
+        'min-h-10 px-4 text-base rounded-xl': layout === 'cols' && variant === 'pill' && size === 'xl',
 
         {{-- Layout 2 Kolom (Vertical / Cols) - Underline --}}
         'w-full justify-start text-left border-r-2 border-primary text-foreground font-semibold -mr-px rounded-none bg-transparent px-3 py-2 hover:bg-transparent active:scale-100 shadow-none': layout === 'cols' && variant === 'underline' && activeTab === '{{ $name }}',

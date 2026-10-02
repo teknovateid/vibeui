@@ -27,7 +27,7 @@
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $v }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    @foreach (['sm', 'md', 'lg', 'xl'] as $s)
+                    @foreach (['xs', 'sm', 'md', 'lg', 'xl'] as $s)
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ $s }}</vibe:badge>
                     @endforeach
                     <span class="text-muted-foreground/40 text-xs">|</span>
@@ -386,6 +386,10 @@
 
                 <vibe:preview :title="__('docs/select.sizes.preview_title')" minHeight="320px">
                     <vibe:preview.code>
+                        <vibe:select size="xs" label="Ekstra Kecil (xs - h-7)" placeholder="Ukuran xs...">
+                            <vibe:select.option value="xs1">Ekstra Kecil (XS)</vibe:select.option>
+                        </vibe:select>
+
                         <vibe:select size="sm" label="Kecil (sm - h-8)" placeholder="Ukuran sm...">
                             <vibe:select.option value="sm1">{{ __('docs/select.demo_options.sm') }}</vibe:select.option>
                         </vibe:select>
@@ -403,6 +407,10 @@
                         </vibe:select>
                     </vibe:preview.code>
                     <div class="w-full max-w-sm space-y-4">
+                        <vibe:select size="xs" label="Ekstra Kecil (xs - h-7)" placeholder="Ukuran xs...">
+                            <vibe:select.option value="xs1">Ekstra Kecil (XS)</vibe:select.option>
+                        </vibe:select>
+
                         <vibe:select size="sm" label="Kecil (sm - h-8)" placeholder="Ukuran sm...">
                             <vibe:select.option value="sm1">{{ __('docs/select.demo_options.sm') }}</vibe:select.option>
                         </vibe:select>
@@ -1060,7 +1068,7 @@ BLADE;
         ['label', 'string', 'null', __('docs/select.props_items.label')],
         ['placeholder', 'string', 'Pilih opsi...', __('docs/select.props_items.placeholder')],
         ['value', 'string|array', 'null', __('docs/select.props_items.value')],
-        ['size', "'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
+        ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/select.props_items.size')],
         ['variant', "'primary'|'outline'|'filled'|'ghost'", "'primary'", __('docs/select.props_items.variant')],
         ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
         ['keyboard', 'bool', 'false', __('docs/select.props_items.keyboard')],
@@ -1163,7 +1171,7 @@ BLADE;
                                     ['description', 'string', 'null', 'Teks deskripsi penjelasan singkat di bawah label.'],
                                     ['placeholder', 'string', 'Pilih opsi...', 'Teks placeholder pada tombol pemicu dropdown.'],
                                     ['searchPlaceholder', 'string', 'Cari opsi...', 'Teks placeholder pada input pencarian.'],
-                                    ['size', "'sm'|'md'|'lg'|'xl'", "'md'", 'Ukuran tinggi dan teks komponen select.'],
+                                    ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", 'Ukuran tinggi dan teks komponen select.'],
                                     ['variant', "'primary'|'outline'|'filled'|'flush'|'ghost'", "'primary'", 'Varian gaya visual batas dan latar belakang.'],
                                     ['keyboard', 'bool', 'false', 'Mengaktifkan kontrol navigasi keyboard penuh (panah atas/bawah, Enter, Escape).'],
                                     ['multiple', 'bool', 'false', 'Mengaktifkan mode pemilihan banyak item dengan badge/chip.'],

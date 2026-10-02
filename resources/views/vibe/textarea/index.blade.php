@@ -6,7 +6,7 @@
     'name' => null,
     'rows' => 3,
     'placeholder' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled, flush, ghost
     'autoResize' => false,
     'showCount' => false,
@@ -30,6 +30,7 @@
     $baseClasses = 'block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 read-only:bg-muted/20 read-only:cursor-default';
 
     $sizeClasses = match ($size) {
+        'xs' => 'text-xs rounded-md px-2 py-1',
         'sm' => 'text-xs rounded-md px-2.5 py-1.5',
         'lg' => 'text-sm rounded-lg px-4 py-2.5',
         'xl' => 'text-base rounded-xl px-4.5 py-3',
@@ -38,6 +39,7 @@
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
+            'xs' => 'text-xs px-0 py-1 rounded-none',
             'sm' => 'text-xs px-0 py-1.5 rounded-none',
             'lg' => 'text-sm px-0 py-2.5 rounded-none',
             'xl' => 'text-base px-0 py-3 rounded-none',

@@ -5,7 +5,7 @@
     'id' => null,
     'name' => null,
     'description' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled, flush, ghost
     'placeholder' => null,
     'searchable' => false,
@@ -38,6 +38,7 @@
     $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus:outline-none focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
     $sizeClasses = match ($size) {
+        'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . ' text-xs rounded-md pl-2.5 pr-7 gap-1',
         'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs rounded-md pl-3 pr-8 gap-1.5',
         'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
         'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm rounded-lg pl-4 pr-10 gap-2',
@@ -47,6 +48,7 @@
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
+            'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . ' text-xs px-0 rounded-none pr-5',
             'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs px-0 rounded-none pr-6',
             'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
             'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm px-0 rounded-none pr-8',
@@ -74,12 +76,13 @@
     };
 
     $chevronSize = match ($size) {
-        'sm' => 'size-3.5',
+        'xs', 'sm' => 'size-3.5',
         'xl' => 'size-4.5',
         default => 'size-4',
     };
 
     $chevronRightPosition = match ($size) {
+        'xs' => 'right-2',
         'sm' => 'right-2.5',
         'xl' => 'right-3.5',
         default => 'right-3',

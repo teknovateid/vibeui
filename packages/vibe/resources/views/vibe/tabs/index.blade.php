@@ -6,7 +6,7 @@
     'layout' => 'rows', // 'rows' (2 baris: list di atas, panel di bawah) atau 'cols' (2 kolom: list di kiri, panel di kanan)
     'orientation' => null, // alias: 'horizontal' (rows), 'vertical' (cols)
     'variant' => 'pill', // 'pill', 'underline', 'button', 'sidebar'
-    'size' => 'md', // 'sm', 'md', 'lg'
+    'size' => 'md', // 'xs', 'sm', 'md', 'lg', 'xl'
     'persist' => false,
     'id' => null,
     'syncUrl' => false,

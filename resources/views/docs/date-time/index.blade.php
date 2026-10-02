@@ -37,7 +37,7 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:inline="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:dualMonth="true"</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">sm / md / lg / xl</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">xs / sm / md / lg / xl</vibe:badge>
                 </div>
             </div>
 
@@ -396,6 +396,9 @@
 
                 <vibe:preview :title="__('docs/date-time.sizes_variants.preview_title')">
                     <vibe:preview.code>
+                        {{-- Extra Small (xs) --}}
+                        <vibe:date-time size="xs" label="Extra Small (xs - 28px)" value="{{ date('Y-m-d') }}" clearable />
+
                         {{-- Small (sm) --}}
                         <vibe:date-time size="sm" label="{{ __('docs/date-time.sizes_variants.size_sm') }}" value="{{ date('Y-m-d') }}" clearable />
 
@@ -409,6 +412,7 @@
                         <vibe:date-time size="xl" variant="outline" label="{{ __('docs/date-time.sizes_variants.size_xl') }}" value="{{ date('Y-m-d') }}" clearable />
                     </vibe:preview.code>
                     <div class="space-y-4 max-w-sm mx-auto p-4">
+                        <vibe:date-time size="xs" label="Extra Small (xs - 28px)" value="{{ date('Y-m-d') }}" clearable />
                         <vibe:date-time size="sm" label="{{ __('docs/date-time.sizes_variants.size_sm') }}" value="{{ date('Y-m-d') }}" clearable />
                         <vibe:date-time size="md" label="{{ __('docs/date-time.sizes_variants.size_md') }}" value="{{ date('Y-m-d') }}" clearable />
                         <vibe:date-time size="lg" label="{{ __('docs/date-time.sizes_variants.size_lg') }}" value="{{ date('Y-m-d') }}" clearable />
@@ -600,7 +604,7 @@
                                 ['markers', 'array', '[]', __('docs/date-time.props_items.markers')],
                                 ['locale', 'string|null', 'app()->getLocale()', __('docs/date-time.props_items.locale')],
                                 ['firstDayOfWeek', 'int', '1', __('docs/date-time.props_items.firstDayOfWeek')],
-                                ['size', 'string', "'md'", __('docs/date-time.props_items.size')],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'", "'md'", __('docs/date-time.props_items.size')],
                                 ['variant', 'string', "'primary'", __('docs/date-time.props_items.variant')],
                                 ['error', 'string|bool|null', 'null', __('docs/date-time.props_items.error')],
                                 ['required', 'bool', 'false', __('docs/date-time.props_items.required')],

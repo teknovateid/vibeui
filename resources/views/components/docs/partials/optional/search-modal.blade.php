@@ -175,6 +175,16 @@
             'keywords' => 'input phone nomor telepon hp country code format wa whatsapp contact kontak',
         ],
         [
+            'id' => 'menu-input-quantity',
+            'title' => __('docs/sidebar.nav.input_group.quantity') ?: 'Input Quantity',
+            'subtitle' => 'Input kuantitas dengan tombol plus dan minus stepper',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.input.quantity'),
+            'icon' => 'hash',
+            'keywords' => 'input quantity qty jumlah stepper plus minus counter cart keranjang angka number',
+        ],
+        [
             'id' => 'menu-textarea',
             'title' => __('docs/sidebar.nav.textarea') ?: __('docs/search.menu_items.textarea.title'),
             'subtitle' => __('docs/search.menu_items.textarea.subtitle'),
@@ -275,6 +285,16 @@
             'url' => route('docs.button.index'),
             'icon' => 'button',
             'keywords' => 'button tombol action click cta trigger aksi primary secondary outline ghost',
+        ],
+        [
+            'id' => 'menu-swipe',
+            'title' => __('docs/sidebar.nav.swipe') ?: 'Swipe Button',
+            'subtitle' => 'Slide-to-action, slide-to-confirm, submit form, and pay button',
+            'category' => $catMenu,
+            'section' => $navSections['ui'],
+            'url' => route('docs.swipe.index'),
+            'icon' => 'swipe',
+            'keywords' => 'swipe slide to action slide to confirm pay checkout submit button geser konfirmasi tombol',
         ],
         [
             'id' => 'menu-show',
@@ -1238,6 +1258,8 @@
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
                     case 'button':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="5" rx="4"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`;
+                    case 'swipe':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="2.5"/><path d="m14 12 2 0"/><path d="m15 10 2 2-2 2"/></svg>`;
                     case 'eye':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
                     case 'badge':
