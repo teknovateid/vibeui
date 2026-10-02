@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.4.0] - 2026-10-02
+
+### 🚀 Features
+- feat: add internationalization support and language files for swipe component and documentation (737ab47)
+- feat: add xs size support to UI components and introduce quantity and swipe components (6c5509b)
+
+### ⚡ Performance & Refactoring
+- refactor: update component sizes and styling across auth views and vibe components (4e0c552)
+
+
 ## [0.3.2] - 2026-10-01
 
 ### 🧰 Maintenance & Documentation
