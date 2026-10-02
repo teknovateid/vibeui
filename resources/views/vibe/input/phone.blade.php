@@ -8,7 +8,7 @@
     'mask' => '+62 8##-####-####',
     'placeholder' => '+62 812-3456-7890',
     'description' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled, flush, ghost
     'info' => null,
     'error' => null,
@@ -82,6 +82,7 @@
     }
 
     $sizeClasses = match ($size) {
+        'xs' => 'h-7 text-xs rounded-md px-2',
         'sm' => 'h-8 text-xs rounded-md px-2.5',
         'md' => 'h-9 text-sm rounded-lg px-3.5',
         'lg' => 'h-10 text-sm rounded-lg px-4',

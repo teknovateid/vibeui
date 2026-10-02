@@ -8,7 +8,7 @@
     'mask' => false,
     'autoSubmit' => false,
     'description' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled
     'info' => null,
     'error' => null,
@@ -39,6 +39,7 @@
     $wireModel = $attributes->wire('model')->value();
 
     $boxSizeClasses = match ($size) {
+        'xs' => 'w-7 h-8 text-xs rounded-md',
         'sm' => 'w-8 h-9 text-sm rounded-md',
         'md' => 'w-10 h-11 text-base rounded-lg',
         'lg' => 'w-12 h-13 text-lg rounded-xl',

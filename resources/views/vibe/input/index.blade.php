@@ -6,7 +6,7 @@
     'type' => 'text',
     'name' => null,
     'description' => null,
-    'size' => 'md', // sm, md, lg, xl
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled, flush, ghost
     'info' => null,
     'error' => null,
@@ -41,6 +41,7 @@
     $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
 
     $sizeControlClasses = match ($size) {
+        'xs' => 'h-7 text-xs rounded-md',
         'sm' => 'h-8 text-xs rounded-md',
         'md' => 'h-9 text-sm rounded-lg',
         'lg' => 'h-10 text-sm rounded-lg',
@@ -50,6 +51,7 @@
 
     if ($variant === 'flush') {
         $sizeControlClasses = match ($size) {
+            'xs' => 'h-7 text-xs rounded-none px-0',
             'sm' => 'h-8 text-xs rounded-none px-0',
             'md' => 'h-9 text-sm rounded-none px-0',
             'lg' => 'h-10 text-sm rounded-none px-0',
@@ -92,12 +94,14 @@
         $inputPadding = 'px-0';
     } else {
         $leadingPadding = match ($size) {
+            'xs' => 'pl-2 pr-1',
             'sm' => 'pl-2.5 pr-1.5',
             'lg' => 'pl-3.5 pr-2',
             'xl' => 'pl-4 pr-2.5',
             default => 'pl-3 pr-1.5',
         };
         $trailingPadding = match ($size) {
+            'xs' => 'pr-2 pl-1',
             'sm' => 'pr-2.5 pl-1.5',
             'lg' => 'pr-3.5 pl-2',
             'xl' => 'pr-4 pl-2.5',
@@ -107,6 +111,7 @@
             ($hasLeading
                 ? 'pl-0 '
                 : match ($size) {
+                    'xs' => 'pl-2 ',
                     'sm' => 'pl-2.5 ',
                     'lg' => 'pl-4 ',
                     'xl' => 'pl-4.5 ',
@@ -115,6 +120,7 @@
             ($hasTrailing
                 ? 'pr-0'
                 : match ($size) {
+                    'xs' => 'pr-2',
                     'sm' => 'pr-2.5',
                     'lg' => 'pr-4',
                     'xl' => 'pr-4.5',
@@ -123,7 +129,7 @@
     }
 
     $inputFontSize = match ($size) {
-        'sm' => 'text-xs',
+        'xs', 'sm' => 'text-xs',
         'xl' => 'text-base',
         default => 'text-sm',
     };

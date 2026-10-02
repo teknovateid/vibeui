@@ -11,7 +11,7 @@
     'info' => null,
     'error' => null,
     'errorName' => null,
-    'size' => 'md', // sm, md, lg
+    'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary/default, secondary, success, warning, danger/destructive, info, card
     'color' => null, // optional color override: primary, secondary, success, warning, danger/destructive, info
     'card' => false,
@@ -47,28 +47,35 @@
 
     // Box size classes
     $boxSizes = match ($size) {
+        'xs' => 'size-3 rounded-[3px]',
         'sm' => 'size-3.5 rounded-[4px]',
-        'lg' => 'size-5 rounded-md',
+        'lg' => 'size-4.5 rounded-[5px]',
+        'xl' => 'size-5 rounded-md',
         default => 'size-4 rounded-[5px]',
     };
 
     // Icon size classes
     $iconSizes = match ($size) {
+        'xs' => 'size-2',
         'sm' => 'size-2.5',
         'lg' => 'size-3.5',
+        'xl' => 'size-4',
         default => 'size-3',
     };
 
     // Text size classes
     $labelSizes = match ($size) {
-        'sm' => 'text-xs',
-        'lg' => 'text-base',
+        'xs', 'sm' => 'text-xs',
+        'lg' => 'text-sm',
+        'xl' => 'text-base',
         default => 'text-sm',
     };
 
     $descSizes = match ($size) {
+        'xs' => 'text-[10px]',
         'sm' => 'text-[11px]',
-        'lg' => 'text-sm',
+        'lg' => 'text-xs',
+        'xl' => 'text-sm',
         default => 'text-xs',
     };
 

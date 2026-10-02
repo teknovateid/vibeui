@@ -2,7 +2,7 @@
 
 @props([
     'variant' => 'default', // default/primary, secondary, outline, ghost, destructive/danger, success, warning, info
-    'size' => 'md',         // sm, md, lg, xl
+    'size' => 'md',         // xs, sm, md, lg, xl
     'icon' => null,
     'trailingIcon' => null,
     'prefix' => null,
@@ -23,6 +23,7 @@
     $baseClasses = 'inline-flex items-center justify-center font-medium select-none whitespace-nowrap transition-colors duration-150';
 
     $sizeClasses = match ($size) {
+        'xs' => 'h-4 px-1.5 text-[10px] gap-1 rounded-sm',
         'sm' => 'h-5 px-2 text-[11px] gap-1 rounded-sm',
         'md' => 'h-6 px-2.5 text-xs font-semibold gap-1.5 rounded-md',
         'lg' => 'h-7 px-3 text-xs font-semibold gap-1.5 rounded-lg',
@@ -54,14 +55,13 @@
     };
 
     $dotSizeClass = match ($size) {
-        'sm' => 'size-1.5',
-        'md' => 'size-1.5',
-        'lg' => 'size-2',
-        'xl' => 'size-2',
+        'xs', 'sm', 'md' => 'size-1.5',
+        'lg', 'xl' => 'size-2',
         default => 'size-1.5',
     };
 
     $iconSizeClass = match ($size) {
+        'xs' => 'size-2.5 [&>svg]:size-2.5',
         'sm' => 'size-3 [&>svg]:size-3',
         'md' => 'size-3.5 [&>svg]:size-3.5',
         'lg' => 'size-3.5 [&>svg]:size-3.5',
@@ -70,6 +70,7 @@
     };
 
     $dismissSizeClass = match ($size) {
+        'xs' => 'size-2.5 [&>svg]:size-1.5',
         'sm' => 'size-3 [&>svg]:size-2',
         'md' => 'size-3.5 [&>svg]:size-2.5',
         'lg' => 'size-4 [&>svg]:size-3',
