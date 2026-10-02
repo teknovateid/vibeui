@@ -1,29 +1,35 @@
 @blaze(fold: true)
 
 @props([
-    'name' => null,
-    'value' => '1',
-    'id' => null,
-    'type' => 'button', // 'button' | 'submit'
-    'size' => 'md', // 'xs', 'sm', 'md', 'lg', 'xl'
-    'variant' => 'primary', // 'primary', 'success', 'destructive', 'danger', 'warning', 'info', 'secondary'
-    'label' => 'Geser untuk konfirmasi',
-    'confirmedLabel' => 'Terkonfirmasi',
-    'loadingLabel' => 'Memproses...',
-    'threshold' => 0.88,
-    'autoReset' => false, // false, true (2000ms), or number in ms
-    'disabled' => false,
-    'readonly' => false,
-    'loading' => false,
-    'haptic' => true,
-    'icon' => null,
-    'confirmedIcon' => null,
-    'loadingIcon' => null,
-    'wrapperClass' => null,
+    'name'           => null,
+    'value'          => '1',
+    'id'             => null,
+    'type'           => 'button', // 'button' | 'submit'
+    'size'           => 'md',     // 'xs', 'sm', 'md', 'lg', 'xl'
+    'variant'        => 'primary', // 'primary', 'success', 'destructive', 'danger', 'warning', 'info', 'secondary'
+    'label'          => null,     // null = auto-translate via vibe/swipe.label
+    'confirmedLabel' => null,     // null = auto-translate via vibe/swipe.confirmed_label
+    'loadingLabel'   => null,     // null = auto-translate via vibe/swipe.loading_label
+    'threshold'      => 0.88,
+    'autoReset'      => false,    // false, true (2000ms), or number in ms
+    'disabled'       => false,
+    'readonly'       => false,
+    'loading'        => false,
+    'haptic'         => true,
+    'icon'           => null,
+    'confirmedIcon'  => null,
+    'loadingIcon'    => null,
+    'wrapperClass'   => null,
 ])
 
 @php
     $id = $id ?? ($name ?? uniqid('vibe-swipe-'));
+
+    // i18n: resolve default labels from translation files
+    $label          = $label          ?? __('vibe/swipe.label');
+    $confirmedLabel = $confirmedLabel ?? __('vibe/swipe.confirmed_label');
+    $loadingLabel   = $loadingLabel   ?? __('vibe/swipe.loading_label', [], null) ?: 'Loading...';
+
     $normalizedVariant = match (strtolower((string) $variant)) {
         'danger' => 'destructive',
         default => strtolower((string) $variant),
@@ -347,6 +353,8 @@
     {{-- Swipe Track Container (Standard Rounded like <vibe:button>) --}}
     <div
         x-ref="track"
+        role="group"
+        aria-label="{{ __('vibe/swipe.aria_label') }}"
         class="relative w-full overflow-hidden border shadow-xs transition-colors duration-200 {{ $sizeConfig['height'] }} {{ $sizeConfig['radius']['track'] }} {{ $themeConfig['track'] }}"
         :class="{
             '{{ $themeConfig['confirmedTrack'] }}': isConfirmed,
