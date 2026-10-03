@@ -18,6 +18,8 @@
     'placement' => 'auto', // auto, bottom, top
     'keyboard' => false,
     'multiple' => false,
+    'badgeVariant' => 'secondary', // secondary, primary, outline, cycle
+    'colorCycle' => ['info', 'primary', 'success', 'warning', 'secondary', 'purple'],
     'min' => null,
     'max' => null,
     'clearable' => false,
@@ -44,23 +46,40 @@
 
     $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus:outline-none focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
+    $prClass = match ($size) {
+        'xs' => $clearable ? 'pr-11' : 'pr-7',
+        'sm' => $clearable ? 'pr-12' : 'pr-8',
+        'md' => $clearable ? 'pr-14' : 'pr-9',
+        'lg' => $clearable ? 'pr-15' : 'pr-10',
+        'xl' => $clearable ? 'pr-16' : 'pr-11',
+        default => $clearable ? 'pr-14' : 'pr-9',
+    };
+
     $sizeClasses = match ($size) {
-        'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . ' text-xs rounded-md pl-2.5 pr-7 gap-1',
-        'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs rounded-md pl-3 pr-8 gap-1.5',
-        'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
-        'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm rounded-lg pl-4 pr-10 gap-2',
-        'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base rounded-xl pl-4.5 pr-11 gap-2.5',
-        default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm rounded-lg pl-3.5 pr-9 gap-2',
+        'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs rounded-md pl-2.5 {$prClass} gap-1",
+        'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs rounded-md pl-3 {$prClass} gap-1.5",
+        'md' => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm rounded-lg pl-3.5 {$prClass} gap-2",
+        'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm rounded-lg pl-4 {$prClass} gap-2",
+        'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base rounded-xl pl-4.5 {$prClass} gap-2.5",
+        default => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm rounded-lg pl-3.5 {$prClass} gap-2",
     };
 
     if ($variant === 'flush') {
+        $flushPr = match ($size) {
+            'xs' => $clearable ? 'pr-9' : 'pr-5',
+            'sm' => $clearable ? 'pr-10' : 'pr-6',
+            'md' => $clearable ? 'pr-12' : 'pr-7',
+            'lg' => $clearable ? 'pr-13' : 'pr-8',
+            'xl' => $clearable ? 'pr-14' : 'pr-9',
+            default => $clearable ? 'pr-12' : 'pr-7',
+        };
         $sizeClasses = match ($size) {
-            'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . ' text-xs px-0 rounded-none pr-5',
-            'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . ' text-xs px-0 rounded-none pr-6',
-            'md' => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
-            'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . ' text-sm px-0 rounded-none pr-8',
-            'xl' => ($multiple ? 'min-h-11 py-2' : 'h-11') . ' text-base px-0 rounded-none pr-9',
-            default => ($multiple ? 'min-h-9 py-1.5' : 'h-9') . ' text-sm px-0 rounded-none pr-7',
+            'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs px-0 rounded-none {$flushPr}",
+            'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs px-0 rounded-none {$flushPr}",
+            'md' => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm px-0 rounded-none {$flushPr}",
+            'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm px-0 rounded-none {$flushPr}",
+            'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base px-0 rounded-none {$flushPr}",
+            default => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm px-0 rounded-none {$flushPr}",
         };
     }
 
@@ -96,6 +115,22 @@
     };
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
+
+    // Badge sizing based on select size (matching vibe:input.multiple)
+    $badgeSizeClass = match ($size) {
+        'xs' => 'h-5 px-1.5 text-[10px] gap-1 rounded-sm',
+        'sm' => 'h-5.5 px-2 text-[11px] gap-1 rounded-sm',
+        'md' => 'h-6 px-2 text-xs gap-1.5 rounded-md',
+        'lg' => 'h-6.5 px-2.5 text-xs gap-1.5 rounded-lg',
+        'xl' => 'h-7.5 px-3 text-sm gap-2 rounded-lg',
+        default => 'h-6 px-2 text-xs gap-1.5 rounded-md',
+    };
+
+    $badgeRemoveSizeClass = match ($size) {
+        'xs', 'sm' => 'size-2.5',
+        'xl' => 'size-3.5',
+        default => 'size-3',
+    };
 
     $describedBy = [];
     if ($hasError && $errorMessage) {
@@ -174,6 +209,8 @@
         disabled: {{ $disabled ? 'true' : 'false' }},
         keyboard: {{ $keyboard ? 'true' : 'false' }},
         multiple: {{ $multiple ? 'true' : 'false' }},
+        badgeVariant: @js($badgeVariant),
+        colorCycle: @js($colorCycle),
         min: {{ $min !== null ? (int) $min : 'null' }},
         max: {{ $max !== null ? (int) $max : 'null' }},
         api: '{{ $api }}',
@@ -183,6 +220,29 @@
         placement: '{{ $placement }}',
         openUp: {{ $placement === 'top' ? 'true' : 'false' }},
         abortController: null,
+
+        getBadgeClasses(index) {
+            if (this.badgeVariant === 'cycle') {
+                const cycle = [
+                    'bg-info/15 text-info border-info/30 hover:bg-info/20',
+                    'bg-primary/15 text-primary border-primary/30 hover:bg-primary/20',
+                    'bg-success/15 text-success border-success/30 hover:bg-success/20',
+                    'bg-warning/15 text-warning border-warning/30 hover:bg-warning/20',
+                    'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
+                    'bg-pink-500/15 text-pink-600 dark:text-pink-400 border-pink-500/30 hover:bg-pink-500/20',
+                    'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20',
+                    'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
+                ];
+                return cycle[index % cycle.length];
+            }
+            if (this.badgeVariant === 'primary') {
+                return 'bg-primary text-primary-foreground border-transparent shadow-2xs';
+            }
+            if (this.badgeVariant === 'outline') {
+                return 'bg-transparent text-foreground border-border hover:bg-muted';
+            }
+            return 'bg-muted/80 text-foreground border-border/70 hover:bg-muted';
+        },
 
         init() {
             if (this.multiple) {
@@ -535,13 +595,16 @@
         >
             {{-- Content Display --}}
             @if ($multiple)
-                <div class="flex flex-wrap items-center gap-1.5 py-0.5 max-w-[calc(100%-2.5rem)]">
+                <div class="flex flex-wrap items-center gap-1.5 py-0.5 flex-1 min-w-0">
                     <template x-if="selectedItems.length === 0">
                         <span class="text-muted-foreground truncate">{{ $placeholder }}</span>
                     </template>
 
-                    <template x-for="item in selectedItems" :key="item.value">
-                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-medium bg-muted/80 text-foreground border border-border/70 shadow-2xs">
+                    <template x-for="(item, index) in selectedItems" :key="item.value">
+                        <span 
+                            class="inline-flex items-center font-medium border select-none transition-colors shrink-0 max-w-full {{ $badgeSizeClass }}"
+                            :class="getBadgeClasses(index)"
+                        >
                             <template x-if="item.avatar">
                                 <img :src="item.avatar" class="size-3.5 rounded-full object-cover shrink-0" alt="" />
                             </template>
@@ -553,10 +616,17 @@
                                     <span class="text-[10px] font-bold text-muted-foreground" x-text="item.icon"></span>
                                 </template>
                             </template>
-                            <span x-text="item.label" class="truncate max-w-30"></span>
-                            <button type="button" @click.stop="removeTag(item.value)" :disabled="disabled || (min !== null && value.length <= min)" :class="{ 'opacity-30 cursor-not-allowed': min !== null && value.length <= min }" class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 text-muted-foreground transition-colors cursor-pointer" aria-label="{{ __('vibe/select.remove_tag') }}">
-                                <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M18 6L6 18M6 6l12 12" />
+                            <span x-text="item.label" class="truncate max-w-44 sm:max-w-56"></span>
+                            <button 
+                                type="button" 
+                                @click.stop="removeTag(item.value)" 
+                                :disabled="disabled || (min !== null && value.length <= min)" 
+                                :class="{ 'opacity-30 cursor-not-allowed': min !== null && value.length <= min }" 
+                                class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 transition-colors cursor-pointer shrink-0" 
+                                aria-label="{{ __('vibe/select.remove_tag') }}"
+                            >
+                                <svg class="{{ $badgeRemoveSizeClass }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="m16 8-8 8m0-8 8 8" />
                                 </svg>
                             </button>
                         </span>
@@ -592,13 +662,14 @@
                         @click.stop="clearAll()"
                         class="size-4 hover:text-foreground inline-flex items-center justify-center transition-colors cursor-pointer mr-0.5"
                         aria-label="{{ __('vibe/select.clear') ?? 'Clear' }}">
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6L6 18M6 6l12 12" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="m14.5 9.5-5 5m0-5 5 5" />
                         </svg>
                     </button>
                 @endif
                 <svg class="{{ $chevronSize }} shrink-0 transition-transform duration-200 pointer-events-none" :class="{ 'rotate-180 {{ $hasError ? 'text-destructive' : 'text-primary' }}': open }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 9l-7 6-7-6" />
+                    <path d="m19 9-7 6-7-6" />
                 </svg>
             </div>
         </div>
@@ -624,7 +695,7 @@
                     <div class="size-3.5 absolute left-2.5 text-muted-foreground pointer-events-none flex items-center justify-center">
                         <svg x-show="!loading" class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="11.5" cy="11.5" r="9.5" />
-                            <path d="M18.5 18.5L22 22" />
+                            <path d="m20 20-2-2" />
                         </svg>
                         <svg x-show="loading" class="size-3.5 animate-spin text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <path d="M21 12a9 9 0 1 1-6.219-8.56" />
@@ -652,8 +723,9 @@
                         @click="search = ''; fetchData(''); $refs.searchInput.focus()"
                         type="button"
                         class="absolute right-2 text-muted-foreground hover:text-foreground size-4 flex items-center justify-center cursor-pointer">
-                        <svg class="size-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M18 6L6 18M6 6l12 12" />
+                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="m14.5 9.5-5 5m0-5 5 5" />
                         </svg>
                     </button>
                 </div>
@@ -717,7 +789,7 @@
                 <div x-cloak x-show="!loading && !hasNetworkError && items.length === 0 && search.length >= minChars && hasLoadedOnce" class="py-6 px-3 text-center text-xs text-muted-foreground">
                     <svg class="size-6 mx-auto mb-1.5 text-muted-foreground/50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11.5" cy="11.5" r="9.5" />
-                        <path d="M18.5 18.5L22 22" />
+                        <path d="m20 20-2-2" />
                         <path d="M9 11.5h5" />
                     </svg>
                     <span>{{ __('vibe/select.no_options') }}</span>
@@ -781,7 +853,7 @@
                                     class="size-4 rounded border flex items-center justify-center transition-colors"
                                     :class="isSelected(item.value) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-background'">
                                     <svg x-show="isSelected(item.value)" class="size-3 stroke-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 12l5 5L20 7" />
+                                        <path d="M4 12.611 8.923 17.5 20 6.5" />
                                     </svg>
                                 </div>
                             </template>
@@ -789,8 +861,8 @@
                             {{-- Single-Select Checkmark --}}
                             <template x-if="!multiple">
                                 <div x-cloak x-show="isSelected(item.value)" class="text-primary">
-                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 12l5 5L20 7" />
+                                    <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 12.611 8.923 17.5 20 6.5" />
                                     </svg>
                                 </div>
                             </template>
