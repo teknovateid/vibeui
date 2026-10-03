@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.4.1] - 2026-10-03
+
+### 🚀 Features
+- feat: add code generator input component and documentation (9465fa0)
+
+
 ## [0.4.0] - 2026-10-02
 
 ### 🚀 Features
