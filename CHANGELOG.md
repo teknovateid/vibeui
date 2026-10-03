@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.4.2] - 2026-10-03
+
+### 🚀 Features
+- feat: add multiple input component with tag support and documentation (250ed86)
+- feat: add integer and strip-decimals support with rounding options to currency input component (52264a2)
+
+
 ## [0.4.1] - 2026-10-03
 
 ### 🚀 Features
