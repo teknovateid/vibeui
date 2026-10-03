@@ -22,6 +22,7 @@ return [
             'currency' => 'Input Currency',
             'phone' => 'Input Phone',
             'quantity' => 'Input Quantity',
+            'generate' => 'Input Generate',
         ],
         'textarea' => 'Textarea',
         'select' => 'Select',

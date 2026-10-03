@@ -117,6 +117,9 @@
             <vibe:nav.item href="{{ route('docs.input.quantity') }}" :active="request()->routeIs('docs.input.quantity')">
                 {{ __('docs/sidebar.nav.input_group.quantity') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.generate') }}" :active="request()->routeIs('docs.input.generate')">
+                {{ __('docs/sidebar.nav.input_group.generate') }}
+            </vibe:nav.item>
         </vibe:nav.group>
 
         <!-- Textarea -->

@@ -1121,10 +1121,10 @@
 
         </div>
 
-        {{-- Table of Contents (TOC) --}}
-        <div class="col-span-12 md:col-span-3 order-1 md:order-2 sticky top-6 space-y-4">
+        {{-- Table of Contents Sidebar --}}
+        <aside class="col-span-12 order-1 md:order-2 md:col-span-3 w-full md:sticky md:top-6 group-has-[header.sticky]/docs:md:top-20">
             <vibe:toc selector="#docs-content" />
-        </div>
+        </aside>
 
     </div>
 </x-docs.layouts.sidebar>

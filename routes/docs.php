@@ -72,6 +72,33 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/currency', 'docs.input.currency')->name('currency');
         Route::view('/phone', 'docs.input.phone')->name('phone');
         Route::view('/quantity', 'docs.input.quantity')->name('quantity');
+        Route::view('/generate', 'docs.input.generate')->name('generate');
+        Route::post('/generate/api/code', function (\Illuminate\Http\Request $request) {
+            $prefix = $request->input('prefix', 'VIBE-');
+            $suffix = $request->input('suffix', '');
+            $length = max(4, min(32, (int) $request->input('length', 8)));
+            $code = $prefix . strtoupper(\Illuminate\Support\Str::random($length)) . $suffix;
+            return response()->json([
+                'success' => true,
+                'code' => $code,
+                'created_at' => now()->toIso8601String()
+            ]);
+        })->name('generate.api');
+        Route::match(['get', 'post'], '/generate/api/check', function (\Illuminate\Http\Request $request) {
+            $code = strtoupper(trim($request->input('code', '')));
+            // Mocking check: codes containing USED, TAKEN, or TEST are flagged as taken
+            $takenList = ['PROMO-USED', 'VIBE-TAKEN', 'TEST-1234', 'DISC-USED', 'TAKEN-999'];
+            $isTaken = in_array($code, $takenList) 
+                || str_contains($code, 'USED') 
+                || str_contains($code, 'TAKEN');
+
+            return response()->json([
+                'available' => !$isTaken,
+                'valid' => !$isTaken,
+                'code' => $code,
+                'message' => $isTaken ? "Kode '{$code}' sudah digunakan oleh pengguna lain!" : "Kode '{$code}' tersedia dan belum terpakai.",
+            ]);
+        })->name('generate.check');
     });
 
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');

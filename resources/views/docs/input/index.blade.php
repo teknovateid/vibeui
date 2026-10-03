@@ -43,6 +43,12 @@
                     <vibe:button href="{{ route('docs.input.phone') }}" variant="outline" size="xs">
                         &lt;vibe:input.phone&gt; &rarr;
                     </vibe:button>
+                    <vibe:button href="{{ route('docs.input.quantity') }}" variant="outline" size="xs">
+                        &lt;vibe:input.quantity&gt; &rarr;
+                    </vibe:button>
+                    <vibe:button href="{{ route('docs.input.generate') }}" variant="outline" size="xs">
+                        &lt;vibe:input.generate&gt; &rarr;
+                    </vibe:button>
                 </div>
             </div>
 

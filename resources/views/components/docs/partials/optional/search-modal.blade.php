@@ -185,6 +185,16 @@
             'keywords' => 'input quantity qty jumlah stepper plus minus counter cart keranjang angka number',
         ],
         [
+            'id' => 'menu-input-generate',
+            'title' => __('docs/sidebar.nav.input_group.generate') ?: 'Input Generate',
+            'subtitle' => 'Input generator kode otomatis, voucher, referral, SKU, UUID dan validasi API',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.input.generate'),
+            'icon' => 'hash',
+            'keywords' => 'input generate voucher referral promo sku kode acak random uuid pattern check uniqueness api token',
+        ],
+        [
             'id' => 'menu-textarea',
             'title' => __('docs/sidebar.nav.textarea') ?: __('docs/search.menu_items.textarea.title'),
             'subtitle' => __('docs/search.menu_items.textarea.subtitle'),
