@@ -46,7 +46,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.basic_usage.preview_title')" minHeight="300px">
+                <vibe:preview :title="__('docs/select.basic_usage.preview_title')" :center="false" minHeight="340px">
                     <vibe:preview.code>
                         <vibe:select name="role" label="{{ __('docs/select.basic_usage.label') }}" placeholder="{{ __('docs/select.basic_usage.placeholder') }}">
                             <vibe:select.option value="admin">Administrator</vibe:select.option>
@@ -55,7 +55,7 @@
                             <vibe:select.option value="subscriber">Subscriber</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
+                    <div class="w-full max-w-sm mx-auto">
                         <vibe:select name="role" :label="__('docs/select.basic_usage.label')" :placeholder="__('docs/select.basic_usage.placeholder')">
                             <vibe:select.option value="admin">Administrator</vibe:select.option>
                             <vibe:select.option value="editor">Editor</vibe:select.option>
@@ -78,7 +78,7 @@
                 {{-- A. Single Select --}}
                 <div class="space-y-3">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.single_tab') }}</h3>
-                    <vibe:preview :title="__('docs/select.selected_methods.single_tab')" minHeight="300px">
+                    <vibe:preview :title="__('docs/select.selected_methods.single_tab')" :center="false" minHeight="360px">
                         <vibe:preview.code>
                             {{-- Metode 1: Prop value pada <vibe:select> (Single) --}}
                             <vibe:select name="status" label="{{ __('docs/select.selected_methods.method1_label') }}" value="active">
@@ -130,7 +130,7 @@
                 {{-- B. Multiple Select --}}
                 <div class="space-y-3 pt-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.selected_methods.multi_tab') }}</h3>
-                    <vibe:preview :title="__('docs/select.selected_methods.multi_tab')" minHeight="320px">
+                    <vibe:preview :title="__('docs/select.selected_methods.multi_tab')" :center="false" minHeight="360px">
                         <vibe:preview.code>
                             {{-- Metode 1: Prop :value array pada <vibe:select multiple> --}}
                             <vibe:select name="frontend" label="{{ __('docs/select.selected_methods.multi_method1_label') }}" multiple :value="['react', 'vue']">
@@ -193,7 +193,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.searchable.preview_title')" minHeight="300px">
+                <vibe:preview :title="__('docs/select.searchable.preview_title')" :center="false" minHeight="380px">
                     <vibe:preview.code>
                         <vibe:select name="country" label="{{ __('docs/select.searchable.label') }}" placeholder="{{ __('docs/select.searchable.placeholder') }}" searchable searchPlaceholder="{{ __('docs/select.searchable.search_placeholder') }}">
                             <vibe:select.option value="id">Indonesia</vibe:select.option>
@@ -205,7 +205,7 @@
                             <vibe:select.option value="jp">Jepang</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
+                    <div class="w-full max-w-sm mx-auto">
                         <vibe:select name="country" :label="__('docs/select.searchable.label')" :placeholder="__('docs/select.searchable.placeholder')" searchable :searchPlaceholder="__('docs/select.searchable.search_placeholder')">
                             <vibe:select.option value="id">Indonesia</vibe:select.option>
                             <vibe:select.option value="my">Malaysia</vibe:select.option>
@@ -228,7 +228,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.groups.preview_title')" minHeight="300px">
+                <vibe:preview :title="__('docs/select.groups.preview_title')" :center="false" minHeight="400px">
                     <vibe:preview.code>
                         <vibe:select name="skill" label="{{ __('docs/select.groups.label') }}" placeholder="{{ __('docs/select.groups.placeholder') }}" searchable>
                             <vibe:select.group label="Frontend">
@@ -244,7 +244,7 @@
                             </vibe:select.group>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
+                    <div class="w-full max-w-sm mx-auto">
                         <vibe:select name="skill" :label="__('docs/select.groups.label')" :placeholder="__('docs/select.groups.placeholder')" searchable>
                             <vibe:select.group label="Frontend">
                                 <vibe:select.option value="vue" description="Progressive Framework">Vue.js</vibe:select.option>
@@ -271,7 +271,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.avatars_icons.preview_title')" minHeight="300px">
+                <vibe:preview :title="__('docs/select.avatars_icons.preview_title')" :center="false" minHeight="400px">
                     <vibe:preview.code>
                         <vibe:select name="assignee" label="{{ __('docs/select.avatars_icons.label') }}" placeholder="{{ __('docs/select.avatars_icons.placeholder') }}" searchable>
                             <vibe:select.option value="sarah" avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face" description="Lead Product Designer">
@@ -287,7 +287,7 @@
                             </vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
+                    <div class="w-full max-w-sm mx-auto">
                         <vibe:select name="assignee" :label="__('docs/select.avatars_icons.label')" :placeholder="__('docs/select.avatars_icons.placeholder')" searchable>
                             <vibe:select.option value="sarah" avatar="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face" description="Lead Product Designer">
                                 Sarah Jenkins
@@ -314,7 +314,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.variants.preview_title')" minHeight="320px">
+                <vibe:preview :title="__('docs/select.variants.preview_title')" :center="false" minHeight="420px">
                     <vibe:preview.code>
                         {{-- primary (default) --}}
                         <vibe:select label="Primary" placeholder="Varian primary (default)...">
@@ -346,7 +346,7 @@
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm space-y-4">
+                    <div class="w-full max-w-sm mx-auto space-y-4">
                         <vibe:select label="Primary" placeholder="Varian primary (default)...">
                             <vibe:select.option value="1">Opsi Satu</vibe:select.option>
                             <vibe:select.option value="2">Opsi Dua</vibe:select.option>
@@ -384,7 +384,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.sizes.preview_title')" minHeight="320px">
+                <vibe:preview :title="__('docs/select.sizes.preview_title')" :center="false" minHeight="440px">
                     <vibe:preview.code>
                         <vibe:select size="xs" label="Ekstra Kecil (xs - h-7)" placeholder="Ukuran xs...">
                             <vibe:select.option value="xs1">Ekstra Kecil (XS)</vibe:select.option>
@@ -406,7 +406,7 @@
                             <vibe:select.option value="xl1">{{ __('docs/select.demo_options.xl') }}</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm space-y-4">
+                    <div class="w-full max-w-sm mx-auto space-y-4">
                         <vibe:select size="xs" label="Ekstra Kecil (xs - h-7)" placeholder="Ukuran xs...">
                             <vibe:select.option value="xs1">Ekstra Kecil (XS)</vibe:select.option>
                         </vibe:select>
@@ -439,7 +439,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.states.preview_title')" minHeight="320px">
+                <vibe:preview :title="__('docs/select.states.preview_title')" :center="false" minHeight="380px">
                     <vibe:preview.code>
                         {{-- Disabled select --}}
                         <vibe:select name="locked_region" label="{{ __('docs/select.states.disabled_label') }}" placeholder="{{ __('docs/select.states.disabled_placeholder') }}" disabled />
@@ -456,7 +456,7 @@
                             <vibe:select.option value="us1" description="Kapasitas penuh (Maintenance)" disabled>US East Node 1 (Disabled)</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm space-y-4">
+                    <div class="w-full max-w-sm mx-auto space-y-4">
                         <vibe:select name="locked_region" :label="__('docs/select.states.disabled_label')" :placeholder="__('docs/select.states.disabled_placeholder')" disabled />
 
                         <vibe:select name="service_category" :label="__('docs/select.states.error_label')" required :error="__('docs/select.states.error_msg')" placeholder="Pilih kategori...">
@@ -481,7 +481,7 @@
                     </p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.keyboard.preview_title')" minHeight="300px">
+                <vibe:preview :title="__('docs/select.keyboard.preview_title')" :center="false" minHeight="380px">
                     <vibe:preview.code>
                         <vibe:select name="os" label="{{ __('docs/select.keyboard.label') }}" placeholder="{{ __('docs/select.keyboard.placeholder') }}" keyboard searchable>
                             <vibe:select.option value="mac">macOS Sonoma</vibe:select.option>
@@ -491,7 +491,7 @@
                             <vibe:select.option value="arch">Arch Linux</vibe:select.option>
                         </vibe:select>
                     </vibe:preview.code>
-                    <div class="w-full max-w-sm">
+                    <div class="w-full max-w-sm mx-auto">
                         <vibe:select name="os" :label="__('docs/select.keyboard.label')" :placeholder="__('docs/select.keyboard.placeholder')" keyboard searchable>
                             <vibe:select.option value="mac">macOS Sonoma</vibe:select.option>
                             <vibe:select.option value="linux">Ubuntu Linux</vibe:select.option>
@@ -518,7 +518,7 @@
                         <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.basic_title') }}</h3>
                         <vibe:badge variant="outline" size="sm" class="font-mono text-[10px]">Tanpa Batasan (Bebas Pilih/Kosongkan)</vibe:badge>
                     </div>
-                    <vibe:preview :title="__('docs/select.multiple.basic_title')" minHeight="320px">
+                    <vibe:preview :title="__('docs/select.multiple.basic_title')" :center="false" minHeight="460px">
                         <vibe:preview.code>
                             <vibe:select name="skills" label="{{ __('docs/select.multiple.basic_label') }}" placeholder="{{ __('docs/select.multiple.basic_placeholder') }}" multiple keyboard :value="['php', 'laravel']">
                                 <vibe:select.option value="php">PHP</vibe:select.option>
@@ -530,7 +530,7 @@
                                 <vibe:select.option value="react">React</vibe:select.option>
                             </vibe:select>
                         </vibe:preview.code>
-                        <div class="w-full max-w-md">
+                        <div class="w-full max-w-md mx-auto">
                             <vibe:select name="skills" :label="__('docs/select.multiple.basic_label')" :placeholder="__('docs/select.multiple.basic_placeholder')" multiple keyboard :value="['php', 'laravel']">
                                 <vibe:select.option value="php">PHP</vibe:select.option>
                                 <vibe:select.option value="laravel">Laravel</vibe:select.option>
@@ -547,7 +547,7 @@
                 {{-- Demo 2: Multiple with Searchable --}}
                 <div class="space-y-2 pt-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.searchable_title') }}</h3>
-                    <vibe:preview :title="__('docs/select.multiple.searchable_title')" minHeight="340px">
+                    <vibe:preview :title="__('docs/select.multiple.searchable_title')" :center="false" minHeight="460px">
                         <vibe:preview.code>
                             <vibe:select name="tech_stack" label="{{ __('docs/select.multiple.searchable_label') }}" placeholder="{{ __('docs/select.multiple.searchable_placeholder') }}" multiple keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
                                 <vibe:select.option value="docker">Docker</vibe:select.option>
@@ -559,7 +559,7 @@
                                 <vibe:select.option value="gcp">Google Cloud Platform</vibe:select.option>
                             </vibe:select>
                         </vibe:preview.code>
-                        <div class="w-full max-w-md">
+                        <div class="w-full max-w-md mx-auto">
                             <vibe:select name="tech_stack" :label="__('docs/select.multiple.searchable_label')" :placeholder="__('docs/select.multiple.searchable_placeholder')" multiple keyboard searchable searchPlaceholder="Ketik untuk mencari teknologi...">
                                 <vibe:select.option value="docker">Docker</vibe:select.option>
                                 <vibe:select.option value="k8s">Kubernetes</vibe:select.option>
@@ -579,7 +579,7 @@
                         <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.multiple.limits_title') }}</h3>
                         <vibe:badge variant="warning" size="sm" class="font-mono text-[10px]">:min="2" & :max="4" (Terkunci Otomatis)</vibe:badge>
                     </div>
-                    <vibe:preview :title="__('docs/select.multiple.limits_title')" minHeight="340px">
+                    <vibe:preview :title="__('docs/select.multiple.limits_title')" :center="false" minHeight="460px">
                         <vibe:preview.code>
                             <vibe:select name="interests" label="{{ __('docs/select.multiple.limits_label') }}" placeholder="{{ __('docs/select.multiple.limits_placeholder') }}" info="{{ __('docs/select.multiple.limits_info') }}" multiple keyboard :min="2" :max="4" :value="['ai', 'cloud']">
                                 <vibe:select.option value="ai">Artificial Intelligence</vibe:select.option>
@@ -591,7 +591,7 @@
                                 <vibe:select.option value="blockchain">Blockchain</vibe:select.option>
                             </vibe:select>
                         </vibe:preview.code>
-                        <div class="w-full max-w-md">
+                        <div class="w-full max-w-md mx-auto">
                             <vibe:select name="interests" :label="__('docs/select.multiple.limits_label')" :placeholder="__('docs/select.multiple.limits_placeholder')" :info="__('docs/select.multiple.limits_info')" multiple keyboard :min="2" :max="4" :value="['ai', 'cloud']">
                                 <vibe:select.option value="ai">Artificial Intelligence</vibe:select.option>
                                 <vibe:select.option value="cloud">Cloud Computing</vibe:select.option>
@@ -601,6 +601,145 @@
                                 <vibe:select.option value="devops">DevOps & CI/CD</vibe:select.option>
                                 <vibe:select.option value="blockchain">Blockchain</vibe:select.option>
                             </vibe:select>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 4: Multiple Select dengan Separator POST --}}
+                <div class="space-y-2">
+                    <h3 class="text-sm font-semibold text-foreground">Nilai Form POST Menggunakan Separator (String Comma / Pipe)</h3>
+                    <p class="text-xs text-muted-foreground">
+                        Tambahkan atribut <code>separator=","</code> atau <code>separator="|"</code> agar saat formulir di-submit, nilai yang dikirim ke controller berupa string yang digabungkan pemisah tersebut alih-alih array <code>name[]</code>.
+                    </p>
+                    <vibe:preview title="Multiple Select dengan Separator Koma" :center="false" minHeight="460px">
+                        <vibe:preview.code>
+<vibe:select 
+    name="tech_tags" 
+    label="Pilihan Teknologi (Dipost: 'laravel,vue')" 
+    placeholder="Pilih teknologi..." 
+    multiple 
+    separator="," 
+    value="laravel,vue"
+>
+    <vibe:select.option value="laravel" label="Laravel" />
+    <vibe:select.option value="vue" label="Vue.js" />
+    <vibe:select.option value="react" label="React" />
+    <vibe:select.option value="tailwind" label="Tailwind CSS" />
+</vibe:select>
+                        </vibe:preview.code>
+                        <div class="w-full max-w-sm mx-auto">
+                            <vibe:select 
+                                name="tech_tags" 
+                                label="Pilihan Teknologi (Dipost: 'laravel,vue')" 
+                                placeholder="Pilih teknologi..." 
+                                multiple 
+                                separator="," 
+                                value="laravel,vue"
+                            >
+                                <vibe:select.option value="laravel" label="Laravel" />
+                                <vibe:select.option value="vue" label="Vue.js" />
+                                <vibe:select.option value="react" label="React" />
+                                <vibe:select.option value="tailwind" label="Tailwind CSS" />
+                            </vibe:select>
+                        </div>
+                    </vibe:preview>
+                </div>
+
+                {{-- Demo 5: Kustomisasi Tampilan Badge & Color Cycle --}}
+                <div class="space-y-2 pt-2">
+                    <div class="flex items-center justify-between gap-2">
+                        <h3 class="text-sm font-semibold text-foreground">Kustomisasi Tampilan Badge & Color Cycle</h3>
+                        <vibe:badge variant="primary" size="sm" class="font-mono text-[10px]">badge-variant="cycle"</vibe:badge>
+                    </div>
+                    <p class="text-xs text-muted-foreground">
+                        Pada mode <code>multiple</code>, Anda dapat mengubah gaya badge opsi terpilih menggunakan prop <code>badge-variant</code> (pilihan: <code>cycle</code>, <code>primary</code>, <code>outline</code>, atau default <code>secondary</code>). Opsi <code>badge-variant="cycle"</code> merotasikan warna badge secara otomatis untuk memudahkan identifikasi visual per item.
+                    </p>
+                    <vibe:preview title="Rotasi Warna Badge (Color Cycle)" :center="false" minHeight="520px">
+                        <vibe:preview.code>
+<div class="space-y-4">
+    {{-- Color Cycle --}}
+    <vibe:select 
+        name="topics_cycle" 
+        label="Topik Minat (Color Cycle)" 
+        multiple 
+        badge-variant="cycle"
+        :value="['ai', 'cloud', 'devops', 'security']"
+    >
+        <vibe:select.option value="ai" label="Artificial Intelligence" />
+        <vibe:select.option value="cloud" label="Cloud Computing" />
+        <vibe:select.option value="devops" label="DevOps & CI/CD" />
+        <vibe:select.option value="security" label="Cyber Security" />
+        <vibe:select.option value="blockchain" label="Blockchain Technology" />
+    </vibe:select>
+
+    {{-- Varian Primary & Outline --}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <vibe:select 
+            name="tags_primary" 
+            label="Badge Primary" 
+            multiple 
+            badge-variant="primary"
+            :value="['laravel', 'tailwind']"
+        >
+            <vibe:select.option value="laravel" label="Laravel" />
+            <vibe:select.option value="tailwind" label="Tailwind CSS" />
+            <vibe:select.option value="vue" label="Vue.js" />
+        </vibe:select>
+
+        <vibe:select 
+            name="tags_outline" 
+            label="Badge Outline" 
+            multiple 
+            badge-variant="outline"
+            :value="['api', 'graphql']"
+        >
+            <vibe:select.option value="api" label="REST API" />
+            <vibe:select.option value="graphql" label="GraphQL" />
+            <vibe:select.option value="grpc" label="gRPC" />
+        </vibe:select>
+    </div>
+</div>
+                        </vibe:preview.code>
+                        <div class="w-full max-w-lg mx-auto space-y-4">
+                            <vibe:select 
+                                name="demo_topics_cycle" 
+                                label="Topik Minat (Color Cycle)" 
+                                multiple 
+                                badge-variant="cycle"
+                                :value="['ai', 'cloud', 'devops', 'security']"
+                            >
+                                <vibe:select.option value="ai" label="Artificial Intelligence" />
+                                <vibe:select.option value="cloud" label="Cloud Computing" />
+                                <vibe:select.option value="devops" label="DevOps & CI/CD" />
+                                <vibe:select.option value="security" label="Cyber Security" />
+                                <vibe:select.option value="blockchain" label="Blockchain Technology" />
+                            </vibe:select>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <vibe:select 
+                                    name="demo_tags_primary" 
+                                    label="Badge Primary" 
+                                    multiple 
+                                    badge-variant="primary"
+                                    :value="['laravel', 'tailwind']"
+                                >
+                                    <vibe:select.option value="laravel" label="Laravel" />
+                                    <vibe:select.option value="tailwind" label="Tailwind CSS" />
+                                    <vibe:select.option value="vue" label="Vue.js" />
+                                </vibe:select>
+
+                                <vibe:select 
+                                    name="demo_tags_outline" 
+                                    label="Badge Outline" 
+                                    multiple 
+                                    badge-variant="outline"
+                                    :value="['api', 'graphql']"
+                                >
+                                    <vibe:select.option value="api" label="REST API" />
+                                    <vibe:select.option value="graphql" label="GraphQL" />
+                                    <vibe:select.option value="grpc" label="gRPC" />
+                                </vibe:select>
+                            </div>
                         </div>
                     </vibe:preview>
                 </div>
@@ -621,7 +760,7 @@
                 {{-- Demo 1: Basic Remote API Search --}}
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.basic_title') }}</h3>
-                    <vibe:preview :title="__('docs/select.remote.basic_title')" minHeight="320px">
+                    <vibe:preview :title="__('docs/select.remote.basic_title')" :center="false" minHeight="460px">
                         <vibe:preview.code>
                             <vibe:select.remote
                                 name="user_id"
@@ -632,7 +771,7 @@
                                 clearable
                             />
                         </vibe:preview.code>
-                        <div class="w-full max-w-sm">
+                        <div class="w-full max-w-sm mx-auto">
                             <vibe:select.remote
                                 name="demo_user_id"
                                 :label="__('docs/select.remote.basic_label')"
@@ -648,7 +787,7 @@
                 {{-- Demo 2: Edit Mode with Pre-filled Value & Initial Label --}}
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.edit_title') }}</h3>
-                    <vibe:preview :title="__('docs/select.remote.edit_title')" minHeight="320px">
+                    <vibe:preview :title="__('docs/select.remote.edit_title')" :center="false" minHeight="460px">
                         <vibe:preview.code>
                             <vibe:select.remote
                                 name="lead_id"
@@ -660,10 +799,11 @@
                                 clearable
                             />
                         </vibe:preview.code>
-                        <div class="w-full max-w-sm">
+                        <div class="w-full max-w-sm mx-auto">
                             <vibe:select.remote
                                 name="demo_lead_id"
                                 :label="__('docs/select.remote.edit_label')"
+                                :placeholder="__('docs/select.remote.edit_placeholder')"
                                 :api="route('docs.select.api')"
                                 value="13"
                                 initial-label="Alanna Schimmel"
@@ -677,7 +817,7 @@
                 {{-- Demo 3: Multi-Select API --}}
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.multiple_title') }}</h3>
-                    <vibe:preview :title="__('docs/select.remote.multiple_title')" minHeight="340px">
+                    <vibe:preview :title="__('docs/select.remote.multiple_title')" :center="false" minHeight="500px">
                         <vibe:preview.code>
                             <vibe:select.remote
                                 name="assigned_members[]"
@@ -690,7 +830,7 @@
                                 clearable
                             />
                         </vibe:preview.code>
-                        <div class="w-full max-w-md">
+                        <div class="w-full max-w-md mx-auto">
                             <vibe:select.remote
                                 name="demo_assigned_members[]"
                                 :label="__('docs/select.remote.multiple_label')"
@@ -709,7 +849,7 @@
                 <div class="space-y-2">
                     <h3 class="text-sm font-semibold text-foreground">{{ __('docs/select.remote.edit_multiple_title') }}</h3>
                     <p class="text-xs text-muted-foreground">{!! __('docs/select.remote.edit_multiple_desc') !!}</p>
-                    <vibe:preview :title="__('docs/select.remote.edit_multiple_title')" minHeight="340px">
+                    <vibe:preview :title="__('docs/select.remote.edit_multiple_title')" :center="false" minHeight="520px">
                         <vibe:preview.code>
                             @php
                                 $collaborators = [
@@ -739,7 +879,7 @@
                                 clearable
                             />
                         </vibe:preview.code>
-                        <div class="w-full max-w-md">
+                        <div class="w-full max-w-md mx-auto">
                             @php
                                 $demoCollaborators = [
                                     [
@@ -957,7 +1097,7 @@ BLADE;
                     <p class="text-sm text-muted-foreground">{!! __('docs/select.test.desc') !!}</p>
                 </div>
 
-                <vibe:preview :title="__('docs/select.test.preview_title')">
+                <vibe:preview :title="__('docs/select.test.preview_title')" :center="false">
                     <vibe:preview.code>
                         <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
                             @csrf
@@ -1073,6 +1213,7 @@ BLADE;
         ['searchable', 'bool', 'false', __('docs/select.props_items.searchable')],
         ['keyboard', 'bool', 'false', __('docs/select.props_items.keyboard')],
         ['multiple', 'bool', 'false', __('docs/select.props_items.multiple')],
+        ['separator', 'string|null', 'null', 'Karakter pemisah nilai saat form dipost (misal "," atau "|") pada mode multiple.'],
         ['disabled', 'bool', 'false', __('docs/select.props_items.disabled')],
         ['clearable', 'bool', 'false', __('docs/select.props_items.clearable')],
         ['max', 'int|null', 'null', __('docs/select.props_items.max')],
@@ -1084,6 +1225,7 @@ BLADE;
         ['errorName', 'string', 'null', __('docs/select.props_items.errorName')],
         ['wrapperClass', 'string', 'null', __('docs/select.props_items.wrapperClass')],
         ['badgeVariant', 'string', "'secondary'", __('docs/select.props_items.badgeVariant')],
+        ['colorCycle', 'array', "['info', 'primary', ...]", 'Daftar palet warna rotasi lencana badge terpilih saat badgeVariant="cycle".'],
         ['required', 'bool', 'false', __('docs/select.props_items.required')],
     ];
                             @endphp

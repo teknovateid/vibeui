@@ -122,7 +122,7 @@
             });
         }
     }
-}" {{ $attributes->twMerge(['class' => 'group/preview relative isolate flex flex-col rounded-2xl border border-border bg-card text-card-foreground shadow-xs']) }}>
+}" {{ $attributes->twMerge(['class' => 'group/preview relative flex flex-col rounded-2xl border border-border bg-card text-card-foreground shadow-xs focus-within:z-30']) }}>
     {{-- Preview Toolbar Header --}}
     <div class="relative flex items-center justify-between min-h-10.5 px-3.5 py-2 bg-muted/40 dark:bg-muted/20 border-b border-border text-xs">
         {{-- Left: Segmented Tab Buttons --}}

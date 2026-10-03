@@ -23,6 +23,7 @@ return [
             'phone' => 'Input Phone',
             'quantity' => 'Input Quantity',
             'generate' => 'Input Generate',
+            'multiple' => 'Input Multiple / Tags',
         ],
         'textarea' => 'Textarea',
         'select' => 'Select',

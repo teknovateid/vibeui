@@ -73,6 +73,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/phone', 'docs.input.phone')->name('phone');
         Route::view('/quantity', 'docs.input.quantity')->name('quantity');
         Route::view('/generate', 'docs.input.generate')->name('generate');
+        Route::view('/multiple', 'docs.input.multiple')->name('multiple');
         Route::post('/generate/api/code', function (\Illuminate\Http\Request $request) {
             $prefix = $request->input('prefix', 'VIBE-');
             $suffix = $request->input('suffix', '');
