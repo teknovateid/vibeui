@@ -10,6 +10,9 @@
     'decimalSeparator' => ',',
     'precision' => 0,
     'allowNegative' => false,
+    'integer' => false, // Opsi agar nilai bersih saat dipost berupa bilangan bulat (tanpa desimal/angka di belakang koma)
+    'stripDecimals' => false, // Alias untuk integer
+    'round' => false, // Pembulatan ke bilangan bulat terdekat jika terdapat nilai desimal
     'description' => null,
     'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled, flush, ghost
@@ -33,12 +36,28 @@
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
     $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
 
+    $isInteger = $integer || $stripDecimals || ($attributes->has('integer') && $attributes->get('integer') !== false) || ($attributes->has('strip-decimals') && $attributes->get('strip-decimals') !== false) || (int) $precision === 0;
+
     $initialRaw = '';
     if (!empty($name) && !is_array(old($name))) {
         $initialRaw = (string) old($name, !is_array($value ?? null) ? ($value ?? '') : '');
     } elseif (!empty($value) && !is_array($value)) {
         $initialRaw = (string) $value;
     }
+
+    // Bersihkan nilai awal jika mode integer aktif atau precision 0 agar saat form dipost tidak ada desimal
+    if ($isInteger && !empty($initialRaw)) {
+        $cleanInit = str_replace($thousandSeparator, '', trim($initialRaw));
+        $cleanInit = str_replace($decimalSeparator, '.', $cleanInit);
+        if (str_contains($cleanInit, '.')) {
+            if ($round) {
+                $initialRaw = (string) round((float) $cleanInit);
+            } else {
+                $initialRaw = explode('.', $cleanInit)[0];
+            }
+        }
+    }
+
     $wireModel = $attributes->wire('model')->value();
 
     $sizeClasses = match ($size) {
@@ -80,9 +99,12 @@
             decimalSep: '{{ $decimalSeparator }}',
             precision: {{ (int) $precision }},
             allowNegative: {{ $allowNegative ? 'true' : 'false' }},
+            isInteger: {{ $isInteger ? 'true' : 'false' }},
+            round: {{ $round ? 'true' : 'false' }},
 
             init() {
                 if (this.rawValue !== '') {
+                    this.rawValue = this.sanitizeRaw(this.rawValue);
                     this.displayValue = this.formatNumber(this.rawValue);
                 }
 
@@ -91,13 +113,41 @@
                     let hidden = this.$refs.hiddenInput;
                     if (hidden) {
                         hidden.addEventListener('input', (e) => {
-                            if (e.target.value !== this.rawValue) {
-                                this.rawValue = e.target.value;
+                            let clean = this.sanitizeRaw(e.target.value);
+                            if (clean !== this.rawValue) {
+                                this.rawValue = clean;
                                 this.displayValue = this.formatNumber(this.rawValue);
                             }
                         });
                     }
                 });
+            },
+
+            sanitizeRaw(val) {
+                if (val === null || val === undefined || val === '') return '';
+                let str = String(val);
+                let isNeg = this.allowNegative && str.startsWith('-');
+                
+                // Remove prefix, spaces, and thousand separators
+                let clean = str.replace(new RegExp('\\' + this.thousandSep, 'g'), '').trim();
+                clean = clean.replace(new RegExp('\\' + this.decimalSep, 'g'), '.');
+                clean = clean.replace(/[^\d.]/g, '');
+
+                if (!clean) return isNeg ? '-' : '';
+
+                // Jika mode integer aktif atau precision 0, pastikan tidak ada angka di belakang koma
+                if (this.isInteger || this.precision === 0) {
+                    if (this.round && clean.includes('.')) {
+                        return (isNeg ? '-' : '') + String(Math.round(parseFloat(clean)));
+                    }
+                    let intPart = clean.split('.')[0] || '0';
+                    return (isNeg ? '-' : '') + intPart;
+                }
+
+                let parts = clean.split('.');
+                let intPart = parts[0] || '0';
+                let decPart = parts[1] !== undefined ? parts[1].slice(0, this.precision) : '';
+                return (isNeg ? '-' : '') + (decPart ? intPart + '.' + decPart : intPart);
             },
 
             formatNumber(val) {
@@ -109,35 +159,27 @@
 
                 let parts = str.split('.');
                 let integerPart = parts[0] || '0';
-                let decimalPart = parts[1] !== undefined ? parts[1].slice(0, this.precision) : '';
+                let decimalPart = (this.isInteger || this.precision === 0) 
+                    ? '' 
+                    : (parts[1] !== undefined ? parts[1].slice(0, this.precision) : '');
 
                 // Add thousand separators
                 let formattedInt = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, this.thousandSep);
 
                 let result = (isNeg ? '-' : '') + formattedInt;
-                if (this.precision > 0 && decimalPart !== '') {
+                if (this.precision > 0 && !this.isInteger && decimalPart !== '') {
                     result += this.decimalSep + decimalPart;
                 }
                 return result;
             },
 
             parseRaw(displayStr) {
-                if (!displayStr) return '';
-                let str = String(displayStr);
-                let isNeg = this.allowNegative && str.startsWith('-');
-                
-                // Remove prefix, spaces, and thousand separators
-                let clean = str.replace(new RegExp('\\' + this.thousandSep, 'g'), '').trim();
-                clean = clean.replace(new RegExp('\\' + this.decimalSep, 'g'), '.');
-                clean = clean.replace(/[^\d.]/g, '');
-
-                if (!clean) return isNeg ? '-' : '';
-                return (isNeg ? '-' : '') + clean;
+                return this.sanitizeRaw(displayStr);
             },
 
             handleInput(e) {
                 let inputVal = e.target.value;
-                this.rawValue = this.parseRaw(inputVal);
+                this.rawValue = this.sanitizeRaw(inputVal);
                 this.displayValue = this.formatNumber(this.rawValue);
 
                 // Update hidden input and dispatch bubbling input/change events
@@ -160,7 +202,7 @@
         {{-- Visible Formatted Input --}}
         <input 
             type="text"
-            inputmode="{{ $precision > 0 ? 'decimal' : 'numeric' }}"
+            inputmode="{{ ($precision > 0 && !$isInteger) ? 'decimal' : 'numeric' }}"
             id="{{ $id }}-display"
             x-model="displayValue"
             @input="handleInput($event)"

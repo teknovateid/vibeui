@@ -129,10 +129,61 @@
                 </vibe:preview>
             </section>
 
-            {{-- 4. Uji Nilai Murni (Live Proof of Clean Numeric Value) --}}
+            {{-- 4. Opsi Integer / Tanpa Angka di Belakang Koma Saat POST --}}
+            <section id="tanpa-desimal" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">4. Opsi Nilai Integer Saat POST (Tanpa Angka di Belakang Koma)</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Gunakan prop <code>integer</code> (atau <code>strip-decimals</code>) untuk memastikan nilai yang dikirim ke controller/database saat form di-submit murni berupa bilangan bulat tanpa koma/desimal (misal <code>50000</code> alih-alih <code>50000.00</code>). Opsi <code>round</code> dapat ditambahkan jika ingin pecahan dibulatkan:
+                    </p>
+                </div>
+
+                <vibe:preview title="Format Integer Tanpa Angka di Belakang Koma">
+                    <vibe:preview.code>
+{{-- Nilai terkirim ke backend selalu integer bersih (misal 150000) --}}
+<\vibe:input.currency 
+    name="price_integer" 
+    label="Harga Produk (Integer)" 
+    prefix="Rp" 
+    value="150000.00" 
+    integer 
+/>
+
+{{-- Dengan pembulatan otomatis jika ada nilai pecahan --}}
+<\vibe:input.currency 
+    name="price_rounded" 
+    label="Total Dibulatkan (Round)" 
+    prefix="Rp" 
+    value="12500.75" 
+    integer 
+    round 
+/>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-sm space-y-4">
+                        <vibe:input.currency 
+                            name="price_integer" 
+                            label="Harga Produk (Integer)" 
+                            prefix="Rp" 
+                            value="150000.00" 
+                            integer 
+                        />
+
+                        <vibe:input.currency 
+                            name="price_rounded" 
+                            label="Total Dibulatkan (Round)" 
+                            prefix="Rp" 
+                            value="12500.75" 
+                            integer 
+                            round 
+                        />
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 5. Uji Nilai Murni (Live Proof of Clean Numeric Value) --}}
             <section id="uji-nilai-numerik" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">4. Uji Coba Langsung: Tampilan vs Nilai Terkirim</h2>
+                    <h2 class="text-xl font-bold text-foreground">5. Uji Coba Langsung: Tampilan vs Nilai Terkirim</h2>
                     <p class="text-sm text-muted-foreground">
                         Ketik nominal berapapun di kotak di bawah dan perhatikan bagaimana nilai yang terkirim ke server selalu berupa angka murni:
                     </p>
@@ -163,10 +214,10 @@
                 </div>
             </section>
 
-            {{-- 5. Kompatibilitas dengan vibe:form --}}
+            {{-- 6. Kompatibilitas dengan vibe:form --}}
             <section id="dukungan-vibe-form" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">5. Kompatibilitas Penuh dengan vibe:form</h2>
+                    <h2 class="text-xl font-bold text-foreground">6. Kompatibilitas Penuh dengan vibe:form</h2>
                     <p class="text-sm text-muted-foreground">
                         Dapat langsung diletakkan di dalam <code>&lt;vibe:form&gt;</code>:
                     </p>
