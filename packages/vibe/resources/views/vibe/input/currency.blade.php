@@ -47,8 +47,8 @@
 
     // Bersihkan nilai awal jika mode integer aktif atau precision 0 agar saat form dipost tidak ada desimal
     if ($isInteger && !empty($initialRaw)) {
-        $cleanInit = str_replace($thousandSeparator, '', trim($initialRaw));
-        $cleanInit = str_replace($decimalSeparator, '.', $cleanInit);
+        $cleanInit = ($thousandSeparator !== '' && $thousandSeparator !== null) ? str_replace($thousandSeparator, '', trim($initialRaw)) : trim($initialRaw);
+        $cleanInit = ($decimalSeparator !== '' && $decimalSeparator !== null) ? str_replace($decimalSeparator, '.', $cleanInit) : $cleanInit;
         if (str_contains($cleanInit, '.')) {
             if ($round) {
                 $initialRaw = (string) round((float) $cleanInit);
@@ -128,10 +128,15 @@
                 let str = String(val);
                 let isNeg = this.allowNegative && str.startsWith('-');
                 
-                // Remove prefix, spaces, and thousand separators
-                let clean = str.replace(new RegExp('\\' + this.thousandSep, 'g'), '').trim();
-                clean = clean.replace(new RegExp('\\' + this.decimalSep, 'g'), '.');
-                clean = clean.replace(/[^\d.]/g, '');
+                // Remove prefix, spaces, and thousand separators safely without RegExp trailing backslash
+                let clean = str;
+                if (this.thousandSep) {
+                    clean = clean.split(this.thousandSep).join('');
+                }
+                if (this.decimalSep) {
+                    clean = clean.split(this.decimalSep).join('.');
+                }
+                clean = clean.trim().replace(/[^\d.]/g, '');
 
                 if (!clean) return isNeg ? '-' : '';
 
@@ -164,11 +169,13 @@
                     : (parts[1] !== undefined ? parts[1].slice(0, this.precision) : '');
 
                 // Add thousand separators
-                let formattedInt = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, this.thousandSep);
+                let formattedInt = this.thousandSep 
+                    ? integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, this.thousandSep)
+                    : integerPart;
 
                 let result = (isNeg ? '-' : '') + formattedInt;
                 if (this.precision > 0 && !this.isInteger && decimalPart !== '') {
-                    result += this.decimalSep + decimalPart;
+                    result += (this.decimalSep || '.') + decimalPart;
                 }
                 return result;
             },

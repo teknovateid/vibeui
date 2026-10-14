@@ -54,5 +54,5 @@ test('vibe:form confirm password modal renders passkey button and medium buttons
 
     expect($html)
         ->toContain('confirmWithPasskey()')
-        ->toContain('h-9 px-3.5 text-sm gap-2 rounded-lg');
+        ->toContain('h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg');
 });
