@@ -10,7 +10,6 @@
     <form wire:submit="register" class="space-y-4">
     {{-- Full Name --}}
     <vibe:input 
-        size="xl"
         wire:model="name" 
         id="name" 
         name="name" 
@@ -24,7 +23,6 @@
     {{-- Email & Phone Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <vibe:input 
-            size="xl"
             wire:model="email" 
             id="email" 
             name="email" 
@@ -36,7 +34,6 @@
         />
 
         <vibe:input 
-            size="xl"
             wire:model="phone" 
             id="phone" 
             name="phone" 
@@ -50,7 +47,6 @@
 
     {{-- Username --}}
     <vibe:input 
-        size="xl"
         wire:model="username" 
         id="username" 
         name="username" 
@@ -64,7 +60,6 @@
     {{-- Passwords Grid --}}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <vibe:input 
-            size="xl"
             wire:model="password" 
             id="password" 
             name="password" 
@@ -77,7 +72,6 @@
         />
 
         <vibe:input 
-            size="xl"
             wire:model="password_confirmation" 
             id="password_confirmation" 
             name="password_confirmation" 
@@ -93,7 +87,6 @@
     {{-- Submit Button --}}
     <div class="pt-2">
         <vibe:button 
-            size="xl"
             type="submit" 
             variant="primary" 
             class="w-full justify-center shadow-xs" 

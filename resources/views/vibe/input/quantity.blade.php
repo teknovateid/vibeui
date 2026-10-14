@@ -51,10 +51,10 @@
     $heightClass = match ($size) {
         'xs' => 'h-7 text-xs',
         'sm' => 'h-8 text-xs',
-        'md' => 'h-9 text-sm',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm',
         'lg' => 'h-10 text-sm',
         'xl' => 'h-11 text-base',
-        default => 'h-9 text-sm',
+        default => 'h-11 sm:h-9 text-base sm:text-sm',
     };
 
     $radiusClass = $isPill ? 'rounded-full' : match ($size) {
@@ -68,19 +68,19 @@
     $btnWidthClass = match ($size) {
         'xs' => 'w-7',
         'sm' => 'w-8',
-        'md' => 'w-9',
+        'md' => 'w-11 sm:w-9',
         'lg' => 'w-10',
         'xl' => 'w-11',
-        default => 'w-9',
+        default => 'w-11 sm:w-9',
     };
 
     $iconSizeClass = match ($size) {
         'xs' => 'size-3',
         'sm' => 'size-3.5',
-        'md' => 'size-4',
+        'md' => 'size-4.5 sm:size-4',
         'lg' => 'size-4.5',
         'xl' => 'size-5',
-        default => 'size-4',
+        default => 'size-4.5 sm:size-4',
     };
 
     $errorClasses = $hasError

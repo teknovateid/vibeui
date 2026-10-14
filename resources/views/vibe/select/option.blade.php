@@ -35,7 +35,7 @@
     @endif
     :aria-selected="isSelected('{{ addslashes($value) }}')"
     @class([
-        'relative flex items-center gap-2.5 w-full px-2.5 py-1.5 text-xs rounded-lg select-none transition-colors group focus:outline-none',
+        'relative flex items-center gap-2.5 w-full px-3 sm:px-2.5 py-2.5 sm:py-1.5 text-sm sm:text-xs rounded-lg select-none transition-colors group focus:outline-none',
         'opacity-40 cursor-not-allowed pointer-events-none' => $disabled,
         'cursor-pointer focus:bg-muted focus:text-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset' => !$disabled,
     ])
