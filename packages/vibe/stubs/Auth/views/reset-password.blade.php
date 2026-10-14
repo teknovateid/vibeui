@@ -10,7 +10,6 @@
     <form wire:submit="resetPassword" class="space-y-4">
         {{-- Email (Prefilled) --}}
         <vibe:input 
-            size="xl"
             wire:model="email" 
             id="email" 
             name="email" 
@@ -23,7 +22,6 @@
 
         {{-- New Password --}}
         <vibe:input 
-            size="xl"
             wire:model="password" 
             id="password" 
             name="password" 
@@ -38,7 +36,6 @@
 
         {{-- Confirm New Password --}}
         <vibe:input 
-            size="xl"
             wire:model="password_confirmation" 
             id="password_confirmation" 
             name="password_confirmation" 
@@ -53,7 +50,6 @@
         {{-- Submit Button --}}
         <div class="pt-2">
             <vibe:button 
-                size="xl"
                 type="submit" 
                 variant="primary" 
                 class="w-full justify-center shadow-xs" 
