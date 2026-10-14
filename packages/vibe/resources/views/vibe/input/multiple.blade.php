@@ -65,10 +65,10 @@
     $sizeClasses = match ($size) {
         'xs' => 'min-h-7 text-xs rounded-md px-2 py-1 gap-1',
         'sm' => 'min-h-8 text-xs rounded-md px-2.5 py-1 gap-1.5',
-        'md' => 'min-h-9 text-sm rounded-lg px-3 py-1.5 gap-1.5',
+        'md' => 'min-h-11 sm:min-h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3 py-2 sm:py-1.5 gap-1.5',
         'lg' => 'min-h-10 text-sm rounded-lg px-3.5 py-1.5 gap-2',
         'xl' => 'min-h-11 text-base rounded-xl px-4 py-2 gap-2.5',
-        default => 'min-h-9 text-sm rounded-lg px-3 py-1.5 gap-1.5',
+        default => 'min-h-11 sm:min-h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3 py-2 sm:py-1.5 gap-1.5',
     };
 
     $variantClasses = match ($variant) {
@@ -94,7 +94,7 @@
     $badgeRemoveSizeClass = match ($size) {
         'xs', 'sm' => 'size-2.5',
         'xl' => 'size-3.5',
-        default => 'size-3',
+        default => 'size-3.5 sm:size-3',
     };
 @endphp
 

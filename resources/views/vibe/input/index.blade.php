@@ -43,20 +43,20 @@
     $sizeControlClasses = match ($size) {
         'xs' => 'h-7 text-xs rounded-md',
         'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-9 text-sm rounded-lg',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
         'lg' => 'h-10 text-sm rounded-lg',
         'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-9 text-sm rounded-lg',
+        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
     };
 
     if ($variant === 'flush') {
         $sizeControlClasses = match ($size) {
             'xs' => 'h-7 text-xs rounded-none px-0',
             'sm' => 'h-8 text-xs rounded-none px-0',
-            'md' => 'h-9 text-sm rounded-none px-0',
+            'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
             'lg' => 'h-10 text-sm rounded-none px-0',
             'xl' => 'h-11 text-base rounded-none px-0',
-            default => 'h-9 text-sm rounded-none px-0',
+            default => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
         };
     }
 
@@ -98,14 +98,14 @@
             'sm' => 'pl-2.5 pr-1.5',
             'lg' => 'pl-3.5 pr-2',
             'xl' => 'pl-4 pr-2.5',
-            default => 'pl-3 pr-1.5',
+            default => 'pl-3.5 sm:pl-3 pr-2 sm:pr-1.5',
         };
         $trailingPadding = match ($size) {
             'xs' => 'pr-2 pl-1',
             'sm' => 'pr-2.5 pl-1.5',
             'lg' => 'pr-3.5 pl-2',
             'xl' => 'pr-4 pl-2.5',
-            default => 'pr-3 pl-1.5',
+            default => 'pr-3.5 sm:pr-3 pl-2 sm:pl-1.5',
         };
         $inputPadding =
             ($hasLeading
@@ -115,7 +115,7 @@
                     'sm' => 'pl-2.5 ',
                     'lg' => 'pl-4 ',
                     'xl' => 'pl-4.5 ',
-                    default => 'pl-3.5 ',
+                    default => 'pl-4 sm:pl-3.5 ',
                 }) .
             ($hasTrailing
                 ? 'pr-0'
@@ -124,14 +124,14 @@
                     'sm' => 'pr-2.5',
                     'lg' => 'pr-4',
                     'xl' => 'pr-4.5',
-                    default => 'pr-3.5',
+                    default => 'pr-4 sm:pr-3.5',
                 });
     }
 
     $inputFontSize = match ($size) {
         'xs', 'sm' => 'text-xs',
         'xl' => 'text-base',
-        default => 'text-sm',
+        default => 'text-base sm:text-sm',
     };
 
     $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';
@@ -191,7 +191,7 @@
                         type="button" 
                         tabindex="-1"
                         @click.stop="showPassword = !showPassword" 
-                        class="text-muted-foreground hover:text-foreground p-1 sm:p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
+                        class="text-muted-foreground hover:text-foreground p-1.5 sm:p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
                         aria-label="Toggle password visibility"
                         :aria-pressed="showPassword"
                     >

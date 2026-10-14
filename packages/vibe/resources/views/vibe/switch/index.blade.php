@@ -47,14 +47,14 @@
     $labelSizes = match ($size) {
         'xs', 'sm' => 'text-xs',
         'xl' => 'text-base',
-        default => 'text-sm',
+        default => 'text-base sm:text-sm',
     };
 
     $descSizes = match ($size) {
         'xs' => 'text-[10px]',
         'sm' => 'text-[11px]',
         'xl' => 'text-sm',
-        default => 'text-xs',
+        default => 'text-sm sm:text-xs',
     };
 
     // Track active colors

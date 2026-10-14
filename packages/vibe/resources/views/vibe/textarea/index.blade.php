@@ -32,18 +32,20 @@
     $sizeClasses = match ($size) {
         'xs' => 'text-xs rounded-md px-2 py-1',
         'sm' => 'text-xs rounded-md px-2.5 py-1.5',
+        'md' => 'text-base sm:text-sm rounded-lg px-4 py-2.5 sm:px-3.5 sm:py-2',
         'lg' => 'text-sm rounded-lg px-4 py-2.5',
         'xl' => 'text-base rounded-xl px-4.5 py-3',
-        default => 'text-sm rounded-lg px-3.5 py-2',
+        default => 'text-base sm:text-sm rounded-lg px-4 py-2.5 sm:px-3.5 sm:py-2',
     };
 
     if ($variant === 'flush') {
         $sizeClasses = match ($size) {
             'xs' => 'text-xs px-0 py-1 rounded-none',
             'sm' => 'text-xs px-0 py-1.5 rounded-none',
+            'md' => 'text-base sm:text-sm px-0 py-2.5 sm:py-2 rounded-none',
             'lg' => 'text-sm px-0 py-2.5 rounded-none',
             'xl' => 'text-base px-0 py-3 rounded-none',
-            default => 'text-sm px-0 py-2 rounded-none',
+            default => 'text-base sm:text-sm px-0 py-2.5 sm:py-2 rounded-none',
         };
     }
 

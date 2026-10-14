@@ -113,9 +113,10 @@
     $sizeClasses = match ($size) {
         'xs' => 'h-7 text-xs rounded-md pl-7 pr-7',
         'sm' => 'h-8 text-xs rounded-md pl-8 pr-8',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg pl-10 sm:pl-9 pr-10 sm:pr-9',
         'lg' => 'h-10 text-sm rounded-lg pl-10 pr-9',
         'xl' => 'h-11 text-base rounded-xl pl-11 pr-10',
-        default => 'h-9 text-sm rounded-lg pl-9 pr-9',
+        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg pl-10 sm:pl-9 pr-10 sm:pr-9',
     };
 
     $variantClasses = match ($variant) {
@@ -135,7 +136,7 @@
         'sm' => 'size-3.5 left-2.5',
         'lg' => 'size-4.5 left-3',
         'xl' => 'size-5 left-3.5',
-        default => 'size-4 left-3',
+        default => 'size-4.5 sm:size-4 left-3',
     };
 
     $configJson = json_encode([

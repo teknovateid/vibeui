@@ -51,7 +51,7 @@
         'sm' => 'size-3.5 rounded-[4px]',
         'lg' => 'size-4.5 rounded-[5px]',
         'xl' => 'size-5 rounded-md',
-        default => 'size-4 rounded-[5px]',
+        default => 'size-5 sm:size-4 rounded-[5px]',
     };
 
     // Icon size classes
@@ -60,7 +60,7 @@
         'sm' => 'size-2.5',
         'lg' => 'size-3.5',
         'xl' => 'size-4',
-        default => 'size-3',
+        default => 'size-3.5 sm:size-3',
     };
 
     // Text size classes
@@ -68,7 +68,7 @@
         'xs', 'sm' => 'text-xs',
         'lg' => 'text-sm',
         'xl' => 'text-base',
-        default => 'text-sm',
+        default => 'text-base sm:text-sm',
     };
 
     $descSizes = match ($size) {
@@ -76,7 +76,7 @@
         'sm' => 'text-[11px]',
         'lg' => 'text-xs',
         'xl' => 'text-sm',
-        default => 'text-xs',
+        default => 'text-sm sm:text-xs',
     };
 
     // Box variant color classes

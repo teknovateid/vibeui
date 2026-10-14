@@ -60,20 +60,20 @@
     $sizeControlClasses = match ($size) {
         'xs' => 'h-7 text-xs rounded-md',
         'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-9 text-sm rounded-lg',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
         'lg' => 'h-10 text-sm rounded-lg',
         'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-9 text-sm rounded-lg',
+        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
     };
 
     if ($variant === 'flush') {
         $sizeControlClasses = match ($size) {
             'xs' => 'h-7 text-xs rounded-none px-0',
             'sm' => 'h-8 text-xs rounded-none px-0',
-            'md' => 'h-9 text-sm rounded-none px-0',
+            'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
             'lg' => 'h-10 text-sm rounded-none px-0',
             'xl' => 'h-11 text-base rounded-none px-0',
-            default => 'h-9 text-sm rounded-none px-0',
+            default => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
         };
     }
 
@@ -109,7 +109,7 @@
         'sm' => 'pl-2.5 pr-1.5',
         'lg' => 'pl-3.5 pr-2',
         'xl' => 'pl-4 pr-2.5',
-        default => 'pl-3 pr-1.5',
+        default => 'pl-3.5 sm:pl-3 pr-2 sm:pr-1.5',
     };
 
     $trailingPadding = match ($size) {
@@ -117,7 +117,7 @@
         'sm' => 'pr-2 pl-1',
         'lg' => 'pr-2.5 pl-1.5',
         'xl' => 'pr-3 pl-1.5',
-        default => 'pr-2 pl-1',
+        default => 'pr-2.5 sm:pr-2 pl-1.5 sm:pl-1',
     };
 
     $inputPadding = ($icon ? 'pl-0 ' : match ($size) {
@@ -125,13 +125,13 @@
         'sm' => 'pl-2.5 ',
         'lg' => 'pl-4 ',
         'xl' => 'pl-4.5 ',
-        default => 'pl-3.5 ',
+        default => 'pl-4 sm:pl-3.5 ',
     }) . 'pr-1';
 
     $inputFontSize = match ($size) {
         'xs', 'sm' => 'text-xs',
         'xl' => 'text-base',
-        default => 'text-sm font-mono tracking-wide',
+        default => 'text-base sm:text-sm font-mono tracking-wide',
     };
 
     $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';

@@ -49,7 +49,7 @@
         'sm' => 'size-3.5',
         'lg' => 'size-4.5',
         'xl' => 'size-5',
-        default => 'size-4',
+        default => 'size-5 sm:size-4',
     };
 
     // Inner dot sizes
@@ -58,7 +58,7 @@
         'sm' => 'size-1.5',
         'lg' => 'size-2',
         'xl' => 'size-2.5',
-        default => 'size-2',
+        default => 'size-2.5 sm:size-2',
     };
 
     // Text sizes
@@ -66,7 +66,7 @@
         'xs', 'sm' => 'text-xs',
         'lg' => 'text-sm',
         'xl' => 'text-base',
-        default => 'text-sm',
+        default => 'text-base sm:text-sm',
     };
 
     $descSizes = match ($size) {
@@ -74,7 +74,7 @@
         'sm' => 'text-[11px]',
         'lg' => 'text-xs',
         'xl' => 'text-sm',
-        default => 'text-xs',
+        default => 'text-sm sm:text-xs',
     };
 
     // Outer circle variant colors

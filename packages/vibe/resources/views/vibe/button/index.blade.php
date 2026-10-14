@@ -32,15 +32,15 @@
     $sizeClasses = match ($size) {
         'xs' => 'h-7 px-2 text-xs gap-1 rounded-sm',
         'sm' => 'h-8 px-2.5 text-xs gap-1.5 rounded-md',
-        'md' => 'h-9 px-3.5 text-sm gap-2 rounded-lg',
+        'md' => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
         'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
         'xl' => 'h-11 px-4.5 text-base sm:text-sm gap-3 rounded-xl',
         'icon-xs' => 'size-7 p-0 rounded-sm',
         'icon-sm' => 'size-8 p-0 rounded-md',
-        'icon-md' => 'size-9.5 sm:size-9 p-0 rounded-lg',
+        'icon-md' => 'size-11 sm:size-9 p-0 rounded-lg',
         'icon-lg' => 'size-11 sm:size-10 p-0 rounded-lg',
         'icon-xl' => 'size-12 sm:size-11 p-0 rounded-xl',
-        default => 'h-9 px-3.5 text-sm gap-2 rounded-lg',
+        default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
     };
 
     if ($variant === 'tab') {
@@ -50,7 +50,7 @@
             'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
             'xl' => 'h-11 px-4.5 text-base sm:text-sm gap-3 rounded-xl',
             'none' => '',
-            default => 'h-9 px-3.5 text-sm gap-2 rounded-lg',
+            default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
         };
     } elseif ($variant === 'link') {
         $sizeClasses = 'text-sm p-0';

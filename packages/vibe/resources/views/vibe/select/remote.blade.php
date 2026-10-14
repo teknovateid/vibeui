@@ -58,10 +58,10 @@
     $sizeClasses = match ($size) {
         'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs rounded-md pl-2.5 {$prClass} gap-1",
         'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs rounded-md pl-3 {$prClass} gap-1.5",
-        'md' => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm rounded-lg pl-3.5 {$prClass} gap-2",
+        'md' => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
         'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm rounded-lg pl-4 {$prClass} gap-2",
         'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base rounded-xl pl-4.5 {$prClass} gap-2.5",
-        default => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm rounded-lg pl-3.5 {$prClass} gap-2",
+        default => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
     };
 
     if ($variant === 'flush') {
@@ -76,10 +76,10 @@
         $sizeClasses = match ($size) {
             'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs px-0 rounded-none {$flushPr}",
             'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs px-0 rounded-none {$flushPr}",
-            'md' => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm px-0 rounded-none {$flushPr}",
+            'md' => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
             'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm px-0 rounded-none {$flushPr}",
             'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base px-0 rounded-none {$flushPr}",
-            default => ($multiple ? 'min-h-10 py-1.5' : 'h-9') . " text-sm px-0 rounded-none {$flushPr}",
+            default => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
         };
     }
 
@@ -708,7 +708,7 @@
                         @input.debounce.{{ $debounce }}ms="fetchData()"
                         type="text"
                         placeholder="{{ $searchPlaceholder }}"
-                        class="w-full h-9 sm:h-8 pl-8 pr-7 text-sm sm:text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
+                        class="w-full h-10 sm:h-8 pl-8.5 sm:pl-8 pr-7 text-base sm:text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
                         @keydown.escape.stop="close()"
                         @if ($keyboard)
                             @keydown.down.stop.prevent="focusNext($event)"

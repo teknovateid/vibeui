@@ -63,10 +63,10 @@
     $sizeClasses = match ($size) {
         'xs' => 'h-7 text-xs rounded-md px-2',
         'sm' => 'h-8 text-xs rounded-md px-2.5',
-        'md' => 'h-9 text-sm rounded-lg px-3.5',
+        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
         'lg' => 'h-10 text-sm rounded-lg px-4',
         'xl' => 'h-11 text-base rounded-xl px-4.5',
-        default => 'h-9 text-sm rounded-lg px-3.5',
+        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
     };
 
     $variantClasses = match ($variant) {
