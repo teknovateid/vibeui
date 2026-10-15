@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.1] - 2026-10-15
+
+### 🚀 Features
+- feat: add comprehensive dashboard charts, widgets, and navigation data enhancements (a12538d)
+
+
 ## [0.5.0] - 2026-10-15
 
 ### 🚀 Features
