@@ -279,6 +279,12 @@
             this.currentX = this.maxX;
             this.progress = 1;
 
+            // Immediately enable and set hidden input value so it is included in synchronous form submission
+            if (this.$refs.hiddenInput) {
+                this.$refs.hiddenInput.disabled = this.disabled;
+                this.$refs.hiddenInput.value = this.value;
+            }
+
             // Trigger haptic vibration if supported on device
             if (this.haptic && typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
                 try { navigator.vibrate([40, 60, 40]); } catch (err) {}
@@ -289,18 +295,20 @@
             this.$dispatch('swiped', { id: this.id, value: this.value });
 
             // Trigger hidden native button click (executes @click, wire:click, onclick, and native form submit if type="submit")
-            if (this.$refs.triggerBtn) {
-                this.$refs.triggerBtn.click();
-            } else if (this.type === 'submit') {
-                const form = this.$el.closest('form');
-                if (form) {
-                    if (typeof form.requestSubmit === 'function') {
-                        form.requestSubmit();
-                    } else {
-                        form.submit();
+            this.$nextTick(() => {
+                if (this.$refs.triggerBtn) {
+                    this.$refs.triggerBtn.click();
+                } else if (this.type === 'submit') {
+                    const form = this.$el.closest('form');
+                    if (form) {
+                        if (typeof form.requestSubmit === 'function') {
+                            form.requestSubmit();
+                        } else {
+                            form.submit();
+                        }
                     }
                 }
-            }
+            });
 
             // Handle auto-reset if configured
             if (this.autoReset) {
@@ -316,6 +324,12 @@
             this.isLoading = false;
             this.currentX = 0;
             this.progress = 0;
+
+            if (this.$refs.hiddenInput) {
+                this.$refs.hiddenInput.disabled = true;
+                this.$refs.hiddenInput.value = '';
+            }
+
             this.$dispatch('reset', { id: this.id });
         }
     }"
@@ -331,6 +345,7 @@
         <input
             type="hidden"
             name="{{ $name }}"
+            x-ref="hiddenInput"
             :value="isConfirmed ? value : ''"
             :disabled="!isConfirmed || disabled"
         />
@@ -377,7 +392,7 @@
         {{-- Centered Track Label with Animated Guidance Arrows --}}
         <div
             class="absolute inset-0 flex items-center justify-center text-center px-10 pointer-events-none transition-opacity duration-200 {{ $sizeConfig['text'] }}"
-            :style="{ opacity: isConfirmed ? 0 : Math.max(0, 1 - (progress * 1.8)) }"
+            :style="{ opacity: (isConfirmed || isLoading) ? 0 : Math.max(0, 1 - (progress * 1.8)) }"
         >
             <span class="inline-flex items-center gap-2 font-medium tracking-tight truncate {{ $themeConfig['textColor'] }}">
                 <span>{{ $slot->isNotEmpty() ? $slot : $label }}</span>
@@ -394,7 +409,7 @@
 
         {{-- Confirmed State Label (Revealed with scale & fade when swipe complete) --}}
         <div
-            x-show="isConfirmed"
+            x-show="isConfirmed && !isLoading"
             x-transition:enter="transition ease-out duration-300 transform"
             x-transition:enter-start="opacity-0 scale-90 translate-y-1"
             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
@@ -406,6 +421,24 @@
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
                 <span>{{ $confirmedLabel }}</span>
+            </span>
+        </div>
+
+        {{-- Loading State Label (Revealed when async loading active) --}}
+        <div
+            x-show="isLoading"
+            x-transition:enter="transition ease-out duration-200 transform"
+            x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100"
+            class="absolute inset-0 flex items-center justify-center text-center px-10 pointer-events-none font-medium {{ $sizeConfig['text'] }}"
+            style="display: none;"
+        >
+            <span class="inline-flex items-center gap-2 truncate {{ $themeConfig['textColor'] }}">
+                <svg class="{{ $sizeConfig['icon'] }} animate-spin shrink-0 text-current" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>{{ $loadingLabel }}</span>
             </span>
         </div>
 
@@ -427,7 +460,7 @@
             aria-valuemin="0"
             aria-valuemax="100"
             :aria-disabled="disabled || readonly"
-            tabindex="0"
+            :tabindex="disabled || readonly ? -1 : 0"
             @keydown.arrow-right.prevent="if (!disabled && !readonly && !isConfirmed) { currentX = Math.min(maxX, currentX + 30); progress = maxX > 0 ? currentX / maxX : 0; if (progress >= threshold) confirm(); }"
             @keydown.arrow-left.prevent="if (!disabled && !readonly && !isConfirmed) { currentX = Math.max(0, currentX - 30); progress = maxX > 0 ? currentX / maxX : 0; }"
             @keydown.enter.prevent="if (!disabled && !readonly && !isConfirmed) confirm()"
