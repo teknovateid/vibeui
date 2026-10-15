@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.2] - 2026-10-15
+
+### 🐛 Bug Fixes
+- fix: ensure decorated output and standard OutputStyle for vibe commands when agent interceptors are active (5719bc7)
+
+
 ## [0.5.1] - 2026-10-15
 
 ### 🚀 Features
