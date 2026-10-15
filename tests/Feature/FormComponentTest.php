@@ -56,3 +56,26 @@ test('vibe:form confirm password modal renders passkey button and medium buttons
         ->toContain('confirmWithPasskey()')
         ->toContain('h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg');
 });
+
+test('vibe:input.multiple safely handles double quotes in placeholder without attribute corruption', function () {
+    $html = Blade::render(
+        '<vibe:input.multiple name="tags" :placeholder="$ph" />',
+        ['ph' => 'Tambah "tags" disini']
+    );
+
+    expect($html)
+        ->toContain(':placeholder="items.length === 0 ? \'Tambah \u0022tags\u0022 disini\' : \'\'"')
+        ->not->toContain('Tambah \"tags\"');
+});
+
+test('vibe:select safely handles double quotes in placeholder without attribute corruption', function () {
+    $html = Blade::render(
+        '<vibe:select name="category" :placeholder="$ph"><vibe:select.option value="1">Opt</vibe:select.option></vibe:select>',
+        ['ph' => 'Pilih "Kategori"']
+    );
+
+    expect($html)
+        ->toContain('x-text="selectedLabel || \'Pilih \u0022Kategori\u0022\'"')
+        ->not->toContain('Pilih \"Kategori\"');
+});
+

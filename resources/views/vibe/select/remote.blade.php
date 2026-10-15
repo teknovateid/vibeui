@@ -648,7 +648,7 @@
                     </template>
 
                     {{-- Selected Label or Placeholder --}}
-                    <span x-text="selectedLabel || '{{ addslashes($placeholder) }}'" :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'" class="truncate"></span>
+                    <span x-text="selectedLabel || @js($placeholder)" :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'" class="truncate"></span>
                 </span>
             @endif
 

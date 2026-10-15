@@ -340,7 +340,7 @@
             @keydown="handleKeydown($event)"
             @paste="handlePaste($event)"
             @blur="addFromInput()"
-            :placeholder="items.length === 0 ? '{{ addslashes($placeholder) }}' : ''"
+            :placeholder="items.length === 0 ? @js($placeholder) : ''"
             :disabled="disabled || (max !== null && items.length >= max)"
             @if($isReadonly) readonly @endif
             class="flex-1 min-w-25 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none border-none p-0 text-sm font-medium leading-none"
