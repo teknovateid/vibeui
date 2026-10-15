@@ -47,7 +47,8 @@ class VibeServiceProvider extends ServiceProvider
 
                 try {
                     if ($app->bound('cache')) {
-                        $factory->withCache($app->make('cache')->store());
+                        $cacheStore = config('tailwind-merge.cache', config('vibe.tailwind_merge_cache', 'array'));
+                        $factory->withCache($app->make('cache')->store($cacheStore));
                     }
                 } catch (\Throwable $e) {
                     // Ignore cache store failure (e.g. during early bootstrap or testing)
