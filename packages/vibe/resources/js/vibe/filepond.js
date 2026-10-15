@@ -2829,9 +2829,10 @@ export function vibeFilepond(config = {}) {
 
             // Track matched inputs so we don't assign twice
             const usedInputs = new Set();
+            const cleanArrayName = this.config?.multiple ? `${baseName}[]` : baseName;
+            const orderedInputs = [];
 
-            files.forEach((fileItem, idx) => {
-                const indexedName = `${baseName}[${idx}]`;
+            files.forEach((fileItem) => {
                 const fileObj = fileItem.file;
                 const sourceVal = fileItem.serverId || (typeof fileItem.source === 'string' ? fileItem.source : null);
 
@@ -2873,10 +2874,33 @@ export function vibeFilepond(config = {}) {
 
                 if (matchedInput) {
                     usedInputs.add(matchedInput);
-                    matchedInput.setAttribute('name', indexedName);
-                    matchedInput.name = indexedName;
+                    // Use clean non-indexed name (e.g. "product_images[]") so PHP receives a natural sequential list
+                    matchedInput.setAttribute('name', cleanArrayName);
+                    matchedInput.name = cleanArrayName;
+                    orderedInputs.push(matchedInput);
                 }
             });
+
+            // Physically reorder matched inputs in the DOM in the exact visual sequence
+            orderedInputs.forEach(inp => {
+                if (inp.parentNode) {
+                    inp.parentNode.appendChild(inp);
+                }
+            });
+
+            // Sync uploadedKeys for Livewire wire:model & Alpine state
+            const currentOrderedKeys = [];
+            files.forEach(f => {
+                const k = f.serverId || (typeof f.source === 'string' ? f.source : null);
+                if (k) currentOrderedKeys.push(k);
+            });
+            if (currentOrderedKeys.length > 0) {
+                this.uploadedKeys = currentOrderedKeys;
+                if (this.config?.wireModel && this.$wire) {
+                    const val = this.config.multiple ? this.uploadedKeys : (this.uploadedKeys[0] || null);
+                    this.$wire.set(this.config.wireModel, val);
+                }
+            }
         }
     };
 }
