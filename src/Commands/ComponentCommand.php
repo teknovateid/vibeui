@@ -57,8 +57,8 @@ class ComponentCommand extends Command implements PromptsForMissingInput
         }
 
         $component = $this->publishComponent($name);
-        $alpine = $this->publishAlpine($name);
-        $vanilla = $this->publishVanilla($name);
+        $js = $this->publishJs($name);
+        $css = $this->publishCss($name);
 
         if ($name === 'datatable' || $name === 'all') {
             $this->ensureLivewireTablesConfigExists();
@@ -70,11 +70,11 @@ class ComponentCommand extends Command implements PromptsForMissingInput
             if ($component) {
                 $include[] = "resources/views/vibe/{$name}";
             }
-            if ($alpine) {
-                $include[] = "resources/js/plugins/alpine/{$name}.js";
+            if ($js) {
+                $include[] = "resources/js/vibe/{$name}.js";
             }
-            if ($vanilla) {
-                $include[] = "resources/js/plugins/vanilla/{$name}.js";
+            if ($css) {
+                $include[] = "resources/css/vibe/{$name}.css";
             }
             $this->components->bulletList($include);
             $this->newLine();
@@ -128,31 +128,32 @@ PHP;
         }
     }
 
-    protected function publishAlpine($name)
+    protected function publishJs(string $name): bool
     {
-        $fileAlpine = __DIR__ . '/../../resources/js/plugins/alpine/' . $name . '.js';
-        if (File::isFile($fileAlpine)) {
-            if (!File::isDirectory(resource_path('js/vibe/plugins/alpine'))) {
-                File::makeDirectory(resource_path('js/vibe/plugins/alpine'), 0777, true);
+        $fileJs = __DIR__ . '/../../resources/js/vibe/' . $name . '.js';
+        if (File::isFile($fileJs)) {
+            if (! File::isDirectory(resource_path('js/vibe'))) {
+                File::makeDirectory(resource_path('js/vibe'), 0777, true);
             }
-            File::copy($fileAlpine, resource_path('js/vibe/plugins/alpine/' . $name . '.js'));
+            File::copy($fileJs, resource_path('js/vibe/' . $name . '.js'));
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
-    protected function publishVanilla($name)
+
+    protected function publishCss(string $name): bool
     {
-        $fileVanilla = __DIR__ . '/../../resources/js/plugins/vanilla/' . $name . '.js';
-        if (File::isFile($fileVanilla)) {
-            if (!File::isDirectory(resource_path('js/vibe/plugins/vanilla'))) {
-                File::makeDirectory(resource_path('js/vibe/plugins/vanilla'), 0777, true);
+        $fileCss = __DIR__ . '/../../resources/css/vibe/' . $name . '.css';
+        if (File::isFile($fileCss)) {
+            if (! File::isDirectory(resource_path('css/vibe'))) {
+                File::makeDirectory(resource_path('css/vibe'), 0777, true);
             }
-            File::copy($fileVanilla, resource_path('js/vibe/plugins/vanilla/' . $name . '.js'));
+            File::copy($fileCss, resource_path('css/vibe/' . $name . '.css'));
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     protected function getAvailableComponents(): array
