@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.4] - 2026-10-15
+
+### 🚀 Features
+- feat: internationalize FilePond UI text and add robust error handling for component rendering (b4019d4)
+
+### ⚡ Performance & Refactoring
+- refactor: remove outdated comment from filepond add file handler (979e279)
+
+
 ## [0.5.3] - 2026-10-15
 
 ### 🐛 Bug Fixes
