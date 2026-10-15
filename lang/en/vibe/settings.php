@@ -236,6 +236,12 @@ return [
         'header_bg' => 'Header Background',
         'header_fg' => 'Header Text',
         'header_border' => 'Header Border',
+        'table_title' => 'Table Color Customization',
+        'table_desc' => 'Customize table header background, borders, and row hover highlight colors.',
+        'table_header_bg' => 'Table Header Background',
+        'table_border' => 'Table Border',
+        'table_row_hover' => 'Table Row Hover',
+        'table_surface_style' => 'Table Header & Surface Style',
         'radius_title' => 'Component Corner Radius (--radius)',
         'radius_desc' => 'Adjust the border radius curvature across cards, inputs, and buttons.',
         'radius_options' => [

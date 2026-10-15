@@ -943,108 +943,271 @@
 
                     <vibe:separator />
 
-                    {{-- 10. Tables View & Density --}}
+                    {{-- 10. Tables View & Custom Colors --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Tables view</h3>
-                            <p class="text-muted-foreground text-xs">Atur kepadatan baris tabel dan kenyamanan pembacaan data tabular.</p>
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.table_title') ?? 'Kustomisasi Warna Tabel' }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                            </div>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.table_desc') ?? 'Atur kepadatan baris tabel, gaya permukaan header (--table-header, --table-border), dan warna kustom untuk mode aktif saat ini.' }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
-                                {{-- Default Card --}}
-                                <button 
-                                    type="button" 
-                                    @click="setTablesView('default')" 
-                                    class="group text-left cursor-pointer transition-all duration-200"
-                                >
-                                    <div 
-                                        class="relative w-full aspect-16/10 rounded-xl border p-2 transition-all overflow-hidden bg-card"
-                                        :class="tablesView === 'default' ? 'border-primary ring-2 ring-primary/20 shadow-md' : 'border-border/80 hover:border-border hover:bg-muted/30'"
+                        <div class="space-y-5 w-full max-w-xl">
+                            {{-- Density Cards --}}
+                            <div class="space-y-2">
+                                <label class="text-xs font-semibold text-foreground block">Kepadatan Baris (Density)</label>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
+                                    {{-- Default Card --}}
+                                    <button 
+                                        type="button" 
+                                        @click="setTablesView('default')" 
+                                        class="group text-left cursor-pointer transition-all duration-200"
                                     >
-                                        <div class="size-full rounded-lg overflow-hidden border border-border/60 flex flex-col bg-background p-2">
-                                            <div class="flex items-center justify-between pb-1.5 border-b border-border/60 shrink-0">
-                                                <span class="text-[7.5px] font-bold text-foreground">Customer</span>
-                                                <span class="h-2 w-7 bg-muted rounded-full"></span>
+                                        <div 
+                                            class="relative w-full aspect-16/10 rounded-xl border p-2 transition-all overflow-hidden bg-card"
+                                            :class="tablesView === 'default' ? 'border-primary ring-2 ring-primary/20 shadow-md' : 'border-border/80 hover:border-border hover:bg-muted/30'"
+                                        >
+                                            <div class="size-full rounded-lg overflow-hidden border border-table-border flex flex-col bg-background p-2">
+                                                <div class="flex items-center justify-between pb-1.5 border-b border-table-border shrink-0 bg-table-header px-1.5 -mx-2 -mt-2 pt-1.5 rounded-t-lg">
+                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">Customer</span>
+                                                    <span class="h-2 w-7 bg-muted rounded-full"></span>
+                                                </div>
+                                                <div class="flex-1 flex flex-col justify-around py-0.5 divide-y divide-table-border/60">
+                                                    <div class="flex items-center gap-1.5 py-0.5">
+                                                        <span class="size-1.5 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-1 w-10 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-1 w-14 bg-muted-foreground/20 rounded-xs"></span>
+                                                        <span class="h-1 w-8 bg-muted-foreground/20 rounded-xs ml-auto"></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 py-0.5">
+                                                        <span class="size-1.5 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-1 w-12 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-1 w-10 bg-muted-foreground/20 rounded-xs"></span>
+                                                        <span class="h-1 w-6 bg-muted-foreground/20 rounded-xs ml-auto"></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 py-0.5">
+                                                        <span class="size-1.5 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-1 w-9 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-1 w-12 bg-muted-foreground/20 rounded-xs"></span>
+                                                        <span class="h-1 w-7 bg-muted-foreground/20 rounded-xs ml-auto"></span>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="flex-1 flex flex-col justify-around py-0.5 divide-y divide-border/30">
-                                                <div class="flex items-center gap-1.5 py-0.5">
-                                                    <span class="size-1.5 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-1 w-10 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-1 w-14 bg-muted-foreground/20 rounded-xs"></span>
-                                                    <span class="h-1 w-8 bg-muted-foreground/20 rounded-xs ml-auto"></span>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 py-0.5">
-                                                    <span class="size-1.5 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-1 w-12 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-1 w-10 bg-muted-foreground/20 rounded-xs"></span>
-                                                    <span class="h-1 w-6 bg-muted-foreground/20 rounded-xs ml-auto"></span>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 py-0.5">
-                                                    <span class="size-1.5 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-1 w-9 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-1 w-12 bg-muted-foreground/20 rounded-xs"></span>
-                                                    <span class="h-1 w-7 bg-muted-foreground/20 rounded-xs ml-auto"></span>
-                                                </div>
+
+                                            <div x-show="tablesView === 'default'" class="absolute bottom-2 left-2 size-4.5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
+                                                <svg class="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                                                    <polyline points="20 6 9 17 4 12" />
+                                                </svg>
                                             </div>
                                         </div>
+                                        <span class="text-xs font-semibold text-foreground block pt-2">Default</span>
+                                    </button>
 
-                                        <div x-show="tablesView === 'default'" class="absolute bottom-2 left-2 size-4.5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
-                                            <svg class="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
-                                                <polyline points="20 6 9 17 4 12" />
-                                            </svg>
+                                    {{-- Compact Card --}}
+                                    <button 
+                                        type="button" 
+                                        @click="setTablesView('compact')" 
+                                        class="group text-left cursor-pointer transition-all duration-200"
+                                    >
+                                        <div 
+                                            class="relative w-full aspect-16/10 rounded-xl border p-2 transition-all overflow-hidden bg-card"
+                                            :class="tablesView === 'compact' ? 'border-primary ring-2 ring-primary/20 shadow-md' : 'border-border/80 hover:border-border hover:bg-muted/30'"
+                                        >
+                                            <div class="size-full rounded-lg overflow-hidden border border-table-border flex flex-col bg-background p-2">
+                                                <div class="flex items-center justify-between pb-1 border-b border-table-border shrink-0 bg-table-header px-1.5 -mx-2 -mt-2 pt-1.5 rounded-t-lg">
+                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">Customer</span>
+                                                    <span class="h-2 w-7 bg-muted rounded-full"></span>
+                                                </div>
+                                                <div class="flex-1 flex flex-col justify-around py-0 divide-y divide-table-border/40">
+                                                    <div class="flex items-center gap-1.5 py-px">
+                                                        <span class="size-1 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-0.75 w-10 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-0.75 w-14 bg-muted-foreground/20 rounded-xs"></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 py-px">
+                                                        <span class="size-1 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-0.75 w-12 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-0.75 w-10 bg-muted-foreground/20 rounded-xs"></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 py-px">
+                                                        <span class="size-1 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-0.75 w-9 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-0.75 w-12 bg-muted-foreground/20 rounded-xs"></span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 py-px">
+                                                        <span class="size-1 rounded-full bg-primary/70 shrink-0"></span>
+                                                        <span class="h-0.75 w-11 bg-muted-foreground/30 rounded-xs"></span>
+                                                        <span class="h-0.75 w-8 bg-muted-foreground/20 rounded-xs"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div x-show="tablesView === 'compact'" class="absolute bottom-2 left-2 size-4.5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
+                                                <svg class="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
+                                                    <polyline points="20 6 9 17 4 12" />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <span class="text-xs font-semibold text-foreground block pt-2">Compact</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            {{-- Table Surface Style Presets --}}
+                            <div class="space-y-2 pt-2">
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_surface_style') ?? 'Table header & surface style' }}</label>
+                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                                    <template x-for="st in tableStyles" :key="st.id">
+                                        <vibe:button 
+                                            type="button" 
+                                            variant="outline" 
+                                            size="sm" 
+                                            @click="selectTableStyle(st.id)" 
+                                            class="h-auto py-2.5 text-xs font-medium justify-center transition-all cursor-pointer"
+                                            x-bind:class="tableStyle === st.id ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
+                                            x-text="st.name"
+                                        >
+                                        </vibe:button>
+                                    </template>
+                                </div>
+                            </div>
+
+                            {{-- Custom Table Color Picker (Shown when tableStyle === 'custom') --}}
+                            <vibe:card x-show="tableStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_title') ?? 'Kustomisasi Warna Tabel' }}</span>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    {{-- Table Header Background --}}
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] text-muted-foreground font-medium block">Header (<code class="text-[10px] font-mono">--table-header</code>)</label>
+                                        <div class="flex items-center gap-2">
+                                            <label 
+                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                :style="{ backgroundColor: tableCustomHeaderBg }"
+                                            >
+                                                <input 
+                                                    type="color" 
+                                                    x-model="tableCustomHeaderBg" 
+                                                    @input="onTableCustomHeaderBgChange($event.target.value)" 
+                                                    class="opacity-0 absolute inset-0 size-full cursor-pointer" 
+                                                />
+                                            </label>
+                                            <div class="w-24">
+                                                <vibe:input 
+                                                    size="sm" 
+                                                    prefix="#" 
+                                                    x-model="tableCustomHeaderBgInput" 
+                                                    @input="onTableCustomHeaderBgInput($event.target.value)" 
+                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    maxlength="6" 
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-semibold text-foreground block pt-2">Default</span>
-                                </button>
 
-                                {{-- Compact Card --}}
-                                <button 
-                                    type="button" 
-                                    @click="setTablesView('compact')" 
-                                    class="group text-left cursor-pointer transition-all duration-200"
-                                >
-                                    <div 
-                                        class="relative w-full aspect-16/10 rounded-xl border p-2 transition-all overflow-hidden bg-card"
-                                        :class="tablesView === 'compact' ? 'border-primary ring-2 ring-primary/20 shadow-md' : 'border-border/80 hover:border-border hover:bg-muted/30'"
-                                    >
-                                        <div class="size-full rounded-lg overflow-hidden border border-border/60 flex flex-col bg-background p-2">
-                                            <div class="flex items-center justify-between pb-1 border-b border-border/60 shrink-0">
-                                                <span class="text-[7.5px] font-bold text-foreground">Customer</span>
-                                                <span class="h-2 w-7 bg-muted rounded-full"></span>
+                                    {{-- Table Border --}}
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] text-muted-foreground font-medium block">Border (<code class="text-[10px] font-mono">--table-border</code>)</label>
+                                        <div class="flex items-center gap-2">
+                                            <label 
+                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                :style="{ backgroundColor: tableCustomBorder }"
+                                            >
+                                                <input 
+                                                    type="color" 
+                                                    x-model="tableCustomBorder" 
+                                                    @input="onTableCustomBorderChange($event.target.value)" 
+                                                    class="opacity-0 absolute inset-0 size-full cursor-pointer" 
+                                                />
+                                            </label>
+                                            <div class="w-24">
+                                                <vibe:input 
+                                                    size="sm" 
+                                                    prefix="#" 
+                                                    x-model="tableCustomBorderInput" 
+                                                    @input="onTableCustomBorderInput($event.target.value)" 
+                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    maxlength="6" 
+                                                />
                                             </div>
-                                            <div class="flex-1 flex flex-col justify-around py-0 divide-y divide-border/20">
-                                                <div class="flex items-center gap-1.5 py-px">
-                                                    <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-0.75 w-10 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-0.75 w-14 bg-muted-foreground/20 rounded-xs"></span>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 py-px">
-                                                    <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-0.75 w-12 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-0.75 w-10 bg-muted-foreground/20 rounded-xs"></span>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 py-px">
-                                                    <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-0.75 w-9 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-0.75 w-12 bg-muted-foreground/20 rounded-xs"></span>
-                                                </div>
-                                                <div class="flex items-center gap-1.5 py-px">
-                                                    <span class="size-1 rounded-full bg-zinc-400/80 shrink-0"></span>
-                                                    <span class="h-0.75 w-11 bg-muted-foreground/30 rounded-xs"></span>
-                                                    <span class="h-0.75 w-8 bg-muted-foreground/20 rounded-xs"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div x-show="tablesView === 'compact'" class="absolute bottom-2 left-2 size-4.5 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-xs">
-                                            <svg class="size-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5">
-                                                <polyline points="20 6 9 17 4 12" />
-                                            </svg>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-semibold text-foreground block pt-2">Compact</span>
-                                </button>
+
+                                    {{-- Table Row Hover --}}
+                                    <div class="space-y-1">
+                                        <label class="text-[11px] text-muted-foreground font-medium block">Hover (<code class="text-[10px] font-mono">--table-row-hover</code>)</label>
+                                        <div class="flex items-center gap-2">
+                                            <label 
+                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                :style="{ backgroundColor: tableCustomRowHover }"
+                                            >
+                                                <input 
+                                                    type="color" 
+                                                    x-model="tableCustomRowHover" 
+                                                    @input="onTableCustomRowHoverChange($event.target.value)" 
+                                                    class="opacity-0 absolute inset-0 size-full cursor-pointer" 
+                                                />
+                                            </label>
+                                            <div class="w-24">
+                                                <vibe:input 
+                                                    size="sm" 
+                                                    prefix="#" 
+                                                    x-model="tableCustomRowHoverInput" 
+                                                    @input="onTableCustomRowHoverInput($event.target.value)" 
+                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    maxlength="6" 
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </vibe:card>
+
+                            {{-- Live Table Mini Preview --}}
+                            <div class="space-y-2 pt-1">
+                                <div class="flex items-center justify-between">
+                                    <label class="text-xs font-semibold text-foreground block">Pratinjau Langsung Komponen Tabel</label>
+                                    <span class="text-[10px] text-muted-foreground">Otomatis merefleksikan token live</span>
+                                </div>
+                                <div class="rounded-xl border border-table-border bg-card overflow-hidden shadow-2xs">
+                                    <table class="w-full text-xs text-left border-collapse">
+                                        <thead class="bg-table-header text-table-header-foreground border-b border-table-border font-semibold uppercase tracking-wider text-[10px]">
+                                            <tr>
+                                                <th class="py-2.5 px-3 w-8 text-center">
+                                                    <vibe:checkbox checked disabled class="pointer-events-none" />
+                                                </th>
+                                                <th class="py-2.5 px-3">Pelanggan</th>
+                                                <th class="py-2.5 px-3">Status</th>
+                                                <th class="py-2.5 px-3 text-right">Nilai Transaksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-table-border text-foreground">
+                                            <tr class="transition-colors hover:bg-table-row-hover">
+                                                <td class="py-2.5 px-3 text-center">
+                                                    <vibe:checkbox disabled class="pointer-events-none" />
+                                                </td>
+                                                <td class="py-2.5 px-3 font-medium">Acme Corporation</td>
+                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success" class="rounded-full">Selesai</vibe:badge></td>
+                                                <td class="py-2.5 px-3 text-right font-mono">Rp 1.450.000</td>
+                                            </tr>
+                                            <tr class="transition-colors hover:bg-table-row-hover">
+                                                <td class="py-2.5 px-3 text-center">
+                                                    <vibe:checkbox disabled class="pointer-events-none" />
+                                                </td>
+                                                <td class="py-2.5 px-3 font-medium">Globex Industries</td>
+                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="warning" class="rounded-full">Tertunda</vibe:badge></td>
+                                                <td class="py-2.5 px-3 text-right font-mono">Rp 820.000</td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot class="border-t border-table-border bg-table-footer text-table-header-foreground font-medium text-[10px] uppercase tracking-wider">
+                                            <tr>
+                                                <td colspan="3" class="py-2 px-3">Total 2 Catatan</td>
+                                                <td class="py-2 px-3 text-right font-mono font-bold text-foreground">Rp 2.270.000</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1177,6 +1340,32 @@
                     selectedFontName: 'Figtree',
                     selectedFontValue: "'Figtree', ui-sans-serif, system-ui, sans-serif",
                     tablesView: 'default',
+
+                    // Table States
+                    tableStyle: 'default',
+                    tableStyleLight: 'default',
+                    tableStyleDark: 'default',
+                    tableCustomHeaderBg: '#f4f4f5',
+                    tableCustomHeaderBgLight: '#f4f4f5',
+                    tableCustomHeaderBgDark: '#18181b',
+                    tableCustomHeaderBgInput: 'F4F4F5',
+                    tableCustomBorder: '#e4e4e7',
+                    tableCustomBorderLight: '#e4e4e7',
+                    tableCustomBorderDark: '#27272a',
+                    tableCustomBorderInput: 'E4E4E7',
+                    tableCustomRowHover: '#f9f9fa',
+                    tableCustomRowHoverLight: '#f9f9fa',
+                    tableCustomRowHoverDark: '#1c1c20',
+                    tableCustomRowHoverInput: 'F9F9FA',
+
+                    tableStyles: [
+                        { id: 'default', name: 'Standar' },
+                        { id: 'card', name: 'Kartu' },
+                        { id: 'contrast', name: 'Kontras' },
+                        { id: 'muted', name: 'Lembut' },
+                        { id: 'dark', name: 'Gelap' },
+                        { id: 'custom', name: 'Kustom' },
+                    ],
                     reduceMotion: false,
                     glassEffect: true,
                     copied: false,
@@ -1362,6 +1551,14 @@
                             this.navCustomActiveFgInput = (this.navCustomActiveFgDark || '').replace('#', '').toUpperCase();
                             this.navCustomIndicator = this.navCustomIndicatorDark;
                             this.navCustomIndicatorInput = (this.navCustomIndicatorDark || '').replace('#', '').toUpperCase();
+
+                            this.tableStyle = this.tableStyleDark;
+                            this.tableCustomHeaderBg = this.tableCustomHeaderBgDark;
+                            this.tableCustomHeaderBgInput = (this.tableCustomHeaderBgDark || '').replace('#', '').toUpperCase();
+                            this.tableCustomBorder = this.tableCustomBorderDark;
+                            this.tableCustomBorderInput = (this.tableCustomBorderDark || '').replace('#', '').toUpperCase();
+                            this.tableCustomRowHover = this.tableCustomRowHoverDark;
+                            this.tableCustomRowHoverInput = (this.tableCustomRowHoverDark || '').replace('#', '').toUpperCase();
                         } else {
                             this.selectedSurface = this.selectedSurfaceLight;
 
@@ -1390,6 +1587,14 @@
                             this.navCustomActiveFgInput = (this.navCustomActiveFgLight || '').replace('#', '').toUpperCase();
                             this.navCustomIndicator = this.navCustomIndicatorLight;
                             this.navCustomIndicatorInput = (this.navCustomIndicatorLight || '').replace('#', '').toUpperCase();
+
+                            this.tableStyle = this.tableStyleLight;
+                            this.tableCustomHeaderBg = this.tableCustomHeaderBgLight;
+                            this.tableCustomHeaderBgInput = (this.tableCustomHeaderBgLight || '').replace('#', '').toUpperCase();
+                            this.tableCustomBorder = this.tableCustomBorderLight;
+                            this.tableCustomBorderInput = (this.tableCustomBorderLight || '').replace('#', '').toUpperCase();
+                            this.tableCustomRowHover = this.tableCustomRowHoverLight;
+                            this.tableCustomRowHoverInput = (this.tableCustomRowHoverLight || '').replace('#', '').toUpperCase();
                         }
                     },
 
@@ -1547,6 +1752,20 @@
                                 if (parsed.selectedFontName) this.selectedFontName = parsed.selectedFontName;
                                 if (parsed.selectedFontValue) this.selectedFontValue = parsed.selectedFontValue;
                                 if (parsed.tablesView) this.tablesView = parsed.tablesView;
+
+                                // Table
+                                if (parsed.tableStyleLight) this.tableStyleLight = parsed.tableStyleLight;
+                                if (parsed.tableStyleDark) this.tableStyleDark = parsed.tableStyleDark;
+                                if (parsed.tableStyle && !parsed.tableStyleLight) {
+                                    this.tableStyleLight = parsed.tableStyle;
+                                    this.tableStyleDark = parsed.tableStyle;
+                                }
+                                if (parsed.tableCustomHeaderBgLight) this.tableCustomHeaderBgLight = parsed.tableCustomHeaderBgLight;
+                                if (parsed.tableCustomHeaderBgDark) this.tableCustomHeaderBgDark = parsed.tableCustomHeaderBgDark;
+                                if (parsed.tableCustomBorderLight) this.tableCustomBorderLight = parsed.tableCustomBorderLight;
+                                if (parsed.tableCustomBorderDark) this.tableCustomBorderDark = parsed.tableCustomBorderDark;
+                                if (parsed.tableCustomRowHoverLight) this.tableCustomRowHoverLight = parsed.tableCustomRowHoverLight;
+                                if (parsed.tableCustomRowHoverDark) this.tableCustomRowHoverDark = parsed.tableCustomRowHoverDark;
                                 if (typeof parsed.reduceMotion !== 'undefined') {
                                     this.reduceMotion = !!parsed.reduceMotion;
                                     this.motionActive = !this.reduceMotion;
@@ -2016,6 +2235,95 @@
                         this.notify('Tampilan tabel: ' + view);
                     },
 
+                    selectTableStyle(id) {
+                        if (this.isDarkNow) {
+                            this.tableStyleDark = id;
+                        } else {
+                            this.tableStyleLight = id;
+                        }
+                        this.tableStyle = id;
+                        this.applyTheme();
+                        this.notify(`Gaya tabel (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
+                    },
+
+                    onTableCustomHeaderBgChange(val) {
+                        if (this.isDarkNow) {
+                            this.tableCustomHeaderBgDark = val;
+                        } else {
+                            this.tableCustomHeaderBgLight = val;
+                        }
+                        this.tableCustomHeaderBg = val;
+                        this.tableCustomHeaderBgInput = val.replace('#', '').toUpperCase();
+                        this.applyTheme();
+                    },
+
+                    onTableCustomHeaderBgInput(val) {
+                        let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
+                        this.tableCustomHeaderBgInput = clean.toUpperCase();
+                        if (clean.length === 6 || clean.length === 3) {
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.tableCustomHeaderBgDark = hex;
+                            } else {
+                                this.tableCustomHeaderBgLight = hex;
+                            }
+                            this.tableCustomHeaderBg = hex;
+                            this.applyTheme();
+                        }
+                    },
+
+                    onTableCustomBorderChange(val) {
+                        if (this.isDarkNow) {
+                            this.tableCustomBorderDark = val;
+                        } else {
+                            this.tableCustomBorderLight = val;
+                        }
+                        this.tableCustomBorder = val;
+                        this.tableCustomBorderInput = val.replace('#', '').toUpperCase();
+                        this.applyTheme();
+                    },
+
+                    onTableCustomBorderInput(val) {
+                        let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
+                        this.tableCustomBorderInput = clean.toUpperCase();
+                        if (clean.length === 6 || clean.length === 3) {
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.tableCustomBorderDark = hex;
+                            } else {
+                                this.tableCustomBorderLight = hex;
+                            }
+                            this.tableCustomBorder = hex;
+                            this.applyTheme();
+                        }
+                    },
+
+                    onTableCustomRowHoverChange(val) {
+                        if (this.isDarkNow) {
+                            this.tableCustomRowHoverDark = val;
+                        } else {
+                            this.tableCustomRowHoverLight = val;
+                        }
+                        this.tableCustomRowHover = val;
+                        this.tableCustomRowHoverInput = val.replace('#', '').toUpperCase();
+                        this.applyTheme();
+                    },
+
+                    onTableCustomRowHoverInput(val) {
+                        let clean = val.replace(/[^0-9A-Fa-f]/g, '').slice(0, 6);
+                        this.tableCustomRowHoverInput = clean.toUpperCase();
+                        if (clean.length === 6 || clean.length === 3) {
+                            const hex = '#' + clean;
+                            if (this.isDarkNow) {
+                                this.tableCustomRowHoverDark = hex;
+                            } else {
+                                this.tableCustomRowHoverLight = hex;
+                            }
+                            this.tableCustomRowHover = hex;
+                            this.applyTheme();
+                        }
+                    },
+
                     toggleMotion(val) {
                         if (typeof val !== 'undefined') {
                             this.motionActive = !!val;
@@ -2069,6 +2377,16 @@
                         this.headerBorderModeDark = 'default';
                         this.headerGlassEffectLight = true;
                         this.headerGlassEffectDark = true;
+
+                        // Reset Table
+                        this.tableStyleLight = 'default';
+                        this.tableStyleDark = 'default';
+                        this.tableCustomHeaderBgLight = '#f4f4f5';
+                        this.tableCustomHeaderBgDark = '#18181b';
+                        this.tableCustomBorderLight = '#e4e4e7';
+                        this.tableCustomBorderDark = '#27272a';
+                        this.tableCustomRowHoverLight = '#f9f9fa';
+                        this.tableCustomRowHoverDark = '#1c1c20';
 
                         // Reset Nav
                         this.navStyleLight = 'harmony';
@@ -2260,6 +2578,53 @@
                         };
                     },
 
+                    getResolvedTableColors(surfaceLight, surfaceDark) {
+                        let lightHeaderBg = '#f4f4f5';
+                        let darkHeaderBg = '#18181b';
+                        let lightBorder = this.highContrast ? '#a1a1aa' : surfaceLight.light.border;
+                        let darkBorder = this.highContrast ? '#3f3f46' : surfaceDark.dark.border;
+                        let lightHover = '#f9f9fa';
+                        let darkHover = '#1c1c20';
+
+                        if (this.tableStyleLight === 'card') {
+                            lightHeaderBg = surfaceLight.light.card;
+                        } else if (this.tableStyleLight === 'contrast') {
+                            lightHeaderBg = '#e4e4e7';
+                        } else if (this.tableStyleLight === 'muted') {
+                            lightHeaderBg = '#f4f5f5';
+                        } else if (this.tableStyleLight === 'dark') {
+                            lightHeaderBg = '#121312';
+                            lightBorder = '#262726';
+                        } else if (this.tableStyleLight === 'custom') {
+                            lightHeaderBg = this.tableCustomHeaderBgLight;
+                            lightBorder = this.tableCustomBorderLight;
+                            lightHover = this.tableCustomRowHoverLight;
+                        }
+
+                        if (this.tableStyleDark === 'card') {
+                            darkHeaderBg = surfaceDark.dark.card;
+                        } else if (this.tableStyleDark === 'contrast') {
+                            darkHeaderBg = '#0a0b0a';
+                        } else if (this.tableStyleDark === 'muted') {
+                            darkHeaderBg = '#181918';
+                        } else if (this.tableStyleDark === 'dark') {
+                            darkHeaderBg = '#121312';
+                            darkBorder = '#262726';
+                        } else if (this.tableStyleDark === 'custom') {
+                            darkHeaderBg = this.tableCustomHeaderBgDark;
+                            darkBorder = this.tableCustomBorderDark;
+                            darkHover = this.tableCustomRowHoverDark;
+                        }
+
+                        const lightFg = this.isLight(lightHeaderBg) ? '#71717a' : '#d4d4d8';
+                        const darkFg = this.isLight(darkHeaderBg) ? '#71717a' : '#a1a1aa';
+
+                        return {
+                            light: { headerBg: lightHeaderBg, fg: lightFg, border: lightBorder, hover: lightHover },
+                            dark: { headerBg: darkHeaderBg, fg: darkFg, border: darkBorder, hover: darkHover }
+                        };
+                    },
+
                     getResolvedNavColors(surfaceLight, surfaceDark, sb) {
                         let lightActiveBg = '#f4f5f5';
                         let darkActiveBg = '#1e1f1e';
@@ -2375,6 +2740,7 @@
                         const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
                         const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
                         const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+                        const tbl = this.getResolvedTableColors(surfaceLight, surfaceDark);
 
                         // Hapus inline style dari documentElement agar stylesheet berperan sebagai single source of truth
                         const root = document.documentElement;
@@ -2400,6 +2766,14 @@
                         root.style.removeProperty('--container');
                         root.style.removeProperty('--sidebar');
                         root.style.removeProperty('--header');
+                        root.style.removeProperty('--table-header');
+                        root.style.removeProperty('--table-header-foreground');
+                        root.style.removeProperty('--table-border');
+                        root.style.removeProperty('--table-row-hover');
+                        root.style.removeProperty('--color-table-header');
+                        root.style.removeProperty('--color-table-header-foreground');
+                        root.style.removeProperty('--color-table-border');
+                        root.style.removeProperty('--color-table-row-hover');
 
                         let css = `
                             :root, html, body, [data-canvas-theme] {
@@ -2470,6 +2844,15 @@
                                 --color-nav-hover-bg: ${nav.light.hoverBg} !important;
                                 --color-nav-hover-fg: ${nav.light.hoverFg} !important;
                                 --color-nav-indicator: ${nav.light.indicator} !important;
+
+                                --table-header: ${tbl.light.headerBg} !important;
+                                --table-header-foreground: ${tbl.light.fg} !important;
+                                --table-border: ${tbl.light.border} !important;
+                                --table-row-hover: ${tbl.light.hover} !important;
+                                --color-table-header: ${tbl.light.headerBg} !important;
+                                --color-table-header-foreground: ${tbl.light.fg} !important;
+                                --color-table-border: ${tbl.light.border} !important;
+                                --color-table-row-hover: ${tbl.light.hover} !important;
                             }
 
                             html.dark:root:root, html.dark, .dark, [data-canvas-theme="dark"] {
@@ -2516,6 +2899,15 @@
                                 --color-nav-hover-bg: ${nav.dark.hoverBg} !important;
                                 --color-nav-hover-fg: ${nav.dark.hoverFg} !important;
                                 --color-nav-indicator: ${nav.dark.indicator} !important;
+
+                                --table-header: ${tbl.dark.headerBg} !important;
+                                --table-header-foreground: ${tbl.dark.fg} !important;
+                                --table-border: ${tbl.dark.border} !important;
+                                --table-row-hover: ${tbl.dark.hover} !important;
+                                --color-table-header: ${tbl.dark.headerBg} !important;
+                                --color-table-header-foreground: ${tbl.dark.fg} !important;
+                                --color-table-border: ${tbl.dark.border} !important;
+                                --color-table-row-hover: ${tbl.dark.hover} !important;
                             }
 
                             body {
@@ -2720,6 +3112,7 @@
                         const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
                         const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
                         const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
+                        const tbl = this.getResolvedTableColors(surfaceLight, surfaceDark);
 
                         return `:root {
     --primary: ${lightPrimary};
@@ -2769,6 +3162,10 @@
     --nav-hover-bg: ${nav.light.hoverBg};
     --nav-hover-fg: ${nav.light.hoverFg};
     --nav-indicator: ${nav.light.indicator};
+    --table-header: ${tbl.light.headerBg};
+    --table-header-foreground: ${tbl.light.fg};
+    --table-border: ${tbl.light.border};
+    --table-row-hover: ${tbl.light.hover};
 }
 
 html.dark, .dark {
@@ -2799,6 +3196,10 @@ html.dark, .dark {
     --nav-hover-bg: ${nav.dark.hoverBg};
     --nav-hover-fg: ${nav.dark.hoverFg};
     --nav-indicator: ${nav.dark.indicator};
+    --table-header: ${tbl.dark.headerBg};
+    --table-header-foreground: ${tbl.dark.fg};
+    --table-border: ${tbl.dark.border};
+    --table-row-hover: ${tbl.dark.hover};
 }`;
                     },
 
@@ -2882,6 +3283,20 @@ html.dark, .dark {
                                 selectedFontName: this.selectedFontName,
                                 selectedFontValue: this.selectedFontValue,
                                 tablesView: this.tablesView,
+
+                                tableStyle: this.tableStyle,
+                                tableStyleLight: this.tableStyleLight,
+                                tableStyleDark: this.tableStyleDark,
+                                tableCustomHeaderBg: this.tableCustomHeaderBg,
+                                tableCustomHeaderBgLight: this.tableCustomHeaderBgLight,
+                                tableCustomHeaderBgDark: this.tableCustomHeaderBgDark,
+                                tableCustomBorder: this.tableCustomBorder,
+                                tableCustomBorderLight: this.tableCustomBorderLight,
+                                tableCustomBorderDark: this.tableCustomBorderDark,
+                                tableCustomRowHover: this.tableCustomRowHover,
+                                tableCustomRowHoverLight: this.tableCustomRowHoverLight,
+                                tableCustomRowHoverDark: this.tableCustomRowHoverDark,
+
                                 reduceMotion: this.reduceMotion,
                                 glassEffect: this.glassEffect,
                             }));
