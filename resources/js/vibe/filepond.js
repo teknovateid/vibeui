@@ -1326,7 +1326,7 @@ export function vibeFilepond(config = {}) {
                 },
                 onaddfile: (err, item) => {
                     try {
-                        attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                        attachCustomFileIcon(item, self._blobUrls, false, self);
                     } catch (e) {
                         console.warn('FilePond onaddfile attachCustomFileIcon warning:', e);
                     }
