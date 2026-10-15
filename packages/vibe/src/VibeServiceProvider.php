@@ -24,6 +24,9 @@ use Teknovate\VibeUi\Commands\PageCommand;
 use Teknovate\VibeUi\Commands\ReleaseCommand;
 use Teknovate\VibeUi\Commands\SyncCommand;
 use Teknovate\VibeUi\Commands\TableMakeCommand;
+use Illuminate\Console\Events\CommandStarting;
+use Illuminate\Console\OutputStyle;
+use Illuminate\Contracts\Events\Dispatcher;
 use Teknovate\VibeUi\Commands\VibeCommand;
 use Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation;
 use Teknovate\VibeUi\Http\Middleware\SetLocale;
@@ -433,6 +436,15 @@ class VibeServiceProvider extends ServiceProvider
         $this->registerTailwindMerge();
 
         if ($this->app->runningInConsole()) {
+            /** @var Dispatcher $events */
+            $events = $this->app->make(Dispatcher::class);
+            $events->listen(CommandStarting::class, function (CommandStarting $event): void {
+                if ($event->command === 'vibe' || str_starts_with((string) $event->command, 'vibe:')) {
+                    $this->app->bind(OutputStyle::class, OutputStyle::class);
+                    $event->output->setDecorated(true);
+                }
+            });
+
             $commands = [
                 AuthCommand::class,
                 LayoutCommand::class,

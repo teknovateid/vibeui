@@ -86,3 +86,20 @@ test('vibe:install command remains directly executable via CLI', function () {
     $this->artisan('vibe:install', ['--skip-npm' => true])
         ->assertSuccessful();
 });
+
+test("Vibe commands ensure clean OutputStyle and decorated output even when agent interceptors are active", function () {
+    app()->bind(\Illuminate\Console\OutputStyle::class, \Laravel\Pao\Laravel\PaoOutputStyle::class);
+
+    $input = new \Symfony\Component\Console\Input\ArrayInput(["command" => "vibe"]);
+    $output = new \Symfony\Component\Console\Output\BufferedOutput();
+
+    /** @var \Illuminate\Contracts\Events\Dispatcher $events */
+    $events = app()->make(\Illuminate\Contracts\Events\Dispatcher::class);
+    $events->dispatch(new \Illuminate\Console\Events\CommandStarting("vibe", $input, $output));
+
+    $resolved = app()->make(\Illuminate\Console\OutputStyle::class, ["input" => $input, "output" => $output]);
+
+    expect($resolved)->not->toBeInstanceOf(\Laravel\Pao\Laravel\PaoOutputStyle::class);
+    expect($resolved)->toBeInstanceOf(\Illuminate\Console\OutputStyle::class);
+    expect($output->isDecorated())->toBeTrue();
+});
