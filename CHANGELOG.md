@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.3] - 2026-10-15
+
+### 🐛 Bug Fixes
+- fix: handle HTML error responses gracefully in FilePond upload error extraction (1e14594)
+
+
 ## [0.5.2] - 2026-10-15
 
 ### 🐛 Bug Fixes
