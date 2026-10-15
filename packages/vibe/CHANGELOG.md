@@ -2,6 +2,28 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.0] - 2026-10-15
+
+### 🚀 Features
+- feat: add table customization options and styling settings for appearance (413cb5c)
+- feat: add async loading state and labels to swipe component (15ce6c9)
+
+### 🐛 Bug Fixes
+- fix: update button row data attribute handling and JSON parsing in edit view and tests (19843d1)
+- fix: configure tailwind-merge to use fallback cache store and add resilience test (064bd89)
+- fix: handle empty thousand and decimal separators in currency input and add tests (511d469)
+
+### ⚡ Performance & Refactoring
+- refactor: replace addslashes placeholder with Blade @js directive in select and multiple input views (1e96851)
+- refactor: update asset publishing logic in ComponentCommand and add feature tests (7ce91bb)
+- refactor: improve swipe component value handling with Blade @js and add feature tests (1f862dc)
+- refactor: remove size xl attribute from authentication views and stubs (e05c12b)
+
+### 🧰 Maintenance & Documentation
+- test: add APP_KEY environment variable to phpunit configuration (5d2a301)
+- style: update medium size and padding classes for responsive UI components (20533f3)
+
+
 ## [0.4.2] - 2026-10-03
 
 ### 🚀 Features
