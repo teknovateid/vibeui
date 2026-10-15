@@ -69,6 +69,14 @@
     --color-container: var(--container);
     --color-container-foreground: var(--container-foreground);
     --color-container-border: var(--container-border);
+
+    --color-table-header: var(--table-header);
+    --color-table-header-foreground: var(--table-header-foreground);
+    --color-table-body: var(--table-body);
+    --color-table-footer: var(--table-footer);
+    --color-table-row-hover: var(--table-row-hover);
+    --color-table-row-selected: var(--table-row-selected);
+    --color-table-border: var(--table-border);
 }
 
 :root,
@@ -99,6 +107,14 @@
     --container: #ffffff !important;
     --container-foreground: #09090b !important;
     --container-border: #e4e4e7 !important;
+
+    --table-header: #f4f4f5 !important;
+    --table-header-foreground: #71717a !important;
+    --table-body: #ffffff !important;
+    --table-footer: #f4f4f5 !important;
+    --table-row-hover: #f9f9fa !important;
+    --table-row-selected: #e4e4e7 !important;
+    --table-border: #e4e4e7 !important;
 
     --primary: #18181b !important;
     --primary-foreground: #fafafa !important;
@@ -162,6 +178,14 @@
     --container: #121215 !important;
     --container-foreground: #fafafa !important;
     --container-border: #27272a !important;
+
+    --table-header: #18181b !important;
+    --table-header-foreground: #a1a1aa !important;
+    --table-body: #121215 !important;
+    --table-footer: #18181b !important;
+    --table-row-hover: #1c1c20 !important;
+    --table-row-selected: #27272a !important;
+    --table-border: #27272a !important;
 
     --primary: #fafafa !important;
     --primary-foreground: #09090b !important;

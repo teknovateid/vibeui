@@ -8,7 +8,13 @@
     <th 
         scope="col" 
         wire:key="{{ $tableName }}-thead-bulk-actions"
-        class="w-14 px-2 py-3 text-center align-middle border-b border-border bg-muted/40 text-muted-foreground font-medium text-xs select-none"
+        {{ 
+            $attributes->merge($customAttributes)
+                ->class([
+                    'w-14 px-2 py-3 text-center align-middle text-table-header-foreground font-medium text-xs select-none' => ($customAttributes['default-styling'] ?? true) || ($customAttributes['default'] ?? true),
+                ])
+                ->except(['default', 'default-colors', 'default-styling'])
+        }}
     >
         <div
             x-data="{

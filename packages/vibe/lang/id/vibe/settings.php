@@ -236,6 +236,12 @@ return [
         'header_bg' => 'Background Header',
         'header_fg' => 'Teks Header',
         'header_border' => 'Batas Header',
+        'table_title' => 'Kustomisasi Warna Tabel',
+        'table_desc' => 'Sesuaikan tema warna latar header, batas (border), dan efek hover baris pada tabel.',
+        'table_header_bg' => 'Background Header Tabel',
+        'table_border' => 'Batas Border Tabel',
+        'table_row_hover' => 'Hover Baris Data',
+        'table_surface_style' => 'Gaya Permukaan Header Tabel',
         'radius_title' => 'Radius Sudut Komponen (--radius)',
         'radius_desc' => 'Sesuaikan tingkat kelengkungan sudut untuk card, input, dan tombol.',
         'radius_options' => [

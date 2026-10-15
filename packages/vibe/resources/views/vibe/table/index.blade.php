@@ -11,7 +11,7 @@
 @php
     $baseContainerClasses = match ($variant) {
         'flush' => 'w-full overflow-x-auto',
-        default => 'w-full overflow-x-auto rounded-xl border border-border bg-card text-card-foreground shadow-2xs',
+        default => 'w-full overflow-x-auto rounded-xl border border-table-border bg-card text-card-foreground shadow-2xs',
     };
 
     $containerCompiledClasses = trim("{$baseContainerClasses} {$containerClass}");
@@ -24,12 +24,12 @@
 
     $variantClasses = match ($variant) {
         'striped' => '[&_tbody_tr:nth-child(even)]:bg-muted/40 dark:[&_tbody_tr:nth-child(even)]:bg-muted/20',
-        'bordered' => 'border-collapse [&_th]:border [&_th]:border-border [&_td]:border [&_td]:border-border',
+        'bordered' => 'border-collapse [&_th]:border [&_th]:border-table-border [&_td]:border [&_td]:border-table-border',
         'flush' => '',
         default => '',
     };
 
-    $hoverClasses = $hoverable ? '[&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-muted/50 dark:[&_tbody_tr:hover]:bg-muted/30' : '';
+    $hoverClasses = $hoverable ? '[&_tbody_tr]:transition-colors [&_tbody_tr:hover]:bg-table-row-hover' : '';
 
     $tableCompiledClasses = trim("{$baseTableClasses} {$densityClasses} {$variantClasses} {$hoverClasses}");
 @endphp

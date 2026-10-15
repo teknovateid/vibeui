@@ -1,6 +1,6 @@
 @blaze(fold: true)
 
-<tfoot {{ $attributes->twMerge(['class' => 'border-t-2 border-border bg-muted/40 font-medium text-xs text-foreground']) }}>
+<tfoot {{ $attributes->twMerge(['class' => 'border-t-2 border-table-border bg-table-footer font-medium text-xs text-table-header-foreground']) }}>
     <tr>
         {{ $slot }}
     </tr>

@@ -13,7 +13,7 @@
 <th {{
     $attributes->merge($customThAttributes)
         ->class([
-            'py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground select-none whitespace-nowrap' => ($customThAttributes['default-styling'] ?? true) || ($customThAttributes['default'] ?? true),
+            'py-3 px-4 text-left text-xs font-semibold uppercase tracking-wider text-table-header-foreground select-none whitespace-nowrap' => ($customThAttributes['default-styling'] ?? true) || ($customThAttributes['default'] ?? true),
             'hidden' => $column->shouldCollapseAlways(),
             'hidden md:table-cell' => $column->shouldCollapseOnMobile(),
             'hidden lg:table-cell' => $column->shouldCollapseOnTablet(),
@@ -30,7 +30,7 @@
                 {{
                     $attributes->merge($customSortButtonAttributes)
                         ->class([
-                            'group inline-flex items-center gap-1.5 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors focus:outline-none' => (($customSortButtonAttributes['default-styling'] ?? true) || ($customSortButtonAttributes['default'] ?? true)),
+                            'group inline-flex items-center gap-1.5 text-left text-xs font-semibold uppercase tracking-wider text-table-header-foreground hover:text-foreground transition-colors focus:outline-none' => (($customSortButtonAttributes['default-styling'] ?? true) || ($customSortButtonAttributes['default'] ?? true)),
                         ])
                         ->except(['default', 'default-colors', 'default-styling', 'wire:key'])
                 }}

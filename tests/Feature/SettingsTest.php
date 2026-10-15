@@ -45,7 +45,9 @@ test('authenticated user can view appearance page with sidebar, header, and cust
         ->assertSee('Desktop sidebar')
         ->assertSee('Application header')
         ->assertSee('sidebarCustomBg')
-        ->assertSee('headerCustomBg');
+        ->assertSee('headerCustomBg')
+        ->assertSee('tableCustomHeaderBg')
+        ->assertSee('tableCustomBorder');
 });
 
 test('profile component updates user details in database', function () {
