@@ -61,7 +61,7 @@
 
     if ($hasData) {
         $mergedAttributes = $mergedAttributes->merge([
-            ':data-row-data' => \Illuminate\Support\Js::from($data),
+            'data-row-data' => is_string($data) ? $data : json_encode($data),
         ]);
     }
 
@@ -103,7 +103,18 @@
                 if (!rowData) {
                     var rawDataAttr = triggerEl.getAttribute('data-row-data') || triggerEl.getAttribute(':data-row-data');
                     if (rawDataAttr) {
-                        try { rowData = JSON.parse(rawDataAttr); } catch (e) {}
+                        try {
+                            if (rawDataAttr.indexOf("JSON.parse('") === 0 && rawDataAttr.slice(-2) === "')") {
+                                var inner = rawDataAttr.slice(12, -2).replace(/\\'/g, "'");
+                                rowData = JSON.parse(inner);
+                            } else {
+                                rowData = JSON.parse(rawDataAttr);
+                            }
+                        } catch (e) {
+                            try {
+                                rowData = (new Function('return ' + rawDataAttr))();
+                            } catch (err) {}
+                        }
                     }
                 }
 
