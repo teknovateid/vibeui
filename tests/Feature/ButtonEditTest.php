@@ -41,7 +41,9 @@ test('vibe:button.edit in instant data mode renders row data json attribute', fu
     );
 
     expect($rendered)->toContain('data-target="edit-modal"');
-    expect($rendered)->toContain(':data-row-data=');
+    expect($rendered)->toContain('data-row-data="');
+    expect($rendered)->toContain('&quot;id&quot;:99');
+    expect($rendered)->toContain('&quot;name&quot;:&quot;John Doe&quot;');
     expect($rendered)->toContain('window.vibeTriggerEdit($el)');
     expect($rendered)->toContain('x-on:click.stop');
 });
