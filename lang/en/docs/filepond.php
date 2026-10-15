@@ -211,6 +211,8 @@ return [
             'protect_title' => 'Custom title for active upload alert (default: "Upload in Progress").',
             'protect_message' => 'Custom confirmation warning message when attempting to navigate or submit during active upload.',
             'reorder' => 'Enable drag & drop reordering. The visual UI order is synced to form inputs on submit (works for both preloaded and newly uploaded files).',
+            'status' => 'Error notification mode: `"toast"` (default, displays error toast automatically), `"alert"`, or `false` to disable.',
+            'on_error' => 'JavaScript string expression executed when an upload or validation error occurs.',
         ],
     ],
 

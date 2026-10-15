@@ -211,6 +211,8 @@ return [
             'protect_title' => 'Kustomisasi judul alert proteksi unggah (default: "Unggahan Belum Selesai").',
             'protect_message' => 'Kustomisasi pesan konfirmasi/peringatan ketika user mencoba mengirim form atau berpindah halaman saat upload berlangsung.',
             'reorder' => 'Aktifkan fitur reorder drag & drop. Urutan visual di UI langsung tersinkronkan ke input form saat submit (bekerja untuk berkas lama maupun baru diunggah).',
+            'status' => 'Mode notifikasi kesalahan: `"toast"` (default, menampilkan toast error otomatis), `"alert"`, atau `false` untuk menonaktifkan.',
+            'on_error' => 'Ekspresi string JavaScript yang dieksekusi saat terjadi error unggah atau validasi.',
         ],
     ],
 

@@ -665,13 +665,17 @@
     right: 3.125rem !important;
 }
 
-/* Hide download button on busy, loading, error, invalid, cancelled, and uploading states */
+/* Hide download button on busy, loading, error, invalid, cancelled, queued, idle unprocessed, or when upload/retry button is present */
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='busy'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='load-'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='error'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='invalid'] .filepond--action-download-item,
 .filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state*='cancelled'] .filepond--action-download-item,
-.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state~='processing'] .filepond--action-download-item {
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state~='processing'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='processing-queued'] .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) [data-filepond-item-state='idle']:not([data-filepond-item-origin='local']) .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) .filepond--item:has(.filepond--action-process-item) .filepond--action-download-item,
+.filepond--root:not(.filepond-avatar-mode) .filepond--item:has(.filepond--action-retry-item-processing) .filepond--action-download-item {
     display: none !important;
 }
 

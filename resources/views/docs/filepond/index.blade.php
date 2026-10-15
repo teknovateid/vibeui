@@ -1869,6 +1869,8 @@ BLADE;
                             ['protect-title', 'string', 'null', __('docs/filepond.props.items.protect_title')],
                             ['protect-message', 'string', 'null', __('docs/filepond.props.items.protect_message')],
                             ['reorder', 'bool', 'false', __('docs/filepond.props.items.reorder')],
+                            ['status', 'bool | string', '"toast"', __('docs/filepond.props.items.status')],
+                            ['on-error', 'string', 'null', __('docs/filepond.props.items.on_error')],
                         ];
                         @endphp
                         @foreach ($filepondProps as [$prop, $type, $default, $desc])

@@ -61,6 +61,9 @@
     'protectMessage' => null,
     'reorder' => false,
     'allowReorder' => false,
+    'status' => 'toast',
+    'onError' => null,
+    'locale' => null,
 ])
 
 @php
@@ -91,12 +94,14 @@
         }
     }
 
-    $fpLang = function ($key, $default = '') {
-        if (Lang::has("vibe/filepond.{$key}")) {
-            return __("vibe/filepond.{$key}");
+    $resolvedLocale = $locale ?? app()->getLocale();
+
+    $fpLang = function ($key, $default = '') use ($resolvedLocale) {
+        if (Lang::has("vibe/filepond.{$key}", $resolvedLocale)) {
+            return __("vibe/filepond.{$key}", [], $resolvedLocale);
         }
-        if (Lang::has("vibe::vibe/filepond.{$key}")) {
-            return __("vibe::vibe/filepond.{$key}");
+        if (Lang::has("vibe::vibe/filepond.{$key}", $resolvedLocale)) {
+            return __("vibe::vibe/filepond.{$key}", [], $resolvedLocale);
         }
         return $default;
     };
@@ -206,6 +211,48 @@
     $mergedLabels = array_merge($langLabels, (array) $labels);
 
 
+    $formTranslations = trans('vibe/form', [], $resolvedLocale);
+    if (!is_array($formTranslations)) {
+        $formTranslations = trans('vibe::vibe/form', [], $resolvedLocale);
+    }
+    $httpErrors = is_array($formTranslations) && isset($formTranslations['http_errors'])
+        ? $formTranslations['http_errors']
+        : [];
+
+    $i18n = [
+        'http_errors' => $httpErrors,
+        'upload_failed' => $fpLang('upload_failed', 'Gagal Mengunggah Berkas'),
+        'presigned_failed' => $fpLang('presigned_failed', 'Gagal Meminta URL Unggahan'),
+        'cloud_upload_failed' => $fpLang('cloud_upload_failed', 'Gagal Mengunggah ke Cloud Storage'),
+        'protect_understand_button' => $fpLang('protect_understand_button', 'Mengerti'),
+        'close' => $fpLang('close', 'Tutup'),
+        'image_preview' => $fpLang('image_preview', 'Pratinjau gambar'),
+        'click_to_preview' => $fpLang('click_to_preview', 'Klik untuk melihat pratinjau penuh'),
+        'download_file' => $fpLang('download_file', 'Unduh berkas'),
+        'reorder_drag_title' => $fpLang('reorder_drag_title', 'Tahan dan seret untuk memindahkan urutan'),
+        'reorder_drag_aria' => $fpLang('reorder_drag_aria', 'Geser urutan'),
+        'reorder_up' => $fpLang('reorder_up', 'Pindah ke atas'),
+        'reorder_down' => $fpLang('reorder_down', 'Pindah ke bawah'),
+        'invalid_file' => $fpLang('invalid_file', 'Berkas Tidak Valid'),
+        'error_title' => $fpLang('error_title', 'Terjadi Kesalahan'),
+        'notice_title' => $fpLang('notice_title', 'Pemberitahuan'),
+        'validation_failed' => $fpLang('validation_failed', 'Validasi Gagal'),
+        'generic_upload_error' => $fpLang('generic_upload_error', 'Terjadi kesalahan saat mengunggah berkas.'),
+        'process_error' => $fpLang('process_error', 'Terjadi kesalahan saat memproses berkas.'),
+        'html_response_error' => $fpLang('html_response_error', 'Server mengembalikan respons HTML / error (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().'),
+        'presigned_html_error' => $fpLang('presigned_html_error', 'Endpoint presigned mengembalikan HTML (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().'),
+        'presigned_html_status' => $fpLang('presigned_html_status', 'Endpoint presigned mengembalikan HTML / error HTTP :status (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().'),
+        'missing_upload_url' => $fpLang('missing_upload_url', 'Respons presigned tidak menyertakan upload URL.'),
+        'cloud_upload_failed_status' => $fpLang('cloud_upload_failed_status', 'Direct upload gagal dengan HTTP :status.'),
+        'cloud_forbidden' => $fpLang('cloud_forbidden', 'Akses cloud storage ditolak (HTTP 403). Periksa CORS bucket S3/R2 atau izin URL presigned.'),
+        'cloud_bad_request' => $fpLang('cloud_bad_request', 'Permintaan unggah ke cloud tidak valid (HTTP 400). Periksa header presigned.'),
+        'cloud_network_error' => $fpLang('cloud_network_error', 'Koneksi terputus saat mengunggah langsung ke cloud storage. Periksa jaringan Anda.'),
+        'cloud_timeout' => $fpLang('cloud_timeout', 'Waktu pengunggahan berkas ke cloud telah habis (timeout).'),
+        'json_parse_error' => $fpLang('json_parse_error', 'Error membaca respons JSON presigned: :message'),
+        'presigned_network_error' => $fpLang('presigned_network_error', 'Tidak dapat terhubung ke server untuk meminta URL presigned.'),
+        'livewire_failed' => $fpLang('livewire_failed', 'Gagal mengunggah berkas ke Livewire.'),
+    ];
+
     $size = in_array($size, ['sm', 'md', 'lg']) ? $size : 'md';
 
     $config = [
@@ -251,6 +298,9 @@
         'allowReorder' => $isReorderable,
         'panelLayout' => $panelLayout,     // [FIX QA-2] Expose panelLayout prop to JS
         'storeAsFile' => $storeAsFile,     // [FIX QA-3] Expose storeAsFile prop to JS (null = auto-detect)
+        'status' => $status,
+        'onError' => $onError,
+        'i18n' => $i18n,
         'protect' => [
             'enabled' => (bool) ($protectUpload || $preventUnload || $preventNavigation || $protectSubmit),
             'protectSubmit' => (bool) ($protectUpload || $preventUnload || $protectSubmit),
@@ -261,6 +311,7 @@
             'navigationMessage' => $protectMessage ?? $fpLang('protect_navigation_message', 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?'),
             'stayButton' => $fpLang('protect_stay_button', 'Tetap di Sini'),
             'leaveButton' => $fpLang('protect_leave_button', 'Tinggalkan Halaman'),
+            'understandButton' => $fpLang('protect_understand_button', 'Mengerti'),
         ],
     ];
 @endphp

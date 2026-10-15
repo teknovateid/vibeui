@@ -31,14 +31,17 @@ window.FilePond = FilePond;
 /**
  * Global lightbox modal for viewing full-size image previews
  */
-function openImageLightbox(src, title) {
+function openImageLightbox(src, title, i18n = {}) {
     let backdrop = document.getElementById('vibe-filepond-lightbox');
+    const closeText = i18n.close || 'Tutup';
+    const previewAlt = title || i18n.image_preview || 'Image preview';
+
     if (!backdrop) {
         backdrop = document.createElement('div');
         backdrop.id = 'vibe-filepond-lightbox';
         backdrop.className = 'filepond--lightbox-backdrop';
         backdrop.innerHTML = `
-            <button type="button" class="filepond--lightbox-close" title="Tutup" aria-label="Tutup">
+            <button type="button" class="filepond--lightbox-close" title="${closeText}" aria-label="${closeText}">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -77,10 +80,16 @@ function openImageLightbox(src, title) {
         });
     }
 
+    const closeBtn = backdrop.querySelector('.filepond--lightbox-close');
+    if (closeBtn) {
+        closeBtn.setAttribute('title', closeText);
+        closeBtn.setAttribute('aria-label', closeText);
+    }
+
     const img = backdrop.querySelector('.filepond--lightbox-img');
     const cap = backdrop.querySelector('.filepond--lightbox-caption');
     img.src = src;
-    img.alt = title || 'Image preview';
+    img.alt = previewAlt;
     cap.textContent = title || '';
 
     backdrop.style.display = 'flex';
@@ -110,6 +119,12 @@ const FileStatus = (FilePondModule && FilePondModule.FileStatus) || {
     LOADING: 7,
     LOAD_ERROR: 8,
     PROCESSING_QUEUED: 9
+};
+
+const FileOrigin = (FilePondModule && FilePondModule.FileOrigin) || {
+    INPUT: 1,
+    LIMBO: 2,
+    LOCAL: 3
 };
 
 function isSameOrigin(url) {
@@ -169,16 +184,19 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
     };
 
     const render = () => {
-        const itemEl = findItemEl();
-        if (!itemEl) return;
+        try {
+            const itemEl = findItemEl();
+            if (!itemEl) return;
 
-        // Check if avatar mode
-        const wrapper = itemEl.closest('.filepond-avatar-mode') || itemEl.closest('[data-vibe-filepond].filepond-avatar-mode');
-        const rootEl = itemEl.closest('.filepond--root');
-        const isAvatar = Boolean(wrapper || (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle'))));
+            const i18n = comp?.config?.i18n || {};
 
-        const fileWrapper = itemEl.querySelector('.filepond--file');
-        if (!fileWrapper) return;
+            // Check if avatar mode
+            const wrapper = itemEl.closest('.filepond-avatar-mode') || itemEl.closest('[data-vibe-filepond].filepond-avatar-mode');
+            const rootEl = itemEl.closest('.filepond--root');
+            const isAvatar = Boolean(wrapper || (rootEl && (rootEl.classList.contains('filepond-avatar-mode') || rootEl.dataset.stylePanelLayout?.includes('circle'))));
+
+            const fileWrapper = itemEl.querySelector('.filepond--file');
+            if (!fileWrapper) return;
 
         const file = item.file;
         let name = (file && file.name) ? file.name : (item.filename || '');
@@ -301,11 +319,16 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
             }
 
             if (!handleGroup) {
+                const dragTitle = i18n.reorder_drag_title || 'Tahan dan seret untuk memindahkan urutan';
+                const dragAria = i18n.reorder_drag_aria || 'Geser urutan';
+                const upTitle = i18n.reorder_up || 'Pindah ke atas';
+                const downTitle = i18n.reorder_down || 'Pindah ke bawah';
+
                 handleGroup = document.createElement('div');
                 handleGroup.className = 'filepond--reorder-group';
                 handleGroup.setAttribute('data-filepond-reorder-handle', '');
                 handleGroup.innerHTML = `
-                    <div class="filepond--reorder-handle" title="Tahan dan seret untuk memindahkan urutan" aria-label="Geser urutan">
+                    <div class="filepond--reorder-handle" title="${dragTitle}" aria-label="${dragAria}">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="5" r="1"></circle>
                             <circle cx="9" cy="12" r="1"></circle>
@@ -316,12 +339,12 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
                         </svg>
                     </div>
                     <div class="filepond--reorder-arrows">
-                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-up" title="Pindah ke atas" aria-label="Pindah ke atas">
+                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-up" title="${upTitle}" aria-label="${upTitle}">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="18 15 12 9 6 15"></polyline>
                             </svg>
                         </button>
-                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-down" title="Pindah ke bawah" aria-label="Pindah ke bawah">
+                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-down" title="${downTitle}" aria-label="${downTitle}">
                             <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                                 <polyline points="6 9 12 15 18 9"></polyline>
                             </svg>
@@ -373,11 +396,12 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
         // Inject / Update Custom Download Action Button
         let downloadBtn = fileWrapper.querySelector('.filepond--action-download-item');
         if (!downloadBtn) {
+            const downloadTitle = i18n.download_file || 'Unduh berkas';
             downloadBtn = document.createElement('button');
             downloadBtn.type = 'button';
             downloadBtn.className = 'filepond--file-action-button filepond--action-download-item';
-            downloadBtn.setAttribute('title', 'Unduh berkas');
-            downloadBtn.setAttribute('aria-label', 'Unduh berkas');
+            downloadBtn.setAttribute('title', downloadTitle);
+            downloadBtn.setAttribute('aria-label', downloadTitle);
             downloadBtn.innerHTML = `
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -387,8 +411,8 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
             `;
 
             // Only show download button for preloaded files or successfully uploaded files
-            const isPreloaded = item.origin === 1 || Boolean(item.serverId) || (typeof item.source === 'string' && (item.source.startsWith('http') || item.source.startsWith('/')));
-            const isComplete = item.status === 5; // ItemStatus.PROCESSING_COMPLETE
+            const isPreloaded = item.origin === FileOrigin.LOCAL || item.origin === FileOrigin.LIMBO || (typeof item.source === 'string' && (item.source.startsWith('http') || item.source.startsWith('/')));
+            const isComplete = item.status === FileStatus.PROCESSING_COMPLETE || Boolean(item.serverId);
             if (!isPreloaded && !isComplete) {
                 downloadBtn.style.display = 'none';
             } else {
@@ -588,7 +612,8 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
 
             if (imgUrl) {
                 iconContainer.classList.add('filepond--thumbnail-preview-container');
-                iconContainer.setAttribute('title', 'Klik untuk melihat pratinjau penuh');
+                const previewTitle = i18n.click_to_preview || 'Klik untuk melihat pratinjau penuh';
+                iconContainer.setAttribute('title', previewTitle);
                 const escapedName = name.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
                 iconContainer.innerHTML = `
                     <div class="filepond--thumbnail-wrapper">
@@ -623,7 +648,7 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
 
                 iconContainer.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openImageLightbox(imgUrl, name);
+                    openImageLightbox(imgUrl, name, i18n);
                 });
 
                 insertIcon();
@@ -653,6 +678,9 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
         `;
 
         insertIcon();
+        } catch (err) {
+            console.warn('FilePond icon render warning:', err);
+        }
     };
 
     render();
@@ -666,15 +694,22 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
  * Alpine.js FilePond Component Factory
  */
 export function vibeFilepond(config = {}) {
+    let statusMode = config.status !== undefined ? config.status : 'toast';
+    if (statusMode === 'false') statusMode = false;
+    if (statusMode === 'true') statusMode = 'toast';
+
     return {
         pond: null,
         input: null,
         config: config,
+        statusMode: statusMode,
         uploadedKeys: [],
         activeUploads: new Set(),
         _blobUrls: new Set(), // [FIX BUG-4] Per-instance blob URL tracking
         _isNavigatingAway: false,
         _cleanupListeners: [],
+        _lastNotifiedKey: null,
+        _lastNotifiedTime: 0,
 
         // Reactive states for Alpine
         isUploading: false,
@@ -781,6 +816,9 @@ export function vibeFilepond(config = {}) {
                 this._blobUrls.forEach(url => { try { URL.revokeObjectURL(url); } catch (e) {} });
                 this._blobUrls.clear();
             }
+            if (this._autoProcessedItemIds) {
+                this._autoProcessedItemIds.clear();
+            }
             if (this._cleanupHandler) {
                 document.removeEventListener('livewire:navigating', this._cleanupHandler);
             }
@@ -810,6 +848,8 @@ export function vibeFilepond(config = {}) {
         clear() {
             this.serverError = null;
             this.hasError = false;
+            this._lastNotifiedKey = null;
+            this._lastNotifiedTime = 0;
             if (this.pond && typeof this.pond.removeFiles === 'function') {
                 this.pond.removeFiles();
             }
@@ -865,10 +905,11 @@ export function vibeFilepond(config = {}) {
 
         extractErrorMessage(err) {
             if (!err) return null;
+            const i18n = this.config?.i18n || {};
             if (typeof err === 'string') {
                 const trimmed = err.trim();
                 if (trimmed.startsWith('<') || trimmed.includes('<script') || trimmed.includes('<html')) {
-                    return 'Server mengembalikan respons HTML / error (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
+                    return i18n.html_response_error || 'Server mengembalikan respons HTML / error (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
                 }
                 try {
                     const parsed = JSON.parse(err);
@@ -895,7 +936,152 @@ export function vibeFilepond(config = {}) {
                     return this.extractErrorMessage(err.body);
                 }
             }
-            return 'An error occurred during upload';
+            return i18n.generic_upload_error || 'An error occurred during upload';
+        },
+
+        // ==========================================
+        // HELPER: Dispatch notification (toast or alert)
+        // ==========================================
+        notify(type, title, message) {
+            if (!this.statusMode) return;
+            const i18n = this.config?.i18n || {};
+
+            if (this.statusMode === 'alert') {
+                const defaultTitle = type === 'error' ? (i18n.error_title || 'Terjadi Kesalahan') : (i18n.notice_title || 'Pemberitahuan');
+                window.dispatchEvent(new CustomEvent('alert', {
+                    detail: { type, title: title || defaultTitle, message }
+                }));
+            } else {
+                // Default: Toast notification
+                if (window.$vibe && window.$vibe.toast) {
+                    if (typeof window.$vibe.toast[type] === 'function') {
+                        if (title && title !== message) {
+                            window.$vibe.toast[type](message, title);
+                        } else {
+                            window.$vibe.toast[type](message);
+                        }
+                    } else {
+                        const opts = (title && title !== message) ? { title } : {};
+                        window.$vibe.toast(message, type, opts);
+                    }
+                } else {
+                    const detail = { type, message };
+                    if (title && title !== message) detail.title = title;
+                    window.dispatchEvent(new CustomEvent('toast', { detail }));
+                }
+            }
+        },
+
+        // ==========================================
+        // HELPER: Execute onError callback
+        // ==========================================
+        executeCallback(code, data, response) {
+            if (!code) return;
+            try {
+                if (typeof code === 'function') {
+                    code(data, response);
+                    return;
+                }
+                if (typeof code === 'string') {
+                    const $vibe = window.$vibe;
+                    // eslint-disable-next-line no-new-func
+                    (new Function('$vibe', 'data', 'response', code))($vibe, data, response);
+                }
+            } catch (e) {
+                console.error('[vibeFilepond] onError callback error:', e);
+            }
+        },
+
+        // ==========================================
+        // HELPER: Parse HTTP error response into title + message
+        // ==========================================
+        parseErrorMessage(status, data, fallbackTitle = null, fallbackMessage = null) {
+            const i18n = this.config?.i18n || {};
+            const httpMap = i18n.http_errors || {};
+
+            // 422 - Laravel Validation Error
+            if (status === 422) {
+                let message = '';
+                if (data && data.message) {
+                    message = data.message;
+                } else if (data && data.errors && typeof data.errors === 'object') {
+                    const errorLines = [];
+                    Object.values(data.errors).forEach(fieldErrors => {
+                        if (Array.isArray(fieldErrors)) {
+                            fieldErrors.forEach(e => errorLines.push(e));
+                        } else if (typeof fieldErrors === 'string') {
+                            errorLines.push(fieldErrors);
+                        }
+                    });
+                    if (errorLines.length > 0) {
+                        const first = errorLines[0];
+                        const remaining = errorLines.length - 1;
+                        const suffix = httpMap.and_more_errors || '(:count error lainnya)';
+                        message = remaining > 0 ? `${first} ${suffix.replace(':count', remaining)}` : first;
+                    }
+                }
+                return {
+                    title: fallbackTitle || (i18n.upload_failed || 'Gagal Mengunggah Berkas'),
+                    message: message || (httpMap['422'] && httpMap['422'].message) || fallbackMessage || (i18n.validation_failed || 'Validasi Gagal')
+                };
+            }
+
+            // Direct O(1) hash map lookup
+            const entry = httpMap[status];
+            if (entry) {
+                return {
+                    title: entry.title || fallbackTitle,
+                    message: (data && data.message) || entry.message || fallbackMessage
+                };
+            }
+
+            // Generic HTTP status
+            if (status) {
+                const generic = httpMap.generic || { title: 'Error :status', message: 'Permintaan gagal (:status)' };
+                return {
+                    title: generic.title ? generic.title.replace(':status', status) : (fallbackTitle || `Error ${status}`),
+                    message: (data && data.message) || (generic.message ? generic.message.replace(':status', status) : (fallbackMessage || `HTTP ${status}`))
+                };
+            }
+
+            // Network error fallback
+            if (status === 0 || status === null) {
+                const net = httpMap.network || { title: (i18n.error_title || 'Kesalahan Jaringan'), message: 'Tidak dapat terhubung ke server.' };
+                return {
+                    title: fallbackTitle || net.title,
+                    message: (data && data.message) || fallbackMessage || net.message
+                };
+            }
+
+            return {
+                title: fallbackTitle || (i18n.error_title || 'Terjadi Kesalahan'),
+                message: (data && data.message) || fallbackMessage || (i18n.process_error || 'Terjadi kesalahan saat memproses berkas.')
+            };
+        },
+
+        // Centralized Error Notifier (deduplicated per file/error key)
+        notifyError(payload = {}) {
+            if (!this.statusMode) return;
+
+            const fileId = payload.filename || payload.file?.name || (typeof payload.message === 'string' ? payload.message.slice(0, 40) : '') || 'filepond_err';
+            const now = Date.now();
+
+            if (this._lastNotifiedKey === fileId && (now - (this._lastNotifiedTime || 0)) < 600) {
+                return;
+            }
+            this._lastNotifiedKey = fileId;
+            this._lastNotifiedTime = now;
+
+            const i18n = this.config?.i18n || {};
+            const type = 'error';
+            const title = payload.title || (i18n.upload_failed || 'Gagal Mengunggah Berkas');
+            const message = payload.message || (i18n.generic_upload_error || 'Terjadi kesalahan saat mengunggah berkas.');
+
+            this.notify(type, title, message);
+
+            if (this.config?.onError) {
+                this.executeCallback(this.config.onError, payload.data || payload.error || payload.message, payload);
+            }
         },
 
         // Centralized Event Dispatcher
@@ -994,6 +1180,54 @@ export function vibeFilepond(config = {}) {
             const baseName = rawName ? rawName.replace(/\[\]$/, '') : null;
             const resolvedName = baseName ? (cfg.multiple ? `${baseName}[]` : baseName) : null;
 
+            // Auto-upload trigger helper
+            const hasAsyncServer = Boolean(cfg.presignUrl || cfg.server || cfg.wireModel);
+            const isStoreAsFile = (cfg.storeAsFile !== null && cfg.storeAsFile !== undefined)
+                ? Boolean(cfg.storeAsFile)
+                : !hasAsyncServer;
+
+            const triggerAutoProcess = (fileItem) => {
+                if (!hasAsyncServer || isStoreAsFile || cfg.instantUpload === false) return;
+                if (!fileItem || !fileItem.id) return;
+                if (fileItem.origin === FileOrigin.LOCAL || fileItem.origin === 3) return;
+
+                if (!self._autoProcessedItemIds) {
+                    self._autoProcessedItemIds = new Set();
+                }
+                if (self._autoProcessedItemIds.has(fileItem.id)) return;
+
+                const attemptProcess = (retries = 60) => {
+                    if (!self.pond || typeof self.pond.processFile !== 'function' || typeof self.pond.getFile !== 'function') return;
+                    const current = self.pond.getFile(fileItem.id);
+                    if (!current) return;
+
+                    // If already processing or completed, mark as processed and stop
+                    if (current.status === FileStatus.PROCESSING || current.status === FileStatus.PROCESSING_COMPLETE) {
+                        self._autoProcessedItemIds.add(fileItem.id);
+                        return;
+                    }
+
+                    // If error state, do not attempt to process
+                    if (current.status === FileStatus.PROCESSING_ERROR || current.status === FileStatus.LOAD_ERROR) {
+                        return;
+                    }
+
+                    // If file has settled into IDLE or INIT ready state, start processing immediately
+                    if (current.status === FileStatus.IDLE || current.status === FileStatus.INIT) {
+                        self._autoProcessedItemIds.add(fileItem.id);
+                        self.pond.processFile(fileItem.id);
+                        return;
+                    }
+
+                    // Continue polling until plugins finish and status transitions to IDLE or timeout
+                    if (retries > 0) {
+                        setTimeout(() => attemptProcess(retries - 1), 50);
+                    }
+                };
+
+                setTimeout(() => attemptProcess(), 25);
+            };
+
             const options = {
                 name: resolvedName,
                 credits: false,
@@ -1078,37 +1312,33 @@ export function vibeFilepond(config = {}) {
 
                 // Callbacks & Events
                 oninitfile: (item) => {
-                    attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                    try {
+                        attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                    } catch (e) {
+                        console.warn('FilePond oninitfile attachCustomFileIcon warning:', e);
+                    }
                 },
                 onaddfilestart: (item) => {
                     self.serverError = null;
                     self.hasError = false;
+                    self._lastNotifiedKey = null;
+                    self._lastNotifiedTime = 0;
                 },
                 onaddfile: (err, item) => {
-                    attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                    try {
+                        attachCustomFileIcon(item, self._blobUrls, false, self); // [FIX BUG-4] pass per-instance set
+                    } catch (e) {
+                        console.warn('FilePond onaddfile attachCustomFileIcon warning:', e);
+                    }
                     self.syncFormInputsOrder();
                     self.updateArrowButtonStates();
                     self.updateReactiveState();
                     self.fireEvent('add', { item: item });
 
-                    // Auto-start upload on add if instantUpload is desired (default true),
-                    // but ONLY if an async server endpoint is configured (presignUrl, server, or wireModel)
-                    // and storeAsFile is not active. Traditional form uploads should remain in IDLE ready state.
-                    const hasAsyncServer = Boolean(cfg.presignUrl || cfg.server || cfg.wireModel);
-                    const isStoreAsFile = (cfg.storeAsFile !== null && cfg.storeAsFile !== undefined)
-                        ? Boolean(cfg.storeAsFile)
-                        : !hasAsyncServer;
-
-                    if (hasAsyncServer && !isStoreAsFile && cfg.instantUpload !== false) {
-                        setTimeout(() => {
-                            if (self.pond && typeof self.pond.processFile === 'function' && item && item.id) {
-                                const current = typeof self.pond.getFile === 'function' ? self.pond.getFile(item.id) : null;
-                                if (current && (current.status === FileStatus.IDLE || current.status === FileStatus.INIT)) {
-                                    self.pond.processFile(item.id);
-                                }
-                            }
-                        }, 25);
-                    }
+                    triggerAutoProcess(item);
+                },
+                onpreparefile: (item, output) => {
+                    triggerAutoProcess(item);
                 },
                 onerror: (err, item, status) => {
                     self.hasError = true;
@@ -1116,6 +1346,17 @@ export function vibeFilepond(config = {}) {
                         self.serverError = self.extractErrorMessage(err);
                     }
                     self.fireEvent('error', { error: err, item: item, status: status });
+                    if (err) {
+                        const extractedMsg = self.serverError || self.extractErrorMessage(err);
+                        self.notifyError({
+                            title: self.config?.i18n?.invalid_file || self.config?.i18n?.upload_failed || 'Berkas Tidak Valid',
+                            message: extractedMsg,
+                            file: item?.file,
+                            filename: item?.filename || item?.file?.name,
+                            error: err,
+                            status: status
+                        });
+                    }
                 },
                 onprocessfilestart: (item) => {
                     if (item && item.id) {
@@ -1144,11 +1385,28 @@ export function vibeFilepond(config = {}) {
                     }
                     self.updateReactiveState();
                     if (err) {
+                        if (self._autoProcessedItemIds && item && item.id) {
+                            self._autoProcessedItemIds.delete(item.id);
+                        }
                         self.hasError = true;
                         if (!self.serverError) {
                             self.serverError = self.extractErrorMessage(err);
                         }
                         self.fireEvent('error', { error: err, item: item });
+                        const extractedMsg = self.serverError || self.extractErrorMessage(err);
+                        self.notifyError({
+                            title: self.config?.i18n?.upload_failed || 'Gagal Mengunggah Berkas',
+                            message: extractedMsg,
+                            file: item?.file,
+                            filename: item?.filename || item?.file?.name,
+                            error: err
+                        });
+                        // Ensure download button is hidden on failed upload
+                        if (item && item.id && self.pond && self.pond.element) {
+                            const itemEl = self.pond.element.querySelector(`[data-filepond-item-id="${item.id}"]`);
+                            const dlBtn = itemEl?.querySelector('.filepond--action-download-item');
+                            if (dlBtn) dlBtn.style.display = 'none';
+                        }
                         return;
                     }
                     self.serverError = null; // clear any previous server error on successful upload
@@ -1168,6 +1426,9 @@ export function vibeFilepond(config = {}) {
                 onprocessfileabort: (item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
+                        if (self._autoProcessedItemIds) {
+                            self._autoProcessedItemIds.delete(item.id);
+                        }
                     }
                     self.updateReactiveState();
                     self.serverError = null; // clear server error on abort
@@ -1205,6 +1466,9 @@ export function vibeFilepond(config = {}) {
                 onremovefile: (err, item) => {
                     if (item && item.id) {
                         self.activeUploads.delete(item.id);
+                        if (self._autoProcessedItemIds) {
+                            self._autoProcessedItemIds.delete(item.id);
+                        }
                     }
                     const fileIdentifier = item?.serverId || item?.source || item?.file?.name;
                     if (fileIdentifier) {
@@ -1388,10 +1652,18 @@ export function vibeFilepond(config = {}) {
                                     self.activeUploads.delete(uploadId);
                                     self.updateReactiveState();
                                     self.hasError = true;
-                                    const errMsg = 'Endpoint presigned mengembalikan HTML (bukan JSON). Pastikan endpoint mengembalikan JSON.';
+                                    const errMsg = self.config?.i18n?.presigned_html_error || 'Endpoint presigned mengembalikan HTML (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
                                     self.serverError = errMsg;
                                     error(errMsg);
                                     self.fireEvent('error', { error: errMsg, file, filename: fileName });
+                                    window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg, status: xhrPresign.status } }));
+                                    self.notifyError({
+                                        title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                        message: errMsg,
+                                        file: file,
+                                        filename: fileName,
+                                        status: xhrPresign.status
+                                    });
                                     return;
                                 }
 
@@ -1427,11 +1699,18 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = 'Presigned response missing upload URL';
+                                        const errMsg = self.config?.i18n?.missing_upload_url || 'Respons presigned tidak menyertakan upload URL';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
+                                        self.notifyError({
+                                            title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                            message: errMsg,
+                                            file: file,
+                                            filename: fileName,
+                                            data: response
+                                        });
                                         return;
                                     }
 
@@ -1481,11 +1760,24 @@ export function vibeFilepond(config = {}) {
                                             if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-success', successDetail);
                                         } else {
                                             self.hasError = true;
-                                            const errMsg = 'Direct upload failed with HTTP ' + xhrUpload.status;
-                                            self.serverError = errMsg;
-                                            error(errMsg);
-                                            self.fireEvent('error', { error: errMsg, status: xhrUpload.status, file, filename: fileName });
-                                            window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg, status: xhrUpload.status } }));
+                                            const statusTpl = self.config?.i18n?.cloud_upload_failed_status || 'Direct upload gagal dengan HTTP :status';
+                                            let cloudMsg = statusTpl.replace(':status', xhrUpload.status);
+                                            if (xhrUpload.status === 403) {
+                                                cloudMsg = self.config?.i18n?.cloud_forbidden || 'Akses cloud storage ditolak (HTTP 403). Periksa CORS bucket S3/R2 atau permission URL presigned.';
+                                            } else if (xhrUpload.status === 400) {
+                                                cloudMsg = self.config?.i18n?.cloud_bad_request || 'Permintaan upload ke cloud tidak valid (HTTP 400). Periksa header presigned.';
+                                            }
+                                            self.serverError = cloudMsg;
+                                            error(cloudMsg);
+                                            self.fireEvent('error', { error: cloudMsg, status: xhrUpload.status, file, filename: fileName });
+                                            window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: cloudMsg, status: xhrUpload.status } }));
+                                            self.notifyError({
+                                                title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                                message: cloudMsg,
+                                                file: file,
+                                                filename: fileName,
+                                                status: xhrUpload.status
+                                            });
                                         }
                                     };
 
@@ -1493,22 +1785,35 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = 'Network error during cloud upload';
+                                        const errMsg = self.config?.i18n?.cloud_network_error || 'Koneksi terputus saat mengunggah langsung ke cloud storage. Periksa jaringan Anda.';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
+                                        self.notifyError({
+                                            title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                            message: errMsg,
+                                            file: file,
+                                            filename: fileName,
+                                            status: 0
+                                        });
                                     };
 
                                     xhrUpload.ontimeout = () => {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = 'Upload timed out';
+                                        const errMsg = self.config?.i18n?.cloud_timeout || 'Waktu pengunggahan berkas ke cloud telah habis (timeout).';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
+                                        self.notifyError({
+                                            title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                            message: errMsg,
+                                            file: file,
+                                            filename: fileName
+                                        });
                                     };
 
                                     xhrUpload.send(file);
@@ -1516,33 +1821,59 @@ export function vibeFilepond(config = {}) {
                                     self.activeUploads.delete(uploadId);
                                     self.updateReactiveState();
                                     self.hasError = true;
-                                    const errMsg = 'Error parsing presigned JSON: ' + e.message;
+                                    const jsonErrTpl = self.config?.i18n?.json_parse_error || 'Error membaca respons JSON presigned: :message';
+                                    const errMsg = jsonErrTpl.replace(':message', e.message);
                                     self.serverError = errMsg;
                                     error(errMsg);
                                     self.fireEvent('error', { error: errMsg, file, filename: fileName });
+                                    window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
+                                    self.notifyError({
+                                        title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                        message: errMsg,
+                                        file: file,
+                                        filename: fileName
+                                    });
                                 }
                             } else {
                                 self.activeUploads.delete(uploadId);
                                 self.updateReactiveState();
                                 self.hasError = true;
-                                // Parse Laravel validation error (422) or generic HTTP error
-                                let errMsg = xhrPresign.statusText || 'Request failed';
+
+                                let errData = null;
                                 try {
-                                    const errJson = JSON.parse(xhrPresign.responseText);
-                                    const extracted = self.extractErrorMessage(errJson);
-                                    if (extracted) errMsg = extracted;
+                                    errData = JSON.parse(xhrPresign.responseText);
                                 } catch (e) {
-                                    const resText = (xhrPresign.responseText || '').trim();
-                                    const contentType = xhrPresign.getResponseHeader('Content-Type') || '';
-                                    if (contentType.includes('text/html') || resText.startsWith('<') || resText.includes('<script') || resText.includes('<html')) {
-                                        errMsg = `Endpoint presigned mengembalikan HTML / error HTTP ${xhrPresign.status} (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().`;
-                                    } else if (resText) {
-                                        errMsg = resText;
-                                    }
+                                    errData = null;
                                 }
-                                self.serverError = errMsg;
-                                error(errMsg);
-                                self.fireEvent('error', { error: errMsg, status: xhrPresign.status, file, filename: fileName });
+
+                                const resText = (xhrPresign.responseText || '').trim();
+                                const contentType = xhrPresign.getResponseHeader('Content-Type') || '';
+                                let parsed = self.parseErrorMessage(
+                                    xhrPresign.status,
+                                    errData,
+                                    self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                    xhrPresign.statusText || self.config?.i18n?.presigned_failed || 'Gagal meminta URL presigned'
+                                );
+
+                                if (contentType.includes('text/html') || resText.startsWith('<') || resText.includes('<script') || resText.includes('<html')) {
+                                    const htmlStatusTpl = self.config?.i18n?.presigned_html_status || 'Endpoint presigned mengembalikan HTML / error HTTP :status (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
+                                    parsed.message = htmlStatusTpl.replace(':status', xhrPresign.status);
+                                } else if (!errData && resText) {
+                                    parsed.message = resText;
+                                }
+
+                                self.serverError = parsed.message;
+                                error(parsed.message);
+                                self.fireEvent('error', { error: parsed.message, status: xhrPresign.status, file, filename: fileName, data: errData });
+                                window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: parsed.message, status: xhrPresign.status, data: errData } }));
+                                self.notifyError({
+                                    title: parsed.title,
+                                    message: parsed.message,
+                                    file: file,
+                                    filename: fileName,
+                                    status: xhrPresign.status,
+                                    data: errData
+                                });
                             }
                         };
 
@@ -1550,10 +1881,19 @@ export function vibeFilepond(config = {}) {
                             self.activeUploads.delete(uploadId);
                             self.updateReactiveState();
                             self.hasError = true;
-                            const errMsg = 'Network error requesting presigned URL';
-                            self.serverError = errMsg;
-                            error(errMsg);
-                            self.fireEvent('error', { error: errMsg, file, filename: fileName });
+                            const netErr = self.config?.i18n?.presigned_network_error || 'Tidak dapat terhubung ke server untuk meminta URL presigned.';
+                            const parsed = self.parseErrorMessage(0, null, self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan', netErr);
+                            self.serverError = parsed.message;
+                            error(parsed.message);
+                            self.fireEvent('error', { error: parsed.message, file, filename: fileName });
+                            window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: parsed.message, status: 0 } }));
+                            self.notifyError({
+                                title: parsed.title,
+                                message: parsed.message,
+                                file: file,
+                                filename: fileName,
+                                status: 0
+                            });
                         };
 
                         xhrPresign.send(JSON.stringify(requestPayload));
@@ -1610,11 +1950,17 @@ export function vibeFilepond(config = {}) {
                                 self.activeUploads.delete(uploadId);
                                 self.updateReactiveState();
                                 self.hasError = true;
-                                const errMsg = 'Livewire upload failed';
+                                const errMsg = self.config?.i18n?.livewire_failed || 'Livewire upload failed';
                                 self.serverError = errMsg;
                                 error(errMsg);
                                 self.fireEvent('error', { error: errMsg, file });
                                 self.$dispatch('vibe-filepond-error', { error: errMsg });
+                                self.notifyError({
+                                    title: self.config?.i18n?.upload_failed || 'Gagal Mengunggah Berkas',
+                                    message: errMsg,
+                                    file: file,
+                                    filename: file.name
+                                });
                             },
                             (event) => {
                                 progress(event.detail.progress, event.detail.progress, 100);
@@ -1906,9 +2252,10 @@ export function vibeFilepond(config = {}) {
         },
 
         showSubmitBlockedAlert(protect = {}) {
-            const title = protect.title || 'Unggahan Belum Selesai';
-            const message = protect.submitMessage || 'Berkas Anda masih dalam proses pengunggahan. Harap tunggu hingga semua berkas selesai diunggah sebelum mengirim formulir.';
-            const stayBtnText = protect.stayButton || 'Mengerti';
+            const i18n = this.config?.i18n || {};
+            const title = protect.title || i18n.protect_title || 'Unggahan Belum Selesai';
+            const message = protect.submitMessage || i18n.protect_submit_message || 'Berkas Anda masih dalam proses pengunggahan. Harap tunggu hingga semua berkas selesai diunggah sebelum mengirim formulir.';
+            const stayBtnText = protect.understandButton || protect.stayButton || i18n.protect_understand_button || i18n.protect_stay_button || 'Mengerti';
 
             const hasVibeAlert = Boolean(document.getElementById('vibe-alert-container') || typeof window.vibeAlert === 'function');
 
@@ -1935,10 +2282,11 @@ export function vibeFilepond(config = {}) {
 
         showNavigationBlockedAlert(targetUrl, protect = {}) {
             const self = this;
-            const title = protect.title || 'Unggahan Belum Selesai';
-            const message = protect.navigationMessage || 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?';
-            const leaveBtnText = protect.leaveButton || 'Tinggalkan Halaman';
-            const stayBtnText = protect.stayButton || 'Tetap di Sini';
+            const i18n = this.config?.i18n || {};
+            const title = protect.title || i18n.protect_title || 'Unggahan Belum Selesai';
+            const message = protect.navigationMessage || i18n.protect_navigation_message || 'Berkas Anda masih dalam proses pengunggahan. Jika Anda meninggalkan halaman ini sekarang, proses unggah akan dibatalkan. Apakah Anda yakin ingin berpindah halaman?';
+            const leaveBtnText = protect.leaveButton || i18n.protect_leave_button || 'Tinggalkan Halaman';
+            const stayBtnText = protect.stayButton || i18n.protect_stay_button || 'Tetap di Sini';
 
             const hasVibeAlert = Boolean(document.getElementById('vibe-alert-container') || typeof window.vibeAlert === 'function');
 
