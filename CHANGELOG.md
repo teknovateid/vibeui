@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.5] - 2026-10-15
+
+### 🐛 Bug Fixes
+- fix: update FilePond input naming to clean arrays and sync DOM order with Livewire state (135c285)
+
+
 ## [0.5.4] - 2026-10-15
 
 ### 🚀 Features
