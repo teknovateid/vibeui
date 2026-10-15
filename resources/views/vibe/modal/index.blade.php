@@ -8,6 +8,7 @@
     'show' => false,
     'position' => 'center',
     'maxWidth' => '2xl',
+    'size' => null,
     'teleport' => true,
     'variant' => 'default',
     'animation' => false,
@@ -17,6 +18,7 @@
 
 @php
     $modalId = $id ?? uniqid('modal-');
+    $effectiveMaxWidth = $size ?? $maxWidth;
 
     $positionClasses = match ($position) {
         'top' => 'items-start pt-16 sm:pt-24',
@@ -25,7 +27,7 @@
         default => 'items-center',
     };
 
-    $maxWidthClasses = match ($maxWidth) {
+    $maxWidthClasses = match ($effectiveMaxWidth) {
         'sm' => 'sm:max-w-sm',
         'md' => 'sm:max-w-md',
         'lg' => 'sm:max-w-lg',

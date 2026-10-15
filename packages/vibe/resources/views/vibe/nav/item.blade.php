@@ -54,7 +54,7 @@
     };
 @endphp
 
-<a wire:navigate href="{{ $href }}" @click="if ($event.target.closest('[data-nav-pin-btn]')) { $event.preventDefault(); $event.stopPropagation(); return false; }" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ strip_tags($slot) }}" data-pin-href="{{ $href }}" @if ($variant) data-variant="{{ $variant }}" @endif @if ($itemDensity) data-density="{{ $itemDensity }}" @endif @if ($hasIndicator) data-indicator="true" @endif x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
+<a wire:navigate href="{{ $href }}" @click="if ($event.target.closest('[data-nav-pin-btn]')) { $event.preventDefault(); $event.stopPropagation(); return false; }" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ html_entity_decode(strip_tags($slot), ENT_QUOTES, 'UTF-8') }}" data-pin-href="{{ $href }}" @if ($variant) data-variant="{{ $variant }}" @endif @if ($itemDensity) data-density="{{ $itemDensity }}" @endif @if ($hasIndicator) data-indicator="true" @endif x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
 
     <!-- Icon -->
     @if (isset($icon))
