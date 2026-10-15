@@ -4,6 +4,10 @@ namespace Teknovate\VibeUi\Commands;
 
 use Illuminate\Console\Command;
 
+use Illuminate\Console\OutputStyle;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 use function Laravel\Prompts\select;
 
 class VibeCommand extends Command
@@ -23,18 +27,29 @@ class VibeCommand extends Command
     protected $description = 'Vibe UI Interactive Console';
 
     /**
+     * Run the console command.
+     */
+    public function run(InputInterface $input, OutputInterface $output): int
+    {
+        $this->laravel->bind(OutputStyle::class, OutputStyle::class);
+        $output->setDecorated(true);
+
+        return parent::run($input, $output);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle(): void
     {
         $this->newLine();
         $this->line(' <fg=cyan;options=bold>
- __      ___ _          _    _ _____ 
- \ \    / (_) |        | |  | |_   _|
-  \ \  / / _| |__   ___| |  | | | |  
-   \ \/ / | | \'_ \ / _ \ |  | | | |  
-    \  /  | | |_) |  __/ |__| |_| |_ 
-     \/   |_|_.__/ \___|\____/|_____|
+  __      __  _  _            _    _  _____ 
+  \ \    / / (_)| |          | |  | ||_   _|
+   \ \  / /   _ | |__    ___ | |  | |  | |  
+    \ \/ /   | || \'_ \  / _ \| |  | |  | |  
+     \  /    | || |_) ||  __/| |__| | _| |_ 
+      \/     |_||_.__/  \___| \____/ |_____|
         </>');
         $this->line(' <fg=gray>Teknovate Vibe UI Interactive Console</>');
         $this->newLine();
