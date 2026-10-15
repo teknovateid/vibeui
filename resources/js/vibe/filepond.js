@@ -866,6 +866,10 @@ export function vibeFilepond(config = {}) {
         extractErrorMessage(err) {
             if (!err) return null;
             if (typeof err === 'string') {
+                const trimmed = err.trim();
+                if (trimmed.startsWith('<') || trimmed.includes('<script') || trimmed.includes('<html')) {
+                    return 'Server mengembalikan respons HTML / error (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
+                }
                 try {
                     const parsed = JSON.parse(err);
                     return this.extractErrorMessage(parsed);
@@ -1528,7 +1532,13 @@ export function vibeFilepond(config = {}) {
                                     const extracted = self.extractErrorMessage(errJson);
                                     if (extracted) errMsg = extracted;
                                 } catch (e) {
-                                    if (xhrPresign.responseText) errMsg = xhrPresign.responseText;
+                                    const resText = (xhrPresign.responseText || '').trim();
+                                    const contentType = xhrPresign.getResponseHeader('Content-Type') || '';
+                                    if (contentType.includes('text/html') || resText.startsWith('<') || resText.includes('<script') || resText.includes('<html')) {
+                                        errMsg = `Endpoint presigned mengembalikan HTML / error HTTP ${xhrPresign.status} (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().`;
+                                    } else if (resText) {
+                                        errMsg = resText;
+                                    }
                                 }
                                 self.serverError = errMsg;
                                 error(errMsg);
