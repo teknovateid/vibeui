@@ -25,3 +25,21 @@ test('Blade renders vibe components with merged classes', function () {
         ->toContain('rounded-full')
         ->toContain('bg-blue-600');
 });
+
+test('TailwindMerge uses array cache and works even if application cache is set to database with non-existent database', function () {
+    config([
+        'cache.default' => 'database',
+        'database.default' => 'sqlite',
+        'database.connections.sqlite.database' => '/tmp/nonexistent-test-db-' . uniqid() . '.sqlite',
+    ]);
+
+    app()->forgetInstance('tailwind-merge');
+    app()->forgetInstance(\TailwindMerge\Contracts\TailwindMergeContract::class);
+
+    $merged = twMerge('px-2 py-1', 'px-4');
+    expect($merged)->toBe('py-1 px-4');
+
+    $html = Blade::render('<vibe:button class="px-6">Test</vibe:button>');
+    expect($html)->toContain('px-6');
+});
+
