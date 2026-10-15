@@ -199,8 +199,9 @@
     id="{{ $id }}"
     data-vibe-swipe
     x-data="{
-        id: '{{ $id }}',
-        type: '{{ $type }}',
+        id: @js($id),
+        type: @js($type),
+        value: @js($value),
         threshold: {{ (float) $threshold }},
         autoReset: @js($autoReset),
         disabled: {{ $isDisabled ? 'true' : 'false' }},
@@ -284,20 +285,17 @@
             }
 
             // Dispatch Alpine/DOM custom events
-            this.$dispatch('confirmed', { id: this.id, value: '{{ $value }}' });
-            this.$dispatch('swiped', { id: this.id, value: '{{ $value }}' });
+            this.$dispatch('confirmed', { id: this.id, value: this.value });
+            this.$dispatch('swiped', { id: this.id, value: this.value });
 
-            // Trigger hidden native button click (executes @click, wire:click, onclick)
+            // Trigger hidden native button click (executes @click, wire:click, onclick, and native form submit if type="submit")
             if (this.$refs.triggerBtn) {
                 this.$refs.triggerBtn.click();
-            }
-
-            // If submit button in form, trigger standard form submission
-            if (this.type === 'submit') {
+            } else if (this.type === 'submit') {
                 const form = this.$el.closest('form');
                 if (form) {
                     if (typeof form.requestSubmit === 'function') {
-                        form.requestSubmit(this.$refs.triggerBtn);
+                        form.requestSubmit();
                     } else {
                         form.submit();
                     }
@@ -333,7 +331,7 @@
         <input
             type="hidden"
             name="{{ $name }}"
-            :value="isConfirmed ? '{{ $value }}' : ''"
+            :value="isConfirmed ? value : ''"
             :disabled="!isConfirmed || disabled"
         />
     @endif
