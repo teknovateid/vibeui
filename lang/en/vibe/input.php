@@ -7,4 +7,6 @@ return [
     'show_password' => 'Show password',
     'hide_password' => 'Hide password',
     'digit_label' => 'Digit :digit of :total',
+    'increase_value' => 'Increase value',
+    'decrease_value' => 'Decrease value',
 ];
