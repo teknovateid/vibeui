@@ -40,6 +40,9 @@
                     <vibe:button href="{{ route('docs.input.currency') }}" variant="outline" size="xs">
                         &lt;vibe:input.currency&gt; &rarr;
                     </vibe:button>
+                    <vibe:button href="{{ route('docs.input.number') }}" variant="outline" size="xs">
+                        &lt;vibe:input.number&gt; &rarr;
+                    </vibe:button>
                     <vibe:button href="{{ route('docs.input.phone') }}" variant="outline" size="xs">
                         &lt;vibe:input.phone&gt; &rarr;
                     </vibe:button>

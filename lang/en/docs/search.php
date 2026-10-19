@@ -267,6 +267,10 @@ return [
             'title' => 'Input Currency',
             'subtitle' => 'Automatic real-time currency formatting and numerical input',
         ],
+        'input_number' => [
+            'title' => 'Input Number',
+            'subtitle' => 'Numeric input with automatic thousand separator, raw data control, and steppers',
+        ],
         'input_phone' => [
             'title' => 'Input Phone',
             'subtitle' => 'Telephone number input with automatic country code picker',

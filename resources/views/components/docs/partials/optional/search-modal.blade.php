@@ -166,8 +166,8 @@
         ],
         [
             'id' => 'menu-input-number',
-            'title' => __('docs/sidebar.nav.input_group.number') ?: 'Input Number',
-            'subtitle' => 'Input angka dengan format ribuan, desimal, dan opsi pengiriman data bersih',
+            'title' => __('docs/sidebar.nav.input_group.number') ?: __('docs/search.menu_items.input_number.title'),
+            'subtitle' => __('docs/search.menu_items.input_number.subtitle'),
             'category' => $catMenu,
             'section' => $navSections['forms'],
             'url' => route('docs.input.number'),

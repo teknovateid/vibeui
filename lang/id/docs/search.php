@@ -267,6 +267,10 @@ return [
             'title' => 'Input Currency',
             'subtitle' => 'Input format mata uang Rupiah dan angka terformat otomatis secara real-time',
         ],
+        'input_number' => [
+            'title' => 'Input Number',
+            'subtitle' => 'Input angka numerik dengan pemisah ribuan otomatis, kontrol data bersih, dan stepper',
+        ],
         'input_phone' => [
             'title' => 'Input Phone',
             'subtitle' => 'Input nomor telepon dengan pemilih kode negara otomatis',
