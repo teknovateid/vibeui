@@ -68,3 +68,34 @@ test('docs.input.number route loads with standard right-side TOC aside and contr
     $response->assertSee(route('docs.form.store'), false);
     $response->assertSee('form-test-submission-modal', false);
 });
+
+test('stepper buttons render localized aria-labels for id and en', function () {
+    app()->setLocale('id');
+    $idHtml = Blade::render('<vibe:input.number name="qty" stepper />');
+    expect($idHtml)
+        ->toContain('aria-label="Tambah nilai"')
+        ->toContain('aria-label="Kurang nilai"');
+
+    app()->setLocale('en');
+    $enHtml = Blade::render('<vibe:input.number name="qty" stepper />');
+    expect($enHtml)
+        ->toContain('aria-label="Increase value"')
+        ->toContain('aria-label="Decrease value"');
+});
+
+test('docs.input.number route renders correctly in both id and en locales', function () {
+    // Indonesian
+    app()->setLocale('id');
+    $idResponse = $this->get(route('docs.input.number'));
+    $idResponse->assertOk();
+    $idResponse->assertSee(__('docs/number.basic_usage.title', [], 'id'));
+    $idResponse->assertSee(__('docs/number.data_posting.clean_card_title', [], 'id'));
+
+    // English
+    app()->setLocale('en');
+    $enResponse = $this->get(route('docs.input.number'));
+    $enResponse->assertOk();
+    $enResponse->assertSee(__('docs/number.basic_usage.title', [], 'en'));
+    $enResponse->assertSee(__('docs/number.data_posting.clean_card_title', [], 'en'));
+});
+
