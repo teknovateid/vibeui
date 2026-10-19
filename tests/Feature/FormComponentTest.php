@@ -117,4 +117,28 @@ test('vibe:date-time safely falls back to default placeholder for different mode
     );
     expect($rangeHtml)->toContain('placeholder="Select date range"');
 });
+test('vibe:select.option safely handles double quotes in value without attribute corruption', function () {
+    $html = Blade::render(
+        '<vibe:select.option :value="$val">Monitor</vibe:select.option>',
+        ['val' => '27" 4K Monitor']
+    );
 
+    expect($html)
+        ->toContain(':aria-selected="isSelected($el.dataset.value)"')
+        ->toContain('data-value="27&quot; 4K Monitor"')
+        ->toContain("isSelected('27\u0022 4K Monitor')")
+        ->not->toContain("isSelected('27\\\"")
+        ->not->toContain("isSelected('27\\&quot;");
+});
+
+test('vibe:select.option safely handles single quotes in value', function () {
+    $html = Blade::render(
+        '<vibe:select.option :value="$val">Shoes</vibe:select.option>',
+        ['val' => "Men's Shoes"]
+    );
+
+    expect($html)
+        ->toContain(':aria-selected="isSelected($el.dataset.value)"')
+        ->toContain("isSelected('Men\u0027s Shoes')")
+        ->not->toContain("isSelected('Men\\'");
+});

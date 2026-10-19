@@ -27,24 +27,24 @@
     data-icon="{{ $icon ?? '' }}"
     data-description="{{ $description ?? '' }}"
     data-selected="{{ $isSelectedDefault ? 'true' : 'false' }}"
-    x-show="!search || $el.innerText.toLowerCase().includes(search.toLowerCase().trim()) || '{{ strtolower(addslashes($value)) }}'.includes(search.toLowerCase().trim())"
+    x-show="!search || $el.innerText.toLowerCase().includes(search.toLowerCase().trim()) || ($el.dataset.value || '').toLowerCase().includes(search.toLowerCase().trim())"
     @if(!$disabled)
         @click="selectOption($el)"
         @keydown.enter.prevent="selectOption($el)"
         @keydown.space.prevent="selectOption($el)"
     @endif
-    :aria-selected="isSelected('{{ addslashes($value) }}')"
+    :aria-selected="isSelected($el.dataset.value)"
     @class([
         'relative flex items-center gap-2.5 w-full px-3 sm:px-2.5 py-2.5 sm:py-1.5 text-sm sm:text-xs rounded-lg select-none transition-colors group focus:outline-none',
         'opacity-40 cursor-not-allowed pointer-events-none' => $disabled,
         'cursor-pointer focus:bg-muted focus:text-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset' => !$disabled,
     ])
     :class="{
-        'bg-muted text-foreground font-medium': !multiple && isSelected('{{ addslashes($value) }}'),
-        'font-medium text-foreground': multiple && isSelected('{{ addslashes($value) }}'),
-        'text-popover-foreground hover:bg-muted/60': !isSelected('{{ addslashes($value) }}') && !isOptionDisabled('{{ addslashes($value) }}', {{ $disabled ? 'true' : 'false' }}),
-        'hover:bg-muted/60': multiple && isSelected('{{ addslashes($value) }}') && !isOptionDisabled('{{ addslashes($value) }}', {{ $disabled ? 'true' : 'false' }}),
-        'opacity-40 cursor-not-allowed pointer-events-none': isOptionDisabled('{{ addslashes($value) }}', {{ $disabled ? 'true' : 'false' }})
+        'bg-muted text-foreground font-medium': !multiple && isSelected($el.dataset.value),
+        'font-medium text-foreground': multiple && isSelected($el.dataset.value),
+        'text-popover-foreground hover:bg-muted/60': !isSelected($el.dataset.value) && !isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }}),
+        'hover:bg-muted/60': multiple && isSelected($el.dataset.value) && !isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }}),
+        'opacity-40 cursor-not-allowed pointer-events-none': isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }})
     }"
 >
     
@@ -80,9 +80,9 @@
         <template x-if="multiple">
             <div 
                 class="size-4 rounded border flex items-center justify-center transition-colors"
-                :class="isSelected('{{ addslashes($value) }}') ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-background'"
+                :class="isSelected(@js((string) $value)) ? 'bg-primary border-primary text-primary-foreground' : 'border-input bg-background'"
             >
-                <svg x-show="isSelected('{{ addslashes($value) }}')" class="size-3 stroke-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <svg x-show="isSelected(@js((string) $value))" class="size-3 stroke-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 12.611 8.923 17.5 20 6.5" />
                 </svg>
             </div>
@@ -90,7 +90,7 @@
 
         {{-- Single-Select Checkmark --}}
         <template x-if="!multiple">
-            <div x-cloak x-show="isSelected('{{ addslashes($value) }}')" class="text-primary">
+            <div x-cloak x-show="isSelected(@js((string) $value))" class="text-primary">
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 12.611 8.923 17.5 20 6.5" />
                 </svg>
