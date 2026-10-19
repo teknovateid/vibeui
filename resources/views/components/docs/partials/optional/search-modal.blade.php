@@ -546,6 +546,16 @@
             'icon' => 'qrcode',
             'keywords' => 'display qrcode qr code generator svg barcode matriks scan authenticator pindai 2fa',
         ],
+        [
+            'id' => 'menu-display-image',
+            'title' => __('docs/sidebar.nav.display.image') ?: 'Image Lightbox',
+            'subtitle' => 'Komponen preview gambar fullscreen dengan galeri dan zoom',
+            'category' => $catMenu,
+            'section' => $navSections['display'],
+            'url' => route('docs.display.image'),
+            'icon' => 'image',
+            'keywords' => 'display image lightbox gallery galeri foto gambar fullscreen preview zoom next prev modal',
+        ],
 
         // Components - Extra
         [

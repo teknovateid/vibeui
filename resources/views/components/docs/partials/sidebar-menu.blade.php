@@ -500,6 +500,9 @@
             <vibe:nav.item href="{{ route('docs.display.qrcode') }}" :active="request()->routeIs('docs.display.qrcode')">
                 {{ __('docs/sidebar.nav.display.qrcode') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.display.image') }}" :active="request()->routeIs('docs.display.image')">
+                {{ __('docs/sidebar.nav.display.image') }}
+            </vibe:nav.item>
         </vibe:nav.group>
 
         <!-- Chart -->

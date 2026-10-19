@@ -61,6 +61,7 @@ return [
         'display' => [
             'group' => 'Display',
             'qrcode' => 'QR Code',
+            'image' => 'Image (Lightbox)',
         ],
         'chart' => 'Chart',
         'dashboard' => 'dashboard',
