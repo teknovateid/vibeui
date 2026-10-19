@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.0] - 2026-10-19
+
+### 🚀 Features
+- feat: add image lightbox component and documentation with alpinejs store and views (332484c)
+
+### ⚡ Performance & Refactoring
+- refactor: replace Alpine.js image component logic with high-performance event delegation engine (eae9d44)
+
+
 ## [0.5.7] - 2026-10-19
 
 ### 🚀 Features
