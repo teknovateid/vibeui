@@ -70,6 +70,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/', 'docs.input.index')->name('index');
         Route::view('/otp', 'docs.input.otp')->name('otp');
         Route::view('/currency', 'docs.input.currency')->name('currency');
+        Route::view('/number', 'docs.input.number')->name('number');
         Route::view('/phone', 'docs.input.phone')->name('phone');
         Route::view('/quantity', 'docs.input.quantity')->name('quantity');
         Route::view('/generate', 'docs.input.generate')->name('generate');

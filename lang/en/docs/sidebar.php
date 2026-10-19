@@ -20,6 +20,7 @@ return [
             'standard' => 'Standard Input',
             'otp' => 'Input OTP',
             'currency' => 'Input Currency',
+            'number' => 'Input Number',
             'phone' => 'Input Phone',
             'quantity' => 'Input Quantity',
             'generate' => 'Input Generate',

@@ -100,6 +100,9 @@
             <vibe:nav.item href="{{ route('docs.input.currency') }}" :active="request()->routeIs('docs.input.currency')">
                 {{ __('docs/sidebar.nav.input_group.currency') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.number') }}" :active="request()->routeIs('docs.input.number')">
+                {{ __('docs/sidebar.nav.input_group.number') }}
+            </vibe:nav.item>
             <vibe:nav.item href="{{ route('docs.input.phone') }}" :active="request()->routeIs('docs.input.phone')">
                 {{ __('docs/sidebar.nav.input_group.phone') }}
             </vibe:nav.item>

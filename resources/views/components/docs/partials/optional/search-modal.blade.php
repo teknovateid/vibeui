@@ -165,6 +165,16 @@
             'keywords' => 'input currency rupiah uang format nominal rupiah separator idr money angka harga',
         ],
         [
+            'id' => 'menu-input-number',
+            'title' => __('docs/sidebar.nav.input_group.number') ?: 'Input Number',
+            'subtitle' => 'Input angka dengan format ribuan, desimal, dan opsi pengiriman data bersih',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.input.number'),
+            'icon' => 'currency',
+            'keywords' => 'input number angka format ribuan thousand separator desimal integer raw keep-format stok kuantitas',
+        ],
+        [
             'id' => 'menu-input-phone',
             'title' => __('docs/sidebar.nav.input_group.phone') ?: __('docs/search.menu_items.input_phone.title'),
             'subtitle' => __('docs/search.menu_items.input_phone.subtitle'),
