@@ -23,7 +23,7 @@
     $hasBorderClass = in_array('border', $classesList, true) || in_array('bordered', $classesList, true);
 
     $isBordered = $bordered || $hasBorderClass;
-    $borderedCellStyles = $isBordered ? '[&_th]:border [&_th]:border-border [&_td]:border [&_td]:border-border border-collapse' : '';
+    $borderedCellStyles = $isBordered ? '[&_th]:border [&_th]:border-table-border [&_td]:border [&_td]:border-table-border border-collapse' : '';
 @endphp
 
 @if ($component)

@@ -27,7 +27,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
         ]);
 
         $this->setTableWrapperAttributes([
-            'class' => 'w-full overflow-x-auto rounded-xl border border-border bg-card text-card-foreground shadow-2xs',
+            'class' => 'w-full overflow-x-auto rounded-xl border border-table-border bg-card text-card-foreground shadow-2xs',
         ]);
 
         $this->setTableAttributes([
@@ -35,22 +35,22 @@ abstract class VibeDataTableComponent extends DataTableComponent
         ]);
 
         $this->setTheadAttributes([
-            'class' => 'border-b border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground',
+            'class' => 'border-b border-table-border bg-table-header text-xs font-semibold uppercase tracking-wider text-table-header-foreground',
         ]);
 
         $this->setTbodyAttributes([
-            'class' => 'divide-y divide-border text-sm',
+            'class' => 'divide-y divide-table-border text-sm',
         ]);
 
         $this->setTrAttributes(function ($row, $index) {
             return [
-                'class' => 'transition-colors hover:bg-muted/50 dark:hover:bg-muted/30',
+                'class' => 'transition-colors hover:bg-table-row-hover',
             ];
         });
 
         $this->setThAttributes(function ($column) {
             return [
-                'class' => 'py-3 px-4 font-semibold text-muted-foreground whitespace-nowrap',
+                'class' => 'py-3 px-4 font-semibold text-table-header-foreground whitespace-nowrap',
             ];
         });
 
@@ -69,7 +69,7 @@ abstract class VibeDataTableComponent extends DataTableComponent
 
         if ($status) {
             $this->setTableAttributes([
-                'class' => 'w-full text-left text-sm caption-bottom select-text border-collapse [&_th]:border [&_th]:border-border [&_td]:border [&_td]:border-border',
+                'class' => 'w-full text-left text-sm caption-bottom select-text border-collapse [&_th]:border [&_th]:border-table-border [&_td]:border [&_td]:border-table-border',
             ]);
         }
 
@@ -103,14 +103,14 @@ abstract class VibeDataTableComponent extends DataTableComponent
                         <div class="h-9 w-24 bg-muted-foreground/12 dark:bg-muted-foreground/20 rounded-lg border border-border/60"></div>
                     </div>
                 </div>
-                <div class="w-full overflow-hidden rounded-xl border border-border bg-card shadow-2xs">
-                    <div class="h-10 bg-muted-foreground/8 dark:bg-muted/40 border-b border-border flex items-center px-4 gap-6">
+                <div class="w-full overflow-hidden rounded-xl border border-table-border bg-card shadow-2xs">
+                    <div class="h-10 bg-table-header border-b border-table-border flex items-center px-4 gap-6">
                         <div class="h-3 w-16 bg-muted-foreground/25 dark:bg-muted-foreground/35 rounded"></div>
                         <div class="h-3 w-32 bg-muted-foreground/25 dark:bg-muted-foreground/35 rounded"></div>
                         <div class="h-3 w-40 bg-muted-foreground/25 dark:bg-muted-foreground/35 rounded"></div>
                         <div class="h-3 w-28 bg-muted-foreground/25 dark:bg-muted-foreground/35 rounded"></div>
                     </div>
-                    <div class="divide-y divide-border/60">
+                    <div class="divide-y divide-table-border">
                         <div class="h-12 flex items-center px-4 gap-6">
                             <div class="h-3.5 w-12 bg-muted-foreground/15 dark:bg-muted-foreground/20 rounded"></div>
                             <div class="h-3.5 w-28 bg-muted-foreground/15 dark:bg-muted-foreground/20 rounded"></div>
