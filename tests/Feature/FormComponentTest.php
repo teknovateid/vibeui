@@ -142,3 +142,35 @@ test('vibe:select.option safely handles single quotes in value', function () {
         ->toContain("isSelected('Men\u0027s Shoes')")
         ->not->toContain("isSelected('Men\\'");
 });
+
+test('vibe:select.option decodes html entities in label without double-encoding in data-label', function () {
+    $htmlFromSlot = Blade::render(
+        '<vibe:select.option value="cemilan">Cemilan &amp; Finger Food</vibe:select.option>'
+    );
+
+    expect($htmlFromSlot)
+        ->toContain('data-label="Cemilan &amp; Finger Food"')
+        ->not->toContain('&amp;amp;');
+
+    $htmlFromLabel = Blade::render(
+        '<vibe:select.option value="cemilan" label="Cemilan &amp; Finger Food" />'
+    );
+
+    expect($htmlFromLabel)
+        ->toContain('data-label="Cemilan &amp; Finger Food"')
+        ->not->toContain('&amp;amp;');
+});
+
+test('vibe:select decodes html entities in options and includes decodeHtml in alpine data', function () {
+    $html = Blade::render(
+        '<vibe:select name="category" :options="$options" multiple />',
+        ['options' => ['cemilan' => 'Cemilan & Finger Food', 'manual' => 'Manual Brew']]
+    );
+
+    expect($html)
+        ->toContain('decodeHtml(str)')
+        ->toContain('getOptionLabel(el)')
+        ->toContain('data-label="Cemilan &amp; Finger Food"')
+        ->not->toContain('&amp;amp;');
+});
+

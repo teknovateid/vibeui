@@ -14,6 +14,9 @@
     $slotContent = $slot->isNotEmpty() ? trim($slot) : null;
     $cleanSlot = $slotContent ? trim(preg_replace('/blaze_placeholder_\d+_?/', '', strip_tags($slotContent))) : null;
     $effectiveLabel = $label ?? ($cleanSlot ?: (string)$value);
+    if ($effectiveLabel !== null) {
+        $effectiveLabel = html_entity_decode((string) $effectiveLabel, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
     $isSelectedDefault = $selected || $attributes->has('selected');
 @endphp
 
