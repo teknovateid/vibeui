@@ -2,6 +2,20 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.7] - 2026-10-19
+
+### 🚀 Features
+- feat: add dynamic script loading and Alpine.js re-initialization logic for datatables (521b7e6)
+- feat: add input number documentation and search references (0a65ebd)
+- feat: add input number component with thousand separator and documentation (da5d5ae)
+
+### 🐛 Bug Fixes
+- fix: decode HTML entities in select component labels on both backend and frontend (c52e4da)
+
+### 🧰 Maintenance & Documentation
+- test: add localization tests for number input stepper aria-labels and documentation routes (bc77272)
+
+
 ## [0.5.6] - 2026-10-19
 
 ### ⚡ Performance & Refactoring
