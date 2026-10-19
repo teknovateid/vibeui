@@ -155,7 +155,8 @@
     if (is_array($value)) {
         if (isset($value['value']) || isset($value['id']) || isset($value['label'])) {
             $val = (string) ($value['value'] ?? $value['id'] ?? '');
-            $lbl = (string) ($value['label'] ?? $value['name'] ?? $value['title'] ?? $val);
+            $rawLbl = (string) ($value['label'] ?? $value['name'] ?? $value['title'] ?? $val);
+            $lbl = html_entity_decode($rawLbl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
             $initialItemsData[] = [
                 'value' => $val,
                 'label' => $lbl,
@@ -174,7 +175,8 @@
                 foreach ($value as $item) {
                     $itemArr = (array) $item;
                     $val = (string) ($itemArr['value'] ?? $itemArr['id'] ?? '');
-                    $lbl = (string) ($itemArr['label'] ?? $itemArr['name'] ?? $itemArr['title'] ?? $val);
+                    $rawLbl = (string) ($itemArr['label'] ?? $itemArr['name'] ?? $itemArr['title'] ?? $val);
+                    $lbl = html_entity_decode($rawLbl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
                     $extractedValues[] = $val;
                     $initialItemsData[] = [
                         'value' => $val,
@@ -189,6 +191,14 @@
                     $initialLabel = $multiple ? array_column($initialItemsData, 'label') : $initialItemsData[0]['label'];
                 }
             }
+        }
+    }
+
+    if ($initialLabel) {
+        if (is_array($initialLabel)) {
+            $initialLabel = array_map(fn($l) => html_entity_decode((string) $l, ENT_QUOTES | ENT_HTML5, 'UTF-8'), $initialLabel);
+        } else {
+            $initialLabel = html_entity_decode((string) $initialLabel, ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }
     }
 @endphp
@@ -244,6 +254,13 @@
             return 'bg-muted/80 text-foreground border-border/70 hover:bg-muted';
         },
 
+        decodeHtml(str) {
+            if (!str || typeof str !== 'string' || !str.includes('&')) return str || '';
+            let txt = document.createElement('textarea');
+            txt.innerHTML = str;
+            return txt.value;
+        },
+
         init() {
             if (this.multiple) {
                 let initialVals = Array.isArray(this.value) ? this.value : (this.value ? [this.value] : []);
@@ -255,7 +272,7 @@
                     let icons = Array.isArray(this.selectedIcon) ? this.selectedIcon : (this.selectedIcon ? [this.selectedIcon] : []);
                     this.selectedItems = this.value.map((v, i) => ({
                         value: v,
-                        label: labels[i] || v,
+                        label: this.decodeHtml(labels[i] || v),
                         avatar: avatars[i] || '',
                         icon: icons[i] || '',
                         description: ''
@@ -264,7 +281,7 @@
             } else {
                 this.value = this.value !== null && this.value !== undefined ? String(this.value) : '';
                 if (!this.selectedLabel && this.selectedItems.length > 0) {
-                    this.selectedLabel = this.selectedItems[0].label;
+                    this.selectedLabel = this.decodeHtml(this.selectedItems[0].label);
                     this.selectedAvatar = this.selectedItems[0].avatar || '';
                     this.selectedIcon = this.selectedIcon || this.selectedItems[0].icon || '';
                 }
@@ -343,7 +360,7 @@
 
                 this.items = rawItems.map(item => ({
                     value: String(item.value ?? item.id ?? ''),
-                    label: String(item.label ?? item.name ?? item.title ?? item.value ?? ''),
+                    label: this.decodeHtml(String(item.label ?? item.name ?? item.title ?? item.value ?? '')),
                     description: item.description ?? item.desc ?? null,
                     avatar: item.avatar ?? (item.icon && (String(item.icon).startsWith('http') || String(item.icon).startsWith('/') || String(item.icon).startsWith('data:')) ? item.icon : null),
                     icon: item.icon ?? item.avatar ?? null,
@@ -421,7 +438,7 @@
                     this.value.push(strVal);
                     this.selectedItems.push({
                         value: strVal,
-                        label: item.label,
+                        label: this.decodeHtml(item.label),
                         avatar: item.avatar || '',
                         icon: item.icon || '',
                         description: item.description || ''
@@ -432,7 +449,7 @@
             }
 
             this.value = String(item.value);
-            this.selectedLabel = item.label;
+            this.selectedLabel = this.decodeHtml(item.label);
             this.selectedAvatar = item.avatar || '';
             this.selectedIcon = !item.avatar && item.icon ? item.icon : '';
             this.close();

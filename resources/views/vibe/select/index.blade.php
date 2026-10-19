@@ -200,6 +200,19 @@
         return 'bg-muted/80 text-foreground border-border/70 hover:bg-muted';
     },
 
+    decodeHtml(str) {
+        if (!str || typeof str !== 'string' || !str.includes('&')) return str || '';
+        let txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+    },
+
+    getOptionLabel(el) {
+        if (!el) return '';
+        let lbl = el.getAttribute('data-label') || el.innerText.trim();
+        return this.decodeHtml(lbl);
+    },
+
     init() {
         this.$nextTick(() => {
             let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
@@ -248,7 +261,7 @@
     selectOption(el) {
         if (!el) return;
         let val = el.getAttribute('data-value');
-        let lbl = el.getAttribute('data-label') || el.innerText.trim();
+        let lbl = this.getOptionLabel(el);
         let av = el.getAttribute('data-avatar') || '';
         let ic = el.getAttribute('data-icon') || '';
         let desc = el.getAttribute('data-description') || '';
@@ -375,7 +388,7 @@
                 if (el) {
                     items.push({
                         value: val,
-                        label: el.getAttribute('data-label') || el.innerText.trim(),
+                        label: this.getOptionLabel(el),
                         avatar: el.getAttribute('data-avatar') || '',
                         icon: el.getAttribute('data-icon') || '',
                         description: el.getAttribute('data-description') || ''
@@ -383,7 +396,7 @@
                 } else {
                     items.push({
                         value: val,
-                        label: String(val),
+                        label: this.decodeHtml(String(val)),
                         avatar: '',
                         icon: '',
                         description: ''
@@ -403,7 +416,7 @@
         }
         let el = this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelector(`[data-value='${this.value}']`) : null;
         if (el) {
-            this.selectedLabel = el.getAttribute('data-label') || el.innerText.trim();
+            this.selectedLabel = this.getOptionLabel(el);
             this.selectedAvatar = el.getAttribute('data-avatar') || '';
             this.selectedIcon = el.getAttribute('data-icon') || '';
             this.selectedDescription = el.getAttribute('data-description') || '';
@@ -440,7 +453,7 @@
         }
 
         this.value = val;
-        this.selectedLabel = lbl;
+        this.selectedLabel = this.decodeHtml(lbl);
         this.selectedAvatar = av || '';
         this.selectedIcon = ic || '';
         this.selectedDescription = desc || '';
@@ -467,7 +480,7 @@
         let anyVisible = options.some(el => {
             if (el.style.display === 'none') return false;
             let val = (el.getAttribute('data-value') || '').toLowerCase();
-            let lbl = (el.getAttribute('data-label') || el.innerText || '').toLowerCase();
+            let lbl = (this.getOptionLabel(el) || '').toLowerCase();
             return val.includes(q) || lbl.includes(q);
         });
         this.hasVisibleOptions = anyVisible;
