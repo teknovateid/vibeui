@@ -50,12 +50,12 @@
     };
 
     $sizeClasses = match ($size) {
-        'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs rounded-md pl-2.5 {$prClass} gap-1",
-        'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs rounded-md pl-3 {$prClass} gap-1.5",
-        'md' => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
-        'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm rounded-lg pl-4 {$prClass} gap-2",
-        'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base rounded-xl pl-4.5 {$prClass} gap-2.5",
-        default => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
+        'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . " text-xs rounded-md pl-2.5 {$prClass} gap-1",
+        'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . " text-xs rounded-md pl-3 {$prClass} gap-1.5",
+        'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
+        'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . " text-sm rounded-lg pl-4 {$prClass} gap-2",
+        'xl' => ($multiple ? 'min-h-11 py-1.5' : 'h-11') . " text-base rounded-xl pl-4.5 {$prClass} gap-2.5",
+        default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
     };
 
     if ($variant === 'flush') {
@@ -68,12 +68,12 @@
             default => $clearable ? 'pr-12' : 'pr-7',
         };
         $sizeClasses = match ($size) {
-            'xs' => ($multiple ? 'min-h-7.5 py-1' : 'h-7') . " text-xs px-0 rounded-none {$flushPr}",
-            'sm' => ($multiple ? 'min-h-8.5 py-1' : 'h-8') . " text-xs px-0 rounded-none {$flushPr}",
-            'md' => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
-            'lg' => ($multiple ? 'min-h-11 py-2' : 'h-10') . " text-sm px-0 rounded-none {$flushPr}",
-            'xl' => ($multiple ? 'min-h-12 py-2' : 'h-11') . " text-base px-0 rounded-none {$flushPr}",
-            default => ($multiple ? 'min-h-11 sm:min-h-10 py-1.5' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
+            'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . " text-xs px-0 rounded-none {$flushPr}",
+            'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . " text-xs px-0 rounded-none {$flushPr}",
+            'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
+            'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . " text-sm px-0 rounded-none {$flushPr}",
+            'xl' => ($multiple ? 'min-h-11 py-1.5' : 'h-11') . " text-base px-0 rounded-none {$flushPr}",
+            default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
         };
     }
 
@@ -594,7 +594,7 @@
                 @keydown.up.stop.prevent="if (!open) { toggle(); } else { focusPrevious($event); }" @endif {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
             {{-- Content Display --}}
             @if ($multiple)
-                <div class="flex flex-wrap items-center gap-1.5 py-0.5 flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 py-0.5 sm:py-0 flex-1 min-w-0">
                     <template x-if="selectedItems.length === 0">
                         <span class="text-muted-foreground truncate">{{ $placeholder }}</span>
                     </template>

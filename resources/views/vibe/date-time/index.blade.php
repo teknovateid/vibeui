@@ -97,14 +97,14 @@
 
     $placeholders = $i18n['placeholders'] ?? [];
     $defaultPlaceholder = match($resolvedMode) {
-        'time' => $placeholders['time'],
-        'time-range' => $placeholders['time_range'],
-        'datetime' => $placeholders['datetime'],
-        'range' => $placeholders['range'],
-        'datetime-range' => $placeholders['datetime_range'],
-        'multiple' => $placeholders['multiple'],
-        'month' => $placeholders['month'],
-        default => $placeholders['date'],
+        'time' => $placeholders['time'] ?? 'Select time',
+        'time-range' => $placeholders['time_range'] ?? 'Select time range',
+        'datetime' => $placeholders['datetime'] ?? 'Select date & time',
+        'range' => $placeholders['range'] ?? 'Select date range',
+        'datetime-range' => $placeholders['datetime_range'] ?? 'Select date & time range',
+        'multiple' => $placeholders['multiple'] ?? 'Select multiple dates',
+        'month' => $placeholders['month'] ?? 'Select month & year',
+        default => $placeholders['date'] ?? 'Select date',
     };
     $inputPlaceholder = $placeholder ?? $defaultPlaceholder;
     $startPlaceholder = $startPlaceholder ?? ($placeholders['start'] ?? 'Start Date');

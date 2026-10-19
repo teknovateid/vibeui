@@ -79,3 +79,42 @@ test('vibe:select safely handles double quotes in placeholder without attribute 
         ->not->toContain('Pilih \"Kategori\"');
 });
 
+test('vibe:select multiple uses min-h-11 sm:min-h-9 matching vibe:input height', function () {
+    $html = Blade::render(
+        '<vibe:select name="categories" multiple><vibe:select.option value="1">Opt 1</vibe:select.option></vibe:select>'
+    );
+
+    expect($html)
+        ->toContain('min-h-11 sm:min-h-9 py-1.5 sm:py-1')
+        ->not->toContain('sm:min-h-10');
+});
+
+test('vibe:select single uses h-11 sm:h-9 matching vibe:input height', function () {
+    $html = Blade::render(
+        '<vibe:select name="category"><vibe:select.option value="1">Opt 1</vibe:select.option></vibe:select>'
+    );
+
+    expect($html)
+        ->toContain('h-11 sm:h-9');
+});
+test('vibe:date-time safely falls back to default placeholders when translations/placeholders are missing', function () {
+    $html = Blade::render(
+        '<vibe:date-time name="published_at" locale="xx-custom" />'
+    );
+
+    expect($html)
+        ->toContain('placeholder="Select date"');
+});
+
+test('vibe:date-time safely falls back to default placeholder for different modes with missing translations', function () {
+    $timeHtml = Blade::render(
+        '<vibe:date-time name="start_time" mode="time" locale="xx-custom" />'
+    );
+    expect($timeHtml)->toContain('placeholder="Select time"');
+
+    $rangeHtml = Blade::render(
+        '<vibe:date-time name="date_range" mode="range" locale="xx-custom" />'
+    );
+    expect($rangeHtml)->toContain('placeholder="Select date range"');
+});
+
