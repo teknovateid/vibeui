@@ -1,14 +1,13 @@
 /**
- * Vibe UI — Display Image Lightbox Manager & Alpine Store
+ * Vibe UI — Display Image Lightbox Manager (Event Delegation Engine)
+ * High Performance: 0 Alpine instances per thumbnail, O(1) page load, Datatable-ready (10.000+ items).
  */
 
 const LightboxStoreDefinition = {
     isOpen: false,
-    currentGroup: 'default',
     currentIndex: 0,
-    groups: {},
+    items: [],
     isStandalone: false,
-    standaloneItem: null,
     zoom: 1,
     panX: 0,
     panY: 0,
@@ -19,19 +18,11 @@ const LightboxStoreDefinition = {
     touchStartY: 0,
 
     get currentItem() {
-        const list = this.items;
-        return (list && list[this.currentIndex]) ? list[this.currentIndex] : { src: '', alt: '', caption: '' };
-    },
-
-    get items() {
-        if (this.isStandalone) {
-            return this.standaloneItem ? [this.standaloneItem] : [];
-        }
-        return (this.groups && this.groups[this.currentGroup]) ? this.groups[this.currentGroup] : [];
+        return (this.items && this.items[this.currentIndex]) ? this.items[this.currentIndex] : { src: '', alt: '', caption: '' };
     },
 
     get total() {
-        return this.items.length;
+        return this.items ? this.items.length : 0;
     },
 
     get hasNext() {
@@ -42,64 +33,20 @@ const LightboxStoreDefinition = {
         return !this.isStandalone && this.total > 1;
     },
 
-    register(group, item) {
-        const grp = group || 'default';
-        if (!this.groups[grp]) {
-            this.groups[grp] = [];
-        }
-        const existingIndex = this.groups[grp].findIndex(i => (item.id && i.id === item.id) || i.src === item.src);
-        if (existingIndex >= 0) {
-            this.groups[grp][existingIndex] = { ...this.groups[grp][existingIndex], ...item };
-        } else {
-            this.groups[grp].push(item);
-        }
-    },
-
-    unregister(group, id) {
-        const grp = group || 'default';
-        if (this.groups[grp]) {
-            this.groups[grp] = this.groups[grp].filter(i => i.id !== id);
-        }
-    },
-
-    open(group, srcOrIndex, options = {}) {
+    openWithItems(items, initialIndex = 0) {
         this.resetZoom();
+        this.items = items || [];
+        this.currentIndex = Math.max(0, Math.min(initialIndex, this.items.length - 1));
+        this.isStandalone = this.items.length <= 1;
+        this.isOpen = true;
+        document.body.style.overflow = 'hidden';
+    },
 
-        if (options.standalone) {
-            this.isStandalone = true;
-            this.standaloneItem = {
-                src: typeof srcOrIndex === 'string' ? srcOrIndex : '',
-                alt: options.alt || '',
-                caption: options.caption || ''
-            };
-            this.currentGroup = null;
-            this.currentIndex = 0;
-        } else {
-            this.isStandalone = false;
-            const grp = group || 'default';
-            this.currentGroup = grp;
-            if (!this.groups[grp]) {
-                this.groups[grp] = [];
-            }
-            const list = this.groups[grp];
-
-            if (typeof srcOrIndex === 'string') {
-                let idx = list.findIndex(i => i.src === srcOrIndex);
-                if (idx === -1) {
-                    list.push({
-                        id: 'item-' + Math.random().toString(36).substring(2, 9),
-                        src: srcOrIndex,
-                        alt: options.alt || '',
-                        caption: options.caption || ''
-                    });
-                    idx = list.length - 1;
-                }
-                this.currentIndex = idx;
-            } else if (typeof srcOrIndex === 'number') {
-                this.currentIndex = Math.max(0, Math.min(srcOrIndex, Math.max(0, list.length - 1)));
-            }
-        }
-
+    openStandalone(item) {
+        this.resetZoom();
+        this.items = [item];
+        this.currentIndex = 0;
+        this.isStandalone = true;
         this.isOpen = true;
         document.body.style.overflow = 'hidden';
     },
@@ -240,21 +187,93 @@ if (!tryInitStore()) {
     }, 50);
 }
 
-// Global Keyboard Handler
-window.addEventListener('keydown', (e) => {
-    const store = (window.Alpine && window.Alpine.store) ? window.Alpine.store('vibeImageLightbox') : window.VibeImageLightbox;
-    if (!store || !store.isOpen) return;
+function getStore() {
+    return (window.Alpine && window.Alpine.store) ? window.Alpine.store('vibeImageLightbox') : window.VibeImageLightbox;
+}
 
-    if (e.key === 'Escape') {
-        store.close();
-    } else if (e.key === 'ArrowRight') {
-        store.next();
-    } else if (e.key === 'ArrowLeft') {
-        store.prev();
-    } else if (e.key === '+' || e.key === '=') {
-        store.zoomIn();
-    } else if (e.key === '-') {
-        store.zoomOut();
+// Global Delegated Click Listener — Handles any number of images with 0 overhead
+document.addEventListener('click', (e) => {
+    // 1. Direct <vibe:display.image>
+    let trigger = e.target.closest('[data-vibe-image]');
+    let isGallery = false;
+    let galleryWrapper = null;
+
+    // 2. Regular <img> inside <vibe:display.image-gallery> wrapper
+    if (!trigger) {
+        if (e.target.tagName === 'IMG' && !e.target.hasAttribute('data-vibe-ignore')) {
+            galleryWrapper = e.target.closest('[data-vibe-gallery]');
+            if (galleryWrapper) {
+                trigger = e.target;
+                isGallery = true;
+            }
+        }
+    }
+
+    if (!trigger) return;
+
+    e.preventDefault();
+    const store = getStore();
+    if (!store) return;
+
+    if (isGallery && galleryWrapper) {
+        const allImgs = Array.from(galleryWrapper.querySelectorAll('img:not([data-vibe-ignore])'));
+        const items = allImgs.map(img => ({
+            src: img.getAttribute('src') || '',
+            alt: img.getAttribute('alt') || '',
+            caption: img.getAttribute('title') || img.getAttribute('alt') || ''
+        }));
+        const curIndex = allImgs.indexOf(trigger);
+        store.openWithItems(items, curIndex);
+    } else {
+        const src = trigger.dataset.src || trigger.getAttribute('src') || '';
+        const alt = trigger.dataset.alt || trigger.getAttribute('alt') || '';
+        const caption = trigger.dataset.caption || '';
+        const group = trigger.dataset.group || 'default';
+        const isStandalone = trigger.hasAttribute('data-standalone');
+
+        if (isStandalone) {
+            store.openStandalone({ src, alt, caption });
+        } else {
+            // Collect all visible images sharing the same group on-demand!
+            const groupElements = Array.from(document.querySelectorAll(`[data-vibe-image][data-group="${group}"]`));
+            const items = groupElements.map(el => ({
+                src: el.dataset.src || el.getAttribute('src') || '',
+                alt: el.dataset.alt || el.getAttribute('alt') || '',
+                caption: el.dataset.caption || ''
+            }));
+            const curIndex = groupElements.indexOf(trigger);
+            store.openWithItems(items, curIndex >= 0 ? curIndex : 0);
+        }
+    }
+});
+
+// Global Keyboard Accessibility Handler (Enter / Space on focused thumbnail)
+document.addEventListener('keydown', (e) => {
+    const store = getStore();
+
+    // If Lightbox is open, handle lightbox keyboard navigation
+    if (store && store.isOpen) {
+        if (e.key === 'Escape') {
+            store.close();
+        } else if (e.key === 'ArrowRight') {
+            store.next();
+        } else if (e.key === 'ArrowLeft') {
+            store.prev();
+        } else if (e.key === '+' || e.key === '=') {
+            store.zoomIn();
+        } else if (e.key === '-') {
+            store.zoomOut();
+        }
+        return;
+    }
+
+    // Enter / Space to open focused thumbnail
+    if (e.key === 'Enter' || e.key === ' ') {
+        const trigger = document.activeElement?.closest('[data-vibe-image]');
+        if (trigger) {
+            e.preventDefault();
+            trigger.click();
+        }
     }
 });
 
