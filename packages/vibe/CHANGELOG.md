@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.5.6] - 2026-10-19
+
+### ⚡ Performance & Refactoring
+- refactor: update CI workflow branches to development, remove Flux credentials, and disable Vite in test case (8235a09)
+- refactor: update table components and tests to use dedicated table design tokens (62327b4)
+- refactor: use dataset values and blade json directive in select option component for safe quote handling (2c2f94c)
+- refactor: adjust select component sizing classes and add fallback placeholders for date-time component (993624d)
+
+
 ## [0.5.5] - 2026-10-15
 
 ### 🐛 Bug Fixes
