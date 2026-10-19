@@ -35,3 +35,46 @@ test('vibe:table.footer renders with table-footer and table-border tokens', func
         ->toContain('border-table-border')
         ->toContain('text-table-header-foreground');
 });
+
+test('vibe:table.rows renders with divide-table-border token', function () {
+    $rendered = Blade::render('<vibe:table.rows><tr><td>Data</td></tr></vibe:table.rows>');
+
+    expect($rendered)
+        ->toContain('divide-table-border')
+        ->not->toContain('divide-border/60');
+});
+
+test('VibeDataTableComponent sets table appearance tokens by default', function () {
+    $component = new class extends \Teknovate\VibeUi\DataTable\VibeDataTableComponent {
+        public function columns(): array { return []; }
+        public function builder(): \Illuminate\Database\Eloquent\Builder {
+            return \App\Models\User::query();
+        }
+    };
+
+    $component->configure();
+
+    expect($component->getTableWrapperAttributes()['class'])
+        ->toContain('border-table-border')
+        ->not->toContain('border-border');
+
+    expect($component->getTheadAttributes()['class'])
+        ->toContain('border-table-border')
+        ->toContain('bg-table-header')
+        ->toContain('text-table-header-foreground')
+        ->not->toContain('border-border');
+
+    expect($component->getTbodyAttributes()['class'])
+        ->toContain('divide-table-border')
+        ->not->toContain('divide-border');
+
+    $trAttrs = $component->getTrAttributes(new \App\Models\User(), 0);
+    expect($trAttrs['class'])
+        ->toContain('hover:bg-table-row-hover')
+        ->not->toContain('hover:bg-muted/50');
+
+    $thAttrs = $component->getThAttributes(new \Rappasoft\LaravelLivewireTables\Views\Column('Test'));
+    expect($thAttrs['class'])
+        ->toContain('text-table-header-foreground');
+});
+

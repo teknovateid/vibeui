@@ -2,12 +2,12 @@
 
 <tr
     wire:key="{{ $tableName }}-secondary-header"
-    class="border-b border-border bg-muted/20"
+    class="border-b border-table-border bg-muted/20"
 >
     <x-livewire-tables::table.td.plain x-cloak x-show="currentlyReorderingStatus" :displayMinimisedOnReorder="true" wire:key="{{ $tableName }}-header-test" />
 
     @if ($this->showBulkActionsSections)
-        <td class="p-2 align-middle border-b border-border text-center" wire:key="{{ $tableName }}-header-hasBulkActions"></td>
+        <td class="p-2 align-middle border-b border-table-border text-center" wire:key="{{ $tableName }}-header-hasBulkActions"></td>
     @endif
 
     @if ($this->collapsingColumnsAreEnabled() && $this->hasCollapsedColumns())
@@ -15,7 +15,7 @@
     @endif
 
     @foreach($this->selectedVisibleColumns as $colIndex => $column)
-        <td wire:key="{{ $tableName }}-secondary-header-show-{{ $column->getSlug() }}" class="p-2 align-middle border-b border-border">
+        <td wire:key="{{ $tableName }}-secondary-header-show-{{ $column->getSlug() }}" class="p-2 align-middle border-b border-table-border">
             @if($column->hasSecondaryHeader() && $column->hasSecondaryHeaderCallback())
                 @if($column->secondaryHeaderCallbackIsFilter())
                     {!! $column->getSecondaryHeaderFilter($column->getSecondaryHeaderCallback(), $this->getFilterGenericData) !!}    

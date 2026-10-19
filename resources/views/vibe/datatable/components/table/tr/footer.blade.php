@@ -2,7 +2,7 @@
 
 <tr
     wire:key="{{ $tableName . '-footer' }}"
-    class="border-t border-border bg-muted/40 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+    class="border-t border-table-border bg-table-footer text-xs font-semibold uppercase tracking-wider text-table-header-foreground"
 >
     @if ($this->showBulkActionsSections)
         <td class="py-3 px-4" wire:key="{{ $tableName . '-footer-bulkactions' }}"></td>
