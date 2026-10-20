@@ -291,6 +291,10 @@ return [
             'title' => 'Display QR Code',
             'subtitle' => 'Generator SVG QR Code vektor standar ISO/IEC 18004 tanpa dependensi pihak ketiga',
         ],
+        'display_image' => [
+            'title' => 'Display Image Lightbox',
+            'subtitle' => 'Komponen preview gambar interaktif dengan modal fullscreen lightbox dan kontrol navigasi',
+        ],
         'settings_appearance' => [
             'title' => 'Pengaturan Tampilan',
             'subtitle' => 'Kustomisasi tema warna, palet, sidebar, dan header studio',

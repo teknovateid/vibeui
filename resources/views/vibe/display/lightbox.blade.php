@@ -17,7 +17,7 @@
     class="fixed inset-0 z-9999 flex flex-col justify-between bg-black/95 backdrop-blur-md select-none touch-none text-white overflow-hidden"
     role="dialog"
     aria-modal="true"
-    aria-label="{{ __('vibe/image.lightbox_title') ?? 'Pratinjau Gambar' }}"
+    aria-label="{{ __('vibe/image.lightbox_title') }}"
 >
     {{-- Top Bar (Header Controls) --}}
     <div class="relative z-30 flex items-center justify-between px-4 py-3 sm:px-6 bg-linear-to-b from-black/80 via-black/40 to-transparent">
@@ -42,8 +42,8 @@
                 @click="store && store.zoomOut()"
                 :disabled="!store || store.zoom <= 1"
                 class="size-8 sm:size-9 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:pointer-events-none text-neutral-200 hover:text-white transition-all flex items-center justify-center cursor-pointer focus:outline-none"
-                title="Perkecil zoom (-)"
-                aria-label="Zoom out"
+                title="{{ __('vibe/image.zoom_out') }}"
+                aria-label="{{ __('vibe/image.zoom_out_aria') }}"
             >
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"/>
@@ -57,8 +57,8 @@
                 type="button"
                 @click="store && store.resetZoom()"
                 class="px-2.5 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[11px] sm:text-xs font-mono font-medium text-neutral-200 hover:text-white transition-all cursor-pointer focus:outline-none min-w-12 text-center"
-                title="Reset zoom ke 100%"
-                aria-label="Reset zoom"
+                title="{{ __('vibe/image.reset_zoom') }}"
+                aria-label="{{ __('vibe/image.reset_zoom_aria') }}"
             >
                 <span x-text="store ? Math.round(store.zoom * 100) + '%' : '100%'">100%</span>
             </button>
@@ -69,8 +69,8 @@
                 @click="store && store.zoomIn()"
                 :disabled="!store || store.zoom >= 3"
                 class="size-8 sm:size-9 rounded-full bg-white/10 hover:bg-white/20 disabled:opacity-30 disabled:pointer-events-none text-neutral-200 hover:text-white transition-all flex items-center justify-center cursor-pointer focus:outline-none"
-                title="Perbesar zoom (+)"
-                aria-label="Zoom in"
+                title="{{ __('vibe/image.zoom_in') }}"
+                aria-label="{{ __('vibe/image.zoom_in_aria') }}"
             >
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="11" cy="11" r="8"/>
@@ -87,8 +87,8 @@
                 type="button"
                 @click="store && store.download()"
                 class="size-8 sm:size-9 rounded-full bg-white/10 hover:bg-white/20 text-neutral-200 hover:text-white transition-all flex items-center justify-center cursor-pointer focus:outline-none"
-                title="Unduh gambar"
-                aria-label="Download image"
+                title="{{ __('vibe/image.download') }}"
+                aria-label="{{ __('vibe/image.download_aria') }}"
             >
                 <svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -102,8 +102,8 @@
                 type="button"
                 @click="store && store.close()"
                 class="size-8 sm:size-9 rounded-full bg-white/10 hover:bg-white/25 text-neutral-200 hover:text-white transition-all flex items-center justify-center cursor-pointer focus:outline-none ml-1 group"
-                title="Tutup (Esc)"
-                aria-label="Close lightbox"
+                title="{{ __('vibe/image.close') }}"
+                aria-label="{{ __('vibe/image.close_aria') }}"
             >
                 <svg class="size-4 group-hover:rotate-90 transition-transform duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 6 6 18M6 6l12 12"/>
@@ -125,8 +125,8 @@
                 type="button"
                 @click.stop="store.prev()"
                 class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 size-11 sm:size-12 rounded-full bg-black/40 hover:bg-black/70 active:scale-95 text-white/80 hover:text-white backdrop-blur-md border border-white/15 flex items-center justify-center transition-all cursor-pointer shadow-lg focus:outline-none"
-                title="Gambar sebelumnya (Panah Kiri)"
-                aria-label="Previous image"
+                title="{{ __('vibe/image.prev') }}"
+                aria-label="{{ __('vibe/image.prev_aria') }}"
             >
                 <svg class="size-6 -ml-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"/>
@@ -156,8 +156,8 @@
                 type="button"
                 @click.stop="store.next()"
                 class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 size-11 sm:size-12 rounded-full bg-black/40 hover:bg-black/70 active:scale-95 text-white/80 hover:text-white backdrop-blur-md border border-white/15 flex items-center justify-center transition-all cursor-pointer shadow-lg focus:outline-none"
-                title="Gambar selanjutnya (Panah Kanan)"
-                aria-label="Next image"
+                title="{{ __('vibe/image.next') }}"
+                aria-label="{{ __('vibe/image.next_aria') }}"
             >
                 <svg class="size-6 -mr-0.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"/>

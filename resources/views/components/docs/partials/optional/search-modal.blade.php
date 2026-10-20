@@ -548,8 +548,8 @@
         ],
         [
             'id' => 'menu-display-image',
-            'title' => __('docs/sidebar.nav.display.image') ?: 'Image Lightbox',
-            'subtitle' => 'Komponen preview gambar fullscreen dengan galeri dan zoom',
+            'title' => __('docs/sidebar.nav.display.image') ?: __('docs/search.menu_items.display_image.title'),
+            'subtitle' => __('docs/search.menu_items.display_image.subtitle'),
             'category' => $catMenu,
             'section' => $navSections['display'],
             'url' => route('docs.display.image'),

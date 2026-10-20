@@ -15,7 +15,7 @@
     <vibe:display.lightbox />
 @endPushOnce
 
-<figure id="{{ $id }}" data-vibe-image data-src="{{ $src }}" data-alt="{{ $alt }}" data-caption="{{ $caption }}" data-group="{{ $effectiveGroup }}" @if ($standalone) data-standalone @endif tabindex="0" role="button" aria-label="{{ $alt ?: 'Perbesar gambar' }}" {{ $attributes->twMerge(['class' => 'relative inline-flex flex-col group/vibe-img cursor-pointer select-none rounded-xl overflow-hidden bg-muted/20']) }}>
+<figure id="{{ $id }}" data-vibe-image data-src="{{ $src }}" data-alt="{{ $alt }}" data-caption="{{ $caption }}" data-group="{{ $effectiveGroup }}" @if ($standalone) data-standalone @endif tabindex="0" role="button" aria-label="{{ $alt ?: __('vibe/image.zoom_image') }}" {{ $attributes->twMerge(['class' => 'relative inline-flex flex-col group/vibe-img cursor-pointer select-none rounded-xl overflow-hidden bg-muted/20']) }}>
     {{-- Image Container (Holds Image + Zoom Overlay) --}}
     <div class="relative w-full h-full flex-1 overflow-hidden rounded-[inherit]">
         {{-- Main Image with Native Lazy Loading --}}
