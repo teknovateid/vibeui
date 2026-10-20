@@ -618,6 +618,38 @@ export function vibeForm(config = {}) {
                 }
             }
 
+            // Sync single checkboxes & switches (HTML FormData omits unchecked checkboxes)
+            const singleCheckboxes = targetForm.querySelectorAll('input[type="checkbox"]:not([name$="[]"])');
+            singleCheckboxes.forEach(cb => {
+                const name = cb.getAttribute('name');
+                if (!name || name.startsWith('_')) return;
+                dataObj[name] = cb.checked ? (cb.value || '1') : false;
+            });
+
+            // Sync array checkboxes (name ending with []) when none are checked
+            const arrayCheckboxes = targetForm.querySelectorAll('input[type="checkbox"][name$="[]"]');
+            const seenArrayNames = new Set();
+            arrayCheckboxes.forEach(cb => {
+                const rawName = cb.getAttribute('name');
+                if (!rawName || rawName.startsWith('_')) return;
+                seenArrayNames.add(rawName.slice(0, -2));
+            });
+            seenArrayNames.forEach(cleanName => {
+                if (!dataObj[cleanName]) {
+                    dataObj[cleanName] = [];
+                }
+            });
+
+            // Sync radio groups when none are selected
+            const allRadios = targetForm.querySelectorAll('input[type="radio"]');
+            allRadios.forEach(r => {
+                const name = r.getAttribute('name');
+                if (!name || name.startsWith('_')) return;
+                if (!dataObj.hasOwnProperty(name)) {
+                    dataObj[name] = null;
+                }
+            });
+
             // Sync vibe:select components state directly
             const selectEls = targetForm.querySelectorAll('[data-vibe-select]');
             selectEls.forEach(sel => {
@@ -738,25 +770,49 @@ export function vibeForm(config = {}) {
                             return;
                         }
 
-                        // 3. Radio inputs
-                        const radio = targetForm.querySelector(`input[type="radio"][name="${key}"][value="${value}"]`);
-                        if (radio) {
-                            radio.checked = true;
-                            radio.dispatchEvent(new Event('change', { bubbles: true }));
+                        // 3. Radio inputs (<vibe:radio>)
+                        const radios = targetForm.querySelectorAll(`input[type="radio"][name="${key}"]`);
+                        if (radios.length > 0) {
+                            radios.forEach(r => {
+                                const shouldCheck = value !== null && value !== undefined && String(r.value) === String(value);
+                                if (r.checked !== shouldCheck) {
+                                    r.checked = shouldCheck;
+                                    r.dispatchEvent(new Event('input', { bubbles: true }));
+                                    r.dispatchEvent(new Event('change', { bubbles: true }));
+                                }
+                            });
                             return;
                         }
 
-                        // 4. Checkbox inputs
-                        const checkbox = targetForm.querySelector(`input[type="checkbox"][name="${key}"]`);
-                        if (checkbox) {
-                            checkbox.checked = Boolean(value);
-                            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                        // 4. Array Checkbox inputs (<vibe:checkbox name="roles[]">)
+                        const arrayCheckboxes = targetForm.querySelectorAll(`input[type="checkbox"][name="${key}[]"]`);
+                        if (arrayCheckboxes.length > 0) {
+                            const selectedVals = Array.isArray(value) ? value.map(String) : (value ? [String(value)] : []);
+                            arrayCheckboxes.forEach(cb => {
+                                const shouldCheck = selectedVals.includes(String(cb.value));
+                                if (cb.checked !== shouldCheck) {
+                                    cb.checked = shouldCheck;
+                                    cb.dispatchEvent(new Event('input', { bubbles: true }));
+                                    cb.dispatchEvent(new Event('change', { bubbles: true }));
+                                }
+                            });
                             return;
                         }
 
-                        // 5. Standard inputs / textareas / native selects
-                        const input = targetForm.querySelector(`[name="${key}"]`) 
-                            || targetForm.querySelector(`[name="${key}[]"]`);
+                        // 5. Single Checkbox & Switch inputs (<vibe:checkbox> / <vibe:switch>)
+                        const singleCheckbox = targetForm.querySelector(`input[type="checkbox"][name="${key}"]`);
+                        if (singleCheckbox) {
+                            const isChecked = Boolean(value) && value !== '0' && value !== false && value !== 'false';
+                            if (singleCheckbox.checked !== isChecked) {
+                                singleCheckbox.checked = isChecked;
+                                singleCheckbox.dispatchEvent(new Event('input', { bubbles: true }));
+                                singleCheckbox.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                            return;
+                        }
+
+                        // 6. Standard inputs / textareas / native selects
+                        const input = targetForm.querySelector(`[name="${key}"]`);
                         if (input && input.type !== 'file') {
                             if (input.value !== value) {
                                 input.value = value;
