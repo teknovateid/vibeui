@@ -13,8 +13,8 @@
     'integer' => false,
     'stripDecimals' => false,
     'round' => false,
-    'raw' => true, // Default: true (kirim angka bersih murni saat dipost). Set false atau keepFormat untuk kirim berformat.
-    'keepFormat' => false, // Alias kemudahan untuk raw=false
+    'raw' => true,
+    'keepFormat' => false,
     'min' => null,
     'max' => null,
     'step' => 1,
@@ -22,8 +22,8 @@
     'stepper' => false,
     'keyboard' => true,
     'description' => null,
-    'size' => 'md', // xs, sm, md, lg, xl
-    'variant' => 'primary', // primary, outline, filled, flush, ghost
+    'size' => 'md',
+    'variant' => 'primary',
     'info' => null,
     'error' => null,
     'errorName' => null,
@@ -34,7 +34,11 @@
 ])
 
 @php
-    $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
+    $bindName = $attributes->get('x-bind:name') ?? $attributes->get(':name');
+    $bindId = $attributes->get('x-bind:id') ?? $attributes->get(':id');
+    $xModel = $attributes->whereStartsWith('x-model')->first();
+
+    $name = $name ?? ($bindName ? null : $attributes->whereStartsWith('wire:model')->first());
     $id = $id ?? ($name ?? uniqid('number-'));
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
 
@@ -43,6 +47,7 @@
 
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
     $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
+    $isRequired = $attributes->has('required') && $attributes->get('required') !== false;
 
     $isInteger = $integer || $stripDecimals || ($attributes->has('integer') && $attributes->get('integer') !== false) || ($attributes->has('strip-decimals') && $attributes->get('strip-decimals') !== false) || (int) $precision === 0;
 
@@ -51,11 +56,10 @@
     $initialRaw = '';
     if (!empty($name) && !is_array(old($name))) {
         $initialRaw = (string) old($name, !is_array($value ?? null) ? ($value ?? '') : '');
-    } elseif (!empty($value) && !is_array($value)) {
+    } elseif ($value !== null && !is_array($value) && $value !== '') {
         $initialRaw = (string) $value;
     }
 
-    // Bersihkan nilai awal jika ada pemisah ribuan/desimal agar initial raw bersih
     if (!empty($initialRaw)) {
         $cleanInit = ($thousandSeparator !== '' && $thousandSeparator !== null) ? str_replace($thousandSeparator, '', trim($initialRaw)) : trim($initialRaw);
         $cleanInit = ($decimalSeparator !== '' && $decimalSeparator !== null) ? str_replace($decimalSeparator, '.', $cleanInit) : $cleanInit;
@@ -112,11 +116,11 @@
     $errorBorderClasses = $hasError ? 'border-destructive text-destructive focus-within:border-destructive focus-within:ring-destructive/20' : '';
 @endphp
 
-<div class="space-y-1.5 w-full" id="{{ $id }}-container">
+<div class="{{ $label || $description ? 'space-y-1.5' : '' }} w-full" @if($bindId) :id="'container-' + ({{ $bindId }})" @elseif($bindName) :id="'container-' + ({{ $bindName }})" @else id="{{ $id }}-container" @endif>
     @if ($label)
-        <label for="{{ $id }}-display" class="block text-xs font-semibold text-foreground select-none">
+        <label @if($bindId) :for="'display-' + ({{ $bindId }})" @elseif($bindName) :for="'display-' + ({{ $bindName }})" @else for="{{ $id }}-display" @endif class="block text-xs font-semibold text-foreground select-none">
             {{ $label }}
-            @if ($attributes->has('required') && $attributes->get('required') !== false)
+            @if ($isRequired)
                 <span class="text-destructive font-bold ml-0.5" aria-hidden="true">*</span>
             @endif
         </label>
@@ -145,12 +149,47 @@
             isReadonly: {{ $isReadonly ? 'true' : 'false' }},
 
             init() {
-                if (this.rawValue !== '') {
-                    this.rawValue = this.sanitizeRaw(this.rawValue);
-                    this.displayValue = this.formatNumber(this.rawValue);
-                }
+                @if ($xModel)
+                    let getVal = () => {
+                        try {
+                            return {{ $xModel }};
+                        } catch (e) {
+                            return null;
+                        }
+                    };
 
-                // Listen to external input event for vibe:form restoreFromStorage()
+                    let initialVal = getVal();
+                    if (initialVal !== null && initialVal !== undefined && initialVal !== '') {
+                        this.rawValue = this.sanitizeRaw(initialVal);
+                        this.displayValue = this.formatNumber(this.rawValue);
+                    } else if (this.rawValue !== '') {
+                        this.displayValue = this.formatNumber(this.rawValue);
+                    }
+
+                    this.$watch(() => {
+                        try {
+                            return {{ $xModel }};
+                        } catch (e) {
+                            return null;
+                        }
+                    }, (newVal) => {
+                        let clean = (newVal !== null && newVal !== undefined && newVal !== '') ? this.sanitizeRaw(newVal) : '';
+                        if (clean !== this.rawValue) {
+                            this.rawValue = clean;
+                            this.displayValue = this.formatNumber(this.rawValue);
+                            let hidden = this.$refs.hiddenInput;
+                            if (hidden) {
+                                hidden.value = this.isRaw ? this.rawValue : this.displayValue;
+                            }
+                        }
+                    });
+                @else
+                    if (this.rawValue !== '') {
+                        this.rawValue = this.sanitizeRaw(this.rawValue);
+                        this.displayValue = this.formatNumber(this.rawValue);
+                    }
+                @endif
+
                 this.$nextTick(() => {
                     let hidden = this.$refs.hiddenInput;
                     if (hidden) {
@@ -159,6 +198,9 @@
                             if (clean !== this.rawValue) {
                                 this.rawValue = clean;
                                 this.displayValue = this.formatNumber(this.rawValue);
+                                @if ($xModel)
+                                    this.syncModel();
+                                @endif
                             }
                         });
                     }
@@ -170,7 +212,6 @@
                 let str = String(val);
                 let isNeg = this.allowNegative && str.startsWith('-');
                 
-                // Clean thousand and decimal separators
                 let clean = str;
                 if (this.thousandSep) {
                     clean = clean.split(this.thousandSep).join('');
@@ -182,7 +223,6 @@
 
                 if (!clean) return isNeg ? '-' : '';
 
-                // Jika mode integer aktif atau precision 0, pastikan tidak ada angka di belakang koma
                 if (this.isInteger || this.precision === 0) {
                     if (this.round && clean.includes('.')) {
                         return (isNeg ? '-' : '') + String(Math.round(parseFloat(clean)));
@@ -210,7 +250,6 @@
                     ? '' 
                     : (parts[1] !== undefined ? parts[1].slice(0, this.precision) : '');
 
-                // Add thousand separators
                 let formattedInt = this.thousandSep 
                     ? integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, this.thousandSep)
                     : integerPart;
@@ -250,6 +289,20 @@
                 }
             },
 
+            syncModel() {
+                @if ($xModel)
+                    try {
+                        let parsed = null;
+                        if (this.rawValue !== '' && this.rawValue !== '-') {
+                            parsed = (this.isInteger || this.precision === 0)
+                                ? parseInt(this.rawValue, 10)
+                                : parseFloat(this.rawValue);
+                        }
+                        {{ $xModel }} = parsed;
+                    } catch (e) {}
+                @endif
+            },
+
             setValue(num) {
                 let str = String(num);
                 if (this.precision > 0 && !this.isInteger) {
@@ -267,6 +320,11 @@
                     hidden.dispatchEvent(new Event('input', { bubbles: true }));
                     hidden.dispatchEvent(new Event('change', { bubbles: true }));
                 }
+                @if ($xModel)
+                    this.syncModel();
+                @endif
+                this.$dispatch('input', this.rawValue);
+                this.$dispatch('change', this.rawValue);
             },
 
             handleInput(e) {
@@ -276,7 +334,8 @@
                 this.syncHidden();
             }
         }"
-        class="relative flex items-center w-full border shadow-2xs transition-colors duration-150 {{ $sizeClasses }} {{ $variantClasses }} {{ $errorBorderClasses }}"
+        {{ $attributes->whereStartsWith('@') }}
+        {{ $attributes->only('class')->twMerge(['class' => "relative flex items-center w-full border shadow-2xs transition-colors duration-150 {$sizeClasses} {$variantClasses} {$errorBorderClasses}"]) }}
     >
         @if ($prefix)
             <span class="mr-2 text-muted-foreground font-semibold select-none text-xs pointer-events-none shrink-0">
@@ -284,11 +343,16 @@
             </span>
         @endif
 
-        {{-- Visible Formatted Input --}}
         <input 
             type="text"
             inputmode="{{ ($precision > 0 && !$isInteger) ? 'decimal' : 'numeric' }}"
-            id="{{ $id }}-display"
+            @if($bindId)
+                :id="'display-' + ({{ $bindId }})"
+            @elseif($bindName)
+                :id="'display-' + ({{ $bindName }})"
+            @else
+                id="{{ $id }}-display"
+            @endif
             x-model="displayValue"
             @input="handleInput($event)"
             @if ($keyboard)
@@ -299,6 +363,7 @@
             placeholder="{{ $placeholder }}"
             @if($isDisabled) disabled @endif
             @if($isReadonly) readonly @endif
+            @if($isRequired) required @endif
             class="w-full bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none text-left font-medium min-w-0"
         />
 
@@ -308,7 +373,6 @@
             </span>
         @endif
 
-        {{-- Optional Mini Stepper Buttons --}}
         @if ($stepper)
             <div class="flex flex-col border-l border-border/60 pl-1 ml-2 self-stretch justify-center my-0.5 shrink-0 select-none">
                 <button 
@@ -334,12 +398,21 @@
             </div>
         @endif
 
-        {{-- Hidden Input carrying Clean Numeric Raw Value (or formatted if keepFormat is true) for Form POST & vibe:form --}}
         <input 
             type="hidden" 
             x-ref="hiddenInput"
-            id="{{ $id }}"
-            @if($name) name="{{ $name }}" @endif
+            @if($bindId)
+                :id="{{ $bindId }}"
+            @elseif($bindName)
+                :id="'hidden-' + ({{ $bindName }})"
+            @else
+                id="{{ $id }}"
+            @endif
+            @if($name)
+                name="{{ $name }}"
+            @elseif($bindName)
+                :name="{{ $bindName }}"
+            @endif
             :value="isRaw ? rawValue : displayValue"
             @if($wireModel) wire:model="{{ $wireModel }}" @endif
             @if($hasError) aria-invalid="true" @endif
@@ -347,7 +420,7 @@
     </div>
 
     @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
+        <p @if($bindName) :id="'error-' + ({{ $bindName }})" @else id="{{ $id }}-error" @endif role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
             <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10" />
                 <path d="M12 8v5M12 16h.01" />
@@ -355,6 +428,6 @@
             <span>{{ $errorMessage }}</span>
         </p>
     @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
+        <p @if($bindName) :id="'info-' + ({{ $bindName }})" @else id="{{ $id }}-info" @endif class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
     @endif
 </div>
