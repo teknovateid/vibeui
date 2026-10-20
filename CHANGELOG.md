@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.1] - 2026-10-20
+
+### 🚀 Features
+- feat: add image lightbox component documentation and localization keys (5319322)
+
+
 ## [0.6.0] - 2026-10-19
 
 ### 🚀 Features
