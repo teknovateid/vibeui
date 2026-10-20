@@ -46,14 +46,20 @@
     }
 
     // Bersihkan nilai awal jika mode integer aktif atau precision 0 agar saat form dipost tidak ada desimal
-    if ($isInteger && !empty($initialRaw)) {
-        $cleanInit = ($thousandSeparator !== '' && $thousandSeparator !== null) ? str_replace($thousandSeparator, '', trim($initialRaw)) : trim($initialRaw);
-        $cleanInit = ($decimalSeparator !== '' && $decimalSeparator !== null) ? str_replace($decimalSeparator, '.', $cleanInit) : $cleanInit;
-        if (str_contains($cleanInit, '.')) {
-            if ($round) {
-                $initialRaw = (string) round((float) $cleanInit);
-            } else {
-                $initialRaw = explode('.', $cleanInit)[0];
+    if (!empty($initialRaw)) {
+        if (is_numeric($initialRaw)) {
+            if ($isInteger) {
+                $initialRaw = $round ? (string) round((float) $initialRaw) : (string) (int) ((float) $initialRaw);
+            }
+        } else {
+            $cleanInit = ($thousandSeparator !== '' && $thousandSeparator !== null) ? str_replace($thousandSeparator, '', trim($initialRaw)) : trim($initialRaw);
+            $cleanInit = ($decimalSeparator !== '' && $decimalSeparator !== null) ? str_replace($decimalSeparator, '.', $cleanInit) : $cleanInit;
+            if (str_contains($cleanInit, '.')) {
+                if ($round) {
+                    $initialRaw = (string) round((float) $cleanInit);
+                } else {
+                    $initialRaw = explode('.', $cleanInit)[0];
+                }
             }
         }
     }
@@ -104,7 +110,13 @@
 
             init() {
                 if (this.rawValue !== '') {
-                    this.rawValue = this.sanitizeRaw(this.rawValue);
+                    if (/^-?\d*(\.\d+)?$/.test(String(this.rawValue).trim())) {
+                        this.rawValue = (this.isInteger || this.precision === 0) 
+                            ? (this.round && String(this.rawValue).includes('.') ? String(Math.round(parseFloat(this.rawValue))) : String(this.rawValue).split('.')[0])
+                            : String(this.rawValue);
+                    } else {
+                        this.rawValue = this.sanitizeRaw(this.rawValue);
+                    }
                     this.displayValue = this.formatNumber(this.rawValue);
                 }
 
