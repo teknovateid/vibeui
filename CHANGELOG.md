@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.2] - 2026-10-20
+
+### 🚀 Features
+- feat: enhance form local storage persistence for custom select and filepond components (5e7447e)
+
+### 🐛 Bug Fixes
+- fix: improve form state synchronization for checkboxes, switches, and radio groups (971d0d6)
+
+
 ## [0.6.1] - 2026-10-20
 
 ### 🚀 Features
