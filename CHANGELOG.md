@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.3] - 2026-10-20
+
+### 🚀 Features
+- feat: add alpine x-model support and dynamic binding to currency and number inputs (ef272c5)
+
+### 🐛 Bug Fixes
+- fix: optimize initial value sanitization and handling in currency input component (091d90b)
+
+
 ## [0.6.2] - 2026-10-20
 
 ### 🚀 Features
