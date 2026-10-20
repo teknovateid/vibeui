@@ -104,6 +104,9 @@
     @keydown.enter="handleKeydownEnter($event)"
     @if($saveToStorage && $id)
         @input.debounce.500ms="saveToStorage($el)"
+        @change.debounce.500ms="saveToStorage($el)"
+        @vibe-select-change.debounce.500ms="saveToStorage($el)"
+        @vibe-filepond-change.debounce.500ms="saveToStorage($el)"
     @endif
 >
     {{ $slot }}

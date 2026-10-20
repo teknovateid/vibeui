@@ -590,13 +590,71 @@ export function vibeForm(config = {}) {
         },
 
         saveToStorage(formEl) {
-            const formData = new FormData(formEl);
+            const targetForm = formEl || (_self && _self.$el) || this.$el || (formId ? document.getElementById(formId) : null);
+            if (!targetForm) return;
+
+            let formData = null;
+            try {
+                formData = new FormData(targetForm);
+            } catch (e) {
+                formData = null;
+            }
+
             const dataObj = {};
 
-            for (let [key, value] of formData.entries()) {
-                if (value instanceof File || key.startsWith('_') || key === 'components') continue;
-                dataObj[key] = value;
+            if (formData) {
+                for (let [key, value] of formData.entries()) {
+                    if (value instanceof File || key.startsWith('_') || key === 'components') continue;
+
+                    if (key.endsWith('[]')) {
+                        const cleanKey = key.slice(0, -2);
+                        if (!Array.isArray(dataObj[cleanKey])) {
+                            dataObj[cleanKey] = [];
+                        }
+                        dataObj[cleanKey].push(value);
+                    } else {
+                        dataObj[key] = value;
+                    }
+                }
             }
+
+            // Sync vibe:select components state directly
+            const selectEls = targetForm.querySelectorAll('[data-vibe-select]');
+            selectEls.forEach(sel => {
+                const name = sel.getAttribute('data-vibe-select');
+                if (!name) return;
+                const comp = sel._x_dataStack ? sel._x_dataStack[0] : null;
+                if (comp && comp.value !== undefined && comp.value !== null && comp.value !== '') {
+                    dataObj[name] = comp.value;
+                }
+            });
+
+            // Sync vibe:filepond components state directly
+            const pondEls = targetForm.querySelectorAll('[data-vibe-filepond]');
+            pondEls.forEach(fp => {
+                let name = fp.getAttribute('data-vibe-filepond');
+                const comp = fp._x_dataStack ? fp._x_dataStack[0] : null;
+                if (!name && comp && comp.config && comp.config.name) {
+                    name = comp.config.name;
+                }
+                if (!name) return;
+
+                let keys = [];
+                if (comp && Array.isArray(comp.uploadedKeys) && comp.uploadedKeys.length > 0) {
+                    keys = comp.uploadedKeys;
+                } else if (comp && comp.pond && typeof comp.pond.getFiles === 'function') {
+                    const files = comp.pond.getFiles();
+                    files.forEach(f => {
+                        const k = f.serverId || (typeof f.source === 'string' ? f.source : null);
+                        if (k) keys.push(k);
+                    });
+                }
+
+                if (keys.length > 0) {
+                    const isMultiple = (comp && comp.config && comp.config.multiple) || fp.getAttribute('data-multiple') === 'true';
+                    dataObj[name] = isMultiple ? keys : keys[0];
+                }
+            });
 
             if (Object.keys(dataObj).length === 0) return;
 
@@ -634,15 +692,83 @@ export function vibeForm(config = {}) {
             const myData = storageArray.find(item => item.id === formId);
 
             if (myData && myData.data) {
-                setTimeout(() => {
+                const applyData = () => {
+                    const targetForm = (_self && _self.$el) || this.$el || (formId ? document.getElementById(formId) : null);
+                    if (!targetForm) return;
+
                     Object.entries(myData.data).forEach(([key, value]) => {
-                        const input = this.$el.querySelector(`[name="${key}"]`);
-                        if (input && input.value !== value) {
-                            input.value = value;
-                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                        // 1. Check for vibe:select component
+                        const selectEl = targetForm.querySelector(`[data-vibe-select="${key}"]`);
+                        if (selectEl) {
+                            const selectComp = selectEl._x_dataStack ? selectEl._x_dataStack[0] : null;
+                            if (selectComp) {
+                                selectComp.value = value;
+                                if (typeof selectComp.updateSelectionFromValue === 'function') {
+                                    selectComp.updateSelectionFromValue();
+                                }
+                                if (selectComp.$refs && selectComp.$refs.hiddenInput) {
+                                    if (selectComp.multiple) {
+                                        selectComp.$refs.hiddenInput.value = selectComp.separator 
+                                            ? (Array.isArray(value) ? value.join(selectComp.separator) : value) 
+                                            : JSON.stringify(value);
+                                    } else {
+                                        selectComp.$refs.hiddenInput.value = value;
+                                    }
+                                }
+                            }
+                            selectEl.dispatchEvent(new CustomEvent('vibe-select-restore', {
+                                bubbles: true,
+                                detail: { name: key, value: value }
+                            }));
+                            return;
+                        }
+
+                        // 2. Check for vibe:filepond component
+                        const filepondEl = targetForm.querySelector(`[data-vibe-filepond="${key}"]`) 
+                            || targetForm.querySelector(`[data-vibe-filepond][id*="${key}"]`);
+                        if (filepondEl) {
+                            const fpComp = filepondEl._x_dataStack ? filepondEl._x_dataStack[0] : null;
+                            if (fpComp && typeof fpComp.loadExistingFiles === 'function') {
+                                fpComp.loadExistingFiles(value);
+                            }
+                            filepondEl.dispatchEvent(new CustomEvent('vibe-filepond-restore', {
+                                bubbles: true,
+                                detail: { name: key, value: value, keys: Array.isArray(value) ? value : [value] }
+                            }));
+                            return;
+                        }
+
+                        // 3. Radio inputs
+                        const radio = targetForm.querySelector(`input[type="radio"][name="${key}"][value="${value}"]`);
+                        if (radio) {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change', { bubbles: true }));
+                            return;
+                        }
+
+                        // 4. Checkbox inputs
+                        const checkbox = targetForm.querySelector(`input[type="checkbox"][name="${key}"]`);
+                        if (checkbox) {
+                            checkbox.checked = Boolean(value);
+                            checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                            return;
+                        }
+
+                        // 5. Standard inputs / textareas / native selects
+                        const input = targetForm.querySelector(`[name="${key}"]`) 
+                            || targetForm.querySelector(`[name="${key}[]"]`);
+                        if (input && input.type !== 'file') {
+                            if (input.value !== value) {
+                                input.value = value;
+                                input.dispatchEvent(new Event('input', { bubbles: true }));
+                                input.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
                         }
                     });
-                }, 50);
+                };
+
+                setTimeout(applyData, 50);
+                setTimeout(applyData, 250);
             }
         },
 

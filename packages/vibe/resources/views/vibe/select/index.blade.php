@@ -156,7 +156,10 @@
     }
 @endphp
 
-<div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }} x-data="{
+<div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}
+    data-vibe-select="{{ $name }}"
+    data-multiple="{{ $multiple ? 'true' : 'false' }}"
+    x-data="{
     open: false,
     search: '',
     value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($initialSelectVal) @endif,
@@ -216,6 +219,24 @@
     init() {
         this.$nextTick(() => {
             let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
+            if (isEmptyValue) {
+                const form = this.$el ? this.$el.closest('form') : null;
+                if (form && form._x_dataStack && form._x_dataStack[0]?.getStorageData) {
+                    const formAlpine = form._x_dataStack[0];
+                    if (formAlpine.saveToStorage && form.id) {
+                        const storageArray = formAlpine.getStorageData();
+                        const myData = storageArray.find(item => item.id === form.id);
+                        if (myData && myData.data) {
+                            const rawKey = @js($name);
+                            const storedVal = myData.data[rawKey] !== undefined ? myData.data[rawKey] : myData.data[`${rawKey}[]`];
+                            if (storedVal !== undefined && storedVal !== null && storedVal !== '') {
+                                this.value = storedVal;
+                                isEmptyValue = false;
+                            }
+                        }
+                    }
+                }
+            }
             if (isEmptyValue && this.$refs.hiddenInput && this.$refs.hiddenInput.value) {
                 if (this.multiple) {
                     if (this.separator && typeof this.$refs.hiddenInput.value === 'string') {
@@ -255,6 +276,19 @@
         });
         this.$watch('search', () => {
             this.$nextTick(() => this.checkVisibility());
+        });
+        this.$el.addEventListener('vibe-select-restore', (e) => {
+            if (e.detail && e.detail.value !== undefined) {
+                this.value = e.detail.value;
+                this.updateSelectionFromValue();
+                if (this.$refs.hiddenInput) {
+                    if (this.multiple) {
+                        this.$refs.hiddenInput.value = this.separator ? (Array.isArray(this.value) ? this.value.join(this.separator) : this.value) : JSON.stringify(this.value);
+                    } else {
+                        this.$refs.hiddenInput.value = this.value;
+                    }
+                }
+            }
         });
     },
 
@@ -344,6 +378,12 @@
             this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
             this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
         }
+        this.$el.dispatchEvent(new CustomEvent('vibe-select-change', {
+            bubbles: true,
+            detail: { name: @js($name), value: this.value }
+        }));
+        this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+        this.$el.dispatchEvent(new Event('change', { bubbles: true }));
     },
 
     handleHiddenInput(el) {
@@ -443,7 +483,7 @@
                 if (this.max !== null && this.value.length >= this.max) {
                     return;
                 }
-                this.value.push(val);
+                this.value = [...this.value, val];
             }
             this.updateSelectionFromValue();
             this.$nextTick(() => {
@@ -589,15 +629,15 @@
     {{-- Hidden input(s) for native form compatibility --}}
     @if ($multiple)
         @if ($separator)
-            <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="Array.isArray(value) ? value.join('{{ $separator }}') : (value || '')" x-ref="hiddenInput" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
+            <input type="hidden" id="{{ $id }}" name="{{ $name }}" data-vibe-select-input="{{ $name }}" :value="Array.isArray(value) ? value.join('{{ $separator }}') : (value || '')" x-ref="hiddenInput" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
         @else
             <template x-for="val in value" :key="val">
-                <input type="hidden" name="{{ $name }}[]" :value="val" />
+                <input type="hidden" name="{{ $name }}[]" data-vibe-select-input="{{ $name }}" :value="val" />
             </template>
-            <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
+            <input type="hidden" id="{{ $id }}" data-vibe-select-input="{{ $name }}" x-ref="hiddenInput" :value="JSON.stringify(value)" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
         @endif
     @else
-        <input type="hidden" id="{{ $id }}" name="{{ $name }}" :value="value" x-ref="hiddenInput" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
+        <input type="hidden" id="{{ $id }}" name="{{ $name }}" data-vibe-select-input="{{ $name }}" :value="value" x-ref="hiddenInput" @input="handleHiddenInput($el)" @change="handleHiddenInput($el)" />
     @endif
 
     {{-- Trigger & Popover Wrapper --}}

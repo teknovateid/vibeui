@@ -797,6 +797,36 @@ export function vibeFilepond(config = {}) {
             }
 
 
+            // Listen for form storage restore event
+            this._restoreHandler = (e) => {
+                if (e.detail && (e.detail.name === config.name || e.detail.id === config.id)) {
+                    this.loadExistingFiles(e.detail.value || e.detail.keys);
+                }
+            };
+            if (this.$el) {
+                this.$el.addEventListener('vibe-filepond-restore', this._restoreHandler);
+            }
+
+            // Also check enclosing form storage directly on mount if no files yet
+            setTimeout(() => {
+                try {
+                    const form = this.$el ? this.$el.closest('form') : null;
+                    if (form && form._x_dataStack && form._x_dataStack[0] && typeof form._x_dataStack[0].getStorageData === 'function') {
+                        const formAlpine = form._x_dataStack[0];
+                        if (formAlpine.saveToStorage && form.id) {
+                            const storageArray = formAlpine.getStorageData() || [];
+                            const myData = storageArray.find(item => item.id === form.id);
+                            if (myData && myData.data) {
+                                const savedVal = myData.data[config.name] !== undefined ? myData.data[config.name] : myData.data[`${config.name}[]`];
+                                if (savedVal && (!this.uploadedKeys || this.uploadedKeys.length === 0)) {
+                                    this.loadExistingFiles(savedVal);
+                                }
+                            }
+                        }
+                    }
+                } catch (e) {}
+            }, 100);
+
             // [FIX WARN-4] Always destroy pond on Livewire navigation to prevent memory leaks.
             // Previous condition was too restrictive and could leave FilePond instances alive.
             this._cleanupHandler = () => {
@@ -821,6 +851,9 @@ export function vibeFilepond(config = {}) {
             }
             if (this._cleanupHandler) {
                 document.removeEventListener('livewire:navigating', this._cleanupHandler);
+            }
+            if (this._restoreHandler && this.$el) {
+                this.$el.removeEventListener('vibe-filepond-restore', this._restoreHandler);
             }
             if (Array.isArray(this._cleanupListeners)) {
                 this._cleanupListeners.forEach(fn => {
@@ -878,6 +911,36 @@ export function vibeFilepond(config = {}) {
 
         removeFiles() {
             this.clear();
+        },
+
+        loadExistingFiles(filesList) {
+            if (!this.pond) return;
+            const items = this.resolveInitialFiles(filesList);
+            if (!items || items.length === 0) return;
+
+            items.forEach(f => {
+                const currentFiles = this.pond.getFiles();
+                const exists = currentFiles.some(cur => (cur.serverId === f.source || cur.source === f.source));
+                if (!exists) {
+                    try {
+                        this.pond.addFile(f.source, f.options).then(item => {
+                            if (!this.uploadedKeys.includes(f.source)) {
+                                if (this.config?.multiple) {
+                                    this.uploadedKeys.push(f.source);
+                                } else {
+                                    this.uploadedKeys = [f.source];
+                                }
+                            }
+                            this.updateReactiveState();
+                            this.syncFormInputsOrder();
+                        }).catch(e => {
+                            // Suppress error if already loaded
+                        });
+                    } catch (e) {
+                        console.warn('FilePond addFile error:', e);
+                    }
+                }
+            });
         },
 
         getFiles() {
@@ -2042,6 +2105,14 @@ export function vibeFilepond(config = {}) {
             if (this.$dispatch) {
                 this.$dispatch('vibe-filepond-presigned-success', { key: fileKey, keys: this.uploadedKeys });
             }
+            if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {
+                    bubbles: true,
+                    detail: { name: cfg.name, key: fileKey, keys: this.uploadedKeys }
+                }));
+                this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+            }
         },
 
         handleUploadRevert(fileKey, cfg) {
@@ -2067,6 +2138,14 @@ export function vibeFilepond(config = {}) {
             // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
             if (this.$dispatch) {
                 this.$dispatch('vibe-filepond-presigned-revert', { key: fileKey, keys: this.uploadedKeys });
+            }
+            if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {
+                    bubbles: true,
+                    detail: { name: cfg.name, key: fileKey, keys: this.uploadedKeys }
+                }));
+                this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
             }
         },
 
@@ -2899,6 +2978,14 @@ export function vibeFilepond(config = {}) {
                 if (this.config?.wireModel && this.$wire) {
                     const val = this.config.multiple ? this.uploadedKeys : (this.uploadedKeys[0] || null);
                     this.$wire.set(this.config.wireModel, val);
+                }
+                if (this.$el) {
+                    this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {
+                        bubbles: true,
+                        detail: { name: this.config?.name, keys: this.uploadedKeys }
+                    }));
+                    this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+                    this.$el.dispatchEvent(new Event('change', { bubbles: true }));
                 }
             }
         }

@@ -46,7 +46,7 @@
         alt="{{ __('docs/display/image.grouped.yosemite.alt') }}" 
         caption="{{ __('docs/display/image.grouped.yosemite.caption') }}"
         group="nature"
-        class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+        class="w-full aspect-4/3 rounded-2xl shadow-sm"
     />
 
     <\vibe:display.image 
@@ -54,7 +54,7 @@
         alt="{{ __('docs/display/image.grouped.meadow.alt') }}" 
         caption="{{ __('docs/display/image.grouped.meadow.caption') }}"
         group="nature"
-        class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+        class="w-full aspect-4/3 rounded-2xl shadow-sm"
     />
 
     <\vibe:display.image 
@@ -62,7 +62,7 @@
         alt="{{ __('docs/display/image.grouped.lake.alt') }}" 
         caption="{{ __('docs/display/image.grouped.lake.caption') }}"
         group="nature"
-        class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+        class="w-full aspect-4/3 rounded-2xl shadow-sm"
     />
 </div>
                     </vibe:preview.code>
@@ -74,7 +74,7 @@
                                 alt="{{ __('docs/display/image.grouped.yosemite.alt') }}" 
                                 caption="{{ __('docs/display/image.grouped.yosemite.caption') }}"
                                 group="nature"
-                                class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+                                class="w-full aspect-4/3 rounded-2xl shadow-sm"
                             />
 
                             <vibe:display.image 
@@ -82,7 +82,7 @@
                                 alt="{{ __('docs/display/image.grouped.meadow.alt') }}" 
                                 caption="{{ __('docs/display/image.grouped.meadow.caption') }}"
                                 group="nature"
-                                class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+                                class="w-full aspect-4/3 rounded-2xl shadow-sm"
                             />
 
                             <vibe:display.image 
@@ -90,7 +90,7 @@
                                 alt="{{ __('docs/display/image.grouped.lake.alt') }}" 
                                 caption="{{ __('docs/display/image.grouped.lake.caption') }}"
                                 group="nature"
-                                class="w-full aspect-[4/3] rounded-2xl shadow-sm"
+                                class="w-full aspect-4/3 rounded-2xl shadow-sm"
                             />
                         </div>
                     </div>
@@ -156,7 +156,7 @@
         alt="{{ __('docs/display/image.sizing.portrait.alt') }}" 
         caption="{{ __('docs/display/image.sizing.portrait.caption') }}"
         group="shape-variations"
-        class="w-36 aspect-[3/4] rounded-2xl shadow-sm"
+        class="w-36 aspect-3/4 rounded-2xl shadow-sm"
     />
 
     {{-- Circle (Avatar Lightbox) --}}
@@ -184,7 +184,7 @@
                             alt="{{ __('docs/display/image.sizing.portrait.alt') }}" 
                             caption="{{ __('docs/display/image.sizing.portrait.caption') }}"
                             group="shape-variations"
-                            class="w-36 aspect-[3/4] rounded-2xl shadow-sm"
+                            class="w-36 aspect-3/4 rounded-2xl shadow-sm"
                         />
 
                         <vibe:display.image 
