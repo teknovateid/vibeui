@@ -203,7 +203,7 @@
     }
 @endphp
 
-<div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}
+<div data-vibe-select="{{ $name }}" data-multiple="{{ $multiple ? 'true' : 'false' }}" {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}
     x-data="{
         open: false,
         search: '',
@@ -287,6 +287,27 @@
                 }
             }
 
+            // Restore from enclosing form storage if initial value is empty
+            let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
+            if (isEmptyValue) {
+                const form = this.$el ? this.$el.closest('form') : null;
+                if (form && form._x_dataStack && form._x_dataStack[0]?.getStorageData) {
+                    const formAlpine = form._x_dataStack[0];
+                    if (formAlpine.saveToStorage && form.id) {
+                        const storageArray = formAlpine.getStorageData();
+                        const myData = storageArray.find(item => item.id === form.id);
+                        if (myData && myData.data) {
+                            const rawKey = @js($name);
+                            const storedVal = myData.data[rawKey] !== undefined ? myData.data[rawKey] : myData.data[`${rawKey}[]`];
+                            if (storedVal !== undefined && storedVal !== null && storedVal !== '') {
+                                this.value = storedVal;
+                                isEmptyValue = false;
+                            }
+                        }
+                    }
+                }
+            }
+
             this.$watch('value', (val) => {
                 if (!this.multiple && (!val || val === '')) {
                     this.selectedLabel = '';
@@ -294,6 +315,20 @@
                     this.selectedIcon = '';
                 }
                 this.$nextTick(() => this.dispatchChangeEvent());
+            });
+
+            this.$el.addEventListener('vibe-select-restore', (e) => {
+                if (e.detail && e.detail.value !== undefined) {
+                    this.value = e.detail.value;
+                    if (this.$refs.hiddenInput) {
+                        if (this.multiple) {
+                            this.$refs.hiddenInput.value = JSON.stringify(this.value);
+                        } else {
+                            this.$refs.hiddenInput.value = this.value;
+                        }
+                    }
+                    this.dispatchChangeEvent();
+                }
             });
         },
 
@@ -494,6 +529,12 @@
                     this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
                     this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
                 }
+                this.$el.dispatchEvent(new CustomEvent('vibe-select-change', {
+                    bubbles: true,
+                    detail: { name: @js($name), value: this.value }
+                }));
+                this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
             });
         },
 
@@ -581,11 +622,11 @@
     @if ($name)
         @if ($multiple)
             <template x-for="val in (Array.isArray(value) ? value : [])" :key="val">
-                <input type="hidden" name="{{ Str::endsWith($name, '[]') ? $name : $name . '[]' }}" :value="val" />
+                <input type="hidden" name="{{ Str::endsWith($name, '[]') ? $name : $name . '[]' }}" data-vibe-select-input="{{ $name }}" :value="val" />
             </template>
-            <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" :value="JSON.stringify(value)" />
+            <input type="hidden" id="{{ $id }}" data-vibe-select-input="{{ $name }}" x-ref="hiddenInput" :value="JSON.stringify(value)" />
         @else
-            <input type="hidden" id="{{ $id }}" x-ref="hiddenInput" name="{{ $name }}" :value="value" />
+            <input type="hidden" id="{{ $id }}" data-vibe-select-input="{{ $name }}" x-ref="hiddenInput" name="{{ $name }}" :value="value" />
         @endif
     @endif
 

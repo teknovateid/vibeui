@@ -326,7 +326,7 @@
 
 <div 
     id="{{ $id }}-container"
-    data-vibe-filepond
+    data-vibe-filepond="{{ $name }}"
     {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass} " . ($isAvatar ? 'filepond-avatar-mode ' : '') . ($isCompact ? 'filepond-compact-mode ' : '') . ($dashed ? 'filepond-dashed ' : 'filepond-solid ') . "filepond-size-{$size} " . ($hasError ? 'filepond-has-error' : ''))]) }}
     :class="{ 'filepond-has-error': hasError || Boolean(serverError) }"
     x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {
@@ -374,6 +374,17 @@
             this.hasError = false;
             if (this.pond && typeof this.pond.removeFiles === 'function') {
                 this.pond.removeFiles();
+            }
+        },
+        loadExistingFiles(filesList) {
+            if (this.pond && typeof this.pond.addFile === 'function') {
+                var arr = Array.isArray(filesList) ? filesList : (filesList ? [filesList] : []);
+                arr.forEach(function(f) {
+                    var src = typeof f === 'string' ? f : (f.source || f.url || f.key);
+                    if (src) {
+                        try { self.pond.addFile(src, { type: 'local' }); } catch(e) {}
+                    }
+                });
             }
         },
         getFiles() {
