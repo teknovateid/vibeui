@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.5] - 2026-10-21
+
+### ⚡ Performance & Refactoring
+- refactor: internationalize settings strings and add idle middleware to login history route (4359e47)
+
+
 ## [0.6.4] - 2026-10-21
 
 ### 🚀 Features
