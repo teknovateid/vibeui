@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.4] - 2026-10-21
+
+### 🚀 Features
+- feat: enhance login history management with session termination and agent parsing (c8788b6)
+
+
 ## [0.6.3] - 2026-10-20
 
 ### 🚀 Features
