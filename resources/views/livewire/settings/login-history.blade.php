@@ -1,124 +1,272 @@
-<div class="space-y-6">
+<div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
     @php
         $currentSession = $sessions->firstWhere('is_current', true);
-        $otherSessionsCount = $sessions->where('is_current', false)->count();
+        $otherSessions = $sessions->where('is_current', false);
+        $otherSessionsCount = $otherSessions->count();
     @endphp
 
-    {{-- Current Session Banner --}}
-    @if ($currentSession)
-        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-            <span class="size-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-            <div class="flex-1 min-w-0 text-xs">
-                <span class="font-semibold text-emerald-700 dark:text-emerald-300">{{ __('vibe/settings.login_history.current_session') }}</span>
-                <span class="text-muted-foreground"> — {{ $currentSession->device }} ({{ $currentSession->browser }} &bull; {{ $currentSession->os }})</span>
-            </div>
-            <span class="text-xs text-muted-foreground shrink-0 font-mono">IP: {{ $currentSession->ip_address }}</span>
+    {{-- Left Column: Section Title & Description (Security Tab Pattern) --}}
+    <div class="space-y-1 max-w-lg w-full">
+        <div class="flex items-center gap-2">
+            <h3 class="font-semibold text-foreground text-base">
+                {{ __('vibe/settings.security.sessions_title') }}
+            </h3>
+            <vibe:badge size="sm" variant="secondary" class="rounded-full font-medium">
+                {{ $sessions->count() }} Sesi
+            </vibe:badge>
         </div>
-    @endif
-
-    {{-- Login History List --}}
-    <div class="space-y-3">
-        <div class="flex items-center justify-between">
-            <div>
-                <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.all_sessions') }}</h3>
-                <p class="text-xs text-muted-foreground">{{ $sessions->count() }} sesi aktif terdeteksi di database.</p>
-            </div>
-
-            @if ($otherSessionsCount > 0)
-                <vibe:button 
-                    type="button" 
-                    variant="ghost" 
-                    size="sm" 
-                    class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer" 
-                    wire:click="confirmLogout"
-                >
-                    {{ __('vibe/settings.login_history.terminate_all_btn') }}
-                </vibe:button>
-            @endif
-        </div>
-
-        <div class="border border-border/60 rounded-2xl overflow-hidden divide-y divide-border/40">
-            @forelse ($sessions as $session)
-                <div class="p-4 flex items-start gap-4 {{ $session->is_current ? 'bg-emerald-500/5' : 'bg-card hover:bg-muted/20' }} transition-colors">
-                    {{-- Device Icon --}}
-                    <div class="size-9 rounded-xl shrink-0 flex items-center justify-center {{ $session->is_current ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-muted/60 text-muted-foreground' }}">
-                        @if ($session->icon === 'smartphone')
-                            <svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="14" height="20" x="5" y="2" rx="4" />
-                                <path d="M11 18h2" />
-                            </svg>
-                        @else
-                            <svg class="size-4.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="20" height="14" x="2" y="3" rx="3" />
-                                <path d="M7 21h10M12 17v4" />
-                            </svg>
-                        @endif
-                    </div>
-
-                    {{-- Session Info --}}
-                    <div class="flex-1 min-w-0 space-y-1">
-                        <div class="flex items-center gap-2 flex-wrap">
-                            <span class="text-sm font-semibold text-foreground">{{ $session->device }}</span>
-                            @if ($session->is_current)
-                                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                                    <span class="size-1.5 rounded-full bg-emerald-500"></span>
-                                    {{ __('vibe/settings.login_history.this_session_badge') }}
-                                </span>
-                            @endif
-                        </div>
-                        <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-xs text-muted-foreground">
-                            <span>{{ $session->browser }} · {{ $session->os }}</span>
-                            <span class="font-mono">{{ $session->ip_address }}</span>
-                        </div>
-                        <p class="text-xs text-muted-foreground/70">{{ $session->last_active }}</p>
-                    </div>
-
-                    {{-- Action --}}
-                    @if (!$session->is_current)
-                        <button 
-                            type="button" 
-                            wire:click="terminateSession('{{ $session->id }}')" 
-                            wire:confirm="Apakah Anda yakin ingin mengakhiri sesi perangkat ini?"
-                            class="shrink-0 text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer mt-0.5"
-                        >
-                            {{ __('vibe/settings.login_history.terminate_btn') }}
-                        </button>
-                    @endif
-                </div>
-            @empty
-                <div class="p-8 text-center text-xs text-muted-foreground">
-                    Tidak ada catatan sesi yang ditemukan.
-                </div>
-            @endforelse
-        </div>
+        <p class="text-muted-foreground text-xs">
+            {{ __('vibe/settings.security.sessions_desc') }}
+        </p>
     </div>
 
-    {{-- Terminate All Other Sessions Confirmation Modal --}}
+    {{-- Right Column: Interactive Content & Sessions List --}}
+    <div class="space-y-4 w-full">
+        {{-- Header & Quick Info --}}
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+                <p class="font-semibold text-foreground text-sm">
+                    {{ __('vibe/settings.login_history.all_sessions') }}
+                </p>
+                <p class="text-xs text-muted-foreground">
+                    {{ __('vibe/settings.login_history.devices_signed_in', ['count' => $sessions->count(), 'name' => auth()->user()?->name ?? 'akun Anda']) }}
+                </p>
+            </div>
+
+            <div class="flex items-center gap-2 shrink-0">
+                @if ($otherSessionsCount > 0)
+                    <vibe:button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm" 
+                        class="rounded-full text-xs cursor-pointer flex items-center gap-1.5" 
+                        wire:click="confirmLogout('other')"
+                    >
+                        <svg class="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" x2="9" y1="12" y2="12" />
+                        </svg>
+                        <span>{{ __('vibe/settings.login_history.sign_out_others_btn') }}</span>
+                    </vibe:button>
+                @endif
+
+                @if ($sessions->count() > 1)
+                    <vibe:button 
+                        type="button" 
+                        variant="destructive" 
+                        size="sm" 
+                        class="rounded-full text-xs cursor-pointer" 
+                        wire:click="confirmLogout('all')"
+                    >
+                        {{ __('vibe/settings.login_history.terminate_all_devices_btn') }}
+                    </vibe:button>
+                @endif
+            </div>
+        </div>
+
+        {{-- Sessions Container --}}
+        @if ($sessions->isEmpty())
+            <div class="flex items-center gap-3.5 bg-muted p-3.5 rounded-xl text-xs text-muted-foreground">
+                <div class="flex justify-center items-center bg-primary/10 rounded-xl size-9 shrink-0 text-primary">
+                    <svg class="size-4.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect width="20" height="14" x="2" y="3" rx="2" />
+                        <line x1="8" x2="16" y1="21" y2="21" />
+                        <line x1="12" x2="12" y1="17" y2="21" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-semibold text-foreground text-sm">Tidak ada sesi aktif</p>
+                    <p class="text-xs text-muted-foreground">Belum ada sesi yang tercatat di akun Anda.</p>
+                </div>
+            </div>
+        @else
+            {{-- This Device Section --}}
+            @if ($currentSession)
+                <div class="space-y-2">
+                    <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        {{ __('vibe/settings.login_history.this_device') }}
+                    </p>
+                    <div class="rounded-xl border border-border/60 bg-muted/50 p-4 transition-colors">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <div class="flex items-center gap-3.5 min-w-0">
+                                <div class="flex justify-center items-center bg-primary/10 rounded-xl size-9 text-primary shrink-0">
+                                    @if ($currentSession->icon === 'smartphone')
+                                        <svg class="size-4.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="12" height="18" x="6" y="3" rx="3" />
+                                            <circle cx="12" cy="17" r="0.75" fill="currentColor" />
+                                        </svg>
+                                    @elseif ($currentSession->icon === 'tablet')
+                                        <svg class="size-4.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="16" height="20" x="4" y="2" rx="3" />
+                                            <circle cx="12" cy="18" r="0.75" fill="currentColor" />
+                                        </svg>
+                                    @elseif ($currentSession->icon === 'laptop')
+                                        <svg class="size-4.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="18" height="12" x="3" y="4" rx="2" />
+                                            <path d="M2 20h20" />
+                                        </svg>
+                                    @else
+                                        <svg class="size-4.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect width="20" height="14" x="2" y="3" rx="2" />
+                                            <line x1="8" x2="16" y1="21" y2="21" />
+                                            <line x1="12" x2="12" y1="17" y2="21" />
+                                        </svg>
+                                    @endif
+                                </div>
+                                <div class="min-w-0">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <span class="font-semibold text-foreground text-sm truncate">{{ $currentSession->device }}</span>
+                                        <vibe:badge size="sm" variant="success" dot class="rounded-full text-[10px]">
+                                            {{ __('vibe/settings.login_history.this_session_badge') }}
+                                        </vibe:badge>
+                                    </div>
+                                    <p class="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 flex-wrap">
+                                        <span>{{ $currentSession->browser }} &bull; {{ $currentSession->os }}</span>
+                                        <span class="text-muted-foreground/40">&bull;</span>
+                                        <span>{{ $currentSession->last_active }}</span>
+                                        <span class="text-muted-foreground/40">&bull;</span>
+                                        <span class="font-mono text-[11px]">IP: {{ $currentSession->ip_address }}</span>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="shrink-0 sm:self-center">
+                                <vibe:button 
+                                    type="button"
+                                    variant="ghost"
+                                    size="xs"
+                                    class="text-xs text-destructive hover:bg-destructive/10 rounded-full cursor-pointer"
+                                    wire:click="confirmLogout('single', '{{ $currentSession->id }}', '{{ $currentSession->device }}')"
+                                >
+                                    {{ __('vibe/settings.login_history.terminate_current_btn') }}
+                                </vibe:button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            {{-- Other Devices Section --}}
+            @if ($otherSessions->isNotEmpty())
+                <div class="space-y-2 pt-2">
+                    <p class="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                        {{ __('vibe/settings.login_history.other_devices') }}
+                    </p>
+                    <div class="rounded-xl border border-border/50 divide-y divide-border/40 overflow-hidden bg-muted/30">
+                        @foreach ($otherSessions as $session)
+                            <div class="flex justify-between items-center gap-3 p-3.5 hover:bg-muted/60 transition-colors">
+                                <div class="flex items-center gap-3.5 min-w-0">
+                                    <div class="flex justify-center items-center bg-primary/10 rounded-lg size-8 text-primary shrink-0">
+                                        @if ($session->icon === 'smartphone')
+                                            <svg class="size-4 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="12" height="18" x="6" y="3" rx="3" />
+                                                <circle cx="12" cy="17" r="0.75" fill="currentColor" />
+                                            </svg>
+                                        @elseif ($session->icon === 'tablet')
+                                            <svg class="size-4 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="16" height="20" x="4" y="2" rx="3" />
+                                                <circle cx="12" cy="18" r="0.75" fill="currentColor" />
+                                            </svg>
+                                        @elseif ($session->icon === 'laptop')
+                                            <svg class="size-4 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="18" height="12" x="3" y="4" rx="2" />
+                                                <path d="M2 20h20" />
+                                            </svg>
+                                        @else
+                                            <svg class="size-4 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect width="20" height="14" x="2" y="3" rx="2" />
+                                                <line x1="8" x2="16" y1="21" y2="21" />
+                                                <line x1="12" x2="12" y1="17" y2="21" />
+                                            </svg>
+                                        @endif
+                                    </div>
+                                    <div class="min-w-0">
+                                        <div class="flex items-center gap-2 flex-wrap">
+                                            <span class="font-semibold text-foreground text-sm truncate">{{ $session->device }}</span>
+                                            @if (!empty($session->is_online))
+                                                <vibe:badge size="sm" variant="secondary" class="rounded-full text-[10px]">
+                                                    {{ __('vibe/settings.login_history.active_now') }}
+                                                </vibe:badge>
+                                            @endif
+                                        </div>
+                                        <p class="text-xs text-muted-foreground mt-0.5 flex items-center gap-1.5 flex-wrap">
+                                            <span>{{ $session->browser }} &bull; {{ $session->os }}</span>
+                                            <span class="text-muted-foreground/40">&bull;</span>
+                                            <span>{{ $session->last_active }}</span>
+                                            <span class="text-muted-foreground/40">&bull;</span>
+                                            <span class="font-mono text-[11px]">IP: {{ $session->ip_address }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="shrink-0">
+                                    <vibe:button 
+                                        type="button"
+                                        variant="ghost"
+                                        size="xs"
+                                        class="text-xs text-destructive hover:bg-destructive/10 rounded-full cursor-pointer"
+                                        wire:click="confirmLogout('single', '{{ $session->id }}', '{{ $session->device }}')"
+                                    >
+                                        {{ __('vibe/settings.login_history.sign_out_btn') }}
+                                    </vibe:button>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
+        @endif
+    </div>
+
+    {{-- Confirmation Modal (Matching Delete User & 2FA Modal in Security Tab) --}}
     @if ($confirmingLogout)
+        @php
+            $isCurrent = ($logoutMode === 'single' && $selectedSessionId === $currentSession?->id);
+        @endphp
         <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-xs">
             <div class="w-full max-w-md p-6 rounded-2xl border border-border bg-card shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-200">
                 <div class="flex items-center gap-3">
-                    <div class="p-2.5 rounded-xl bg-destructive/10 text-destructive">
+                    <div class="p-2.5 rounded-xl bg-destructive/10 text-destructive shrink-0">
                         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z" />
-                            <path d="M12 8v5M12 16h.01" />
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                            <polyline points="16 17 21 12 16 7" />
+                            <line x1="21" x2="9" y1="12" y2="12" />
                         </svg>
                     </div>
                     <div>
-                        <h4 class="text-sm font-bold text-foreground">{{ __('vibe/settings.login_history.terminate_all_btn') }}</h4>
-                        <p class="text-xs text-muted-foreground">Masukkan kata sandi akun Anda untuk mengonfirmasi pengakhiran seluruh sesi pada perangkat lain.</p>
+                        <h4 class="text-sm font-bold text-foreground">
+                            @if ($logoutMode === 'all')
+                                {{ __('vibe/settings.login_history.terminate_all_devices_btn') }}
+                            @elseif ($logoutMode === 'other')
+                                {{ __('vibe/settings.login_history.sign_out_others_btn') }}
+                            @elseif ($isCurrent)
+                                {{ __('vibe/settings.login_history.terminate_current_btn') }}
+                            @else
+                                {{ __('vibe/settings.login_history.terminate_single_title') }}
+                            @endif
+                        </h4>
+                        <p class="text-xs text-muted-foreground">
+                            @if ($logoutMode === 'all')
+                                {{ __('vibe/settings.login_history.terminate_all_devices_desc') }}
+                            @elseif ($logoutMode === 'other')
+                                {{ __('vibe/settings.login_history.terminate_other_devices_desc') }}
+                            @elseif ($isCurrent)
+                                {{ __('vibe/settings.login_history.confirm_logout_this_device_desc') }}
+                            @else
+                                {{ __('vibe/settings.login_history.confirm_terminate_single_desc') }}
+                            @endif
+                        </p>
                     </div>
                 </div>
 
-                <form wire:submit.prevent="terminateOtherSessions" class="space-y-4 pt-2">
+                <form wire:submit.prevent="executeLogout" class="space-y-4 pt-2">
                     <div>
                         <vibe:input 
                             type="password" 
                             name="password" 
-                            label="Kata Sandi Akun" 
+                            label="{{ __('vibe/settings.login_history.account_password') }}" 
                             viewable 
                             wire:model="password" 
-                            placeholder="Masukkan kata sandi..." 
+                            placeholder="{{ __('vibe/settings.login_history.password_placeholder') }}" 
                             required 
                         />
                         @error('password')
@@ -128,13 +276,21 @@
 
                     <div class="flex items-center justify-end gap-2 pt-2 border-t border-border/50">
                         <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" wire:click="$set('confirmingLogout', false)">
-                            Batal
+                            {{ __('vibe/settings.login_history.cancel') }}
                         </vibe:button>
-                        <vibe:button type="submit" variant="destructive" size="sm" class="cursor-pointer" wire:loading.attr="disabled" wire:target="terminateOtherSessions">
-                            <span wire:loading.remove wire:target="terminateOtherSessions">
-                                Akhiri Semua Sesi Lain
+                        <vibe:button type="submit" variant="destructive" size="sm" class="cursor-pointer" wire:loading.attr="disabled" wire:target="executeLogout">
+                            <span wire:loading.remove wire:target="executeLogout">
+                                @if ($logoutMode === 'all')
+                                    {{ __('vibe/settings.login_history.terminate_all_devices_btn') }}
+                                @elseif ($logoutMode === 'other')
+                                    {{ __('vibe/settings.login_history.sign_out_others_btn') }}
+                                @elseif ($isCurrent)
+                                    {{ __('vibe/settings.login_history.terminate_current_btn') }}
+                                @else
+                                    {{ __('vibe/settings.login_history.sign_out_btn') }}
+                                @endif
                             </span>
-                            <span wire:loading.inline-flex wire:target="terminateOtherSessions" class="inline-flex items-center justify-center gap-1.5 leading-none">
+                            <span wire:loading.inline-flex wire:target="executeLogout" class="inline-flex items-center justify-center gap-1.5 leading-none">
                                 <svg class="size-3.5 animate-spin shrink-0 text-current" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                                 <span>Memproses...</span>
                             </span>

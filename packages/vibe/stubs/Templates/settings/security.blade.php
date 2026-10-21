@@ -181,6 +181,11 @@
 
                     <vibe:separator />
 
+                    {{-- Active Sessions Section (Livewire Component) --}}
+                    <livewire:settings.login-history />
+
+                    <vibe:separator />
+
                     <livewire:settings.delete-user />
 
                 </div>

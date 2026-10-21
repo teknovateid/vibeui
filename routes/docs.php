@@ -205,9 +205,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
                 return view('docs.settings.security');
             })->middleware('confirm')->name('passkey');
 
-            Route::view('/login-history', 'docs.settings.login-history')
-                ->middleware('idle:10')
-                ->name('login-history');
+            Route::view('/login-history', 'docs.settings.login-history')->name('login-history');
         });
     });
     Route::get('/search/query', [\App\Http\Controllers\SearchController::class, 'search'])->name('search.query');

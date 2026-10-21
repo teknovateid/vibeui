@@ -97,7 +97,7 @@ test('password component updates password in database when valid', function () {
     expect(Hash::check('newpassword123', $this->user->password))->toBeTrue();
 });
 
-test('login history component renders sessions and terminates a session', function () {
+test('login history component renders sessions and terminates a session with password', function () {
     $otherSessionId = 'other_device_session_' . uniqid();
     DB::table('sessions')->insert([
         'id' => $otherSessionId,
@@ -111,7 +111,13 @@ test('login history component renders sessions and terminates a session', functi
     Livewire::actingAs($this->user)
         ->test(LoginHistory::class)
         ->assertSee('iPhone')
-        ->call('terminateSession', $otherSessionId)
+        ->call('confirmLogout', 'single', $otherSessionId)
+        ->assertSet('confirmingLogout', true)
+        ->set('password', 'wrong-password')
+        ->call('executeLogout')
+        ->assertHasErrors(['password'])
+        ->set('password', 'password123')
+        ->call('executeLogout')
         ->assertDispatched('toast');
 
     $exists = DB::table('sessions')->where('id', $otherSessionId)->exists();
