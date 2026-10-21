@@ -30,7 +30,7 @@
                                     </vibe:badge>
                                 </div>
                                 <p class="mt-0.5 text-muted-foreground text-xs">
-                                    Kustomisasi seluruh token desain warna (`vibe/app.css`), kanvas, tipografi, dan tata letak secara real-time.
+                                    {{ __('vibe/settings.appearance.header_desc') }}
                                 </p>
                             </div>
 
@@ -337,17 +337,17 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Desktop sidebar</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_sidebar_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah sisi (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--sidebar</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--sidebar-border</code>), palet permukaan, garis batas, dan transparansi untuk mode aktif saat ini.</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.sidebar_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
 
                             {{-- Sidebar Style Cards --}}
                             <div class="space-y-2">
-                                <label class="text-xs font-semibold text-foreground block">Sidebar surface style</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_surface_style') }}</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     <template x-for="st in sidebarStyles" :key="st.id">
                                         <vibe:button 
@@ -366,12 +366,12 @@
 
                             {{-- Custom Sidebar Color Picker (Shown when style is 'custom') --}}
                             <vibe:card x-show="sidebarStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
-                                <span class="text-xs font-semibold text-foreground block">Kustomisasi Warna Sidebar</span>
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_title') }}</span>
                                 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {{-- Sidebar Background --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Warna Latar (<code class="text-[10px] font-mono">--sidebar</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.background_color') }} (<code class="text-[10px] font-mono">--sidebar</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -472,16 +472,16 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Navigation items (Nav)</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.nav_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token item navigasi (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-active-bg</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-active-fg</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--nav-indicator</code>), gaya aktif, garis indikator, dan kerapatan baris untuk mode aktif saat ini.</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.nav_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
                             {{-- Nav Style Preset Cards --}}
                             <div class="space-y-2">
-                                <label class="text-xs font-semibold text-foreground block">Gaya Navigasi Aktif</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.nav_style_label') }}</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     <template x-for="st in navStyles" :key="st.id">
                                         <vibe:button 
@@ -500,12 +500,12 @@
 
                             {{-- Custom Nav Color Pickers (Shown when style is 'custom') --}}
                             <vibe:card x-show="navStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
-                                <span class="text-xs font-semibold text-foreground block">Kustomisasi Warna Navigasi</span>
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.nav_custom_title') }}</span>
                                 
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                     {{-- Nav Active Bg --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Latar Aktif (<code class="text-[10px] font-mono">--nav-active-bg</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_active_bg') }} (<code class="text-[10px] font-mono">--nav-active-bg</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -646,18 +646,18 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Application header</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_header_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">Kustomisasi token bilah atas (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--header</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--header-border</code>), gaya permukaan, garis batas, dan transparansi blur untuk mode aktif saat ini.</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.header_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
                             {{-- Header Blur Glassmorphism Switch --}}
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
-                                    label="Header backdrop blur" 
-                                    description="Efek kaca transparan (*glassmorphism*) saat konten halaman bergulir di bawah bilah atas." 
+                                    :label="__('vibe/settings.appearance.header_blur_label')" 
+                                    :description="__('vibe/settings.appearance.header_blur_desc')" 
                                     labelPlacement="justify" 
                                     size="md" 
                                     x-model="headerGlassEffect" 
@@ -667,7 +667,7 @@
 
                             {{-- Header Style Cards --}}
                             <div class="space-y-2">
-                                <label class="text-xs font-semibold text-foreground block">Header surface style</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_surface_style') }}</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     <template x-for="st in headerStyles" :key="st.id">
                                         <vibe:button 
@@ -686,12 +686,12 @@
 
                             {{-- Custom Header Color Picker (Shown when style is 'custom') --}}
                             <vibe:card x-show="headerStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
-                                <span class="text-xs font-semibold text-foreground block">Kustomisasi Warna Header</span>
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_title') }}</span>
                                 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {{-- Header Background --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Warna Latar (<code class="text-[10px] font-mono">--header</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.background_color') }} (<code class="text-[10px] font-mono">--header</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"

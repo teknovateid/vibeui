@@ -23,7 +23,7 @@
                 {{-- TABS LIST (sidebar kiri)                                          --}}
                 {{-- ================================================================= --}}
                 <vibe:tabs.list class="w-56 shrink-0 flex flex-col gap-0.5 p-3 border-r border-border/60 bg-muted/40">
-                    <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Akun</p>
+                    <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
                     <vibe:tabs.tab name="account">
                         <x-slot:icon>
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -46,7 +46,7 @@
                     </vibe:tabs.tab>
 
                     {{-- Group: Preferensi --}}
-                    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Preferensi</p>
+                    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
 
                     <vibe:tabs.tab name="appearance">
                         <x-slot:icon>

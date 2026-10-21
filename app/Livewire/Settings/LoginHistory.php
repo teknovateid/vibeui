@@ -88,7 +88,7 @@ class LoginHistory extends Component
         $this->password = '';
         $this->selectedSessionId = '';
 
-        $deviceName = $this->selectedDeviceName ?: 'perangkat';
+        $deviceName = $this->selectedDeviceName ?: __('vibe/settings.login_history.device');
 
         $this->dispatch('toast', [
             'message' => __('vibe/settings.login_history.terminated_single_toast', ['device' => $deviceName]) ?: 'Sesi perangkat telah berhasil diakhiri.',
@@ -193,12 +193,12 @@ class LoginHistory extends Component
         $agent = new Agent();
         $agent->setUserAgent($userAgent);
 
-        $platform = $agent->platform() ?: 'Sistem Tidak Diketahui';
+        $platform = $agent->platform() ?: __('vibe/settings.login_history.unknown_platform');
         if ($platform === 'OS X') {
             $platform = 'macOS';
         }
 
-        $browser = $agent->browser() ?: 'Web Browser';
+        $browser = $agent->browser() ?: __('vibe/settings.login_history.web_browser');
         $browserVersion = $agent->version($browser);
         if ($browserVersion) {
             $majorVersion = explode('.', (string) $browserVersion)[0] ?? null;
@@ -207,18 +207,18 @@ class LoginHistory extends Component
             }
         }
 
-        $device = 'Perangkat Tidak Diketahui';
+        $device = __('vibe/settings.login_history.unknown_device');
         if ($agent->isDesktop()) {
-            $device = ($platform === 'macOS') ? 'Mac' : ($platform ? $platform . ' PC' : 'Komputer Desktop');
+            $device = ($platform === 'macOS') ? 'Mac' : ($platform ? $platform . ' PC' : __('vibe/settings.login_history.desktop_pc'));
         } elseif ($agent->isTablet()) {
             $deviceName = $agent->device();
-            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Tablet';
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : __('vibe/settings.login_history.tablet');
         } elseif ($agent->isPhone() || $agent->isMobile()) {
             $deviceName = $agent->device();
-            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Smartphone';
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : __('vibe/settings.login_history.smartphone');
         } else {
             $deviceName = $agent->device();
-            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Perangkat';
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : __('vibe/settings.login_history.device');
         }
 
         $icon = 'laptop';

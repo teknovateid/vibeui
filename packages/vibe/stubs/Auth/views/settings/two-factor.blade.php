@@ -426,9 +426,9 @@
                 async openSetup(method = 'totp') {
                     if (this.isGuest) {
                         if (window.vibeToast) {
-                            vibeToast('Silakan login terlebih dahulu untuk mengaktifkan 2FA akun Anda.', {
+                            vibeToast('{{ __('vibe/settings.two_factor.guest_warning') }}', {
                                 type: 'warning',
-                                title: 'Perlu Login'
+                                title: '{{ __('vibe/settings.two_factor.guest_title') }}'
                             });
                         }
                         return;
