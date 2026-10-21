@@ -207,7 +207,7 @@ class TwoFactor extends Component
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
-            $this->dispatch('vibe-toast', message: 'Silakan login terlebih dahulu untuk mengaktifkan 2FA.', type: 'warning');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.login_required'), type: 'warning');
             return;
         }
 
@@ -247,14 +247,14 @@ class TwoFactor extends Component
         /** @var User|null $user */
         $user = Auth::user();
         if (! $user) {
-            $this->dispatch('vibe-toast', message: 'Silakan login terlebih dahulu untuk mengaktifkan 2FA.', type: 'warning');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.login_required'), type: 'warning');
             return;
         }
 
         if (empty($user->email)) {
             $this->feedbackType = 'error';
-            $this->feedback = 'Alamat email akun tidak ditemukan.';
-            $this->dispatch('vibe-toast', message: 'Alamat email akun tidak ditemukan.', type: 'error');
+            $this->feedback = __('vibe/settings.two_factor.email_not_found');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.email_not_found'), type: 'error');
             return;
         }
 
@@ -271,7 +271,7 @@ class TwoFactor extends Component
                 $this->cooldown = $remaining;
                 $this->emailOtpSent = true;
                 $this->feedbackType = 'info';
-                $this->feedback = 'Kode verifikasi sudah dikirim ke email Anda. Tunggu ' . $remaining . ' detik untuk meminta kode baru.';
+                $this->feedback = __('vibe/settings.two_factor.otp_already_sent', ['seconds' => $remaining]);
                 $this->dispatch('start-cooldown', seconds: $remaining);
                 $this->dispatch('open-modal', 'modal-2fa-email');
                 return;
@@ -286,7 +286,7 @@ class TwoFactor extends Component
             $seconds = $rateLimiter->availableIn($throttleKey);
             $this->cooldown = $seconds;
             $this->feedbackType = 'error';
-            $this->feedback = 'Terlalu banyak permintaan kode verifikasi. Tunggu ' . ceil($seconds / 60) . ' menit sebelum mencoba lagi.';
+            $this->feedback = __('vibe/settings.two_factor.too_many_requests', ['minutes' => ceil($seconds / 60)]);
             $this->dispatch('start-cooldown', seconds: $seconds);
             $this->dispatch('open-modal', 'modal-2fa-email');
             return;
@@ -302,7 +302,7 @@ class TwoFactor extends Component
         $this->cooldown = 60;
         $this->emailOtpSent = true;
         $this->feedbackType = 'info';
-        $this->feedback = 'Kode verifikasi 6-digit telah dikirimkan ke email Anda.';
+        $this->feedback = __('vibe/settings.two_factor.code_sent');
         $this->dispatch('start-cooldown', seconds: 60);
         $this->dispatch('open-modal', 'modal-2fa-email');
     }
@@ -325,7 +325,7 @@ class TwoFactor extends Component
             if ($remaining > 0) {
                 $this->cooldown = $remaining;
                 $this->feedbackType = 'info';
-                $this->feedback = 'Tunggu ' . $remaining . ' detik sebelum meminta kode baru.';
+                $this->feedback = __('vibe/settings.two_factor.wait_seconds', ['seconds' => $remaining]);
                 $this->dispatch('start-cooldown', seconds: $remaining);
                 return;
             }
@@ -339,7 +339,7 @@ class TwoFactor extends Component
             $seconds = $rateLimiter->availableIn($throttleKey);
             $this->cooldown = $seconds;
             $this->feedbackType = 'error';
-            $this->feedback = 'Terlalu sering. Tunggu ' . ceil($seconds / 60) . ' menit sebelum meminta ulang.';
+            $this->feedback = __('vibe/settings.two_factor.wait_minutes', ['minutes' => ceil($seconds / 60)]);
             $this->dispatch('start-cooldown', seconds: $seconds);
             return;
         }
@@ -354,9 +354,9 @@ class TwoFactor extends Component
         $this->cooldown = 60;
         $this->emailOtpSent = true;
         $this->feedbackType = 'info';
-        $this->feedback = 'Kode 6-digit baru telah dikirimkan ke email Anda.';
+        $this->feedback = __('vibe/settings.two_factor.new_code_sent');
         $this->dispatch('start-cooldown', seconds: 60);
-        $this->dispatch('vibe-toast', message: 'Kode baru berhasil dikirim ke email!', type: 'success');
+        $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.new_code_sent_toast'), type: 'success');
     }
 
     /**
@@ -389,7 +389,7 @@ class TwoFactor extends Component
             $valid = $manager->verifyOtpForUser($user, 'email', $this->code);
             if (! $valid) {
                 $this->feedbackType = 'error';
-                $this->feedback = 'Kode verifikasi email 6-digit tidak valid atau sudah kedaluwarsa.';
+                $this->feedback = __('vibe/settings.two_factor.invalid_or_expired_code');
                 $this->addError('code', $this->feedback);
                 return;
             }
@@ -415,7 +415,7 @@ class TwoFactor extends Component
             $this->step = 1;
             $this->feedback = null;
             $this->code = '';
-            $this->dispatch('vibe-toast', message: '2FA via Email berhasil diaktifkan!', type: 'success');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.email_2fa_enabled_toast'), type: 'success');
             return;
         }
 
@@ -423,7 +423,7 @@ class TwoFactor extends Component
         $authenticator = $user->twoFactorAuthenticators()->where('method', 'totp')->first();
         if (! $authenticator || ! $authenticator->secret) {
             $this->feedbackType = 'error';
-            $this->feedback = 'Silakan mulai setup 2FA terlebih dahulu.';
+            $this->feedback = __('vibe/settings.two_factor.start_setup_first');
             $this->addError('code', $this->feedback);
             return;
         }
@@ -431,7 +431,7 @@ class TwoFactor extends Component
         $valid = $manager->verifyOtp($authenticator->secret, $this->code);
         if (! $valid) {
             $this->feedbackType = 'error';
-            $this->feedback = 'Kode autentikasi 6-digit tidak valid.';
+            $this->feedback = __('vibe/settings.two_factor.invalid_totp_code');
             $this->addError('code', $this->feedback);
             return;
         }
@@ -452,7 +452,7 @@ class TwoFactor extends Component
         $this->step = 1;
         $this->feedback = null;
         $this->code = '';
-        $this->dispatch('vibe-toast', message: 'Autentikasi Dua Faktor (TOTP) berhasil diaktifkan!', type: 'success');
+        $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.totp_2fa_enabled_toast'), type: 'success');
     }
 
     /**
@@ -476,7 +476,7 @@ class TwoFactor extends Component
         }
 
         $user->twoFactorAuthenticators()->where('method', $method)->delete();
-        $message = 'Metode 2FA (' . strtoupper($method) . ') telah dinonaktifkan.';
+        $message = __('vibe/settings.two_factor.method_disabled_toast', ['method' => strtoupper($method)]);
 
         if ($method === 'totp') {
             $this->totpEnabled = false;
@@ -516,7 +516,7 @@ class TwoFactor extends Component
 
         $authenticator = $user->twoFactorAuthenticators()->whereNotNull('recovery_codes')->first();
         if (! $authenticator) {
-            $this->dispatch('vibe-toast', message: '2FA belum aktif pada akun ini.', type: 'error');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.not_enabled_error'), type: 'error');
             return;
         }
 
@@ -542,7 +542,7 @@ class TwoFactor extends Component
 
         $authenticator = $user->twoFactorAuthenticators()->whereNotNull('confirmed_at')->first();
         if (! $authenticator) {
-            $this->dispatch('vibe-toast', message: '2FA belum aktif pada akun ini.', type: 'error');
+            $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.not_enabled_error'), type: 'error');
             return;
         }
 
@@ -551,7 +551,7 @@ class TwoFactor extends Component
         $authenticator->save();
 
         $this->recoveryCodes = $recoveryCodes;
-        $this->dispatch('vibe-toast', message: 'Kode pemulihan baru berhasil dibuat.', type: 'success');
+        $this->dispatch('vibe-toast', message: __('vibe/settings.two_factor.recovery_codes_regenerated_toast'), type: 'success');
     }
 
     /**

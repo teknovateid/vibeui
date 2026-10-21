@@ -29,7 +29,7 @@
                     </div>
                     <div>
                         <h4 class="text-sm font-bold text-foreground">{{ __('vibe/settings.security.delete_account_title') }}</h4>
-                        <p class="text-xs text-muted-foreground">Tindakan ini permanen. Masukkan kata sandi akun Anda untuk konfirmasi.</p>
+                        <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.delete_account_confirm_desc') }}</p>
                     </div>
                 </div>
 
@@ -38,10 +38,10 @@
                         <vibe:input 
                             type="password" 
                             name="password" 
-                            label="Kata Sandi Akun" 
+                            :label="__('vibe/settings.security.account_password')" 
                             viewable 
                             wire:model="password" 
-                            placeholder="Masukkan kata sandi..." 
+                            :placeholder="__('vibe/settings.security.password_placeholder')" 
                             required 
                         />
                         @error('password')
@@ -51,15 +51,15 @@
 
                     <div class="flex items-center justify-end gap-2 pt-2 border-t border-border/50">
                         <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" wire:click="$set('confirmingDeletion', false)">
-                            Batal
+                            {{ __('vibe/settings.security.cancel') }}
                         </vibe:button>
                         <vibe:button type="submit" variant="destructive" size="sm" class="cursor-pointer" wire:loading.attr="disabled" wire:target="deleteUser">
                             <span wire:loading.remove wire:target="deleteUser">
-                                Hapus Akun Sekarang
+                                {{ __('vibe/settings.security.delete_account_now') }}
                             </span>
                             <span wire:loading.inline-flex wire:target="deleteUser" class="inline-flex items-center justify-center gap-1.5 leading-none">
                                 <svg class="size-3.5 animate-spin shrink-0 text-current" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                <span>Menghapus...</span>
+                                <span>{{ __('vibe/settings.security.deleting') }}</span>
                             </span>
                         </vibe:button>
                     </div>

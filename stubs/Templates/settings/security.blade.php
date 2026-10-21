@@ -65,12 +65,12 @@
 
                             {{-- Feedback Message --}}
                             <div x-show="feedbackMessage && feedbackType === 'success'" x-cloak>
-                                <vibe:card.alert variant="success" size="sm" title="✓ Berhasil!">
+                                <vibe:card.alert variant="success" size="sm" title="✓ {{ __('vibe/settings.security.success_title') }}">
                                     <span x-text="feedbackMessage"></span>
                                 </vibe:card.alert>
                             </div>
                             <div x-show="feedbackMessage && feedbackType !== 'success'" x-cloak>
-                                <vibe:card.alert variant="destructive" size="sm" title="⚠ Perhatian:">
+                                <vibe:card.alert variant="destructive" size="sm" title="⚠ {{ __('vibe/settings.security.attention_title') }}">
                                     <span x-text="feedbackMessage"></span>
                                 </vibe:card.alert>
                             </div>
@@ -209,7 +209,7 @@
                         supported: false,
                         isIpAddress: typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1'),
                         localhostUrl: typeof window !== 'undefined' ? window.location.href.replace('127.0.0.1', 'localhost') : '',
-                        registerName: 'Perangkat Saya (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
+                        registerName: '{{ __('vibe/settings.security.passkey_device_default') }} (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
                         loading: false,
                         registering: false,
                         statusText: '',
@@ -221,42 +221,42 @@
                         async submitRegisterPasskey() {
                             if (!this.registerName) {
                                 this.feedbackType = 'error';
-                                this.feedbackMessage = 'Harap masukkan nama perangkat.';
+                                this.feedbackMessage = '{{ __('vibe/settings.security.passkey_enter_device_name') }}';
                                 return;
                             }
 
                             this.loading = true;
                             this.registering = true;
-                            this.statusText = 'Menyiapkan sensor biometrik perangkat...';
+                            this.statusText = '{{ __('vibe/settings.security.passkey_sensor_preparing') }}';
                             this.feedbackMessage = null;
 
                             try {
                                 if (!window.VibePasskeyService) {
-                                    throw new Error('Modul Passkey belum dimuat.');
+                                    throw new Error('{{ __('vibe/settings.security.passkey_module_not_loaded') }}');
                                 }
 
-                                const regRes = await window.VibePasskeyService.register(this.registerName || 'Perangkat Saya');
+                                const regRes = await window.VibePasskeyService.register(this.registerName || '{{ __('vibe/settings.security.passkey_device_default') }}');
                                 if (regRes.success) {
                                     this.feedbackType = 'success';
-                                    this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
+                                    this.feedbackMessage = '{{ __('vibe/settings.security.passkey_registered_success') }}';
                                     setTimeout(() => window.location.reload(), 1500);
                                 } else if (regRes.confirmationRequired) {
                                     const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
-                                    this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                    this.statusText = '{{ __('vibe/settings.security.passkey_redirecting_confirm') }}';
                                     window.location.href = confirmUrl;
                                 } else {
                                     this.feedbackType = 'error';
-                                    this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
+                                    this.feedbackMessage = regRes.message || '{{ __('vibe/settings.security.passkey_canceled_user') }}';
                                 }
                             } catch (err) {
                                 if (err?.response?.status === 423 || err?.status === 423 || err?.message?.includes('423') || err?.message?.toLowerCase().includes('password confirmation')) {
                                     const confirmUrl = '{{ Route::has('password.confirm') ? route('password.confirm') : '/confirm-password' }}';
-                                    this.statusText = 'Mengarahkan ke halaman konfirmasi kata sandi...';
+                                    this.statusText = '{{ __('vibe/settings.security.passkey_redirecting_confirm') }}';
                                     window.location.href = confirmUrl;
                                     return;
                                 }
                                 this.feedbackType = 'error';
-                                this.feedbackMessage = err.message || 'Terjadi kesalahan saat memproses pendaftaran passkey.';
+                                this.feedbackMessage = err.message || '{{ __('vibe/settings.security.passkey_error_processing') }}';
                             } finally {
                                 this.loading = false;
                                 this.registering = false;
