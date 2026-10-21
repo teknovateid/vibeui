@@ -6,25 +6,76 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Jenssegers\Agent\Agent;
 use Livewire\Component;
 
 class LoginHistory extends Component
 {
     public bool $confirmingLogout = false;
+    public string $logoutMode = 'other'; // 'other', 'all', or 'single'
+    public string $selectedSessionId = '';
+    public string $selectedDeviceName = '';
     public string $password = '';
 
-    public function confirmLogout(): void
+    public function confirmLogout(string $mode = 'other', string $sessionId = '', string $deviceName = ''): void
     {
         $this->resetErrorBag();
         $this->password = '';
+        $this->logoutMode = in_array($mode, ['other', 'all', 'single'], true) ? $mode : 'other';
+        $this->selectedSessionId = $sessionId;
+        $this->selectedDeviceName = $deviceName;
         $this->confirmingLogout = true;
     }
 
-    public function terminateSession(string $sessionId): void
+    public function executeLogout(): void
     {
+        $this->validate([
+            'password' => ['required', 'string', 'current_password'],
+        ]);
+
+        if ($this->logoutMode === 'all') {
+            $this->terminateAllSessions();
+        } elseif ($this->logoutMode === 'single') {
+            $this->terminateSingleSession();
+        } else {
+            $this->terminateOtherSessions();
+        }
+    }
+
+    public function terminateSession(string $sessionId, ?string $password = null): void
+    {
+        $this->selectedSessionId = $sessionId;
+        $this->logoutMode = 'single';
+
+        if ($password !== null) {
+            $this->password = $password;
+            $this->executeLogout();
+            return;
+        }
+
+        $this->confirmLogout('single', $sessionId);
+    }
+
+    public function terminateSingleSession(): void
+    {
+        $this->validate([
+            'password' => ['required', 'string', 'current_password'],
+        ]);
+
+        $sessionId = $this->selectedSessionId;
         $currentSessionId = $this->getCurrentSessionId();
 
         if ($sessionId === $currentSessionId) {
+            DB::table('sessions')
+                ->where('user_id', Auth::id())
+                ->where('id', $sessionId)
+                ->delete();
+
+            Auth::guard('web')->logout();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+
+            $this->redirect(route('login'), navigate: true);
             return;
         }
 
@@ -33,10 +84,16 @@ class LoginHistory extends Component
             ->where('id', $sessionId)
             ->delete();
 
+        $this->confirmingLogout = false;
+        $this->password = '';
+        $this->selectedSessionId = '';
+
+        $deviceName = $this->selectedDeviceName ?: 'perangkat';
+
         $this->dispatch('toast', [
-            'message' => 'Sesi perangkat telah berhasil diakhiri.',
+            'message' => __('vibe/settings.login_history.terminated_single_toast', ['device' => $deviceName]) ?: 'Sesi perangkat telah berhasil diakhiri.',
             'type' => 'success',
-            'title' => __('vibe/settings.login_history.terminated_single_title') ?? 'Sesi Diakhiri',
+            'title' => __('vibe/settings.login_history.terminated_single_title') ?: 'Sesi Diakhiri',
         ]);
     }
 
@@ -57,12 +114,30 @@ class LoginHistory extends Component
 
         $this->confirmingLogout = false;
         $this->password = '';
+        $this->selectedSessionId = '';
 
         $this->dispatch('toast', [
-            'message' => __('vibe/settings.login_history.terminated_all_toast') ?? 'Semua sesi lain berhasil diakhiri.',
+            'message' => __('vibe/settings.login_history.terminated_all_toast') ?: 'Semua sesi lain berhasil diakhiri.',
             'type' => 'success',
-            'title' => __('vibe/settings.login_history.terminated_all_title') ?? 'Sesi Diakhiri',
+            'title' => __('vibe/settings.login_history.terminated_all_title') ?: 'Sesi Diakhiri',
         ]);
+    }
+
+    public function terminateAllSessions(): void
+    {
+        $this->validate([
+            'password' => ['required', 'string', 'current_password'],
+        ]);
+
+        DB::table('sessions')
+            ->where('user_id', Auth::id())
+            ->delete();
+
+        Auth::guard('web')->logout();
+        request()->session()->invalidate();
+        request()->session()->regenerateToken();
+
+        $this->redirect(route('login'), navigate: true);
     }
 
     protected function getCurrentSessionId(): string
@@ -97,10 +172,13 @@ class LoginHistory extends Component
             ->map(function ($session) use ($currentSessionId) {
                 $agent = $this->parseUserAgent($session->user_agent ?? '');
 
+                $isOnline = (time() - (int) $session->last_activity) < 300;
+
                 return (object) [
                     'id' => $session->id,
                     'ip_address' => $session->ip_address ?: '127.0.0.1',
                     'is_current' => $session->id === $currentSessionId,
+                    'is_online' => $isOnline,
                     'device' => $agent['device'],
                     'browser' => $agent['browser'],
                     'os' => $agent['os'],
@@ -112,55 +190,52 @@ class LoginHistory extends Component
 
     protected function parseUserAgent(string $userAgent): array
     {
-        $os = 'Sistem Tidak Diketahui';
-        $icon = 'monitor';
-        $device = 'Perangkat Komputer';
+        $agent = new Agent();
+        $agent->setUserAgent($userAgent);
 
-        // Detect OS
-        if (preg_match('/windows nt 10/i', $userAgent)) {
-            $os = 'Windows 10/11';
-            $device = 'Windows PC';
-        } elseif (preg_match('/windows/i', $userAgent)) {
-            $os = 'Windows';
-            $device = 'Windows PC';
-        } elseif (preg_match('/iphone/i', $userAgent)) {
-            $os = 'iOS';
-            $device = 'iPhone';
-            $icon = 'smartphone';
-        } elseif (preg_match('/ipad/i', $userAgent)) {
-            $os = 'iPadOS';
-            $device = 'iPad';
-            $icon = 'smartphone';
-        } elseif (preg_match('/android/i', $userAgent)) {
-            $os = 'Android';
-            $device = 'Android Device';
-            $icon = 'smartphone';
-        } elseif (preg_match('/macintosh|mac os x/i', $userAgent)) {
-            $os = 'macOS';
-            $device = 'Mac';
-        } elseif (preg_match('/linux/i', $userAgent)) {
-            $os = 'Linux';
-            $device = 'Linux Desktop';
+        $platform = $agent->platform() ?: 'Sistem Tidak Diketahui';
+        if ($platform === 'OS X') {
+            $platform = 'macOS';
         }
 
-        // Detect Browser
-        $browser = 'Web Browser';
-        if (preg_match('/edg/i', $userAgent)) {
-            $browser = 'Microsoft Edge';
-        } elseif (preg_match('/chrome|crios/i', $userAgent)) {
-            $browser = 'Google Chrome';
-        } elseif (preg_match('/firefox|fxios/i', $userAgent)) {
-            $browser = 'Mozilla Firefox';
-        } elseif (preg_match('/safari/i', $userAgent)) {
-            $browser = 'Apple Safari';
-        } elseif (preg_match('/opera|opr/i', $userAgent)) {
-            $browser = 'Opera';
+        $browser = $agent->browser() ?: 'Web Browser';
+        $browserVersion = $agent->version($browser);
+        if ($browserVersion) {
+            $majorVersion = explode('.', (string) $browserVersion)[0] ?? null;
+            if ($majorVersion) {
+                $browser .= ' ' . $majorVersion;
+            }
+        }
+
+        $device = 'Perangkat Tidak Diketahui';
+        if ($agent->isDesktop()) {
+            $device = ($platform === 'macOS') ? 'Mac' : ($platform ? $platform . ' PC' : 'Komputer Desktop');
+        } elseif ($agent->isTablet()) {
+            $deviceName = $agent->device();
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Tablet';
+        } elseif ($agent->isPhone() || $agent->isMobile()) {
+            $deviceName = $agent->device();
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Smartphone';
+        } else {
+            $deviceName = $agent->device();
+            $device = ($deviceName && $deviceName !== 'WebKit') ? $deviceName : 'Perangkat';
+        }
+
+        $icon = 'laptop';
+        if ($agent->isTablet()) {
+            $icon = 'tablet';
+        } elseif ($agent->isPhone() || $agent->isMobile()) {
+            $icon = 'smartphone';
+        } elseif ($agent->isDesktop()) {
+            $icon = 'laptop';
+        } else {
+            $icon = 'monitor';
         }
 
         return [
             'device' => $device,
             'browser' => $browser,
-            'os' => $os,
+            'os' => $platform,
             'icon' => $icon,
         ];
     }
