@@ -355,19 +355,16 @@
                     x-show="items.length > 0"
                     x-cloak
                     :title="copied ? 'Tersalin!' : 'Salin Semua'"
-                    class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer"
+                    aria-label="Salin Semua"
+                    class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer flex items-center justify-center"
                 >
-                    <template x-if="!copied">
-                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 12.9V17c0 3-1.7 4-4 4H7c-2.3 0-4-1-4-4v-5c0-3 1.7-4 4-4h1" />
-                            <path d="M17 7.1V7c0-3-1.7-4-4-4H8" />
-                        </svg>
-                    </template>
-                    <template x-if="copied">
-                        <svg class="size-3.5 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 12.611 8.923 17.5 20 6.5" />
-                        </svg>
-                    </template>
+                    <svg x-show="!copied" class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+                        <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+                    </svg>
+                    <svg x-show="copied" x-cloak class="size-3.5 text-success" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
                 </button>
             @endif
 
