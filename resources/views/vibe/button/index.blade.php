@@ -9,6 +9,7 @@
     'disabled' => false,
     'pulse' => false,
     'animation' => false,
+    'navigate' => null,    // boolean or null (auto-detect based on target: false if target is set and not _self, true otherwise)
 ])
 
 @php
@@ -98,6 +99,34 @@
         $attributes = $attributes->except([':loading', '::loading', 'x-bind:loading', 'x-loading']);
     }
 
+    $target = $attributes->get('target');
+    $hasExternalTarget = ! empty($target) && $target !== '_self';
+
+    $isNavigateExplicitlyFalse = $navigate === false || $navigate === 'false' || $navigate === 0 || $navigate === '0';
+    $isNavigateExplicitlyTrue = $navigate === true || $navigate === 'true' || $navigate === 1 || $navigate === '1';
+
+    if ($isNavigateExplicitlyTrue) {
+        $shouldNavigate = true;
+    } elseif ($isNavigateExplicitlyFalse || $hasExternalTarget) {
+        $shouldNavigate = false;
+    } else {
+        $shouldNavigate = true;
+    }
+
+    if (! $shouldNavigate) {
+        $attributes = $attributes->except([
+            'wire:navigate',
+            'wire:navigate.hover',
+            'wire:navigate.preserve-scroll',
+            'wire:navigate.hover.preserve-scroll',
+            'wire:navigate.preserve-scroll.hover',
+        ]);
+    }
+
+    $hasCustomNavigateAttr = $attributes->has('wire:navigate')
+        || $attributes->has('wire:navigate.hover')
+        || $attributes->has('wire:navigate.preserve-scroll');
+
     $spinnerSize = match ($size) {
         'xs', 'icon-xs' => 'size-3.5',
         'sm', 'icon-sm' => 'size-3.5',
@@ -113,7 +142,7 @@
 
 @if($href)
     <a 
-        wire:navigate 
+        @if($shouldNavigate && ! $hasCustomNavigateAttr) wire:navigate @endif
         href="{{ $isDisabled ? '#' : $href }}" 
         @if(!$hasCustomXData) x-data @endif 
         @if($isDisabled) aria-disabled="true" tabindex="-1" @endif

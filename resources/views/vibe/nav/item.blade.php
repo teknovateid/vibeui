@@ -11,6 +11,7 @@
     'variant' => null,
     'density' => null,
     'indicator' => null,
+    'navigate' => null,
 ])
 
 @php
@@ -52,9 +53,36 @@
         'yellow', 'warning' => 'bg-warning/15 text-warning border border-warning/20',
         default => 'bg-secondary text-secondary-foreground',
     };
+
+    $target = $attributes->get('target');
+    $hasExternalTarget = ! empty($target) && $target !== '_self';
+    $isNavigateExplicitlyFalse = $navigate === false || $navigate === 'false' || $navigate === 0 || $navigate === '0';
+    $isNavigateExplicitlyTrue = $navigate === true || $navigate === 'true' || $navigate === 1 || $navigate === '1';
+
+    if ($isNavigateExplicitlyTrue) {
+        $shouldNavigate = true;
+    } elseif ($isNavigateExplicitlyFalse || $hasExternalTarget) {
+        $shouldNavigate = false;
+    } else {
+        $shouldNavigate = true;
+    }
+
+    if (! $shouldNavigate) {
+        $attributes = $attributes->except([
+            'wire:navigate',
+            'wire:navigate.hover',
+            'wire:navigate.preserve-scroll',
+            'wire:navigate.hover.preserve-scroll',
+            'wire:navigate.preserve-scroll.hover',
+        ]);
+    }
+
+    $hasCustomNavigateAttr = $attributes->has('wire:navigate')
+        || $attributes->has('wire:navigate.hover')
+        || $attributes->has('wire:navigate.preserve-scroll');
 @endphp
 
-<a wire:navigate href="{{ $href }}" @click="if ($event.target.closest('[data-nav-pin-btn]')) { $event.preventDefault(); $event.stopPropagation(); return false; }" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ html_entity_decode(strip_tags($slot), ENT_QUOTES, 'UTF-8') }}" data-pin-href="{{ $href }}" @if ($variant) data-variant="{{ $variant }}" @endif @if ($itemDensity) data-density="{{ $itemDensity }}" @endif @if ($hasIndicator) data-indicator="true" @endif x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
+<a @if($shouldNavigate && ! $hasCustomNavigateAttr) wire:navigate @endif href="{{ $href }}" @click="if ($event.target.closest('[data-nav-pin-btn]')) { $event.preventDefault(); $event.stopPropagation(); return false; }" @if ($collapsed) data-collapsed="true" @endif data-nav-pin-id="{{ $itemId }}" data-pin-type="item" data-pin-title="{{ html_entity_decode(strip_tags($slot), ENT_QUOTES, 'UTF-8') }}" data-pin-href="{{ $href }}" @if ($variant) data-variant="{{ $variant }}" @endif @if ($itemDensity) data-density="{{ $itemDensity }}" @endif @if ($hasIndicator) data-indicator="true" @endif x-bind:data-collapsed="typeof state !== 'undefined' && state === 'minified'" :class="(typeof isInitialized !== 'undefined' && !isInitialized) ? '' : 'transition-[width,height,padding,margin] duration-300'" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
 
     <!-- Icon -->
     @if (isset($icon))

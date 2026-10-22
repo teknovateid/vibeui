@@ -9,6 +9,7 @@
     'active' => false,
     'wrapperClass' => null,
     'separator' => null,
+    'navigate' => null,
 ])
 
 @php
@@ -17,6 +18,33 @@
 
     $isSeparatorSlot = isset($separator) && $separator instanceof \Illuminate\View\ComponentSlot && $separator->isNotEmpty();
     $separatorType = is_string($separator) ? trim($separator) : 'chevron';
+
+    $target = $attributes->get('target');
+    $hasExternalTarget = ! empty($target) && $target !== '_self';
+    $isNavigateExplicitlyFalse = $navigate === false || $navigate === 'false' || $navigate === 0 || $navigate === '0';
+    $isNavigateExplicitlyTrue = $navigate === true || $navigate === 'true' || $navigate === 1 || $navigate === '1';
+
+    if ($isNavigateExplicitlyTrue) {
+        $shouldNavigate = true;
+    } elseif ($isNavigateExplicitlyFalse || $hasExternalTarget) {
+        $shouldNavigate = false;
+    } else {
+        $shouldNavigate = true;
+    }
+
+    if (! $shouldNavigate) {
+        $attributes = $attributes->except([
+            'wire:navigate',
+            'wire:navigate.hover',
+            'wire:navigate.preserve-scroll',
+            'wire:navigate.hover.preserve-scroll',
+            'wire:navigate.preserve-scroll.hover',
+        ]);
+    }
+
+    $hasCustomNavigateAttr = $attributes->has('wire:navigate')
+        || $attributes->has('wire:navigate.hover')
+        || $attributes->has('wire:navigate.preserve-scroll');
 @endphp
 
 <li @class(['inline-flex items-center gap-2 sm:gap-2.5 group shrink-0 whitespace-nowrap', $wrapperClass])>
@@ -39,7 +67,7 @@
     </span>
 
     @if($href)
-        <a wire:navigate href="{{ $href }}" @if($active) aria-current="page" @endif {{ $attributes->twMerge(['class' => $linkClasses]) }}>
+        <a @if($shouldNavigate && ! $hasCustomNavigateAttr) wire:navigate @endif href="{{ $href }}" @if($active) aria-current="page" @endif {{ $attributes->twMerge(['class' => $linkClasses]) }}>
             {{ $slot }}
         </a>
     @else

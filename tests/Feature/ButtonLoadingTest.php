@@ -82,3 +82,51 @@ test('button as link (href) supports loading state', function () {
         ->toContain('Beranda');
 });
 
+test('button as link includes wire:navigate by default', function () {
+    $html = Blade::render('<vibe:button href="/dashboard">Dashboard</vibe:button>');
+
+    expect($html)
+        ->toContain('<a')
+        ->toContain('wire:navigate')
+        ->toContain('href="/dashboard"');
+});
+
+test('button as link omits wire:navigate when target is _blank', function () {
+    $html = Blade::render('<vibe:button href="/receipt/1" target="_blank">Cetak</vibe:button>');
+
+    expect($html)
+        ->toContain('<a')
+        ->toContain('target="_blank"')
+        ->toContain('href="/receipt/1"')
+        ->not->toContain('wire:navigate');
+});
+
+test('button as link omits wire:navigate when target is custom or non-self', function () {
+    $html = Blade::render('<vibe:button href="/receipt/1" target="__blank">Cetak</vibe:button>');
+
+    expect($html)
+        ->toContain('<a')
+        ->toContain('target="__blank"')
+        ->toContain('href="/receipt/1"')
+        ->not->toContain('wire:navigate');
+});
+
+test('button as link omits wire:navigate when navigate is false', function () {
+    $html = Blade::render('<vibe:button href="/download" :navigate="false">Unduh</vibe:button>');
+
+    expect($html)
+        ->toContain('<a')
+        ->toContain('href="/download"')
+        ->not->toContain('wire:navigate');
+});
+
+test('button as link forces wire:navigate when navigate is true even with target', function () {
+    $html = Blade::render('<vibe:button href="/dashboard" target="_blank" :navigate="true">Dashboard</vibe:button>');
+
+    expect($html)
+        ->toContain('<a')
+        ->toContain('wire:navigate')
+        ->toContain('target="_blank"');
+});
+
+
