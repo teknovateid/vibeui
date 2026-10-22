@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.7] - 2026-10-22
+
+### 🚀 Features
+- feat: add controller request testing sections and modals to currency, otp, and phone input documentation (97570a6)
+- feat(input): add file input component and documentation (20cea19)
+
+### ⚡ Performance & Refactoring
+- refactor: update copy button icons and improve styling in multiple input view (42171d3)
+
+
 ## [0.6.6] - 2026-10-22
 
 ### 🚀 Features
