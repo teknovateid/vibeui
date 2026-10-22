@@ -13,6 +13,7 @@
     'animation' => false,
     'dismissible' => false,
     'href' => null,
+    'navigate' => null,
 ])
 
 @php
@@ -88,11 +89,38 @@
         default => ($pulse ? 'animate-vibe-pulse' : ''),
     };
 
+    $target = $attributes->get('target');
+    $hasExternalTarget = ! empty($target) && $target !== '_self';
+    $isNavigateExplicitlyFalse = $navigate === false || $navigate === 'false' || $navigate === 0 || $navigate === '0';
+    $isNavigateExplicitlyTrue = $navigate === true || $navigate === 'true' || $navigate === 1 || $navigate === '1';
+
+    if ($isNavigateExplicitlyTrue) {
+        $shouldNavigate = true;
+    } elseif ($isNavigateExplicitlyFalse || $hasExternalTarget) {
+        $shouldNavigate = false;
+    } else {
+        $shouldNavigate = true;
+    }
+
+    if (! $shouldNavigate) {
+        $attributes = $attributes->except([
+            'wire:navigate',
+            'wire:navigate.hover',
+            'wire:navigate.preserve-scroll',
+            'wire:navigate.hover.preserve-scroll',
+            'wire:navigate.preserve-scroll.hover',
+        ]);
+    }
+
+    $hasCustomNavigateAttr = $attributes->has('wire:navigate')
+        || $attributes->has('wire:navigate.hover')
+        || $attributes->has('wire:navigate.preserve-scroll');
+
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$interactiveClasses} {$animationClass}");
 @endphp
 
 @if ($href)
-    <a wire:navigate href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
+    <a @if($shouldNavigate && ! $hasCustomNavigateAttr) wire:navigate @endif href="{{ $href }}" {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
         @if ($dot)
             <span class="relative flex {{ $dotSizeClass }} shrink-0">
                 @if ($dotPulse)
