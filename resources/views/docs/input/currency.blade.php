@@ -240,6 +240,56 @@
 </vibe:highlightjs>
             </section>
 
+            {{-- Pengujian Form Submit ke Controller --}}
+            <section id="uji-coba-controller" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Pengujian Request ke Controller</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Submit form di bawah untuk melihat nilai yang diterima <code>$request->all()</code> di controller — termasuk nilai bersih numerik dari input currency.
+                    </p>
+                </div>
+
+                <vibe:preview title="Uji Submit vibe:input.currency">
+                    <vibe:preview.code>
+<\vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+    @@csrf
+    <\vibe:card>
+        <\vibe:card.header>
+            <h3 class="text-sm font-semibold text-foreground">Form Anggaran & Keuangan</h3>
+            <p class="text-xs text-muted-foreground mt-0.5">Nilai numerik bersih dikirim ke controller tanpa separator.</p>
+        <\/vibe:card.header>
+        <\vibe:card.content class="space-y-4">
+            <\vibe:input.currency name="anggaran" label="Anggaran Proyek" prefix="Rp" thousand-separator="." placeholder="0" />
+            <\vibe:input.currency name="harga_jual" label="Harga Jual" prefix="Rp" thousand-separator="." decimal-separator="," precision="2" placeholder="0,00" />
+            <\vibe:input.currency name="budget_usd" label="Budget (USD)" prefix="$" thousand-separator="," decimal-separator="." precision="2" placeholder="0.00" />
+        <\/vibe:card.content>
+        <\vibe:card.footer>
+            <\vibe:button class="w-full" type="submit" variant="primary">Kirim & Lihat $request->all()<\/vibe:button>
+        <\/vibe:card.footer>
+    <\/vibe:card>
+<\/vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm font-semibold text-foreground">Form Anggaran & Keuangan</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Nilai numerik bersih dikirim ke controller tanpa separator.</p>
+                            </vibe:card.header>
+                            <vibe:card.content class="space-y-4">
+                                <vibe:input.currency name="anggaran" label="Anggaran Proyek" prefix="Rp" thousand-separator="." placeholder="0" />
+                                <vibe:input.currency name="harga_jual" label="Harga Jual" prefix="Rp" thousand-separator="." decimal-separator="," precision="2" placeholder="0,00" />
+                                <vibe:input.currency name="budget_usd" label="Budget (USD)" prefix="$" thousand-separator="," decimal-separator="." precision="2" placeholder="0.00" />
+                            </vibe:card.content>
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">Kirim & Lihat $request->all()</vibe:button>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
+                </vibe:preview>
+            </section>
+
         </div>
 
         {{-- Table of Contents Sidebar --}}
@@ -248,4 +298,8 @@
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>
+

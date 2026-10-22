@@ -211,6 +211,56 @@ class ContactForm extends Component
                 </vibe:highlightjs>
             </section>
 
+            {{-- 6. Pengujian Request ke Controller --}}
+            <section id="uji-coba-controller" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Pengujian Request ke Controller</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Submit form di bawah untuk melihat nilai <code>$request->all()</code> — perhatikan perbedaan nilai raw (dengan format) vs clean (hanya digit) di controller.
+                    </p>
+                </div>
+
+                <vibe:preview title="Uji Submit vibe:input.phone">
+                    <vibe:preview.code>
+<\vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+    @@csrf
+    <\vibe:card>
+        <\vibe:card.header>
+            <h3 class="text-sm font-semibold text-foreground">Form Data Kontak</h3>
+            <p class="text-xs text-muted-foreground mt-0.5">Format Indonesia & internasional.</p>
+        <\/vibe:card.header>
+        <\vibe:card.content class="space-y-4">
+            <\vibe:input.phone name="phone_id" label="Telepon Indonesia" placeholder="+62 812-3456-7890" />
+            <\vibe:input.phone name="phone_clean" label="Telepon Bersih (digit only)" clean placeholder="+62 812-3456-7890" />
+            <\vibe:input.phone name="phone_intl" label="Telepon Internasional" format="+## (###) ###-####" placeholder="+62 (812) 345-6789" />
+        <\/vibe:card.content>
+        <\vibe:card.footer>
+            <\vibe:button class="w-full" type="submit" variant="primary">Simpan & Lihat $request->all()<\/vibe:button>
+        <\/vibe:card.footer>
+    <\/vibe:card>
+<\/vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-lg mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm font-semibold text-foreground">Form Data Kontak</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Format Indonesia & internasional.</p>
+                            </vibe:card.header>
+                            <vibe:card.content class="space-y-4">
+                                <vibe:input.phone name="phone_id" label="Telepon Indonesia" placeholder="+62 812-3456-7890" />
+                                <vibe:input.phone name="phone_clean" label="Telepon Bersih (digit only)" clean placeholder="+62 812-3456-7890" />
+                                <vibe:input.phone name="phone_intl" label="Telepon Internasional" format="+## (###) ###-####" placeholder="+62 (812) 345-6789" />
+                            </vibe:card.content>
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">Simpan & Lihat $request->all()</vibe:button>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
+                </vibe:preview>
+            </section>
+
         </div>
 
         {{-- Table of Contents Sidebar --}}
@@ -219,4 +269,8 @@ class ContactForm extends Component
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>
+

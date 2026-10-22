@@ -167,6 +167,54 @@
                 </div>
             </section>
 
+            {{-- 5. Pengujian Request ke Controller --}}
+            <section id="uji-coba-controller" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">Pengujian Request ke Controller</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Isi kode OTP lalu submit untuk melihat nilai <code>$request->token</code> yang diterima controller — satu string digit utuh.
+                    </p>
+                </div>
+
+                <vibe:preview title="Uji Submit vibe:input.otp">
+                    <vibe:preview.code>
+<\vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-sm mx-auto">
+    @@csrf
+    <\vibe:card>
+        <\vibe:card.header>
+            <h3 class="text-sm font-semibold text-foreground">Verifikasi Kode OTP</h3>
+            <p class="text-xs text-muted-foreground mt-0.5">Masukkan kode 6 digit yang diterima.</p>
+        <\/vibe:card.header>
+        <\vibe:card.content class="space-y-4">
+            <\vibe:input.otp name="otp_code" length="6" label="Kode Verifikasi" />
+            <\vibe:input.otp name="pin_4" length="4" label="PIN 4 Digit" mask />
+        <\/vibe:card.content>
+        <\vibe:card.footer>
+            <\vibe:button class="w-full" type="submit" variant="primary">Verifikasi & Lihat $request->all()<\/vibe:button>
+        <\/vibe:card.footer>
+    <\/vibe:card>
+<\/vibe:form>
+                    </vibe:preview.code>
+
+                    <vibe:form action="{{ route('docs.form.store') }}" method="POST" class="w-full max-w-sm mx-auto">
+                        @csrf
+                        <vibe:card>
+                            <vibe:card.header>
+                                <h3 class="text-sm font-semibold text-foreground">Verifikasi Kode OTP</h3>
+                                <p class="text-xs text-muted-foreground mt-0.5">Masukkan kode 6 digit yang diterima.</p>
+                            </vibe:card.header>
+                            <vibe:card.content class="space-y-4">
+                                <vibe:input.otp name="otp_code" length="6" label="Kode Verifikasi" />
+                                <vibe:input.otp name="pin_4" length="4" label="PIN 4 Digit" mask />
+                            </vibe:card.content>
+                            <vibe:card.footer>
+                                <vibe:button class="w-full" type="submit" variant="primary">Verifikasi & Lihat $request->all()</vibe:button>
+                            </vibe:card.footer>
+                        </vibe:card>
+                    </vibe:form>
+                </vibe:preview>
+            </section>
+
         </div>
 
         {{-- Table of Contents Sidebar --}}
@@ -175,4 +223,7 @@
         </aside>
 
     </div>
+
+    {{-- Reusable Modal Pengujian $request->all() --}}
+    @include('docs.partials.form-test-modal')
 </x-docs.layouts.sidebar>
