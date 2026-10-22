@@ -25,6 +25,7 @@ return [
             'quantity' => 'Input Quantity',
             'generate' => 'Input Generate',
             'multiple' => 'Input Multiple / Tags',
+            'file' => 'Input File / Upload',
         ],
         'textarea' => 'Textarea',
         'select' => 'Select',

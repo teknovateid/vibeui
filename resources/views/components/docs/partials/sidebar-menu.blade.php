@@ -126,6 +126,9 @@
             <vibe:nav.item href="{{ route('docs.input.multiple') }}" :active="request()->routeIs('docs.input.multiple')">
                 {{ __('docs/sidebar.nav.input_group.multiple') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.input.file') }}" :active="request()->routeIs('docs.input.file')">
+                {{ __('docs/sidebar.nav.input_group.file') }}
+            </vibe:nav.item>
         </vibe:nav.group>
 
         <!-- Textarea -->
