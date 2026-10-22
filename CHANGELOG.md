@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.6] - 2026-10-22
+
+### 🚀 Features
+- feat: add configurable navigate option for wire:navigate support across components (cd37052)
+
+
 ## [0.6.5] - 2026-10-21
 
 ### ⚡ Performance & Refactoring
