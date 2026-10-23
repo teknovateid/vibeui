@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.7.1] - 2026-10-23
+
+### 🚀 Features
+- feat: add stepper component with documentation, views, localization, and route (4db0851)
+
+### ⚡ Performance & Refactoring
+- refactor: update vertical stepper documentation preview to use multi-step form panels with localization (fb527d6)
+- refactor: refactor stepper component to use centralized dynamic CSS class helper methods (84d691a)
+
+
 ## [0.7.0] - 2026-10-23
 
 ### 🚀 Features
