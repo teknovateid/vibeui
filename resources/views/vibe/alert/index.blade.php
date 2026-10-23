@@ -466,10 +466,17 @@
             remove(t);
         }
     " class="fixed inset-0 z-100 flex pointer-events-none" id="vibe-alert-container" :class="getPositionClasses()">
-    <div class="hidden" x-init="@if (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/alert.success') }}' }); @endif
-    @if (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/alert.error') }}' }); @endif
-    @if (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: '{{ __('vibe/alert.warning') }}' }); @endif
-    @if (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/alert.info') }}' }); @endif"></div>
+    <!-- Handle Session Flash Messages -->
+    <div class="hidden" x-init="
+        @if (session()->has('alert_success')) add({ type: 'success', message: '{{ session('alert_success') }}', title: '{{ __('vibe/alert.success') }}' });
+        @elseif (session()->has('success')) add({ type: 'success', message: '{{ session('success') }}', title: '{{ __('vibe/alert.success') }}' }); @endif
+        @if (session()->has('alert_error')) add({ type: 'error', message: '{{ session('alert_error') }}', title: '{{ __('vibe/alert.error') }}' });
+        @elseif (session()->has('error')) add({ type: 'error', message: '{{ session('error') }}', title: '{{ __('vibe/alert.error') }}' }); @endif
+        @if (session()->has('alert_warning')) add({ type: 'warning', message: '{{ session('alert_warning') }}', title: '{{ __('vibe/alert.warning') }}' });
+        @elseif (session()->has('warning')) add({ type: 'warning', message: '{{ session('warning') }}', title: '{{ __('vibe/alert.warning') }}' }); @endif
+        @if (session()->has('alert_info')) add({ type: 'info', message: '{{ session('alert_info') }}', title: '{{ __('vibe/alert.info') }}' });
+        @elseif (session()->has('info')) add({ type: 'info', message: '{{ session('info') }}', title: '{{ __('vibe/alert.info') }}' }); @endif
+    "></div>
 
     <!-- Backdrop -->
     <div x-show="hasBackdrop()" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-black/40 pointer-events-auto transition-all duration-300" :class="getBackdropBlurClass()" @click="closeOutsideAlerts()" style="display: none; z-index: -1;"></div>
