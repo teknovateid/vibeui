@@ -18,7 +18,16 @@
             <vibe:tabs selected="appearance" variant="sidebar" class="min-h-155">
                 @include('docs.settings.tabs', ['active' => 'appearance'])
 
-                <div class="flex-1 min-w-0 p-6 space-y-8" x-data="appearanceController()" x-init="init()">
+                <div class="flex-1 min-w-0 p-6 space-y-8" 
+                    x-data="Object.assign(appearanceController(), {
+                        styleNames: @js(__('vibe/settings.appearance.style_names')),
+                        radiiLabels: @js(__('vibe/settings.appearance.radii_labels')),
+                        surfacePresetsI18n: @js(__('vibe/settings.appearance.surface_presets')),
+                        fontsI18n: @js(__('vibe/settings.appearance.fonts_desc')),
+                        i18n: @js(__('vibe/settings.appearance.toasts')),
+                    })" 
+                    x-init="init()"
+                >
                     {{-- Header with Status & Quick Actions --}}
                     <div class="pb-4 border-border/50 border-b">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -26,7 +35,7 @@
                                 <div class="flex items-center gap-2">
                                     <h2 class="font-bold text-foreground text-lg">{{ __('vibe/settings.appearance.header_title') ?? 'Appearance & Theme Tokens' }}</h2>
                                     <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
-                                        Live Engine
+                                        {{ __('vibe/settings.appearance.live_engine') }}
                                     </vibe:badge>
                                 </div>
                                 <p class="mt-0.5 text-muted-foreground text-xs">
@@ -46,7 +55,7 @@
                                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                                         <path d="M3 3v5h5" />
                                     </svg>
-                                    <span>Reset Bawaan</span>
+                                    <span>{{ __('vibe/settings.appearance.reset_btn_short') ?? 'Reset' }}</span>
                                 </vibe:button>
 
                                 <vibe:button 
@@ -60,7 +69,7 @@
                                         <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
                                         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
                                     </svg>
-                                    <span x-text="copied ? 'Tersalin!' : 'Salin CSS Tokens'">Salin CSS Tokens</span>
+                                    <span x-text="copied ? @js(__('vibe/settings.appearance.copied')) : @js(__('vibe/settings.appearance.copy_css'))">{{ __('vibe/settings.appearance.copy_css') }}</span>
                                 </vibe:button>
                             </div>
                         </div>
@@ -70,10 +79,10 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Custom primary color</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">Light & Dark</span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.primary_color_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{{ __('vibe/settings.appearance.modes_badge') }}</span>
                             </div>
-                            <p class="text-muted-foreground text-xs">Mengatur token warna primer utama (<code class="font-mono text-[11px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10">--primary</code>, <code class="font-mono text-[11px] font-semibold text-primary px-1.5 py-0.5 rounded bg-primary/10">--ring</code>) untuk tombol, badge, fokus kontrol, dan elemen interaktif di kedua mode.</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.primary_color_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full">
@@ -97,7 +106,7 @@
 
                             {{-- Custom Color Input --}}
                             <div class="flex items-center gap-3 pt-1">
-                                <span class="text-xs text-muted-foreground font-medium">Custom color:</span>
+                                <span class="text-xs text-muted-foreground font-medium">{{ __('vibe/settings.appearance.custom_color_label') }}</span>
                                 <div class="w-36">
                                     <vibe:input 
                                         size="sm" 
@@ -112,7 +121,7 @@
                                 <label 
                                     class="relative size-8 rounded-full ring-2 ring-offset-2 cursor-pointer shadow-xs transition-transform hover:scale-105 shrink-0 flex items-center justify-center overflow-hidden" 
                                     :style="{ backgroundColor: customHex, borderColor: customHex, '--tw-ring-color': customHex }"
-                                    title="Pilih warna primer kustom dari color picker"
+                                    :title="@js(__('vibe/settings.appearance.color_picker_title'))"
                                 >
                                     <input 
                                         type="color" 
@@ -132,8 +141,8 @@
                     {{-- 2. Interface Theme Mode & High Contrast --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Interface theme</h3>
-                            <p class="text-muted-foreground text-xs">Pilih mode tema global terang, gelap, atau sinkron otomatis dengan preferensi sistem.</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.theme_mode_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.theme_mode_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full">
@@ -184,7 +193,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-semibold text-foreground block pt-2">System preference</span>
+                                    <span class="text-xs font-semibold text-foreground block pt-2">{{ __('vibe/settings.appearance.modes.system') }}</span>
                                 </button>
 
                                 {{-- Card 2: Light --}}
@@ -224,7 +233,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-semibold text-foreground block pt-2">Light</span>
+                                    <span class="text-xs font-semibold text-foreground block pt-2">{{ __('vibe/settings.appearance.modes.light') }}</span>
                                 </button>
 
                                 {{-- Card 3: Dark --}}
@@ -264,7 +273,7 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <span class="text-xs font-semibold text-foreground block pt-2">Dark</span>
+                                    <span class="text-xs font-semibold text-foreground block pt-2">{{ __('vibe/settings.appearance.modes.dark') }}</span>
                                 </button>
                             </div>
 
@@ -279,8 +288,8 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <vibe:switch 
-                                            label="Mode Kontras Tinggi" 
-                                            description="Pertegas garis pembatas dan kontur elemen antarmuka untuk keterbacaan lebih optimal." 
+                                            :label="__('vibe/settings.appearance.high_contrast_label')" 
+                                            :description="__('vibe/settings.appearance.high_contrast_desc')" 
                                             labelPlacement="justify" 
                                             size="sm" 
                                             x-model="highContrast" 
@@ -298,10 +307,10 @@
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">Canvas & surface palette</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.canvas_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">Pilih nuansa warna dasar kanvas (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--background</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--card</code>, <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--popover</code>) khusus untuk mode aktif saat ini.</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.canvas_desc') }}</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-2xl 2xl:max-w-3xl">
@@ -320,10 +329,10 @@
 
                                         <div class="min-w-0 flex-1">
                                             <div class="flex items-center justify-between">
-                                                <span class="text-xs font-bold text-foreground" x-text="surface.name"></span>
+                                                <span class="text-xs font-bold text-foreground" x-text="surfacePresetsI18n[surface.id]?.name || surface.name"></span>
                                                 <span x-show="selectedSurface === surface.id" class="text-primary font-bold text-xs">&check;</span>
                                             </div>
-                                            <p class="text-[11px] text-muted-foreground mt-0.5 leading-snug" x-text="surface.desc"></p>
+                                            <p class="text-[11px] text-muted-foreground mt-0.5 leading-snug" x-text="surfacePresetsI18n[surface.id]?.desc || surface.desc"></p>
                                         </div>
                                     </button>
                                 </template>
@@ -338,7 +347,7 @@
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_sidebar_title') }}</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.sidebar_desc') }}</p>
                         </div>
@@ -357,7 +366,7 @@
                                             @click="selectSidebarStyle(st.id)"
                                             class="h-auto py-2.5 text-xs font-medium justify-center transition-all"
                                             x-bind:class="sidebarStyle === st.id ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
-                                            x-text="st.name"
+                                            x-text="styleNames[st.id] || st.name"
                                         >
                                         </vibe:button>
                                     </template>
@@ -399,7 +408,7 @@
 
                                     {{-- Sidebar Border --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Warna Border (<code class="text-[10px] font-mono">--sidebar-border</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.border_color') }} (<code class="text-[10px] font-mono">--sidebar-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -429,7 +438,7 @@
 
                             {{-- Sidebar Border Mode --}}
                             <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-foreground block">Batas Garis Sisi (Border)</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_border_mode_label') }}</label>
                                 <div class="grid grid-cols-3 gap-2">
                                     <vibe:button 
                                         type="button" 
@@ -439,7 +448,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="sidebarBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Standar
+                                        {{ __('vibe/settings.appearance.border_mode.default') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -449,7 +458,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="sidebarBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Tanpa Garis
+                                        {{ __('vibe/settings.appearance.border_mode.none') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -459,7 +468,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="sidebarBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Tegas
+                                        {{ __('vibe/settings.appearance.border_mode.high') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -473,7 +482,7 @@
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.nav_title') }}</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.nav_desc') }}</p>
                         </div>
@@ -491,7 +500,7 @@
                                             @click="selectNavStyle(st.id)"
                                             class="h-auto py-2.5 text-xs font-medium justify-center transition-all"
                                             x-bind:class="navStyle === st.id ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
-                                            x-text="st.name"
+                                            x-text="styleNames[st.id] || st.name"
                                         >
                                         </vibe:button>
                                     </template>
@@ -533,7 +542,7 @@
 
                                     {{-- Nav Active Fg --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Teks Aktif (<code class="text-[10px] font-mono">--nav-active-fg</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_active_fg') }} (<code class="text-[10px] font-mono">--nav-active-fg</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -561,7 +570,7 @@
 
                                     {{-- Nav Indicator Color --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Garis Indikator (<code class="text-[10px] font-mono">--nav-indicator</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_indicator') }} (<code class="text-[10px] font-mono">--nav-indicator</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -591,7 +600,7 @@
 
                             {{-- Nav Density Options --}}
                             <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-foreground block">Kerapatan Navigasi (Density)</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.nav_density_label') }}</label>
                                 <div class="grid grid-cols-3 gap-2">
                                     <vibe:button 
                                         type="button" 
@@ -601,7 +610,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="navDensity === 'compact' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Kompak (32px)
+                                        {{ __('vibe/settings.appearance.nav_density.compact') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -611,7 +620,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="navDensity === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Standar (36px)
+                                        {{ __('vibe/settings.appearance.nav_density.default') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -621,7 +630,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="navDensity === 'relaxed' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Luas (40px)
+                                        {{ __('vibe/settings.appearance.nav_density.relaxed') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -629,8 +638,8 @@
                             {{-- Active Indicator Switch --}}
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
-                                    label="Active item indicator" 
-                                    description="Tampilkan garis aksen vertikal di tepi kiri pada item navigasi yang sedang aktif." 
+                                    :label="__('vibe/settings.appearance.nav_indicator_label')" 
+                                    :description="__('vibe/settings.appearance.nav_indicator_desc')" 
                                     labelPlacement="justify" 
                                     size="md" 
                                     x-model="navIndicator" 
@@ -647,7 +656,7 @@
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_header_title') }}</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? '{{ __('vibe/settings.appearance.modes.dark') }}' : '{{ __('vibe/settings.appearance.modes.light') }}'"></span>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.header_desc') }}</p>
                         </div>
@@ -677,7 +686,7 @@
                                             @click="selectHeaderStyle(st.id)"
                                             class="h-auto py-2.5 text-xs font-medium justify-center transition-all"
                                             x-bind:class="headerStyle === st.id ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
-                                            x-text="st.name"
+                                            x-text="styleNames[st.id] || st.name"
                                         >
                                         </vibe:button>
                                     </template>
@@ -719,7 +728,7 @@
 
                                     {{-- Header Border --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Warna Border (<code class="text-[10px] font-mono">--header-border</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.border_color') }} (<code class="text-[10px] font-mono">--header-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -749,7 +758,7 @@
 
                             {{-- Header Border Mode --}}
                             <div class="space-y-1.5">
-                                <label class="text-xs font-semibold text-foreground block">Batas Garis Bawah (Border)</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_border_mode_label') }}</label>
                                 <div class="grid grid-cols-3 gap-2">
                                     <vibe:button 
                                         type="button" 
@@ -759,7 +768,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="headerBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Standar
+                                        {{ __('vibe/settings.appearance.border_mode.default') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -769,7 +778,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="headerBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Tanpa Garis
+                                        {{ __('vibe/settings.appearance.border_mode.none') }}
                                     </vibe:button>
                                     <vibe:button 
                                         type="button" 
@@ -779,7 +788,7 @@
                                         class="text-xs justify-center transition-all"
                                         x-bind:class="headerBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
                                     >
-                                        Tegas
+                                        {{ __('vibe/settings.appearance.border_mode.high') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -788,11 +797,11 @@
 
                     <vibe:separator />
 
-                    {{-- 6. Semantic Status Colors (--success, --warning, --destructive, --info) --}}
+                    {{-- 7. Semantic Status Colors (--success, --warning, --destructive, --info) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Semantic status colors</h3>
-                            <p class="text-muted-foreground text-xs">Palet warna status (<code class="font-mono text-[11px] text-emerald-500">--success</code>, <code class="font-mono text-[11px] text-amber-500">--warning</code>, <code class="font-mono text-[11px] text-rose-500">--destructive</code>, <code class="font-mono text-[11px] text-sky-500">--info</code>) untuk badge, alert, dan feedback.</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.semantic_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.semantic_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -822,21 +831,21 @@
 
                             {{-- Live Badge Preview --}}
                             <vibe:card variant="muted" class="p-3 border border-border/60 flex flex-wrap items-center gap-2">
-                                <vibe:badge variant="success" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.success, color: '#ffffff' }">Success</vibe:badge>
-                                <vibe:badge variant="warning" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.warning, color: '#ffffff' }">Warning</vibe:badge>
-                                <vibe:badge variant="destructive" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.destructive, color: '#ffffff' }">Destructive</vibe:badge>
-                                <vibe:badge variant="info" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.info, color: '#ffffff' }">Info</vibe:badge>
+                                <vibe:badge variant="success" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.success, color: '#ffffff' }">{{ __('vibe/settings.appearance.status_success') }}</vibe:badge>
+                                <vibe:badge variant="warning" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.warning, color: '#ffffff' }">{{ __('vibe/settings.appearance.status_warning') }}</vibe:badge>
+                                <vibe:badge variant="destructive" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.destructive, color: '#ffffff' }">{{ __('vibe/settings.appearance.status_destructive') }}</vibe:badge>
+                                <vibe:badge variant="info" class="rounded-full shadow-2xs font-medium" x-bind:style="{ backgroundColor: currentSemanticColors.info, color: '#ffffff' }">{{ __('vibe/settings.appearance.status_info') }}</vibe:badge>
                             </vibe:card>
                         </div>
                     </div>
 
                     <vibe:separator />
 
-                    {{-- 7. Data Charts Palette (--chart-1 s/d --chart-5) --}}
+                    {{-- 8. Data Charts Palette (--chart-1 s/d --chart-5) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Chart & data palette</h3>
-                            <p class="text-muted-foreground text-xs">Palet warna grafik analitik (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--chart-1</code> s/d <code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--chart-5</code>) pada dashboard dan diagram data.</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.charts_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.charts_desc') }}</p>
                         </div>
 
                         <div class="space-y-4 w-full max-w-xl">
@@ -868,11 +877,11 @@
 
                     <vibe:separator />
 
-                    {{-- 8. Border Radius (--radius, --radius-xs s/d --radius-3xl) --}}
+                    {{-- 9. Border Radius (--radius, --radius-xs s/d --radius-3xl) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Border radius</h3>
-                            <p class="text-muted-foreground text-xs">Derajat kelengkungan sudut (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--radius</code>) pada kartu, tombol, badge, dan kontrol input.</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.radius_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.radius_desc') }}</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-xl">
@@ -889,7 +898,7 @@
                                             :style="{ borderRadius: r.value }"
                                         ></div>
                                         <div class="text-center">
-                                            <span class="text-xs font-semibold text-foreground block" x-text="r.label"></span>
+                                            <span class="text-xs font-semibold text-foreground block" x-text="radiiLabels[r.value] || r.label"></span>
                                             <span class="text-[10px] text-muted-foreground font-mono" x-text="r.value"></span>
                                         </div>
                                     </button>
@@ -900,11 +909,11 @@
 
                     <vibe:separator />
 
-                    {{-- 9. Typography (--font-sans) --}}
+                    {{-- 10. Typography (--font-sans) --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Typography</h3>
-                            <p class="text-muted-foreground text-xs">Pilih font antarmuka sistem utama (<code class="font-mono text-[11px] font-semibold text-foreground px-1.5 py-0.5 rounded bg-muted">--font-sans</code>).</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.font_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.font_desc') }}</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-xl">
@@ -919,9 +928,9 @@
                                         <div class="space-y-0.5 min-w-0">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-bold text-foreground" :style="{ fontFamily: f.value }" x-text="f.name"></span>
-                                                <vibe:badge size="sm" variant="primary" class="rounded-full" x-show="f.name === 'Figtree'">Bawaan</vibe:badge>
+                                                <vibe:badge size="sm" variant="primary" class="rounded-full" x-show="f.name === 'Figtree'">{{ __('vibe/settings.appearance.default_badge') }}</vibe:badge>
                                             </div>
-                                            <p class="text-[11px] text-muted-foreground" x-text="f.desc"></p>
+                                            <p class="text-[11px] text-muted-foreground" x-text="fontsI18n[f.name] || f.desc"></p>
                                             <span class="text-xs text-foreground/80 block pt-1 font-mono tracking-tight" :style="{ fontFamily: f.value }">
                                                 Aa Bb Gg 123
                                             </span>
@@ -943,20 +952,20 @@
 
                     <vibe:separator />
 
-                    {{-- 10. Tables View & Custom Colors --}}
+                    {{-- 11. Tables View & Custom Colors --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
                             <div class="flex items-center gap-2">
-                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.table_title') ?? 'Kustomisasi Warna Tabel' }}</h3>
-                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? 'Mode Gelap' : 'Mode Terang'"></span>
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.table_title') }}</h3>
+                                <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.table_desc') ?? 'Atur kepadatan baris tabel, gaya permukaan header (--table-header, --table-border), dan warna kustom untuk mode aktif saat ini.' }}</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.table_desc') }}</p>
                         </div>
 
                         <div class="space-y-5 w-full max-w-xl">
                             {{-- Density Cards --}}
                             <div class="space-y-2">
-                                <label class="text-xs font-semibold text-foreground block">Kepadatan Baris (Density)</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_density_label') }}</label>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-lg">
                                     {{-- Default Card --}}
                                     <button 
@@ -970,7 +979,7 @@
                                         >
                                             <div class="size-full rounded-lg overflow-hidden border border-table-border flex flex-col bg-background p-2">
                                                 <div class="flex items-center justify-between pb-1.5 border-b border-table-border shrink-0 bg-table-header px-1.5 -mx-2 -mt-2 pt-1.5 rounded-t-lg">
-                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">Customer</span>
+                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">{{ __('vibe/settings.appearance.table_demo.customer') }}</span>
                                                     <span class="h-2 w-7 bg-muted rounded-full"></span>
                                                 </div>
                                                 <div class="flex-1 flex flex-col justify-around py-0.5 divide-y divide-table-border/60">
@@ -1001,7 +1010,7 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <span class="text-xs font-semibold text-foreground block pt-2">Default</span>
+                                        <span class="text-xs font-semibold text-foreground block pt-2">{{ __('vibe/settings.appearance.table_density.default') }}</span>
                                     </button>
 
                                     {{-- Compact Card --}}
@@ -1016,7 +1025,7 @@
                                         >
                                             <div class="size-full rounded-lg overflow-hidden border border-table-border flex flex-col bg-background p-2">
                                                 <div class="flex items-center justify-between pb-1 border-b border-table-border shrink-0 bg-table-header px-1.5 -mx-2 -mt-2 pt-1.5 rounded-t-lg">
-                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">Customer</span>
+                                                    <span class="text-[7.5px] font-bold text-table-header-foreground uppercase tracking-wider">{{ __('vibe/settings.appearance.table_demo.customer') }}</span>
                                                     <span class="h-2 w-7 bg-muted rounded-full"></span>
                                                 </div>
                                                 <div class="flex-1 flex flex-col justify-around py-0 divide-y divide-table-border/40">
@@ -1049,14 +1058,14 @@
                                                 </svg>
                                             </div>
                                         </div>
-                                        <span class="text-xs font-semibold text-foreground block pt-2">Compact</span>
+                                        <span class="text-xs font-semibold text-foreground block pt-2">{{ __('vibe/settings.appearance.table_density.compact') }}</span>
                                     </button>
                                 </div>
                             </div>
 
                             {{-- Table Surface Style Presets --}}
                             <div class="space-y-2 pt-2">
-                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_surface_style') ?? 'Table header & surface style' }}</label>
+                                <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_surface_style') }}</label>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                                     <template x-for="st in tableStyles" :key="st.id">
                                         <vibe:button 
@@ -1066,7 +1075,7 @@
                                             @click="selectTableStyle(st.id)" 
                                             class="h-auto py-2.5 text-xs font-medium justify-center transition-all cursor-pointer"
                                             x-bind:class="tableStyle === st.id ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
-                                            x-text="st.name"
+                                            x-text="styleNames[st.id] || st.name"
                                         >
                                         </vibe:button>
                                     </template>
@@ -1075,12 +1084,12 @@
 
                             {{-- Custom Table Color Picker (Shown when tableStyle === 'custom') --}}
                             <vibe:card x-show="tableStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
-                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_title') ?? 'Kustomisasi Warna Tabel' }}</span>
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_title') }}</span>
                                 
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                     {{-- Table Header Background --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Header (<code class="text-[10px] font-mono">--table-header</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_header_bg') }} (<code class="text-[10px] font-mono">--table-header</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -1108,7 +1117,7 @@
 
                                     {{-- Table Border --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Border (<code class="text-[10px] font-mono">--table-border</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_border') }} (<code class="text-[10px] font-mono">--table-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -1136,7 +1145,7 @@
 
                                     {{-- Table Row Hover --}}
                                     <div class="space-y-1">
-                                        <label class="text-[11px] text-muted-foreground font-medium block">Hover (<code class="text-[10px] font-mono">--table-row-hover</code>)</label>
+                                        <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_row_hover') }} (<code class="text-[10px] font-mono">--table-row-hover</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
                                                 class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
@@ -1167,8 +1176,8 @@
                             {{-- Live Table Mini Preview --}}
                             <div class="space-y-2 pt-1">
                                 <div class="flex items-center justify-between">
-                                    <label class="text-xs font-semibold text-foreground block">Pratinjau Langsung Komponen Tabel</label>
-                                    <span class="text-[10px] text-muted-foreground">Otomatis merefleksikan token live</span>
+                                    <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_preview_title') }}</label>
+                                    <span class="text-[10px] text-muted-foreground">{{ __('vibe/settings.appearance.table_preview_desc') }}</span>
                                 </div>
                                 <div class="rounded-xl border border-table-border bg-card overflow-hidden shadow-2xs">
                                     <table class="w-full text-xs text-left border-collapse">
@@ -1177,9 +1186,9 @@
                                                 <th class="py-2.5 px-3 w-8 text-center">
                                                     <vibe:checkbox checked disabled class="pointer-events-none" />
                                                 </th>
-                                                <th class="py-2.5 px-3">Pelanggan</th>
-                                                <th class="py-2.5 px-3">Status</th>
-                                                <th class="py-2.5 px-3 text-right">Nilai Transaksi</th>
+                                                <th class="py-2.5 px-3">{{ __('vibe/settings.appearance.table_demo.customer') }}</th>
+                                                <th class="py-2.5 px-3">{{ __('vibe/settings.appearance.table_demo.status') }}</th>
+                                                <th class="py-2.5 px-3 text-right">{{ __('vibe/settings.appearance.table_demo.amount') }}</th>
                                             </tr>
                                         </thead>
                                         <tbody class="divide-y divide-table-border text-foreground">
@@ -1188,7 +1197,7 @@
                                                     <vibe:checkbox disabled class="pointer-events-none" />
                                                 </td>
                                                 <td class="py-2.5 px-3 font-medium">Acme Corporation</td>
-                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success" class="rounded-full">Selesai</vibe:badge></td>
+                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.completed') }}</vibe:badge></td>
                                                 <td class="py-2.5 px-3 text-right font-mono">Rp 1.450.000</td>
                                             </tr>
                                             <tr class="transition-colors hover:bg-table-row-hover">
@@ -1196,13 +1205,13 @@
                                                     <vibe:checkbox disabled class="pointer-events-none" />
                                                 </td>
                                                 <td class="py-2.5 px-3 font-medium">Globex Industries</td>
-                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="warning" class="rounded-full">Tertunda</vibe:badge></td>
+                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="warning" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.pending') }}</vibe:badge></td>
                                                 <td class="py-2.5 px-3 text-right font-mono">Rp 820.000</td>
                                             </tr>
                                         </tbody>
                                         <tfoot class="border-t border-table-border bg-table-footer text-table-header-foreground font-medium text-[10px] uppercase tracking-wider">
                                             <tr>
-                                                <td colspan="3" class="py-2 px-3">Total 2 Catatan</td>
+                                                <td colspan="3" class="py-2 px-3">{{ __('vibe/settings.appearance.table_demo.total_records', ['count' => 2]) }}</td>
                                                 <td class="py-2 px-3 text-right font-mono font-bold text-foreground">Rp 2.270.000</td>
                                             </tr>
                                         </tfoot>
@@ -1214,18 +1223,18 @@
 
                     <vibe:separator />
 
-                    {{-- 11. Motion & Visual Effects --}}
+                    {{-- 12. Motion & Visual Effects --}}
                     <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
                         <div class="space-y-1 max-w-lg w-full">
-                            <h3 class="font-semibold text-foreground text-base">Motion & effects</h3>
-                            <p class="text-muted-foreground text-xs">Kontrol animasi transisi dan efek visual kaca transparan (*glassmorphism*).</p>
+                            <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.motion_title') }}</h3>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.motion_desc') }}</p>
                         </div>
 
                         <div class="space-y-3 w-full max-w-xl">
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
-                                    label="Animasi Transisi Halus" 
-                                    description="Aktifkan transisi mikro pada hover dan perpindahan halaman." 
+                                    :label="__('vibe/settings.appearance.motion_label')" 
+                                    :description="__('vibe/settings.appearance.motion_desc_detail')" 
                                     labelPlacement="justify" 
                                     size="sm" 
                                     x-model="motionActive" 
@@ -1235,8 +1244,8 @@
 
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
-                                    label="Backdrop Blur Glassmorphism" 
-                                    description="Efek blur modern pada header, bilah dialog, dan popover." 
+                                    :label="__('vibe/settings.appearance.glass_label')" 
+                                    :description="__('vibe/settings.appearance.glass_desc')" 
                                     labelPlacement="justify" 
                                     size="sm" 
                                     x-model="glassEffect" 

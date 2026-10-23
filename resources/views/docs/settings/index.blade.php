@@ -71,7 +71,7 @@
 
                     {{-- Group: Sesi & Perangkat (auth only) --}}
                     @auth
-                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
+                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.sessions') }}</p>
 
                         <vibe:tabs.tab name="login-history">
                             <x-slot:icon>
@@ -81,7 +81,7 @@
                                     <path d="M12 7v5l4 2" />
                                 </svg>
                             </x-slot:icon>
-                            <span>Riwayat Login</span>
+                            <span>{{ __('vibe/settings.tabs.login_history.label') }}</span>
                         </vibe:tabs.tab>
 
                         <vibe:tabs.tab name="passkey">
@@ -93,7 +93,7 @@
                                     <path d="M2 12a10 10 0 0 1 18-6" />
                                 </svg>
                             </x-slot:icon>
-                            <span>Passkey</span>
+                            <span>{{ __('vibe/settings.tabs.passkey.label') }}</span>
                             @php $passkeyCount = auth()->user()->passkeys?->count() ?? 0; @endphp
                             @if ($passkeyCount > 0)
                                 <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{{ $passkeyCount }}</span>
@@ -109,19 +109,19 @@
                                         <polyline points="16 17 21 12 16 7" />
                                         <line x1="21" x2="9" y1="12" y2="12" />
                                     </svg>
-                                    <span>Logout</span>
+                                    <span>{{ __('vibe/settings.tabs.logout') }}</span>
                                 </button>
                             </form>
                         </div>
                     @else
-                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
+                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.sessions') }}</p>
                         <vibe:tabs.tab name="login-history">
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                                 <path d="M3 3v5h5" />
                                 <path d="M12 7v5l4 2" />
                             </svg>
-                            <span>Riwayat Login</span>
+                            <span>{{ __('vibe/settings.tabs.login_history.label') }}</span>
                             <svg class="size-3.5 ml-auto text-muted-foreground/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect width="18" height="11" x="3" y="11" rx="2" />
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -134,7 +134,7 @@
                                 <path d="M17.29 21.02c.12-.6.43-2.3.5-3.02" />
                                 <path d="M2 12a10 10 0 0 1 18-6" />
                             </svg>
-                            <span>Passkey</span>
+                            <span>{{ __('vibe/settings.tabs.passkey.label') }}</span>
                             <svg class="size-3.5 ml-auto text-muted-foreground/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect width="18" height="11" x="3" y="11" rx="2" />
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -150,9 +150,9 @@
                     {{-- Header --}}
                     <div class="border-b border-border/50 pb-4">
 
-                        <h2 class="text-lg font-bold text-foreground">Profil Akun</h2>
+                        <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.profile.header_title') }}</h2>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            Kelola informasi publik dan preferensi akun Anda.
+                            {{ __('vibe/settings.profile.header_desc') }}
                         </p>
                     </div>
 
@@ -162,7 +162,7 @@
                         {{-- Auth Info Banner --}}
                         <div class="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-700 dark:text-emerald-300">
                             <span class="size-2 rounded-full bg-emerald-500 shrink-0 animate-pulse"></span>
-                            <span>Login sebagai <strong>{{ auth()->user()->name }}</strong> &mdash; data di bawah adalah informasi akun Anda yang sebenarnya.</span>
+                            <span>{!! __('vibe/settings.profile.logged_in_as', ['name' => auth()->user()->name]) !!}</span>
                         </div>
 
                         {{-- Avatar & Identity --}}
@@ -177,14 +177,14 @@
                                 {{ $initials }}
                             </div>
                             <div class="space-y-1">
-                                <h4 class="text-sm font-semibold text-foreground">Foto Profil</h4>
-                                <p class="text-xs text-muted-foreground">Foto profil diambil dari Gravatar berdasarkan email Anda.</p>
+                                <h4 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.profile.avatar_title') }}</h4>
+                                <p class="text-xs text-muted-foreground">{{ __('vibe/settings.profile.avatar_desc_gravatar') }}</p>
                                 <div class="flex items-center gap-2 pt-1">
                                     <vibe:button type="button" size="sm" variant="outline" class="text-xs cursor-pointer">
-                                        Ubah Foto
+                                        {{ __('vibe/settings.profile.change_photo') }}
                                     </vibe:button>
                                     <vibe:button type="button" size="sm" variant="ghost" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer">
-                                        Hapus Foto
+                                        {{ __('vibe/settings.profile.remove_photo') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -193,20 +193,20 @@
                         {{-- Form Fields (data nyata dari auth()) --}}
                         <div class="space-y-4 max-w-xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <vibe:input name="full_name" label="Nama Lengkap" value="{{ auth()->user()->name }}" placeholder="Nama lengkap Anda" />
-                                <vibe:input type="email" name="email" label="Alamat Email" value="{{ auth()->user()->email }}" placeholder="nama@domain.com" />
+                                <vibe:input name="full_name" label="{{ __('vibe/settings.profile.full_name') }}" value="{{ auth()->user()->name }}" placeholder="{{ __('vibe/settings.profile.full_name_placeholder') }}" />
+                                <vibe:input type="email" name="email" label="{{ __('vibe/settings.profile.email_address') }}" value="{{ auth()->user()->email }}" placeholder="{{ __('vibe/settings.profile.email_placeholder') }}" />
                             </div>
                             @if (isset(auth()->user()->username))
-                                <vibe:input name="username" label="Username" value="{{ auth()->user()->username ?? '' }}" placeholder="username_anda" />
+                                <vibe:input name="username" label="{{ __('vibe/settings.profile.username') }}" value="{{ auth()->user()->username ?? '' }}" placeholder="{{ __('vibe/settings.profile.username_placeholder') }}" />
                             @endif
                             @if (isset(auth()->user()->phone))
-                                <vibe:input name="phone" label="No. Handphone" value="{{ auth()->user()->phone ?? '' }}" placeholder="+62 812 xxxx xxxx" />
+                                <vibe:input name="phone" label="{{ __('vibe/settings.profile.phone') }}" value="{{ auth()->user()->phone ?? '' }}" placeholder="{{ __('vibe/settings.profile.phone_placeholder') }}" />
                             @endif
-                            <vibe:textarea name="bio" label="Bio" placeholder="Ceritakan sedikit tentang Anda..." rows="2"></vibe:textarea>
+                            <vibe:textarea name="bio" label="{{ __('vibe/settings.profile.bio') }}" placeholder="{{ __('vibe/settings.profile.bio_placeholder') }}" rows="2"></vibe:textarea>
 
                             {{-- Language Selector --}}
                             <div class="space-y-2 pt-2">
-                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
+                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">{{ __('vibe/settings.profile.interface_language') }}</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
                                     @php
                                         $locOpts = ['id' => '🇮🇩 Bahasa Indonesia', 'en' => '🇺🇸 English (US)'];
@@ -223,8 +223,8 @@
 
                         {{-- Save Action --}}
                         <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Profil berhasil disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                                Simpan Perubahan
+                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.profile.saved_toast')), { type: 'success', title: @js(__('vibe/settings.profile.saved_title')) }) : null">
+                                {{ __('vibe/settings.profile.save_btn') }}
                             </vibe:button>
                         </div>
                     @else
@@ -235,21 +235,21 @@
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Ini adalah pratinjau UI. <strong>Login</strong> untuk mengelola profil akun nyata Anda.</span>
-                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">Login →</a>
+                            <span>{!! __('vibe/settings.profile.guest_notice') !!}</span>
+                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">{{ __('vibe/settings.profile.login_button') }}</a>
                         </div>
 
                         {{-- Avatar & Identity (dummy) --}}
                         <div class="flex items-center gap-4">
                             <vibe:avatar size="lg" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=75&w=128&h=128&auto=format&fit=crop" alt="User Avatar" class="ring-2 ring-primary/20 shrink-0" />
                             <div class="space-y-1">
-                                <h4 class="text-sm font-semibold text-foreground">Foto Profil</h4>
+                                <h4 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.profile.avatar_title') }}</h4>
                                 <div class="flex items-center gap-2">
                                     <vibe:button type="button" size="sm" variant="outline" class="text-xs cursor-pointer">
-                                        Ubah Foto
+                                        {{ __('vibe/settings.profile.change_photo') }}
                                     </vibe:button>
                                     <vibe:button type="button" size="sm" variant="ghost" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer">
-                                        Hapus Foto
+                                        {{ __('vibe/settings.profile.remove_photo') }}
                                     </vibe:button>
                                 </div>
                             </div>
@@ -258,13 +258,13 @@
                         {{-- Essential Fields (dummy) --}}
                         <div class="space-y-4 max-w-xl">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <vibe:input name="full_name" label="Nama Lengkap" value="Masum Parvej" placeholder="Nama lengkap Anda" />
-                                <vibe:input type="email" name="email" label="Alamat Email" value="masum@hugeicons.com" placeholder="nama@domain.com" />
+                                <vibe:input name="full_name" label="{{ __('vibe/settings.profile.full_name') }}" value="Masum Parvej" placeholder="{{ __('vibe/settings.profile.full_name_placeholder') }}" />
+                                <vibe:input type="email" name="email" label="{{ __('vibe/settings.profile.email_address') }}" value="masum@hugeicons.com" placeholder="{{ __('vibe/settings.profile.email_placeholder') }}" />
                             </div>
-                            <vibe:textarea name="bio" label="Bio" placeholder="Ceritakan sedikit tentang Anda..." rows="2">UI/UX Designer & Design Systems Architect at Teknovate.</vibe:textarea>
+                            <vibe:textarea name="bio" label="{{ __('vibe/settings.profile.bio') }}" placeholder="{{ __('vibe/settings.profile.bio_placeholder') }}" rows="2">UI/UX Designer &amp; Design Systems Architect at Teknovate.</vibe:textarea>
 
                             <div class="space-y-2 pt-2">
-                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">Bahasa Antarmuka</label>
+                                <label class="text-xs font-semibold text-foreground uppercase tracking-wider block">{{ __('vibe/settings.profile.interface_language') }}</label>
                                 <div class="inline-flex p-1 rounded-xl bg-muted/50 border border-border/60 gap-1">
                                     @php
                                         $locOpts2 = ['id' => '🇮🇩 Bahasa Indonesia', 'en' => '🇺🇸 English (US)'];
@@ -280,8 +280,8 @@
                         </div>
 
                         <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Profil berhasil disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                                Simpan Perubahan
+                            <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.profile.saved_toast')), { type: 'success', title: @js(__('vibe/settings.profile.saved_title')) }) : null">
+                                {{ __('vibe/settings.profile.save_btn') }}
                             </vibe:button>
                         </div>
                     @endauth
@@ -294,9 +294,9 @@
 
                     {{-- Header --}}
                     <div class="border-b border-border/50 pb-4">
-                        <h2 class="text-lg font-bold text-foreground">Keamanan Akun</h2>
+                        <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.security.header_title') }}</h2>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            Kelola kata sandi dan lapisan keamanan tambahan untuk akun Anda.
+                            {{ __('vibe/settings.security.header_desc') }}
                         </p>
                     </div>
 
@@ -315,7 +315,7 @@
                             </div>
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                 <span class="size-1.5 rounded-full bg-emerald-500"></span>
-                                Aktif
+                                {{ __('vibe/settings.login_history.active_now') }}
                             </span>
                         </div>
                     @else
@@ -324,43 +324,43 @@
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <span>Ini adalah pratinjau UI. <strong>Login</strong> untuk mengelola keamanan akun nyata Anda.</span>
-                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">Login →</a>
+                            <span>{!! __('vibe/settings.profile.guest_notice') !!}</span>
+                            <a href="/login" class="ml-auto shrink-0 px-3 py-1 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition-colors">{{ __('vibe/settings.profile.login_button') }}</a>
                         </div>
                     @endauth
 
                     {{-- Change Password --}}
                     <div class="space-y-1">
-                        <h3 class="text-sm font-semibold text-foreground">Ubah Kata Sandi</h3>
-                        <p class="text-xs text-muted-foreground">Pastikan kata sandi baru Anda minimal 8 karakter dan mengandung kombinasi huruf dan angka.</p>
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.security.password_title') }}</h3>
+                        <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.password_desc') }}</p>
                     </div>
 
                     <div class="space-y-4 max-w-md">
                         @auth
-                            <vibe:input type="password" name="current_password" label="Kata Sandi Saat Ini" viewable placeholder="Masukkan kata sandi saat ini" />
+                            <vibe:input type="password" name="current_password" label="{{ __('vibe/settings.security.current_password') }}" viewable placeholder="{{ __('vibe/settings.security.current_password_placeholder') }}" />
                         @endauth
-                        <vibe:input type="password" name="new_password" label="Kata Sandi Baru" viewable placeholder="Minimal 8 karakter" />
-                        <vibe:input type="password" name="confirm_password" label="Konfirmasi Kata Sandi Baru" viewable placeholder="Ulangi kata sandi baru" />
+                        <vibe:input type="password" name="new_password" label="{{ __('vibe/settings.security.new_password') }}" viewable placeholder="{{ __('vibe/settings.security.new_password_placeholder') }}" />
+                        <vibe:input type="password" name="confirm_password" label="{{ __('vibe/settings.security.confirm_password') }}" viewable placeholder="{{ __('vibe/settings.security.confirm_password_placeholder') }}" />
                     </div>
 
                     <div class="pt-4 border-t border-border/50 flex items-center justify-end max-w-md">
-                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Kata sandi berhasil diperbarui.', { type: 'success', title: 'Diperbarui' }) : null">
-                            Perbarui Kata Sandi
+                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.security.password_updated_toast')), { type: 'success', title: @js(__('vibe/settings.security.password_updated_title')) }) : null">
+                            {{ __('vibe/settings.security.update_password_btn') }}
                         </vibe:button>
                     </div>
 
                     {{-- Two-Factor Authentication --}}
                     <div class="pt-2 space-y-4">
                         <div class="space-y-1">
-                            <h3 class="text-sm font-semibold text-foreground">Autentikasi Dua Faktor (2FA)</h3>
-                            <p class="text-xs text-muted-foreground">Tambahkan lapisan keamanan ekstra. Setiap login membutuhkan kode verifikasi dari aplikasi autentikator.</p>
+                            <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.security.two_factor_title') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.two_factor_desc') }}</p>
                         </div>
 
                         <div class="max-w-md border border-border/60 rounded-2xl p-4 space-y-4">
-                            <vibe:switch name="enable_2fa" label="Aktifkan 2FA via Authenticator App" description="Gunakan Google Authenticator, Authy, atau aplikasi TOTP lainnya." />
+                            <vibe:switch name="enable_2fa" label="{{ __('vibe/settings.security.enable_2fa') }}" description="{{ __('vibe/settings.security.totp_desc') }}" />
 
                             <div class="p-3.5 rounded-xl bg-muted/40 border border-border/60 space-y-2">
-                                <p class="text-xs font-semibold text-foreground">Metode 2FA yang Didukung</p>
+                                <p class="text-xs font-semibold text-foreground">{{ __('vibe/settings.security.methods_title') }}</p>
                                 <div class="space-y-1.5 text-xs text-muted-foreground">
                                     <div class="flex items-center gap-2">
                                         <svg class="size-3.5 text-emerald-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -379,7 +379,7 @@
                                             <line x1="18" x2="6" y1="6" y2="18" />
                                             <line x1="6" x2="18" y1="6" y2="18" />
                                         </svg>
-                                        <span class="text-muted-foreground/50">Email OTP (segera hadir)</span>
+                                        <span class="text-muted-foreground/50">Email OTP ({{ __('vibe/settings.security.coming_soon') }})</span>
                                     </div>
                                 </div>
                             </div>
@@ -389,16 +389,16 @@
                     {{-- Danger Zone --}}
                     <div class="pt-2 space-y-3">
                         <div class="space-y-1">
-                            <h3 class="text-sm font-semibold text-destructive">Zona Berbahaya</h3>
-                            <p class="text-xs text-muted-foreground">Tindakan berikut bersifat permanen dan tidak dapat dibatalkan.</p>
+                            <h3 class="text-sm font-semibold text-destructive">{{ __('vibe/settings.security.danger_zone_title') }}</h3>
+                            <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.danger_zone_desc') }}</p>
                         </div>
                         <div class="max-w-md p-4 rounded-2xl border border-destructive/30 bg-destructive/5 flex items-center justify-between gap-4">
                             <div>
-                                <p class="text-sm font-semibold text-foreground">Hapus Akun</p>
-                                <p class="text-xs text-muted-foreground mt-0.5">Menghapus akun secara permanen beserta semua data terkait.</p>
+                                <p class="text-sm font-semibold text-foreground">{{ __('vibe/settings.security.delete_account_title') }}</p>
+                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('vibe/settings.security.delete_account_desc') }}</p>
                             </div>
-                            <vibe:button type="button" variant="ghost" size="sm" class="shrink-0 text-destructive border border-destructive/30 hover:bg-destructive hover:text-destructive-foreground cursor-pointer" @click="window.vibeToast ? vibeToast('Fitur hapus akun membutuhkan konfirmasi.', { type: 'warning', title: 'Perhatian' }) : null">
-                                Hapus Akun
+                            <vibe:button type="button" variant="ghost" size="sm" class="shrink-0 text-destructive border border-destructive/30 hover:bg-destructive hover:text-destructive-foreground cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.security.delete_account_confirm_desc')), { type: 'warning', title: @js(__('vibe/settings.security.attention_title')) }) : null">
+                                {{ __('vibe/settings.security.delete_account_btn') }}
                             </vibe:button>
                         </div>
                     </div>
@@ -439,13 +439,13 @@
                                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
                                         <path d="M3 3v5h5" />
                                     </svg>
-                                    <span>Reset</span>
+                                    <span>{{ __('vibe/settings.appearance.reset_btn_short') }}</span>
                                 </button>
                                 <button type="button" @click="savePreferences()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-primary text-primary-foreground hover:opacity-90 text-xs font-semibold shadow-xs transition-all cursor-pointer active:scale-95">
                                     <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                         <polyline points="20 6 9 17 4 12" />
                                     </svg>
-                                    <span>Simpan Tema</span>
+                                    <span>{{ __('vibe/settings.appearance.save_theme_btn') }}</span>
                                 </button>
                             </div>
                         </div>
@@ -493,8 +493,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-bold text-foreground">Terang (Light)</p>
-                                        <p class="text-[11px] text-muted-foreground mt-0.5">Tampilan cerah dengan kontras jernih</p>
+                                        <p class="text-xs font-bold text-foreground">{{ __('vibe/settings.appearance.modes.light') }}</p>
+                                        <p class="text-[11px] text-muted-foreground mt-0.5">{{ __('vibe/settings.appearance.modes_desc.light') }}</p>
                                     </div>
                                 </button>
 
@@ -521,8 +521,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-bold text-foreground">Gelap (Dark)</p>
-                                        <p class="text-[11px] text-muted-foreground mt-0.5">Kontras tinggi & nyaman di malam hari</p>
+                                        <p class="text-xs font-bold text-foreground">{{ __('vibe/settings.appearance.modes.dark') }}</p>
+                                        <p class="text-[11px] text-muted-foreground mt-0.5">{{ __('vibe/settings.appearance.modes_desc.dark') }}</p>
                                     </div>
                                 </button>
 
@@ -554,8 +554,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <p class="text-xs font-bold text-foreground">Sistem (Otomatis)</p>
-                                        <p class="text-[11px] text-muted-foreground mt-0.5">Sinkron dengan setelan sistem operasi</p>
+                                        <p class="text-xs font-bold text-foreground">{{ __('vibe/settings.appearance.modes.system') }}</p>
+                                        <p class="text-[11px] text-muted-foreground mt-0.5">{{ __('vibe/settings.appearance.modes_desc.system') }}</p>
                                     </div>
                                 </button>
                             </div>
@@ -588,7 +588,7 @@
                                 </template>
 
                                 {{-- Custom Color Picker Pill --}}
-                                <label title="Pilih Warna Kustom" class="h-10 px-3.5 rounded-2xl border-2 border-dashed transition-all cursor-pointer relative flex items-center gap-2 group hover:border-primary shrink-0" :class="selectedPreset === 'custom' ? 'border-primary ring-2 ring-primary/30 bg-primary/5 shadow-xs' : 'border-border/80 hover:bg-muted/40'">
+                                <label title="{{ __('vibe/settings.appearance.color_picker_title') }}" class="h-10 px-3.5 rounded-2xl border-2 border-dashed transition-all cursor-pointer relative flex items-center gap-2 group hover:border-primary shrink-0" :class="selectedPreset === 'custom' ? 'border-primary ring-2 ring-primary/30 bg-primary/5 shadow-xs' : 'border-border/80 hover:bg-muted/40'">
                                     <input type="color" x-model="customHex" @input.debounce.50ms="applyCustomHex(customHex)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                     <span class="size-4 rounded-full border border-black/10 shadow-2xs" :style="{ backgroundColor: customHex }"></span>
                                     <span class="text-xs font-mono font-semibold" :class="selectedPreset === 'custom' ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'" x-text="customHex"></span>
@@ -646,7 +646,7 @@
                                         <span class="text-xs font-bold" :style="{ color: customSidebarFg }">🎨</span>
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[11px] font-semibold text-foreground">Kustom</span>
+                                        <span class="text-[11px] font-semibold text-foreground">{{ __('vibe/settings.appearance.custom_pill') }}</span>
                                         <span x-show="selectedSidebarPreset === 'custom'" class="size-1.5 rounded-full bg-primary shrink-0"></span>
                                     </div>
                                 </button>
@@ -655,7 +655,7 @@
                             {{-- Custom Sidebar Color Studio --}}
                             <div x-show="selectedSidebarPreset === 'custom'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="p-4 rounded-2xl bg-card border border-border/70 shadow-xs space-y-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-bold text-foreground">Studio Warna Sidebar Kustom</span>
+                                    <span class="text-xs font-bold text-foreground">{{ __('vibe/settings.appearance.studio_sidebar_title') }}</span>
                                     <button type="button" @click="autoAdjustSidebarColors()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted hover:bg-muted/80 text-xs text-muted-foreground hover:text-foreground font-medium transition-colors cursor-pointer">
                                         <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M12 2v4" />
@@ -663,7 +663,7 @@
                                             <path d="M2 12h4" />
                                             <path d="m4.93 19.07 2.83-2.83" />
                                         </svg>
-                                        <span>Auto Kontras Teks</span>
+                                        <span>{{ __('vibe/settings.appearance.auto_contrast_btn') }}</span>
                                     </button>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -749,7 +749,7 @@
                                         <span class="text-xs font-bold" :style="{ color: customHeaderFg }">✨</span>
                                     </div>
                                     <div class="flex items-center justify-between">
-                                        <span class="text-[11px] font-semibold text-foreground">Kustom</span>
+                                        <span class="text-[11px] font-semibold text-foreground">{{ __('vibe/settings.appearance.custom_pill') }}</span>
                                         <span x-show="selectedHeaderPreset === 'custom'" class="size-1.5 rounded-full bg-primary shrink-0"></span>
                                     </div>
                                 </button>
@@ -758,7 +758,7 @@
                             {{-- Custom Header Color Studio --}}
                             <div x-show="selectedHeaderPreset === 'custom'" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="p-4 rounded-2xl bg-card border border-border/70 shadow-xs space-y-4">
                                 <div class="flex items-center justify-between">
-                                    <span class="text-xs font-bold text-foreground">Studio Warna Header Kustom</span>
+                                    <span class="text-xs font-bold text-foreground">{{ __('vibe/settings.appearance.studio_header_title') }}</span>
                                     <button type="button" @click="autoAdjustHeaderColors()" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-muted hover:bg-muted/80 text-xs text-muted-foreground hover:text-foreground font-medium transition-colors cursor-pointer">
                                         <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M12 2v4" />
@@ -766,7 +766,7 @@
                                             <path d="M2 12h4" />
                                             <path d="m4.93 19.07 2.83-2.83" />
                                         </svg>
-                                        <span>Auto Kontras Teks</span>
+                                        <span>{{ __('vibe/settings.appearance.auto_contrast_btn') }}</span>
                                     </button>
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
@@ -895,48 +895,48 @@
 
                     {{-- Header --}}
                     <div class="border-b border-border/50 pb-4">
-                        <h2 class="text-lg font-bold text-foreground">Preferensi Notifikasi</h2>
+                        <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.notifications.header_title') }}</h2>
                         <p class="text-xs text-muted-foreground mt-0.5">
-                            Atur notifikasi apa yang ingin Anda terima dan melalui kanal apa.
+                            {{ __('vibe/settings.notifications.header_desc') }}
                         </p>
                     </div>
 
                     {{-- Email Notifications --}}
                     <div class="space-y-2">
-                        <h3 class="text-sm font-semibold text-foreground">Notifikasi Email</h3>
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.notifications.email_title') }}</h3>
                         <div class="max-w-xl space-y-0 divide-y divide-border/40 border border-border/60 rounded-2xl overflow-hidden">
                             <div class="p-4">
-                                <vibe:switch name="alert_security" label="Peringatan Keamanan" description="Notifikasi login dari perangkat baru, perubahan kata sandi, dan aktivitas mencurigakan." checked />
+                                <vibe:switch name="alert_security" label="{{ __('vibe/settings.notifications.security_alerts_label') }}" description="{{ __('vibe/settings.notifications.security_alerts_desc') }}" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_orders" label="Pembaruan Pesanan" description="Status pemrosesan, pengiriman, dan konfirmasi pesanan." checked />
+                                <vibe:switch name="alert_orders" label="{{ __('vibe/settings.notifications.orders_label') }}" description="{{ __('vibe/settings.notifications.orders_desc') }}" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_product" label="Pembaruan Produk" description="Fitur baru, rilis komponen, dan changelog Vibe UI." />
+                                <vibe:switch name="alert_product" label="{{ __('vibe/settings.notifications.product_label') }}" description="{{ __('vibe/settings.notifications.product_desc') }}" />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_newsletter" label="Newsletter Bulanan" description="Ringkasan bulanan tips, tutorial, dan update dari tim Teknovate." />
+                                <vibe:switch name="alert_newsletter" label="{{ __('vibe/settings.notifications.newsletter_label') }}" description="{{ __('vibe/settings.notifications.newsletter_desc') }}" />
                             </div>
                         </div>
                     </div>
 
                     {{-- Push / In-App Notifications --}}
                     <div class="space-y-2 pt-2">
-                        <h3 class="text-sm font-semibold text-foreground">Notifikasi In-App</h3>
+                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.notifications.inapp_section_title') }}</h3>
                         <div class="max-w-xl space-y-0 divide-y divide-border/40 border border-border/60 rounded-2xl overflow-hidden">
                             <div class="p-4">
-                                <vibe:switch name="alert_sound" label="Efek Suara Notifikasi" description="Mainkan suara saat notifikasi baru masuk di dalam aplikasi." checked />
+                                <vibe:switch name="alert_sound" label="{{ __('vibe/settings.notifications.sound_label') }}" description="{{ __('vibe/settings.notifications.sound_desc') }}" checked />
                             </div>
                             <div class="p-4">
-                                <vibe:switch name="alert_desktop" label="Notifikasi Desktop" description="Tampilkan notifikasi sistem operasi meski browser diminimalkan." />
+                                <vibe:switch name="alert_desktop" label="{{ __('vibe/settings.notifications.desktop_label') }}" description="{{ __('vibe/settings.notifications.desktop_desc') }}" />
                             </div>
                         </div>
                     </div>
 
                     {{-- Save Action --}}
                     <div class="pt-4 border-t border-border/50 flex items-center justify-end">
-                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast('Preferensi notifikasi disimpan.', { type: 'success', title: 'Tersimpan' }) : null">
-                            Simpan Preferensi
+                        <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.notifications.saved_toast')), { type: 'success', title: @js(__('vibe/settings.notifications.saved_title')) }) : null">
+                            {{ __('vibe/settings.notifications.save_btn') }}
                         </vibe:button>
                     </div>
                 </vibe:tabs.panel>
@@ -948,9 +948,9 @@
 
                         {{-- Header --}}
                         <div class="border-b border-border/50 pb-4">
-                            <h2 class="text-lg font-bold text-foreground">Riwayat Login & Sesi Aktif</h2>
+                            <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.login_history.header_title') }}</h2>
                             <p class="text-xs text-muted-foreground mt-0.5">
-                                Pantau semua aktivitas login dan akhiri sesi yang tidak dikenal.
+                                {{ __('vibe/settings.login_history.header_desc') }}
                             </p>
                         </div>
 
@@ -959,8 +959,8 @@
                             <div class="flex items-center gap-3 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
                                 <span class="size-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
                                 <div class="flex-1 min-w-0 text-xs">
-                                    <span class="font-semibold text-emerald-700 dark:text-emerald-300">Sesi Aktif Saat Ini</span>
-                                    <span class="text-muted-foreground"> — {{ request()->userAgent() ? Str::limit(request()->userAgent(), 60) : 'Browser Anda' }}</span>
+                                    <span class="font-semibold text-emerald-700 dark:text-emerald-300">{{ __('vibe/settings.login_history.current_session') }}</span>
+                                    <span class="text-muted-foreground"> — {{ request()->userAgent() ? Str::limit(request()->userAgent(), 60) : __('vibe/settings.login_history.your_browser') }}</span>
                                 </div>
                                 <span class="text-xs text-muted-foreground shrink-0">IP: {{ request()->ip() }}</span>
                             </div>
@@ -968,9 +968,9 @@
                             {{-- Login History Table --}}
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">
-                                    <h3 class="text-sm font-semibold text-foreground">Semua Sesi</h3>
-                                    <vibe:button type="button" variant="ghost" size="sm" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer" @click="window.vibeToast ? vibeToast('Semua sesi lain telah diakhiri.', { type: 'success', title: 'Sesi Diakhiri' }) : null">
-                                        Akhiri Semua Sesi Lain
+                                    <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.all_sessions') }}</h3>
+                                    <vibe:button type="button" variant="ghost" size="sm" class="text-xs text-destructive hover:bg-destructive/10 cursor-pointer" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.login_history.terminated_all_toast')), { type: 'success', title: @js(__('vibe/settings.login_history.terminated_all_title')) }) : null">
+                                        {{ __('vibe/settings.login_history.terminate_all_btn') }}
                                     </vibe:button>
                                 </div>
 
@@ -983,7 +983,7 @@
                                             'os' => 'Windows 11',
                                             'ip' => request()->ip(),
                                             'location' => 'Makassar, Indonesia',
-                                            'time' => 'Baru saja',
+                                            'time' => now()->diffForHumans(),
                                             'current' => true,
                                             'icon' => 'monitor',
                                         ],
@@ -993,7 +993,7 @@
                                             'os' => 'macOS Sonoma',
                                             'ip' => '103.147.8.22',
                                             'location' => 'Jakarta, Indonesia',
-                                            'time' => '2 jam lalu',
+                                            'time' => now()->subHours(2)->diffForHumans(),
                                             'current' => false,
                                             'icon' => 'laptop',
                                         ],
@@ -1003,7 +1003,7 @@
                                             'os' => 'iOS 17',
                                             'ip' => '36.78.120.45',
                                             'location' => 'Surabaya, Indonesia',
-                                            'time' => 'Kemarin, 20:14',
+                                            'time' => now()->subDay()->setTime(20, 14)->diffForHumans(),
                                             'current' => false,
                                             'icon' => 'smartphone',
                                         ],
@@ -1013,7 +1013,7 @@
                                             'os' => 'Android 14',
                                             'ip' => '180.252.10.88',
                                             'location' => 'Bandung, Indonesia',
-                                            'time' => '3 hari lalu',
+                                            'time' => now()->subDays(3)->diffForHumans(),
                                             'current' => false,
                                             'icon' => 'smartphone',
                                         ],
@@ -1022,8 +1022,8 @@
                                             'browser' => 'Firefox 128',
                                             'os' => 'Ubuntu 24.04',
                                             'ip' => '202.43.72.15',
-                                            'location' => 'Tidak Diketahui',
-                                            'time' => '5 hari lalu',
+                                            'location' => __('vibe/settings.login_history.unknown_device'),
+                                            'time' => now()->subDays(5)->diffForHumans(),
                                             'current' => false,
                                             'icon' => 'monitor',
                                         ],
@@ -1056,7 +1056,7 @@
                                                     @if ($session['current'])
                                                         <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                                             <span class="size-1.5 rounded-full bg-emerald-500"></span>
-                                                            Sesi Ini
+                                                            {{ __('vibe/settings.login_history.this_session_badge') }}
                                                         </span>
                                                     @endif
                                                 </div>
@@ -1070,8 +1070,8 @@
 
                                             {{-- Action --}}
                                             @if (!$session['current'])
-                                                <button type="button" data-device="{{ $session['device'] }}" class="shrink-0 text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer mt-0.5" @click="window.vibeToast ? vibeToast('Sesi ' + $el.dataset.device + ' telah diakhiri.', { type: 'success', title: 'Sesi Diakhiri' }) : null">
-                                                    Akhiri
+                                                <button type="button" data-device="{{ $session['device'] }}" class="shrink-0 text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer mt-0.5" @click="window.vibeToast ? vibeToast(@js(__('vibe/settings.login_history.terminated_single_toast')).replace(':device', $el.dataset.device), { type: 'success', title: @js(__('vibe/settings.login_history.terminated_single_title')) }) : null">
+                                                    {{ __('vibe/settings.login_history.terminate_btn') }}
                                                 </button>
                                             @endif
                                         </div>
@@ -1079,7 +1079,7 @@
                                 </div>
 
                                 <p class="text-xs text-muted-foreground italic">
-                                    * Data riwayat login di atas adalah demo. Implementasi nyata memerlukan paket seperti <code class="font-mono bg-muted px-1 py-0.5 rounded">spatie/laravel-login-activity</code> atau model sesi kustom.
+                                    {!! __('vibe/settings.login_history.demo_notice', ['package' => '<code class="font-mono bg-muted px-1 py-0.5 rounded">spatie/laravel-login-activity</code>']) !!}
                                 </p>
                             </div>
                         @else
@@ -1092,13 +1092,13 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-semibold text-foreground">Login Diperlukan</h3>
+                                    <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.guest_title') }}</h3>
                                     <p class="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
-                                        Riwayat login dan sesi aktif hanya tersedia setelah Anda masuk ke akun.
+                                        {{ __('vibe/settings.login_history.guest_desc') }}
                                     </p>
                                 </div>
                                 <vibe:button href="/login" variant="primary" size="sm">
-                                    Masuk ke Akun
+                                    {{ __('vibe/settings.login_history.guest_btn') }}
                                 </vibe:button>
                             </div>
                         @endauth
@@ -1115,11 +1115,11 @@
                         {{-- Header --}}
                         <div class="border-b border-border/50 pb-4">
                             <div class="flex items-center gap-2.5">
-                                <h2 class="text-lg font-bold text-foreground">Passkey (WebAuthn)</h2>
+                                <h2 class="text-lg font-bold text-foreground">{{ __('vibe/settings.security.passkey_title') }}</h2>
                                 <vibe:badge variant="primary" size="sm" class="rounded-full">Passwordless</vibe:badge>
                             </div>
                             <p class="text-xs text-muted-foreground mt-0.5">
-                                Daftarkan perangkat biometrik (Touch ID, Windows Hello, YubiKey) untuk login tanpa kata sandi.
+                                {{ __('vibe/settings.security.passkey_desc') }}
                             </p>
                         </div>
 
@@ -1128,7 +1128,7 @@
                                 supported: false,
                                 isIpAddress: typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1'),
                                 localhostUrl: typeof window !== 'undefined' ? window.location.href.replace('127.0.0.1', 'localhost') : '',
-                                registerName: 'Perangkat Saya (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometrik')) + ')',
+                                registerName: @js(__('vibe/settings.security.passkey_device_default')) + ' (' + (navigator.userAgent.includes('Mac') ? 'Mac Touch ID' : (navigator.userAgent.includes('Windows') ? 'Windows Hello' : 'Biometric')) + ')',
                                 accountPassword: '',
                                 showPassword: false,
                                 loading: false,
@@ -1141,54 +1141,54 @@
                                 async submitRegisterPasskey() {
                                     if (!this.accountPassword) {
                                         this.feedbackType = 'error';
-                                        this.feedbackMessage = 'Harap masukkan kata sandi akun Anda terlebih dahulu.';
+                                        this.feedbackMessage = @js(__('vibe/settings.security.enter_account_password_first'));
                                         return;
                                     }
 
                                     this.loading = true;
-                                    this.statusText = 'Memverifikasi kata sandi...';
+                                    this.statusText = @js(__('vibe/settings.security.verifying_password'));
                                     this.feedbackMessage = null;
 
                                     try {
                                         // 1. Verifikasi kata sandi terlebih dahulu
                                         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
                                         const verifyRes = await fetch('/confirm-password', {
-                                            method: 'POST',
-                                            headers: {
-                                                'Content-Type': 'application/json',
-                                                'X-CSRF-TOKEN': csrfToken,
-                                                'Accept': 'application/json',
-                                            },
-                                            body: JSON.stringify({ password: this.accountPassword }),
+                                             method: 'POST',
+                                             headers: {
+                                                 'Content-Type': 'application/json',
+                                                 'X-CSRF-TOKEN': csrfToken,
+                                                 'Accept': 'application/json',
+                                             },
+                                             body: JSON.stringify({ password: this.accountPassword }),
                                         });
 
                                         if (!verifyRes.ok && verifyRes.status !== 204 && !verifyRes.redirected) {
-                                            const data = await verifyRes.json().catch(() => ({}));
-                                            this.feedbackType = 'error';
-                                            this.feedbackMessage = data?.errors?.password?.[0] || data?.message || 'Kata sandi salah. Silakan periksa kembali.';
-                                            this.loading = false;
-                                            return;
+                                             const data = await verifyRes.json().catch(() => ({}));
+                                             this.feedbackType = 'error';
+                                             this.feedbackMessage = data?.errors?.password?.[0] || data?.message || @js(__('vibe/settings.security.password_incorrect'));
+                                             this.loading = false;
+                                             return;
                                         }
 
                                         // 2. Jika kata sandi benar, lanjutkan pendaftaran WebAuthn Passkey
-                                        this.statusText = 'Menyiapkan sensor biometrik perangkat...';
+                                        this.statusText = @js(__('vibe/settings.security.passkey_sensor_preparing'));
                                         if (!window.VibePasskeyService) {
-                                            throw new Error('Modul Passkey belum dimuat.');
+                                             throw new Error(@js(__('vibe/settings.security.passkey_module_not_loaded')));
                                         }
 
-                                        const regRes = await window.VibePasskeyService.register(this.registerName || 'Perangkat Saya');
+                                        const regRes = await window.VibePasskeyService.register(this.registerName || @js(__('vibe/settings.security.passkey_device_default')));
                                         if (regRes.success) {
-                                            this.feedbackType = 'success';
-                                            this.feedbackMessage = 'Passkey berhasil didaftarkan! Halaman akan diperbarui...';
-                                            this.accountPassword = '';
-                                            setTimeout(() => window.location.reload(), 1500);
+                                             this.feedbackType = 'success';
+                                             this.feedbackMessage = @js(__('vibe/settings.security.passkey_registered_success'));
+                                             this.accountPassword = '';
+                                             setTimeout(() => window.location.reload(), 1500);
                                         } else {
-                                            this.feedbackType = 'error';
-                                            this.feedbackMessage = regRes.message || 'Pendaftaran passkey dibatalkan oleh pengguna.';
+                                             this.feedbackType = 'error';
+                                             this.feedbackMessage = regRes.message || @js(__('vibe/settings.security.passkey_canceled_user'));
                                         }
                                     } catch (err) {
                                         this.feedbackType = 'error';
-                                        this.feedbackMessage = err.message || 'Terjadi kesalahan saat memproses pendaftaran passkey.';
+                                        this.feedbackMessage = err.message || @js(__('vibe/settings.security.passkey_error_processing'));
                                     } finally {
                                         this.loading = false;
                                         this.statusText = '';
@@ -1199,26 +1199,26 @@
                                 {{-- Browser Support Badge --}}
                                 <div class="flex items-center justify-between">
                                     <div class="space-y-0.5">
-                                        <h3 class="text-sm font-semibold text-foreground">Status Browser</h3>
-                                        <p class="text-xs text-muted-foreground">WebAuthn / FIDO2 harus didukung oleh browser Anda.</p>
+                                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.security.browser_status') }}</h3>
+                                        <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.browser_status_desc') }}</p>
                                     </div>
                                     <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold" :class="supported ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'bg-destructive/10 text-destructive'">
                                         <span class="size-2 rounded-full" :class="supported ? 'bg-emerald-500' : 'bg-destructive'"></span>
-                                        <span x-text="supported ? 'Browser Didukung' : 'Tidak Didukung'"></span>
+                                        <span x-text="supported ? @js(__('vibe/settings.security.browser_supported')) : @js(__('vibe/settings.security.browser_not_supported'))"></span>
                                     </span>
                                 </div>
 
                                 {{-- IP Address Warning --}}
                                 <template x-if="isIpAddress">
                                     <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-700 dark:text-amber-300 flex items-center justify-between gap-3">
-                                        <span>Anda mengakses via <strong>127.0.0.1</strong>. Buka via <strong>localhost</strong> agar WebAuthn berfungsi.</span>
-                                        <a :href="localhostUrl" class="shrink-0 px-3 py-1.5 bg-amber-500 text-white rounded-lg font-medium hover:bg-amber-600 transition-colors">Buka di Localhost →</a>
+                                        <span>{!! __('vibe/settings.security.passkey_ip_alert') !!}</span>
+                                        <a :href="localhostUrl" class="shrink-0 px-3 py-1.5 bg-amber-500 text-white rounded-lg font-medium hover:bg-amber-600 transition-colors">{!! __('vibe/settings.security.passkey_open_localhost') !!}</a>
                                     </div>
                                 </template>
 
                                 {{-- Feedback Message --}}
                                 <div x-show="feedbackMessage" x-cloak class="p-3.5 rounded-xl text-xs space-y-1" :class="feedbackType === 'success' ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20' : 'bg-destructive/10 text-destructive border border-destructive/20'">
-                                    <p class="font-semibold" x-text="feedbackType === 'success' ? '✓ Berhasil!' : '⚠ Perhatian:'"></p>
+                                    <p class="font-semibold" x-text="feedbackType === 'success' ? '✓ ' + @js(__('vibe/settings.security.success_title')) : '⚠ ' + @js(__('vibe/settings.security.attention_title'))"></p>
                                     <p x-text="feedbackMessage" class="leading-relaxed"></p>
                                 </div>
 
@@ -1230,7 +1230,7 @@
                                 <div class="space-y-3">
                                     <div class="flex items-center justify-between">
                                         <h3 class="text-sm font-semibold text-foreground">
-                                            Passkey Terdaftar
+                                            {{ __('vibe/settings.security.registered_passkeys') }}
                                             <span class="ml-1.5 px-1.5 py-0.5 text-[10px] font-bold rounded-full bg-primary/10 text-primary">{{ $userPasskeys->count() }}</span>
                                         </h3>
                                     </div>
@@ -1245,8 +1245,8 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <p class="text-sm font-medium text-foreground">Belum ada passkey</p>
-                                                <p class="text-xs text-muted-foreground mt-0.5">Daftarkan perangkat Anda di bawah untuk mulai menggunakan login biometrik.</p>
+                                                <p class="text-sm font-medium text-foreground">{{ __('vibe/settings.security.no_passkeys') }}</p>
+                                                <p class="text-xs text-muted-foreground mt-0.5">{{ __('vibe/settings.security.no_passkeys_desc') }}</p>
                                             </div>
                                         </div>
                                     @else
@@ -1264,14 +1264,14 @@
                                                         </div>
                                                         <div class="min-w-0">
                                                             <p class="text-sm font-semibold text-foreground truncate">{{ $passkey->name }}</p>
-                                                            <p class="text-xs text-muted-foreground">Ditambahkan {{ $passkey->created_at?->diffForHumans() }}</p>
+                                                            <p class="text-xs text-muted-foreground">{{ __('vibe/settings.security.added_time', ['time' => $passkey->created_at?->diffForHumans()]) }}</p>
                                                         </div>
                                                     </div>
-                                                    <form method="POST" action="/user/passkeys/{{ $passkey->id }}" onsubmit="return confirm('Hapus passkey \'{{ $passkey->name }}\'? Anda tidak bisa login dengan perangkat ini lagi.');">
+                                                    <form method="POST" action="/user/passkeys/{{ $passkey->id }}" onsubmit="return confirm(@js(__('vibe/settings.security.delete_passkey_message', ['name' => $passkey->name])));">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="text-xs text-muted-foreground hover:text-destructive font-medium transition-colors cursor-pointer px-2 py-1 rounded-lg hover:bg-destructive/10">
-                                                            Hapus
+                                                            {{ __('vibe/settings.security.delete_passkey') }}
                                                         </button>
                                                     </form>
                                                 </div>
@@ -1283,34 +1283,34 @@
                                 {{-- Add New Passkey (Wajib Kata Sandi Terlebih Dahulu) --}}
                                 <div class="pt-3 border-t border-border/50 space-y-4">
                                     <div>
-                                        <h3 class="text-sm font-semibold text-foreground">Daftarkan Passkey Baru</h3>
+                                        <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.security.register_new_passkey') }}</h3>
                                         <p class="text-xs text-muted-foreground mt-0.5">
-                                            Untuk alasan keamanan, masukkan kata sandi akun Anda terlebih dahulu sebelum mendaftarkan Passkey baru.
+                                            {{ __('vibe/settings.security.register_new_passkey_desc') }}
                                         </p>
                                     </div>
 
                                     <form @submit.prevent="submitRegisterPasskey()" class="p-4 rounded-2xl bg-muted/30 border border-border/60 space-y-3.5">
                                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                             <div class="space-y-1.5">
-                                                <label class="text-xs font-semibold text-foreground">Nama Perangkat</label>
+                                                <label class="text-xs font-semibold text-foreground">{{ __('vibe/settings.security.device_name') }}</label>
                                                 <input
                                                     type="text"
                                                     x-model="registerName"
-                                                    placeholder="Contoh: MacBook Pro Touch ID"
+                                                    placeholder="{{ __('vibe/settings.security.register_new_passkey_placeholder') }}"
                                                     class="w-full px-3 py-2 text-sm rounded-xl border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none"
                                                     required
                                                 />
                                             </div>
                                             <div class="space-y-1.5">
                                                 <label class="text-xs font-semibold text-foreground flex items-center justify-between">
-                                                    <span>Kata Sandi Akun</span>
-                                                    <span class="text-[10px] text-muted-foreground font-normal">Verifikasi Keamanan</span>
+                                                    <span>{{ __('vibe/settings.security.account_password') }}</span>
+                                                    <span class="text-[10px] text-muted-foreground font-normal">{{ __('vibe/settings.security.security_verification') }}</span>
                                                 </label>
                                                 <div class="relative">
                                                     <input
                                                         :type="showPassword ? 'text' : 'password'"
                                                         x-model="accountPassword"
-                                                        placeholder="Masukkan kata sandi akun..."
+                                                        placeholder="{{ __('vibe/settings.security.password_placeholder') }}"
                                                         autocomplete="current-password"
                                                         class="w-full px-3 py-2 pr-10 text-sm rounded-xl border border-input bg-background text-foreground shadow-2xs focus:ring-2 focus:ring-primary focus:outline-none"
                                                         required
@@ -1331,7 +1331,7 @@
                                         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
                                             <div class="text-[11px] text-muted-foreground flex items-center gap-1.5">
                                                 <svg class="size-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                                <span>Kata sandi diverifikasi terlebih dahulu sebelum memicu sensor biometrik.</span>
+                                                <span>{{ __('vibe/settings.security.passkey_verify_note') }}</span>
                                             </div>
 
                                             <vibe:button type="submit" variant="primary" size="sm" ::disabled="loading || !accountPassword" class="cursor-pointer shrink-0">
@@ -1340,13 +1340,13 @@
                                                         <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                                                         </svg>
-                                                        <span>Konfirmasi & Daftarkan Passkey</span>
+                                                        <span>{{ __('vibe/settings.security.confirm_and_register_passkey') }}</span>
                                                     </span>
                                                 </template>
                                                 <template x-if="loading">
                                                     <span class="inline-flex items-center gap-1.5">
                                                         <svg class="animate-spin size-3.5" viewBox="0 0 24 24" fill="none"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                                                        <span x-text="statusText || 'Memproses...'"></span>
+                                                        <span x-text="statusText || @js(__('vibe/settings.security.processing'))"></span>
                                                     </span>
                                                 </template>
                                             </vibe:button>
@@ -1356,8 +1356,8 @@
 
                                 {{-- Info Note --}}
                                 <div class="p-3.5 rounded-xl bg-muted/40 border border-border/60 text-xs text-muted-foreground space-y-1 leading-relaxed">
-                                    <p class="font-semibold text-foreground">Cara Kerja Passkey</p>
-                                    <p>Passkey menggunakan enkripsi kunci publik. Kunci privat tersimpan aman di perangkat Anda dan tidak pernah dikirim ke server. Browser akan meminta verifikasi biometrik (sidik jari / wajah) saat login.</p>
+                                    <p class="font-semibold text-foreground">{{ __('vibe/settings.security.how_passkeys_work_title') }}</p>
+                                    <p>{{ __('vibe/settings.security.how_passkeys_work_desc') }}</p>
                                 </div>
 
                             </div>
@@ -1372,12 +1372,12 @@
                                     </svg>
                                 </div>
                                 <div>
-                                    <h3 class="text-sm font-semibold text-foreground">Login Diperlukan</h3>
+                                    <h3 class="text-sm font-semibold text-foreground">{{ __('vibe/settings.login_history.guest_title') }}</h3>
                                     <p class="text-xs text-muted-foreground mt-1 max-w-xs mx-auto">
-                                        Manajemen Passkey hanya tersedia setelah Anda masuk ke akun.
+                                        {{ __('vibe/settings.security.guest_passkey_desc') }}
                                     </p>
                                 </div>
-                                <vibe:button href="/login" variant="primary" size="sm">Masuk ke Akun</vibe:button>
+                                <vibe:button href="/login" variant="primary" size="sm">{{ __('vibe/settings.login_history.guest_btn') }}</vibe:button>
                             </div>
                         @endauth
                     </vibe:tabs.panel>

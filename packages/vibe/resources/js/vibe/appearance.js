@@ -816,7 +816,7 @@ export function appearanceController() {
                         this.customHexInput = hex.replace('#', '').toUpperCase();
                         this.updateMonoChart(hex);
                         this.applyTheme();
-                        this.notify('Custom primary color diubah ke ' + hex);
+                        this.notify('color_changed', 'Custom primary color diubah ke ' + hex, { hex });
                     },
 
                     selectBrandColor(hex) {
@@ -854,7 +854,8 @@ export function appearanceController() {
                         }
                         this.selectedSurface = id;
                         this.applyTheme();
-                        this.notify(`Kanvas permukaan (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) diperbarui.`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify('surface_updated', `Kanvas permukaan (${modeText}) diperbarui.`, { mode: modeText });
                     },
 
                     // Sidebar Methods
@@ -866,7 +867,9 @@ export function appearanceController() {
                         }
                         this.sidebarStyle = id;
                         this.applyTheme();
-                        this.notify(`Gaya bilah sisi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const styleName = this.styleNames?.[id] || id;
+                        this.notify('sidebar_style', `Gaya bilah sisi (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectSidebarBorderMode(mode) {
@@ -877,7 +880,8 @@ export function appearanceController() {
                         }
                         this.sidebarBorderMode = mode;
                         this.applyTheme();
-                        this.notify(`Batas border sidebar (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${mode}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify('sidebar_border', `Batas border sidebar (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
                     },
 
                     onSidebarCustomBgChange(val) {
@@ -941,13 +945,14 @@ export function appearanceController() {
                         }
                         this.transparentSidebar = next;
                         this.applyTheme();
-                        this.notify(this.transparentSidebar ? `Sidebar transparan (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Sidebar solid (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify(this.transparentSidebar ? 'sidebar_transparent_on' : 'sidebar_transparent_off', this.transparentSidebar ? `Sidebar transparan (${modeText}) aktif.` : `Sidebar solid (${modeText}) aktif.`, { mode: modeText });
                     },
 
                     selectSidebarFeature(name) {
                         this.sidebarFeature = name;
                         this.saveState();
-                        this.notify('Sidebar feature: ' + name);
+                        this.notify('sidebar_feature', 'Sidebar feature: ' + name, { name });
                     },
 
                     sidebarFeatureBadgeColor(name) {
@@ -964,7 +969,9 @@ export function appearanceController() {
                         }
                         this.headerStyle = id;
                         this.applyTheme();
-                        this.notify(`Gaya bilah atas (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const styleName = this.styleNames?.[id] || id;
+                        this.notify('header_style', `Gaya bilah atas (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectHeaderBorderMode(mode) {
@@ -975,7 +982,8 @@ export function appearanceController() {
                         }
                         this.headerBorderMode = mode;
                         this.applyTheme();
-                        this.notify(`Batas border header (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${mode}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify('header_border', `Batas border header (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
                     },
 
                     toggleHeaderGlassEffect(val) {
@@ -987,7 +995,8 @@ export function appearanceController() {
                         }
                         this.headerGlassEffect = next;
                         this.applyTheme();
-                        this.notify(this.headerGlassEffect ? `Header glassmorphism (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Header glassmorphism (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) nonaktif.`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify(this.headerGlassEffect ? 'header_glass_on' : 'header_glass_off', this.headerGlassEffect ? `Header glassmorphism (${modeText}) aktif.` : `Header glassmorphism (${modeText}) nonaktif.`, { mode: modeText });
                     },
 
                     onHeaderCustomBgChange(val) {
@@ -1051,7 +1060,9 @@ export function appearanceController() {
                         }
                         this.navStyle = id;
                         this.applyTheme();
-                        this.notify(`Gaya item navigasi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const styleName = this.styleNames?.[id] || id;
+                        this.notify('nav_style', `Gaya item navigasi (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectNavDensity(density) {
@@ -1062,7 +1073,8 @@ export function appearanceController() {
                         }
                         this.navDensity = density;
                         this.applyTheme();
-                        this.notify(`Kerapatan navigasi (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${density}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify('nav_density', `Kerapatan navigasi (${modeText}): ${density}`, { mode: modeText, density });
                     },
 
                     toggleNavIndicator(val) {
@@ -1074,7 +1086,8 @@ export function appearanceController() {
                         }
                         this.navIndicator = next;
                         this.applyTheme();
-                        this.notify(this.navIndicator ? `Garis indikator (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) aktif.` : `Garis indikator (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}) nonaktif.`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        this.notify(this.navIndicator ? 'nav_indicator_on' : 'nav_indicator_off', this.navIndicator ? `Garis indikator (${modeText}) aktif.` : `Garis indikator (${modeText}) nonaktif.`, { mode: modeText });
                     },
 
                     onNavCustomActiveBgChange(val) {
@@ -1197,44 +1210,44 @@ export function appearanceController() {
                             document.documentElement.classList.toggle('dark', isDark);
                         }
                         this.applyTheme();
-                        this.notify('Mode tema diubah ke ' + newMode);
+                        this.notify('theme_mode', 'Mode tema diubah ke ' + newMode, { mode: newMode });
                     },
 
                     toggleHighContrast(val) {
                         this.highContrast = typeof val !== 'undefined' ? !!val : !this.highContrast;
                         this.applyTheme();
-                        this.notify(this.highContrast ? 'Kontras tinggi aktif.' : 'Kontras standar.');
+                        this.notify(this.highContrast ? 'high_contrast_on' : 'high_contrast_off', this.highContrast ? 'Kontras tinggi aktif.' : 'Kontras standar.');
                     },
 
                     selectSemanticPreset(id) {
                         this.selectedSemantic = id;
                         this.applyTheme();
-                        this.notify('Palet status diperbarui.');
+                        this.notify('semantic_updated', 'Palet status diperbarui.');
                     },
 
                     selectChartPreset(id) {
                         this.selectedChartPreset = id;
                         this.applyTheme();
-                        this.notify('Palet grafik diperbarui.');
+                        this.notify('chart_updated', 'Palet grafik diperbarui.');
                     },
 
                     selectRadius(val) {
                         this.selectedRadius = val;
                         this.applyTheme();
-                        this.notify('Border radius: ' + val);
+                        this.notify('radius_updated', 'Border radius: ' + val, { val });
                     },
 
                     selectFont(name, val) {
                         this.selectedFontName = name;
                         this.selectedFontValue = val;
                         this.applyTheme();
-                        this.notify('Font: ' + name);
+                        this.notify('font_updated', 'Font: ' + name, { name });
                     },
 
                     setTablesView(view) {
                         this.tablesView = view;
                         this.applyTheme();
-                        this.notify('Tampilan tabel: ' + view);
+                        this.notify('table_view', 'Tampilan tabel: ' + view, { view });
                     },
 
                     selectTableStyle(id) {
@@ -1245,7 +1258,9 @@ export function appearanceController() {
                         }
                         this.tableStyle = id;
                         this.applyTheme();
-                        this.notify(`Gaya tabel (${this.isDarkNow ? 'Mode Gelap' : 'Mode Terang'}): ${id}`);
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const styleName = this.styleNames?.[id] || id;
+                        this.notify('table_style', `Gaya tabel (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     onTableCustomHeaderBgChange(val) {
@@ -1334,13 +1349,13 @@ export function appearanceController() {
                         }
                         this.reduceMotion = !this.motionActive;
                         this.applyTheme();
-                        this.notify(this.reduceMotion ? 'Reduced motion aktif.' : 'Animasi halus aktif.');
+                        this.notify(this.reduceMotion ? 'reduced_motion_on' : 'reduced_motion_off', this.reduceMotion ? 'Reduced motion aktif.' : 'Animasi halus aktif.');
                     },
 
                     toggleGlassEffect(val) {
                         this.glassEffect = typeof val !== 'undefined' ? !!val : !this.glassEffect;
                         this.applyTheme();
-                        this.notify(this.glassEffect ? 'Glassmorphism aktif.' : 'Glassmorphism nonaktif.');
+                        this.notify(this.glassEffect ? 'glassmorphism_on' : 'glassmorphism_off', this.glassEffect ? 'Glassmorphism aktif.' : 'Glassmorphism nonaktif.');
                     },
 
                     resetToDefault() {
@@ -1452,7 +1467,7 @@ export function appearanceController() {
 
                         this.setMode('system');
                         this.applyTheme();
-                        this.notify('Semua token tema di-reset ke nilai bawaan.');
+                        this.notify('reset_all', 'Semua token tema di-reset ke nilai bawaan.');
                     },
 
                     isLight(hex) {
@@ -2209,10 +2224,10 @@ html.dark, .dark {
                         const css = this.generateCssText();
                         navigator.clipboard?.writeText(css).then(() => {
                             this.copied = true;
-                            this.notify('Design tokens CSS berhasil disalin ke clipboard!');
+                            this.notify('css_copied', 'Design tokens CSS berhasil disalin ke clipboard!', {}, 'success', this.t('css_copied_title', 'CSS Disalin'));
                             setTimeout(() => this.copied = false, 2500);
                         }).catch(() => {
-                            this.notify('Gagal menyalin CSS tokens.');
+                            this.notify('css_copy_failed', 'Gagal menyalin CSS tokens.', {}, 'destructive');
                         });
                     },
 
@@ -2305,12 +2320,32 @@ html.dark, .dark {
                         } catch (e) {}
                     },
 
-                    notify(message) {
-                        if (window.vibeToast) {
-                            window.vibeToast(message, { type: 'success', title: 'Appearance & Tokens' });
+                    t(key, fallback, replacements = {}) {
+                        let msg = (this.i18n && this.i18n[key]) ? this.i18n[key] : fallback;
+                        for (const [k, v] of Object.entries(replacements)) {
+                            msg = msg.replace(`:${k}`, v);
                         }
-                    }
-                ,
+                        return msg;
+                    },
+
+                    notify(keyOrText, fallback = '', replacements = {}, type = 'info', title = null) {
+                        if (window.vibeToast) {
+                            let text = keyOrText;
+                            if (this.i18n && this.i18n[keyOrText]) {
+                                text = this.i18n[keyOrText];
+                                for (const [k, v] of Object.entries(replacements)) {
+                                    text = text.replace(`:${k}`, v);
+                                }
+                            } else if (fallback) {
+                                text = fallback;
+                                for (const [k, v] of Object.entries(replacements)) {
+                                    text = text.replace(`:${k}`, v);
+                                }
+                            }
+                            const resolvedTitle = title || (this.i18n?.toast_title || 'Appearance & Tokens');
+                            window.vibeToast(text, { type: type || 'info', title: resolvedTitle });
+                        }
+                    },
 
                     // Compatibility methods for index.blade.php
                     selectPreset(key) {
@@ -2519,12 +2554,7 @@ html.dark, .dark {
                         this.customSidebarBorder = isLight ? '#e5e6e5' : '#262726';
                         this.updateGeneratedCss();
                         this.injectOverrideCss();
-                        if (window.vibeToast) {
-                            vibeToast('Kontras warna sidebar berhasil disesuaikan secara otomatis.', {
-                                type: 'info',
-                                title: 'Auto Kontras'
-                            });
-                        }
+                        this.notify('sidebar_contrast', 'Kontras warna sidebar berhasil disesuaikan secara otomatis.', {}, 'info', this.t('auto_contrast_title', 'Auto Kontras'));
                     },
 
                     selectHeaderPreset(key) {
@@ -2570,12 +2600,7 @@ html.dark, .dark {
                         this.customHeaderBorder = isLight ? '#e5e6e5' : '#262726';
                         this.updateGeneratedCss();
                         this.injectOverrideCss();
-                        if (window.vibeToast) {
-                            vibeToast('Kontras warna header berhasil disesuaikan secara otomatis.', {
-                                type: 'info',
-                                title: 'Auto Kontras'
-                            });
-                        }
+                        this.notify('header_contrast', 'Kontras warna header berhasil disesuaikan secara otomatis.', {}, 'info', this.t('auto_contrast_title', 'Auto Kontras'));
                     },
 
                     updateGeneratedCss() {
@@ -2676,12 +2701,7 @@ body {
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(this.generatedCss).then(() => {
                                 this.copied = true;
-                                if (window.vibeToast) {
-                                    vibeToast('CSS Berhasil Disalin', {
-                                        type: 'success',
-                                        title: 'CSS Disalin'
-                                    });
-                                }
+                                this.notify('css_copied', 'CSS Berhasil Disalin', {}, 'success', this.t('css_copied_title', 'CSS Disalin'));
                                 setTimeout(() => {
                                     this.copied = false;
                                 }, 2500);
@@ -2725,12 +2745,7 @@ body {
                             localStorage.removeItem(prefix + '-app-css-overrides');
                         } catch (e) {}
 
-                        if (window.vibeToast) {
-                            vibeToast('Preferensi tema berhasil disimpan.', {
-                                type: 'success',
-                                title: 'Tema Disimpan'
-                            });
-                        }
+                        this.notify('theme_saved', 'Preferensi tema berhasil disimpan.', {}, 'success', this.t('theme_saved_title', 'Tema Disimpan'));
                     },
 };
             }
