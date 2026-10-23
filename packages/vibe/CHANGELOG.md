@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.8.0] - 2026-10-23
+
+### 🚀 Features
+- feat: add support for alert flash session messages and update documentation (414b5e4)
+
+
 ## [0.7.2] - 2026-10-23
 
 ### 🐛 Bug Fixes
