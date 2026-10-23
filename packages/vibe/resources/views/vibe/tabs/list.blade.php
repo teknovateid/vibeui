@@ -53,7 +53,7 @@
                     </span>
                 </template>
 
-                <span x-text="activeLabel || activeTab || '{{ $mobileTitle }}'" class="truncate font-semibold text-sm text-foreground"></span>
+                <span x-text="activeLabel || activeTab || @js($mobileTitle)" class="truncate font-semibold text-sm text-foreground"></span>
 
                 <template x-if="activeBadgeHtml">
                     <span class="inline-flex shrink-0 [&_.vibe-badge]:h-4 [&_.vibe-badge]:px-1.5 [&_.vibe-badge]:text-[10px]" x-html="activeBadgeHtml"></span>

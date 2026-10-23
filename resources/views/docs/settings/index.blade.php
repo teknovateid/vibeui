@@ -10,7 +10,7 @@
     @endpush
 
     <div class="mx-auto w-full space-y-6">
-        <vibe:breadcrumb title="{!! __('docs/page/settings/index.title') !!}">
+        <vibe:breadcrumb :title="__('docs/page/settings/index.title')">
             <vibe:breadcrumb.item href="{{ route('docs.index') }}">{{ __('docs/page/settings/index.breadcrumb.home') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item>{{ __('docs/page/settings/index.breadcrumb.pages') }}</vibe:breadcrumb.item>
             <vibe:breadcrumb.item active>{{ __('docs/page/settings/index.breadcrumb.settings') }}</vibe:breadcrumb.item>
@@ -1151,7 +1151,7 @@
 
                                     try {
                                         // 1. Verifikasi kata sandi terlebih dahulu
-                                        const csrfToken = document.querySelector('meta[name=\"csrf-token\"]')?getAttribute('content') || '{{ csrf_token() }}';
+                                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
                                         const verifyRes = await fetch('/confirm-password', {
                                             method: 'POST',
                                             headers: {

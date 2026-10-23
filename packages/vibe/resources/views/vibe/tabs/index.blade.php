@@ -31,13 +31,13 @@ $layoutClasses = match(true) {
 
 <div 
     x-data="{
-        activeTab: {{ $persist ? "window.VibeTabs?.getActive('{$tabId}', '{$initialTab}') || '{$initialTab}'" : "'{$initialTab}'" }},
-        tabId: '{{ $tabId }}',
-        layout: '{{ $normalizedLayout }}',
-        variant: '{{ $variant }}',
-        size: '{{ $size }}',
-        persist: {{ $persist ? 'true' : 'false' }},
-        syncUrl: {{ is_string($syncUrl) ? "'{$syncUrl}'" : ($syncUrl ? "'tab'" : 'false') }},
+        activeTab: {{ $persist ? 'window.VibeTabs?.getActive(' . \Illuminate\Support\Js::from($tabId) . ', ' . \Illuminate\Support\Js::from($initialTab) . ') || ' . \Illuminate\Support\Js::from($initialTab) : \Illuminate\Support\Js::from($initialTab) }},
+        tabId: @js($tabId),
+        layout: @js($normalizedLayout),
+        variant: @js($variant),
+        size: @js($size),
+        persist: @js((bool) $persist),
+        syncUrl: @js(is_string($syncUrl) ? $syncUrl : ($syncUrl ? 'tab' : false)),
         orientation: @js($orientation),
         mobileMode: @js($resolvedMobileMode),
         activeLabel: '',
@@ -45,26 +45,35 @@ $layoutClasses = match(true) {
         activeBadgeHtml: '',
         mobileOpen: false,
 
+        getEnabledTabs() {
+            return Array.from(this.$el.querySelectorAll('[role=tab]')).filter(
+                el => el.closest('.vibe-tabs-root') === this.$el && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true'
+            );
+        },
+
+        isValidTab(name) {
+            if (!name) return false;
+            return this.getEnabledTabs().some(el => el.dataset.tabName === String(name));
+        },
+
         init() {
+            let candidate = null;
             if (this.syncUrl) {
                 const urlParams = new URLSearchParams(window.location.search);
-                const urlTab = urlParams.get(this.syncUrl);
-                if (urlTab) this.activeTab = urlTab;
+                candidate = urlParams.get(this.syncUrl);
             } else if (this.persist && this.tabId) {
-                const stored = window.VibeTabs?.getActive(this.tabId);
-                if (stored) this.activeTab = stored;
-            }
-
-            if (!this.activeTab) {
-                this.$nextTick(() => {
-                    let first = this.$el.querySelector('[role=tab]:not([disabled])');
-                    if (first && first.dataset.tabName) {
-                        this.activeTab = first.dataset.tabName;
-                    }
-                });
+                candidate = window.VibeTabs?.getActive(this.tabId);
             }
 
             this.$nextTick(() => {
+                if (candidate && this.isValidTab(candidate)) {
+                    this.activeTab = candidate;
+                } else if (!this.isValidTab(this.activeTab)) {
+                    const first = this.getEnabledTabs()[0];
+                    if (first?.dataset?.tabName) {
+                        this.activeTab = first.dataset.tabName;
+                    }
+                }
                 this.updateActiveTabMeta();
             });
 
@@ -87,6 +96,7 @@ $layoutClasses = match(true) {
         },
 
         selectTab(name, label = null, el = null) {
+            if (!this.isValidTab(name)) return;
             this.activeTab = name;
             if (label) this.activeLabel = label;
             if (el) {
@@ -106,8 +116,9 @@ $layoutClasses = match(true) {
         },
 
         updateActiveTabMeta() {
-            const currentTabEl = this.$el.querySelector(`[role=tab][data-tab-name='${this.activeTab}']`) 
-                              || this.$el.querySelector(`[role=tab][aria-selected='true']`);
+            const tabs = Array.from(this.$el.querySelectorAll('[role=tab]'));
+            const currentTabEl = tabs.find(t => t.dataset.tabName === this.activeTab) 
+                              || this.$el.querySelector('[role=tab][aria-selected="true"]');
             if (currentTabEl) {
                 const label = currentTabEl.dataset.label || currentTabEl.querySelector('.vibe-tab-label')?.textContent?.trim() || currentTabEl.textContent?.trim();
                 if (label) this.activeLabel = label;
@@ -121,7 +132,7 @@ $layoutClasses = match(true) {
         },
 
         focusNextTab(event, offset) {
-            const tabs = Array.from(this.$el.querySelectorAll('[role=tab]:not([disabled])'));
+            const tabs = this.getEnabledTabs();
             const activeIndex = tabs.findIndex(t => t === document.activeElement);
             if (activeIndex === -1) return;
             const nextIndex = (activeIndex + offset + tabs.length) % tabs.length;
@@ -130,7 +141,7 @@ $layoutClasses = match(true) {
         },
 
         focusFirstTab() {
-            const tabs = Array.from(this.$el.querySelectorAll('[role=tab]:not([disabled])'));
+            const tabs = this.getEnabledTabs();
             if (tabs.length) {
                 tabs[0].focus();
                 tabs[0].click();
@@ -138,7 +149,7 @@ $layoutClasses = match(true) {
         },
 
         focusLastTab() {
-            const tabs = Array.from(this.$el.querySelectorAll('[role=tab]:not([disabled])'));
+            const tabs = this.getEnabledTabs();
             if (tabs.length) {
                 tabs[tabs.length - 1].focus();
                 tabs[tabs.length - 1].click();
@@ -146,7 +157,7 @@ $layoutClasses = match(true) {
         }
     }"
     @select-tab="selectTab($event.detail)"
-    @change-tab.window="if ($event.detail?.id === tabId || !$event.detail?.id) activeTab = $event.detail?.tab || $event.detail"
+    @change-tab.window="if (($event.detail?.id === tabId || !$event.detail?.id) && isValidTab($event.detail?.tab || $event.detail)) activeTab = $event.detail?.tab || $event.detail"
     data-variant="{{ $variant }}"
     data-layout="{{ $normalizedLayout }}"
     data-selected="{{ $initialTab }}"
