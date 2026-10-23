@@ -312,70 +312,306 @@
 
                 <vibe:preview :title="__('docs/stepper.vertical.preview_title')">
                     <vibe:preview.code>
-                        <div class="max-w-xl mx-auto w-full">
-                            <vibe:stepper orientation="vertical" :default="3">
-                                <vibe:stepper.header>
-                                    <vibe:stepper.step
-                                        step="1"
-                                        title="Order Confirmed & Paid"
-                                        description="10:15 WIB — Invoice #INV-2026-0891 has been verified automatically."
-                                    />
-                                    <vibe:stepper.step
-                                        step="2"
-                                        title="Prepared at Roastery Warehouse"
-                                        description="11:30 WIB — Arabica House Blend (5kg) packed and quality-checked."
-                                    />
-                                    <vibe:stepper.step
-                                        step="3"
-                                        title="In Transit with Instant Courier"
-                                        description="13:05 WIB — Driver (Ahmad) is heading to your cafe location."
-                                    />
-                                    <vibe:stepper.step
-                                        step="4"
-                                        title="Arrived at Destination"
-                                        description="Estimated arrival at 14:00 WIB — Waiting for store manager receipt."
-                                    />
-                                </vibe:stepper.header>
+                        <vibe:stepper orientation="vertical" :default="1">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start w-full">
+                                {{-- Left Column: Vertical Stepper Navigation --}}
+                                <div class="md:col-span-5 lg:col-span-4">
+                                    <vibe:stepper.header>
+                                        <vibe:stepper.step
+                                            step="1"
+                                            title="{{ __('docs/stepper.vertical.step1_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step1_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="2"
+                                            title="{{ __('docs/stepper.vertical.step2_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step2_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="3"
+                                            title="{{ __('docs/stepper.vertical.step3_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step3_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="4"
+                                            title="{{ __('docs/stepper.vertical.step4_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step4_desc') }}"
+                                        />
+                                    </vibe:stepper.header>
+                                </div>
 
-                                <vibe:stepper.actions>
-                                    <vibe:stepper.previous size="sm">Previous Status</vibe:stepper.previous>
-                                    <vibe:stepper.next size="sm" :hide-on-last="true">Advance Status</vibe:stepper.next>
-                                    <vibe:stepper.finish size="sm">Mark Delivered</vibe:stepper.finish>
-                                </vibe:stepper.actions>
-                            </vibe:stepper>
-                        </div>
+                                {{-- Right Column: Multi-Step Form Panels & Actions --}}
+                                <div class="md:col-span-7 lg:col-span-8 p-5 sm:p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-6">
+                                    <vibe:stepper.panels class="mt-0">
+                                        {{-- Step 1: Organization Profile --}}
+                                        <vibe:stepper.panel step="1">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step1_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step1_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step1_org_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step1_org_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step1_domain_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step1_domain_placeholder') }}"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 2: Administrator Account --}}
+                                        <vibe:stepper.panel step="2">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step2_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step2_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step2_name_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step2_name_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        type="email"
+                                                        label="{{ __('docs/stepper.vertical.step2_email_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step2_email_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        type="password"
+                                                        label="{{ __('docs/stepper.vertical.step2_password_label') }}"
+                                                        placeholder="••••••••••••"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 3: Billing Details --}}
+                                        <vibe:stepper.panel step="3">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step3_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step3_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <vibe:input
+                                                            label="{{ __('docs/stepper.vertical.step3_tax_label') }}"
+                                                            placeholder="{{ __('docs/stepper.vertical.step3_tax_placeholder') }}"
+                                                        />
+                                                        <vibe:input
+                                                            type="email"
+                                                            label="{{ __('docs/stepper.vertical.step3_email_label') }}"
+                                                            placeholder="{{ __('docs/stepper.vertical.step3_email_placeholder') }}"
+                                                        />
+                                                    </div>
+                                                    <vibe:textarea
+                                                        label="{{ __('docs/stepper.vertical.step3_address_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step3_address_placeholder') }}"
+                                                        rows="3"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 4: Review & Activation --}}
+                                        <vibe:stepper.panel step="4">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step4_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step4_header_desc') }}</p>
+                                                </div>
+
+                                                <div class="p-4 rounded-xl border border-border/60 bg-muted/20 space-y-3">
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_org') }}</span>
+                                                        <span class="font-medium text-foreground">PT Teknovate Solusi Digital</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_domain') }}</span>
+                                                        <span class="font-mono text-primary font-medium">teknovate-hq.vibe.dev</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_admin') }}</span>
+                                                        <span class="font-medium text-foreground">amanda@teknovate.id</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_status') }}</span>
+                                                        <vibe:badge variant="primary" size="sm">{{ __('docs/stepper.vertical.step4_status_ready') }}</vibe:badge>
+                                                    </div>
+                                                </div>
+
+                                                <vibe:checkbox
+                                                    label="{{ __('docs/stepper.vertical.step4_agreement') }}"
+                                                    name="terms_agreement_demo"
+                                                    checked
+                                                />
+                                            </div>
+                                        </vibe:stepper.panel>
+                                    </vibe:stepper.panels>
+
+                                    <vibe:stepper.actions class="pt-4 border-t border-border/60">
+                                        <vibe:stepper.previous size="sm" />
+                                        <vibe:stepper.next size="sm" :hide-on-last="true" />
+                                        <vibe:stepper.finish size="sm" variant="primary">{{ __('docs/stepper.vertical.finish_button') }}</vibe:stepper.finish>
+                                    </vibe:stepper.actions>
+                                </div>
+                            </div>
+                        </vibe:stepper>
                     </vibe:preview.code>
 
-                    <div class="w-full max-w-xl mx-auto p-2 sm:p-4">
-                        <vibe:stepper orientation="vertical" :default="3">
-                            <vibe:stepper.header>
-                                <vibe:stepper.step
-                                    step="1"
-                                    title="Order Confirmed & Paid"
-                                    description="10:15 WIB — Invoice #INV-2026-0891 has been verified automatically."
-                                />
-                                <vibe:stepper.step
-                                    step="2"
-                                    title="Prepared at Roastery Warehouse"
-                                    description="11:30 WIB — Arabica House Blend (5kg) packed and quality-checked."
-                                />
-                                <vibe:stepper.step
-                                    step="3"
-                                    title="In Transit with Instant Courier"
-                                    description="13:05 WIB — Driver (Ahmad) is heading to your cafe location."
-                                />
-                                <vibe:stepper.step
-                                    step="4"
-                                    title="Arrived at Destination"
-                                    description="Estimated arrival at 14:00 WIB — Waiting for store manager receipt."
-                                />
-                            </vibe:stepper.header>
+                    <div class="w-full p-2 sm:p-4">
+                        <vibe:stepper orientation="vertical" :default="1">
+                            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 items-start w-full">
+                                {{-- Left Column: Vertical Stepper Navigation --}}
+                                <div class="md:col-span-5 lg:col-span-4">
+                                    <vibe:stepper.header>
+                                        <vibe:stepper.step
+                                            step="1"
+                                            title="{{ __('docs/stepper.vertical.step1_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step1_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="2"
+                                            title="{{ __('docs/stepper.vertical.step2_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step2_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="3"
+                                            title="{{ __('docs/stepper.vertical.step3_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step3_desc') }}"
+                                        />
+                                        <vibe:stepper.step
+                                            step="4"
+                                            title="{{ __('docs/stepper.vertical.step4_title') }}"
+                                            description="{{ __('docs/stepper.vertical.step4_desc') }}"
+                                        />
+                                    </vibe:stepper.header>
+                                </div>
 
-                            <vibe:stepper.actions>
-                                <vibe:stepper.previous size="sm">Previous Status</vibe:stepper.previous>
-                                <vibe:stepper.next size="sm" :hide-on-last="true">Advance Status</vibe:stepper.next>
-                                <vibe:stepper.finish size="sm">Mark Delivered</vibe:stepper.finish>
-                            </vibe:stepper.actions>
+                                {{-- Right Column: Multi-Step Form Panels & Actions --}}
+                                <div class="md:col-span-7 lg:col-span-8 p-5 sm:p-6 rounded-2xl border border-border/80 bg-card shadow-xs space-y-6">
+                                    <vibe:stepper.panels class="mt-0">
+                                        {{-- Step 1: Organization Profile --}}
+                                        <vibe:stepper.panel step="1">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step1_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step1_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step1_org_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step1_org_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step1_domain_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step1_domain_placeholder') }}"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 2: Administrator Account --}}
+                                        <vibe:stepper.panel step="2">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step2_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step2_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <vibe:input
+                                                        label="{{ __('docs/stepper.vertical.step2_name_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step2_name_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        type="email"
+                                                        label="{{ __('docs/stepper.vertical.step2_email_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step2_email_placeholder') }}"
+                                                    />
+                                                    <vibe:input
+                                                        type="password"
+                                                        label="{{ __('docs/stepper.vertical.step2_password_label') }}"
+                                                        placeholder="••••••••••••"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 3: Billing Details --}}
+                                        <vibe:stepper.panel step="3">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step3_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step3_header_desc') }}</p>
+                                                </div>
+                                                <div class="space-y-4">
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                        <vibe:input
+                                                            label="{{ __('docs/stepper.vertical.step3_tax_label') }}"
+                                                            placeholder="{{ __('docs/stepper.vertical.step3_tax_placeholder') }}"
+                                                        />
+                                                        <vibe:input
+                                                            type="email"
+                                                            label="{{ __('docs/stepper.vertical.step3_email_label') }}"
+                                                            placeholder="{{ __('docs/stepper.vertical.step3_email_placeholder') }}"
+                                                        />
+                                                    </div>
+                                                    <vibe:textarea
+                                                        label="{{ __('docs/stepper.vertical.step3_address_label') }}"
+                                                        placeholder="{{ __('docs/stepper.vertical.step3_address_placeholder') }}"
+                                                        rows="3"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </vibe:stepper.panel>
+
+                                        {{-- Step 4: Review & Activation --}}
+                                        <vibe:stepper.panel step="4">
+                                            <div class="space-y-4">
+                                                <div class="space-y-1 pb-3 border-b border-border/60">
+                                                    <h3 class="text-base font-semibold text-foreground">{{ __('docs/stepper.vertical.step4_header') }}</h3>
+                                                    <p class="text-xs text-muted-foreground">{{ __('docs/stepper.vertical.step4_header_desc') }}</p>
+                                                </div>
+
+                                                <div class="p-4 rounded-xl border border-border/60 bg-muted/20 space-y-3">
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_org') }}</span>
+                                                        <span class="font-medium text-foreground">PT Teknovate Solusi Digital</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_domain') }}</span>
+                                                        <span class="font-mono text-primary font-medium">teknovate-hq.vibe.dev</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs pb-2 border-b border-border/40">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_admin') }}</span>
+                                                        <span class="font-medium text-foreground">amanda@teknovate.id</span>
+                                                    </div>
+                                                    <div class="flex items-center justify-between text-xs">
+                                                        <span class="text-muted-foreground">{{ __('docs/stepper.vertical.step4_summary_status') }}</span>
+                                                        <vibe:badge variant="primary" size="sm">{{ __('docs/stepper.vertical.step4_status_ready') }}</vibe:badge>
+                                                    </div>
+                                                </div>
+
+                                                <vibe:checkbox
+                                                    label="{{ __('docs/stepper.vertical.step4_agreement') }}"
+                                                    name="terms_agreement"
+                                                    checked
+                                                />
+                                            </div>
+                                        </vibe:stepper.panel>
+                                    </vibe:stepper.panels>
+
+                                    <vibe:stepper.actions class="pt-4 border-t border-border/60">
+                                        <vibe:stepper.previous size="sm" />
+                                        <vibe:stepper.next size="sm" :hide-on-last="true" />
+                                        <vibe:stepper.finish size="sm" variant="primary">{{ __('docs/stepper.vertical.finish_button') }}</vibe:stepper.finish>
+                                    </vibe:stepper.actions>
+                                </div>
+                            </div>
                         </vibe:stepper>
                     </div>
                 </vibe:preview>
