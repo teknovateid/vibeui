@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.7.2] - 2026-10-23
+
+### 🐛 Bug Fixes
+- fix: update sheet component overflow states and sidebar z-index classes (556be57)
+
+
 ## [0.7.1] - 2026-10-23
 
 ### 🚀 Features
