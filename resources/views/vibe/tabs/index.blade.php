@@ -10,6 +10,7 @@
     'persist' => false,
     'id' => null,
     'syncUrl' => false,
+    'mobileMode' => 'auto', // 'auto', 'collapsible', 'scroll', 'stack'
 ])
 
 @php
@@ -19,11 +20,13 @@
     $tabId = $id ?? uniqid('tabs-');
     $initialTab = $selected ?? $default ?? '';
     
-    $layoutClasses = match(true) {
-        $isSidebar => 'flex flex-col md:flex-row w-full items-stretch gap-0',
-        $isCols => 'flex flex-col md:flex-row gap-6 w-full items-start',
-        default => 'flex flex-col gap-4 w-full',
-    };
+    $resolvedMobileMode = $mobileMode === 'auto' ? ($isCols ? 'collapsible' : 'scroll') : $mobileMode;
+
+$layoutClasses = match(true) {
+    $isSidebar => 'flex flex-col md:flex-row w-full items-stretch gap-0',
+    $isCols => 'flex flex-col md:flex-row gap-6 w-full items-start',
+    default => 'flex flex-col gap-4 w-full',
+};  
 @endphp
 
 <div 
@@ -35,6 +38,10 @@
         size: '{{ $size }}',
         persist: {{ $persist ? 'true' : 'false' }},
         syncUrl: {{ is_string($syncUrl) ? "'{$syncUrl}'" : ($syncUrl ? "'tab'" : 'false') }},
+        orientation: @js($orientation),
+        mobileMode: @js($resolvedMobileMode),
+        activeLabel: '',
+        mobileOpen: false,
 
         init() {
             if (this.syncUrl) {
@@ -55,7 +62,12 @@
                 });
             }
 
+            this.$nextTick(() => {
+                this.updateActiveLabel();
+            });
+
             this.$watch('activeTab', val => {
+                this.updateActiveLabel();
                 if (this.persist && this.tabId) {
                     if (window.Alpine && Alpine.store && Alpine.store('vibeTabs')) {
                         Alpine.store('vibeTabs').setActive(this.tabId, val);
@@ -72,8 +84,26 @@
             });
         },
 
-        select(name) {
+        selectTab(name, label = null, el = null) {
             this.activeTab = name;
+            if (label) this.activeLabel = label;
+            this.mobileOpen = false;
+            if (el && window.innerWidth < 768 && this.mobileMode === 'scroll') {
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        },
+
+        select(name, label = null, el = null) {
+            this.selectTab(name, label, el);
+        },
+
+        updateActiveLabel() {
+            const currentTabEl = this.$el.querySelector(`[role=tab][data-tab-name='${this.activeTab}']`) 
+                              || this.$el.querySelector(`[role=tab][aria-selected='true']`);
+            if (currentTabEl) {
+                const label = currentTabEl.dataset.label || currentTabEl.textContent?.trim();
+                if (label) this.activeLabel = label;
+            }
         },
 
         focusNextTab(event, offset) {
@@ -101,7 +131,7 @@
             }
         }
     }"
-    @select-tab="select($event.detail)"
+    @select-tab="selectTab($event.detail)"
     @change-tab.window="if ($event.detail?.id === tabId || !$event.detail?.id) activeTab = $event.detail?.tab || $event.detail"
     data-variant="{{ $variant }}"
     data-layout="{{ $normalizedLayout }}"
