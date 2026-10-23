@@ -2,6 +2,13 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.6.8] - 2026-10-23
+
+### 🚀 Features
+- feat: support dynamic icons and badges in mobile collapsible tab trigger (1764a37)
+- feat: add mobile responsiveness and collapsible mode to tabs component (8f83019)
+
+
 ## [0.6.7] - 2026-10-22
 
 ### 🚀 Features
