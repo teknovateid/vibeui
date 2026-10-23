@@ -26,31 +26,50 @@
         '*:flex-1 w-full': {{ $isFitted ? 'true' : 'false' }},
     }"
 >
-    {{-- 1. Mobile Collapsible Trigger (Hanya tampil di Mobile < md jika mode 'collapsible') --}}
+    {{-- 1. Mobile Collapsible Trigger (Sleek Vibe UI Selector Bar) --}}
     <div
         x-show="mobileMode === 'collapsible'"
-        class="flex md:hidden items-center justify-between w-full pb-2 mb-2 border-b border-border/40"
+        class="flex md:hidden items-center justify-between w-full"
+        :class="{ 'pb-2.5 border-b border-border/50': mobileOpen }"
     >
         <button
             type="button"
             @click="mobileOpen = !mobileOpen"
             :aria-expanded="mobileOpen"
-            class="flex items-center justify-between w-full px-3.5 py-2.5 text-sm font-medium rounded-xl border border-input bg-card text-foreground shadow-2xs transition-all active:scale-[0.99]"
+            class="group w-full flex items-center justify-between px-3.5 py-2.5 min-h-10 rounded-xl border border-border/80 bg-card hover:bg-muted/40 text-foreground shadow-2xs hover:border-border transition-all duration-150 active:scale-[0.99] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-            <div class="flex items-center gap-2.5 truncate">
-                <span class="size-2 rounded-full bg-primary shrink-0"></span>
-                <span x-text="activeLabel || activeTab || '{{ $mobileTitle }}'" class="truncate font-semibold"></span>
+            <div class="flex items-center gap-2.5 min-w-0">
+                <template x-if="activeIconHtml">
+                    <span class="size-4 shrink-0 inline-flex items-center justify-center text-primary [&>svg]:size-4 [&>svg]:shrink-0" x-html="activeIconHtml"></span>
+                </template>
+                <template x-if="!activeIconHtml">
+                    <span class="size-4 shrink-0 inline-flex items-center justify-center text-muted-foreground">
+                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="7" height="7" x="3" y="3" rx="1.5"/>
+                            <rect width="7" height="7" x="14" y="3" rx="1.5"/>
+                            <rect width="7" height="7" x="14" y="14" rx="1.5"/>
+                            <rect width="7" height="7" x="3" y="14" rx="1.5"/>
+                        </svg>
+                    </span>
+                </template>
+
+                <span x-text="activeLabel || activeTab || '{{ $mobileTitle }}'" class="truncate font-semibold text-sm text-foreground"></span>
+
+                <template x-if="activeBadgeHtml">
+                    <span class="inline-flex shrink-0 [&_.vibe-badge]:h-4 [&_.vibe-badge]:px-1.5 [&_.vibe-badge]:text-[10px]" x-html="activeBadgeHtml"></span>
+                </template>
             </div>
 
-            <div class="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0 ml-2">
-                <span x-text="mobileOpen ? 'Tutup' : 'Menu'" class="text-[11px] font-medium"></span>
-                <svg
-                    class="size-4 transition-transform duration-200"
-                    :class="{ 'rotate-180': mobileOpen }"
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                >
-                    <path d="m6 9 6 6 6-6"/>
-                </svg>
+            <div class="flex items-center gap-1.5 shrink-0 ml-2">
+                <span class="size-6 rounded-lg bg-muted/60 border border-border/50 flex items-center justify-center group-hover:bg-muted group-hover:border-border transition-all">
+                    <svg
+                        class="size-3.5 text-muted-foreground group-hover:text-foreground transition-transform duration-200"
+                        :class="{ 'rotate-180': mobileOpen }"
+                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    >
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </span>
             </div>
         </button>
     </div>
@@ -68,7 +87,7 @@
         class="contents md:contents"
         :class="{
             'max-md:hidden': mobileMode === 'collapsible' && !mobileOpen,
-            'max-md:flex max-md:flex-col max-md:gap-1 max-md:w-full': mobileMode === 'collapsible' && mobileOpen,
+            'max-md:flex max-md:flex-col max-md:gap-0.5 max-md:w-full max-md:pt-2': mobileMode === 'collapsible' && mobileOpen,
         }"
     >
         {{ $slot }}

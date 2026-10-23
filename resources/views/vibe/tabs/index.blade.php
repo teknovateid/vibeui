@@ -41,6 +41,8 @@ $layoutClasses = match(true) {
         orientation: @js($orientation),
         mobileMode: @js($resolvedMobileMode),
         activeLabel: '',
+        activeIconHtml: '',
+        activeBadgeHtml: '',
         mobileOpen: false,
 
         init() {
@@ -63,11 +65,11 @@ $layoutClasses = match(true) {
             }
 
             this.$nextTick(() => {
-                this.updateActiveLabel();
+                this.updateActiveTabMeta();
             });
 
             this.$watch('activeTab', val => {
-                this.updateActiveLabel();
+                this.updateActiveTabMeta();
                 if (this.persist && this.tabId) {
                     if (window.Alpine && Alpine.store && Alpine.store('vibeTabs')) {
                         Alpine.store('vibeTabs').setActive(this.tabId, val);
@@ -87,6 +89,12 @@ $layoutClasses = match(true) {
         selectTab(name, label = null, el = null) {
             this.activeTab = name;
             if (label) this.activeLabel = label;
+            if (el) {
+                const icon = el.querySelector('.vibe-tab-icon') || el.querySelector('svg');
+                if (icon) this.activeIconHtml = icon.outerHTML;
+                const badge = el.querySelector('.vibe-tab-badge');
+                if (badge) this.activeBadgeHtml = badge.innerHTML;
+            }
             this.mobileOpen = false;
             if (el && window.innerWidth < 768 && this.mobileMode === 'scroll') {
                 el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
@@ -97,12 +105,18 @@ $layoutClasses = match(true) {
             this.selectTab(name, label, el);
         },
 
-        updateActiveLabel() {
+        updateActiveTabMeta() {
             const currentTabEl = this.$el.querySelector(`[role=tab][data-tab-name='${this.activeTab}']`) 
                               || this.$el.querySelector(`[role=tab][aria-selected='true']`);
             if (currentTabEl) {
-                const label = currentTabEl.dataset.label || currentTabEl.textContent?.trim();
+                const label = currentTabEl.dataset.label || currentTabEl.querySelector('.vibe-tab-label')?.textContent?.trim() || currentTabEl.textContent?.trim();
                 if (label) this.activeLabel = label;
+
+                const icon = currentTabEl.querySelector('.vibe-tab-icon') || currentTabEl.querySelector('svg');
+                this.activeIconHtml = icon ? icon.outerHTML : '';
+
+                const badge = currentTabEl.querySelector('.vibe-tab-badge');
+                this.activeBadgeHtml = badge ? badge.innerHTML : '';
             }
         },
 
