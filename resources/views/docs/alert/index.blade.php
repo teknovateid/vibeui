@@ -599,6 +599,21 @@ vibeAlert({
                             Tutup Semua Alert
                         </vibe:button>
                         HTML;
+
+                        $laravelSnippet = <<<'PHP'
+                        // Di dalam Laravel Controller
+                        // Alert Sukses
+                        return redirect()->back()->with('alert_success', 'Perubahan penting berhasil disimpan.');
+
+                        // Alert Error
+                        return redirect()->back()->with('alert_error', 'Gagal memproses transaksi finansial.');
+
+                        // Alert Warning
+                        return redirect()->back()->with('alert_warning', 'Tindakan ini memerlukan perhatian khusus.');
+
+                        // Alert Info
+                        return redirect()->back()->with('alert_info', 'Informasi pemeliharaan sistem terjadwal.');
+                        PHP;
                     @endphp
 
                     <div>
@@ -619,6 +634,11 @@ vibeAlert({
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">4. Alpine.js Magic Helper ($vibe.alert & $vibe.alerts)</p>
                         <vibe:highlightjs language="html" title="resources/views/components/form.blade.php" :code="$alpineSnippet" />
+                    </div>
+
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">5. Laravel Controller Flash Session</p>
+                        <vibe:highlightjs language="php" title="app/Http/Controllers/OrderController.php" :code="$laravelSnippet" />
                     </div>
                 </div>
             </section>

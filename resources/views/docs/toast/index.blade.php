@@ -416,10 +416,15 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
 
                     $laravelSnippet = <<<'PHP'
                     // Di dalam Laravel Controller
-                    return redirect()->route('dashboard')->with(
-                        'toast_success',
-                        'Artikel baru berhasil diterbitkan.'
-                    );
+                    // Toast Sukses (contoh: alih peran / CRUD)
+                    return redirect()->back()->with('toast_success', 'Peran berhasil diubah.');
+
+                    // Toast Error
+                    return redirect()->back()->with('toast_error', 'Gagal memperbarui data profil.');
+
+                    // Toast Warning & Info
+                    return redirect()->back()->with('toast_warning', 'Masa aktif sesi hampir habis.');
+                    return redirect()->back()->with('toast_info', 'Data disinkronkan di latar belakang.');
                     PHP;
 
                     $livewireSnippet = <<<'PHP'

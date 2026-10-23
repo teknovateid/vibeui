@@ -135,7 +135,7 @@ return [
     // Section 8: Integration Methods
     'integration' => [
         'title' => 'Metode Pemanggilan',
-        'desc' => 'Komponen alert dapat dipicu melalui berbagai metode fleksibel: helper JavaScript global, direktif Blade, atau event browser dari Livewire.',
+        'desc' => 'Komponen alert dapat dipicu melalui berbagai metode fleksibel: helper JavaScript global, direktif Blade, event browser dari Livewire, serta Laravel Flash Session dari Controller.',
     ],
 
     // Section 9: Programmatic Control

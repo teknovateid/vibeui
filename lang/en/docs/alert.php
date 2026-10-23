@@ -135,7 +135,7 @@ return [
     // Section 8: Integration Methods
     'integration' => [
         'title' => 'Invocation Methods',
-        'desc' => 'Alert modals can be triggered across various touchpoints: global JavaScript helper, Blade directive, or Livewire browser events.',
+        'desc' => 'Alert modals can be triggered across various touchpoints: global JavaScript helper, Blade directive, Livewire browser events, and Laravel Controller Flash Sessions.',
     ],
 
     // Section 9: Programmatic Control
