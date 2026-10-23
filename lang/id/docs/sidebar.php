@@ -56,6 +56,7 @@ return [
         'sheet' => 'Sheet',
         'tabs' => 'Tabs',
         'accordion' => 'Accordion',
+        'stepper' => 'Stepper',
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',

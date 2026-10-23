@@ -168,6 +168,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/sheet', 'docs.sheet.index')->name('sheet.index');
     Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
     Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
+    Route::view('/stepper', 'docs.stepper.index')->name('stepper.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
 
     Route::prefix('display')->name('display.')->group(function () {

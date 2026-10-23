@@ -458,6 +458,16 @@
             'icon' => 'tabs',
             'keywords' => 'tabs panel pill navigation segmented switch tab panel peralihan konten tab',
         ],
+        [
+            'id' => 'menu-stepper',
+            'title' => __('docs/sidebar.nav.stepper') ?: 'Stepper',
+            'subtitle' => 'Komponen wizard dan alur tahapan bertahap (stepper)',
+            'category' => $catMenu,
+            'section' => $navSections['navigation'],
+            'url' => route('docs.stepper.index'),
+            'icon' => 'stepper',
+            'keywords' => 'stepper wizard steps timeline form alur langkah tahapan proses progress',
+        ],
 
         // Components - Layout
         [
@@ -1340,6 +1350,8 @@
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h7"/></svg>`;
                     case 'accordion':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>`;
+                    case 'stepper':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/></svg>`;
                     case 'code':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
                     case 'qrcode':
