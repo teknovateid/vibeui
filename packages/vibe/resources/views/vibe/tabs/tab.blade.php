@@ -2,6 +2,7 @@
 
 @props([
     'name',
+    'label' => null,
     'badge' => null,
     'badgeVariant' => 'secondary',
     'disabled' => false,
@@ -14,6 +15,7 @@
 ])
 
 @php
+    $displayLabel = $label ?? trim(strip_tags((string) $slot));
     $isSsrActive = $active === true || $active === 'true' || $active === 1;
 
     $buttonVariantMap = [
@@ -67,15 +69,18 @@
     id="tab-{{ $name }}"
     aria-controls="panel-{{ $name }}"
     data-tab-name="{{ $name }}"
+    data-label="{{ $displayLabel }}"
     aria-selected="{{ $isSsrActive ? 'true' : 'false' }}"
     tabindex="{{ $isSsrActive ? '0' : '-1' }}"
     x-bind:aria-selected="activeTab === '{{ $name }}' ? 'true' : 'false'"
     x-bind:tabindex="activeTab === '{{ $name }}' ? '0' : '-1'"
-    @click="select('{{ $name }}'); $dispatch('select-tab', '{{ $name }}')"
+    x-init="if ((activeTab === '{{ $name }}' || {{ $isSsrActive ? 'true' : 'false' }}) && !activeLabel) activeLabel = $el.dataset.label || '{{ $name }}'"
+    @click="selectTab('{{ $name }}', $el.dataset.label, $el); $dispatch('select-tab', '{{ $name }}')"
     {{ $attributes->twMerge([
         'class' => 'vibe-tabs-tab relative !transition-colors duration-150 gap-2 shrink-0 cursor-pointer ' . $ssrClasses
     ]) }}
     x-bind:class="{
+        'shrink-0 snap-start whitespace-nowrap': mobileMode === 'scroll',
         {{-- Layout 2 Baris (Horizontal / Rows) - Pill --}}
         'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50': layout === 'rows' && variant === 'pill' && activeTab === '{{ $name }}',
         'text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium': layout === 'rows' && variant === 'pill' && activeTab !== '{{ $name }}',
