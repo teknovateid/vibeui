@@ -2,6 +2,18 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.7.0] - 2026-10-23
+
+### 🚀 Features
+- feat: improve tabs component styling, layout support, and attribute bindings (45272c9)
+
+### 🐛 Bug Fixes
+- fix: improve tab validation logic and update breadcrumb title bindings in templates (28c966f)
+
+### ⚡ Performance & Refactoring
+- refactor: internationalize appearance settings and navigation tab labels with localization support (65f90d6)
+
+
 ## [0.6.8] - 2026-10-23
 
 ### 🚀 Features
