@@ -7,8 +7,8 @@
 
 <div 
     role="tabpanel"
-    id="panel-{{ $name }}"
-    aria-labelledby="tab-{{ $name }}"
+    x-bind:id="tabId + '-panel-' + @js($name)"
+    x-bind:aria-labelledby="tabId + '-tab-' + @js($name)"
     x-show="activeTab === @js($name)"
     x-cloak
     x-transition:enter="transition ease-out duration-150"

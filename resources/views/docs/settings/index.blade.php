@@ -22,8 +22,8 @@
                 {{-- ================================================================= --}}
                 {{-- TABS LIST (sidebar kiri)                                          --}}
                 {{-- ================================================================= --}}
-                <vibe:tabs.list class="w-full md:w-56 shrink-0 flex flex-col gap-0.5 p-3 border-b md:border-b-0 md:border-r border-border/60 bg-muted/40">
-                    <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
+                <vibe:tabs.list class="w-full md:w-56 shrink-0 flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll gap-1 md:gap-0.5 p-2 md:p-3 border-b md:border-b-0 md:border-r border-border/60 bg-muted/40">
+                    <p class="hidden md:block px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
                     <vibe:tabs.tab name="account">
                         <x-slot:icon>
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -46,7 +46,7 @@
                     </vibe:tabs.tab>
 
                     {{-- Group: Preferensi --}}
-                    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
+                    <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
 
                     <vibe:tabs.tab name="appearance">
                         <x-slot:icon>
@@ -71,7 +71,7 @@
 
                     {{-- Group: Sesi & Perangkat (auth only) --}}
                     @auth
-                        <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
+                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
 
                         <vibe:tabs.tab name="login-history">
                             <x-slot:icon>
@@ -100,7 +100,7 @@
                             @endif
                         </vibe:tabs.tab>
 
-                        <div class="mt-auto pt-3 border-t border-border/40">
+                        <div class="hidden md:block mt-auto pt-3 border-t border-border/40">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <button type="submit" class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-medium text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all cursor-pointer">
@@ -114,7 +114,7 @@
                             </form>
                         </div>
                     @else
-                        <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
+                        <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Sesi & Perangkat</p>
                         <vibe:tabs.tab name="login-history">
                             <svg class="size-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -589,7 +589,7 @@
 
                                 {{-- Custom Color Picker Pill --}}
                                 <label title="Pilih Warna Kustom" class="h-10 px-3.5 rounded-2xl border-2 border-dashed transition-all cursor-pointer relative flex items-center gap-2 group hover:border-primary shrink-0" :class="selectedPreset === 'custom' ? 'border-primary ring-2 ring-primary/30 bg-primary/5 shadow-xs' : 'border-border/80 hover:bg-muted/40'">
-                                    <input type="color" x-model="customHex" @input="applyCustomHex(customHex)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                    <input type="color" x-model="customHex" @input.debounce.50ms="applyCustomHex(customHex)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                     <span class="size-4 rounded-full border border-black/10 shadow-2xs" :style="{ backgroundColor: customHex }"></span>
                                     <span class="text-xs font-mono font-semibold" :class="selectedPreset === 'custom' ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground'" x-text="customHex"></span>
                                     <svg class="size-3.5 text-muted-foreground group-hover:text-primary transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -672,7 +672,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_bg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarBg }">
-                                                <input type="color" x-model="customSidebarBg" @input="applyCustomSidebarBg(customSidebarBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customSidebarBg" @input.debounce.50ms="applyCustomSidebarBg(customSidebarBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customSidebarBg" @change="applyCustomSidebarBg(customSidebarBg)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -683,7 +683,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_fg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarFg }">
-                                                <input type="color" x-model="customSidebarFg" @input="applyCustomSidebarFg(customSidebarFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customSidebarFg" @input.debounce.50ms="applyCustomSidebarFg(customSidebarFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customSidebarFg" @change="applyCustomSidebarFg(customSidebarFg)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -694,7 +694,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.sidebar_border') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customSidebarBorder }">
-                                                <input type="color" x-model="customSidebarBorder" @input="applyCustomSidebarBorder(customSidebarBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customSidebarBorder" @input.debounce.50ms="applyCustomSidebarBorder(customSidebarBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customSidebarBorder" @change="applyCustomSidebarBorder(customSidebarBorder)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -775,7 +775,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_bg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderBg }">
-                                                <input type="color" x-model="customHeaderBg" @input="applyCustomHeaderBg(customHeaderBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customHeaderBg" @input.debounce.50ms="applyCustomHeaderBg(customHeaderBg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customHeaderBg" @change="applyCustomHeaderBg(customHeaderBg)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -786,7 +786,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_fg') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderFg }">
-                                                <input type="color" x-model="customHeaderFg" @input="applyCustomHeaderFg(customHeaderFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customHeaderFg" @input.debounce.50ms="applyCustomHeaderFg(customHeaderFg)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customHeaderFg" @change="applyCustomHeaderFg(customHeaderFg)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -797,7 +797,7 @@
                                         <label class="text-[11px] font-semibold text-foreground block">{{ __('docs/page/settings/index.appearance.header_border') }}</label>
                                         <div class="flex items-center gap-2">
                                             <label class="size-9 rounded-xl border border-border shadow-2xs cursor-pointer shrink-0 relative overflow-hidden flex items-center justify-center" :style="{ backgroundColor: customHeaderBorder }">
-                                                <input type="color" x-model="customHeaderBorder" @input="applyCustomHeaderBorder(customHeaderBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
+                                                <input type="color" x-model="customHeaderBorder" @input.debounce.50ms="applyCustomHeaderBorder(customHeaderBorder)" class="absolute inset-0 opacity-0 cursor-pointer size-full" />
                                             </label>
                                             <input type="text" x-model="customHeaderBorder" @change="applyCustomHeaderBorder(customHeaderBorder)" class="w-full text-xs font-mono px-3 py-2 rounded-xl border border-border bg-background text-foreground focus:ring-2 focus:ring-primary focus:outline-none" />
                                         </div>
@@ -1385,821 +1385,4 @@
             </vibe:tabs>
         </vibe:card>
     </div>
-
-    @push('body')
-        <script>
-            function appearanceController() {
-                const prefix = window.VIBE_PREFIX || '{{ config('vibe.prefix', 'vibe') }}';
-                const themeKey = prefix + '-theme';
-                const styleId = prefix + '-theme-override';
-
-                return {
-                    mode: window.VibeTheme?.getConfig()?.mode || (document.documentElement.classList.contains('dark') ? 'dark' : 'light'),
-                    selectedPreset: 'zinc',
-                    customHex: '#6366f1',
-                    selectedRadius: '0.5rem',
-                    generatedCss: '',
-                    showCssDrawer: false,
-                    copied: false,
-
-                    selectedSidebarPreset: 'default',
-                    customSidebarBg: '#ffffff',
-                    customSidebarFg: '#0a0b0a',
-                    customSidebarBorder: '#e5e6e5',
-
-                    selectedHeaderPreset: 'default',
-                    customHeaderBg: '#ffffff',
-                    customHeaderFg: '#0a0b0a',
-                    customHeaderBorder: '#e5e6e5',
-
-                    presets: {
-                        zinc: {
-                            name: 'Zinc',
-                            color: '#0a0b0a',
-                            light: '#0a0b0a',
-                            lightFg: '#f9fafa',
-                            dark: '#f9fafa',
-                            darkFg: '#0a0b0a'
-                        },
-                        indigo: {
-                            name: 'Indigo',
-                            color: '#6366f1',
-                            light: '#4f46e5',
-                            lightFg: '#ffffff',
-                            dark: '#818cf8',
-                            darkFg: '#0a0b0a'
-                        },
-                        violet: {
-                            name: 'Violet',
-                            color: '#8b5cf6',
-                            light: '#7c3aed',
-                            lightFg: '#ffffff',
-                            dark: '#a78bfa',
-                            darkFg: '#0a0b0a'
-                        },
-                        blue: {
-                            name: 'Blue',
-                            color: '#2563eb',
-                            light: '#2563eb',
-                            lightFg: '#ffffff',
-                            dark: '#38bdf8',
-                            darkFg: '#0a0b0a'
-                        },
-                        emerald: {
-                            name: 'Emerald',
-                            color: '#10b981',
-                            light: '#059669',
-                            lightFg: '#ffffff',
-                            dark: '#34d399',
-                            darkFg: '#0a0b0a'
-                        },
-                        rose: {
-                            name: 'Rose',
-                            color: '#f43f5e',
-                            light: '#e11d48',
-                            lightFg: '#ffffff',
-                            dark: '#fb7185',
-                            darkFg: '#0a0b0a'
-                        },
-                        amber: {
-                            name: 'Amber',
-                            color: '#f59e0b',
-                            light: '#d97706',
-                            lightFg: '#ffffff',
-                            dark: '#fbbf24',
-                            darkFg: '#0a0b0a'
-                        },
-                        cyan: {
-                            name: 'Cyan',
-                            color: '#06b6d4',
-                            light: '#0891b2',
-                            lightFg: '#ffffff',
-                            dark: '#22d3ee',
-                            darkFg: '#0a0b0a'
-                        }
-                    },
-
-                    sidebarPresets: {
-                        default: {
-                            name: 'Default',
-                            light: {
-                                bg: '#ffffff',
-                                fg: '#09090b',
-                                border: '#e4e4e7',
-                                accent: '#f4f4f5',
-                                accentFg: '#09090b'
-                            },
-                            dark: {
-                                bg: '#0f0f12',
-                                fg: '#fafafa',
-                                border: '#27272a',
-                                accent: '#18181b',
-                                accentFg: '#fafafa'
-                            }
-                        },
-                        dark: {
-                            name: 'Dark Contrast',
-                            light: {
-                                bg: '#121312',
-                                fg: '#f9fafa',
-                                border: '#262726',
-                                accent: '#1e1f1e',
-                                accentFg: '#f9fafa'
-                            },
-                            dark: {
-                                bg: '#0d0e0d',
-                                fg: '#f9fafa',
-                                border: '#222322',
-                                accent: '#191a19',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        zinc: {
-                            name: 'Zinc Slate',
-                            light: {
-                                bg: '#18181b',
-                                fg: '#f4f4f5',
-                                border: '#27272a',
-                                accent: '#27272a',
-                                accentFg: '#f4f4f5'
-                            },
-                            dark: {
-                                bg: '#09090b',
-                                fg: '#f4f4f5',
-                                border: '#27272a',
-                                accent: '#18181b',
-                                accentFg: '#f4f4f5'
-                            }
-                        },
-                        subtle: {
-                            name: 'Subtle Muted',
-                            light: {
-                                bg: '#f4f5f5',
-                                fg: '#0a0b0a',
-                                border: '#e5e6e5',
-                                accent: '#e5e6e5',
-                                accentFg: '#0a0b0a'
-                            },
-                            dark: {
-                                bg: '#1a1b1a',
-                                fg: '#f9fafa',
-                                border: '#2b2c2b',
-                                accent: '#262726',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        navy: {
-                            name: 'Deep Navy',
-                            light: {
-                                bg: '#0a0f24',
-                                fg: '#f1f5f9',
-                                border: '#1e293b',
-                                accent: '#1e293b',
-                                accentFg: '#f1f5f9'
-                            },
-                            dark: {
-                                bg: '#060919',
-                                fg: '#f1f5f9',
-                                border: '#172033',
-                                accent: '#111827',
-                                accentFg: '#f1f5f9'
-                            }
-                        }
-                    },
-
-                    headerPresets: {
-                        default: {
-                            name: 'Default',
-                            light: {
-                                bg: '#ffffff',
-                                fg: '#0a0b0a',
-                                border: '#e5e6e5',
-                                accent: '#f4f5f5',
-                                accentFg: '#0a0b0a'
-                            },
-                            dark: {
-                                bg: '#121312',
-                                fg: '#f9fafa',
-                                border: '#262726',
-                                accent: '#1e1f1e',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        glass: {
-                            name: 'Translucent Glass',
-                            light: {
-                                bg: 'rgba(255, 255, 255, 0.85)',
-                                fg: '#0a0b0a',
-                                border: 'rgba(229, 230, 229, 0.8)',
-                                accent: '#f4f5f5',
-                                accentFg: '#0a0b0a'
-                            },
-                            dark: {
-                                bg: 'rgba(18, 19, 18, 0.85)',
-                                fg: '#f9fafa',
-                                border: 'rgba(38, 39, 38, 0.8)',
-                                accent: '#1e1f1e',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        subtle: {
-                            name: 'Subtle Muted',
-                            light: {
-                                bg: '#f4f5f5',
-                                fg: '#0a0b0a',
-                                border: '#e5e6e5',
-                                accent: '#e5e6e5',
-                                accentFg: '#0a0b0a'
-                            },
-                            dark: {
-                                bg: '#1a1b1a',
-                                fg: '#f9fafa',
-                                border: '#2b2c2b',
-                                accent: '#262726',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        dark: {
-                            name: 'Dark Contrast',
-                            light: {
-                                bg: '#121312',
-                                fg: '#f9fafa',
-                                border: '#262726',
-                                accent: '#1e1f1e',
-                                accentFg: '#f9fafa'
-                            },
-                            dark: {
-                                bg: '#0d0e0d',
-                                fg: '#f9fafa',
-                                border: '#222322',
-                                accent: '#191a19',
-                                accentFg: '#f9fafa'
-                            }
-                        },
-                        navy: {
-                            name: 'Deep Navy',
-                            light: {
-                                bg: '#0a0f24',
-                                fg: '#f1f5f9',
-                                border: '#1e293b',
-                                accent: '#1e293b',
-                                accentFg: '#f1f5f9'
-                            },
-                            dark: {
-                                bg: '#060919',
-                                fg: '#f1f5f9',
-                                border: '#172033',
-                                accent: '#111827',
-                                accentFg: '#f1f5f9'
-                            }
-                        }
-                    },
-
-                    radii: [{
-                            label: '0 (Tajam)',
-                            value: '0rem'
-                        },
-                        {
-                            label: '0.25rem',
-                            value: '0.25rem'
-                        },
-                        {
-                            label: '0.5rem',
-                            value: '0.5rem'
-                        },
-                        {
-                            label: '0.75rem',
-                            value: '0.75rem'
-                        },
-                        {
-                            label: '1rem',
-                            value: '1rem'
-                        }
-                    ],
-
-                    fonts: [{
-                            name: 'Figtree',
-                            desc: 'Default Vibe UI',
-                            value: "'Figtree', ui-sans-serif, system-ui, sans-serif"
-                        },
-                        {
-                            name: 'Inter',
-                            desc: 'Clean & Precision',
-                            value: "'Inter', ui-sans-serif, system-ui, sans-serif"
-                        },
-                        {
-                            name: 'Plus Jakarta',
-                            desc: 'Modern Geometric',
-                            value: "'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif"
-                        },
-                        {
-                            name: 'Outfit',
-                            desc: 'Friendly Display',
-                            value: "'Outfit', ui-sans-serif, system-ui, sans-serif"
-                        }
-                    ],
-                    selectedFontName: 'Figtree',
-                    selectedFontValue: "'Figtree', ui-sans-serif, system-ui, sans-serif",
-
-                    init() {
-                        try {
-                            const stored = localStorage.getItem(themeKey);
-                            if (stored) {
-                                const parsed = JSON.parse(stored);
-                                if (parsed.mode) this.mode = parsed.mode;
-                                if (parsed.preset) this.selectedPreset = parsed.preset;
-                                if (parsed.customHex) this.customHex = parsed.customHex;
-                                if (parsed.radius) this.selectedRadius = parsed.radius;
-                                if (parsed.fontName) this.selectedFontName = parsed.fontName;
-                                if (parsed.fontValue) this.selectedFontValue = parsed.fontValue;
-
-                                if (parsed.sidebarPreset) this.selectedSidebarPreset = parsed.sidebarPreset;
-                                if (parsed.customSidebarBg) this.customSidebarBg = parsed.customSidebarBg;
-                                if (parsed.customSidebarFg) this.customSidebarFg = parsed.customSidebarFg;
-                                if (parsed.customSidebarBorder) this.customSidebarBorder = parsed.customSidebarBorder;
-
-                                if (parsed.headerPreset) this.selectedHeaderPreset = parsed.headerPreset;
-                                if (parsed.customHeaderBg) this.customHeaderBg = parsed.customHeaderBg;
-                                if (parsed.customHeaderFg) this.customHeaderFg = parsed.customHeaderFg;
-                                if (parsed.customHeaderBorder) this.customHeaderBorder = parsed.customHeaderBorder;
-                            }
-                        } catch (e) {}
-
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    setMode(newMode, event = null) {
-                        this.mode = newMode;
-                        if (window.VibeTheme) {
-                            window.VibeTheme.setMode(newMode, event);
-                        } else {
-                            if (newMode === 'dark') document.documentElement.classList.add('dark');
-                            else if (newMode === 'light') document.documentElement.classList.remove('dark');
-                        }
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    selectPreset(key) {
-                        this.selectedPreset = key;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomHex(hex) {
-                        this.selectedPreset = 'custom';
-                        this.customHex = hex;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    selectRadius(value) {
-                        this.selectedRadius = value;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    selectFont(value, name) {
-                        this.selectedFontValue = value;
-                        this.selectedFontName = name;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    isLightColor(hex) {
-                        if (!hex) return true;
-                        let c = hex.replace('#', '');
-                        if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
-                        if (c.length < 6) return true;
-                        const r = parseInt(c.substring(0, 2), 16) || 0;
-                        const g = parseInt(c.substring(2, 4), 16) || 0;
-                        const b = parseInt(c.substring(4, 6), 16) || 0;
-                        return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
-                    },
-
-                    getActiveColorName() {
-                        if (this.selectedPreset === 'custom') return this.customHex;
-                        return this.presets[this.selectedPreset]?.name || 'Zinc';
-                    },
-
-                    getActiveColors() {
-                        if (this.selectedPreset === 'custom') {
-                            return {
-                                light: this.customHex,
-                                lightFg: '#ffffff',
-                                dark: this.customHex,
-                                darkFg: '#ffffff'
-                            };
-                        }
-                        return this.presets[this.selectedPreset] || this.presets.zinc;
-                    },
-
-                    getActivePrimaryColor() {
-                        if (this.selectedPreset === 'custom') return this.customHex;
-                        return this.presets[this.selectedPreset]?.color || '#0a0b0a';
-                    },
-
-                    getActivePrimaryFg() {
-                        if (this.selectedPreset === 'custom') {
-                            return this.isLightColor(this.customHex) ? '#0a0b0a' : '#ffffff';
-                        }
-                        const p = this.presets[this.selectedPreset] || this.presets.zinc;
-                        return (this.mode === 'dark') ? p.darkFg : p.lightFg;
-                    },
-
-                    getActiveSidebarName() {
-                        if (this.selectedSidebarPreset === 'custom') return this.customSidebarBg;
-                        return this.sidebarPresets[this.selectedSidebarPreset]?.name || 'Default';
-                    },
-
-                    getActiveHeaderName() {
-                        if (this.selectedHeaderPreset === 'custom') return this.customHeaderBg;
-                        return this.headerPresets[this.selectedHeaderPreset]?.name || 'Default';
-                    },
-
-                    getSidebarColors() {
-                        if (this.selectedSidebarPreset === 'custom') {
-                            const isLight = this.isLightColor(this.customSidebarBg);
-                            const autoFg = isLight ? '#0a0b0a' : '#f9fafa';
-                            const autoBorder = isLight ? '#e5e6e5' : '#262726';
-                            const autoAccent = isLight ? '#f4f5f5' : '#1e1f1e';
-                            const fg = this.customSidebarFg || autoFg;
-                            const border = this.customSidebarBorder || autoBorder;
-                            return {
-                                light: {
-                                    bg: this.customSidebarBg,
-                                    fg: fg,
-                                    border: border,
-                                    accent: autoAccent,
-                                    accentFg: fg
-                                },
-                                dark: {
-                                    bg: this.customSidebarBg,
-                                    fg: fg,
-                                    border: border,
-                                    accent: autoAccent,
-                                    accentFg: fg
-                                }
-                            };
-                        }
-                        return this.sidebarPresets[this.selectedSidebarPreset] || this.sidebarPresets.default;
-                    },
-
-                    getActiveSidebarBg() {
-                        const s = this.getSidebarColors();
-                        return (this.mode === 'dark') ? s.dark.bg : s.light.bg;
-                    },
-
-                    getActiveSidebarFg() {
-                        const s = this.getSidebarColors();
-                        return (this.mode === 'dark') ? s.dark.fg : s.light.fg;
-                    },
-
-                    getActiveSidebarBorder() {
-                        const s = this.getSidebarColors();
-                        return (this.mode === 'dark') ? s.dark.border : s.light.border;
-                    },
-
-                    getHeaderColors() {
-                        if (this.selectedHeaderPreset === 'custom') {
-                            const isLight = this.isLightColor(this.customHeaderBg);
-                            const autoFg = isLight ? '#0a0b0a' : '#f9fafa';
-                            const autoBorder = isLight ? '#e5e6e5' : '#262726';
-                            const autoAccent = isLight ? '#f4f5f5' : '#1e1f1e';
-                            const fg = this.customHeaderFg || autoFg;
-                            const border = this.customHeaderBorder || autoBorder;
-                            return {
-                                light: {
-                                    bg: this.customHeaderBg,
-                                    fg: fg,
-                                    border: border,
-                                    accent: autoAccent,
-                                    accentFg: fg
-                                },
-                                dark: {
-                                    bg: this.customHeaderBg,
-                                    fg: fg,
-                                    border: border,
-                                    accent: autoAccent,
-                                    accentFg: fg
-                                }
-                            };
-                        }
-                        return this.headerPresets[this.selectedHeaderPreset] || this.headerPresets.default;
-                    },
-
-                    getActiveHeaderBg() {
-                        const h = this.getHeaderColors();
-                        return (this.mode === 'dark') ? h.dark.bg : h.light.bg;
-                    },
-
-                    getActiveHeaderFg() {
-                        const h = this.getHeaderColors();
-                        return (this.mode === 'dark') ? h.dark.fg : h.light.fg;
-                    },
-
-                    getActiveHeaderBorder() {
-                        const h = this.getHeaderColors();
-                        return (this.mode === 'dark') ? h.dark.border : h.light.border;
-                    },
-
-                    selectSidebarPreset(key) {
-                        this.selectedSidebarPreset = key;
-                        if (key !== 'custom') {
-                            const preset = this.sidebarPresets[key];
-                            const active = this.mode === 'dark' ? preset.dark : preset.light;
-                            this.customSidebarBg = active.bg;
-                            this.customSidebarFg = active.fg;
-                            this.customSidebarBorder = active.border;
-                        }
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomSidebarBg(val) {
-                        this.selectedSidebarPreset = 'custom';
-                        this.customSidebarBg = val;
-                        const isLight = this.isLightColor(val);
-                        this.customSidebarFg = isLight ? '#0a0b0a' : '#f9fafa';
-                        this.customSidebarBorder = isLight ? '#e5e6e5' : '#262726';
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomSidebarFg(val) {
-                        this.selectedSidebarPreset = 'custom';
-                        this.customSidebarFg = val;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomSidebarBorder(val) {
-                        this.selectedSidebarPreset = 'custom';
-                        this.customSidebarBorder = val;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    autoAdjustSidebarColors() {
-                        const isLight = this.isLightColor(this.customSidebarBg);
-                        this.customSidebarFg = isLight ? '#0a0b0a' : '#f9fafa';
-                        this.customSidebarBorder = isLight ? '#e5e6e5' : '#262726';
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                        if (window.vibeToast) {
-                            vibeToast('Kontras warna sidebar berhasil disesuaikan secara otomatis.', {
-                                type: 'info',
-                                title: 'Auto Kontras'
-                            });
-                        }
-                    },
-
-                    selectHeaderPreset(key) {
-                        this.selectedHeaderPreset = key;
-                        if (key !== 'custom') {
-                            const preset = this.headerPresets[key];
-                            const active = this.mode === 'dark' ? preset.dark : preset.light;
-                            this.customHeaderBg = active.bg;
-                            this.customHeaderFg = active.fg;
-                            this.customHeaderBorder = active.border;
-                        }
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomHeaderBg(val) {
-                        this.selectedHeaderPreset = 'custom';
-                        this.customHeaderBg = val;
-                        const isLight = this.isLightColor(val);
-                        this.customHeaderFg = isLight ? '#0a0b0a' : '#f9fafa';
-                        this.customHeaderBorder = isLight ? '#e5e6e5' : '#262726';
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomHeaderFg(val) {
-                        this.selectedHeaderPreset = 'custom';
-                        this.customHeaderFg = val;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    applyCustomHeaderBorder(val) {
-                        this.selectedHeaderPreset = 'custom';
-                        this.customHeaderBorder = val;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    autoAdjustHeaderColors() {
-                        const isLight = this.isLightColor(this.customHeaderBg);
-                        this.customHeaderFg = isLight ? '#0a0b0a' : '#f9fafa';
-                        this.customHeaderBorder = isLight ? '#e5e6e5' : '#262726';
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                        if (window.vibeToast) {
-                            vibeToast('Kontras warna header berhasil disesuaikan secara otomatis.', {
-                                type: 'info',
-                                title: 'Auto Kontras'
-                            });
-                        }
-                    },
-
-                    updateGeneratedCss() {
-                        const colors = this.getActiveColors();
-                        const radius = this.selectedRadius;
-                        const font = this.selectedFontValue;
-                        const sidebar = this.getSidebarColors();
-                        const header = this.getHeaderColors();
-
-                        const radiusRules = radius === '0rem' ? `
-    --radius: 0rem !important;
-    --radius-xs: 0rem !important;
-    --radius-sm: 0rem !important;
-    --radius-md: 0rem !important;
-    --radius-lg: 0rem !important;
-    --radius-xl: 0rem !important;
-    --radius-2xl: 0rem !important;
-    --radius-3xl: 0rem !important;
-` : `
-    --radius: ${radius} !important;
-    --radius-xs: calc(${radius} * 0.3) !important;
-    --radius-sm: calc(${radius} * 0.5) !important;
-    --radius-md: calc(${radius} * 0.75) !important;
-    --radius-lg: ${radius} !important;
-    --radius-xl: calc(${radius} * 1.25) !important;
-    --radius-2xl: calc(${radius} * 1.5) !important;
-    --radius-3xl: calc(${radius} * 2) !important;
-`;
-
-                        this.generatedCss = `
-:root:root,
-html:root:root,
-html.light:root,
-html[data-canvas-theme="light"]:root,
-html:not(#__vibe_shield__):root {
-    --primary: ${colors.light} !important;
-    --primary-foreground: ${colors.lightFg} !important;
-    --ring: ${colors.light} !important;
-    --font-sans: ${font} !important;
-    font-family: ${font} !important;
-    --sidebar: ${sidebar.light.bg} !important;
-    --sidebar-foreground: ${sidebar.light.fg} !important;
-    --sidebar-border: ${sidebar.light.border} !important;
-    --sidebar-accent: ${sidebar.light.accent} !important;
-    --sidebar-accent-foreground: ${sidebar.light.accentFg} !important;
-    --header: ${header.light.bg} !important;
-    --header-foreground: ${header.light.fg} !important;
-    --header-border: ${header.light.border} !important;
-    --header-accent: ${header.light.accent} !important;
-    --header-accent-foreground: ${header.light.accentFg} !important;
-${radiusRules}
-}
-
-html.dark:root:root,
-html.dark[data-canvas-theme="dark"]:root,
-html.dark:not(#__vibe_shield__):root {
-    --primary: ${colors.dark} !important;
-    --primary-foreground: ${colors.darkFg} !important;
-    --ring: ${colors.dark} !important;
-    --font-sans: ${font} !important;
-    font-family: ${font} !important;
-    --sidebar: ${sidebar.dark.bg} !important;
-    --sidebar-foreground: ${sidebar.dark.fg} !important;
-    --sidebar-border: ${sidebar.dark.border} !important;
-    --sidebar-accent: ${sidebar.dark.accent} !important;
-    --sidebar-accent-foreground: ${sidebar.dark.accentFg} !important;
-    --header: ${header.dark.bg} !important;
-    --header-foreground: ${header.dark.fg} !important;
-    --header-border: ${header.dark.border} !important;
-    --header-accent: ${header.dark.accent} !important;
-    --header-accent-foreground: ${header.dark.accentFg} !important;
-${radiusRules}
-}
-
-body {
-    font-family: ${font} !important;
-}`;
-                    },
-
-                    injectOverrideCss() {
-                        if (window.VibeTheme?.applyComponentThemes) {
-                            window.VibeTheme.applyComponentThemes({
-                                css: this.generatedCss
-                            });
-                        } else {
-                            let styleEl = document.getElementById(styleId);
-                            if (!styleEl) {
-                                styleEl = document.createElement('style');
-                                styleEl.id = styleId;
-                                styleEl.setAttribute('data-navigate-once', 'true');
-                                document.head.appendChild(styleEl);
-                            }
-                            styleEl.textContent = this.generatedCss;
-                        }
-                    },
-
-                    copyCss() {
-                        if (navigator.clipboard && navigator.clipboard.writeText) {
-                            navigator.clipboard.writeText(this.generatedCss).then(() => {
-                                this.copied = true;
-                                if (window.vibeToast) {
-                                    vibeToast('{{ __('docs/page/settings/index.appearance.copied') }}', {
-                                        type: 'success',
-                                        title: 'CSS Disalin'
-                                    });
-                                }
-                                setTimeout(() => {
-                                    this.copied = false;
-                                }, 2500);
-                            });
-                        }
-                    },
-
-                    savePreferences() {
-                        const extraData = {
-                            mode: this.mode,
-                            preset: this.selectedPreset,
-                            customHex: this.customHex,
-                            radius: this.selectedRadius,
-                            fontName: this.selectedFontName,
-                            fontValue: this.selectedFontValue,
-                            sidebarPreset: this.selectedSidebarPreset,
-                            customSidebarBg: this.customSidebarBg,
-                            customSidebarFg: this.customSidebarFg,
-                            customSidebarBorder: this.customSidebarBorder,
-                            headerPreset: this.selectedHeaderPreset,
-                            customHeaderBg: this.customHeaderBg,
-                            customHeaderFg: this.customHeaderFg,
-                            customHeaderBorder: this.customHeaderBorder,
-                        };
-
-                        if (window.VibeTheme?.setCssOverride) {
-                            window.VibeTheme.setCssOverride(this.generatedCss, extraData);
-                        } else {
-                            let currentConfig = {};
-                            try {
-                                const stored = localStorage.getItem(themeKey);
-                                if (stored) currentConfig = JSON.parse(stored);
-                            } catch (e) {}
-
-                            Object.assign(currentConfig, extraData);
-                            currentConfig.css = this.generatedCss;
-                            localStorage.setItem(themeKey, JSON.stringify(currentConfig));
-                        }
-
-                        try {
-                            localStorage.removeItem(prefix + '-app-css-overrides');
-                        } catch (e) {}
-
-                        if (window.vibeToast) {
-                            vibeToast('{{ __('docs/page/settings/index.appearance.toast_saved') }}', {
-                                type: 'success',
-                                title: 'Tema Disimpan'
-                            });
-                        }
-                    },
-
-                    resetToDefault() {
-                        this.selectedPreset = 'zinc';
-                        this.customHex = '#6366f1';
-                        this.selectedRadius = '0.5rem';
-                        this.selectedFontName = 'Figtree';
-                        this.selectedFontValue = "'Figtree', ui-sans-serif, system-ui, sans-serif";
-
-                        this.selectedSidebarPreset = 'default';
-                        this.customSidebarBg = '#ffffff';
-                        this.customSidebarFg = '#0a0b0a';
-                        this.customSidebarBorder = '#e5e6e5';
-
-                        this.selectedHeaderPreset = 'default';
-                        this.customHeaderBg = '#ffffff';
-                        this.customHeaderFg = '#0a0b0a';
-                        this.customHeaderBorder = '#e5e6e5';
-
-                        if (window.VibeTheme?.clearCssOverride) {
-                            window.VibeTheme.clearCssOverride();
-                        } else {
-                            const styleEl = document.getElementById(styleId);
-                            if (styleEl) styleEl.textContent = '';
-                        }
-
-                        try {
-                            localStorage.removeItem(prefix + '-app-css-overrides');
-                        } catch (e) {}
-
-                        this.updateGeneratedCss();
-
-                        if (window.vibeToast) {
-                            vibeToast('{{ __('docs/page/settings/index.appearance.toast_reset') }}', {
-                                type: 'info',
-                                title: 'Reset Selesai'
-                            });
-                        }
-                    }
-                };
-            }
-        </script>
-    @endpush
 </x-docs.layouts.sidebar>

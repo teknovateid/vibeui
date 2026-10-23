@@ -17,7 +17,7 @@
     $isSidebar = $variant === 'sidebar';
     $isCols = in_array($layout, ['cols', 'columns', '2-cols', 'vertical']) || $orientation === 'vertical' || $isSidebar;
     $normalizedLayout = $isCols ? 'cols' : 'rows';
-    $tabId = $id ?? uniqid('tabs-');
+    $tabId = $id ?? 'tabs-' . substr(md5(($selected ?? $default ?? 'default') . '-' . $variant . '-' . $normalizedLayout), 0, 8);
     $initialTab = $selected ?? $default ?? '';
     
     $resolvedMobileMode = $mobileMode === 'auto' ? ($isCols ? 'collapsible' : 'scroll') : $mobileMode;
@@ -118,7 +118,7 @@ $layoutClasses = match(true) {
         updateActiveTabMeta() {
             const tabs = Array.from(this.$el.querySelectorAll('[role=tab]'));
             const currentTabEl = tabs.find(t => t.dataset.tabName === this.activeTab) 
-                              || this.$el.querySelector('[role=tab][aria-selected="true"]');
+                              || tabs.find(t => t.getAttribute('aria-selected') === 'true');
             if (currentTabEl) {
                 const label = currentTabEl.dataset.label || currentTabEl.querySelector('.vibe-tab-label')?.textContent?.trim() || currentTabEl.textContent?.trim();
                 if (label) this.activeLabel = label;
@@ -133,31 +133,40 @@ $layoutClasses = match(true) {
 
         focusNextTab(event, offset) {
             const tabs = this.getEnabledTabs();
-            const activeIndex = tabs.findIndex(t => t === document.activeElement);
+            const activeIndex = tabs.indexOf(document.activeElement);
             if (activeIndex === -1) return;
             const nextIndex = (activeIndex + offset + tabs.length) % tabs.length;
-            tabs[nextIndex].focus();
-            tabs[nextIndex].click();
+            const nextTab = tabs[nextIndex];
+            nextTab.focus();
+            if (!nextTab.hasAttribute('href')) {
+                nextTab.click();
+            }
         },
 
         focusFirstTab() {
             const tabs = this.getEnabledTabs();
             if (tabs.length) {
-                tabs[0].focus();
-                tabs[0].click();
+                const firstTab = tabs[0];
+                firstTab.focus();
+                if (!firstTab.hasAttribute('href')) {
+                    firstTab.click();
+                }
             }
         },
 
         focusLastTab() {
             const tabs = this.getEnabledTabs();
             if (tabs.length) {
-                tabs[tabs.length - 1].focus();
-                tabs[tabs.length - 1].click();
+                const lastTab = tabs[tabs.length - 1];
+                lastTab.focus();
+                if (!lastTab.hasAttribute('href')) {
+                    lastTab.click();
+                }
             }
         }
     }"
-    @select-tab="selectTab($event.detail)"
-    @change-tab.window="if (($event.detail?.id === tabId || !$event.detail?.id) && isValidTab($event.detail?.tab || $event.detail)) activeTab = $event.detail?.tab || $event.detail"
+    @select-tab.stop="selectTab($event.detail)"
+    @change-tab.window="if (($event.detail?.id && $event.detail.id === tabId) || (!$event.detail?.id && isValidTab($event.detail?.tab || $event.detail))) selectTab($event.detail?.tab || $event.detail)"
     data-variant="{{ $variant }}"
     data-layout="{{ $normalizedLayout }}"
     data-selected="{{ $initialTab }}"

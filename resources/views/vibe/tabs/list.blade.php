@@ -13,16 +13,16 @@
 
 <div
     {{ $attributes->twMerge([
-        'class' => 'vibe-tabs-list select-none scrollbar-none relative',
+        'class' => 'vibe-tabs-list select-none hide-scroll relative',
     ]) }}
     :class="{
-        'inline-flex items-center gap-1 p-1 bg-muted rounded-xl border border-border/40 max-w-full overflow-x-auto no-scrollbar snap-x': layout === 'rows' && variant === 'pill',
-        'flex items-center gap-6 border-b border-border w-full overflow-x-auto no-scrollbar snap-x': layout === 'rows' && variant === 'underline',
+        'inline-flex items-center gap-1 p-1 bg-muted rounded-xl border border-border/40 max-w-full overflow-x-auto hide-scroll snap-x': layout === 'rows' && variant === 'pill',
+        'flex items-center gap-6 border-b border-border w-full overflow-x-auto hide-scroll snap-x': layout === 'rows' && variant === 'underline',
         'flex flex-wrap items-center gap-2 w-full': layout === 'rows' && variant === 'button',
-        'flex flex-col gap-1 p-1.5 bg-muted rounded-xl border border-border/40 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'pill',
-        'flex flex-col border-r border-border w-full md:w-60 shrink-0': layout === 'cols' && variant === 'underline',
-        'flex flex-col gap-2 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'button',
-        'flex flex-col border-b md:border-b-0 md:border-r border-border w-full md:w-60 shrink-0 self-stretch p-3.5 gap-1': variant === 'sidebar',
+        'flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll gap-1 p-1.5 bg-muted rounded-xl border border-border/40 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'pill',
+        'flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll border-b md:border-b-0 md:border-r border-border w-full md:w-60 shrink-0': layout === 'cols' && variant === 'underline',
+        'flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll gap-2 w-full md:w-60 shrink-0': layout === 'cols' && variant === 'button',
+        'flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll border-b md:border-b-0 md:border-r border-border w-full md:w-60 shrink-0 self-stretch p-2 md:p-3.5 gap-1.5 md:gap-1': variant === 'sidebar',
         '*:flex-1 w-full': {{ $isFitted ? 'true' : 'false' }},
     }"
 >

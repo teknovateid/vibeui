@@ -2,9 +2,9 @@
     'active' => 'account',
 ])
 
-<vibe:tabs.list class="w-full md:w-64 shrink-0 flex flex-col gap-0.5 p-3 border-b md:border-b-0 md:border-r border-border/60 bg-muted/40">
+<vibe:tabs.list class="w-full md:w-64 shrink-0 flex flex-row md:flex-col overflow-x-auto md:overflow-visible hide-scroll gap-1 md:gap-0.5 p-2 md:p-3 border-b md:border-b-0 md:border-r border-border/60 bg-muted/40">
     @auth
-        <p class="px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
+        <p class="hidden md:block px-2 pt-1 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.account') }}</p>
 
         <vibe:tabs.tab name="account" href="{{ route('docs.settings.account') }}" variant="sidebar" :active="$active === 'account'">
             <x-slot:icon>
@@ -47,7 +47,7 @@
     @endauth
 
     {{-- Group: Preferensi --}}
-    <p class="px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
+    <p class="hidden md:block px-2 pt-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">{{ __('vibe/settings.tabs_groups.preferences') }}</p>
 
     <vibe:tabs.tab name="appearance" href="{{ route('docs.settings.appearance') }}" variant="sidebar" :active="$active === 'appearance'" badge="Live" badgeVariant="primary">
         <x-slot:icon>
@@ -63,7 +63,7 @@
 
 
     @auth
-        <div class="mt-auto pt-3 border-t border-border/40">
+        <div class="hidden md:block mt-auto pt-3 border-t border-border/40">
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <vibe:button type="submit" variant="ghost" class="w-full justify-start text-muted-foreground hover:bg-destructive/10 hover:text-destructive transition-all">

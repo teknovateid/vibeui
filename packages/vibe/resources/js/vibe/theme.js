@@ -577,3 +577,7 @@ if (typeof window !== 'undefined' && !window.__vibe_vt_handler_registered__) {
     });
 }
 
+import './appearance';
+export { appearanceController } from './appearance';
+
+
