@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.8.2] - 2026-10-26
+
+### 🚀 Features
+- feat: support avatar and icon attributes in remote select component (71c988f)
+
+
 ## [0.8.1] - 2026-10-26
 
 ### ⚡ Performance & Refactoring
