@@ -4,12 +4,12 @@
     'group' => 'default',
 ])
 
-@pushOnce('head', 'vibe-display-image-js')
-    @vite(['resources/js/vibe/display-image.js'])
+@pushOnce('head', 'vibe-image-lightbox-js')
+    @vite(['resources/js/vibe/image-lightbox.js'])
 @endPushOnce
 
-@pushOnce('body', 'vibe-display-lightbox')
-    <vibe:display.lightbox />
+@pushOnce('body', 'vibe-image-lightbox')
+    <vibe:image.lightbox />
 @endPushOnce
 
 <div
