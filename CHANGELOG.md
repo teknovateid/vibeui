@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.8.1] - 2026-10-26
+
+### ⚡ Performance & Refactoring
+- refactor: reorganize image components and lightbox assets into dedicated package directories (c56cb46)
+
+
 ## [0.8.0] - 2026-10-23
 
 ### 🚀 Features
