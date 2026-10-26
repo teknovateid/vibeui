@@ -291,10 +291,6 @@ return [
             'title' => 'Display QR Code',
             'subtitle' => 'ISO/IEC 18004 conforming SVG QR Code generator without third-party dependencies',
         ],
-        'display_image' => [
-            'title' => 'Display Image Lightbox',
-            'subtitle' => 'Interactive image preview component with fullscreen lightbox modal and navigation controls',
-        ],
         'settings_appearance' => [
             'title' => 'Appearance Settings',
             'subtitle' => 'Customize theme colors, palette, sidebar, and header studio',

@@ -394,7 +394,7 @@
             'section' => $navSections['ui'],
             'url' => route('docs.image.index'),
             'icon' => 'image',
-            'keywords' => 'image photo picture media lazyload gambar foto rasio aspect ratio',
+            'keywords' => 'image photo picture media lazyload gambar foto rasio aspect ratio lightbox gallery zoom preview galeri modal detail',
         ],
         [
             'id' => 'menu-card',
@@ -575,16 +575,6 @@
             'url' => route('docs.display.qrcode'),
             'icon' => 'qrcode',
             'keywords' => 'display qrcode qr code generator svg barcode matriks scan authenticator pindai 2fa',
-        ],
-        [
-            'id' => 'menu-display-image',
-            'title' => __('docs/sidebar.nav.display.image') ?: __('docs/search.menu_items.display_image.title'),
-            'subtitle' => __('docs/search.menu_items.display_image.subtitle'),
-            'category' => $catMenu,
-            'section' => $navSections['display'],
-            'url' => route('docs.display.image'),
-            'icon' => 'image',
-            'keywords' => 'display image lightbox gallery galeri foto gambar fullscreen preview zoom next prev modal',
         ],
 
         // Components - Extra

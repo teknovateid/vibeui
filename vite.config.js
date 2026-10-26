@@ -193,7 +193,7 @@ export default defineConfig({
                 'resources/js/vibe/qrcode.js',
                 'resources/js/vibe/datatable.js',
                 'resources/js/vibe/show.js',
-                'resources/js/vibe/display-image.js',
+                'resources/js/vibe/image-lightbox.js',
             ],
             refresh: true,
             fonts: [

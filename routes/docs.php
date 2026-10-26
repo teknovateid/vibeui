@@ -174,7 +174,6 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::prefix('display')->name('display.')->group(function () {
         Route::redirect('/', '/docs/display/qrcode')->name('index');
         Route::view('/qrcode', 'docs.display.qrcode')->name('qrcode');
-        Route::view('/image', 'docs.display.image')->name('image');
     });
 
     Route::get('/chart', function () {
