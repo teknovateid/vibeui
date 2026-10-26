@@ -32,6 +32,11 @@
     'initialLabel' => null,
     'initialAvatar' => null,
     'initialIcon' => null,
+    'avatar' => null,
+    'icon' => null,
+    'selectedLabel' => null,
+    'selectedAvatar' => null,
+    'selectedIcon' => null,
 ])
 
 @php
@@ -39,6 +44,9 @@
     $searchPlaceholder = $searchPlaceholder ?? __('vibe/select.search_placeholder');
     $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
     $id = $id ?? ($name ?? uniqid('select-remote-'));
+    $initialLabel = $initialLabel ?? $selectedLabel ?? null;
+    $initialAvatar = $initialAvatar ?? $avatar ?? $selectedAvatar ?? null;
+    $initialIcon = $initialIcon ?? $icon ?? $selectedIcon ?? null;
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
 
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
@@ -157,16 +165,24 @@
             $val = (string) ($value['value'] ?? $value['id'] ?? '');
             $rawLbl = (string) ($value['label'] ?? $value['name'] ?? $value['title'] ?? $val);
             $lbl = html_entity_decode($rawLbl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $av = $value['avatar'] ?? (isset($value['icon']) && (str_starts_with((string) $value['icon'], 'http') || str_starts_with((string) $value['icon'], '/') || str_starts_with((string) $value['icon'], 'data:')) ? $value['icon'] : null);
+            $ic = $value['icon'] ?? $value['avatar'] ?? null;
             $initialItemsData[] = [
                 'value' => $val,
                 'label' => $lbl,
                 'description' => $value['description'] ?? $value['desc'] ?? null,
-                'avatar' => $value['avatar'] ?? (isset($value['icon']) && (str_starts_with((string) $value['icon'], 'http') || str_starts_with((string) $value['icon'], '/') || str_starts_with((string) $value['icon'], 'data:')) ? $value['icon'] : null),
-                'icon' => $value['icon'] ?? $value['avatar'] ?? null,
+                'avatar' => $av,
+                'icon' => $ic,
             ];
             $value = $multiple ? [$val] : $val;
             if (!$initialLabel) {
                 $initialLabel = $lbl;
+            }
+            if (!$initialAvatar && $av) {
+                $initialAvatar = $av;
+            }
+            if (!$initialIcon && $ic) {
+                $initialIcon = $ic;
             }
         } else {
             $first = reset($value);
@@ -177,18 +193,26 @@
                     $val = (string) ($itemArr['value'] ?? $itemArr['id'] ?? '');
                     $rawLbl = (string) ($itemArr['label'] ?? $itemArr['name'] ?? $itemArr['title'] ?? $val);
                     $lbl = html_entity_decode($rawLbl, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                    $av = $itemArr['avatar'] ?? (isset($itemArr['icon']) && (str_starts_with((string) $itemArr['icon'], 'http') || str_starts_with((string) $itemArr['icon'], '/') || str_starts_with((string) $itemArr['icon'], 'data:')) ? $itemArr['icon'] : null);
+                    $ic = $itemArr['icon'] ?? $itemArr['avatar'] ?? null;
                     $extractedValues[] = $val;
                     $initialItemsData[] = [
                         'value' => $val,
                         'label' => $lbl,
                         'description' => $itemArr['description'] ?? $itemArr['desc'] ?? null,
-                        'avatar' => $itemArr['avatar'] ?? (isset($itemArr['icon']) && (str_starts_with((string) $itemArr['icon'], 'http') || str_starts_with((string) $itemArr['icon'], '/') || str_starts_with((string) $itemArr['icon'], 'data:')) ? $itemArr['icon'] : null),
-                        'icon' => $itemArr['icon'] ?? $itemArr['avatar'] ?? null,
+                        'avatar' => $av,
+                        'icon' => $ic,
                     ];
                 }
                 $value = $multiple ? $extractedValues : ($extractedValues[0] ?? '');
                 if (!$initialLabel && !empty($initialItemsData)) {
                     $initialLabel = $multiple ? array_column($initialItemsData, 'label') : $initialItemsData[0]['label'];
+                }
+                if (!$initialAvatar && !empty($initialItemsData)) {
+                    $initialAvatar = $multiple ? array_column($initialItemsData, 'avatar') : ($initialItemsData[0]['avatar'] ?? null);
+                }
+                if (!$initialIcon && !empty($initialItemsData)) {
+                    $initialIcon = $multiple ? array_column($initialItemsData, 'icon') : ($initialItemsData[0]['icon'] ?? null);
                 }
             }
         }
@@ -280,10 +304,16 @@
                 }
             } else {
                 this.value = this.value !== null && this.value !== undefined ? String(this.value) : '';
-                if (!this.selectedLabel && this.selectedItems.length > 0) {
-                    this.selectedLabel = this.decodeHtml(this.selectedItems[0].label);
-                    this.selectedAvatar = this.selectedItems[0].avatar || '';
-                    this.selectedIcon = this.selectedIcon || this.selectedItems[0].icon || '';
+                if (this.selectedItems.length > 0) {
+                    if (!this.selectedLabel && this.selectedItems[0].label) {
+                        this.selectedLabel = this.decodeHtml(this.selectedItems[0].label);
+                    }
+                    if (!this.selectedAvatar && this.selectedItems[0].avatar) {
+                        this.selectedAvatar = this.selectedItems[0].avatar;
+                    }
+                    if (!this.selectedIcon && this.selectedItems[0].icon) {
+                        this.selectedIcon = this.selectedItems[0].icon;
+                    }
                 }
             }
 
@@ -309,10 +339,19 @@
             }
 
             this.$watch('value', (val) => {
-                if (!this.multiple && (!val || val === '')) {
-                    this.selectedLabel = '';
-                    this.selectedAvatar = '';
-                    this.selectedIcon = '';
+                if (!this.multiple) {
+                    if (!val || val === '') {
+                        this.selectedLabel = '';
+                        this.selectedAvatar = '';
+                        this.selectedIcon = '';
+                    } else if (this.items && this.items.length > 0) {
+                        let found = this.items.find(i => String(i.value) === String(val));
+                        if (found) {
+                            this.selectedLabel = found.label;
+                            this.selectedAvatar = found.avatar || '';
+                            this.selectedIcon = !found.avatar && found.icon ? found.icon : '';
+                        }
+                    }
                 }
                 this.$nextTick(() => this.dispatchChangeEvent());
             });
@@ -653,7 +692,7 @@
         >
             {{-- Content Display --}}
             @if ($multiple)
-                <div class="flex flex-wrap items-center gap-1.5 py-0.5 sm:py-0 flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 py-0.5 sm:py-0 flex-1 min-w-0" wire:ignore.self>
                     <template x-if="selectedItems.length === 0">
                         <span class="text-muted-foreground truncate">{{ $placeholder }}</span>
                     </template>
@@ -663,17 +702,19 @@
                             class="inline-flex items-center font-medium border select-none transition-colors shrink-0 max-w-full {{ $badgeSizeClass }}"
                             :class="getBadgeClasses(index)"
                         >
-                            <template x-if="item.avatar">
-                                <img :src="item.avatar" class="size-3.5 rounded-full object-cover shrink-0" alt="" />
-                            </template>
-                            <template x-if="!item.avatar && item.icon">
-                                <template x-if="item.icon.includes('<svg')">
-                                    <span class="size-3 shrink-0 flex items-center justify-center [&>svg]:size-3" x-html="item.icon"></span>
-                                </template>
-                                <template x-if="!item.icon.includes('<svg')">
-                                    <span class="text-[10px] font-bold text-muted-foreground" x-text="item.icon"></span>
-                                </template>
-                            </template>
+                            <img
+                                x-show="Boolean(item.avatar)"
+                                :src="item.avatar || ''"
+                                class="size-3.5 rounded-full object-cover shrink-0"
+                                alt=""
+                                style="display: none;"
+                            />
+                            <span
+                                x-show="!item.avatar && Boolean(item.icon)"
+                                class="size-3 shrink-0 flex items-center justify-center [&>svg]:size-3 text-[10px] font-bold text-muted-foreground"
+                                x-html="item.icon || ''"
+                                style="display: none;"
+                            ></span>
                             <span x-text="item.label" class="truncate max-w-44 sm:max-w-56"></span>
                             <button 
                                 type="button" 
@@ -691,19 +732,23 @@
                     </template>
                 </div>
             @else
-                <span class="flex items-center gap-2 min-w-0 truncate">
-                    {{-- Dynamic Avatar or Icon when an option is selected --}}
-                    <template x-if="selectedAvatar">
-                        <img :src="selectedAvatar" class="size-5 rounded-full object-cover shrink-0 border border-border/60" alt="" />
-                    </template>
-                    <template x-if="!selectedAvatar && selectedIcon">
-                        <template x-if="selectedIcon.includes('<svg')">
-                            <span class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4" x-html="selectedIcon"></span>
-                        </template>
-                        <template x-if="!selectedIcon.includes('<svg')">
-                            <span class="text-xs font-bold text-muted-foreground" x-text="selectedIcon"></span>
-                        </template>
-                    </template>
+                <span class="flex items-center gap-2 min-w-0 truncate" wire:ignore.self>
+                    {{-- Dynamic Avatar when an option is selected --}}
+                    <img
+                        x-show="Boolean(selectedAvatar)"
+                        :src="selectedAvatar || ''"
+                        class="size-5 rounded-full object-cover shrink-0 border border-border/60"
+                        alt=""
+                        style="display: none;"
+                    />
+
+                    {{-- Dynamic Icon when an option is selected and no avatar --}}
+                    <span
+                        x-show="!selectedAvatar && Boolean(selectedIcon)"
+                        class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4 text-xs font-bold text-muted-foreground"
+                        x-html="selectedIcon || ''"
+                        style="display: none;"
+                    ></span>
 
                     {{-- Selected Label or Placeholder --}}
                     <span x-text="selectedLabel || @js($placeholder)" :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'" class="truncate"></span>

@@ -647,7 +647,7 @@
                 @keydown.up.stop.prevent="if (!open) { toggle(); } else { focusPrevious($event); }" @endif {{ $attributes->twMerge(['class' => $compiledClasses]) }}>
             {{-- Content Display --}}
             @if ($multiple)
-                <div class="flex flex-wrap items-center gap-1.5 py-0.5 sm:py-0 flex-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1.5 py-0.5 sm:py-0 flex-1 min-w-0" wire:ignore.self>
                     <template x-if="selectedItems.length === 0">
                         <span class="text-muted-foreground truncate">{{ $placeholder }}</span>
                     </template>
@@ -657,12 +657,19 @@
                             class="inline-flex items-center font-medium border select-none transition-colors shrink-0 max-w-full {{ $badgeSizeClass }}"
                             :class="getBadgeClasses(index)"
                         >
-                            <template x-if="item.avatar">
-                                <img :src="item.avatar" class="size-3.5 rounded-full object-cover shrink-0" alt="" />
-                            </template>
-                            <template x-if="!item.avatar && item.icon">
-                                <span class="size-3 shrink-0 flex items-center justify-center [&>svg]:size-3" x-html="item.icon"></span>
-                            </template>
+                            <img
+                                x-show="Boolean(item.avatar)"
+                                :src="item.avatar || ''"
+                                class="size-3.5 rounded-full object-cover shrink-0"
+                                alt=""
+                                style="display: none;"
+                            />
+                            <span
+                                x-show="!item.avatar && Boolean(item.icon)"
+                                class="size-3 shrink-0 flex items-center justify-center [&>svg]:size-3"
+                                x-html="item.icon || ''"
+                                style="display: none;"
+                            ></span>
                             <span x-text="item.label" class="truncate max-w-44 sm:max-w-56"></span>
                             <button 
                                 type="button" 
@@ -680,14 +687,21 @@
                     </template>
                 </div>
             @else
-                <span class="flex items-center gap-2 min-w-0 truncate">
+                <span class="flex items-center gap-2 min-w-0 truncate" wire:ignore.self>
                     {{-- Dynamic Avatar or Icon when an option is selected --}}
-                    <template x-if="selectedAvatar">
-                        <img :src="selectedAvatar" class="size-5 rounded-full object-cover shrink-0" alt="" />
-                    </template>
-                    <template x-if="!selectedAvatar && selectedIcon">
-                        <span class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4" x-html="selectedIcon"></span>
-                    </template>
+                    <img
+                        x-show="Boolean(selectedAvatar)"
+                        :src="selectedAvatar || ''"
+                        class="size-5 rounded-full object-cover shrink-0"
+                        alt=""
+                        style="display: none;"
+                    />
+                    <span
+                        x-show="!selectedAvatar && Boolean(selectedIcon)"
+                        class="size-4 shrink-0 flex items-center justify-center [&>svg]:size-4"
+                        x-html="selectedIcon || ''"
+                        style="display: none;"
+                    ></span>
 
                     {{-- Selected Label or Placeholder --}}
                     <span x-text="selectedLabel || @js($placeholder)" :class="!selectedLabel ? 'text-muted-foreground' : 'text-foreground font-medium'" class="truncate"></span>
