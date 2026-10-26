@@ -294,7 +294,7 @@
             this.$dispatch('confirmed', { id: this.id, value: this.value });
             this.$dispatch('swiped', { id: this.id, value: this.value });
 
-            // Trigger hidden native button click (executes @click, wire:click, onclick, and native form submit if type="submit")
+            // Trigger hidden native button click (executes @click, wire:click, onclick, and native form submit if type='submit')
             this.$nextTick(() => {
                 if (this.$refs.triggerBtn) {
                     this.$refs.triggerBtn.click();
@@ -452,9 +452,9 @@
         <div
             x-ref="handle"
             @pointerdown="onPointerDown($event)"
-            @pointermove.window="onPointerMove($event)"
-            @pointerup.window="onPointerUp($event)"
-            @pointercancel.window="onPointerUp($event)"
+            @pointermove.window="if (isDragging) onPointerMove($event)"
+            @pointerup.window="if (isDragging) onPointerUp($event)"
+            @pointercancel.window="if (isDragging) onPointerUp($event)"
             role="slider"
             :aria-valuenow="Math.round(progress * 100)"
             aria-valuemin="0"
