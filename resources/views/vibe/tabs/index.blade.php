@@ -45,9 +45,14 @@ $layoutClasses = match(true) {
         activeBadgeHtml: '',
         mobileOpen: false,
 
+        getRootEl() {
+            return this.$el.closest('.vibe-tabs-root') || this.$root || this.$el;
+        },
+
         getEnabledTabs() {
-            return Array.from(this.$el.querySelectorAll('[role=tab]')).filter(
-                el => el.closest('.vibe-tabs-root') === this.$el && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true'
+            const root = this.getRootEl();
+            return Array.from(root.querySelectorAll('[role=tab]')).filter(
+                el => el.closest('.vibe-tabs-root') === root && !el.hasAttribute('disabled') && el.getAttribute('aria-disabled') !== 'true'
             );
         },
 
@@ -96,7 +101,7 @@ $layoutClasses = match(true) {
         },
 
         selectTab(name, label = null, el = null) {
-            if (!this.isValidTab(name)) return;
+            if (!el && !this.isValidTab(name)) return;
             this.activeTab = name;
             if (label) this.activeLabel = label;
             if (el) {
@@ -116,7 +121,10 @@ $layoutClasses = match(true) {
         },
 
         updateActiveTabMeta() {
-            const tabs = Array.from(this.$el.querySelectorAll('[role=tab]'));
+            const root = this.getRootEl();
+            const tabs = Array.from(root.querySelectorAll('[role=tab]')).filter(
+                el => el.closest('.vibe-tabs-root') === root
+            );
             const currentTabEl = tabs.find(t => t.dataset.tabName === this.activeTab) 
                               || tabs.find(t => t.getAttribute('aria-selected') === 'true');
             if (currentTabEl) {

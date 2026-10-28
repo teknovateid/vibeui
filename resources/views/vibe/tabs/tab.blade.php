@@ -165,7 +165,7 @@
         x-bind:aria-selected="activeTab === {{ $nameJs }} ? 'true' : 'false'"
         x-bind:tabindex="activeTab === {{ $nameJs }} ? '0' : '-1'"
         x-init="if ((activeTab === {{ $nameJs }} || {{ $isSsrActive ? 'true' : 'false' }}) && !activeLabel) activeLabel = $el.dataset.label || {{ $nameJs }}"
-        @click="selectTab({{ $nameJs }}, $el.dataset.label, $el)"
+        @click="activeTab = {{ $nameJs }}; selectTab({{ $nameJs }}, $el.dataset.label, $el)"
         {{ $attributes->twMerge([
             'class' => "{$baseClasses} disabled:pointer-events-none disabled:opacity-50"
         ]) }}

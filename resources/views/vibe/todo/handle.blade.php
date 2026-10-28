@@ -2,7 +2,7 @@
 
 @props([
     'size' => 'md', // sm, md, lg
-    'mode' => 'visible', // visible, hover, hidden
+    'mode' => 'hover', // hover (default), visible, hidden
     'dragHandle' => null,
     'dragIndicator' => null,
     'handle' => null,
@@ -12,10 +12,10 @@
     $rawMode = $dragHandle ?? $dragIndicator ?? $handle ?? $mode;
     if ($rawMode === false || $rawMode === 'false' || $rawMode === 'hidden' || $rawMode === 'none' || $rawMode === 'hide') {
         $displayMode = 'hidden';
-    } elseif ($rawMode === 'hover' || $rawMode === 'on-hover') {
-        $displayMode = 'hover';
-    } else {
+    } elseif ($rawMode === true || $rawMode === 'true' || $rawMode === 'visible' || $rawMode === 'show' || $rawMode === 'always' || $rawMode === '') {
         $displayMode = 'visible';
+    } else {
+        $displayMode = 'hover';
     }
 
     $sizeClass = match ($size) {
@@ -26,8 +26,8 @@
 
     $modeClass = match ($displayMode) {
         'hidden' => 'hidden',
-        'hover' => 'opacity-0 group-hover:opacity-100 group-hover/header:opacity-100 group-hover/item:opacity-100 transition-opacity duration-150',
-        default => '',
+        'hover' => 'flex md:hidden md:group-hover:flex md:group-hover/header:flex md:group-hover/item:flex',
+        default => 'flex',
     };
 @endphp
 

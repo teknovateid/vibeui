@@ -25,6 +25,8 @@
     'dragIndicator' => null,
     'handle' => null,
     'expireHours' => 24 * 30,
+    'lock' => false,
+    'locked' => false,
 ])
 
 @php
@@ -195,12 +197,14 @@
     id="{{ $todoId }}"
     data-vibe-todo
     data-mode="{{ $mode }}"
+    @if ($lock || $locked) data-locked="true" @endif
     {{ $attributes->twMerge(['class' => "relative w-full {$layoutClass} transition-colors select-none"]) }}
     x-data="typeof window.vibeTodo === 'function' ? window.vibeTodo({
         id: @js($todoId),
         mode: @js($mode),
         name: @js($name),
         reorderable: @js((bool) $reorderable),
+        locked: @js((bool) ($lock || $locked)),
         persist: @js((bool) $persist),
         storageKey: @js($storageKey ?: ''),
         expireHours: @js($expireHours),

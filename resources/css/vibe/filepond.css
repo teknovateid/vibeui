@@ -1413,6 +1413,12 @@
     opacity: 1;
 }
 
+@media (max-width: 768px), (hover: none) {
+    [data-drag-handle="hover"] .filepond--reorder-handle {
+        opacity: 0.45;
+    }
+}
+
 [data-drag-handle="hidden"] .filepond--reorder-handle {
     display: none !important;
 }

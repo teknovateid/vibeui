@@ -6,6 +6,8 @@
     'dragHandle' => null,
     'dragIndicator' => null,
     'handle' => null,
+    'lock' => false,
+    'locked' => false,
 ])
 
 @props([
@@ -14,6 +16,8 @@
     'count' => null,
     'color' => 'default',
     'emptyText' => 'Tarik tugas ke sini',
+    'lock' => null,
+    'locked' => null,
 ])
 
 @php
@@ -28,6 +32,7 @@
 
 <div
     data-todo-group="{{ $name }}"
+    @if ($lock || $locked) data-locked="true" @endif
     @dragover.prevent.stop="typeof onDragOverGroup === 'function' ? onDragOverGroup('{{ $name }}', $event) : null"
     @dragleave="typeof onDragLeaveGroup === 'function' ? onDragLeaveGroup('{{ $name }}', $event) : null"
     @drop.prevent.stop="typeof onDropGroup === 'function' ? onDropGroup('{{ $name }}', $event) : null"

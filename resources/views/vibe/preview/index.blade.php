@@ -265,13 +265,17 @@
     {{-- Code Viewer Area --}}
     <div id="{{ $codeId }}" x-show="tab === 'code'" class="rounded-b-2xl overflow-hidden" style="{{ $tab === 'code' ? 'display: block;' : 'display: none;' }}">
         @if (isset($code) && !empty($code))
-            @if ($code instanceof \Illuminate\Support\HtmlString || (is_object($code) && method_exists($code, '__toString')))
+            @if (str_contains((string) $code, 'data-vibe-preview-code'))
                 {{ $code }}
             @else
                 <vibe:preview.code :code="(string) $code" :language="$resolvedLang" />
             @endif
         @elseif (isset($codeSlot))
-            {{ $codeSlot }}
+            @if (str_contains((string) $codeSlot, 'data-vibe-preview-code'))
+                {{ $codeSlot }}
+            @else
+                <vibe:preview.code :code="(string) $codeSlot" :language="$resolvedLang" />
+            @endif
         @endif
     </div>
 </div>
