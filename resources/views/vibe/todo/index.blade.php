@@ -48,7 +48,7 @@
     };
 
     $layoutClass = match ($layout) {
-        'board', 'kanban' => 'flex flex-col md:flex-row items-start overflow-x-auto pb-4 gap-4 w-full',
+        'board', 'kanban' => 'flex flex-col md:flex-row items-stretch overflow-x-auto pb-2 gap-4 w-full h-full min-h-0',
         default => "flex flex-col w-full {$gapClass}",
     };
 @endphp
