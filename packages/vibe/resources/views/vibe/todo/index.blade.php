@@ -12,10 +12,12 @@
     'toggleUrl' => null,
     'deleteUrl' => null,
     'addUrl' => null,
+    'updateUrl' => null,
     'wireReorder' => null,
     'wireToggle' => null,
     'wireDelete' => null,
     'wireAdd' => null,
+    'wireUpdate' => null,
     'layout' => 'list', // 'list' | 'board'
     'gap' => '3',
     'checkbox' => null,
@@ -27,6 +29,11 @@
     'expireHours' => 24 * 30,
     'lock' => false,
     'locked' => false,
+    'editable' => false,
+    'quickAdd' => false,
+    'searchable' => false,
+    'searchPlaceholder' => null,
+    'keyboardNavigation' => true,
 ])
 
 @php
@@ -213,14 +220,21 @@
         toggleUrl: @js($toggleUrl ?: ''),
         deleteUrl: @js($deleteUrl ?: ''),
         addUrl: @js($addUrl ?: ''),
+        updateUrl: @js($updateUrl ?: ''),
         wireReorder: @js($wireReorder ?: ''),
         wireToggle: @js($wireToggle ?: ''),
         wireDelete: @js($wireDelete ?: ''),
         wireAdd: @js($wireAdd ?: ''),
+        wireUpdate: @js($wireUpdate ?: ''),
+        editable: @js((bool) $editable),
+        searchable: @js((bool) $searchable),
+        keyboardNavigation: @js((bool) $keyboardNavigation),
     }) : {
         id: @js($todoId),
         mode: @js($mode),
         items: [],
+        searchQuery: '',
+        filterItems() {},
         isDragging: false,
         wasDragging: false,
         draggingId: null,
@@ -272,6 +286,7 @@
         moveToPrevGroup() {},
         toggle() {},
         remove() {},
+        updateItem() {},
         add() {},
         clearStorage() {},
         resetStorage() {}
@@ -279,5 +294,31 @@
     @vibe:todo-add="typeof add === 'function' ? add($event.detail.title, $event.detail.group) : null"
     :class="{ 'vibe-todo-dragging': isDragging }"
 >
+    @if ($searchable)
+        <div class="relative w-full mb-3" data-todo-search-container>
+            <div class="relative flex items-center">
+                <svg class="size-4 absolute left-3.5 text-muted-foreground/70 pointer-events-none select-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input
+                    type="text"
+                    x-model="searchQuery"
+                    @input="typeof filterItems === 'function' ? filterItems(searchQuery) : null"
+                    placeholder="{{ $searchPlaceholder ?? 'Cari tugas...' }}"
+                    class="w-full pl-10 pr-9 py-2 text-xs rounded-xl border border-input bg-background/80 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all placeholder:text-muted-foreground/60 shadow-2xs"
+                />
+                <button
+                    type="button"
+                    x-show="searchQuery"
+                    @click="searchQuery = ''; if (typeof filterItems === 'function') filterItems('');"
+                    class="absolute right-2.5 p-1 rounded-md text-muted-foreground hover:text-foreground cursor-pointer text-xs"
+                >
+                    ✕
+                </button>
+            </div>
+        </div>
+    @endif
+
     {{ $slot }}
 </div>

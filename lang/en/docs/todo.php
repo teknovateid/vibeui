@@ -102,6 +102,8 @@ return [
         'toggled_desc' => 'Dispatched when an item\'s completion status or checkbox is toggled.',
         'deleted_desc' => 'Dispatched immediately before or upon item deletion.',
         'added_desc' => 'Dispatched when a new task item is added via the quick input.',
+        'updated_desc' => 'Dispatched when an item\'s title or description is updated via inline editing.',
+        'subtask_updated_desc' => 'Dispatched when a subtask or checklist inside a card is toggled.',
     ],
 
     'props' => [
@@ -118,6 +120,10 @@ return [
         'todo_nav_buttons' => "Show or hide previous/next column navigation buttons on cards (default false / hidden)",
         'todo_checkbox' => "Show checkbox on cards (default false)",
         'todo_lock' => "Lock all cards in the board/list to prevent moving or dragging (default false)",
+        'todo_editable' => "Enable inline quick editing for card title and description (default false)",
+        'todo_quick_add' => "Enable inline '+ Add Task' button at the bottom of each column (default false)",
+        'todo_searchable' => "Enable client-side live search bar at the top of the board (default false)",
+        'todo_keyboard' => "Enable keyboard navigation shortcuts (Space, Delete, Left/Right arrow) (default true)",
         'todo_reorderable' => "Enable or disable drag-and-drop capability between cards and columns",
         'todo_drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'hover' (default: revealed on hover on desktop, always visible on mobile), 'visible' (always shown), or 'hidden' / false (hide)",
         'todo_persist' => "Automatically persist card ordering and layout to browser localStorage (local mode only)",
@@ -128,6 +134,7 @@ return [
         'todo_wire_toggle' => "Livewire action method name to handle item completion toggles",
         'todo_wire_delete' => "Livewire action method name to handle item removal",
         'todo_wire_add' => "Livewire action method name to handle new item addition",
+        'todo_wire_update' => "Livewire action method name to handle item title/description updates",
         'todo_endpoint' => "Base REST API URL for CRUD synchronization",
         'todo_name' => "Form array input prefix name for batch submit mode (mode='form')",
 
@@ -136,6 +143,10 @@ return [
         'group_title' => "Title string displayed in the column header",
         'group_count' => "Numeric counter for total cards in column (optional)",
         'group_color' => "Accent color badge variant for column header: 'default', 'blue', 'amber', 'emerald', 'purple'",
+        'group_max' => "Maximum card limit (WIP Limit) with visual alert indicators when exceeded",
+        'group_collapsible' => "Enable collapsible column capability into a slim vertical ribbon (default false)",
+        'group_collapsed' => "Initial collapsed state on first render (default false)",
+        'group_quick_add' => "Column-specific override for the inline quick add task button",
         'group_empty_text' => "Placeholder message displayed when column contains no cards",
 
         // vibe:todo.item
@@ -146,14 +157,24 @@ return [
         'item_nav_buttons' => "Per-item override for column navigation arrow buttons (true/false/null)",
         'item_checkbox' => "Explicitly show or hide the checkbox for this specific card",
         'item_completed' => "Completion state (strikes through text with muted styling)",
-        'item_badge' => "Priority or category tag text displayed on the card",
+        'item_editable' => "Per-item override to allow inline title and description editing",
+        'item_labels' => "Multi-labels / category tag badges (array or comma-separated string)",
+        'item_assignees' => "Task assignees (array of collaborator profiles or avatar slot)",
+        'item_subtasks' => "Checklist subtasks array with automatic progress bar calculation",
+        'item_badge' => "Priority or category tag text displayed on the card (single badge fallback)",
         'item_badge_variant' => "Badge color variant: 'default', 'primary', 'warning', 'destructive', 'outline'",
-        'item_due_date' => "Due date label string displayed with calendar icon",
+        'item_due_date' => "Due date string with smart urgency calculations (overdue, today, upcoming)",
         'item_variant' => "Card visual variant: 'default' (subtle elevation shadow), 'flat', or 'outline'",
         'item_reorderable' => "Whether this specific card can be dragged or repositioned",
         'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'hover' (default), 'visible', or 'hidden' / false",
         'item_lock' => "Lock this specific card to prevent moving or dragging to other columns (default false)",
         'item_deletable' => "Show delete action button when card is hovered",
+
+        // vibe:todo.subtask
+        'subtask_id' => "Unique identifier for the subtask item",
+        'subtask_title' => "Title text of the subtask checklist item",
+        'subtask_completed' => "Subtask completion state (default false)",
+        'subtask_disabled' => "Disable toggle interaction for this subtask (default false)",
 
         // vibe:todo.input
         'input_placeholder' => "Placeholder text for the new task input field",

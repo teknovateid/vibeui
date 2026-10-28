@@ -367,4 +367,193 @@ test('locked items in board mode do not show navigation buttons', function () {
         ->not->toContain('canMoveNext(\'immovable\')');
 });
 
+test('vibe:todo.item supports inline editing when editable=true', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="edit-1" title="Kartu Bisa Diedit" :editable="true" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('x-data="{')
+        ->toContain('isEditable: true')
+        ->toContain('@dblclick="startEdit()"')
+        ->toContain('x-ref="titleInput"')
+        ->toContain('saveEdit()')
+        ->toContain('cancelEdit()')
+        ->toContain('title="Ubah judul tugas"');
+});
+
+test('vibe:todo.item supports multi-labels array and custom labels slot', function () {
+    // Array labels
+    $htmlArray = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="item-labels" title="Multi Label" :labels="[[\'text\' => \'Bug\', \'variant\' => \'destructive\'], [\'text\' => \'UI\', \'variant\' => \'primary\']]" />
+        </vibe:todo>'
+    );
+
+    expect($htmlArray)
+        ->toContain('Bug')
+        ->toContain('UI')
+        ->toContain('bg-destructive');
+
+    // Slot labels
+    $htmlSlot = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="item-slot-labels" title="Slot Label">
+                <x-slot:labels>
+                    <span class="custom-label">Custom Label Tag</span>
+                </x-slot:labels>
+            </vibe:todo.item>
+        </vibe:todo>'
+    );
+
+    expect($htmlSlot)
+        ->toContain('custom-label')
+        ->toContain('Custom Label Tag');
+});
+
+test('vibe:todo.item supports smart due date urgency styling', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="overdue-item" title="Tugas Lewat" due-date="2020-01-01" />
+            <vibe:todo.item id="upcoming-item" title="Tugas Masa Depan" due-date="2099-12-31" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('title="Terlewat / Overdue"')
+        ->toContain('text-destructive bg-destructive/10')
+        ->toContain('2020-01-01')
+        ->toContain('2099-12-31');
+});
+
+test('vibe:todo.item supports assignee avatars and avatar stack', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="assignee-item" title="Punya Assignee" :assignees="[[\'name\' => \'Alex Johnson\'], [\'name\' => \'Maria Garcia\']]" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('vibe-avatar-group')
+        ->toContain('data-avatar')
+        ->toContain('AJ')
+        ->toContain('MG');
+});
+
+test('vibe:todo.subtask renders correctly with checkbox and title', function () {
+    $html = Blade::render(
+        '<vibe:todo.subtask id="sub-1" title="Subtask Test Title" :completed="true" />'
+    );
+
+    expect($html)
+        ->toContain('data-todo-subtask="sub-1"')
+        ->toContain('data-completed="true"')
+        ->toContain('Subtask Test Title')
+        ->toContain('line-through');
+});
+
+test('vibe:todo.item supports subtasks in slot and renders mini progress bar and counter', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="parent-task" title="Parent Feature Task">
+                <vibe:todo.subtask id="sub-1" title="Langkah 1" :completed="true" />
+                <vibe:todo.subtask id="sub-2" title="Langkah 2" :completed="false" />
+            </vibe:todo.item>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('Parent Feature Task')
+        ->toContain('Langkah 1')
+        ->toContain('Langkah 2')
+        ->toContain('data-todo-subtask="sub-1"')
+        ->toContain('data-todo-subtask="sub-2"')
+        ->toContain('subtasksCount')
+        ->toContain('completedSubtasksCount')
+        ->toContain('Subtugas selesai')
+        ->toContain('rounded-full');
+});
+
+test('vibe:todo.item supports subtasks via array prop', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="array-task" title="Array Prop Task" :subtasks="[
+                [\'id\' => \'sub-a\', \'title\' => \'Subtask A\', \'completed\' => true],
+                [\'id\' => \'sub-b\', \'title\' => \'Subtask B\', \'completed\' => false]
+            ]" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('Array Prop Task')
+        ->toContain('Subtask A')
+        ->toContain('Subtask B')
+        ->toContain('data-todo-subtask="sub-a"')
+        ->toContain('data-todo-subtask="sub-b"');
+});
+
+test('vibe:todo.group supports quick add per column', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="board">
+            <vibe:todo.group name="todo" title="To Do" :quick-add="true" quick-add-text="Buat Tugas Baru">
+                <vibe:todo.item id="t-1" title="Tugas 1" />
+            </vibe:todo.group>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('Buat Tugas Baru')
+        ->toContain('Judul tugas baru...')
+        ->toContain('vibe:todo-add');
+});
+
+test('vibe:todo.group supports wip limit and warning calculation', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="board">
+            <vibe:todo.group name="progress" title="In Progress" :count="4" :max="3">
+                <vibe:todo.item id="t-1" title="Tugas 1" />
+            </vibe:todo.group>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-wip-max="3"')
+        ->toContain('isOverWip()')
+        ->toContain('/3');
+});
+
+test('vibe:todo.group supports collapsible columns', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="board">
+            <vibe:todo.group name="done" title="Selesai" :collapsible="true" :collapsed="true">
+                <vibe:todo.item id="t-1" title="Tugas 1" />
+            </vibe:todo.group>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('isCollapsed: true')
+        ->toContain('isCollapsible: true')
+        ->toContain('Buka kolom Selesai')
+        ->toContain('Lipat kolom');
+});
+
+test('vibe:todo supports live client-side search bar', function () {
+    $html = Blade::render(
+        '<vibe:todo :searchable="true" search-placeholder="Filter seluruh tugas...">
+            <vibe:todo.item id="t-1" title="Item Pertama" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-search-container')
+        ->toContain('Filter seluruh tugas...')
+        ->toContain('searchQuery')
+        ->toContain('filterItems');
+});
+
+
+
 

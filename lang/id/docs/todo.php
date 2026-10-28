@@ -102,6 +102,8 @@ return [
         'toggled_desc' => 'Dipicu saat status centang atau status kartu diubah.',
         'deleted_desc' => 'Dipicu sesaat sebelum atau ketika item dihapus.',
         'added_desc' => 'Dipicu saat item tugas baru ditambahkan melalui input cepat.',
+        'updated_desc' => 'Dipicu saat judul atau deskripsi kartu diubah melalui inline editing.',
+        'subtask_updated_desc' => 'Dipicu saat subtask atau checklist di dalam kartu dicentang atau di-toggle.',
     ],
 
     'props' => [
@@ -118,6 +120,10 @@ return [
         'todo_nav_buttons' => "Menampilkan atau menyembunyikan tombol panah navigasi kolom pada kartu (default false / tersembunyi)",
         'todo_checkbox' => "Menampilkan kotak centang checkbox pada seluruh kartu (default false)",
         'todo_lock' => "Mengunci seluruh kartu agar tidak dapat digeser atau dipindahkan antar kolom (default false)",
+        'todo_editable' => "Mengaktifkan fitur inline quick edit untuk judul & deskripsi kartu (default false)",
+        'todo_quick_add' => "Mengaktifkan tombol inline + Tambah Tugas di bawah setiap kolom (default false)",
+        'todo_searchable' => "Mengaktifkan bilah pencarian instan sisi klien di bagian atas papan (default false)",
+        'todo_keyboard' => "Mengaktifkan navigasi shortcut keyboard (Space, Delete, Panah kiri/kanan) (default true)",
         'todo_reorderable' => "Mengaktifkan atau menonaktifkan fitur drag-and-drop antar kartu dan kolom",
         'todo_drag_handle' => "Mode tampilan indikator titik drag 3x2: 'hover' (default: tampil saat dihover pada desktop, selalu tampil di mobile), 'visible' (selalu tampil), atau 'hidden' / false (sembunyikan)",
         'todo_persist' => "Menyimpan susunan kartu ke browser localStorage secara otomatis (khusus mode local)",
@@ -128,6 +134,7 @@ return [
         'todo_wire_toggle' => "Nama metode Livewire untuk menangani perubahan centang",
         'todo_wire_delete' => "Nama metode Livewire untuk menangani penghapusan item",
         'todo_wire_add' => "Nama metode Livewire untuk menangani penambahan tugas baru",
+        'todo_wire_update' => "Nama metode Livewire untuk menangani pembaruan judul/deskripsi kartu",
         'todo_endpoint' => "URL REST API basis untuk operasi CRUD data todo",
         'todo_name' => "Prefix nama array input tersembunyi untuk mode formulir (mode='form')",
 
@@ -136,6 +143,10 @@ return [
         'group_title' => "Judul teks kolom status yang ditampilkan di header kolom",
         'group_count' => "Angka counter jumlah kartu di kolom (opsional)",
         'group_color' => "Varian warna accent header kolom: 'default', 'blue', 'amber', 'emerald', 'purple'",
+        'group_max' => "Batas maksimal kartu (WIP Limit) dengan indikator peringatan visual saat terlampaui",
+        'group_collapsible' => "Mengaktifkan tombol untuk melipat kolom menjadi pita vertikal ringkas (default false)",
+        'group_collapsed' => "Kondisi kolom terlipat secara default pada awal render (default false)",
+        'group_quick_add' => "Override tombol tambah tugas cepat inline khusus untuk kolom ini",
         'group_empty_text' => "Teks placeholder saat kolom tidak memiliki kartu tugas",
 
         // vibe:todo.item
@@ -146,14 +157,24 @@ return [
         'item_nav_buttons' => "Override opsi tombol panah navigasi kolom per kartu (true/false/null)",
         'item_checkbox' => "Menampilkan atau menyembunyikan kotak centang checkbox pada kartu ini",
         'item_completed' => "Status selesai tugas (menampilkan garis coret dan visual pudar)",
-        'item_badge' => "Teks label badge prioritas atau kategori pada kartu",
+        'item_editable' => "Override per-item untuk mengizinkan inline editing judul & deskripsi kartu",
+        'item_labels' => "Daftar multi-label/kategori warna-warni (array atau string dipisah koma)",
+        'item_assignees' => "Penanggung jawab tugas (array data profil atau slot avatar)",
+        'item_subtasks' => "Daftar checklist subtugas dengan perhitungan progress bar otomatis",
+        'item_badge' => "Teks label badge prioritas atau kategori pada kartu (fallback tunggal)",
         'item_badge_variant' => "Varian visual badge: 'default', 'primary', 'warning', 'destructive', 'outline'",
-        'item_due_date' => "Teks label tanggal jatuh tempo tugas",
+        'item_due_date' => "Tanggal jatuh tempo tugas dengan kalkulasi urgensi otomatis (overdue, today, upcoming)",
         'item_variant' => "Varian tampilan kartu: 'default' (card bayangan halus), 'flat', atau 'outline'",
         'item_reorderable' => "Menentukan apakah kartu ini dapat digeser atau ditarik",
         'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'hover' (default), 'visible', atau 'hidden' / false",
         'item_lock' => "Mengunci kartu ini agar tidak dapat digeser atau dipindahkan ke kolom lain (default false)",
         'item_deletable' => "Menampilkan tombol hapus saat kartu di-hover",
+
+        // vibe:todo.subtask
+        'subtask_id' => "ID unik untuk sub-tugas checklist",
+        'subtask_title' => "Judul teks sub-tugas",
+        'subtask_completed' => "Status centang selesai sub-tugas (default false)",
+        'subtask_disabled' => "Menonaktifkan interaksi klik/toggle pada sub-tugas (default false)",
 
         // vibe:todo.input
         'input_placeholder' => "Teks placeholder pada kolom isian tugas baru",
