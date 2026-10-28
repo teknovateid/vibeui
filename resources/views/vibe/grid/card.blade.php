@@ -199,7 +199,7 @@
 
             {{-- Actions & Header Controls (Right side) --}}
             @if (isset($actions) || $lockType !== 'none' || ($reorderable && $dragHandleMode !== 'hidden'))
-                <div class="flex items-center gap-1 shrink-0 {{ ! isset($actions) && $dragHandleMode !== 'visible' ? 'hidden group-hover/header:flex' : '' }}">
+                <div class="flex items-center gap-1 shrink-0 {{ ! isset($actions) && $dragHandleMode !== 'visible' ? 'flex md:hidden md:group-hover/header:flex' : '' }}">
                     @if (isset($actions))
                         <div class="flex items-center gap-1 shrink-0 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
                             {{ $actions }}
@@ -241,7 +241,7 @@
                         @php
                             $gripClass = match ($dragHandleMode) {
                                 'visible' => 'flex',
-                                default => 'hidden group-hover/header:flex',
+                                default => 'flex md:hidden md:group-hover/header:flex',
                             };
                         @endphp
                         <div

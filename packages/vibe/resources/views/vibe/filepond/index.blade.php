@@ -90,10 +90,10 @@
     $rawDragHandle = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
     if ($rawDragHandle === false || $rawDragHandle === 'false' || $rawDragHandle === 'hidden' || $rawDragHandle === 'none' || $rawDragHandle === 'hide') {
         $dragHandleMode = 'hidden';
-    } elseif ($rawDragHandle === 'hover' || $rawDragHandle === 'on-hover') {
-        $dragHandleMode = 'hover';
-    } else {
+    } elseif ($rawDragHandle === true || $rawDragHandle === 'true' || $rawDragHandle === 'visible' || $rawDragHandle === 'show' || $rawDragHandle === 'always' || $rawDragHandle === '') {
         $dragHandleMode = 'visible';
+    } else {
+        $dragHandleMode = 'hover';
     }
 
     $resolvedExistingFiles = $files ?? $existingFiles ?? [];

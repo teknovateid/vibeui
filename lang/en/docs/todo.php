@@ -52,8 +52,37 @@ return [
         'disabled_hint' => 'This column hides navigation buttons by default (:nav-buttons="false").',
     ],
 
+    'drag_handle' => [
+        'title' => '7. 3x2 Drag Indicator Visibility (drag-handle)',
+        'desc' => 'Control the visibility of the 3x2 dot drag grip indicator via <code>drag-handle</code>, <code>drag-indicator</code>, or <code>handle</code>. Defaults to <code>hover</code> (revealed on hover on desktop, always visible on mobile), with options for <code>visible</code> (always shown) or <code>hidden</code> / <code>false</code> (completely hidden).',
+        'preview_title' => 'Drag Indicator Visibility Comparison (Visible, On Hover, Hidden)',
+        'visible_badge' => 'Visible',
+        'visible_desc' => 'The 3x2 grip dots are always displayed on the left side of the card for clear drag affordance.',
+        'hover_badge' => 'On Hover (Default)',
+        'hover_desc' => 'By default, the 3x2 grip dots stay hidden and appear on hover on desktop, and remain always visible on mobile devices for easy touch dragging.',
+        'hidden_badge' => 'Hidden / false',
+        'hidden_desc' => 'The 3x2 grip dots are completely hidden for a clean, ultra-minimalist card design.',
+        'locked_badge' => 'Locked (:lock="true")',
+        'locked_desc' => 'Displays a padlock icon and disables dragging so the card cannot be moved.',
+        'mobile_hint' => '📱 Mobile & Touch Devices Tip: On <code>visible</code> or <code>hover</code> mode, touch the 3x2 dots directly to drag. On <code>hidden</code> mode, touch and hold (250ms long-press) the card body to initiate drag with tactile haptic feedback.',
+    ],
+
+    'backend' => [
+        'title' => '8. Complete Backend Integration Guide',
+        'desc' => 'Learn how to wire the Todo component with your preferred Laravel backend architecture: Livewire 3 Component, REST API Controller (asynchronous JSON), or traditional Form Batch Submit Controller.',
+        'tab_livewire' => 'Livewire 3 Component',
+        'tab_api' => 'REST API Controller',
+        'tab_form' => 'Form Batch Controller',
+        'livewire_card_title' => 'Livewire 3 Component Class Implementation',
+        'livewire_card_desc' => 'Handle card repositioning, completion toggling, and item deletion in real-time using the <code>Task</code> Eloquent model.',
+        'api_card_title' => 'Laravel REST API Controller Implementation',
+        'api_card_desc' => 'Handle asynchronous JSON requests with Laravel CSRF protection across <code>reorder-url</code>, <code>toggle-url</code>, and <code>delete-url</code> endpoints.',
+        'form_card_title' => 'Form Batch Controller Implementation',
+        'form_card_desc' => 'Handle traditional POST form submissions containing the dynamically re-indexed <code>batch_tasks[i]</code> input array.',
+    ],
+
     'anti_fouc' => [
-        'title' => '7. Zero-Jank Anti-FOUC Guarantee',
+        'title' => '9. Zero-Jank Anti-FOUC Guarantee',
         'desc' => 'Cards and columns are rendered 100% on the server via Blade (SSR), guaranteeing instantaneous initial paint on page load without blank flashes or layout shift (CLS = 0). Alpine.js progressively attaches event listeners.',
         'card1_title' => '100% Server Rendered (SSR)',
         'card1_desc' => 'Items are printed directly by Laravel Blade with compiled Tailwind CSS v4 utility classes. Browsers render the view in 0 milliseconds without white flash delays.',
@@ -64,7 +93,7 @@ return [
     ],
 
     'events' => [
-        'title' => '8. JavaScript Events & Custom Events Ecosystem',
+        'title' => '10. JavaScript Events & Custom Events Ecosystem',
         'desc' => 'The component dispatches standard DOM custom events that can be listened to with Alpine.js, Vanilla JavaScript, or other client libraries.',
         'table_event' => 'Event Name',
         'table_detail' => 'Detail Properties ($event.detail)',
@@ -76,7 +105,7 @@ return [
     ],
 
     'props' => [
-        'title' => '9. Props & Subcomponents Reference',
+        'title' => '11. Props & Subcomponents Reference',
         'desc' => 'Comprehensive directory of available attributes and options for &lt;vibe:todo&gt; and all companion subcomponents.',
         'table_prop' => 'Prop',
         'table_type' => 'Data Type',
@@ -87,11 +116,13 @@ return [
         'todo_mode' => "Data sync mode: 'livewire', 'api', 'form', or 'local'",
         'todo_layout' => "Layout presentation: 'board' (multi-column kanban) or 'list' (vertical linear list)",
         'todo_nav_buttons' => "Show or hide previous/next column navigation buttons on cards (default false / hidden)",
-        'todo_checkbox' => "Global checkbox visibility toggle (default false for board layout, true for list)",
+        'todo_checkbox' => "Show checkbox on cards (default false)",
+        'todo_lock' => "Lock all cards in the board/list to prevent moving or dragging (default false)",
         'todo_reorderable' => "Enable or disable drag-and-drop capability between cards and columns",
-        'todo_drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'visible' (always shown), 'hover' (only on hover), or 'hidden' / false (hide)",
+        'todo_drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'hover' (default: revealed on hover on desktop, always visible on mobile), 'visible' (always shown), or 'hidden' / false (hide)",
         'todo_persist' => "Automatically persist card ordering and layout to browser localStorage (local mode only)",
         'todo_storage_key' => "Unique identifier for the todo entry inside the 'vibe-todo' array in localStorage (default: component ID)",
+        'todo_expire_hours' => "Expiration lifetime in hours for stored local data before it is automatically invalidated (default: 720 hours / 30 days)",
         'todo_gap' => "Spacing gap between columns or items: '1', '2', '3', '4', '6' (default: '3')",
         'todo_wire_reorder' => "Livewire action method name to handle reorder and column migration events",
         'todo_wire_toggle' => "Livewire action method name to handle item completion toggles",
@@ -120,7 +151,8 @@ return [
         'item_due_date' => "Due date label string displayed with calendar icon",
         'item_variant' => "Card visual variant: 'default' (subtle elevation shadow), 'flat', or 'outline'",
         'item_reorderable' => "Whether this specific card can be dragged or repositioned",
-        'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'visible', 'hover', or 'hidden' / false",
+        'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'hover' (default), 'visible', or 'hidden' / false",
+        'item_lock' => "Lock this specific card to prevent moving or dragging to other columns (default false)",
         'item_deletable' => "Show delete action button when card is hovered",
 
         // vibe:todo.input

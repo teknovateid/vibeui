@@ -42,7 +42,7 @@
 
     // Resolve drag handle mode: per-item prop overrides parent @aware value
     $rawDragHandle = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
-    $defaultMode = ($variant === 'table') ? 'visible' : 'hover';
+    $defaultMode = 'hover';
 
     if ($rawDragHandle === false || $rawDragHandle === 'false' || $rawDragHandle === 'hidden' || $rawDragHandle === 'none' || $rawDragHandle === 'hide') {
         $dragHandleMode = 'hidden';
@@ -76,7 +76,7 @@
                     @php
                         $handleDisplayClass = match ($dragHandleMode) {
                             'visible' => 'flex',
-                            default => 'hidden group-hover/header:flex',
+                            default => 'flex md:hidden md:group-hover/header:flex',
                         };
                     @endphp
                     {{-- Drag Handle --}}
@@ -159,8 +159,8 @@
             @if ($allowReorder && $dragHandleMode !== 'hidden')
                 @php
                     $tableHandleDisplayClass = match ($dragHandleMode) {
-                        'hover' => 'hidden md:group-hover/item:flex md:group-hover:flex',
-                        default => 'hidden md:flex',
+                        'visible' => 'flex',
+                        default => 'flex md:hidden md:group-hover/item:flex md:group-hover:flex',
                     };
                 @endphp
                 <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 rounded transition-colors {{ $tableHandleDisplayClass }} items-center justify-center shrink-0 select-none touch-none">
@@ -227,7 +227,7 @@
                     @php
                         $borderedHandleDisplayClass = match ($dragHandleMode) {
                             'visible' => 'flex',
-                            default => 'hidden group-hover/header:flex',
+                            default => 'flex md:hidden md:group-hover/header:flex',
                         };
                     @endphp
                     <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab {{ $borderedHandleDisplayClass }} active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors items-center justify-center shrink-0 select-none touch-none">

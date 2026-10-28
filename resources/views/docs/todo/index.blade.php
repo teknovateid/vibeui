@@ -26,9 +26,12 @@
                 <div class="flex flex-wrap items-center gap-1.5 pt-1">
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">mode="livewire / api / form / local"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">layout="board / list"</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:checkbox="false / true"</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:lock="false / true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:nav-buttons="false / true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:reorderable="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:persist="true"</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">drag-handle="visible / hover / hidden"</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.group&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.item&gt;</vibe:badge>
@@ -54,30 +57,28 @@
                     <span>{!! __('docs/todo.livewire.tip') !!}</span>
                 </div>
 
-                <vibe:preview :title="__('docs/todo.livewire.preview_title')" :center="false">
-                    <livewire:demo-todo />
-
-                    <x-slot:code>
-&lt;div class="space-y-4 w-full"&gt;
+                @php
+                    $snippetLivewire = <<<'BLADE'
+<div class="space-y-4 w-full">
     {{-- Quick Add Input --}}
-    &lt;vibe:todo.input 
+    <vibe:todo.input 
         placeholder="Tulis tugas baru lalu tekan Enter..." 
         button-text="Tambah Tugas" 
-    /&gt;
+    />
 
     {{-- Realtime Livewire Kanban Board --}}
-    &lt;vibe:todo 
+    <vibe:todo 
         mode="livewire"
         layout="board"
         wire-reorder="updateTaskOrder"
         wire-toggle="toggleTask"
         wire-delete="deleteTask"
         wire-add="addTask"
-    &gt;
+    >
         {{-- Column 1: To Do --}}
-        &lt;vibe:todo.group name="todo" title="To Do" :count="$todoCount" color="blue"&gt;
-            @@foreach ($tasks-&gt;where('group', 'todo') as $task)
-                &lt;vibe:todo.item
+        <vibe:todo.group name="todo" title="To Do" :count="$todoCount" color="blue">
+            @foreach ($tasks->where('group', 'todo') as $task)
+                <vibe:todo.item
                     :id="$task['id']"
                     :title="$task['title']"
                     :description="$task['description']"
@@ -87,37 +88,42 @@
                     :due-date="$task['dueDate']"
                     :order="$task['order']"
                     group="todo"
-                    wire:key="todo-item-&#123;&#123; $task['id'] &#125;&#125;"
-                /&gt;
-            @@endforeach
-        &lt;/vibe:todo.group&gt;
+                    wire:key="todo-item-{{ $task['id'] }}"
+                />
+            @endforeach
+        </vibe:todo.group>
 
         {{-- Column 2: In Progress --}}
-        &lt;vibe:todo.group name="progress" title="In Progress" :count="$progressCount" color="amber"&gt;
-            @@foreach ($tasks-&gt;where('group', 'progress') as $task)
-                &lt;vibe:todo.item
+        <vibe:todo.group name="progress" title="In Progress" :count="$progressCount" color="amber">
+            @foreach ($tasks->where('group', 'progress') as $task)
+                <vibe:todo.item
                     :id="$task['id']"
                     :title="$task['title']"
                     group="progress"
-                    wire:key="todo-item-&#123;&#123; $task['id'] &#125;&#125;"
-                /&gt;
-            @@endforeach
-        &lt;/vibe:todo.group&gt;
+                    wire:key="todo-item-{{ $task['id'] }}"
+                />
+            @endforeach
+        </vibe:todo.group>
 
         {{-- Column 3: Done --}}
-        &lt;vibe:todo.group name="done" title="Done" :count="$doneCount" color="emerald"&gt;
-            @@foreach ($tasks-&gt;where('group', 'done') as $task)
-                &lt;vibe:todo.item
+        <vibe:todo.group name="done" title="Done" :count="$doneCount" color="emerald">
+            @foreach ($tasks->where('group', 'done') as $task)
+                <vibe:todo.item
                     :id="$task['id']"
                     :title="$task['title']"
                     group="done"
-                    wire:key="todo-item-&#123;&#123; $task['id'] &#125;&#125;"
-                /&gt;
-            @@endforeach
-        &lt;/vibe:todo.group&gt;
-    &lt;/vibe:todo&gt;
-&lt;/div&gt;
-                    </x-slot:code>
+                    wire:key="todo-item-{{ $task['id'] }}"
+                />
+            @endforeach
+        </vibe:todo.group>
+    </vibe:todo>
+</div>
+BLADE;
+                @endphp
+
+                <vibe:preview :title="__('docs/todo.livewire.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetLivewire" />
+                    <livewire:demo-todo />
                 </vibe:preview>
             </section>
 
@@ -130,7 +136,39 @@
                     </p>
                 </div>
 
+                @php
+                    $snippetApi = <<<'BLADE'
+<vibe:todo 
+    mode="api"
+    layout="board"
+    reorder-url="/api/todos/reorder"
+    toggle-url="/api/todos/{id}/toggle"
+    delete-url="/api/todos/{id}"
+>
+    <vibe:todo.group name="review" title="Review & Pending" color="purple">
+        <vibe:todo.item
+            id="task-1"
+            group="review"
+            title="Konfigurasi API Endpoint & CSRF Token"
+            badge="API"
+            badge-variant="primary"
+        />
+    </vibe:todo.group>
+
+    <vibe:todo.group name="deployed" title="Deployed to Production" color="emerald">
+        <vibe:todo.item
+            id="task-2"
+            group="deployed"
+            title="Asynchronous Delete Request"
+            :completed="true"
+        />
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
                 <vibe:preview :title="__('docs/todo.api.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetApi" />
                     <div class="space-y-3 w-full">
                         <vibe:todo 
                             id="demo-api-todo"
@@ -176,35 +214,6 @@
                             </vibe:todo.group>
                         </vibe:todo>
                     </div>
-
-                    <x-slot:code>
-&lt;vibe:todo 
-    mode="api"
-    layout="board"
-    reorder-url="/api/todos/reorder"
-    toggle-url="/api/todos/{id}/toggle"
-    delete-url="/api/todos/{id}"
-&gt;
-    &lt;vibe:todo.group name="review" title="Review &amp; Pending" color="purple"&gt;
-        &lt;vibe:todo.item
-            id="task-1"
-            group="review"
-            title="Konfigurasi API Endpoint &amp; CSRF Token"
-            badge="API"
-            badge-variant="primary"
-        /&gt;
-    &lt;/vibe:todo.group&gt;
-
-    &lt;vibe:todo.group name="deployed" title="Deployed to Production" color="emerald"&gt;
-        &lt;vibe:todo.item
-            id="task-2"
-            group="deployed"
-            title="Asynchronous Delete Request"
-            :completed="true"
-        /&gt;
-    &lt;/vibe:todo.group&gt;
-&lt;/vibe:todo&gt;
-                    </x-slot:code>
                 </vibe:preview>
             </section>
 
@@ -217,7 +226,32 @@
                     </p>
                 </div>
 
+                @php
+                    $snippetKanban = <<<'BLADE'
+<vibe:todo 
+    id="project-kanban" 
+    layout="board" 
+    mode="local" 
+    :persist="true"
+    :nav-buttons="true"
+>
+    <vibe:todo.group name="backlog" title="To Do" color="blue">
+        <vibe:todo.item id="t-1" group="backlog" title="Audit Performa Blade Component" />
+    </vibe:todo.group>
+
+    <vibe:todo.group name="progress" title="In Progress" color="amber">
+        <vibe:todo.item id="t-2" group="progress" title="Desain Tema Dark Mode" />
+    </vibe:todo.group>
+
+    <vibe:todo.group name="done" title="Done" color="emerald">
+        <vibe:todo.item id="t-3" group="done" title="Implementasi Anti-FOUC" :completed="true" />
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
                 <vibe:preview :title="__('docs/todo.kanban.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetKanban" />
                     <div class="w-full space-y-3">
                         <div class="flex items-center justify-between pb-1">
                             <span class="text-xs text-muted-foreground flex items-center gap-1.5">
@@ -294,28 +328,6 @@
                             </vibe:todo.group>
                         </vibe:todo>
                     </div>
-
-                    <x-slot:code>
-&lt;vibe:todo 
-    id="project-kanban" 
-    layout="board" 
-    mode="local" 
-    :persist="true"
-    :nav-buttons="true"
-&gt;
-    &lt;vibe:todo.group name="backlog" title="To Do" color="blue"&gt;
-        &lt;vibe:todo.item id="t-1" group="backlog" title="Audit Performa Blade Component" /&gt;
-    &lt;/vibe:todo.group&gt;
-
-    &lt;vibe:todo.group name="progress" title="In Progress" color="amber"&gt;
-        &lt;vibe:todo.item id="t-2" group="progress" title="Desain Tema Dark Mode" /&gt;
-    &lt;/vibe:todo.group&gt;
-
-    &lt;vibe:todo.group name="done" title="Done" color="emerald"&gt;
-        &lt;vibe:todo.item id="t-3" group="done" title="Implementasi Anti-FOUC" :completed="true" /&gt;
-    &lt;/vibe:todo.group&gt;
-&lt;/vibe:todo&gt;
-                    </x-slot:code>
                 </vibe:preview>
             </section>
 
@@ -328,7 +340,29 @@
                     </p>
                 </div>
 
+                @php
+                    $snippetForm = <<<'BLADE'
+<form method="POST" action="{{ route('tasks.batch') }}">
+    @csrf
+    <vibe:todo mode="form" layout="list" name="batch_tasks">
+        @foreach ($items as $item)
+            <vibe:todo.item 
+                :id="$item->id" 
+                :title="$item->title" 
+                :order="$loop->index" 
+            />
+        @endforeach
+    </vibe:todo>
+
+    <vibe:button type="submit" class="mt-4 rounded-xl">
+        Simpan Perubahan
+    </vibe:button>
+</form>
+BLADE;
+                @endphp
+
                 <vibe:preview :title="__('docs/todo.form.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetForm" />
                     <form 
                         method="POST" 
                         action="#" 
@@ -369,25 +403,6 @@
                             </vibe:button>
                         </div>
                     </form>
-
-                    <x-slot:code>
-&lt;form method="POST" action="&#123;&#123; route('tasks.batch') &#125;&#125;"&gt;
-    @@csrf
-    &lt;vibe:todo mode="form" layout="list" name="batch_tasks"&gt;
-        @@foreach ($items as $item)
-            &lt;vibe:todo.item 
-                :id="$item-&gt;id" 
-                :title="$item-&gt;title" 
-                :order="$loop-&gt;index" 
-            /&gt;
-        @@endforeach
-    &lt;/vibe:todo&gt;
-
-    &lt;vibe:button type="submit" class="mt-4 rounded-xl"&gt;
-        {{ __('docs/todo.form.submit_btn') }}
-    &lt;/vibe:button&gt;
-&lt;/form&gt;
-                    </x-slot:code>
                 </vibe:preview>
             </section>
 
@@ -400,7 +415,28 @@
                     </p>
                 </div>
 
+                @php
+                    $snippetPersist = <<<'BLADE'
+<vibe:todo 
+    id="sprint-board" 
+    layout="board" 
+    mode="local" 
+    :persist="true" 
+    storage-key="my-team-sprint-board"
+>
+    <vibe:todo.group name="sprint_active" title="Sprint Active" color="blue">
+        <vibe:todo.item id="p-1" group="sprint_active" title="Penyusunan Roadmap Q4" />
+    </vibe:todo.group>
+
+    <vibe:todo.group name="sprint_completed" title="Sprint Completed" color="emerald">
+        <vibe:todo.item id="p-2" group="sprint_completed" title="Pembaruan Dokumentasi" :completed="true" />
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
                 <vibe:preview :title="__('docs/todo.persist.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetPersist" />
                     <div class="w-full space-y-3">
                         <div class="flex items-center justify-between pb-1">
                             <span class="text-xs text-muted-foreground flex items-center gap-1.5">
@@ -451,24 +487,6 @@
                             </vibe:todo.group>
                         </vibe:todo>
                     </div>
-
-                    <x-slot:code>
-&lt;vibe:todo 
-    id="sprint-board" 
-    layout="board" 
-    mode="local" 
-    :persist="true" 
-    storage-key="my-team-sprint-board"
-&gt;
-    &lt;vibe:todo.group name="sprint_active" title="Sprint Active" color="blue"&gt;
-        &lt;vibe:todo.item id="p-1" group="sprint_active" title="Penyusunan Roadmap Q4" /&gt;
-    &lt;/vibe:todo.group&gt;
-
-    &lt;vibe:todo.group name="sprint_completed" title="Sprint Completed" color="emerald"&gt;
-        &lt;vibe:todo.item id="p-2" group="sprint_completed" title="Pembaruan Dokumentasi" :completed="true" /&gt;
-    &lt;/vibe:todo.group&gt;
-&lt;/vibe:todo&gt;
-                    </x-slot:code>
                 </vibe:preview>
             </section>
 
@@ -481,7 +499,29 @@
                     </p>
                 </div>
 
+                @php
+                    $snippetNavButtons = <<<'BLADE'
+{{-- Mengaktifkan tombol navigasi kolom secara global di seluruh kartu --}}
+<vibe:todo layout="board" :nav-buttons="true">
+    <vibe:todo.group name="todo" title="To Do">
+        <vibe:todo.item id="t-1" title="Tugas dengan Tombol Navigasi" group="todo" />
+    </vibe:todo.group>
+    <vibe:todo.group name="done" title="Done">
+        ...
+    </vibe:todo.group>
+</vibe:todo>
+
+{{-- Atau aktifkan secara granular hanya pada item tertentu --}}
+<vibe:todo layout="board">
+    <vibe:todo.group name="todo" title="To Do">
+        <vibe:todo.item id="t-2" title="Tugas Khusus" group="todo" :nav-buttons="true" />
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
                 <vibe:preview :title="__('docs/todo.nav_buttons.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetNavButtons" />
                     <div class="w-full space-y-4">
                         <div class="grid grid-cols-1 gap-4">
                             <div class="space-y-2">
@@ -529,29 +569,399 @@
                             </div>
                         </div>
                     </div>
-
-                    <x-slot:code>
-{{-- Mengaktifkan tombol navigasi kolom secara global di seluruh kartu --}}
-&lt;vibe:todo layout="board" :nav-buttons="true"&gt;
-    &lt;vibe:todo.group name="todo" title="To Do"&gt;
-        &lt;vibe:todo.item id="t-1" title="Tugas dengan Tombol Navigasi" group="todo" /&gt;
-    &lt;/vibe:todo.group&gt;
-    &lt;vibe:todo.group name="done" title="Done"&gt;
-        ...
-    &lt;/vibe:todo.group&gt;
-&lt;/vibe:todo&gt;
-
-{{-- Atau aktifkan secara granular hanya pada item tertentu --}}
-&lt;vibe:todo layout="board"&gt;
-    &lt;vibe:todo.group name="todo" title="To Do"&gt;
-        &lt;vibe:todo.item id="t-2" title="Tugas Khusus" group="todo" :nav-buttons="true" /&gt;
-    &lt;/vibe:todo.group&gt;
-&lt;/vibe:todo&gt;
-                    </x-slot:code>
                 </vibe:preview>
             </section>
 
-            {{-- 7. Anti-FOUC Architecture Detail --}}
+            {{-- 7. 3x2 Drag Indicator Options (drag-handle) --}}
+            <section id="drag-handle" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/todo.drag_handle.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/todo.drag_handle.desc') !!}
+                    </p>
+                </div>
+
+                <div class="p-3.5 rounded-xl border border-primary/20 bg-primary/5 text-xs text-foreground flex items-center gap-3">
+                    <svg class="size-5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
+                        <path d="M12 18h.01"/>
+                    </svg>
+                    <span>{!! __('docs/todo.drag_handle.mobile_hint') !!}</span>
+                </div>
+
+                @php
+                    $snippetDragHandle = <<<'BLADE'
+{{-- 1. Setelan Global di Container Todo --}}
+<vibe:todo drag-handle="hover">
+    <vibe:todo.item id="t-1" title="Semua kartu otomatis mengikuti mode hover" />
+</vibe:todo>
+
+{{-- 2. Sembunyikan Titik Drag Sepenuhnya --}}
+<vibe:todo drag-handle="hidden">
+    <vibe:todo.item id="t-2" title="Tampilan kartu bersih tanpa ikon 3x2" />
+</vibe:todo>
+
+{{-- 3. Granular Override per Item Kartu --}}
+<vibe:todo drag-handle="visible">
+    <vibe:todo.item id="t-3" title="Kartu A: visible" />
+    <vibe:todo.item id="t-4" title="Kartu B: on hover" drag-handle="hover" />
+    <vibe:todo.item id="t-5" title="Kartu C: tersembunyi" drag-handle="hidden" />
+</vibe:todo>
+
+{{-- 4. Opsi Lock Agar Kartu Tidak Bisa Dipindah --}}
+<vibe:todo>
+    <vibe:todo.item id="t-6" title="Kartu Terkunci (Pinned)" :lock="true" />
+</vibe:todo>
+BLADE;
+                @endphp
+
+                <vibe:preview :title="__('docs/todo.drag_handle.preview_title')" :center="false">
+                    <vibe:preview.code :code="$snippetDragHandle" />
+                    <div class="w-full space-y-6">
+                        {{-- 1. Visible (Default) --}}
+                        <div class="space-y-2">
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="primary" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.visible_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.visible_desc') }}</span>
+                            </div>
+                            <vibe:todo id="demo-drag-visible" layout="list" mode="local" drag-handle="visible">
+                                <vibe:todo.item
+                                    id="dh-1"
+                                    title="Titik Drag Selalu Tampil (Visible)"
+                                    description="Pengguna dapat langsung melihat ikon titik 3x2 dan menggesernya."
+                                    badge="Visible"
+                                    badge-variant="primary"
+                                />
+                            </vibe:todo>
+                        </div>
+
+                        {{-- 2. On Hover --}}
+                        <div class="space-y-2 pt-2 border-t border-border/50">
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="warning" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.hover_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.hover_desc') }}</span>
+                            </div>
+                            <vibe:todo id="demo-drag-hover" layout="list" mode="local" drag-handle="hover">
+                                <vibe:todo.item
+                                    id="dh-2"
+                                    title="Arahkan Kursor ke Sini untuk Melihat Titik Drag (On Hover)"
+                                    description="Ikon titik 3x2 otomatis muncul saat kartu disorot oleh kursor mouse."
+                                    badge="Hover"
+                                    badge-variant="warning"
+                                />
+                            </vibe:todo>
+                        </div>
+
+                        {{-- 3. Hidden / False --}}
+                        <div class="space-y-2 pt-2 border-t border-border/50">
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.hidden_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.hidden_desc') }}</span>
+                            </div>
+                            <vibe:todo id="demo-drag-hidden" layout="list" mode="local" drag-handle="hidden">
+                                <vibe:todo.item
+                                    id="dh-3"
+                                    title="Indikator Titik 3x2 Disembunyikan (Clean Minimalist)"
+                                    description="Di mobile, kartu ini tetap dapat dipindahkan menggunakan sentuh-tahan (long press)."
+                                    badge="Hidden"
+                                    badge-variant="outline"
+                                />
+                            </vibe:todo>
+                        </div>
+
+                        {{-- 4. Locked (:lock="true") --}}
+                        <div class="space-y-2 pt-2 border-t border-border/50">
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="destructive" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.locked_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.locked_desc') }}</span>
+                            </div>
+                            <vibe:todo id="demo-drag-locked" layout="list" mode="local">
+                                <vibe:todo.item
+                                    id="dh-4"
+                                    title="Kartu Terkunci (Pinned / Immovable)"
+                                    description="Menampilkan ikon gembok, draggable dinonaktifkan, dan tidak dapat digeser atau dipindah."
+                                    badge="Locked"
+                                    badge-variant="destructive"
+                                    :lock="true"
+                                />
+                            </vibe:todo>
+                        </div>
+                    </div>
+                </vibe:preview>
+            </section>
+
+            {{-- 8. Complete Backend Integration Guide --}}
+            <section id="backend-guide" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/todo.backend.title') }}</h2>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/todo.backend.desc') !!}
+                    </p>
+                </div>
+
+                @php
+                    $livewireCode = <<<'PHP'
+namespace App\Livewire;
+
+use Livewire\Component;
+use App\Models\Task;
+
+class TaskBoard extends Component
+{
+    /**
+     * Dipanggil otomatis oleh prop: wire-reorder="updateTaskOrder"
+     * 
+     * @param array $orderedIds Array ID tugas terurut: ['3', '1', '4', '2']
+     * @param string|null $changedItemId ID tugas spesifik yang baru saja dipindahkan
+     * @param string|null $fromGroup Nama kolom asal (misal: 'todo')
+     * @param string|null $toGroup Nama kolom tujuan (misal: 'progress')
+     */
+    public function updateTaskOrder(array $orderedIds, ?string $changedItemId = null, ?string $fromGroup = null, ?string $toGroup = null): void
+    {
+        // 1. Perbarui nilai kolom 'order' secara massal di database
+        foreach ($orderedIds as $index => $id) {
+            Task::where('id', $id)->update(['order' => $index]);
+        }
+
+        // 2. Jika tugas berpindah antar kolom status / Kanban group
+        if ($changedItemId && $toGroup && $fromGroup !== $toGroup) {
+            Task::where('id', $changedItemId)->update([
+                'status' => $toGroup,
+                'completed' => ($toGroup === 'done'),
+            ]);
+        }
+    }
+
+    /**
+     * Dipanggil otomatis oleh prop: wire-toggle="toggleTask"
+     */
+    public function toggleTask(string $id): void
+    {
+        $task = Task::findOrFail($id);
+        $task->update([
+            'completed' => ! $task->completed,
+            'status' => ! $task->completed ? 'done' : 'todo',
+        ]);
+    }
+
+    /**
+     * Dipanggil otomatis oleh prop: wire-delete="deleteTask"
+     */
+    public function deleteTask(string $id): void
+    {
+        Task::where('id', $id)->delete();
+    }
+
+    /**
+     * Dipanggil otomatis oleh prop: wire-add="addTask"
+     */
+    public function addTask(string $title, ?string $group = 'todo'): void
+    {
+        $clean = trim($title);
+        if (empty($clean)) return;
+
+        $targetGroup = $group ?: 'todo';
+        $maxOrder = Task::where('status', $targetGroup)->max('order') ?? 0;
+
+        Task::create([
+            'title' => $clean,
+            'status' => $targetGroup,
+            'order' => $maxOrder + 1,
+            'completed' => false,
+        ]);
+    }
+
+    public function render()
+    {
+        return view('livewire.task-board', [
+            'tasks' => Task::orderBy('order')->get(),
+        ]);
+    }
+}
+PHP;
+
+                    $apiControllerCode = <<<'PHP'
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Task;
+
+class TaskApiController extends Controller
+{
+    /**
+     * Endpoint: POST /api/tasks/reorder (sesuai prop: reorder-url)
+     */
+    public function reorder(Request $request)
+    {
+        $validated = $request->validate([
+            'orderIds' => 'required|array',
+            'orderIds.*' => 'required',
+            'changedItemId' => 'nullable',
+            'fromGroup' => 'nullable|string',
+            'toGroup' => 'nullable|string',
+        ]);
+
+        // Simpan urutan baru
+        foreach ($validated['orderIds'] as $index => $id) {
+            Task::where('id', $id)->update(['order' => $index]);
+        }
+
+        // Simpan perpindahan kolom status
+        if (!empty($validated['changedItemId']) && !empty($validated['toGroup'])) {
+            Task::where('id', $validated['changedItemId'])->update([
+                'status' => $validated['toGroup'],
+                'completed' => ($validated['toGroup'] === 'done'),
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Urutan tugas berhasil diperbarui!',
+        ]);
+    }
+
+    /**
+     * Endpoint: POST /api/tasks/{id}/toggle (sesuai prop: toggle-url)
+     */
+    public function toggle(string $id, Request $request)
+    {
+        $task = Task::findOrFail($id);
+        $task->update([
+            'completed' => (bool) $request->input('completed', !$task->completed),
+        ]);
+
+        return response()->json(['success' => true, 'task' => $task]);
+    }
+
+    /**
+     * Endpoint: DELETE /api/tasks/{id} (sesuai prop: delete-url)
+     */
+    public function destroy(string $id)
+    {
+        Task::where('id', $id)->delete();
+        return response()->json(['success' => true]);
+    }
+
+    /**
+     * Endpoint: POST /api/tasks (sesuai prop: add-url)
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'group' => 'nullable|string',
+        ]);
+
+        $task = Task::create([
+            'title' => $validated['title'],
+            'status' => $validated['group'] ?? 'todo',
+            'order' => (Task::where('status', $validated['group'] ?? 'todo')->max('order') ?? 0) + 1,
+            'completed' => false,
+        ]);
+
+        return response()->json(['success' => true, 'task' => $task], 201);
+    }
+}
+PHP;
+
+                    $formControllerCode = <<<'PHP'
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Task;
+
+class TaskBatchController extends Controller
+{
+    /**
+     * Menangani formulir batch submit dari: <vibe:todo mode="form" name="batch_tasks">
+     */
+    public function updateBatch(Request $request)
+    {
+        $validated = $request->validate([
+            'batch_tasks' => 'required|array',
+            'batch_tasks.*.id' => 'required',
+            'batch_tasks.*.order' => 'required|integer',
+            'batch_tasks.*.completed' => 'required|boolean',
+            'batch_tasks.*.group' => 'nullable|string',
+        ]);
+
+        // Simpan seluruh perubahan urutan dan status sekaligus dalam 1 transaksi
+        \DB::transaction(function () use ($validated) {
+            foreach ($validated['batch_tasks'] as $item) {
+                Task::where('id', $item['id'])->update([
+                    'order' => (int) $item['order'],
+                    'completed' => (bool) $item['completed'],
+                    'status' => $item['group'] ?? 'default',
+                ]);
+            }
+        });
+
+        return redirect()->back()->with('success', 'Semua perubahan tugas berhasil disimpan!');
+    }
+}
+PHP;
+                @endphp
+
+                <vibe:tabs selected="livewire" default="livewire" layout="rows" variant="pill" class="space-y-4">
+                    <vibe:tabs.list class="flex-wrap">
+                        <vibe:tabs.tab name="livewire">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/todo.backend.tab_livewire') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="api">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/todo.backend.tab_api') }}
+                        </vibe:tabs.tab>
+                        <vibe:tabs.tab name="form">
+                            <x-slot:icon>
+                                <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                            </x-slot:icon>
+                            {{ __('docs/todo.backend.tab_form') }}
+                        </vibe:tabs.tab>
+                    </vibe:tabs.list>
+
+                    {{-- Tab 1: Livewire 3 --}}
+                    <vibe:tabs.panel name="livewire">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.livewire_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.livewire_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" title="app/Livewire/TaskBoard.php" :code="$livewireCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 2: REST API Controller --}}
+                    <vibe:tabs.panel name="api">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.api_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.api_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" title="app/Http/Controllers/Api/TaskApiController.php" :code="$apiControllerCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+
+                    {{-- Tab 3: Form Batch Controller --}}
+                    <vibe:tabs.panel name="form">
+                        <vibe:card class="p-5 space-y-3">
+                            <div class="space-y-1">
+                                <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.form_card_title') }}</h3>
+                                <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.form_card_desc') !!}</p>
+                            </div>
+                            <vibe:highlightjs language="php" title="app/Http/Controllers/TaskBatchController.php" :code="$formControllerCode" />
+                        </vibe:card>
+                    </vibe:tabs.panel>
+                </vibe:tabs>
+            </section>
+
+            {{-- 9. Anti-FOUC Architecture Detail --}}
             <section id="anti-fouc" class="space-y-4">
                 <div class="space-y-1">
                     <h2 class="text-xl font-bold text-foreground">{{ __('docs/todo.anti_fouc.title') }}</h2>
@@ -669,12 +1079,14 @@
                                 $rootProps = [
                                     ['mode', 'string', "'local'", __('docs/todo.props.todo_mode')],
                                     ['layout', 'string', "'list'", __('docs/todo.props.todo_layout')],
+                                    ['checkbox', 'bool', 'false', __('docs/todo.props.todo_checkbox')],
+                                    ['lock', 'bool', 'false', __('docs/todo.props.todo_lock')],
                                     ['nav-buttons', 'bool', 'false', __('docs/todo.props.todo_nav_buttons')],
-                                    ['checkbox', 'bool|null', 'null', __('docs/todo.props.todo_checkbox')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.todo_reorderable')],
-                                    ['drag-handle', 'string|bool', "'visible'", __('docs/todo.props.todo_drag_handle')],
+                                    ['drag-handle', 'string|bool', "'hover'", __('docs/todo.props.todo_drag_handle')],
                                     ['persist', 'bool', 'false', __('docs/todo.props.todo_persist')],
                                     ['storage-key', 'string|null', 'null', __('docs/todo.props.todo_storage_key')],
+                                    ['expire-hours', 'int', '720', __('docs/todo.props.todo_expire_hours')],
                                     ['gap', 'string', "'3'", __('docs/todo.props.todo_gap')],
                                     ['wire-reorder', 'string|null', 'null', __('docs/todo.props.todo_wire_reorder')],
                                     ['wire-toggle', 'string|null', 'null', __('docs/todo.props.todo_wire_toggle')],
@@ -751,15 +1163,16 @@
                                     ['title', 'string', "''", __('docs/todo.props.item_title')],
                                     ['description', 'string|null', 'null', __('docs/todo.props.item_description')],
                                     ['group', 'string|null', 'null', __('docs/todo.props.item_group')],
-                                    ['nav-buttons', 'bool|null', 'null', __('docs/todo.props.item_nav_buttons')],
                                     ['checkbox', 'bool|null', 'null', __('docs/todo.props.item_checkbox')],
+                                    ['lock', 'bool|null', 'null', __('docs/todo.props.item_lock')],
+                                    ['nav-buttons', 'bool|null', 'null', __('docs/todo.props.item_nav_buttons')],
                                     ['completed', 'bool', 'false', __('docs/todo.props.item_completed')],
                                     ['badge', 'string|null', 'null', __('docs/todo.props.item_badge')],
                                     ['badge-variant', 'string', "'default'", __('docs/todo.props.item_badge_variant')],
                                     ['due-date', 'string|null', 'null', __('docs/todo.props.item_due_date')],
                                     ['variant', 'string', "'default'", __('docs/todo.props.item_variant')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.item_reorderable')],
-                                    ['drag-handle', 'string|bool', "'visible'", __('docs/todo.props.item_drag_handle')],
+                                    ['drag-handle', 'string|bool', "'hover'", __('docs/todo.props.item_drag_handle')],
                                     ['deletable', 'bool', 'true', __('docs/todo.props.item_deletable')],
                                 ];
                             @endphp

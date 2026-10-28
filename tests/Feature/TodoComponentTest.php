@@ -225,16 +225,30 @@ test('vibe:todo.item :nav-buttons="true" enables buttons individually', function
         ->not->toContain('canMovePrev(\'nav-item-2\')');
 });
 
-test('vibe:todo supports drag-handle="hover" mode', function () {
-    $html = Blade::render(
+test('vibe:todo defaults to drag-handle="hover" mode with mobile visibility and desktop hover', function () {
+    // 1. By default without explicit drag-handle prop (zero space when hidden on desktop)
+    $htmlDefault = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="default-item-1" title="Item Default" />
+        </vibe:todo>'
+    );
+
+    expect($htmlDefault)
+        ->toContain('data-todo-item="default-item-1"')
+        ->toContain('flex md:hidden md:group-hover:flex')
+        ->toContain('aria-label="Drag to reorder"')
+        ->toContain('hidden group-hover:flex focus:flex');
+
+    // 2. Explicit drag-handle="hover"
+    $htmlHover = Blade::render(
         '<vibe:todo drag-handle="hover">
             <vibe:todo.item id="hover-item-1" title="Item Hover" />
         </vibe:todo>'
     );
 
-    expect($html)
+    expect($htmlHover)
         ->toContain('data-todo-item="hover-item-1"')
-        ->toContain('opacity-0 group-hover:opacity-100')
+        ->toContain('flex md:hidden md:group-hover:flex')
         ->toContain('aria-label="Drag to reorder"');
 });
 
@@ -272,4 +286,85 @@ test('vibe:todo.item can override drag-handle per item', function () {
         ->toContain('data-todo-item="item-override-1"')
         ->toContain('aria-label="Drag to reorder"');
 });
+
+test('vibe:todo defaults to having NO checkbox on items in list layout', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="list">
+            <vibe:todo.item id="default-list-item" title="Tugas Default List" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('Tugas Default List')
+        ->not->toContain('data-todo-checkbox-box');
+});
+
+test('vibe:todo supports explicit checkbox prop on container and item', function () {
+    $htmlWithTodoCheckbox = Blade::render(
+        '<vibe:todo :checkbox="true">
+            <vibe:todo.item id="check-item-1" title="Tugas dengan Checkbox Global" />
+        </vibe:todo>'
+    );
+
+    expect($htmlWithTodoCheckbox)
+        ->toContain('data-todo-checkbox-box');
+
+    $htmlWithItemCheckbox = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="check-item-2" title="Tugas dengan Checkbox Item" :checkbox="true" />
+            <vibe:todo.item id="check-item-3" title="Tugas Tanpa Checkbox" />
+        </vibe:todo>'
+    );
+
+    expect($htmlWithItemCheckbox)
+        ->toContain('data-todo-item="check-item-2"')
+        ->toContain('data-todo-checkbox-box');
+});
+
+test('vibe:todo supports lock option to prevent items from being moved', function () {
+    // 1. Lock on specific item
+    $htmlItemLock = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="free-item" title="Item Bebas" />
+            <vibe:todo.item id="locked-item" title="Item Terkunci" lock />
+        </vibe:todo>'
+    );
+
+    expect($htmlItemLock)
+        ->toContain('data-todo-item="free-item"')
+        ->toContain('data-todo-item="locked-item"')
+        ->toContain('data-locked="true"')
+        ->toContain('title="Terkunci (tidak dapat dipindah)"');
+
+    // 2. Lock on container locks all items
+    $htmlTodoLock = Blade::render(
+        '<vibe:todo :lock="true">
+            <vibe:todo.item id="all-locked-1" title="Semua Terkunci 1" />
+        </vibe:todo>'
+    );
+
+    expect($htmlTodoLock)
+        ->toContain('data-locked="true"')
+        ->toContain('draggable="false"')
+        ->toContain('title="Terkunci (tidak dapat dipindah)"')
+        ->not->toContain('aria-label="Drag to reorder"');
+});
+
+test('locked items in board mode do not show navigation buttons', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="board" :nav-buttons="true">
+            <vibe:todo.group name="col_a" title="Kolom A">
+                <vibe:todo.item id="movable" title="Bisa Pindah" group="col_a" />
+                <vibe:todo.item id="immovable" title="Tidak Bisa Pindah" group="col_a" :lock="true" />
+            </vibe:todo.group>
+            <vibe:todo.group name="col_b" title="Kolom B">
+            </vibe:todo.group>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('canMoveNext(\'movable\')')
+        ->not->toContain('canMoveNext(\'immovable\')');
+});
+
 

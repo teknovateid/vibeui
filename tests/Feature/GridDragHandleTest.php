@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Blade;
 
 test('vibe:grid supports drag-handle="hover", "visible", and "hidden"', function () {
-    // 1. Default (card header grip is hover)
+    // 1. Default (card header grip is hover: mobile flex, desktop hover)
     $htmlDefault = Blade::render(
         '<vibe:grid.card title="Card 1" :reorderable="true" />'
     );
     expect($htmlDefault)
-        ->toContain('hidden group-hover/header:flex size-7')
+        ->toContain('flex md:hidden md:group-hover/header:flex size-7')
         ->toContain('circle cx="9" cy="6"');
 
     // 2. Visible mode

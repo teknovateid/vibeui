@@ -3,12 +3,12 @@
 use Illuminate\Support\Facades\Blade;
 
 test('vibe:filepond supports drag-handle configuration', function () {
-    // 1. Default (visible)
+    // 1. Default (hover mode: hover on desktop, visible on mobile)
     $htmlDefault = Blade::render(
         '<vibe:filepond name="avatar" :reorder="true" />'
     );
     expect($htmlDefault)
-        ->toContain('data-drag-handle="visible"')
+        ->toContain('data-drag-handle="hover"')
         ->toContain('dragHandle');
 
     // 2. Hover mode

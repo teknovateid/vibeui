@@ -78,6 +78,7 @@ export function vibeTodo(config = {}) {
         mode: config.mode || 'local', // 'livewire', 'api', 'form', 'local'
         name: config.name || 'todos',
         reorderable: config.reorderable ?? true,
+        locked: Boolean(config.locked ?? config.lock ?? false),
         persist: config.persist ?? false,
         storageKey: config.storageKey || '',
         expireHours: typeof config.expireHours === 'number' ? config.expireHours : (24 * 30),
@@ -126,6 +127,19 @@ export function vibeTodo(config = {}) {
                 }
             }
             return this.$el;
+        },
+
+        isItemLocked(id) {
+            if (this.locked) return true;
+            if (!id && id !== 0) return false;
+            const sId = String(id);
+            const item = this.items.find(i => i.id === sId);
+            if (item && item.locked) return true;
+            const el = this.getItemEl(sId);
+            if (el && (el.dataset.locked === 'true' || el.getAttribute('data-locked') === 'true')) return true;
+            const groupEl = el ? el.closest('[data-todo-group]') : null;
+            if (groupEl && (groupEl.dataset.locked === 'true' || groupEl.getAttribute('data-locked') === 'true')) return true;
+            return false;
         },
 
         init() {
@@ -186,11 +200,14 @@ export function vibeTodo(config = {}) {
                     ? parseInt(el.dataset.order, 10) 
                     : index;
 
+                const locked = el.dataset.locked === 'true' || el.getAttribute('data-locked') === 'true';
+
                 discovered.push({
                     id: String(id),
                     completed: Boolean(completed),
                     group: group ? String(group) : null,
                     order: order,
+                    locked: Boolean(locked),
                     el: el
                 });
             });
@@ -352,7 +369,10 @@ export function vibeTodo(config = {}) {
 
         // --- Drag & Drop Operations ---
         onDragStart(id, group, e) {
-            if (!this.reorderable) return;
+            if (!this.reorderable || this.isItemLocked(id)) {
+                if (e && typeof e.preventDefault === 'function') e.preventDefault();
+                return;
+            }
             if (this.items.length === 0) {
                 this.discoverItemsFromDom();
             }
@@ -600,6 +620,8 @@ export function vibeTodo(config = {}) {
 
                 activeItem = itemEl;
                 activeItemId = itemEl.dataset.todoItem || itemEl.dataset.id;
+                if (this.isItemLocked(activeItemId)) return;
+
                 startX = touch.clientX;
                 startY = touch.clientY;
 
@@ -757,6 +779,7 @@ export function vibeTodo(config = {}) {
 
         // --- Reordering Logic & DOM Relocation ---
         reorderItem(fromId, toId, position = 'before', newGroup = null) {
+            if (this.isItemLocked(fromId)) return;
             const sFromId = String(fromId);
             const sToId = String(toId);
 
@@ -810,6 +833,7 @@ export function vibeTodo(config = {}) {
         },
 
         moveItemToGroup(itemId, newGroup) {
+            if (this.isItemLocked(itemId)) return;
             const sId = String(itemId);
             const item = this.items.find(i => i.id === sId);
             if (!item) return;
@@ -863,6 +887,7 @@ export function vibeTodo(config = {}) {
         },
 
         canMovePrev(itemId) {
+            if (this.isItemLocked(itemId)) return false;
             const sId = String(itemId);
             const item = this.items.find(i => i.id === sId);
             let currentGroup = item?.group;
@@ -877,6 +902,7 @@ export function vibeTodo(config = {}) {
         },
 
         canMoveNext(itemId) {
+            if (this.isItemLocked(itemId)) return false;
             const sId = String(itemId);
             const item = this.items.find(i => i.id === sId);
             let currentGroup = item?.group;
@@ -891,6 +917,7 @@ export function vibeTodo(config = {}) {
         },
 
         moveToNextGroup(itemId) {
+            if (this.isItemLocked(itemId)) return;
             const sId = String(itemId);
             const item = this.items.find(i => i.id === sId);
             let currentGroup = item?.group;
@@ -909,6 +936,7 @@ export function vibeTodo(config = {}) {
         },
 
         moveToPrevGroup(itemId) {
+            if (this.isItemLocked(itemId)) return;
             const sId = String(itemId);
             const item = this.items.find(i => i.id === sId);
             let currentGroup = item?.group;

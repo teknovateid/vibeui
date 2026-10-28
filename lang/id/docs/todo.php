@@ -52,8 +52,37 @@ return [
         'disabled_hint' => 'Kolom ini menyembunyikan tombol navigasi (default).',
     ],
 
+    'drag_handle' => [
+        'title' => '7. Opsi Indikator Drag Titik 3x2 (drag-handle)',
+        'desc' => 'Atur visibilitas ikon titik 3x2 (indikator drag) melalui atribut <code>drag-handle</code>, <code>drag-indicator</code>, atau <code>handle</code>. Secara default bernilai <code>hover</code> (tampil saat di-hover pada desktop dan selalu tampil di mobile), serta opsi <code>visible</code> (selalu tampil) atau <code>hidden</code> / <code>false</code> (disembunyikan sepenuhnya).',
+        'preview_title' => 'Perbandingan Mode Tampilan Indikator Drag (Visible, On Hover, Hidden)',
+        'visible_badge' => 'Visible',
+        'visible_desc' => 'Indikator titik 3x2 selalu terlihat di sisi kiri kartu untuk navigasi drag yang jelas.',
+        'hover_badge' => 'On Hover (Default)',
+        'hover_desc' => 'Secara default, indikator titik 3x2 hanya muncul saat cursor mengarah ke kartu pada desktop, dan tetap selalu tampil pada perangkat mobile agar ramah sentuhan.',
+        'hidden_badge' => 'Hidden / false',
+        'hidden_desc' => 'Indikator titik 3x2 disembunyikan sepenuhnya untuk kartu yang bersih dan minimalis.',
+        'locked_badge' => 'Locked (:lock="true")',
+        'locked_desc' => 'Menampilkan ikon gembok dan menonaktifkan fitur drag agar kartu tidak dapat dipindah.',
+        'mobile_hint' => '📱 Tip Mobile & Layar Sentuh: Pada mode <code>visible</code> atau <code>hover</code>, sentuh langsung titik 3x2 untuk menggeser kartu. Pada mode <code>hidden</code>, sentuh dan tahan (long-press 250ms) badan kartu untuk memulai drag dengan getaran haptik.',
+    ],
+
+    'backend' => [
+        'title' => '8. Panduan Implementasi Backend Lengkap',
+        'desc' => 'Pelajari cara mengintegrasikan komponen Todo dengan arsitektur backend Laravel pilihan Anda: Livewire 3 Component, REST API Controller (asynchronous JSON), atau Form Batch Submit Controller standar.',
+        'tab_livewire' => 'Livewire 3 Component',
+        'tab_api' => 'REST API Controller',
+        'tab_form' => 'Form Batch Controller',
+        'livewire_card_title' => 'Implementasi Livewire 3 Component Class',
+        'livewire_card_desc' => 'Tangani pemindahan kartu, toggle status, dan penghapusan item secara realtime menggunakan model Eloquent <code>Task</code>.',
+        'api_card_title' => 'Implementasi Laravel REST API Controller',
+        'api_card_desc' => 'Tangani request asynchronous JSON dari browser dengan CSRF token bawaan Laravel pada endpoint <code>reorder-url</code>, <code>toggle-url</code>, dan <code>delete-url</code>.',
+        'form_card_title' => 'Implementasi Form Batch Controller',
+        'form_card_desc' => 'Tangani pengiriman formulir POST standar berisi array input <code>batch_tasks[i]</code> yang di-reindex secara otomatis.',
+    ],
+
     'anti_fouc' => [
-        'title' => '7. Garansi Bebas Kedip (Anti-FOUC Architecture)',
+        'title' => '9. Garansi Bebas Kedip (Anti-FOUC Architecture)',
         'desc' => 'Seluruh kartu dan kolom dicetak 100% dari server menggunakan Blade (SSR) sehingga saat halaman dimuat atau direfresh, tidak ada jeda blank screen atau layout shift (CLS = 0). Alpine.js menghidrasi event handler di background secara progresif.',
         'card1_title' => '100% Server Rendered (SSR)',
         'card1_desc' => 'Item dicetak langsung oleh Laravel Blade lengkap dengan kelas Tailwind v4 terkompilasi. Browser merender tampilan dalam 0 milidetik tanpa jeda blank putih.',
@@ -64,7 +93,7 @@ return [
     ],
 
     'events' => [
-        'title' => '8. Event JavaScript & Ekosistem Custom Events',
+        'title' => '10. Event JavaScript & Ekosistem Custom Events',
         'desc' => 'Komponen mengekspos event kustom standar DOM yang dapat didengarkan oleh Alpine.js, Vanilla JavaScript, atau framework lain.',
         'table_event' => 'Nama Event',
         'table_detail' => 'Properti detail ($event.detail)',
@@ -76,7 +105,7 @@ return [
     ],
 
     'props' => [
-        'title' => '9. Referensi Props & Subkomponen Lengkap',
+        'title' => '11. Referensi Props & Subkomponen Lengkap',
         'desc' => 'Daftar atribut dan konfigurasi yang tersedia pada &lt;vibe:todo&gt; dan seluruh subkomponennya.',
         'table_prop' => 'Prop',
         'table_type' => 'Tipe Data',
@@ -87,11 +116,13 @@ return [
         'todo_mode' => "Mode sinkronisasi: 'livewire', 'api', 'form', atau 'local'",
         'todo_layout' => "Tata letak tampilan: 'board' (kanban multi-kolom) atau 'list' (vertikal linear)",
         'todo_nav_buttons' => "Menampilkan atau menyembunyikan tombol panah navigasi kolom pada kartu (default false / tersembunyi)",
-        'todo_checkbox' => "Kontrol visibilitas checkbox secara global (default false untuk layout board, true untuk list)",
+        'todo_checkbox' => "Menampilkan kotak centang checkbox pada seluruh kartu (default false)",
+        'todo_lock' => "Mengunci seluruh kartu agar tidak dapat digeser atau dipindahkan antar kolom (default false)",
         'todo_reorderable' => "Mengaktifkan atau menonaktifkan fitur drag-and-drop antar kartu dan kolom",
-        'todo_drag_handle' => "Mode tampilan indikator titik drag 3x2: 'visible' (selalu tampil), 'hover' (tampil saat dihover), atau 'hidden' / false (sembunyikan)",
+        'todo_drag_handle' => "Mode tampilan indikator titik drag 3x2: 'hover' (default: tampil saat dihover pada desktop, selalu tampil di mobile), 'visible' (selalu tampil), atau 'hidden' / false (sembunyikan)",
         'todo_persist' => "Menyimpan susunan kartu ke browser localStorage secara otomatis (khusus mode local)",
         'todo_storage_key' => "Pengenal unik data todo di dalam penyimpanan 'vibe-todo' di localStorage (default: ID komponen)",
+        'todo_expire_hours' => "Masa berlaku (kedaluwarsa) data lokal dalam hitungan jam sebelum otomatis dibersihkan (default: 720 jam / 30 hari)",
         'todo_gap' => "Jarak antar kolom/item: '1', '2', '3', '4', '6' (default: '3')",
         'todo_wire_reorder' => "Nama metode Livewire untuk menangani event reorder dan perpindahan kolom",
         'todo_wire_toggle' => "Nama metode Livewire untuk menangani perubahan centang",
@@ -120,7 +151,8 @@ return [
         'item_due_date' => "Teks label tanggal jatuh tempo tugas",
         'item_variant' => "Varian tampilan kartu: 'default' (card bayangan halus), 'flat', atau 'outline'",
         'item_reorderable' => "Menentukan apakah kartu ini dapat digeser atau ditarik",
-        'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'visible', 'hover', atau 'hidden' / false",
+        'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'hover' (default), 'visible', atau 'hidden' / false",
+        'item_lock' => "Mengunci kartu ini agar tidak dapat digeser atau dipindahkan ke kolom lain (default false)",
         'item_deletable' => "Menampilkan tombol hapus saat kartu di-hover",
 
         // vibe:todo.input

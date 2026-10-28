@@ -8,6 +8,8 @@
     'dragHandle' => null,
     'dragIndicator' => null,
     'handle' => null,
+    'lock' => false,
+    'locked' => false,
 ])
 
 @props([
@@ -30,6 +32,8 @@
     'dragHandle' => null,
     'dragIndicator' => null,
     'handle' => null,
+    'lock' => null,
+    'locked' => null,
 ])
 
 @php
@@ -37,23 +41,30 @@
     $isCompleted = (bool) $completed;
 
     $isBoard = in_array($layout, ['board', 'kanban'], true) || ! empty($group);
+    
+    // Default: NO checkbox unless explicitly enabled via :checkbox="true" or :checkable="true"
     $itemCheckbox = $checkbox ?? $checkable;
-    $showCheckbox = $itemCheckbox !== null ? (bool) $itemCheckbox : (! $isBoard);
+    $showCheckbox = $itemCheckbox !== null ? (bool) $itemCheckbox : false;
 
     // nav-buttons: per-item prop overrides parent @aware value
     // Default is false (hidden). Set :nav-buttons="true" on <vibe:todo> or per-item to show.
     // Note: $navButtons from @props is null when not set on item; $navButtons from @aware is false by default.
     $showNavButtons = $navButtons !== null ? (bool) $navButtons : false;
 
+    // lock: per-item prop overrides parent @aware value.
+    // Default is false (unlocked). Set lock/locked on <vibe:todo>, <vibe:todo.group>, or <vibe:todo.item> to prevent moving.
+    $itemLockProp = $lock ?? $locked;
+    $isLocked = $itemLockProp !== null ? (bool) $itemLockProp : false;
+
     // drag-handle: per-item prop overrides parent @aware value.
-    // Default is 'visible'. Options: 'visible', 'hover', 'hidden' (or false).
+    // Default is 'hover' (only on hover on desktop, always visible on mobile). Options: 'visible', 'hover', 'hidden' (or false).
     $itemHandleProp = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
     if ($itemHandleProp === false || $itemHandleProp === 'false' || $itemHandleProp === 'hidden' || $itemHandleProp === 'none' || $itemHandleProp === 'hide') {
         $dragHandleMode = 'hidden';
-    } elseif ($itemHandleProp === 'hover' || $itemHandleProp === 'on-hover') {
-        $dragHandleMode = 'hover';
-    } else {
+    } elseif ($itemHandleProp === true || $itemHandleProp === 'true' || $itemHandleProp === 'visible' || $itemHandleProp === 'show' || $itemHandleProp === 'always' || $itemHandleProp === '') {
         $dragHandleMode = 'visible';
+    } else {
+        $dragHandleMode = 'hover';
     }
 
     $cardStyles = match ($variant) {
@@ -70,8 +81,9 @@
     data-completed="{{ $isCompleted ? 'true' : 'false' }}"
     data-order="{{ $order ?? '' }}"
     data-group="{{ $group ?? '' }}"
-    draggable="{{ $reorderable ? 'true' : 'false' }}"
-    @if ($reorderable)
+    data-locked="{{ $isLocked ? 'true' : 'false' }}"
+    draggable="{{ ($reorderable && ! $isLocked) ? 'true' : 'false' }}"
+    @if ($reorderable && ! $isLocked)
         @dragstart="typeof onDragStart === 'function' ? onDragStart('{{ $itemId }}', $event.currentTarget.closest('[data-todo-group]')?.dataset?.todoGroup || $event.currentTarget.dataset.group, $event) : null"
         @dragover.prevent.stop="typeof onDragOver === 'function' ? onDragOver('{{ $itemId }}', $event.currentTarget.closest('[data-todo-group]')?.dataset?.todoGroup || $event.currentTarget.dataset.group, $event) : null"
         @dragleave="typeof onDragLeave === 'function' ? onDragLeave('{{ $itemId }}', $event) : null"
@@ -91,12 +103,20 @@
     <input type="hidden" data-field="completed" value="{{ $isCompleted ? '1' : '0' }}">
     <input type="hidden" data-field="group" value="{{ $group ?? '' }}">
 
-    {{-- Left: Drag Handle, Checkbox, Title/Description --}}
+    {{-- Left: Drag Handle / Lock Indicator, Checkbox, Title/Description --}}
     <div class="flex items-center gap-3 min-w-0 flex-1">
-        {{-- Drag Handle --}}
-        @if ($reorderable && $dragHandleMode !== 'hidden')
-            <div class="shrink-0 {{ $dragHandleMode === 'hover' ? 'opacity-0 group-hover:opacity-100 transition-opacity duration-150' : 'text-muted-foreground/40 group-hover:text-muted-foreground transition-colors' }}">
-                <vibe:todo.handle />
+        @if ($isLocked)
+            {{-- Lock Indicator --}}
+            <div class="shrink-0 text-muted-foreground/50 flex items-center justify-center p-0.5" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
+                <svg class="size-4 pointer-events-none select-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+        @elseif ($reorderable && $dragHandleMode !== 'hidden')
+            {{-- Drag Handle --}}
+            <div class="shrink-0 {{ $dragHandleMode === 'hover' ? 'flex md:hidden md:group-hover:flex' : 'flex' }} text-muted-foreground/40 group-hover:text-muted-foreground transition-colors">
+                <vibe:todo.handle mode="visible" />
             </div>
         @endif
 
@@ -133,7 +153,7 @@
         >
             <span 
                 data-todo-title
-                class="text-sm font-medium transition-all duration-150 truncate {{ ($showCheckbox && $isCompleted) ? 'line-through text-muted-foreground/80' : 'text-foreground' }}"
+                class="text-sm font-medium transition-all duration-150 truncate {{ $isCompleted ? 'line-through text-muted-foreground/80' : 'text-foreground' }}"
             >
                 {{ $title ?: $slot }}
             </span>
@@ -167,8 +187,11 @@
         @endif
 
         {{-- Board Navigation Buttons (Move to Prev/Next Column) --}}
-        @if ($isBoard && $showNavButtons)
-            <div class="flex items-center gap-1 shrink-0">
+        @if ($isBoard && $showNavButtons && ! $isLocked)
+            <div 
+                class="flex items-center gap-1 shrink-0"
+                x-show="(typeof canMovePrev === 'function' && canMovePrev('{{ $itemId }}')) || (typeof canMoveNext === 'function' && canMoveNext('{{ $itemId }}'))"
+            >
                 <button
                     type="button"
                     draggable="false"
@@ -198,7 +221,7 @@
             </div>
         @endif
 
-        {{-- Delete Button (Visible on Hover / Focus) --}}
+        {{-- Delete Button (Visible on Hover / Focus, takes zero space when hidden) --}}
         @if ($deletable)
             <button
                 type="button"
@@ -206,7 +229,7 @@
                 aria-label="Hapus tugas"
                 title="Hapus tugas"
                 @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
-                class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all cursor-pointer"
+                class="hidden group-hover:flex focus:flex p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all cursor-pointer items-center justify-center"
             >
                 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M3 6h18"/>
