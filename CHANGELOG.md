@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.9.0] - 2026-10-28
+
+### 🚀 Features
+- feat: add subtasks and advanced features to todo component docs and views (87f34b1)
+- feat: add drag handle support and documentation to todo component and tests (da9036a)
+- feat: add mobile and touch drag-and-drop support for reordering items (cd395da)
+- feat: add configurable drag handle visibility modes for components (3e8d476)
+- feat: add todo component with drag-and-drop Kanban board and Livewire support (ef6fec5)
+
+
 ## [0.8.2] - 2026-10-26
 
 ### 🚀 Features
