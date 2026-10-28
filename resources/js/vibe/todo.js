@@ -150,6 +150,9 @@ export function vibeTodo(config = {}) {
                 this.syncFormInputs();
             }
 
+            // Setup mobile & touch drag-and-drop support
+            this.setupTouchDrag();
+
             // Notify ready state
             const root = this.getRootEl();
             if (root && root.classList) {
@@ -505,6 +508,223 @@ export function vibeTodo(config = {}) {
             setTimeout(() => {
                 this.wasDragging = false;
             }, 100);
+        },
+
+        // --- Mobile & Touch Drag-and-Drop Support ---
+        setupTouchDrag() {
+            const root = this.getRootEl();
+            if (!root || root._vibeTodoTouchBound) return;
+            root._vibeTodoTouchBound = true;
+
+            let activeItem = null;
+            let activeItemId = null;
+            let isTouchDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+            let holdTimer = null;
+            let ghostEl = null;
+
+            const cleanupTouchDrag = () => {
+                if (holdTimer) {
+                    clearTimeout(holdTimer);
+                    holdTimer = null;
+                }
+                if (ghostEl && ghostEl.parentNode) {
+                    ghostEl.parentNode.removeChild(ghostEl);
+                    ghostEl = null;
+                }
+                if (isTouchDragging) {
+                    this.onDragEnd();
+                    isTouchDragging = false;
+                }
+                activeItem = null;
+                activeItemId = null;
+                document.removeEventListener('touchmove', onTouchMove, { capture: true });
+                document.removeEventListener('touchend', onTouchEnd, { capture: true });
+                document.removeEventListener('touchcancel', onTouchCancel, { capture: true });
+            };
+
+            const startDragAction = (clientX, clientY) => {
+                if (!activeItem || isTouchDragging) return;
+                isTouchDragging = true;
+
+                const rect = activeItem.getBoundingClientRect();
+                offsetX = clientX - rect.left;
+                offsetY = clientY - rect.top;
+
+                // Visual drag ghost
+                ghostEl = activeItem.cloneNode(true);
+                ghostEl.removeAttribute('id');
+                Array.from(ghostEl.querySelectorAll('[id]')).forEach(el => el.removeAttribute('id'));
+
+                ghostEl.style.width = `${Math.round(rect.width)}px`;
+                ghostEl.style.height = `${Math.round(rect.height)}px`;
+                ghostEl.style.position = 'fixed';
+                ghostEl.style.left = '0px';
+                ghostEl.style.top = '0px';
+                ghostEl.style.transform = `translate3d(${clientX - offsetX}px, ${clientY - offsetY}px, 0) scale(1.02)`;
+                ghostEl.style.zIndex = '99999';
+                ghostEl.style.pointerEvents = 'none';
+                ghostEl.style.opacity = '0.92';
+                ghostEl.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25)';
+                ghostEl.style.borderRadius = window.getComputedStyle(activeItem).borderRadius || '12px';
+                ghostEl.style.boxSizing = 'border-box';
+                ghostEl.style.transition = 'none';
+
+                document.body.appendChild(ghostEl);
+
+                const group = activeItem.dataset.group || (activeItem.closest('[data-todo-group]')?.dataset?.todoGroup) || null;
+                this.onDragStart(activeItemId, group, null);
+
+                if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+                    try { navigator.vibrate(30); } catch (_) {}
+                }
+            };
+
+            const onTouchStart = (e) => {
+                if (!this.reorderable || e.touches.length !== 1) return;
+
+                const touch = e.touches[0];
+                const target = e.target;
+
+                // Skip interactive controls unless touching a designated drag handle
+                const interactive = target.closest('button, a, input, textarea, select, [role="checkbox"], [data-action]');
+                const handle = target.closest('[data-todo-handle], [aria-label="Drag to reorder"], [data-action-drag-handle]');
+
+                if (interactive && !handle) return;
+
+                const itemEl = target.closest('[data-todo-item]');
+                if (!itemEl || !root.contains(itemEl)) return;
+
+                activeItem = itemEl;
+                activeItemId = itemEl.dataset.todoItem || itemEl.dataset.id;
+                startX = touch.clientX;
+                startY = touch.clientY;
+
+                document.addEventListener('touchmove', onTouchMove, { capture: true, passive: false });
+                document.addEventListener('touchend', onTouchEnd, { capture: true });
+                document.addEventListener('touchcancel', onTouchCancel, { capture: true });
+
+                if (handle) {
+                    // Direct handle touch initiates drag on first slight movement (> 3px)
+                } else {
+                    // Body touch requires 250ms hold to distinguish from scrolling
+                    holdTimer = setTimeout(() => {
+                        startDragAction(startX, startY);
+                    }, 250);
+                }
+            };
+
+            const onTouchMove = (e) => {
+                if (!activeItem || e.touches.length !== 1) return;
+                const touch = e.touches[0];
+                const dist = Math.hypot(touch.clientX - startX, touch.clientY - startY);
+
+                if (!isTouchDragging) {
+                    const handle = e.target.closest('[data-todo-handle], [aria-label="Drag to reorder"], [data-action-drag-handle]');
+                    if (handle && dist >= 3) {
+                        if (holdTimer) clearTimeout(holdTimer);
+                        startDragAction(touch.clientX, touch.clientY);
+                    } else if (dist >= 8) {
+                        if (holdTimer) {
+                            clearTimeout(holdTimer);
+                            holdTimer = null;
+                        }
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+
+                if (ghostEl) {
+                    ghostEl.style.transform = `translate3d(${touch.clientX - offsetX}px, ${touch.clientY - offsetY}px, 0) scale(1.02)`;
+                }
+
+                // Screen vertical auto-scroll
+                const margin = 50;
+                const speed = 10;
+                if (touch.clientY < margin) {
+                    window.scrollBy(0, -speed);
+                } else if (touch.clientY > window.innerHeight - margin) {
+                    window.scrollBy(0, speed);
+                }
+
+                // Kanban board horizontal auto-scroll
+                const hScrollContainer = root.closest('.overflow-x-auto') || (root.scrollWidth > root.clientWidth ? root : null);
+                if (hScrollContainer) {
+                    const hRect = hScrollContainer.getBoundingClientRect();
+                    if (touch.clientX < hRect.left + margin) {
+                        hScrollContainer.scrollLeft -= speed;
+                    } else if (touch.clientX > hRect.right - margin) {
+                        hScrollContainer.scrollLeft += speed;
+                    }
+                }
+
+                // Detect element under finger
+                const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+                let targetItem = null;
+                let targetGroupEl = null;
+
+                for (const el of elements) {
+                    if (ghostEl && ghostEl.contains(el)) continue;
+                    if (!targetItem) {
+                        const item = el.closest('[data-todo-item]');
+                        if (item && root.contains(item) && item !== activeItem) {
+                            targetItem = item;
+                        }
+                    }
+                    if (!targetGroupEl) {
+                        const grp = el.closest('[data-todo-group]');
+                        if (grp && root.contains(grp)) {
+                            targetGroupEl = grp;
+                        }
+                    }
+                }
+
+                if (targetItem) {
+                    const rect = targetItem.getBoundingClientRect();
+                    const relY = touch.clientY - rect.top;
+                    const position = relY < rect.height / 2 ? 'before' : 'after';
+                    const targetId = targetItem.dataset.todoItem || targetItem.dataset.id;
+                    const parentGrp = targetItem.closest('[data-todo-group]');
+                    const resolvedGroup = (parentGrp ? parentGrp.dataset.todoGroup : null) || targetItem.dataset.group || null;
+
+                    this.dragOverId = String(targetId);
+                    this.dragOverPosition = position;
+                    this.dragOverGroup = resolvedGroup ? String(resolvedGroup) : null;
+                } else if (targetGroupEl) {
+                    this.dragOverId = null;
+                    this.dragOverPosition = null;
+                    this.dragOverGroup = targetGroupEl.dataset.todoGroup ? String(targetGroupEl.dataset.todoGroup) : null;
+                } else {
+                    this.dragOverId = null;
+                    this.dragOverPosition = null;
+                    this.dragOverGroup = null;
+                }
+            };
+
+            const onTouchEnd = () => {
+                if (isTouchDragging) {
+                    if (this.dragOverId) {
+                        this.reorderItem(this.draggingId, this.dragOverId, this.dragOverPosition, this.dragOverGroup);
+                    } else if (this.dragOverGroup) {
+                        this.moveItemToGroup(this.draggingId, this.dragOverGroup);
+                    }
+                }
+                cleanupTouchDrag();
+            };
+
+            const onTouchCancel = () => {
+                cleanupTouchDrag();
+            };
+
+            root.addEventListener('touchstart', onTouchStart, { passive: true });
         },
 
         getItemEl(id) {
