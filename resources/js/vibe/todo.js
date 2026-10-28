@@ -87,10 +87,16 @@ export function vibeTodo(config = {}) {
         toggleUrl: config.toggleUrl || '',
         deleteUrl: config.deleteUrl || '',
         addUrl: config.addUrl || '',
+        updateUrl: config.updateUrl || '',
         wireReorder: config.wireReorder || '',
         wireToggle: config.wireToggle || '',
         wireDelete: config.wireDelete || '',
         wireAdd: config.wireAdd || '',
+        wireUpdate: config.wireUpdate || '',
+        editable: Boolean(config.editable ?? false),
+        searchable: Boolean(config.searchable ?? false),
+        keyboardNavigation: Boolean(config.keyboardNavigation ?? true),
+        searchQuery: '',
 
         // Drag & Drop State
         draggingId: null,
@@ -167,8 +173,21 @@ export function vibeTodo(config = {}) {
             // Setup mobile & touch drag-and-drop support
             this.setupTouchDrag();
 
-            // Notify ready state
+            // Listen for subtask toggle events
             const root = this.getRootEl();
+            if (root) {
+                root.addEventListener('vibe:todo-subtask-changed', (e) => {
+                    const detail = e.detail || {};
+                    this.onSubtaskChanged(detail.itemId, detail.subtaskId, detail.completed);
+                });
+            }
+
+            // Setup keyboard navigation
+            if (this.keyboardNavigation) {
+                this.setupKeyboardNavigation();
+            }
+
+            // Notify ready state
             if (root && root.classList) {
                 root.classList.add('vibe-todo-ready');
             }
@@ -202,12 +221,29 @@ export function vibeTodo(config = {}) {
 
                 const locked = el.dataset.locked === 'true' || el.getAttribute('data-locked') === 'true';
 
+                const titleEl = el.querySelector('[data-todo-title]');
+                const title = titleEl ? titleEl.textContent.trim() : '';
+                const descEl = el.querySelector('[data-todo-description]');
+                const description = descEl ? descEl.textContent.trim() : null;
+
+                const subtaskEls = el.querySelectorAll('[data-todo-subtask]');
+                const subtasks = [];
+                subtaskEls.forEach(subEl => {
+                    subtasks.push({
+                        id: subEl.dataset.todoSubtask || subEl.dataset.subtaskId,
+                        completed: subEl.dataset.completed === 'true' || subEl.getAttribute('data-completed') === 'true'
+                    });
+                });
+
                 discovered.push({
                     id: String(id),
+                    title: title,
+                    description: description,
                     completed: Boolean(completed),
                     group: group ? String(group) : null,
                     order: order,
                     locked: Boolean(locked),
+                    subtasks: subtasks,
                     el: el
                 });
             });
@@ -265,9 +301,12 @@ export function vibeTodo(config = {}) {
                     parsed.forEach((stored, idx) => {
                         if (stored && stored.id !== undefined) {
                             orderMap.set(String(stored.id), {
+                                title: stored.title || null,
+                                description: stored.description || null,
                                 order: typeof stored.order === 'number' ? stored.order : idx,
                                 completed: !!stored.completed,
-                                group: stored.group || null
+                                group: stored.group || null,
+                                subtasks: Array.isArray(stored.subtasks) ? stored.subtasks : []
                             });
                         }
                     });
@@ -281,6 +320,35 @@ export function vibeTodo(config = {}) {
                             if (stored.group !== undefined && stored.group !== null) {
                                 item.group = String(stored.group);
                             }
+                            if (stored.title && !item.title) {
+                                item.title = stored.title;
+                                const titleEl = this.getItemEl(item.id)?.querySelector('[data-todo-title]');
+                                if (titleEl) titleEl.textContent = stored.title;
+                            }
+                            if (stored.description && !item.description) {
+                                item.description = stored.description;
+                                const descEl = this.getItemEl(item.id)?.querySelector('[data-todo-description]');
+                                if (descEl) descEl.textContent = stored.description;
+                            }
+
+                            // Restore subtasks completion states
+                            if (stored.subtasks && stored.subtasks.length > 0) {
+                                item.subtasks = stored.subtasks;
+                                const itemEl = this.getItemEl(item.id);
+                                if (itemEl) {
+                                    stored.subtasks.forEach(sub => {
+                                        const subEl = itemEl.querySelector(`[data-todo-subtask="${sub.id}"]`);
+                                        if (subEl) {
+                                            subEl.dataset.completed = sub.completed ? 'true' : 'false';
+                                            subEl.setAttribute('data-completed', sub.completed ? 'true' : 'false');
+                                            if (subEl._x_dataStack && subEl._x_dataStack[0]) {
+                                                subEl._x_dataStack[0].completed = Boolean(sub.completed);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+
                             this.updateItemVisuals(item.id, item.completed);
                         }
                     });
@@ -293,14 +361,124 @@ export function vibeTodo(config = {}) {
             }
         },
 
+        onSubtaskChanged(itemId, subtaskId, completed) {
+            const item = this.items.find(i => String(i.id) === String(itemId));
+            if (item) {
+                if (!item.subtasks) item.subtasks = [];
+                const sub = item.subtasks.find(s => String(s.id) === String(subtaskId));
+                if (sub) {
+                    sub.completed = Boolean(completed);
+                } else {
+                    item.subtasks.push({ id: String(subtaskId), completed: Boolean(completed) });
+                }
+            }
+
+            if (this.persist) {
+                this.saveStoredState();
+            }
+
+            this.dispatchCustomEvent('vibe:todo-subtask-updated', {
+                todoId: this.id,
+                itemId: itemId,
+                subtaskId: subtaskId,
+                completed: completed
+            });
+        },
+
+        filterItems(query) {
+            this.searchQuery = (query || '').toLowerCase().trim();
+            const root = this.getRootEl();
+            if (!root) return;
+
+            this.items.forEach(item => {
+                const el = this.getItemEl(item.id);
+                if (!el) return;
+
+                if (!this.searchQuery) {
+                    el.style.display = '';
+                    item.matchedSearch = true;
+                    return;
+                }
+
+                const titleText = (item.title || '').toLowerCase();
+                const descText = (item.description || '').toLowerCase();
+                const badges = Array.from(el.querySelectorAll('[data-todo-badge], .vibe-badge, span')).map(b => b.textContent.toLowerCase()).join(' ');
+                const matches = titleText.includes(this.searchQuery) || descText.includes(this.searchQuery) || badges.includes(this.searchQuery);
+
+                el.style.display = matches ? '' : 'none';
+                item.matchedSearch = matches;
+            });
+        },
+
+        setupKeyboardNavigation() {
+            const root = this.getRootEl();
+            if (!root) return;
+
+            const makeFocusable = () => {
+                const itemEls = root.querySelectorAll('[data-todo-item]');
+                itemEls.forEach(el => {
+                    if (!el.hasAttribute('tabindex')) {
+                        el.setAttribute('tabindex', '0');
+                    }
+                });
+            };
+
+            makeFocusable();
+
+            root.addEventListener('keydown', (e) => {
+                const activeEl = document.activeElement;
+                if (!activeEl || !activeEl.closest) return;
+                
+                // Do not intercept if user is typing in an input or textarea
+                if (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA' || activeEl.isContentEditable) {
+                    return;
+                }
+
+                const cardEl = activeEl.closest('[data-todo-item]');
+                if (!cardEl) return;
+
+                const itemId = cardEl.dataset.id || cardEl.getAttribute('data-todo-item');
+                if (!itemId) return;
+
+                if (e.code === 'Space') {
+                    e.preventDefault();
+                    this.toggle(itemId);
+                } else if (e.code === 'Delete' || e.code === 'Backspace') {
+                    e.preventDefault();
+                    this.remove(itemId);
+                } else if (e.code === 'ArrowLeft') {
+                    if (this.canMovePrev(itemId)) {
+                        e.preventDefault();
+                        this.moveToPrevGroup(itemId);
+                        setTimeout(() => {
+                            const newEl = this.getItemEl(itemId);
+                            if (newEl) newEl.focus();
+                        }, 50);
+                    }
+                } else if (e.code === 'ArrowRight') {
+                    if (this.canMoveNext(itemId)) {
+                        e.preventDefault();
+                        this.moveToNextGroup(itemId);
+                        setTimeout(() => {
+                            const newEl = this.getItemEl(itemId);
+                            if (newEl) newEl.focus();
+                        }, 50);
+                    }
+                }
+            });
+        },
+
         saveStoredState() {
             if (!this.persist) return;
             try {
                 const serializable = this.items.map(item => ({
                     id: item.id,
+                    title: item.title,
+                    description: item.description,
                     completed: item.completed,
                     group: item.group,
-                    order: item.order
+                    order: item.order,
+                    subtasks: Array.isArray(item.subtasks) ? item.subtasks.map(s => ({ id: s.id, completed: s.completed })) : []
                 }));
                 this.saveStoredData(serializable);
             } catch (e) {}
@@ -1340,6 +1518,90 @@ export function vibeTodo(config = {}) {
                 }
             } catch (err) {
                 console.error('[Vibe Todo API] Gagal tambah item:', err);
+            }
+        },
+
+        updateItem(id, updates = {}) {
+            const sId = String(id);
+            const item = this.items.find(i => i.id === sId);
+            if (!item) return;
+
+            if (typeof updates.title === 'string') {
+                item.title = updates.title.trim();
+            }
+            if (typeof updates.description !== 'undefined') {
+                item.description = updates.description ? String(updates.description).trim() : null;
+            }
+
+            const el = this.getItemEl(sId);
+            if (el) {
+                const titleEl = el.querySelector('[data-todo-title]');
+                if (titleEl && typeof updates.title === 'string') {
+                    titleEl.textContent = item.title;
+                }
+                const descEl = el.querySelector('[data-todo-description]');
+                if (descEl && typeof updates.description !== 'undefined') {
+                    if (item.description) {
+                        descEl.textContent = item.description;
+                        descEl.classList.remove('hidden');
+                    } else {
+                        descEl.classList.add('hidden');
+                    }
+                }
+            }
+
+            this.saveStoredState();
+
+            const root = this.getRootEl();
+            if (root && root.dispatchEvent) {
+                root.dispatchEvent(new CustomEvent('vibe:todo-updated', {
+                    bubbles: true,
+                    detail: {
+                        id: this.id,
+                        itemId: sId,
+                        title: item.title,
+                        description: item.description,
+                        group: item.group
+                    }
+                }));
+            }
+
+            if (this.mode === 'livewire') {
+                if (this.wireUpdate && this.$wire) {
+                    this.$wire.call(this.wireUpdate, sId, item.title, item.description);
+                } else if (this.$wire) {
+                    this.$wire.dispatch('todo-updated', {
+                        itemId: sId,
+                        title: item.title,
+                        description: item.description
+                    });
+                }
+            } else if (this.mode === 'api') {
+                this.syncApiUpdate(sId, { title: item.title, description: item.description });
+            }
+        },
+
+        async syncApiUpdate(id, data) {
+            let url = this.updateUrl 
+                ? this.updateUrl.replace('{id}', id) 
+                : (this.endpoint ? `${this.endpoint.replace(/\/$/, '')}/${id}` : null);
+
+            if (!url) return;
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+
+            try {
+                await fetch(url, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(data)
+                });
+            } catch (err) {
+                console.error('[Vibe Todo API] Gagal update item:', err);
             }
         }
     };
