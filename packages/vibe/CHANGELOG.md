@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.9.1] - 2026-10-28
+
+### 🚀 Features
+- feat(todo): add customizable item slots, title, and description subcomponents (477bf5e)
+
+
 ## [0.9.0] - 2026-10-28
 
 ### 🚀 Features
