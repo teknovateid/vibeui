@@ -23,6 +23,9 @@
     'schema' => null,
     'wrapperClass' => null,
     'locale' => null,
+    'dragHandle' => null, // 'visible', 'hover', 'hidden'
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php
@@ -54,6 +57,7 @@
     $hasCustomTemplate = isset($template);
     $hasSlotContent = $slot->isNotEmpty() && trim($slot) !== '';
     $isSchemaMode = !empty($schema) && is_array($schema);
+    $resolvedDragHandle = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
 @endphp
 
 @pushOnce('head', 'vibe-dynamic-form')
@@ -139,7 +143,7 @@
                 @php
                     $rowVal = $resolvedItems[$i] ?? [];
                 @endphp
-                <vibe:dynamic-form.item :index="$i" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale">
+                <vibe:dynamic-form.item :index="$i" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale" :drag-handle="$resolvedDragHandle">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         @foreach ($schema as $field)
                             @php
@@ -194,7 +198,7 @@
                     @if (str_contains($slot, 'data-dynamic-form-item'))
                         {!! str_replace('__INDEX__', $idx, $slot) !!}
                     @else
-                        <vibe:dynamic-form.item :index="$idx" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale">
+                        <vibe:dynamic-form.item :index="$idx" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale" :drag-handle="$resolvedDragHandle">
                             {!! str_replace('__INDEX__', $idx, $slot) !!}
                         </vibe:dynamic-form.item>
                     @endif
@@ -205,7 +209,7 @@
                     @if (str_contains($slot, 'data-dynamic-form-item'))
                         {!! str_replace('__INDEX__', $idx, $slot) !!}
                     @else
-                        <vibe:dynamic-form.item :index="$idx" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale">
+                        <vibe:dynamic-form.item :index="$idx" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale" :drag-handle="$resolvedDragHandle">
                             {!! str_replace('__INDEX__', $idx, $slot) !!}
                         </vibe:dynamic-form.item>
                     @endif
@@ -219,7 +223,7 @@
         @if ($hasCustomTemplate)
             {{ $template }}
         @elseif ($isSchemaMode)
-            <vibe:dynamic-form.item index="__INDEX__" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale">
+            <vibe:dynamic-form.item index="__INDEX__" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale" :drag-handle="$resolvedDragHandle">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     @foreach ($schema as $field)
                         @php
@@ -260,7 +264,7 @@
             @if (str_contains($slot, 'data-dynamic-form-item'))
                 {!! $slot !!}
             @else
-                <vibe:dynamic-form.item index="__INDEX__" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale">
+                <vibe:dynamic-form.item index="__INDEX__" :variant="$variant" :allow-reorder="$allowReorder" :allow-duplicate="$allowDuplicate" :collapsible="$collapsible" :locale="$resolvedLocale" :drag-handle="$resolvedDragHandle">
                     {!! $slot !!}
                 </vibe:dynamic-form.item>
             @endif

@@ -191,6 +191,89 @@ window.VibeTabs = {
     }
 };
 
+window.VibeTodo = {
+    getStorageKey() {
+        const prefix = window.VIBE_PREFIX || 'vibe';
+        return `${prefix}-todo`;
+    },
+
+    getAll() {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTodos')) {
+            window.Alpine.store('vibeTodos').clean();
+            return window.Alpine.store('vibeTodos').items;
+        }
+        try {
+            const raw = localStorage.getItem(this.getStorageKey());
+            const parsed = raw ? JSON.parse(raw) : [];
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (e) {
+            return [];
+        }
+    },
+
+    get(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTodos')) {
+            return window.Alpine.store('vibeTodos').get(id);
+        }
+        const items = this.getAll();
+        const now = Date.now();
+        const entry = items.find(i => i && i.id === id);
+        if (entry && (!entry.expiredAt || entry.expiredAt > now)) {
+            return entry.data;
+        }
+        return null;
+    },
+
+    save(id, data, expireHours = 24 * 30) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTodos')) {
+            window.Alpine.store('vibeTodos').save(id, data, expireHours);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            let items = this.getAll();
+            const now = Date.now();
+            items = items.filter(i => i && (!i.expiredAt || i.expiredAt > now));
+
+            const expirationDate = new Date();
+            expirationDate.setHours(expirationDate.getHours() + expireHours);
+            const entry = {
+                id,
+                data,
+                expiredAt: expirationDate.getTime()
+            };
+
+            const index = items.findIndex(i => i && i.id === id);
+            if (index >= 0) {
+                items[index] = entry;
+            } else {
+                items.push(entry);
+            }
+            localStorage.setItem(key, JSON.stringify(items));
+        } catch (e) {}
+    },
+
+    clear(id) {
+        if (window.Alpine && window.Alpine.store && window.Alpine.store('vibeTodos')) {
+            window.Alpine.store('vibeTodos').clear(id);
+            return;
+        }
+        try {
+            const key = this.getStorageKey();
+            let items = this.getAll();
+            if (id) {
+                items = items.filter(i => i && i.id !== id);
+                localStorage.setItem(key, JSON.stringify(items));
+                const prefix = window.VIBE_PREFIX || 'vibe';
+                localStorage.removeItem(`${prefix}-todo-${id}`);
+                localStorage.removeItem(id);
+            } else {
+                localStorage.removeItem(key);
+            }
+        } catch (e) {}
+    }
+};
+
 // ==========================================
 // VIBE UI CONTROLLER MANAGER ($vibe / window.$vibe)
 // ==========================================
@@ -321,7 +404,16 @@ const vibeManager = {
     }),
     contexts: {
         close() { window.dispatchEvent(new CustomEvent('close-context', { detail: '*' })); }
-    }
+    },
+
+    // TODO
+    todo: Object.assign((id) => ({
+        clear() { if (window.VibeTodo) window.VibeTodo.clear(id); },
+        get() { return window.VibeTodo ? window.VibeTodo.get(id) : null; }
+    }), {
+        clear(id) { if (window.VibeTodo) window.VibeTodo.clear(id); },
+        get(id) { return window.VibeTodo ? window.VibeTodo.get(id) : null; }
+    })
 };
 
 window.$vibe = vibeManager;
@@ -440,6 +532,46 @@ document.addEventListener('alpine:init', () => {
         clean() {
             const now = new Date();
             this.items = this.items.filter(g => new Date(g.expired) > now);
+        }
+    });
+
+    // ==========================================
+    // STORE: vibeTodos (Todo & Kanban persistence)
+    // ==========================================
+    window.Alpine.store('vibeTodos', {
+        items: window.Alpine.$persist([]).as(`${VIBE_PREFIX}-todo`),
+
+        save(id, data, expireHours = 24 * 30) {
+            let index = this.items.findIndex(t => t && t.id === id);
+            const expirationDate = new Date();
+            expirationDate.setHours(expirationDate.getHours() + expireHours);
+            let entry = { id, data, expiredAt: expirationDate.getTime() };
+
+            if (index >= 0) {
+                this.items[index] = entry;
+            } else {
+                this.items.push(entry);
+            }
+            this.clean();
+        },
+
+        get(id) {
+            this.clean();
+            let item = this.items.find(t => t && t.id === id);
+            return item ? item.data : null;
+        },
+
+        clear(id) {
+            if (id) {
+                this.items = this.items.filter(t => t && t.id !== id);
+            } else {
+                this.items = [];
+            }
+        },
+
+        clean() {
+            const now = Date.now();
+            this.items = this.items.filter(t => t && (!t.expiredAt || t.expiredAt > now));
         }
     });
 

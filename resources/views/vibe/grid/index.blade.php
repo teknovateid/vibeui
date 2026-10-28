@@ -8,6 +8,9 @@
     'resizable' => true,
     'reorderable' => true,
     'storageKey' => null,
+    'dragHandle' => null, // 'visible', 'hover', 'hidden'
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php

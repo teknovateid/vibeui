@@ -64,6 +64,9 @@
     'status' => 'toast',
     'onError' => null,
     'locale' => null,
+    'dragHandle' => null, // 'visible', 'hover', 'hidden'
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php
@@ -83,6 +86,15 @@
     $isAvatar = $avatar || $variant === 'avatar';
     $isCompact = $variant === 'compact';
     $isReorderable = (bool) ($reorder || $allowReorder || ($attributes->has('reorder') && $attributes->get('reorder') !== false) || ($attributes->has('allow-reorder') && $attributes->get('allow-reorder') !== false));
+
+    $rawDragHandle = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
+    if ($rawDragHandle === false || $rawDragHandle === 'false' || $rawDragHandle === 'hidden' || $rawDragHandle === 'none' || $rawDragHandle === 'hide') {
+        $dragHandleMode = 'hidden';
+    } elseif ($rawDragHandle === 'hover' || $rawDragHandle === 'on-hover') {
+        $dragHandleMode = 'hover';
+    } else {
+        $dragHandleMode = 'visible';
+    }
 
     $resolvedExistingFiles = $files ?? $existingFiles ?? [];
     if (is_string($resolvedExistingFiles) && !empty($resolvedExistingFiles)) {
@@ -296,6 +308,7 @@
         'variant' => $variant,
         'reorder' => $isReorderable,
         'allowReorder' => $isReorderable,
+        'dragHandle' => $dragHandleMode,
         'panelLayout' => $panelLayout,     // [FIX QA-2] Expose panelLayout prop to JS
         'storeAsFile' => $storeAsFile,     // [FIX QA-3] Expose storeAsFile prop to JS (null = auto-detect)
         'status' => $status,
@@ -327,6 +340,7 @@
 <div 
     id="{{ $id }}-container"
     data-vibe-filepond="{{ $name }}"
+    data-drag-handle="{{ $dragHandleMode }}"
     {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass} " . ($isAvatar ? 'filepond-avatar-mode ' : '') . ($isCompact ? 'filepond-compact-mode ' : '') . ($dashed ? 'filepond-dashed ' : 'filepond-solid ') . "filepond-size-{$size} " . ($hasError ? 'filepond-has-error' : ''))]) }}
     :class="{ 'filepond-has-error': hasError || Boolean(serverError) }"
     x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {

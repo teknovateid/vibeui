@@ -1401,6 +1401,22 @@
     color: var(--primary, var(--foreground));
 }
 
+/* Drag handle hover & hidden display modes */
+[data-drag-handle="hover"] .filepond--reorder-handle {
+    opacity: 0;
+}
+[data-drag-handle="hover"] .filepond--file-wrapper:hover .filepond--reorder-handle,
+[data-drag-handle="hover"] .filepond--item:hover .filepond--reorder-handle {
+    opacity: 0.45;
+}
+[data-drag-handle="hover"] .filepond--reorder-handle:hover {
+    opacity: 1;
+}
+
+[data-drag-handle="hidden"] .filepond--reorder-handle {
+    display: none !important;
+}
+
 /* Up/Down arrow buttons container */
 .filepond--reorder-arrows {
     display: inline-flex;
