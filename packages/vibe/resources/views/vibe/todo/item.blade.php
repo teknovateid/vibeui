@@ -5,6 +5,9 @@
     'checkbox' => null,
     'checkable' => null,
     'navButtons' => false,
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @props([
@@ -24,6 +27,9 @@
     'assignee' => null,
     'variant' => 'default', // 'default', 'card', 'flat'
     'navButtons' => null, // null = inherit dari parent @aware, true/false = override per-item
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php
@@ -38,6 +44,17 @@
     // Default is false (hidden). Set :nav-buttons="true" on <vibe:todo> or per-item to show.
     // Note: $navButtons from @props is null when not set on item; $navButtons from @aware is false by default.
     $showNavButtons = $navButtons !== null ? (bool) $navButtons : false;
+
+    // drag-handle: per-item prop overrides parent @aware value.
+    // Default is 'visible'. Options: 'visible', 'hover', 'hidden' (or false).
+    $itemHandleProp = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
+    if ($itemHandleProp === false || $itemHandleProp === 'false' || $itemHandleProp === 'hidden' || $itemHandleProp === 'none' || $itemHandleProp === 'hide') {
+        $dragHandleMode = 'hidden';
+    } elseif ($itemHandleProp === 'hover' || $itemHandleProp === 'on-hover') {
+        $dragHandleMode = 'hover';
+    } else {
+        $dragHandleMode = 'visible';
+    }
 
     $cardStyles = match ($variant) {
         'flat' => 'bg-muted/40 border-transparent hover:bg-muted/60',
@@ -77,8 +94,8 @@
     {{-- Left: Drag Handle, Checkbox, Title/Description --}}
     <div class="flex items-center gap-3 min-w-0 flex-1">
         {{-- Drag Handle --}}
-        @if ($reorderable)
-            <div class="shrink-0 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors">
+        @if ($reorderable && $dragHandleMode !== 'hidden')
+            <div class="shrink-0 {{ $dragHandleMode === 'hover' ? 'opacity-0 group-hover:opacity-100 transition-opacity duration-150' : 'text-muted-foreground/40 group-hover:text-muted-foreground transition-colors' }}">
                 <vibe:todo.handle />
             </div>
         @endif

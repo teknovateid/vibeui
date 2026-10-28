@@ -57,6 +57,19 @@ test('vibe:todo.item includes form hidden inputs for batch submit mode', functio
         ->toContain('value="task-99"');
 });
 
+test('vibe:todo configures persistence and expireHours properly in x-data', function () {
+    $html = Blade::render(
+        '<vibe:todo id="my-board" :persist="true" storage-key="custom-storage-key" :expire-hours="48">
+            <vibe:todo.item id="t1" title="Task 1" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('persist: true')
+        ->toContain("storageKey: 'custom-storage-key'")
+        ->toContain('expireHours: 48');
+});
+
 test('vibe:todo.group renders Kanban column structure', function () {
     $html = Blade::render(
         '<vibe:todo layout="board">
@@ -210,5 +223,53 @@ test('vibe:todo.item :nav-buttons="true" enables buttons individually', function
     expect($html)
         ->toContain('canMovePrev(\'nav-item-1\')')
         ->not->toContain('canMovePrev(\'nav-item-2\')');
+});
+
+test('vibe:todo supports drag-handle="hover" mode', function () {
+    $html = Blade::render(
+        '<vibe:todo drag-handle="hover">
+            <vibe:todo.item id="hover-item-1" title="Item Hover" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-item="hover-item-1"')
+        ->toContain('opacity-0 group-hover:opacity-100')
+        ->toContain('aria-label="Drag to reorder"');
+});
+
+test('vibe:todo supports drag-handle="hidden" and :drag-handle="false" mode', function () {
+    $htmlHidden = Blade::render(
+        '<vibe:todo drag-handle="hidden">
+            <vibe:todo.item id="hidden-item-1" title="Item Hidden" />
+        </vibe:todo>'
+    );
+
+    expect($htmlHidden)
+        ->toContain('data-todo-item="hidden-item-1"')
+        ->not->toContain('aria-label="Drag to reorder"');
+
+    $htmlFalse = Blade::render(
+        '<vibe:todo :drag-handle="false">
+            <vibe:todo.item id="hidden-item-2" title="Item False" />
+        </vibe:todo>'
+    );
+
+    expect($htmlFalse)
+        ->toContain('data-todo-item="hidden-item-2"')
+        ->not->toContain('aria-label="Drag to reorder"');
+});
+
+test('vibe:todo.item can override drag-handle per item', function () {
+    $html = Blade::render(
+        '<vibe:todo drag-handle="hidden">
+            <vibe:todo.item id="item-override-1" title="Item 1" drag-handle="visible" />
+            <vibe:todo.item id="item-override-2" title="Item 2" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-item="item-override-1"')
+        ->toContain('aria-label="Drag to reorder"');
 });
 

@@ -97,6 +97,7 @@ return [
             'gap' => 'Spasi jarak antar kartu grid (pilihan: 2, 3, 4, 5, 6).',
             'persist' => 'Otomatis menyimpan urutan dan ukuran kartu ke Alpine Store dan browser localStorage.',
             'reorderable' => 'Mengaktifkan atau menonaktifkan fitur drag-and-drop antar kartu secara global.',
+            'drag_handle' => "Mode tampilan indikator titik drag 3x2: 'hover' (tampil saat dihover), 'visible' (selalu tampil), atau 'hidden' / false (sembunyikan).",
             'resizable' => 'Mengaktifkan atau menonaktifkan fitur resize kolom kartu secara global.',
         ],
         'card' => [
@@ -105,6 +106,7 @@ return [
             'minColSpan' => 'Batas minimum lebar kartu saat ditarik/dikecilkan (default: 2).',
             'maxColSpan' => 'Batas maksimum lebar kartu saat ditarik/diperbesar (default: 12).',
             'reorderable' => 'Mengontrol apakah kartu ini dapat dipindahkan urutannya via drag-and-drop.',
+            'drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'hover', 'visible', atau 'hidden' / false.",
             'resizable' => 'Mengontrol apakah kartu ini dapat diubah ukuran lebarnya via drag handle.',
             'title' => 'Judul teks header kartu (dapat juga menggunakan slot title).',
             'description' => 'Teks keterangan ringkas di bawah judul pada header kartu.',

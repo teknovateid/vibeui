@@ -503,6 +503,7 @@
         ['gap', 'int|string', '4', __('docs/grid.props_items.root.gap')],
         ['persist', 'bool', 'false', __('docs/grid.props_items.root.persist')],
         ['reorderable', 'bool', 'true', __('docs/grid.props_items.root.reorderable')],
+        ['drag-handle', 'string|bool', "'hover'", __('docs/grid.props_items.root.drag_handle')],
         ['resizable', 'bool', 'true', __('docs/grid.props_items.root.resizable')],
     ];
                             @endphp
@@ -536,6 +537,7 @@
         ['minColSpan', 'int', '2', __('docs/grid.props_items.card.minColSpan')],
         ['maxColSpan', 'int', '12', __('docs/grid.props_items.card.maxColSpan')],
         ['reorderable', 'bool', 'true', __('docs/grid.props_items.card.reorderable')],
+        ['drag-handle', 'string|bool', "'hover'", __('docs/grid.props_items.card.drag_handle')],
         ['resizable', 'bool', 'true', __('docs/grid.props_items.card.resizable')],
         ['title', 'string|null', 'null', __('docs/grid.props_items.card.title')],
         ['description', 'string|null', 'null', __('docs/grid.props_items.card.description')],

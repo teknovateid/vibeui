@@ -3,6 +3,9 @@
 @aware([
     'layout' => 'board',
     'navButtons' => false,
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @props([

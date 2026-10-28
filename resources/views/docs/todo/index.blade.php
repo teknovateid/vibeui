@@ -230,7 +230,7 @@
                             </span>
                             <button 
                                 type="button" 
-                                @click="localStorage.removeItem('vibe-todo-demo-kanban-board'); window.location.reload();" 
+                                @click="(window.VibeTodo ? window.VibeTodo.clear('demo-kanban-board') : null); localStorage.removeItem('vibe-todo-demo-kanban-board'); window.location.reload();" 
                                 class="text-xs text-muted-foreground hover:text-foreground font-medium underline cursor-pointer"
                                 title="{{ __('docs/todo.kanban.reset_btn') }}"
                             >
@@ -413,7 +413,7 @@
                             </span>
                             <button 
                                 type="button" 
-                                @click="localStorage.removeItem('docs-persist-board'); window.location.reload();" 
+                                @click="(window.VibeTodo ? window.VibeTodo.clear('docs-persist-board') : null); localStorage.removeItem('docs-persist-board'); window.location.reload();" 
                                 class="text-xs text-muted-foreground hover:text-foreground font-medium underline cursor-pointer"
                                 title="{{ __('docs/todo.persist.reset_btn') }}"
                             >
@@ -672,6 +672,7 @@
                                     ['nav-buttons', 'bool', 'false', __('docs/todo.props.todo_nav_buttons')],
                                     ['checkbox', 'bool|null', 'null', __('docs/todo.props.todo_checkbox')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.todo_reorderable')],
+                                    ['drag-handle', 'string|bool', "'visible'", __('docs/todo.props.todo_drag_handle')],
                                     ['persist', 'bool', 'false', __('docs/todo.props.todo_persist')],
                                     ['storage-key', 'string|null', 'null', __('docs/todo.props.todo_storage_key')],
                                     ['gap', 'string', "'3'", __('docs/todo.props.todo_gap')],
@@ -758,6 +759,7 @@
                                     ['due-date', 'string|null', 'null', __('docs/todo.props.item_due_date')],
                                     ['variant', 'string', "'default'", __('docs/todo.props.item_variant')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.item_reorderable')],
+                                    ['drag-handle', 'string|bool', "'visible'", __('docs/todo.props.item_drag_handle')],
                                     ['deletable', 'bool', 'true', __('docs/todo.props.item_deletable')],
                                 ];
                             @endphp

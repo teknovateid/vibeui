@@ -782,6 +782,10 @@ export function vibeFilepond(config = {}) {
                 });
             }
 
+            if (config.dragHandle && this.pond.element) {
+                this.pond.element.setAttribute('data-drag-handle', config.dragHandle);
+            }
+
             // Remove server-side fallback dropzone now that FilePond is mounted
             const fallbackEl = this.$el ? this.$el.querySelector('.filepond--fallback-dropzone') : null;
             if (fallbackEl) {

@@ -14,6 +14,9 @@
     'reorderable' => true,
     'variant' => 'default',
     'padding' => 'default',
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 <vibe:grid.card
@@ -30,6 +33,7 @@
     :reorderable="$reorderable"
     :variant="$variant"
     :padding="$padding"
+    :dragHandle="$dragHandle ?? $dragIndicator ?? $handle"
     {{ $attributes }}
 >
     @if (isset($header))

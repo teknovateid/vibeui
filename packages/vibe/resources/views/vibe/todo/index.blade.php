@@ -21,6 +21,10 @@
     'checkbox' => null,
     'checkable' => null,
     'navButtons' => false, // show/hide ← → column navigation buttons on items (default hidden)
+    'dragHandle' => null, // 'visible', 'hover', 'hidden'
+    'dragIndicator' => null,
+    'handle' => null,
+    'expireHours' => 24 * 30,
 ])
 
 @php
@@ -199,6 +203,7 @@
         reorderable: @js((bool) $reorderable),
         persist: @js((bool) $persist),
         storageKey: @js($storageKey ?: ''),
+        expireHours: @js($expireHours),
         endpoint: @js($endpoint ?: ''),
         reorderUrl: @js($reorderUrl ?: ''),
         toggleUrl: @js($toggleUrl ?: ''),
@@ -263,7 +268,9 @@
         moveToPrevGroup() {},
         toggle() {},
         remove() {},
-        add() {}
+        add() {},
+        clearStorage() {},
+        resetStorage() {}
     }"
     @vibe:todo-add="typeof add === 'function' ? add($event.detail.title, $event.detail.group) : null"
     :class="{ 'vibe-todo-dragging': isDragging }"

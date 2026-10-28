@@ -1,5 +1,11 @@
 @blaze
 
+@aware([
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
+])
+
 @props([
     'index' => 0,
     'title' => null,
@@ -9,6 +15,9 @@
     'collapsible' => true,
     'collapsed' => false,
     'locale' => null,
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php
@@ -26,10 +35,24 @@
 
     $cardClasses = match ($variant) {
         'bordered' => 'w-full rounded-xl border border-border bg-background p-4 relative transition-all duration-150 focus-within:z-30',
-        'table' => 'w-full rounded-lg border border-border/70 bg-card p-3 relative transition-all duration-150 focus-within:z-30',
+        'table' => 'w-full rounded-lg border border-border/70 bg-card p-3 relative transition-all duration-150 focus-within:z-30 group/item group',
         'ghost' => 'w-full border-b border-border/60 pb-4 pt-2 relative transition-all duration-150 focus-within:z-30',
         default => 'w-full rounded-xl border border-border bg-card text-card-foreground shadow-2xs relative transition-all duration-150 focus-within:z-30',
     };
+
+    // Resolve drag handle mode: per-item prop overrides parent @aware value
+    $rawDragHandle = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
+    $defaultMode = ($variant === 'table') ? 'visible' : 'hover';
+
+    if ($rawDragHandle === false || $rawDragHandle === 'false' || $rawDragHandle === 'hidden' || $rawDragHandle === 'none' || $rawDragHandle === 'hide') {
+        $dragHandleMode = 'hidden';
+    } elseif ($rawDragHandle === 'hover' || $rawDragHandle === 'on-hover') {
+        $dragHandleMode = 'hover';
+    } elseif ($rawDragHandle === true || $rawDragHandle === 'true' || $rawDragHandle === 'visible' || $rawDragHandle === 'show' || $rawDragHandle === 'always' || $rawDragHandle === '') {
+        $dragHandleMode = 'visible';
+    } else {
+        $dragHandleMode = $defaultMode;
+    }
 @endphp
 
 <div data-dynamic-form-item data-index="{{ $index }}" @if ($allowReorder) @dragover="onDragOver($el, $event)"
@@ -49,9 +72,15 @@
         >
             {{-- Left: Drag Handle, Badge & Title --}}
             <div class="flex items-center gap-2 min-w-0 pointer-events-none">
-                @if ($allowReorder)
+                @if ($allowReorder && $dragHandleMode !== 'hidden')
+                    @php
+                        $handleDisplayClass = match ($dragHandleMode) {
+                            'visible' => 'flex',
+                            default => 'hidden group-hover/header:flex',
+                        };
+                    @endphp
                     {{-- Drag Handle --}}
-                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab {{ $handleDisplayClass }} duration-400 transition-all active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 -ml-1 rounded items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
                             <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
@@ -127,8 +156,14 @@
     @elseif ($variant === 'table')
         {{-- Table Variant: Inline row layout with Drag Handle --}}
         <div class="flex flex-col md:flex-row items-start md:items-center gap-2.5">
-            @if ($allowReorder)
-                <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 rounded transition-colors hidden md:flex items-center justify-center shrink-0 select-none">
+            @if ($allowReorder && $dragHandleMode !== 'hidden')
+                @php
+                    $tableHandleDisplayClass = match ($dragHandleMode) {
+                        'hover' => 'hidden md:group-hover/item:flex md:group-hover:flex',
+                        default => 'hidden md:flex',
+                    };
+                @endphp
+                <div data-action-drag-handle draggable="true" @dragstart="startDrag($el, $event)" @dragend="endDrag($el, $event)" title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-1 rounded transition-colors {{ $tableHandleDisplayClass }} items-center justify-center shrink-0 select-none">
                     <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
                         <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
@@ -188,8 +223,14 @@
             class="flex items-center justify-between pb-2 mb-3 border-b border-border/50 select-none group/header {{ $allowReorder ? 'cursor-grab active:cursor-grabbing hover:bg-muted/30 transition-colors' : '' }}"
         >
             <div class="flex items-center gap-2 pointer-events-none">
-                @if ($allowReorder)
-                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab hidden group-hover/header:flex active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors items-center justify-center shrink-0 select-none">
+                @if ($allowReorder && $dragHandleMode !== 'hidden')
+                    @php
+                        $borderedHandleDisplayClass = match ($dragHandleMode) {
+                            'visible' => 'flex',
+                            default => 'hidden group-hover/header:flex',
+                        };
+                    @endphp
+                    <div data-action-drag-handle title="{{ $i18n['drag_handle_title'] ?? __('vibe/dynamic-form.drag_handle_title', [], $resolvedLocale) }}" class="cursor-grab {{ $borderedHandleDisplayClass }} active:cursor-grabbing text-muted-foreground/60 hover:text-foreground hover:bg-muted p-0.5 rounded transition-colors items-center justify-center shrink-0 select-none">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="9" cy="6" r="1" fill="currentColor" stroke="none" />
                             <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />

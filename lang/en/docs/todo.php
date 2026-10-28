@@ -89,8 +89,9 @@ return [
         'todo_nav_buttons' => "Show or hide previous/next column navigation buttons on cards (default false / hidden)",
         'todo_checkbox' => "Global checkbox visibility toggle (default false for board layout, true for list)",
         'todo_reorderable' => "Enable or disable drag-and-drop capability between cards and columns",
+        'todo_drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'visible' (always shown), 'hover' (only on hover), or 'hidden' / false (hide)",
         'todo_persist' => "Automatically persist card ordering and layout to browser localStorage (local mode only)",
-        'todo_storage_key' => "Custom key for localStorage (default: auto-generated vibe-todo-{id})",
+        'todo_storage_key' => "Unique identifier for the todo entry inside the 'vibe-todo' array in localStorage (default: component ID)",
         'todo_gap' => "Spacing gap between columns or items: '1', '2', '3', '4', '6' (default: '3')",
         'todo_wire_reorder' => "Livewire action method name to handle reorder and column migration events",
         'todo_wire_toggle' => "Livewire action method name to handle item completion toggles",
@@ -119,6 +120,7 @@ return [
         'item_due_date' => "Due date label string displayed with calendar icon",
         'item_variant' => "Card visual variant: 'default' (subtle elevation shadow), 'flat', or 'outline'",
         'item_reorderable' => "Whether this specific card can be dragged or repositioned",
+        'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'visible', 'hover', or 'hidden' / false",
         'item_deletable' => "Show delete action button when card is hovered",
 
         // vibe:todo.input

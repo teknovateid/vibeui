@@ -97,6 +97,7 @@ return [
             'gap' => 'Spacing gap between grid cards (options: 2, 3, 4, 5, 6).',
             'persist' => 'Automatically persist card order and dimensions to Alpine Store and browser localStorage.',
             'reorderable' => 'Globally enable or disable drag-and-drop card reordering.',
+            'drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'hover' (only on hover), 'visible' (always shown), or 'hidden' / false (hide).",
             'resizable' => 'Globally enable or disable column width resizing.',
         ],
         'card' => [
@@ -105,6 +106,7 @@ return [
             'minColSpan' => 'Minimum column width constraint when dragging/reducing (default: 2).',
             'maxColSpan' => 'Maximum column width constraint when dragging/enlarging (default: 12).',
             'reorderable' => 'Controls whether this individual card can be reordered via drag-and-drop.',
+            'drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per card: 'hover', 'visible', or 'hidden' / false.",
             'resizable' => 'Controls whether this individual card can be resized via corner grabber handle.',
             'title' => 'Card header text title (can also use the title slot).',
             'description' => 'Short explanatory subtitle below the card title.',

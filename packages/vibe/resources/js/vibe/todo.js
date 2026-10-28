@@ -4,6 +4,74 @@
  * Anti-FOUC Architecture: Progressively hydratable from Server-Side Rendered Blade HTML.
  */
 
+if (typeof window !== 'undefined' && !window.VibeTodo) {
+    window.VibeTodo = {
+        getStorageKey() {
+            const prefix = window.VIBE_PREFIX || 'vibe';
+            return `${prefix}-todo`;
+        },
+        getAll() {
+            try {
+                const raw = localStorage.getItem(this.getStorageKey());
+                const parsed = raw ? JSON.parse(raw) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                return [];
+            }
+        },
+        get(id) {
+            const items = this.getAll();
+            const now = Date.now();
+            const entry = items.find(item => item && item.id === id);
+            if (entry && (!entry.expiredAt || entry.expiredAt > now)) {
+                return entry.data;
+            }
+            return null;
+        },
+        save(id, data, expireHours = 24 * 30) {
+            try {
+                const key = this.getStorageKey();
+                let items = this.getAll();
+                const now = Date.now();
+                items = items.filter(item => item && (!item.expiredAt || item.expiredAt > now));
+
+                const expirationDate = new Date();
+                expirationDate.setHours(expirationDate.getHours() + expireHours);
+
+                const newEntry = {
+                    id: id,
+                    data: data,
+                    expiredAt: expirationDate.getTime()
+                };
+
+                const existingIndex = items.findIndex(item => item && item.id === id);
+                if (existingIndex > -1) {
+                    items[existingIndex] = newEntry;
+                } else {
+                    items.push(newEntry);
+                }
+
+                localStorage.setItem(key, JSON.stringify(items));
+            } catch (e) {}
+        },
+        clear(id) {
+            try {
+                const key = this.getStorageKey();
+                let items = this.getAll();
+                if (id) {
+                    items = items.filter(item => item && item.id !== id);
+                    localStorage.setItem(key, JSON.stringify(items));
+                    const prefix = window.VIBE_PREFIX || 'vibe';
+                    localStorage.removeItem(`${prefix}-todo-${id}`);
+                    localStorage.removeItem(id);
+                } else {
+                    localStorage.removeItem(key);
+                }
+            } catch (e) {}
+        }
+    };
+}
+
 export function vibeTodo(config = {}) {
     return {
         id: config.id || 'vibe-todo',
@@ -12,6 +80,7 @@ export function vibeTodo(config = {}) {
         reorderable: config.reorderable ?? true,
         persist: config.persist ?? false,
         storageKey: config.storageKey || '',
+        expireHours: typeof config.expireHours === 'number' ? config.expireHours : (24 * 30),
         endpoint: config.endpoint || '',
         reorderUrl: config.reorderUrl || '',
         toggleUrl: config.toggleUrl || '',
@@ -62,10 +131,11 @@ export function vibeTodo(config = {}) {
         init() {
             this.rootEl = this.getRootEl();
 
-            if (!this.storageKey) {
-                const prefix = window.VIBE_PREFIX || 'vibe';
-                this.storageKey = `${prefix}-todo-${this.id}`;
-            }
+            const prefix = window.VIBE_PREFIX || 'vibe';
+            this.rootStorageKey = `${prefix}-todo`;
+            this.entryId = this.storageKey || this.id || 'default';
+            this.storageKey = this.entryId;
+            this.expireHours = typeof config.expireHours === 'number' ? config.expireHours : (24 * 30);
 
             // Progressive Hydration: discover items from server-rendered Blade DOM (0ms FOUC)
             this.discoverItemsFromDom();
@@ -132,37 +202,71 @@ export function vibeTodo(config = {}) {
 
         loadStoredState() {
             try {
-                const raw = localStorage.getItem(this.storageKey);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        const orderMap = new Map();
-                        parsed.forEach((stored, idx) => {
-                            if (stored && stored.id !== undefined) {
-                                orderMap.set(String(stored.id), {
-                                    order: typeof stored.order === 'number' ? stored.order : idx,
-                                    completed: !!stored.completed,
-                                    group: stored.group || null
-                                });
+                let parsed = null;
+                // 1. Try from window.VibeTodo or localStorage root key 'vibe-todo'
+                if (typeof window.VibeTodo !== 'undefined' && typeof window.VibeTodo.get === 'function') {
+                    parsed = window.VibeTodo.get(this.entryId);
+                } else {
+                    const raw = localStorage.getItem(this.rootStorageKey);
+                    if (raw) {
+                        const all = JSON.parse(raw);
+                        if (Array.isArray(all)) {
+                            const now = Date.now();
+                            const entry = all.find(item => item && item.id === this.entryId);
+                            if (entry && (!entry.expiredAt || entry.expiredAt > now)) {
+                                parsed = entry.data;
                             }
-                        });
-
-                        // Reorder items according to stored state
-                        this.items.forEach(item => {
-                            if (orderMap.has(item.id)) {
-                                const stored = orderMap.get(item.id);
-                                item.order = stored.order;
-                                item.completed = stored.completed;
-                                if (stored.group !== undefined && stored.group !== null) {
-                                    item.group = String(stored.group);
-                                }
-                                this.updateItemVisuals(item.id, item.completed);
-                            }
-                        });
-
-                        this.applyOrderToDom();
-                        this.items = [...this.items].sort((a, b) => a.order - b.order);
+                        }
                     }
+                }
+
+                // 2. Migration fallback: check legacy localStorage key if not found in root key
+                if (!parsed) {
+                    const prefix = window.VIBE_PREFIX || 'vibe';
+                    const legacyKey = `${prefix}-todo-${this.id}`;
+                    const customLegacyKey = this.storageKey && this.storageKey !== this.id ? this.storageKey : null;
+                    const legacyRaw = localStorage.getItem(legacyKey) || (customLegacyKey ? localStorage.getItem(customLegacyKey) : null);
+                    if (legacyRaw) {
+                        try {
+                            const legacyData = JSON.parse(legacyRaw);
+                            if (Array.isArray(legacyData) && legacyData.length > 0) {
+                                parsed = legacyData;
+                                // Automatically migrate to new structure!
+                                this.saveStoredData(legacyData);
+                                localStorage.removeItem(legacyKey);
+                                if (customLegacyKey) localStorage.removeItem(customLegacyKey);
+                            }
+                        } catch (e) {}
+                    }
+                }
+
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    const orderMap = new Map();
+                    parsed.forEach((stored, idx) => {
+                        if (stored && stored.id !== undefined) {
+                            orderMap.set(String(stored.id), {
+                                order: typeof stored.order === 'number' ? stored.order : idx,
+                                completed: !!stored.completed,
+                                group: stored.group || null
+                            });
+                        }
+                    });
+
+                    // Reorder items according to stored state
+                    this.items.forEach(item => {
+                        if (orderMap.has(item.id)) {
+                            const stored = orderMap.get(item.id);
+                            item.order = stored.order;
+                            item.completed = stored.completed;
+                            if (stored.group !== undefined && stored.group !== null) {
+                                item.group = String(stored.group);
+                            }
+                            this.updateItemVisuals(item.id, item.completed);
+                        }
+                    });
+
+                    this.applyOrderToDom();
+                    this.items = [...this.items].sort((a, b) => a.order - b.order);
                 }
             } catch (e) {
                 console.warn('[Vibe Todo] Gagal memuat stored layout:', e);
@@ -178,8 +282,69 @@ export function vibeTodo(config = {}) {
                     group: item.group,
                     order: item.order
                 }));
-                localStorage.setItem(this.storageKey, JSON.stringify(serializable));
+                this.saveStoredData(serializable);
             } catch (e) {}
+        },
+
+        saveStoredData(data) {
+            const expireHours = typeof this.expireHours === 'number' ? this.expireHours : (24 * 30);
+            if (typeof window.VibeTodo !== 'undefined' && typeof window.VibeTodo.save === 'function') {
+                window.VibeTodo.save(this.entryId, data, expireHours);
+            } else {
+                const key = this.rootStorageKey;
+                let items = [];
+                try {
+                    const raw = localStorage.getItem(key);
+                    const parsed = raw ? JSON.parse(raw) : [];
+                    if (Array.isArray(parsed)) items = parsed;
+                } catch (e) {}
+
+                const now = Date.now();
+                items = items.filter(item => item && (!item.expiredAt || item.expiredAt > now));
+
+                const expirationDate = new Date();
+                expirationDate.setHours(expirationDate.getHours() + expireHours);
+
+                const newEntry = {
+                    id: this.entryId,
+                    data: data,
+                    expiredAt: expirationDate.getTime()
+                };
+
+                const existingIndex = items.findIndex(item => item && item.id === this.entryId);
+                if (existingIndex > -1) {
+                    items[existingIndex] = newEntry;
+                } else {
+                    items.push(newEntry);
+                }
+
+                localStorage.setItem(key, JSON.stringify(items));
+            }
+        },
+
+        clearStorage() {
+            if (typeof window.VibeTodo !== 'undefined' && typeof window.VibeTodo.clear === 'function') {
+                window.VibeTodo.clear(this.entryId);
+            } else {
+                try {
+                    const key = this.rootStorageKey;
+                    const raw = localStorage.getItem(key);
+                    if (raw) {
+                        let items = JSON.parse(raw);
+                        if (Array.isArray(items)) {
+                            items = items.filter(item => item && item.id !== this.entryId);
+                            localStorage.setItem(key, JSON.stringify(items));
+                        }
+                    }
+                } catch (e) {}
+            }
+            const prefix = window.VIBE_PREFIX || 'vibe';
+            localStorage.removeItem(`${prefix}-todo-${this.id}`);
+            if (this.storageKey) localStorage.removeItem(this.storageKey);
+        },
+
+        resetStorage() {
+            this.clearStorage();
         },
 
         // --- Drag & Drop Operations ---

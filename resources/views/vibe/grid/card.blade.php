@@ -1,5 +1,11 @@
 @blaze(fold: true)
 
+@aware([
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
+])
+
 @props([
     'id' => null,
     'key' => null,
@@ -14,6 +20,9 @@
     'reorderable' => true,
     'variant' => 'default', // default, outline, flat, elevated
     'padding' => 'default', // none, sm, default, lg
+    'dragHandle' => null,
+    'dragIndicator' => null,
+    'handle' => null,
 ])
 
 @php
@@ -26,6 +35,16 @@
     if (!$reorderable && !$resizable) $lockType = 'both';
     elseif (!$reorderable) $lockType = 'reorder';
     elseif (!$resizable) $lockType = 'resize';
+
+    // Resolve drag handle mode: per-card prop overrides parent @aware value, default is 'hover'
+    $cardHandleProp = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
+    if ($cardHandleProp === false || $cardHandleProp === 'false' || $cardHandleProp === 'hidden' || $cardHandleProp === 'none' || $cardHandleProp === 'hide') {
+        $dragHandleMode = 'hidden';
+    } elseif ($cardHandleProp === true || $cardHandleProp === 'true' || $cardHandleProp === 'visible' || $cardHandleProp === 'show' || $cardHandleProp === 'always' || $cardHandleProp === '') {
+        $dragHandleMode = 'visible';
+    } else {
+        $dragHandleMode = 'hover';
+    }
 
     $lockTooltip = match ($lockType) {
         'reorder' => 'Posisi dikunci — tidak dapat dipindahkan',
@@ -179,8 +198,8 @@
             </div>
 
             {{-- Actions & Header Controls (Right side) --}}
-            @if (isset($actions) || $lockType !== 'none' || $reorderable)
-                <div class="flex items-center gap-1 shrink-0 {{ ! isset($actions) ? 'hidden group-hover/header:flex' : '' }}">
+            @if (isset($actions) || $lockType !== 'none' || ($reorderable && $dragHandleMode !== 'hidden'))
+                <div class="flex items-center gap-1 shrink-0 {{ ! isset($actions) && $dragHandleMode !== 'visible' ? 'hidden group-hover/header:flex' : '' }}">
                     @if (isset($actions))
                         <div class="flex items-center gap-1 shrink-0 pointer-events-auto" @mousedown.stop @dragstart.stop.prevent>
                             {{ $actions }}
@@ -217,11 +236,17 @@
                         </div>
                     @endif
 
-                    {{-- Drag Handle Grip — visible on header hover only, does not take space when hidden --}}
-                    @if ($reorderable)
+                    {{-- Drag Handle Grip --}}
+                    @if ($reorderable && $dragHandleMode !== 'hidden')
+                        @php
+                            $gripClass = match ($dragHandleMode) {
+                                'visible' => 'flex',
+                                default => 'hidden group-hover/header:flex',
+                            };
+                        @endphp
                         <div
                             title="Tarik header untuk menukar posisi kartu"
-                            class="hidden group-hover/header:flex size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
+                            class="{{ $gripClass }} size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
                         >
                             <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <circle cx="9" cy="6" r="1.2" fill="currentColor"/>

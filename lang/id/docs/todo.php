@@ -89,8 +89,9 @@ return [
         'todo_nav_buttons' => "Menampilkan atau menyembunyikan tombol panah navigasi kolom pada kartu (default false / tersembunyi)",
         'todo_checkbox' => "Kontrol visibilitas checkbox secara global (default false untuk layout board, true untuk list)",
         'todo_reorderable' => "Mengaktifkan atau menonaktifkan fitur drag-and-drop antar kartu dan kolom",
+        'todo_drag_handle' => "Mode tampilan indikator titik drag 3x2: 'visible' (selalu tampil), 'hover' (tampil saat dihover), atau 'hidden' / false (sembunyikan)",
         'todo_persist' => "Menyimpan susunan kartu ke browser localStorage secara otomatis (khusus mode local)",
-        'todo_storage_key' => "Kunci khusus untuk localStorage (default: otomatis menggunakan vibe-todo-{id})",
+        'todo_storage_key' => "Pengenal unik data todo di dalam penyimpanan 'vibe-todo' di localStorage (default: ID komponen)",
         'todo_gap' => "Jarak antar kolom/item: '1', '2', '3', '4', '6' (default: '3')",
         'todo_wire_reorder' => "Nama metode Livewire untuk menangani event reorder dan perpindahan kolom",
         'todo_wire_toggle' => "Nama metode Livewire untuk menangani perubahan centang",
@@ -119,6 +120,7 @@ return [
         'item_due_date' => "Teks label tanggal jatuh tempo tugas",
         'item_variant' => "Varian tampilan kartu: 'default' (card bayangan halus), 'flat', atau 'outline'",
         'item_reorderable' => "Menentukan apakah kartu ini dapat digeser atau ditarik",
+        'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'visible', 'hover', atau 'hidden' / false",
         'item_deletable' => "Menampilkan tombol hapus saat kartu di-hover",
 
         // vibe:todo.input
