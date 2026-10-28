@@ -169,6 +169,18 @@ return [
         'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'hover' (default), 'visible', atau 'hidden' / false",
         'item_lock' => "Mengunci kartu ini agar tidak dapat digeser atau dipindahkan ke kolom lain (default false)",
         'item_deletable' => "Menampilkan tombol hapus saat kartu di-hover",
+        'item_slot' => "Markup HTML kustom untuk mendesain bodi kartu secara bebas sesuai preferensi developer",
+        'item_slot_content' => "Slot alternatif eksplisit untuk menyisipkan HTML kustom di bawah baris judul",
+        'item_slot_actions' => "Slot tombol aksi kustom yang diletakkan rapi di footer kartu",
+        'item_slot_header_actions' => "Slot tombol aksi ringkas di baris atas kartu di sebelah tombol hapus",
+
+        // vibe:todo.title
+        'title_prop_class' => "Class utility CSS tambahan untuk kustomisasi gaya, ukuran, atau warna teks judul",
+        'title_slot' => "Slot teks atau markup HTML konten judul kartu tugas",
+
+        // vibe:todo.description
+        'description_prop_class' => "Class utility CSS tambahan untuk kustomisasi gaya teks deskripsi",
+        'description_slot' => "Slot teks atau markup HTML rincian deskripsi kartu tugas",
 
         // vibe:todo.subtask
         'subtask_id' => "ID unik untuk sub-tugas checklist",

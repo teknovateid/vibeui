@@ -37,6 +37,8 @@
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.group&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.item&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.title&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.description&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.subtask&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.input&gt;</vibe:badge>
                 </div>
@@ -1073,6 +1075,94 @@ BLADE;
                         </vibe:todo>
                     </div>
                 </vibe:preview>
+
+                {{-- Custom Card Content & Action Buttons --}}
+                <div class="space-y-2 pt-4 border-t border-border/40">
+                    <h3 class="text-base font-semibold text-foreground">Desain Bebas Kustom HTML &amp; Slot Aksi Developer</h3>
+                    <p class="text-xs text-muted-foreground">
+                        Komponen &lt;vibe:todo.item&gt; dapat langsung diisi dengan markup HTML bebas di dalam tag (seperti kotak catatan pesanan, informasi item, baris badge, atau tombol aksi kustom melalui &lt;x-slot:actions&gt;) agar desain kartu dapat disesuaikan 100% dengan kebutuhan proyek.
+                    </p>
+                </div>
+
+                @php
+                    $snippetCustomHtml = <<<'BLADE'
+<vibe:todo layout="board">
+    <vibe:todo.group name="kitchen" title="Dapur Masak" color="amber">
+        <vibe:todo.item 
+            id="order-101" 
+            badge="Meja 4" 
+            due-date="5m lalu" 
+            :deletable="false"
+        >
+            {{-- Title & Deskripsi diletakkan di dalam komponen --}}
+            <vibe:todo.title>Antrian #05</vibe:todo.title>
+            <vibe:todo.description>Pelanggan: Budi • ORD-8891</vibe:todo.description>
+
+            {{-- Konten Kustom Tambahan --}}
+            <div class="p-2 bg-muted rounded-lg text-xs mt-2">
+                Catatan Pesanan: Sedikit gula, es dipisah
+            </div>
+
+            <div class="text-[11px] text-muted-foreground flex items-center gap-1 mt-1">
+                <span>Rincian Menu: 2x Kopi Susu Aren, 1x Roti Bakar</span>
+            </div>
+
+            <div class="flex justify-between mt-2 items-center">
+                <vibe:badge variant="secondary" size="sm">Dine-In</vibe:badge>
+                <vibe:badge size="sm" variant="outline">Prioritas Normal</vibe:badge>
+            </div>
+
+            {{-- Slot Tombol Aksi --}}
+            <x-slot:actions>
+                <vibe:button size="sm" variant="primary" class="w-full">
+                    Selesai Masak
+                </vibe:button>
+            </x-slot:actions>
+        </vibe:todo.item>
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
+                <vibe:preview title="Desain Kustom HTML & Slot Aksi Bebas" :code="$snippetCustomHtml" :center="false">
+                    <div class="w-full max-w-sm mx-auto">
+                        <vibe:todo layout="board" mode="local">
+                            <vibe:todo.group name="kitchen" title="Dapur Masak" color="amber" :count="1">
+                                <vibe:todo.item 
+                                    id="demo-order-101" 
+                                    badge="Meja 4" 
+                                    due-date="5m lalu" 
+                                    :deletable="false"
+                                >
+                                    {{-- Title & Deskripsi diletakkan di dalam komponen --}}
+                                    <vibe:todo.title>Antrian #05</vibe:todo.title>
+                                    <vibe:todo.description>Pelanggan: Budi • ORD-8891</vibe:todo.description>
+
+                                    {{-- Konten Kustom Tambahan --}}
+                                    <div class="p-2 bg-muted rounded-lg text-xs mt-2">
+                                        Catatan Pesanan: Sedikit gula, es dipisah
+                                    </div>
+
+                                    <div class="text-[11px] text-muted-foreground flex items-center gap-1 mt-1">
+                                        <span>Rincian Menu: 2x Kopi Susu Aren, 1x Roti Bakar</span>
+                                    </div>
+
+                                    <div class="flex justify-between mt-2 items-center">
+                                        <vibe:badge variant="secondary" size="sm">Dine-In</vibe:badge>
+                                        <vibe:badge size="sm" variant="outline">Prioritas Normal</vibe:badge>
+                                    </div>
+
+                                    {{-- Slot Tombol Aksi --}}
+                                    <x-slot:actions>
+                                        <vibe:button size="sm" variant="primary" class="w-full">
+                                            Selesai Masak
+                                        </vibe:button>
+                                    </x-slot:actions>
+                                </vibe:todo.item>
+                            </vibe:todo.group>
+                        </vibe:todo>
+                    </div>
+                </vibe:preview>
             </section>
 
             {{-- 11. Superpower Kolom Kanban & Live Search --}}
@@ -1332,9 +1422,77 @@ BLADE;
                                     ['deletable', 'bool', 'true', __('docs/todo.props.item_deletable')],
                                     ['update-url', 'string|null', 'null', __('docs/todo.props.todo_endpoint')],
                                     ['wire-update', 'string|null', 'null', __('docs/todo.props.todo_wire_update')],
+                                    ['slot (default)', 'html|string', 'null', __('docs/todo.props.item_slot')],
+                                    ['x-slot:content', 'html', 'null', __('docs/todo.props.item_slot_content')],
+                                    ['x-slot:actions', 'html', 'null', __('docs/todo.props.item_slot_actions')],
+                                    ['x-slot:header-actions', 'html', 'null', __('docs/todo.props.item_slot_header_actions')],
                                 ];
                             @endphp
                             @foreach ($itemProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.title Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.title&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Subkomponen Judul Kartu)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $titleProps = [
+                                    ['class', 'string|null', 'null', __('docs/todo.props.title_prop_class')],
+                                    ['slot (default)', 'html|string', 'required', __('docs/todo.props.title_slot')],
+                                ];
+                            @endphp
+                            @foreach ($titleProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.description Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.description&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Subkomponen Deskripsi Kartu)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $descProps = [
+                                    ['class', 'string|null', 'null', __('docs/todo.props.description_prop_class')],
+                                    ['slot (default)', 'html|string', 'required', __('docs/todo.props.description_slot')],
+                                ];
+                            @endphp
+                            @foreach ($descProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>

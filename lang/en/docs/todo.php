@@ -169,6 +169,18 @@ return [
         'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'hover' (default), 'visible', or 'hidden' / false",
         'item_lock' => "Lock this specific card to prevent moving or dragging to other columns (default false)",
         'item_deletable' => "Show delete action button when card is hovered",
+        'item_slot' => "Custom HTML markup to design the card body freely according to developer preferences",
+        'item_slot_content' => "Explicit alternative slot for inserting custom HTML below the card title row",
+        'item_slot_actions' => "Card action buttons slot cleanly placed in the card footer",
+        'item_slot_header_actions' => "Compact action buttons slot in the top header row next to the delete button",
+
+        // vibe:todo.title
+        'title_prop_class' => "Additional CSS utility classes to customize title text style, font, or color",
+        'title_slot' => "Text slot or HTML markup for the card title",
+
+        // vibe:todo.description
+        'description_prop_class' => "Additional CSS utility classes to customize description text style",
+        'description_slot' => "Text slot or HTML markup for the card description/subtitle",
 
         // vibe:todo.subtask
         'subtask_id' => "Unique identifier for the subtask item",

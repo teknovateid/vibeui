@@ -554,6 +554,75 @@ test('vibe:todo supports live client-side search bar', function () {
         ->toContain('filterItems');
 });
 
+test('vibe:todo.item can be filled with custom HTML in default slot for developer custom designs', function () {
+    $html = Blade::render(
+        '<vibe:todo.item id="custom-card-1">
+            <div class="p-2 bg-muted rounded-lg">
+                Catatan Pesanan: Pedas manis
+            </div>
+            <div class="text-[11px] text-muted-foreground flex items-center gap-1">
+                <span>Lihat Rincian (2 item)</span>
+            </div>
+            <div class="flex justify-between mt-2 items-center">
+                <vibe:badge variant="secondary" size="sm">Meja 4</vibe:badge>
+                <vibe:badge size="sm">5m lalu</vibe:badge>
+            </div>
+        </vibe:todo.item>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-custom-content')
+        ->toContain('Catatan Pesanan: Pedas manis')
+        ->toContain('Lihat Rincian (2 item)')
+        ->toContain('Meja 4')
+        ->toContain('5m lalu');
+});
+
+test('vibe:todo.item supports custom content and actions slots simultaneously', function () {
+    $html = Blade::render(
+        '<vibe:todo.item id="card-with-actions" title="Pesanan #101" badge="Dine-In">
+            <x-slot:content>
+                <div class="p-2 bg-muted rounded-lg">
+                    Catatan Pesanan: Tanpa Es
+                </div>
+            </x-slot:content>
+            <x-slot:actions>
+                <vibe:button size="sm" variant="primary" class="w-full">
+                    Mulai Masak
+                </vibe:button>
+            </x-slot:actions>
+        </vibe:todo.item>'
+    );
+
+    expect($html)
+        ->toContain('Pesanan #101')
+        ->toContain('Dine-In')
+        ->toContain('data-todo-custom-content')
+        ->toContain('Catatan Pesanan: Tanpa Es')
+        ->toContain('data-todo-actions')
+        ->toContain('Mulai Masak');
+});
+
+test('vibe:todo supports dedicated title and description subcomponents inside item slot', function () {
+    $html = Blade::render(
+        '<vibe:todo.item id="item-with-subcomponents" :deletable="false">
+            <vibe:todo.title>Antrian #05</vibe:todo.title>
+            <vibe:todo.description>Pelanggan: Budi</vibe:todo.description>
+            <div class="note-box">Catatan Tambahan</div>
+        </vibe:todo.item>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-title')
+        ->toContain('Antrian #05')
+        ->toContain('data-todo-description')
+        ->toContain('Pelanggan: Budi')
+        ->toContain('note-box')
+        ->toContain('Catatan Tambahan');
+});
+
+
+
 
 
 
