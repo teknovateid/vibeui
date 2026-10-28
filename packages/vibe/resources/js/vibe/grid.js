@@ -37,6 +37,9 @@ export function vibeGrid(config = {}) {
             }
 
             this.applyLayout();
+
+            // Setup mobile & touch drag-and-drop card swap support
+            this.setupTouchDrag();
         },
 
         getItemEl(id) {
@@ -204,21 +207,45 @@ export function vibeGrid(config = {}) {
 
         // --- Drag & Drop 1-to-1 Card Swap ---
         startDrag(id, e) {
-            if (typeof window !== 'undefined' && window.innerWidth < 1024) return;
             if (!this.isItemReorderable(id)) return;
             this.draggingId = id;
-            if (e.dataTransfer) {
+            if (e && e.dataTransfer) {
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', id);
                 e.dataTransfer.setData('application/x-vibe-grid', this.id);
                 let cardEl = this.getItemEl(id);
                 if (cardEl && e.dataTransfer.setDragImage) {
                     let rect = cardEl.getBoundingClientRect();
-                    let offsetX = Math.min(rect.width / 2, Math.max(10, e.clientX - rect.left));
-                    let offsetY = Math.min(rect.height / 2, Math.max(10, e.clientY - rect.top));
+                    let offsetX = Math.min(rect.width / 2, Math.max(10, (e.clientX || 0) - rect.left));
+                    let offsetY = Math.min(rect.height / 2, Math.max(10, (e.clientY || 0) - rect.top));
                     e.dataTransfer.setDragImage(cardEl, offsetX, offsetY);
                 }
             }
+        },
+
+        swapCards(fromId, targetId) {
+            if (!fromId || !targetId || fromId === targetId) return false;
+            if (!this.isItemReorderable(fromId) || !this.isItemReorderable(targetId)) return false;
+
+            let fromIndex = this.order.indexOf(fromId);
+            let toIndex = this.order.indexOf(targetId);
+
+            if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
+                // Direct 1-to-1 SWAP: Tukar posisi langsung antar kedua kartu yang tidak terkunci
+                let newOrder = [...this.order];
+                newOrder[fromIndex] = targetId;
+                newOrder[toIndex] = fromId;
+                this.order = newOrder;
+
+                this.applyLayout();
+                this.saveStoredLayout();
+
+                window.dispatchEvent(new CustomEvent('vibe-grid-swapped', {
+                    detail: { id: this.id, fromId, targetId, order: this.order }
+                }));
+                return true;
+            }
+            return false;
         },
 
         onDragOver(targetId, e) {
@@ -256,36 +283,198 @@ export function vibeGrid(config = {}) {
                 return;
             }
 
-            // Both the source and target cards MUST be reorderable (cannot swap with locked cards)!
-            if (!this.isItemReorderable(fromId) || !this.isItemReorderable(targetId)) {
-                this.endDrag();
-                return;
-            }
-
-            let fromIndex = this.order.indexOf(fromId);
-            let toIndex = this.order.indexOf(targetId);
-
-            if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
-                // Direct 1-to-1 SWAP: Tukar posisi langsung antar kedua kartu yang tidak terkunci
-                let newOrder = [...this.order];
-                newOrder[fromIndex] = targetId;
-                newOrder[toIndex] = fromId;
-                this.order = newOrder;
-
-                this.applyLayout();
-                this.saveStoredLayout();
-
-                window.dispatchEvent(new CustomEvent('vibe-grid-swapped', {
-                    detail: { id: this.id, fromId, targetId, order: this.order }
-                }));
-            }
-
+            this.swapCards(fromId, targetId);
             this.endDrag();
         },
 
         endDrag() {
             this.draggingId = null;
             this.dragOverId = null;
+        },
+
+        // --- Mobile & Touch Drag-and-Drop Card Swap Support ---
+        setupTouchDrag() {
+            const root = this.$el;
+            if (!root || root._vibeGridTouchBound) return;
+            root._vibeGridTouchBound = true;
+
+            let activeCard = null;
+            let activeCardId = null;
+            let isTouchDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+            let holdTimer = null;
+            let ghostEl = null;
+
+            const cleanupTouchDrag = () => {
+                if (holdTimer) {
+                    clearTimeout(holdTimer);
+                    holdTimer = null;
+                }
+                if (ghostEl && ghostEl.parentNode) {
+                    ghostEl.parentNode.removeChild(ghostEl);
+                    ghostEl = null;
+                }
+                if (isTouchDragging) {
+                    this.endDrag();
+                    isTouchDragging = false;
+                }
+                activeCard = null;
+                activeCardId = null;
+                document.removeEventListener('touchmove', onTouchMove, { capture: true });
+                document.removeEventListener('touchend', onTouchEnd, { capture: true });
+                document.removeEventListener('touchcancel', onTouchCancel, { capture: true });
+            };
+
+            const startDragAction = (clientX, clientY) => {
+                if (!activeCard || isTouchDragging) return;
+                isTouchDragging = true;
+
+                const rect = activeCard.getBoundingClientRect();
+                offsetX = clientX - rect.left;
+                offsetY = clientY - rect.top;
+
+                ghostEl = activeCard.cloneNode(true);
+                ghostEl.removeAttribute('id');
+                Array.from(ghostEl.querySelectorAll('[id]')).forEach(el => el.removeAttribute('id'));
+
+                ghostEl.style.width = `${Math.round(rect.width)}px`;
+                ghostEl.style.height = `${Math.round(rect.height)}px`;
+                ghostEl.style.position = 'fixed';
+                ghostEl.style.left = '0px';
+                ghostEl.style.top = '0px';
+                ghostEl.style.transform = `translate3d(${clientX - offsetX}px, ${clientY - offsetY}px, 0) scale(1.02)`;
+                ghostEl.style.zIndex = '99999';
+                ghostEl.style.pointerEvents = 'none';
+                ghostEl.style.opacity = '0.92';
+                ghostEl.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25)';
+                ghostEl.style.borderRadius = window.getComputedStyle(activeCard).borderRadius || '16px';
+                ghostEl.style.boxSizing = 'border-box';
+                ghostEl.style.transition = 'none';
+
+                document.body.appendChild(ghostEl);
+
+                this.draggingId = activeCardId;
+
+                if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+                    try { navigator.vibrate(30); } catch (_) {}
+                }
+            };
+
+            const onTouchStart = (e) => {
+                if (!this.reorderable || e.touches.length !== 1) return;
+
+                const touch = e.touches[0];
+                const target = e.target;
+
+                // Skip interactive controls unless touching a designated drag handle/header
+                const interactive = target.closest('button, a, input, select, textarea, [data-resize-handle]');
+                const handle = target.closest('.group\\/header, [data-action-drag-handle]');
+
+                if (interactive && !handle) return;
+
+                const cardEl = target.closest('[data-grid-item]');
+                if (!cardEl || !root.contains(cardEl)) return;
+
+                const cardId = cardEl.dataset.gridItem;
+                if (!cardId || !this.isItemReorderable(cardId)) return;
+
+                activeCard = cardEl;
+                activeCardId = cardId;
+                startX = touch.clientX;
+                startY = touch.clientY;
+
+                document.addEventListener('touchmove', onTouchMove, { capture: true, passive: false });
+                document.addEventListener('touchend', onTouchEnd, { capture: true });
+                document.addEventListener('touchcancel', onTouchCancel, { capture: true });
+
+                if (handle) {
+                    // Direct handle / header touch initiates drag on slight movement
+                } else {
+                    // Body touch requires 250ms hold
+                    holdTimer = setTimeout(() => {
+                        startDragAction(startX, startY);
+                    }, 250);
+                }
+            };
+
+            const onTouchMove = (e) => {
+                if (!activeCard || e.touches.length !== 1) return;
+                const touch = e.touches[0];
+                const dist = Math.hypot(touch.clientX - startX, touch.clientY - startY);
+
+                if (!isTouchDragging) {
+                    const handle = e.target.closest('.group\\/header, [data-action-drag-handle]');
+                    if (handle && dist >= 3) {
+                        if (holdTimer) clearTimeout(holdTimer);
+                        startDragAction(touch.clientX, touch.clientY);
+                    } else if (dist >= 8) {
+                        if (holdTimer) {
+                            clearTimeout(holdTimer);
+                            holdTimer = null;
+                        }
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+
+                if (ghostEl) {
+                    ghostEl.style.transform = `translate3d(${touch.clientX - offsetX}px, ${touch.clientY - offsetY}px, 0) scale(1.02)`;
+                }
+
+                // Screen vertical auto-scroll
+                const margin = 50;
+                const speed = 10;
+                if (touch.clientY < margin) {
+                    window.scrollBy(0, -speed);
+                } else if (touch.clientY > window.innerHeight - margin) {
+                    window.scrollBy(0, speed);
+                }
+
+                // Detect card under finger
+                const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+                let targetCard = null;
+
+                for (const el of elements) {
+                    if (ghostEl && ghostEl.contains(el)) continue;
+                    const c = el.closest('[data-grid-item]');
+                    if (c && root.contains(c) && c !== activeCard) {
+                        targetCard = c;
+                        break;
+                    }
+                }
+
+                if (targetCard) {
+                    const targetId = targetCard.dataset.gridItem;
+                    if (targetId && this.isItemReorderable(targetId)) {
+                        this.dragOverId = targetId;
+                    } else {
+                        this.dragOverId = null;
+                    }
+                } else {
+                    this.dragOverId = null;
+                }
+            };
+
+            const onTouchEnd = () => {
+                if (isTouchDragging && this.dragOverId && activeCardId && this.dragOverId !== activeCardId) {
+                    this.swapCards(activeCardId, this.dragOverId);
+                }
+                cleanupTouchDrag();
+            };
+
+            const onTouchCancel = () => {
+                cleanupTouchDrag();
+            };
+
+            root.addEventListener('touchstart', onTouchStart, { passive: true });
         },
 
         // --- Real-Time Drag-to-Resize ---

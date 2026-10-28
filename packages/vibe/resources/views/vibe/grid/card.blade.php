@@ -173,7 +173,7 @@
                 @dragend="endDrag()"
                 title="Tarik header untuk menukar posisi kartu"
             @endif
-            class="group/header flex items-center justify-between border-b border-border/60 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
+            class="group/header flex items-center justify-between border-b border-border/60 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors touch-none' : '' }}"
         >
             {{ $header }}
         </div>
@@ -185,7 +185,7 @@
                 @dragend="endDrag()"
                 title="Tarik header untuk menukar posisi kartu"
             @endif
-            class="group/header flex items-center justify-between gap-2 border-b border-border/50 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors' : '' }}"
+            class="group/header flex items-center justify-between gap-2 border-b border-border/50 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors touch-none' : '' }}"
         >
             {{-- Title & Description (Flush Left) --}}
             <div class="min-w-0 flex-1 pointer-events-none">
@@ -245,6 +245,7 @@
                             };
                         @endphp
                         <div
+                            data-action-drag-handle
                             title="Tarik header untuk menukar posisi kartu"
                             class="{{ $gripClass }} size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
                         >

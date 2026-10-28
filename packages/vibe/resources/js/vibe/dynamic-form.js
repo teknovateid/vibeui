@@ -54,6 +54,9 @@ export function vibeDynamicForm(config = {}) {
                 // Re-bind state after all child components are ready
                 this.reindex();
 
+                // Setup mobile & touch drag-and-drop support
+                this.setupTouchDrag();
+
                 // If default count is specified and current rows < default
                 const defaultCount = config.default !== undefined ? parseInt(config.default, 10) : 0;
                 if (rows.length === 0 && defaultCount > 0) {
@@ -432,6 +435,217 @@ export function vibeDynamicForm(config = {}) {
             rows.forEach(r => {
                 r.classList.remove('opacity-40', 'scale-[0.99]', 'ring-2', 'ring-primary', 'border-primary/60');
             });
+        },
+
+        // --- Mobile & Touch Drag-and-Drop Support ---
+        setupTouchDrag() {
+            const root = this.getRoot();
+            if (!root || root._vibeDfTouchBound) return;
+            root._vibeDfTouchBound = true;
+
+            let activeRow = null;
+            let activeIndex = -1;
+            let isTouchDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let offsetX = 0;
+            let offsetY = 0;
+            let holdTimer = null;
+            let ghostEl = null;
+            let currentTargetRow = null;
+
+            const cleanupTouchDrag = () => {
+                if (holdTimer) {
+                    clearTimeout(holdTimer);
+                    holdTimer = null;
+                }
+                if (ghostEl && ghostEl.parentNode) {
+                    ghostEl.parentNode.removeChild(ghostEl);
+                    ghostEl = null;
+                }
+                if (currentTargetRow) {
+                    currentTargetRow.classList.remove('ring-2', 'ring-primary', 'border-primary/60');
+                    currentTargetRow = null;
+                }
+                if (isTouchDragging) {
+                    this.endDrag();
+                    isTouchDragging = false;
+                }
+                activeRow = null;
+                activeIndex = -1;
+                document.removeEventListener('touchmove', onTouchMove, { capture: true });
+                document.removeEventListener('touchend', onTouchEnd, { capture: true });
+                document.removeEventListener('touchcancel', onTouchCancel, { capture: true });
+            };
+
+            const startDragAction = (clientX, clientY) => {
+                if (!activeRow || isTouchDragging) return;
+                isTouchDragging = true;
+
+                const rect = activeRow.getBoundingClientRect();
+                offsetX = clientX - rect.left;
+                offsetY = clientY - rect.top;
+
+                ghostEl = activeRow.cloneNode(true);
+                ghostEl.removeAttribute('id');
+                Array.from(ghostEl.querySelectorAll('[id]')).forEach(el => el.removeAttribute('id'));
+
+                ghostEl.style.width = `${Math.round(rect.width)}px`;
+                ghostEl.style.height = `${Math.round(rect.height)}px`;
+                ghostEl.style.position = 'fixed';
+                ghostEl.style.left = '0px';
+                ghostEl.style.top = '0px';
+                ghostEl.style.transform = `translate3d(${clientX - offsetX}px, ${clientY - offsetY}px, 0) scale(1.02)`;
+                ghostEl.style.zIndex = '99999';
+                ghostEl.style.pointerEvents = 'none';
+                ghostEl.style.opacity = '0.92';
+                ghostEl.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.25)';
+                ghostEl.style.borderRadius = window.getComputedStyle(activeRow).borderRadius || '12px';
+                ghostEl.style.boxSizing = 'border-box';
+                ghostEl.style.transition = 'none';
+
+                document.body.appendChild(ghostEl);
+
+                this.draggingEl = activeRow;
+                this.draggingIndex = activeIndex;
+                activeRow.classList.add('opacity-40', 'scale-[0.99]');
+
+                if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+                    try { navigator.vibrate(30); } catch (_) {}
+                }
+            };
+
+            const onTouchStart = (e) => {
+                if (!this.allowReorder || e.touches.length !== 1) return;
+
+                const touch = e.touches[0];
+                const target = e.target;
+
+                // Skip interactive controls unless touching a designated drag handle
+                const interactive = target.closest('button, a, input, textarea, select');
+                const handle = target.closest('[data-action-drag-handle], .group\\/header');
+
+                if (interactive && !handle) return;
+
+                const row = target.closest('[data-dynamic-form-item]');
+                const container = this.getContainer();
+                if (!row || !container || !container.contains(row)) return;
+
+                const rows = this.getRows();
+                if (rows.length <= 1) return;
+
+                activeRow = row;
+                activeIndex = parseInt(row.getAttribute('data-index') || '-1', 10);
+                if (activeIndex === -1) return;
+
+                startX = touch.clientX;
+                startY = touch.clientY;
+
+                document.addEventListener('touchmove', onTouchMove, { capture: true, passive: false });
+                document.addEventListener('touchend', onTouchEnd, { capture: true });
+                document.addEventListener('touchcancel', onTouchCancel, { capture: true });
+
+                if (handle) {
+                    // Direct handle / header touch initiates drag on slight movement
+                } else {
+                    // Body touch requires 250ms hold
+                    holdTimer = setTimeout(() => {
+                        startDragAction(startX, startY);
+                    }, 250);
+                }
+            };
+
+            const onTouchMove = (e) => {
+                if (!activeRow || e.touches.length !== 1) return;
+                const touch = e.touches[0];
+                const dist = Math.hypot(touch.clientX - startX, touch.clientY - startY);
+
+                if (!isTouchDragging) {
+                    const handle = e.target.closest('[data-action-drag-handle], .group\\/header');
+                    if (handle && dist >= 3) {
+                        if (holdTimer) clearTimeout(holdTimer);
+                        startDragAction(touch.clientX, touch.clientY);
+                    } else if (dist >= 8) {
+                        if (holdTimer) {
+                            clearTimeout(holdTimer);
+                            holdTimer = null;
+                        }
+                        return;
+                    } else {
+                        return;
+                    }
+                }
+
+                if (e.cancelable) {
+                    e.preventDefault();
+                }
+
+                if (ghostEl) {
+                    ghostEl.style.transform = `translate3d(${touch.clientX - offsetX}px, ${touch.clientY - offsetY}px, 0) scale(1.02)`;
+                }
+
+                // Vertical auto-scroll
+                const margin = 50;
+                const speed = 10;
+                if (touch.clientY < margin) {
+                    window.scrollBy(0, -speed);
+                } else if (touch.clientY > window.innerHeight - margin) {
+                    window.scrollBy(0, speed);
+                }
+
+                // Detect target row under finger
+                const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+                let targetRow = null;
+                const container = this.getContainer();
+
+                for (const el of elements) {
+                    if (ghostEl && ghostEl.contains(el)) continue;
+                    const r = el.closest('[data-dynamic-form-item]');
+                    if (r && container && container.contains(r) && r !== activeRow) {
+                        targetRow = r;
+                        break;
+                    }
+                }
+
+                if (currentTargetRow && currentTargetRow !== targetRow) {
+                    currentTargetRow.classList.remove('ring-2', 'ring-primary', 'border-primary/60');
+                }
+
+                currentTargetRow = targetRow;
+
+                if (currentTargetRow) {
+                    currentTargetRow.classList.add('ring-2', 'ring-primary', 'border-primary/60');
+                }
+            };
+
+            const onTouchEnd = () => {
+                if (isTouchDragging && currentTargetRow && activeRow && currentTargetRow !== activeRow) {
+                    const fromIndex = parseInt(activeRow.getAttribute('data-index') || '-1', 10);
+                    const toIndex = parseInt(currentTargetRow.getAttribute('data-index') || '-1', 10);
+
+                    if (fromIndex !== -1 && toIndex !== -1 && fromIndex !== toIndex) {
+                        const container = this.getContainer();
+                        if (fromIndex < toIndex) {
+                            container.insertBefore(activeRow, currentTargetRow.nextSibling);
+                        } else {
+                            container.insertBefore(activeRow, currentTargetRow);
+                        }
+                        this.reindex();
+                        this.highlightRow(activeRow);
+
+                        const eventDetail = { formId: this.id, fromIndex, toIndex };
+                        this.$dispatch('vibe-dynamic-form:reorder', eventDetail);
+                        window.dispatchEvent(new CustomEvent('vibe-dynamic-form-reorder', { detail: eventDetail }));
+                    }
+                }
+                cleanupTouchDrag();
+            };
+
+            const onTouchCancel = () => {
+                cleanupTouchDrag();
+            };
+
+            root.addEventListener('touchstart', onTouchStart, { passive: true });
         },
 
         toggleCollapse(target) {

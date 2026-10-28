@@ -33,6 +33,7 @@
 
 @if ($displayMode !== 'hidden')
     <div 
+        data-todo-handle="true"
         {{ $attributes->twMerge(['class' => "flex items-center justify-center cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-muted-foreground transition-colors p-0.5 rounded touch-none {$modeClass}"]) }}
         aria-label="Drag to reorder"
         title="Drag to reorder"
