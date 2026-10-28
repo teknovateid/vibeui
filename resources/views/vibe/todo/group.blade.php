@@ -29,6 +29,7 @@
     'wip' => null,
     'collapsible' => false,
     'collapsed' => false,
+    'scrollable' => true,
 ])
 
 @php
@@ -44,6 +45,7 @@
     $showQuickAdd = $quickAdd !== null ? (bool) $quickAdd : false;
     $isCollapsible = filter_var($collapsible, FILTER_VALIDATE_BOOLEAN);
     $isCollapsed = filter_var($collapsed, FILTER_VALIDATE_BOOLEAN);
+    $isScrollable = filter_var($scrollable ?? true, FILTER_VALIDATE_BOOLEAN);
 @endphp
 
 <div
@@ -67,7 +69,7 @@
             return this.getLiveCount() > this.wipMax;
         }
     }"
-    {{ $attributes->twMerge(['class' => 'flex flex-col flex-1 rounded-2xl bg-muted/30 dark:bg-muted/10 border border-border/60 transition-all duration-200']) }}
+    {{ $attributes->twMerge(['class' => 'flex flex-col flex-1 h-full min-h-0 rounded-2xl bg-muted/30 dark:bg-muted/10 border border-border/60 transition-all duration-200 overflow-hidden']) }}
     :class="{
         'ring-2 ring-primary/50 bg-primary/5 border-primary/40': (typeof dragOverGroup !== 'undefined' && dragOverGroup === '{{ $name }}'),
         'border-destructive/60 bg-destructive/5': isOverWip(),
@@ -102,10 +104,10 @@
     </div>
 
     {{-- Expanded Normal View --}}
-    <div x-show="!isCollapsed" class="flex flex-col flex-1 h-full min-w-0">
+    <div x-show="!isCollapsed" class="flex flex-col flex-1 h-full min-w-0 min-h-0 overflow-hidden">
         {{-- Group Header --}}
         @if ($title || isset($header) || $isCollapsible)
-            <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center justify-between mb-3 px-1 shrink-0">
                 <div class="flex items-center gap-2 min-w-0">
                     <h3 class="text-sm font-semibold text-foreground tracking-tight truncate">
                         {{ $title }}
@@ -149,7 +151,7 @@
             data-todo-group-items="{{ $name }}"
             @dragover.prevent.stop="typeof onDragOverGroup === 'function' ? onDragOverGroup('{{ $name }}', $event) : null"
             @drop.prevent.stop="typeof onDropGroup === 'function' ? onDropGroup('{{ $name }}', $event) : null"
-            class="flex flex-col gap-2.5 min-h-35 flex-1 rounded-xl transition-all p-1"
+            class="flex flex-col gap-2.5 flex-1 min-h-0 rounded-xl transition-all p-1 {{ $isScrollable ? 'overflow-y-auto overflow-x-hidden pr-1.5' : '' }}"
             :class="{ 'bg-primary/5 border-2 border-dashed border-primary/40': (typeof dragOverGroup !== 'undefined' && dragOverGroup === '{{ $name }}') }"
         >
             {{ $slot }}
