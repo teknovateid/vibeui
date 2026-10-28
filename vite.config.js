@@ -194,6 +194,7 @@ export default defineConfig({
                 'resources/js/vibe/datatable.js',
                 'resources/js/vibe/show.js',
                 'resources/js/vibe/image-lightbox.js',
+                'resources/js/vibe/todo.js',
             ],
             refresh: true,
             fonts: [

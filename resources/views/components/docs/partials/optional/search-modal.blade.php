@@ -468,6 +468,16 @@
             'icon' => 'stepper',
             'keywords' => 'stepper wizard steps timeline form alur langkah tahapan proses progress',
         ],
+        [
+            'id' => 'menu-todo',
+            'title' => __('docs/sidebar.nav.todo') ?: 'Todo',
+            'subtitle' => 'Komponen todo interaktif dengan drag & drop, Livewire, API, dan anti-FOUC',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.todo.index'),
+            'icon' => 'todo',
+            'keywords' => 'todo task list tasklist drag drop reorder kanban livewire realtime anti-fouc tugas daftar centang',
+        ],
 
         // Components - Layout
         [
@@ -1342,6 +1352,8 @@
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg>`;
                     case 'stepper':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/></svg>`;
+                    case 'todo':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
                     case 'code':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
                     case 'qrcode':

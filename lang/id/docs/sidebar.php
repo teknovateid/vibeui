@@ -57,6 +57,7 @@ return [
         'tabs' => 'Tabs',
         'accordion' => 'Accordion',
         'stepper' => 'Stepper',
+        'todo' => 'Todo',
         'alert' => 'Alert',
         'toast' => 'Toast',
         'highlightjs' => 'Highlight.js',

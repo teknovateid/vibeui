@@ -170,6 +170,39 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
     Route::view('/stepper', 'docs.stepper.index')->name('stepper.index');
     Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
+    Route::view('/todo', 'docs.todo.index')->name('todo.index');
+
+    Route::prefix('todo-demo')->name('todo.demo.')->group(function () {
+        Route::post('/reorder', function (\Illuminate\Http\Request $request) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Urutan tugas berhasil diperbarui secara realtime via REST API!',
+                'items' => $request->input('todos', []),
+            ]);
+        })->name('reorder');
+        Route::patch('/{id}/toggle', function ($id, \Illuminate\Http\Request $request) {
+            return response()->json([
+                'success' => true,
+                'id' => $id,
+                'completed' => $request->boolean('completed'),
+                'message' => "Status tugas #{$id} berhasil diperbarui via API!",
+            ]);
+        })->name('toggle');
+        Route::post('/add', function (\Illuminate\Http\Request $request) {
+            return response()->json([
+                'success' => true,
+                'item' => [
+                    'id' => 'api-' . time(),
+                    'title' => $request->input('title', 'Tugas Baru'),
+                    'completed' => false,
+                    'group' => $request->input('group'),
+                ],
+            ]);
+        })->name('add');
+        Route::delete('/{id}', function ($id) {
+            return response()->json(['success' => true, 'id' => $id]);
+        })->name('delete');
+    });
 
     Route::prefix('display')->name('display.')->group(function () {
         Route::redirect('/', '/docs/display/qrcode')->name('index');

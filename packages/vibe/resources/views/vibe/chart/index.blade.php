@@ -108,17 +108,4 @@
     >
         <div class="w-full h-full flex items-end gap-2.5 pb-2 px-2">
             <div class="flex-1 bg-muted/40 rounded-t-md h-[40%] animate-pulse"></div>
-            <div class="flex-1 bg-muted/50 rounded-t-md h-[70%] animate-pulse"></div>
-            <div class="flex-1 bg-muted/30 rounded-t-md h-[55%] animate-pulse"></div>
-            <div class="flex-1 bg-muted/60 rounded-t-md h-[85%] animate-pulse"></div>
-            <div class="flex-1 bg-muted/40 rounded-t-md h-[60%] animate-pulse"></div>
-            <div class="flex-1 bg-muted/50 rounded-t-md h-[95%] animate-pulse"></div>
-        </div>
-    </div>
-
-    {{-- HTML5 Canvas Render Target --}}
-    <canvas
-        x-ref="canvas"
-        class="w-full h-full relative z-0"
-    ></canvas>
-</div>
+  
