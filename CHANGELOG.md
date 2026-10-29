@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.9.2] - 2026-10-29
+
+### 🚀 Features
+- feat: add task update support and lockable features to todo component (9ac7090)
+- feat: add scrollable option to todo group component (d6382e1)
+
+### 🐛 Bug Fixes
+- fix: update kanban layout classes for improved height and alignment in todo views (3e4970b)
+
+
 ## [0.9.1] - 2026-10-28
 
 ### 🚀 Features
