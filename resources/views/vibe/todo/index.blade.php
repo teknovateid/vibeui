@@ -23,12 +23,11 @@
     'checkbox' => null,
     'checkable' => null,
     'navButtons' => false, // show/hide ← → column navigation buttons on items (default hidden)
-    'dragHandle' => null, // 'visible', 'hover', 'hidden'
-    'dragIndicator' => null,
-    'handle' => null,
     'expireHours' => 24 * 30,
     'lock' => false,
     'locked' => false,
+    'lockable' => false,
+    'wireLock' => null,
     'editable' => false,
     'quickAdd' => false,
     'searchable' => false,
@@ -205,6 +204,7 @@
     data-vibe-todo
     data-mode="{{ $mode }}"
     @if ($lock || $locked) data-locked="true" @endif
+    @vibe:todo-item-update="typeof updateItem === 'function' ? updateItem($event.detail.id || $event.detail.itemId, $event.detail) : null"
     {{ $attributes->twMerge(['class' => "relative w-full {$layoutClass} transition-colors select-none"]) }}
     x-data="typeof window.vibeTodo === 'function' ? window.vibeTodo({
         id: @js($todoId),
@@ -212,6 +212,7 @@
         name: @js($name),
         reorderable: @js((bool) $reorderable),
         locked: @js((bool) ($lock || $locked)),
+        lockable: @js((bool) $lockable),
         persist: @js((bool) $persist),
         storageKey: @js($storageKey ?: ''),
         expireHours: @js($expireHours),
@@ -226,6 +227,7 @@
         wireDelete: @js($wireDelete ?: ''),
         wireAdd: @js($wireAdd ?: ''),
         wireUpdate: @js($wireUpdate ?: ''),
+        wireLock: @js($wireLock ?: ''),
         editable: @js((bool) $editable),
         searchable: @js((bool) $searchable),
         keyboardNavigation: @js((bool) $keyboardNavigation),

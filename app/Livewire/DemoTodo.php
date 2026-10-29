@@ -87,6 +87,19 @@ class DemoTodo extends Component
         }
     }
 
+    public function updateTask(string $id, string $title, ?string $description = null): void
+    {
+        foreach ($this->tasks as &$task) {
+            if ($task['id'] === $id) {
+                $task['title'] = trim($title);
+                if ($description !== null) {
+                    $task['description'] = trim($description);
+                }
+                break;
+            }
+        }
+    }
+
     public function deleteTask(string $id): void
     {
         $this->tasks = array_values(array_filter($this->tasks, fn ($t) => $t['id'] !== $id));

@@ -52,19 +52,19 @@ return [
         'disabled_hint' => 'Kolom ini menyembunyikan tombol navigasi (default).',
     ],
 
-    'drag_handle' => [
-        'title' => '7. Opsi Indikator Drag Titik 3x2 (drag-handle)',
-        'desc' => 'Atur visibilitas ikon titik 3x2 (indikator drag) melalui atribut <code>drag-handle</code>, <code>drag-indicator</code>, atau <code>handle</code>. Secara default bernilai <code>hover</code> (tampil saat di-hover pada desktop dan selalu tampil di mobile), serta opsi <code>visible</code> (selalu tampil) atau <code>hidden</code> / <code>false</code> (disembunyikan sepenuhnya).',
-        'preview_title' => 'Perbandingan Mode Tampilan Indikator Drag (Visible, On Hover, Hidden)',
-        'visible_badge' => 'Visible',
-        'visible_desc' => 'Indikator titik 3x2 selalu terlihat di sisi kiri kartu untuk navigasi drag yang jelas.',
-        'hover_badge' => 'On Hover (Default)',
-        'hover_desc' => 'Secara default, indikator titik 3x2 hanya muncul saat cursor mengarah ke kartu pada desktop, dan tetap selalu tampil pada perangkat mobile agar ramah sentuhan.',
-        'hidden_badge' => 'Hidden / false',
-        'hidden_desc' => 'Indikator titik 3x2 disembunyikan sepenuhnya untuk kartu yang bersih dan minimalis.',
-        'locked_badge' => 'Locked (:lock="true")',
-        'locked_desc' => 'Menampilkan ikon gembok dan menonaktifkan fitur drag agar kartu tidak dapat dipindah.',
-        'mobile_hint' => '📱 Tip Mobile & Layar Sentuh: Pada mode <code>visible</code> atau <code>hover</code>, sentuh langsung titik 3x2 untuk menggeser kartu. Pada mode <code>hidden</code>, sentuh dan tahan (long-press 250ms) badan kartu untuk memulai drag dengan getaran haptik.',
+    'lock' => [
+        'title' => '7. Mengunci Kartu & Tombol Lock Interaktif (:lock & :lockable)',
+        'desc' => 'Vibe Todo mendukung dua cara penguncian kartu: <strong>Kunci Statis (Read-Only)</strong> via <code>:lock="true"</code> untuk mengunci permanen kartu sejak awal, dan <strong>Tombol Kunci Interaktif</strong> via <code>:lockable="true"</code> (atau metode <code>toggleLock(id)</code>) yang menampilkan tombol gembok interaktif agar pengguna dapat mengunci atau membuka kunci kartu dengan sekali klik.',
+        'preview_title' => 'Perbandingan Tombol Lock Interaktif vs Kunci Statis',
+        'unlocked_badge' => 'Dapat Digeser (Default)',
+        'unlocked_desc' => 'Kartu dapat digeser dan diatur ulang urutannya secara bebas ke kolom mana pun.',
+        'lockable_badge' => 'Tombol Lock Interaktif (:lockable="true")',
+        'lockable_desc' => 'Klik tombol gembok untuk mengunci/membuka kunci kartu secara interaktif secara realtime.',
+        'header_lockable_badge' => 'Header Lock Button (<vibe:todo.header :lockable="true">)',
+        'header_lockable_desc' => 'Menempatkan tombol gembok interaktif di baris header kartu.',
+        'locked_badge' => 'Terkunci Statis (:lock="true")',
+        'locked_desc' => 'Kartu menampilkan indikator gembok permanen, drag dinonaktifkan, dan tombol navigasi disembunyikan.',
+        'mobile_hint' => '📱 Tip Mobile & Layar Sentuh: Seluruh badan kartu dapat digeser secara instan. Pada layar sentuh, sentuh dan tahan selama 200ms untuk memindahkan kartu tanpa mengganggu fungsi scroll layar.',
     ],
 
     'backend' => [
@@ -103,6 +103,7 @@ return [
         'deleted_desc' => 'Dipicu sesaat sebelum atau ketika item dihapus.',
         'added_desc' => 'Dipicu saat item tugas baru ditambahkan melalui input cepat.',
         'updated_desc' => 'Dipicu saat judul atau deskripsi kartu diubah melalui inline editing.',
+        'lock_toggled_desc' => 'Dipicu saat status kunci kartu diubah (dikunci atau dibuka kuncinya) melalui tombol lock.',
         'subtask_updated_desc' => 'Dipicu saat subtask atau checklist di dalam kartu dicentang atau di-toggle.',
     ],
 
@@ -120,12 +121,13 @@ return [
         'todo_nav_buttons' => "Menampilkan atau menyembunyikan tombol panah navigasi kolom pada kartu (default false / tersembunyi)",
         'todo_checkbox' => "Menampilkan kotak centang checkbox pada seluruh kartu (default false)",
         'todo_lock' => "Mengunci seluruh kartu agar tidak dapat digeser atau dipindahkan antar kolom (default false)",
+        'todo_lockable' => "Menampilkan tombol toggle lock interaktif pada seluruh kartu di papan (default false)",
         'todo_editable' => "Mengaktifkan fitur inline quick edit untuk judul & deskripsi kartu (default false)",
         'todo_quick_add' => "Mengaktifkan tombol inline + Tambah Tugas di bawah setiap kolom (default false)",
         'todo_searchable' => "Mengaktifkan bilah pencarian instan sisi klien di bagian atas papan (default false)",
         'todo_keyboard' => "Mengaktifkan navigasi shortcut keyboard (Space, Delete, Panah kiri/kanan) (default true)",
         'todo_reorderable' => "Mengaktifkan atau menonaktifkan fitur drag-and-drop antar kartu dan kolom",
-        'todo_drag_handle' => "Mode tampilan indikator titik drag 3x2: 'hover' (default: tampil saat dihover pada desktop, selalu tampil di mobile), 'visible' (selalu tampil), atau 'hidden' / false (sembunyikan)",
+        'todo_lock' => "Mengunci seluruh kartu di papan agar tidak dapat digeser atau dipindahkan (default false)",
         'todo_persist' => "Menyimpan susunan kartu ke browser localStorage secara otomatis (khusus mode local)",
         'todo_storage_key' => "Pengenal unik data todo di dalam penyimpanan 'vibe-todo' di localStorage (default: ID komponen)",
         'todo_expire_hours' => "Masa berlaku (kedaluwarsa) data lokal dalam hitungan jam sebelum otomatis dibersihkan (default: 720 jam / 30 hari)",
@@ -166,21 +168,42 @@ return [
         'item_due_date' => "Tanggal jatuh tempo tugas dengan kalkulasi urgensi otomatis (overdue, today, upcoming)",
         'item_variant' => "Varian tampilan kartu: 'default' (card bayangan halus), 'flat', atau 'outline'",
         'item_reorderable' => "Menentukan apakah kartu ini dapat digeser atau ditarik",
-        'item_drag_handle' => "Override mode tampilan titik drag 3x2 per kartu: 'hover' (default), 'visible', atau 'hidden' / false",
         'item_lock' => "Mengunci kartu ini agar tidak dapat digeser atau dipindahkan ke kolom lain (default false)",
+        'item_lockable' => "Menampilkan tombol toggle lock interaktif pada kartu ini untuk mengunci/membuka kunci kapan saja",
         'item_deletable' => "Menampilkan tombol hapus saat kartu di-hover",
         'item_slot' => "Markup HTML kustom untuk mendesain bodi kartu secara bebas sesuai preferensi developer",
         'item_slot_content' => "Slot alternatif eksplisit untuk menyisipkan HTML kustom di bawah baris judul",
         'item_slot_actions' => "Slot tombol aksi kustom yang diletakkan rapi di footer kartu",
         'item_slot_header_actions' => "Slot tombol aksi ringkas di baris atas kartu di sebelah tombol hapus",
 
+        // vibe:todo.header
+        'header_slot' => "Wadah header atas kartu, otomatis menampilkan icon gembok saat kartu di-lock",
+        'header_lock' => "Mengunci kartu dan menampilkan icon gembok statis di header",
+        'header_lockable' => "Menampilkan tombol toggle gembok interaktif di header kartu",
+
         // vibe:todo.title
         'title_prop_class' => "Class utility CSS tambahan untuk kustomisasi gaya, ukuran, atau warna teks judul",
+        'title_editable' => "Mengaktifkan fitur inline edit judul melalui double-click atau tombol pensil",
         'title_slot' => "Slot teks atau markup HTML konten judul kartu tugas",
 
         // vibe:todo.description
         'description_prop_class' => "Class utility CSS tambahan untuk kustomisasi gaya teks deskripsi",
+        'description_editable' => "Mengaktifkan fitur inline edit deskripsi melalui double-click atau tombol pensil",
         'description_slot' => "Slot teks atau markup HTML rincian deskripsi kartu tugas",
+
+        // vibe:todo.content
+        'content_slot' => "Wadah bodi konten kartu bebas untuk menempatkan catatan, title/description, atau markup kustom",
+
+        // vibe:todo.subitem
+        'subitem_slot' => "Wadah bebas untuk subtugas, progress bar, due date, status pill, dan label tags",
+        'subitem_total' => "Jumlah total subtugas untuk shortcut progress bar otomatis",
+        'subitem_completed' => "Jumlah subtugas yang telah selesai",
+        'subitem_color' => "Warna progress bar shortcut ('primary', 'indigo', 'blue', 'emerald', dll.)",
+        'subitem_title' => "Judul label baris subtugas shortcut (default 'Subtasks')",
+        'subitem_progress' => "Menampilkan progress bar horizontal otomatis (default true)",
+
+        // vibe:todo.footer
+        'footer_slot' => "Wadah footer kartu untuk avatar stack penanggung jawab, counter komentar/lampiran, atau tombol aksi",
 
         // vibe:todo.subtask
         'subtask_id' => "ID unik untuk sub-tugas checklist",

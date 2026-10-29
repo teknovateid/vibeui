@@ -28,18 +28,21 @@
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">layout="board / list"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:checkbox="false / true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:lock="false / true"</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:lockable="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:editable="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:quick-add="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:searchable="true"</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:max="5" (WIP)</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">:collapsible="true"</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">drag-handle="hover / visible / hidden"</vibe:badge>
                     <span class="text-muted-foreground/40 text-xs">|</span>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.group&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.item&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.header&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.title&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.description&gt;</vibe:badge>
-                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.subtask&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.content&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.subitem&gt;</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.footer&gt;</vibe:badge>
                     <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">&lt;vibe:todo.input&gt;</vibe:badge>
                 </div>
             </div>
@@ -275,7 +278,7 @@ BLADE;
                         </div>
 
                         {{-- Kanban Board with :nav-buttons="true" explicitly enabled --}}
-                        <vibe:todo id="demo-kanban-board" layout="board" mode="local" :persist="true" :nav-buttons="true">
+                        <vibe:todo id="demo-kanban-board" layout="board" mode="local" :persist="true" :nav-buttons="true" :editable="true">
                             {{-- Column 1: Backlog / To Do --}}
                             <vibe:todo.group name="backlog" title="To Do" count="2" color="blue">
                                 <vibe:todo.item
@@ -571,12 +574,12 @@ BLADE;
                 </vibe:preview>
             </section>
 
-            {{-- 7. 3x2 Drag Indicator Options (drag-handle) --}}
-            <section id="drag-handle" class="space-y-4">
+            {{-- 7. Locking Items & Disabling Drag (:lock & :lockable) --}}
+            <section id="card-locking" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/todo.drag_handle.title') }}</h2>
+                    <h2 class="text-xl font-bold text-foreground">{{ __('docs/todo.lock.title') }}</h2>
                     <p class="text-sm text-muted-foreground">
-                        {!! __('docs/todo.drag_handle.desc') !!}
+                        {!! __('docs/todo.lock.desc') !!}
                     </p>
                 </div>
 
@@ -585,99 +588,122 @@ BLADE;
                         <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/>
                         <path d="M12 18h.01"/>
                     </svg>
-                    <span>{!! __('docs/todo.drag_handle.mobile_hint') !!}</span>
+                    <span>{!! __('docs/todo.lock.mobile_hint') !!}</span>
                 </div>
 
                 @php
-                    $snippetDragHandle = <<<'BLADE'
-{{-- 1. Setelan Global di Container Todo --}}
-<vibe:todo drag-handle="hover">
-    <vibe:todo.item id="t-1" title="Semua kartu otomatis mengikuti mode hover" />
+                    $snippetLocking = <<<'BLADE'
+{{-- 1. Kartu Standar Bebas Digeser (Direct Card Drag) --}}
+<vibe:todo layout="list">
+    <vibe:todo.item id="t-1" title="Kartu Bebas Digeser" description="Seluruh badan kartu dapat langsung di-drag." />
 </vibe:todo>
 
-{{-- 2. Sembunyikan Titik Drag Sepenuhnya --}}
-<vibe:todo drag-handle="hidden">
-    <vibe:todo.item id="t-2" title="Tampilan kartu bersih tanpa ikon 3x2" />
+{{-- 2. Menampilkan Tombol Lock Interaktif (:lockable="true") --}}
+{{-- Pengguna dapat mengklik tombol gembok untuk mengunci / membuka kunci kapan saja --}}
+<vibe:todo layout="list">
+    <vibe:todo.item 
+        id="t-2" 
+        title="Kartu dengan Tombol Lock Interaktif" 
+        description="Arahkan kursor atau sentuh untuk melihat tombol gembok di pojok kanan kartu."
+        :lockable="true" 
+    />
 </vibe:todo>
 
-{{-- 3. Granular Override per Item Kartu --}}
-<vibe:todo drag-handle="visible">
-    <vibe:todo.item id="t-3" title="Kartu A: visible" />
-    <vibe:todo.item id="t-4" title="Kartu B: on hover" drag-handle="hover" />
-    <vibe:todo.item id="t-5" title="Kartu C: tersembunyi" drag-handle="hidden" />
+{{-- 3. Menampilkan Tombol Lock di Subkomponen Header --}}
+<vibe:todo layout="list">
+    <vibe:todo.item id="t-3">
+        <vibe:todo.header :lockable="true">
+            <vibe:badge variant="primary" size="sm">Urgent</vibe:badge>
+        </vibe:todo.header>
+        <vibe:todo.content>
+            <vibe:todo.title>Tugas Penting dengan Header Lock</vibe:todo.title>
+        </vibe:todo.content>
+    </vibe:todo.item>
 </vibe:todo>
 
-{{-- 4. Opsi Lock Agar Kartu Tidak Bisa Dipindah --}}
-<vibe:todo>
-    <vibe:todo.item id="t-6" title="Kartu Terkunci (Pinned)" :lock="true" />
+{{-- 4. Kunci Seluruh Papan Secara Statis (Global Static Lock) --}}
+<vibe:todo layout="list" :lock="true">
+    <vibe:todo.item id="t-4" title="Semua Kartu Terkunci Permanen" />
+</vibe:todo>
+
+{{-- 5. Kunci Kartu Tertentu Secara Statis (:lock="true") --}}
+<vibe:todo layout="list">
+    <vibe:todo.item id="t-5" title="Kartu Bebas Bergerak" />
+    <vibe:todo.item id="t-6" title="Kartu Terkunci Statis (Pinned)" :lock="true" />
 </vibe:todo>
 BLADE;
                 @endphp
 
-                <vibe:preview :title="__('docs/todo.drag_handle.preview_title')" :code="$snippetDragHandle" :center="false">
+                <vibe:preview :title="__('docs/todo.lock.preview_title')" :code="$snippetLocking" :center="false">
                     <div class="w-full space-y-6">
-                        {{-- 1. On Hover (Default) --}}
+                        {{-- 1. Unlocked (Default) --}}
                         <div class="space-y-2">
                             <div class="flex items-center gap-2">
-                                <vibe:badge variant="warning" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.hover_badge') }}</vibe:badge>
-                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.hover_desc') }}</span>
+                                <vibe:badge variant="primary" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.lock.unlocked_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.lock.unlocked_desc') }}</span>
                             </div>
-                            <vibe:todo id="demo-drag-hover" layout="list" mode="local" drag-handle="hover">
+                            <vibe:todo id="demo-drag-unlocked" layout="list" mode="local">
                                 <vibe:todo.item
-                                    id="dh-2"
-                                    title="Arahkan Kursor ke Sini untuk Melihat Titik Drag (On Hover)"
-                                    description="Ikon titik 3x2 otomatis muncul saat kartu disorot oleh kursor mouse."
-                                    badge="Hover"
-                                    badge-variant="warning"
-                                />
-                            </vibe:todo>
-                        </div>
-
-                        {{-- 2. Visible --}}
-                        <div class="space-y-2 pt-2 border-t border-border/50">
-                            <div class="flex items-center gap-2">
-                                <vibe:badge variant="primary" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.visible_badge') }}</vibe:badge>
-                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.visible_desc') }}</span>
-                            </div>
-                            <vibe:todo id="demo-drag-visible" layout="list" mode="local" drag-handle="visible">
-                                <vibe:todo.item
-                                    id="dh-1"
-                                    title="Titik Drag Selalu Tampil (Visible)"
-                                    description="Pengguna dapat langsung melihat ikon titik 3x2 dan menggesernya."
-                                    badge="Visible"
+                                    id="dh-unlocked"
+                                    title="Kartu Bebas Digeser (Direct Card Drag)"
+                                    description="Arahkan kursor untuk melihat cursor-grab dan geser kartu secara langsung."
+                                    badge="Movable"
                                     badge-variant="primary"
                                 />
                             </vibe:todo>
                         </div>
 
-                        {{-- 3. Hidden / False --}}
+                        {{-- 2. Interactive Lock Button (:lockable="true") --}}
                         <div class="space-y-2 pt-2 border-t border-border/50">
                             <div class="flex items-center gap-2">
-                                <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.hidden_badge') }}</vibe:badge>
-                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.hidden_desc') }}</span>
+                                <vibe:badge variant="warning" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.lock.lockable_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.lock.lockable_desc') }}</span>
                             </div>
-                            <vibe:todo id="demo-drag-hidden" layout="list" mode="local" drag-handle="hidden">
+                            <vibe:todo id="demo-drag-lockable" layout="list" mode="local">
                                 <vibe:todo.item
-                                    id="dh-3"
-                                    title="Indikator Titik 3x2 Disembunyikan (Clean Minimalist)"
-                                    description="Di mobile, kartu ini tetap dapat dipindahkan menggunakan sentuh-tahan (long press)."
-                                    badge="Hidden"
-                                    badge-variant="outline"
+                                    id="dh-interactive-lock"
+                                    title="Klik Ikon Gembok untuk Mengunci / Membuka"
+                                    description="Tombol gembok interaktif muncul di sebelah tombol hapus. Saat terkunci, kartu tidak dapat digeser."
+                                    badge="Interactive"
+                                    badge-variant="warning"
+                                    :lockable="true"
                                 />
                             </vibe:todo>
                         </div>
 
-                        {{-- 4. Locked (:lock="true") --}}
+                        {{-- 3. Header Lock Button (<vibe:todo.header :lockable="true">) --}}
                         <div class="space-y-2 pt-2 border-t border-border/50">
                             <div class="flex items-center gap-2">
-                                <vibe:badge variant="destructive" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.drag_handle.locked_badge') }}</vibe:badge>
-                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.drag_handle.locked_desc') }}</span>
+                                <vibe:badge variant="outline" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.lock.header_lockable_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.lock.header_lockable_desc') }}</span>
+                            </div>
+                            <vibe:todo id="demo-header-lockable" layout="list" mode="local">
+                                <vibe:todo.item id="dh-header-lock">
+                                    <vibe:todo.header :lockable="true">
+                                        <div class="flex items-center gap-1.5">
+                                            <vibe:badge variant="primary" size="sm" class="rounded-full">Sprint 14</vibe:badge>
+                                            <span class="text-[11px] text-muted-foreground font-mono">TASK-88</span>
+                                        </div>
+                                    </vibe:todo.header>
+                                    <vibe:todo.content>
+                                        <vibe:todo.title>Kunci Kartu Lewat Header</vibe:todo.title>
+                                        <vibe:todo.description>Tombol gembok di baris header atas dapat diklik untuk mengunci atau membuka kunci kartu.</vibe:todo.description>
+                                    </vibe:todo.content>
+                                </vibe:todo.item>
+                            </vibe:todo>
+                        </div>
+
+                        {{-- 4. Locked Permanently (:lock="true") --}}
+                        <div class="space-y-2 pt-2 border-t border-border/50">
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="destructive" size="sm" class="font-mono text-[11px]">{{ __('docs/todo.lock.locked_badge') }}</vibe:badge>
+                                <span class="text-xs text-muted-foreground">{{ __('docs/todo.lock.locked_desc') }}</span>
                             </div>
                             <vibe:todo id="demo-drag-locked" layout="list" mode="local">
                                 <vibe:todo.item
-                                    id="dh-4"
-                                    title="Kartu Terkunci (Pinned / Immovable)"
-                                    description="Menampilkan ikon gembok, draggable dinonaktifkan, dan tidak dapat digeser atau dipindah."
+                                    id="dh-locked"
+                                    title="Kartu Terkunci Statis (Pinned / Immovable)"
+                                    description="Menampilkan ikon gembok otomatis, draggable dinonaktifkan secara permanen, dan kartu tidak dapat dipindahkan."
                                     badge="Locked"
                                     badge-variant="destructive"
                                     :lock="true"
@@ -1163,6 +1189,164 @@ BLADE;
                         </vibe:todo>
                     </div>
                 </vibe:preview>
+
+                {{-- Modern UI Card with Header, Content, Subitem & Footer --}}
+                <div class="space-y-2 pt-4 border-t border-border/40">
+                    <h3 class="text-base font-semibold text-foreground">Kartu Kanban Modern: Header, Content, Subitem &amp; Footer</h3>
+                    <p class="text-xs text-muted-foreground">
+                        Menggabungkan subkomponen &lt;vibe:todo.header&gt;, &lt;vibe:todo.content&gt;, &lt;vibe:todo.subitem&gt;, dan &lt;vibe:todo.footer&gt; untuk membangun kartu tugas modern dengan progress bar persentase, tanggal jatuh tempo, label tags, serta avatar stack penanggung jawab.
+                    </p>
+                </div>
+
+                @php
+                    $snippetModernCard = <<<'BLADE'
+<vibe:todo layout="board" :editable="true">
+    <vibe:todo.group name="in_progress" title="IN PROGRESS">
+        <vibe:todo.item id="task-101" class="p-4 rounded-2xl bg-card border border-border/60 shadow-xs space-y-3">
+            {{-- 1. Header Kartu: Priority Badge & Menu Titik 3 --}}
+            <vibe:todo.header class="flex items-center justify-between pb-0 border-0">
+                <vibe:badge variant="destructive" size="sm" class="rounded-full px-2.5 py-0.5 bg-red-50 text-red-600 border-red-200 text-xs font-semibold">
+                    High
+                </vibe:badge>
+                
+                <button type="button" class="text-muted-foreground/60 hover:text-foreground p-1 rounded-md">
+                    <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                    </svg>
+                </button>
+            </vibe:todo.header>
+
+            {{-- 2. Content: Title & Description (Bisa Inline Edit) --}}
+            <vibe:todo.content class="py-0 space-y-1">
+                <vibe:todo.title :editable="true" class="text-sm font-bold text-foreground tracking-tight">
+                    Design System Implementation
+                </vibe:todo.title>
+                <vibe:todo.description :editable="true" class="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                    Create and implement a comprehensive design system for the product to unify colors, typography, and reusable components.
+                </vibe:todo.description>
+            </vibe:todo.content>
+
+            {{-- 3. Subitem: Wadah Bebas (Progress Bar, Due Date, Status Pill, & Tags) --}}
+            <vibe:todo.subitem :total="8" :completed="6" color="indigo" title="Subtasks" class="pt-1 border-0">
+                {{-- Baris Due Date & Status Pill --}}
+                <div class="flex items-center justify-between text-xs pt-1">
+                    <span class="text-muted-foreground flex items-center gap-1 font-medium">
+                        <svg class="size-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Due: <strong class="text-foreground">Sep 28</strong>
+                    </span>
+                    <vibe:badge variant="secondary" size="sm" class="rounded-full bg-slate-900 text-white font-medium text-[11px]">
+                        In progress
+                    </vibe:badge>
+                </div>
+
+                {{-- Tags --}}
+                <div class="flex items-center gap-1.5 flex-wrap">
+                    <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-blue-600 border-blue-200 bg-blue-50/50">Design</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-emerald-600 border-emerald-200 bg-emerald-50/50">Frontend</vibe:badge>
+                    <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-purple-600 border-purple-200 bg-purple-50/50">UI/UX</vibe:badge>
+                </div>
+            </vibe:todo.subitem>
+
+            {{-- 4. Footer: Avatar Stack & Attachment / Comments --}}
+            <vibe:todo.footer class="pt-2 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground">
+                <vibe:avatar.group size="xs" :limit="3">
+                    <vibe:avatar size="xs" name="Alex Chen" />
+                    <vibe:avatar size="xs" name="Sara Connor" />
+                    <vibe:avatar size="xs" name="Rizal Tri" />
+                    <vibe:avatar size="xs" name="Maya Lee" />
+                </vibe:avatar.group>
+
+                <div class="flex items-center gap-3 text-muted-foreground/80">
+                    <span class="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        3
+                    </span>
+                    <span class="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                        8
+                    </span>
+                </div>
+            </vibe:todo.footer>
+        </vibe:todo.item>
+    </vibe:todo.group>
+</vibe:todo>
+BLADE;
+                @endphp
+
+                <vibe:preview title="Kartu Kanban Desain Sistem Modern" :code="$snippetModernCard" :center="false">
+                    <div class="w-full max-w-sm mx-auto">
+                        <vibe:todo layout="board" mode="local" :editable="true">
+                            <vibe:todo.group name="in_progress" title="IN PROGRESS" :count="1">
+                                <vibe:todo.item id="demo-modern-card" class="p-4 rounded-2xl bg-card border border-border/60 shadow-xs space-y-3">
+                                    {{-- 1. Header Kartu: Priority Badge & Menu Titik 3 --}}
+                                    <vibe:todo.header class="flex items-center justify-between pb-0 border-0">
+                                        <vibe:badge variant="destructive" size="sm" class="rounded-full px-2.5 py-0.5 bg-red-50 text-red-600 border-red-200 text-xs font-semibold">
+                                            High
+                                        </vibe:badge>
+                                        
+                                        <button type="button" class="text-muted-foreground/60 hover:text-foreground p-1 rounded-md">
+                                            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                                            </svg>
+                                        </button>
+                                    </vibe:todo.header>
+
+                                    {{-- 2. Content: Title & Description (Bisa Inline Edit) --}}
+                                    <vibe:todo.content class="py-0 space-y-1">
+                                        <vibe:todo.title :editable="true" class="text-sm font-bold text-foreground tracking-tight">
+                                            Design System Implementation
+                                        </vibe:todo.title>
+                                        <vibe:todo.description :editable="true" class="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                                            Create and implement a comprehensive design system for the product to unify colors, typography, and reusable components.
+                                        </vibe:todo.description>
+                                    </vibe:todo.content>
+
+                                    {{-- 3. Subitem: Wadah Bebas (Progress Bar, Due Date, Status Pill, & Tags) --}}
+                                    <vibe:todo.subitem :total="8" :completed="6" color="indigo" title="Subtasks" class="pt-1 border-0">
+                                        {{-- Baris Due Date & Status Pill --}}
+                                        <div class="flex items-center justify-between text-xs pt-1">
+                                            <span class="text-muted-foreground flex items-center gap-1 font-medium">
+                                                <svg class="size-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                                Due: <strong class="text-foreground">Sep 28</strong>
+                                            </span>
+                                            <vibe:badge variant="secondary" size="sm" class="rounded-full bg-slate-900 text-white font-medium text-[11px]">
+                                                In progress
+                                            </vibe:badge>
+                                        </div>
+
+                                        {{-- Tags --}}
+                                        <div class="flex items-center gap-1.5 flex-wrap">
+                                            <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-blue-600 border-blue-200 bg-blue-50/50">Design</vibe:badge>
+                                            <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-emerald-600 border-emerald-200 bg-emerald-50/50">Frontend</vibe:badge>
+                                            <vibe:badge variant="outline" size="sm" class="rounded-full text-[10px] text-purple-600 border-purple-200 bg-purple-50/50">UI/UX</vibe:badge>
+                                        </div>
+                                    </vibe:todo.subitem>
+
+                                    {{-- 4. Footer: Avatar Stack & Attachment / Comments --}}
+                                    <vibe:todo.footer class="pt-2 border-t border-border/40 flex items-center justify-between text-xs text-muted-foreground">
+                                        <vibe:avatar.group size="xs" :limit="3">
+                                            <vibe:avatar size="xs" name="Alex Chen" />
+                                            <vibe:avatar size="xs" name="Sara Connor" />
+                                            <vibe:avatar size="xs" name="Rizal Tri" />
+                                            <vibe:avatar size="xs" name="Maya Lee" />
+                                        </vibe:avatar.group>
+
+                                        <div class="flex items-center gap-3 text-muted-foreground/80">
+                                            <span class="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                                                3
+                                            </span>
+                                            <span class="flex items-center gap-1 hover:text-foreground cursor-pointer">
+                                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+                                                8
+                                            </span>
+                                        </div>
+                                    </vibe:todo.footer>
+                                </vibe:todo.item>
+                            </vibe:todo.group>
+                        </vibe:todo>
+                    </div>
+                </vibe:preview>
             </section>
 
             {{-- 11. Superpower Kolom Kanban & Live Search --}}
@@ -1268,6 +1452,11 @@ BLADE;
                             <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/todo.events.updated_desc') }}</vibe:table.cell>
                         </vibe:table.row>
                         <vibe:table.row>
+                            <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">vibe:todo-lock-toggled</vibe:table.cell>
+                            <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">{ id, itemId, locked }</vibe:table.cell>
+                            <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/todo.events.lock_toggled_desc') }}</vibe:table.cell>
+                        </vibe:table.row>
+                        <vibe:table.row>
                             <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">vibe:todo-subtask-updated</vibe:table.cell>
                             <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">{ todoId, itemId, subtaskId, completed }</vibe:table.cell>
                             <vibe:table.cell class="text-xs text-muted-foreground">{{ __('docs/todo.events.subtask_updated_desc') }}</vibe:table.cell>
@@ -1314,13 +1503,13 @@ BLADE;
                                     ['layout', 'string', "'list'", __('docs/todo.props.todo_layout')],
                                     ['checkbox', 'bool', 'false', __('docs/todo.props.todo_checkbox')],
                                     ['lock', 'bool', 'false', __('docs/todo.props.todo_lock')],
+                                    ['lockable', 'bool', 'false', __('docs/todo.props.todo_lockable')],
                                     ['editable', 'bool', 'false', __('docs/todo.props.todo_editable')],
                                     ['quick-add', 'bool', 'false', __('docs/todo.props.todo_quick_add')],
                                     ['searchable', 'bool', 'false', __('docs/todo.props.todo_searchable')],
                                     ['keyboard-navigation', 'bool', 'true', __('docs/todo.props.todo_keyboard')],
                                     ['nav-buttons', 'bool', 'false', __('docs/todo.props.todo_nav_buttons')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.todo_reorderable')],
-                                    ['drag-handle', 'string|bool', "'hover'", __('docs/todo.props.todo_drag_handle')],
                                     ['persist', 'bool', 'false', __('docs/todo.props.todo_persist')],
                                     ['storage-key', 'string|null', 'null', __('docs/todo.props.todo_storage_key')],
                                     ['expire-hours', 'int', '720', __('docs/todo.props.todo_expire_hours')],
@@ -1407,6 +1596,7 @@ BLADE;
                                     ['group', 'string|null', 'null', __('docs/todo.props.item_group')],
                                     ['checkbox', 'bool|null', 'null', __('docs/todo.props.item_checkbox')],
                                     ['lock', 'bool|null', 'null', __('docs/todo.props.item_lock')],
+                                    ['lockable', 'bool|null', 'null', __('docs/todo.props.item_lockable')],
                                     ['editable', 'bool|null', 'null', __('docs/todo.props.item_editable')],
                                     ['labels / tags', 'array|null', 'null', __('docs/todo.props.item_labels')],
                                     ['assignees', 'array|null', 'null', __('docs/todo.props.item_assignees')],
@@ -1418,7 +1608,6 @@ BLADE;
                                     ['due-date', 'string|null', 'null', __('docs/todo.props.item_due_date')],
                                     ['variant', 'string', "'default'", __('docs/todo.props.item_variant')],
                                     ['reorderable', 'bool', 'true', __('docs/todo.props.item_reorderable')],
-                                    ['drag-handle', 'string|bool', "'hover'", __('docs/todo.props.item_drag_handle')],
                                     ['deletable', 'bool', 'true', __('docs/todo.props.item_deletable')],
                                     ['update-url', 'string|null', 'null', __('docs/todo.props.todo_endpoint')],
                                     ['wire-update', 'string|null', 'null', __('docs/todo.props.todo_wire_update')],
@@ -1429,6 +1618,40 @@ BLADE;
                                 ];
                             @endphp
                             @foreach ($itemProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.header Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.header&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Subkomponen Header Kartu)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $headerProps = [
+                                    ['class', 'string|null', 'null', 'Utility class Tailwind CSS untuk kustomisasi wadah header'],
+                                    ['lock / locked', 'bool|null', 'null', __('docs/todo.props.header_lock')],
+                                    ['lockable', 'bool|null', 'null', __('docs/todo.props.header_lockable')],
+                                    ['slot (default)', 'html|string', 'null', __('docs/todo.props.header_slot')],
+                                ];
+                            @endphp
+                            @foreach ($headerProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
@@ -1457,6 +1680,8 @@ BLADE;
                             @php
                                 $titleProps = [
                                     ['class', 'string|null', 'null', __('docs/todo.props.title_prop_class')],
+                                    ['editable', 'bool|null', 'null', __('docs/todo.props.title_editable')],
+                                    ['as', 'string', "'div'", 'Tag HTML wrapper judul (div, h3, h4, span)'],
                                     ['slot (default)', 'html|string', 'required', __('docs/todo.props.title_slot')],
                                 ];
                             @endphp
@@ -1489,10 +1714,114 @@ BLADE;
                             @php
                                 $descProps = [
                                     ['class', 'string|null', 'null', __('docs/todo.props.description_prop_class')],
+                                    ['editable', 'bool|null', 'null', __('docs/todo.props.description_editable')],
+                                    ['as', 'string', "'p'", 'Tag HTML wrapper deskripsi (p, span, div)'],
                                     ['slot (default)', 'html|string', 'required', __('docs/todo.props.description_slot')],
                                 ];
                             @endphp
                             @foreach ($descProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.content Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.content&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Subkomponen Konten Bebas)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $contentProps = [
+                                    ['class', 'string|null', 'null', 'Utility class Tailwind CSS untuk kustomisasi wadah bodi konten'],
+                                    ['slot (default)', 'html|string', 'null', __('docs/todo.props.content_slot')],
+                                ];
+                            @endphp
+                            @foreach ($contentProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.subitem Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.subitem&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Container Bebas / Shortcut Subtugas)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $subitemProps = [
+                                    ['class', 'string|null', 'null', 'Utility class Tailwind CSS untuk kustomisasi wadah subitem'],
+                                    ['total', 'int|null', 'null', __('docs/todo.props.subitem_total')],
+                                    ['completed', 'int', '0', __('docs/todo.props.subitem_completed')],
+                                    ['progress', 'bool', 'true', __('docs/todo.props.subitem_progress')],
+                                    ['percentage', 'bool', 'true', 'Menampilkan persentase progress numerik (misal 75%)'],
+                                    ['color', 'string', "'primary'", __('docs/todo.props.subitem_color')],
+                                    ['title', 'string', "'Subtasks'", __('docs/todo.props.subitem_title')],
+                                    ['slot (default)', 'html|string', 'null', __('docs/todo.props.subitem_slot')],
+                                ];
+                            @endphp
+                            @foreach ($subitemProps as [$prop, $type, $default, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-muted-foreground/70 whitespace-nowrap">{{ $default }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
+
+                {{-- vibe:todo.footer Props --}}
+                <div class="space-y-3">
+                    <p class="text-sm font-semibold text-foreground flex items-center gap-2">
+                        <span class="font-mono text-primary">&lt;vibe:todo.footer&gt;</span>
+                        <span class="text-xs text-muted-foreground font-normal">(Subkomponen Footer Kartu)</span>
+                    </p>
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_prop') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_type') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/todo.props.table_default') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/todo.props.table_desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @php
+                                $footerProps = [
+                                    ['class', 'string|null', 'null', 'Utility class Tailwind CSS untuk kustomisasi wadah footer kartu'],
+                                    ['slot (default)', 'html|string', 'null', __('docs/todo.props.footer_slot')],
+                                ];
+                            @endphp
+                            @foreach ($footerProps as [$prop, $type, $default, $desc])
                                 <vibe:table.row>
                                     <vibe:table.cell class="font-mono font-bold text-foreground whitespace-nowrap">{{ $prop }}</vibe:table.cell>
                                     <vibe:table.cell class="font-mono text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>

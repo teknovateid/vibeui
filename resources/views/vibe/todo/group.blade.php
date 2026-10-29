@@ -3,9 +3,6 @@
 @aware([
     'layout' => 'board',
     'navButtons' => false,
-    'dragHandle' => null,
-    'dragIndicator' => null,
-    'handle' => null,
     'lock' => false,
     'locked' => false,
     'editable' => false,

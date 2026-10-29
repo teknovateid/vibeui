@@ -79,6 +79,7 @@ export function vibeTodo(config = {}) {
         name: config.name || 'todos',
         reorderable: config.reorderable ?? true,
         locked: Boolean(config.locked ?? config.lock ?? false),
+        lockable: Boolean(config.lockable ?? false),
         persist: config.persist ?? false,
         storageKey: config.storageKey || '',
         expireHours: typeof config.expireHours === 'number' ? config.expireHours : (24 * 30),
@@ -93,6 +94,7 @@ export function vibeTodo(config = {}) {
         wireDelete: config.wireDelete || '',
         wireAdd: config.wireAdd || '',
         wireUpdate: config.wireUpdate || '',
+        wireLock: config.wireLock || '',
         editable: Boolean(config.editable ?? false),
         searchable: Boolean(config.searchable ?? false),
         keyboardNavigation: Boolean(config.keyboardNavigation ?? true),
@@ -179,6 +181,13 @@ export function vibeTodo(config = {}) {
                 root.addEventListener('vibe:todo-subtask-changed', (e) => {
                     const detail = e.detail || {};
                     this.onSubtaskChanged(detail.itemId, detail.subtaskId, detail.completed);
+                });
+                root.addEventListener('vibe:todo-item-update', (e) => {
+                    const detail = e.detail || {};
+                    const targetId = detail.id || detail.itemId;
+                    if (targetId) {
+                        this.updateItem(targetId, detail);
+                    }
                 });
             }
 
@@ -305,6 +314,7 @@ export function vibeTodo(config = {}) {
                                 description: stored.description || null,
                                 order: typeof stored.order === 'number' ? stored.order : idx,
                                 completed: !!stored.completed,
+                                locked: typeof stored.locked === 'boolean' ? stored.locked : undefined,
                                 group: stored.group || null,
                                 subtasks: Array.isArray(stored.subtasks) ? stored.subtasks : []
                             });
@@ -317,18 +327,36 @@ export function vibeTodo(config = {}) {
                             const stored = orderMap.get(item.id);
                             item.order = stored.order;
                             item.completed = stored.completed;
+                            if (typeof stored.locked === 'boolean') {
+                                item.locked = stored.locked;
+                                this.updateItemLockVisuals(item.id, item.locked);
+                            }
                             if (stored.group !== undefined && stored.group !== null) {
                                 item.group = String(stored.group);
                             }
-                            if (stored.title && !item.title) {
+                            if (stored.title) {
                                 item.title = stored.title;
                                 const titleEl = this.getItemEl(item.id)?.querySelector('[data-todo-title]');
-                                if (titleEl) titleEl.textContent = stored.title;
+                                if (titleEl) {
+                                    titleEl.textContent = stored.title;
+                                    const titleAlpine = titleEl.closest('[x-data]')?._x_dataStack?.[0];
+                                    if (titleAlpine && typeof titleAlpine.value !== 'undefined') {
+                                        titleAlpine.value = stored.title;
+                                        titleAlpine.previousValue = stored.title;
+                                    }
+                                }
                             }
-                            if (stored.description && !item.description) {
+                            if (typeof stored.description !== 'undefined' && stored.description !== null) {
                                 item.description = stored.description;
                                 const descEl = this.getItemEl(item.id)?.querySelector('[data-todo-description]');
-                                if (descEl) descEl.textContent = stored.description;
+                                if (descEl) {
+                                    descEl.textContent = stored.description;
+                                    const descAlpine = descEl.closest('[x-data]')?._x_dataStack?.[0];
+                                    if (descAlpine && typeof descAlpine.value !== 'undefined') {
+                                        descAlpine.value = stored.description;
+                                        descAlpine.previousValue = stored.description;
+                                    }
+                                }
                             }
 
                             // Restore subtasks completion states
@@ -476,6 +504,7 @@ export function vibeTodo(config = {}) {
                     title: item.title,
                     description: item.description,
                     completed: item.completed,
+                    locked: Boolean(item.locked),
                     group: item.group,
                     order: item.order,
                     subtasks: Array.isArray(item.subtasks) ? item.subtasks.map(s => ({ id: s.id, completed: s.completed })) : []
@@ -788,7 +817,7 @@ export function vibeTodo(config = {}) {
                 const target = e.target;
 
                 // Skip interactive controls unless touching a designated drag handle
-                const interactive = target.closest('button, a, input, textarea, select, [role="checkbox"], [data-action]');
+                const interactive = target.closest('button, a, input, textarea, select, [role="checkbox"], [data-action], [contenteditable="true"]');
                 const handle = target.closest('[data-todo-handle], [aria-label="Drag to reorder"], [data-action-drag-handle]');
 
                 if (interactive && !handle) return;
@@ -810,10 +839,10 @@ export function vibeTodo(config = {}) {
                 if (handle) {
                     // Direct handle touch initiates drag on first slight movement (> 3px)
                 } else {
-                    // Body touch requires 250ms hold to distinguish from scrolling
+                    // Body touch requires 200ms hold to distinguish from scrolling
                     holdTimer = setTimeout(() => {
                         startDragAction(startX, startY);
-                    }, 250);
+                    }, 200);
                 }
             };
 
@@ -1285,6 +1314,91 @@ export function vibeTodo(config = {}) {
         },
 
         // --- Task Item Actions: Toggle, Delete, Add ---
+        toggleLock(id) {
+            if (this.wasDragging) return;
+            if (!id && id !== 0) return;
+            const sId = String(id);
+            let item = this.items.find(i => i.id === sId);
+            const el = this.getItemEl(sId);
+            if (!item && el) {
+                item = {
+                    id: sId,
+                    locked: el.dataset.locked === 'true' || el.getAttribute('data-locked') === 'true'
+                };
+                this.items.push(item);
+            }
+            if (!item) return;
+
+            item.locked = !item.locked;
+            const isLocked = Boolean(item.locked);
+
+            this.updateItemLockVisuals(sId, isLocked);
+            this.saveStoredState();
+
+            const root = this.getRootEl();
+            if (root && root.dispatchEvent) {
+                root.dispatchEvent(new CustomEvent('vibe:todo-lock-toggled', {
+                    bubbles: true,
+                    detail: { id: this.id, itemId: sId, locked: isLocked }
+                }));
+            }
+
+            if (this.mode === 'livewire') {
+                if (this.wireLock && this.$wire) {
+                    this.$wire.call(this.wireLock, sId, isLocked);
+                } else if (this.$wire) {
+                    this.$wire.dispatch('todo-lock-toggled', { itemId: sId, locked: isLocked });
+                }
+            }
+        },
+
+        updateItemLockVisuals(id, isLocked) {
+            const el = this.getItemEl(id);
+            if (!el) return;
+
+            el.dataset.locked = isLocked ? 'true' : 'false';
+            el.setAttribute('draggable', (!isLocked && this.reorderable) ? 'true' : 'false');
+
+            if (isLocked) {
+                el.classList.remove('cursor-grab', 'active:cursor-grabbing');
+            } else if (this.reorderable) {
+                el.classList.add('cursor-grab', 'active:cursor-grabbing');
+            }
+
+            // Update lock toggle buttons inside this card
+            const lockBtns = el.querySelectorAll('[data-todo-lock-btn]');
+            lockBtns.forEach(btn => {
+                btn.setAttribute('aria-pressed', isLocked ? 'true' : 'false');
+                btn.setAttribute('title', isLocked ? 'Buka kunci kartu' : 'Kunci kartu');
+                btn.setAttribute('aria-label', isLocked ? 'Buka kunci kartu' : 'Kunci kartu');
+                const lockedIcon = btn.querySelector('[data-lock-icon-locked]');
+                const unlockedIcon = btn.querySelector('[data-lock-icon-unlocked]');
+                if (lockedIcon && unlockedIcon) {
+                    if (isLocked) {
+                        lockedIcon.classList.remove('hidden');
+                        unlockedIcon.classList.add('hidden');
+                        btn.classList.add('text-amber-500', 'dark:text-amber-400');
+                        btn.classList.remove('text-muted-foreground', 'opacity-0');
+                    } else {
+                        lockedIcon.classList.add('hidden');
+                        unlockedIcon.classList.remove('hidden');
+                        btn.classList.remove('text-amber-500', 'dark:text-amber-400');
+                        btn.classList.add('text-muted-foreground');
+                    }
+                }
+            });
+
+            // Update static lock indicator if present
+            const staticIndicator = el.querySelector('[data-todo-lock-indicator]');
+            if (staticIndicator) {
+                if (isLocked) {
+                    staticIndicator.classList.remove('hidden');
+                } else {
+                    staticIndicator.classList.add('hidden');
+                }
+            }
+        },
+
         toggle(id) {
             if (this.wasDragging) return;
             const sId = String(id);
@@ -1523,7 +1637,21 @@ export function vibeTodo(config = {}) {
 
         updateItem(id, updates = {}) {
             const sId = String(id);
-            const item = this.items.find(i => i.id === sId);
+            let item = this.items.find(i => i.id === sId);
+            if (!item) {
+                const el = this.getItemEl(sId);
+                if (el) {
+                    item = {
+                        id: sId,
+                        title: el.querySelector('[data-todo-title]')?.textContent?.trim() || '',
+                        description: el.querySelector('[data-todo-description]')?.textContent?.trim() || null,
+                        completed: el.dataset.completed === 'true',
+                        group: el.dataset.group || el.closest('[data-todo-group]')?.dataset?.todoGroup || null,
+                        order: parseInt(el.dataset.order || '0', 10)
+                    };
+                    this.items.push(item);
+                }
+            }
             if (!item) return;
 
             if (typeof updates.title === 'string') {
@@ -1538,6 +1666,10 @@ export function vibeTodo(config = {}) {
                 const titleEl = el.querySelector('[data-todo-title]');
                 if (titleEl && typeof updates.title === 'string') {
                     titleEl.textContent = item.title;
+                    const titleAlpine = titleEl.closest('[x-data]')?._x_dataStack?.[0];
+                    if (titleAlpine && typeof titleAlpine.value !== 'undefined') {
+                        titleAlpine.value = item.title;
+                    }
                 }
                 const descEl = el.querySelector('[data-todo-description]');
                 if (descEl && typeof updates.description !== 'undefined') {
@@ -1546,6 +1678,10 @@ export function vibeTodo(config = {}) {
                         descEl.classList.remove('hidden');
                     } else {
                         descEl.classList.add('hidden');
+                    }
+                    const descAlpine = descEl.closest('[x-data]')?._x_dataStack?.[0];
+                    if (descAlpine && typeof descAlpine.value !== 'undefined') {
+                        descAlpine.value = item.description || '';
                     }
                 }
             }

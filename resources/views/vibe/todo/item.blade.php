@@ -5,11 +5,9 @@
     'checkbox' => null,
     'checkable' => null,
     'navButtons' => false,
-    'dragHandle' => null,
-    'dragIndicator' => null,
-    'handle' => null,
     'lock' => false,
     'locked' => false,
+    'lockable' => false,
     'editable' => false,
     'wireUpdate' => null,
     'updateUrl' => null,
@@ -17,7 +15,7 @@
 
 @props([
     'id' => null,
-    'title' => '',
+    'title' => null,
     'description' => null,
     'completed' => false,
     'checkbox' => null,
@@ -34,14 +32,8 @@
     'dueDate' => null,
     'assignee' => null,
     'assignees' => null,
-    'variant' => 'default', // 'default', 'card', 'flat'
-    'navButtons' => null, // null = inherit dari parent @aware, true/false = override per-item
-    'dragHandle' => null,
-    'dragIndicator' => null,
-    'handle' => null,
-    'lock' => null,
-    'locked' => null,
-    'editable' => null,
+    'variant' => 'default', // 'default', 'card', 'flat', 'outline'
+    'navButtons' => null, // null = inherit dari parent @aware
     'wireUpdate' => null,
     'updateUrl' => null,
 ])
@@ -49,7 +41,6 @@
 @php
     $itemId = $id ?? 'todo-item-' . Str::random(8);
     $isCompleted = (bool) $completed;
-
     $isBoard = in_array($layout, ['board', 'kanban'], true) || ! empty($group);
     
     // Default: NO checkbox unless explicitly enabled via :checkbox="true" or :checkable="true"
@@ -57,36 +48,30 @@
     $showCheckbox = $itemCheckbox !== null ? (bool) $itemCheckbox : false;
 
     // nav-buttons: per-item prop overrides parent @aware value
-    // Default is false (hidden). Set :nav-buttons="true" on <vibe:todo> or per-item to show.
-    // Note: $navButtons from @props is null when not set on item; $navButtons from @aware is false by default.
     $showNavButtons = $navButtons !== null ? (bool) $navButtons : false;
 
     // lock: per-item prop overrides parent @aware value.
-    // Default is false (unlocked). Set lock/locked on <vibe:todo>, <vibe:todo.group>, or <vibe:todo.item> to prevent moving.
-    $itemLockProp = $lock ?? $locked;
-    $isLocked = $itemLockProp !== null ? (bool) $itemLockProp : false;
+    $itemLockProp = $attributes->has('lock') 
+        ? filter_var($attributes->get('lock'), FILTER_VALIDATE_BOOLEAN) 
+        : ($attributes->has('locked') 
+            ? filter_var($attributes->get('locked'), FILTER_VALIDATE_BOOLEAN) 
+            : (bool) ($lock || $locked));
+    $isLocked = $itemLockProp;
 
-    // drag-handle: per-item prop overrides parent @aware value.
-    // Default is 'hover' (only on hover on desktop, always visible on mobile). Options: 'visible', 'hover', 'hidden' (or false).
-    $itemHandleProp = $dragHandle ?? $dragIndicator ?? $handle ?? $attributes->get('drag-handle') ?? $attributes->get('drag-indicator') ?? $attributes->get('handle');
-    if ($itemHandleProp === false || $itemHandleProp === 'false' || $itemHandleProp === 'hidden' || $itemHandleProp === 'none' || $itemHandleProp === 'hide') {
-        $dragHandleMode = 'hidden';
-    } elseif ($itemHandleProp === true || $itemHandleProp === 'true' || $itemHandleProp === 'visible' || $itemHandleProp === 'show' || $itemHandleProp === 'always' || $itemHandleProp === '') {
-        $dragHandleMode = 'visible';
-    } else {
-        $dragHandleMode = 'hover';
-    }
+    // lockable: per-item prop overrides parent @aware value
+    $isLockable = $attributes->has('lockable')
+        ? filter_var($attributes->get('lockable'), FILTER_VALIDATE_BOOLEAN)
+        : (bool) $lockable;
 
     // editable: per-item prop overrides parent @aware value
-    $isEditable = $editable !== null ? (bool) $editable : false;
+    $isEditable = $attributes->has('editable')
+        ? filter_var($attributes->get('editable'), FILTER_VALIDATE_BOOLEAN)
+        : (bool) $editable;
 
     // Detect if custom slots were provided
     $hasLabelsSlot = isset($labels) && ($labels instanceof \Illuminate\Contracts\Support\Htmlable || $labels instanceof \Illuminate\View\ComponentSlot) && !empty((string) $labels);
-    $hasAssigneeSlot = isset($assignee) && ($assignee instanceof \Illuminate\Contracts\Support\Htmlable || $assignee instanceof \Illuminate\View\ComponentSlot) && !empty((string) $assignee);
     $hasContentSlot = isset($content) && ($content instanceof \Illuminate\Contracts\Support\Htmlable || $content instanceof \Illuminate\View\ComponentSlot) && !empty(trim((string) $content));
     $hasActionsSlot = isset($actions) && ($actions instanceof \Illuminate\Contracts\Support\Htmlable || $actions instanceof \Illuminate\View\ComponentSlot) && !empty(trim((string) $actions));
-    $hasHeaderActionsSlot = isset($headerActions) && ($headerActions instanceof \Illuminate\Contracts\Support\Htmlable || $headerActions instanceof \Illuminate\View\ComponentSlot) && !empty(trim((string) $headerActions));
-    $hasSubtasksSlot = isset($subtasksSlot) && ($subtasksSlot instanceof \Illuminate\Contracts\Support\Htmlable || $subtasksSlot instanceof \Illuminate\View\ComponentSlot) && !empty(trim((string) $subtasksSlot));
 
     // Resolve labels / tags
     $rawLabels = $hasLabelsSlot ? null : ($labels ?? $tags);
@@ -104,7 +89,7 @@
     }
 
     // Resolve assignees
-    $rawAssignees = $hasAssigneeSlot ? null : ($assignees ?? $assignee);
+    $rawAssignees = $assignees ?? $assignee;
     if (is_string($rawAssignees)) {
         if (str_starts_with(trim($rawAssignees), '[') || str_starts_with(trim($rawAssignees), '{')) {
             $decoded = json_decode($rawAssignees, true);
@@ -142,38 +127,6 @@
         $resolvedSubtasks = [];
     }
 
-    // Smart Slot Content Analysis:
-    // Distinguish between subtasks in slot, plain text title in slot, and custom developer HTML body
-    $rawSlotString = isset($slot) ? trim((string) $slot) : '';
-    $hasRawSlot = !empty($rawSlotString);
-    $slotHasSubtasks = $hasRawSlot && str_contains($rawSlotString, 'data-todo-subtask');
-    $slotHasHtml = $hasRawSlot && (str_contains($rawSlotString, '<') && str_contains($rawSlotString, '>'));
-
-    if (!empty($title)) {
-        $resolvedTitle = $title;
-        $hasSubtasksInSlot = $slotHasSubtasks;
-        $hasCustomSlot = $hasRawSlot && !$slotHasSubtasks;
-    } else {
-        if ($slotHasSubtasks) {
-            $resolvedTitle = '';
-            $hasSubtasksInSlot = true;
-            $hasCustomSlot = false;
-        } elseif ($hasRawSlot && !$slotHasHtml) {
-            // Simple plain text slot without title prop: <vibe:todo.item>Beli Kopi</vibe:todo.item>
-            $resolvedTitle = $rawSlotString;
-            $hasSubtasksInSlot = false;
-            $hasCustomSlot = false;
-        } else {
-            // HTML content in slot or empty title: treat as custom body
-            $resolvedTitle = '';
-            $hasSubtasksInSlot = false;
-            $hasCustomSlot = $hasRawSlot;
-        }
-    }
-
-    $hasCustomBody = $hasContentSlot || $hasCustomSlot;
-    $hasAnySubtasks = !empty($resolvedSubtasks) || $hasSubtasksInSlot || $hasSubtasksSlot;
-
     // Smart Due Date Urgency calculation
     $dueDateUrgency = 'upcoming';
     if (!empty($dueDate) && is_string($dueDate)) {
@@ -188,9 +141,9 @@
     }
 
     $dueDateClasses = match ($dueDateUrgency) {
-        'overdue' => 'text-destructive bg-destructive/10 border border-destructive/25 font-semibold',
-        'today' => 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/25 font-semibold',
-        default => 'text-muted-foreground bg-muted/50 border border-transparent font-medium',
+        'overdue' => 'text-destructive bg-destructive/10 border-destructive/25 font-semibold',
+        'today' => 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/25 font-semibold',
+        default => '',
     };
 
     $dueDateTooltip = match ($dueDateUrgency) {
@@ -205,10 +158,13 @@
         default => 'bg-card border border-border/70 dark:border-border/40 shadow-2xs hover:shadow-xs',
     };
 
-    // Check if header row has any elements to display
-    $hasHeaderLeft = $isLocked || ($reorderable && $dragHandleMode !== 'hidden') || $showCheckbox || !empty($resolvedTitle) || !empty($description);
-    $hasHeaderRight = $hasLabelsSlot || !empty($resolvedLabels) || !empty($badge) || !empty($dueDate) || ($hasAnySubtasks) || $hasAssigneeSlot || !empty($resolvedAssignees) || ($isBoard && $showNavButtons && !$isLocked) || $deletable || $hasHeaderActionsSlot;
-    $hasHeaderRow = $hasHeaderLeft || $hasHeaderRight;
+    $cursorClass = ($reorderable && ! $isLocked) ? 'cursor-grab active:cursor-grabbing' : '';
+
+    $hasMetaBadges = !empty($badge) || !empty($dueDate) || !empty($resolvedLabels) || !empty($resolvedAssignees) || $hasLabelsSlot;
+
+    $rawSlotString = isset($slot) ? trim((string) $slot) : '';
+    $hasRawSlot = !empty($rawSlotString);
+    $hasHeaderSubcomponent = str_contains($rawSlotString, 'data-todo-header');
 @endphp
 
 <div
@@ -246,7 +202,7 @@
         }
     }"
     @vibe:todo-subtask-toggle.stop="updateSubtasks(); $dispatch('vibe:todo-subtask-changed', { itemId: '{{ $itemId }}', subtaskId: $event.detail.subtaskId, completed: $event.detail.completed, total: subtasksCount, completedCount: completedSubtasksCount })"
-    {{ $attributes->twMerge(['class' => "group relative flex flex-col justify-center gap-0 p-3 sm:p-3.5 rounded-xl transition-all duration-150 select-none {$cardStyles}"]) }}
+    {{ $attributes->twMerge(['class' => "group relative flex flex-col justify-center gap-0 p-3 sm:p-3.5 rounded-xl transition-all duration-150 select-none {$cardStyles} {$cursorClass}"]) }}
     :class="{
         'opacity-40 scale-[0.99] ring-2 ring-primary/40': (typeof draggingId !== 'undefined' && draggingId === '{{ $itemId }}'),
         'border-t-2 border-t-primary': (typeof dragOverId !== 'undefined' && dragOverId === '{{ $itemId }}' && typeof dragOverPosition !== 'undefined' && dragOverPosition === 'before'),
@@ -259,260 +215,193 @@
     <input type="hidden" data-field="completed" value="{{ $isCompleted ? '1' : '0' }}">
     <input type="hidden" data-field="group" value="{{ $group ?? '' }}">
 
-    {{-- Main Card Header Row --}}
-    @if ($hasHeaderRow)
-        <div class="flex items-center justify-between gap-3 w-full">
-            {{-- Left: Drag Handle / Lock Indicator, Checkbox, Title/Description --}}
-            @if ($hasHeaderLeft)
-                <div class="flex items-center gap-3 min-w-0 flex-1">
-                    @if ($isLocked)
-                        {{-- Lock Indicator --}}
-                        <div class="shrink-0 text-muted-foreground/50 flex items-center justify-center p-0.5" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
-                            <svg class="size-4 pointer-events-none select-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    {{-- Card Main Body --}}
+    <div class="flex @if($showCheckbox) items-start gap-3 @else flex-col @endif w-full min-w-0">
+        {{-- Custom Accessible Checkbox --}}
+        @if ($showCheckbox)
+            <button
+                type="button"
+                draggable="false"
+                role="checkbox"
+                aria-checked="{{ $isCompleted ? 'true' : 'false' }}"
+                @click.stop="typeof toggle === 'function' ? toggle('{{ $itemId }}') : null"
+                class="shrink-0 mt-0.5 flex items-center justify-center size-5 rounded-md border transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer"
+                data-todo-checkbox-box
+                :class="{{ $isCompleted ? 'true' : 'false' }} ? 'bg-primary border-primary text-primary-foreground' : 'bg-background border-input hover:border-primary/60'"
+            >
+                <svg 
+                    data-todo-check-icon
+                    class="size-3.5 stroke-[2.5] transition-all duration-150 {{ $isCompleted ? 'opacity-100 scale-100' : 'opacity-0 scale-50' }}" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </button>
+        @endif
+
+        {{-- Card Content Slot & Backward Compatible Content --}}
+        <div class="flex-1 min-w-0 space-y-2 w-full">
+            {{-- Prop-based Title & Description Layout with Flex Header and Inline Actions --}}
+            @if (!empty($title))
+                <div class="flex items-start justify-between gap-2 w-full">
+                    <div class="flex-1 min-w-0 space-y-1">
+                        <vibe:todo.title :editable="$isEditable" :completed="$isCompleted">
+                            {{ $title }}
+                        </vibe:todo.title>
+
+                        @if (!empty($description))
+                            <vibe:todo.description :editable="$isEditable">
+                                {{ $description }}
+                            </vibe:todo.description>
+                        @endif
+                    </div>
+
+                    {{-- Actions: Lock indicator/button & Delete Button --}}
+                    <div class="flex items-center gap-1 shrink-0 pt-0.5">
+                        @if ($isLockable)
+                            <button
+                                type="button"
+                                draggable="false"
+                                data-todo-lock-btn
+                                aria-pressed="{{ $isLocked ? 'true' : 'false' }}"
+                                aria-label="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                                title="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                                @click.stop="typeof toggleLock === 'function' ? toggleLock('{{ $itemId }}') : null"
+                                class="p-1 rounded-md transition-all cursor-pointer flex items-center justify-center {{ $isLocked ? 'text-amber-500 dark:text-amber-400' : 'text-muted-foreground opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-foreground hover:bg-muted' }}"
+                            >
+                                <svg data-lock-icon-locked class="size-3.5 {{ $isLocked ? '' : 'hidden' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                <svg data-lock-icon-unlocked class="size-3.5 {{ $isLocked ? 'hidden' : '' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                                </svg>
+                            </button>
+                        @elseif ($isLocked)
+                            <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
+                                <svg class="size-3.5 select-none pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                            </div>
+                        @endif
+
+                        @if ($deletable)
+                            <button
+                                type="button"
+                                draggable="false"
+                                aria-label="Hapus tugas"
+                                title="Hapus tugas"
+                                @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
+                                class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity cursor-pointer flex items-center justify-center"
+                            >
+                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 6h18"/>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        @endif
+                    </div>
+                </div>
+            @elseif (! $hasHeaderSubcomponent && ($deletable || $isLocked || $isLockable))
+                {{-- Fallback Header Actions for slot without <vibe:todo.header> --}}
+                <div class="flex items-center justify-end gap-1 w-full pb-0.5">
+                    @if ($isLockable)
+                        <button
+                            type="button"
+                            draggable="false"
+                            data-todo-lock-btn
+                            aria-pressed="{{ $isLocked ? 'true' : 'false' }}"
+                            aria-label="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                            title="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                            @click.stop="typeof toggleLock === 'function' ? toggleLock('{{ $itemId }}') : null"
+                            class="p-1 rounded-md transition-all cursor-pointer flex items-center justify-center {{ $isLocked ? 'text-amber-500 dark:text-amber-400' : 'text-muted-foreground opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-foreground hover:bg-muted' }}"
+                        >
+                            <svg data-lock-icon-locked class="size-3.5 {{ $isLocked ? '' : 'hidden' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                            <svg data-lock-icon-unlocked class="size-3.5 {{ $isLocked ? 'hidden' : '' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                                <path d="M7 11V7a5 5 0 0 1 9.9-1"/>
+                            </svg>
+                        </button>
+                    @elseif ($isLocked)
+                        <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
+                            <svg class="size-3.5 select-none pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
                             </svg>
                         </div>
-                    @elseif ($reorderable && $dragHandleMode !== 'hidden')
-                        {{-- Drag Handle --}}
-                        <div class="shrink-0 {{ $dragHandleMode === 'hover' ? 'flex md:hidden md:group-hover:flex' : 'flex' }} text-muted-foreground/40 group-hover:text-muted-foreground transition-colors">
-                            <vibe:todo.handle mode="visible" />
-                        </div>
                     @endif
 
-                    {{-- Custom Accessible Checkbox --}}
-                    @if ($showCheckbox)
-                        <button
-                            type="button"
-                            draggable="false"
-                            role="checkbox"
-                            aria-checked="{{ $isCompleted ? 'true' : 'false' }}"
-                            @click.stop="typeof toggle === 'function' ? toggle('{{ $itemId }}') : null"
-                            class="shrink-0 flex items-center justify-center size-5 rounded-md border transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 cursor-pointer"
-                            data-todo-checkbox-box
-                            :class="{{ $isCompleted ? 'true' : 'false' }} ? 'bg-primary border-primary text-primary-foreground' : 'bg-background border-input hover:border-primary/60'"
-                        >
-                            <svg 
-                                data-todo-check-icon
-                                class="size-3.5 stroke-[2.5] transition-all duration-150 {{ $isCompleted ? 'opacity-100 scale-100' : 'opacity-0 scale-50' }}" 
-                                viewBox="0 0 24 24" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                stroke-linecap="round" 
-                                stroke-linejoin="round"
+                    @if ($deletable)
+                            <button
+                                type="button"
+                                draggable="false"
+                                aria-label="Hapus tugas"
+                                title="Hapus tugas"
+                                @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
+                                class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity cursor-pointer flex items-center justify-center"
                             >
-                                <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                        </button>
-                    @endif
-
-                    {{-- Content / Title & Description with Inline Editing --}}
-                    @if (!empty($resolvedTitle) || !empty($description))
-                        <div 
-                            x-data="{
-                                editing: false,
-                                editTitle: @js($resolvedTitle),
-                                editDesc: @js($description ?? ''),
-                                isEditable: @js($isEditable),
-                                startEdit() {
-                                    if (!this.isEditable) return;
-                                    this.editing = true;
-                                    this.$nextTick(() => {
-                                        const input = this.$refs.titleInput;
-                                        if (input) { input.focus(); input.select(); }
-                                    });
-                                },
-                                saveEdit() {
-                                    if (!this.editing) return;
-                                    this.editing = false;
-                                    const cleanTitle = (this.editTitle || '').trim();
-                                    if (cleanTitle) {
-                                        if (typeof updateItem === 'function') {
-                                            updateItem('{{ $itemId }}', { title: cleanTitle, description: this.editDesc });
-                                        }
-                                    } else {
-                                        this.editTitle = @js($resolvedTitle);
-                                    }
-                                },
-                                cancelEdit() {
-                                    this.editing = false;
-                                    this.editTitle = @js($resolvedTitle);
-                                    this.editDesc = @js($description ?? '');
-                                }
-                            }"
-                            class="group/content flex flex-col min-w-0 flex-1 relative {{ $showCheckbox && ! $isEditable ? 'cursor-pointer' : '' }}" 
-                            @if ($showCheckbox && ! $isEditable) @click="typeof toggle === 'function' ? toggle('{{ $itemId }}') : null" @endif
-                        >
-                            {{-- Normal View --}}
-                            <div 
-                                x-show="!editing"
-                                @if ($isEditable) @dblclick="startEdit()" @endif
-                                class="flex items-center gap-1.5 min-w-0"
-                            >
-                                <div class="min-w-0 flex-1">
-                                    <span 
-                                        data-todo-title
-                                        class="text-sm font-medium transition-all duration-150 truncate block {{ $isCompleted ? 'line-through text-muted-foreground/80' : 'text-foreground' }}"
-                                    >
-                                        {{ $resolvedTitle }}
-                                    </span>
-
-                                    @if ($description)
-                                        <p data-todo-description class="text-xs text-muted-foreground truncate mt-0.5">
-                                            {{ $description }}
-                                        </p>
-                                    @endif
-                                </div>
-
-                                @if ($isEditable)
-                                    <button 
-                                        type="button" 
-                                        @click.stop="startEdit()" 
-                                        title="Ubah judul tugas"
-                                        aria-label="Ubah judul tugas"
-                                        class="hidden group-hover/content:inline-flex p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/80 transition-all shrink-0 cursor-pointer"
-                                    >
-                                        <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <path d="M12 20h9"/>
-                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                                        </svg>
-                                    </button>
-                                @endif
-                            </div>
-
-                            {{-- Inline Edit Form --}}
-                            @if ($isEditable)
-                                <div 
-                                    x-show="editing" 
-                                    x-cloak
-                                    @click.stop 
-                                    @mousedown.stop 
-                                    @dragstart.stop.prevent
-                                    class="flex flex-col gap-1.5 w-full pt-0.5"
-                                >
-                                    <input 
-                                        x-ref="titleInput"
-                                        type="text" 
-                                        x-model="editTitle" 
-                                        @keydown.enter.prevent="saveEdit()" 
-                                        @keydown.escape.prevent="cancelEdit()" 
-                                        class="text-sm font-medium bg-background border border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-lg px-2.5 py-1 w-full outline-none shadow-xs text-foreground transition-all"
-                                        placeholder="Judul tugas..."
-                                    />
-                                    <div class="flex items-center gap-1.5">
-                                        <button 
-                                            type="button" 
-                                            @click.stop="saveEdit()" 
-                                            class="px-2.5 py-1 text-xs font-semibold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer shadow-xs active:scale-95"
-                                        >
-                                            Simpan
-                                        </button>
-                                        <button 
-                                            type="button" 
-                                            @click.stop="cancelEdit()" 
-                                            class="px-2.5 py-1 text-xs font-medium rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer"
-                                        >
-                                            Batal (Esc)
-                                        </button>
-                                    </div>
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-                </div>
+                                <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 6h18"/>
+                                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                                </svg>
+                            </button>
+                        @endif
+                    </div>
             @endif
 
-            {{-- Right: Metadata (Labels, Due Date, Assignees, Header Actions) & Action Buttons --}}
-            @if ($hasHeaderRight)
-                <div class="flex items-center gap-2 shrink-0">
-                    {{-- Header Actions Slot --}}
-                    @if ($hasHeaderActionsSlot)
-                        <div class="flex items-center gap-1.5">
-                            {{ $headerActions }}
-                        </div>
-                    @endif
-
-                    {{-- Labels / Tags (Slot, Array, or single Badge fallback) --}}
-                    @if ($hasLabelsSlot)
-                        <div class="flex items-center gap-1">
+            {{-- Metadata Badges (badge, dueDate, labels, assignees) and Board Column Nav Buttons --}}
+            @if ($hasMetaBadges || ($isBoard && $showNavButtons && ! $isLocked))
+                <div class="flex items-center justify-between gap-2 text-xs pt-0.5 w-full">
+                    <div class="flex items-center gap-1.5 flex-wrap flex-1 min-w-0">
+                        @if ($hasLabelsSlot)
                             {{ $labels }}
-                        </div>
-                    @elseif (!empty($resolvedLabels))
-                        <div class="flex items-center gap-1">
-                            @foreach ($resolvedLabels as $lbl)
-                                @php
-                                    $lblText = is_array($lbl) ? ($lbl['text'] ?? $lbl['label'] ?? '') : (string) $lbl;
-                                    $lblVariant = is_array($lbl) ? ($lbl['variant'] ?? 'default') : 'default';
-                                @endphp
-                                @if ($lblText)
-                                    <vibe:badge size="xs" :variant="$lblVariant" class="font-medium">
-                                        {{ $lblText }}
-                                    </vibe:badge>
-                                @endif
-                            @endforeach
-                        </div>
-                    @elseif ($badge)
-                        <vibe:badge size="xs" :variant="$badgeVariant" class="font-medium">
-                            {{ $badge }}
-                        </vibe:badge>
-                    @endif
+                        @endif
 
-                    {{-- Smart Due Date with Urgency Styling --}}
-                    @if ($dueDate)
-                        <span title="{{ $dueDateTooltip }}" class="inline-flex items-center gap-1 text-[11px] px-2 py-0.5 rounded-md transition-colors {{ $dueDateClasses }}">
-                            <svg class="size-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
-                                <line x1="16" x2="16" y1="2" y2="6"/>
-                                <line x1="8" x2="8" y1="2" y2="6"/>
-                                <line x1="3" x2="21" y1="10" y2="10"/>
-                            </svg>
-                            {{ $dueDate }}
-                        </span>
-                    @endif
+                        @if (!empty($badge))
+                            <vibe:badge :variant="$badgeVariant" size="sm">{{ $badge }}</vibe:badge>
+                        @endif
 
-                    {{-- Subtasks Mini Counter Badge --}}
-                    <span 
-                        x-show="subtasksCount > 0" 
-                        title="Subtugas selesai"
-                        class="inline-flex items-center gap-1 text-[11px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded-md font-mono"
-                    >
-                        <svg class="size-3 text-muted-foreground/80 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="m9 11 3 3L22 4"/>
-                            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-                        </svg>
-                        <span x-text="completedSubtasksCount + '/' + subtasksCount"></span>
-                    </span>
+                        @if (!empty($dueDate))
+                            <vibe:badge variant="outline" size="sm" class="{{ $dueDateClasses }}" title="{{ $dueDateTooltip }}">
+                                <x-slot:icon>
+                                    <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                </x-slot:icon>
+                                {{ $dueDate }}
+                            </vibe:badge>
+                        @endif
 
-                    {{-- Assignee Avatar / Avatar Stack --}}
-                    @if ($hasAssigneeSlot)
-                        <div class="flex items-center">
-                            {{ $assignee }}
-                        </div>
-                    @elseif (!empty($resolvedAssignees))
-                        @if (count($resolvedAssignees) > 1)
+                        @foreach ($resolvedLabels as $lbl)
+                            @php
+                                $lblText = is_array($lbl) ? ($lbl['text'] ?? $lbl['name'] ?? '') : (string) $lbl;
+                                $lblVariant = is_array($lbl) ? ($lbl['variant'] ?? 'outline') : 'outline';
+                            @endphp
+                            <vibe:badge :variant="$lblVariant" size="sm" class="text-[10px]">{{ $lblText }}</vibe:badge>
+                        @endforeach
+
+                        @if (!empty($resolvedAssignees))
                             <vibe:avatar.group size="xs" :limit="3">
                                 @foreach ($resolvedAssignees as $asg)
-                                    @php
-                                        $asgName = is_array($asg) ? ($asg['name'] ?? null) : (string) $asg;
-                                        $asgSrc = is_array($asg) ? ($asg['src'] ?? $asg['avatar'] ?? null) : (filter_var($asg, FILTER_VALIDATE_URL) ? $asg : null);
-                                    @endphp
-                                    <vibe:avatar size="xs" :name="$asgName" :src="$asgSrc" />
+                                    <vibe:avatar size="xs" :name="is_array($asg) ? ($asg['name'] ?? null) : (string) $asg" />
                                 @endforeach
                             </vibe:avatar.group>
-                        @else
-                            @php
-                                $singleAsg = $resolvedAssignees[0];
-                                $asgName = is_array($singleAsg) ? ($singleAsg['name'] ?? null) : (string) $singleAsg;
-                                $asgSrc = is_array($singleAsg) ? ($singleAsg['src'] ?? $singleAsg['avatar'] ?? null) : (filter_var($singleAsg, FILTER_VALIDATE_URL) ? $singleAsg : null);
-                            @endphp
-                            <vibe:avatar size="xs" :name="$asgName" :src="$asgSrc" />
                         @endif
-                    @endif
+                    </div>
 
-                    {{-- Board Navigation Buttons (Move to Prev/Next Column) --}}
+                    {{-- Board Column Navigation Buttons (< >) in Document Flow --}}
                     @if ($isBoard && $showNavButtons && ! $isLocked)
                         <div 
-                            class="flex items-center gap-1 shrink-0"
+                            class="flex items-center gap-1 shrink-0 ml-auto"
                             x-show="(typeof canMovePrev === 'function' && canMovePrev('{{ $itemId }}')) || (typeof canMoveNext === 'function' && canMoveNext('{{ $itemId }}'))"
                         >
                             <button
@@ -543,76 +432,39 @@
                             </button>
                         </div>
                     @endif
+                </div>
+            @endif
 
-                    {{-- Delete Button (Visible on Hover / Focus, takes zero space when hidden) --}}
-                    @if ($deletable)
-                        <button
-                            type="button"
-                            draggable="false"
-                            aria-label="Hapus tugas"
-                            title="Hapus tugas"
-                            @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
-                            class="hidden group-hover:flex focus:flex p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all cursor-pointer items-center justify-center"
-                        >
-                            <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18"/>
-                                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
-                                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
-                            </svg>
-                        </button>
-                    @endif
+            {{-- Backward-compatible subtasks array prop if passed --}}
+            @if (!empty($resolvedSubtasks))
+                <div class="space-y-1 pt-1">
+                    @foreach ($resolvedSubtasks as $st)
+                        <vibe:todo.subtask :id="$st['id'] ?? null" :completed="$st['completed'] ?? false">
+                            {{ $st['title'] ?? '' }}
+                        </vibe:todo.subtask>
+                    @endforeach
+                </div>
+            @endif
+
+            {{-- Explicit content slot --}}
+            @if ($hasContentSlot)
+                <div data-todo-custom-content class="w-full">
+                    {{ $content }}
+                </div>
+            @endif
+
+            {{-- Default slot (when no content slot was passed) --}}
+            @if ($hasRawSlot)
+                <div data-todo-custom-content class="w-full space-y-2">
+                    {{ $slot }}
                 </div>
             @endif
         </div>
-    @endif
+    </div>
 
-    {{-- Custom Content / HTML Body Slot --}}
-    @if ($hasCustomBody)
-        <div class="w-full @if($hasHeaderRow) mt-2 @endif" data-todo-custom-content>
-            @if ($hasContentSlot)
-                {{ $content }}
-            @endif
-            @if ($hasCustomSlot)
-                {{ $slot }}
-            @endif
-        </div>
-    @endif
-
-    {{-- Subtasks / Checklist Mini --}}
-    @if ($hasAnySubtasks)
-        <div x-show="subtasksCount > 0" class="w-full mt-2.5 pt-2 border-t border-border/40 space-y-1.5" data-todo-subtasks-wrapper>
-            {{-- Slim Visual Progress Bar --}}
-            <div class="w-full bg-muted/70 rounded-full h-1 overflow-hidden">
-                <div 
-                    class="bg-primary h-full transition-all duration-300 rounded-full" 
-                    :style="'width: ' + (subtasksCount > 0 ? Math.round((completedSubtasksCount / subtasksCount) * 100) : 0) + '%'"
-                ></div>
-            </div>
-
-            {{-- Subtasks List --}}
-            <div class="space-y-0.5">
-                @if ($hasSubtasksSlot)
-                    {{ $subtasksSlot }}
-                @endif
-                @if ($hasSubtasksInSlot)
-                    {{ $slot }}
-                @endif
-                @if (!empty($resolvedSubtasks))
-                    @foreach ($resolvedSubtasks as $sub)
-                        <vibe:todo.subtask 
-                            :id="$sub['id'] ?? null" 
-                            :title="$sub['title'] ?? ''" 
-                            :completed="$sub['completed'] ?? false" 
-                        />
-                    @endforeach
-                @endif
-            </div>
-        </div>
-    @endif
-
-    {{-- Custom Actions Slot (Card Action Buttons / Footer) --}}
+    {{-- Actions Slot --}}
     @if ($hasActionsSlot)
-        <div class="w-full mt-2.5 pt-2 border-t border-border/40 flex items-center gap-2 flex-wrap sm:flex-nowrap" data-todo-actions>
+        <div data-todo-actions class="w-full mt-2.5 pt-2 border-t border-border/40 flex items-center justify-end gap-2">
             {{ $actions }}
         </div>
     @endif

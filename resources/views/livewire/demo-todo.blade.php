@@ -9,10 +9,12 @@
     <vibe:todo 
         mode="livewire"
         layout="board"
+        :editable="true"
         wire-reorder="updateTaskOrder"
         wire-toggle="toggleTask"
         wire-delete="deleteTask"
         wire-add="addTask"
+        wire-update="updateTask"
     >
         <vibe:todo.group name="todo" title="To Do" :count="collect($tasks)->where('group', 'todo')->count()" color="blue">
             @foreach (collect($tasks)->where('group', 'todo')->sortBy('order') as $task)

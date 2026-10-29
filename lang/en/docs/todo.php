@@ -52,19 +52,19 @@ return [
         'disabled_hint' => 'This column hides navigation buttons by default (:nav-buttons="false").',
     ],
 
-    'drag_handle' => [
-        'title' => '7. 3x2 Drag Indicator Visibility (drag-handle)',
-        'desc' => 'Control the visibility of the 3x2 dot drag grip indicator via <code>drag-handle</code>, <code>drag-indicator</code>, or <code>handle</code>. Defaults to <code>hover</code> (revealed on hover on desktop, always visible on mobile), with options for <code>visible</code> (always shown) or <code>hidden</code> / <code>false</code> (completely hidden).',
-        'preview_title' => 'Drag Indicator Visibility Comparison (Visible, On Hover, Hidden)',
-        'visible_badge' => 'Visible',
-        'visible_desc' => 'The 3x2 grip dots are always displayed on the left side of the card for clear drag affordance.',
-        'hover_badge' => 'On Hover (Default)',
-        'hover_desc' => 'By default, the 3x2 grip dots stay hidden and appear on hover on desktop, and remain always visible on mobile devices for easy touch dragging.',
-        'hidden_badge' => 'Hidden / false',
-        'hidden_desc' => 'The 3x2 grip dots are completely hidden for a clean, ultra-minimalist card design.',
-        'locked_badge' => 'Locked (:lock="true")',
-        'locked_desc' => 'Displays a padlock icon and disables dragging so the card cannot be moved.',
-        'mobile_hint' => '📱 Mobile & Touch Devices Tip: On <code>visible</code> or <code>hover</code> mode, touch the 3x2 dots directly to drag. On <code>hidden</code> mode, touch and hold (250ms long-press) the card body to initiate drag with tactile haptic feedback.',
+    'lock' => [
+        'title' => '7. Locking Items & Interactive Lock Button (:lock & :lockable)',
+        'desc' => 'Vibe Todo supports two locking paradigms: <strong>Static Lock (Read-Only)</strong> via <code>:lock="true"</code> to permanently pin a card from initial render, and <strong>Interactive Lock Button</strong> via <code>:lockable="true"</code> (or the <code>toggleLock(id)</code> Alpine method) which renders an interactive padlock button allowing users to lock and unlock cards on the fly with a single click.',
+        'preview_title' => 'Interactive Lock Button vs Static Lock Comparison',
+        'unlocked_badge' => 'Draggable (Default)',
+        'unlocked_desc' => 'The card can be freely dragged and reordered to any column.',
+        'lockable_badge' => 'Interactive Lock Button (:lockable="true")',
+        'lockable_desc' => 'Click the padlock button to dynamically lock or unlock this card in realtime.',
+        'header_lockable_badge' => 'Header Lock Button (<vibe:todo.header :lockable="true">)',
+        'header_lockable_desc' => 'Places the interactive lock button inside the top card header row.',
+        'locked_badge' => 'Permanently Locked (:lock="true")',
+        'locked_desc' => 'The card displays a static padlock indicator, drag is disabled, and navigation buttons are hidden.',
+        'mobile_hint' => '📱 Mobile & Touch Devices Tip: The entire card body is directly draggable. On touchscreen devices, press and hold for 200ms to initiate drag without interfering with natural screen scrolling.',
     ],
 
     'backend' => [
@@ -103,6 +103,7 @@ return [
         'deleted_desc' => 'Dispatched immediately before or upon item deletion.',
         'added_desc' => 'Dispatched when a new task item is added via the quick input.',
         'updated_desc' => 'Dispatched when an item\'s title or description is updated via inline editing.',
+        'lock_toggled_desc' => 'Dispatched when an item\'s lock status is toggled (locked or unlocked) via the lock button.',
         'subtask_updated_desc' => 'Dispatched when a subtask or checklist inside a card is toggled.',
     ],
 
@@ -120,12 +121,13 @@ return [
         'todo_nav_buttons' => "Show or hide previous/next column navigation buttons on cards (default false / hidden)",
         'todo_checkbox' => "Show checkbox on cards (default false)",
         'todo_lock' => "Lock all cards in the board/list to prevent moving or dragging (default false)",
+        'todo_lockable' => "Display interactive lock toggle buttons on all cards across the board (default false)",
         'todo_editable' => "Enable inline quick editing for card title and description (default false)",
         'todo_quick_add' => "Enable inline '+ Add Task' button at the bottom of each column (default false)",
         'todo_searchable' => "Enable client-side live search bar at the top of the board (default false)",
         'todo_keyboard' => "Enable keyboard navigation shortcuts (Space, Delete, Left/Right arrow) (default true)",
         'todo_reorderable' => "Enable or disable drag-and-drop capability between cards and columns",
-        'todo_drag_handle' => "Visibility mode for the 3x2 drag indicator dots: 'hover' (default: revealed on hover on desktop, always visible on mobile), 'visible' (always shown), or 'hidden' / false (hide)",
+        'todo_lock' => "Lock all cards in the board to disable dragging and moving (default false)",
         'todo_persist' => "Automatically persist card ordering and layout to browser localStorage (local mode only)",
         'todo_storage_key' => "Unique identifier for the todo entry inside the 'vibe-todo' array in localStorage (default: component ID)",
         'todo_expire_hours' => "Expiration lifetime in hours for stored local data before it is automatically invalidated (default: 720 hours / 30 days)",
@@ -166,21 +168,42 @@ return [
         'item_due_date' => "Due date string with smart urgency calculations (overdue, today, upcoming)",
         'item_variant' => "Card visual variant: 'default' (subtle elevation shadow), 'flat', or 'outline'",
         'item_reorderable' => "Whether this specific card can be dragged or repositioned",
-        'item_drag_handle' => "Override visibility mode for the 3x2 drag indicator dots per item: 'hover' (default), 'visible', or 'hidden' / false",
         'item_lock' => "Lock this specific card to prevent moving or dragging to other columns (default false)",
+        'item_lockable' => "Display interactive lock toggle button on this card to lock/unlock on the fly",
         'item_deletable' => "Show delete action button when card is hovered",
         'item_slot' => "Custom HTML markup to design the card body freely according to developer preferences",
         'item_slot_content' => "Explicit alternative slot for inserting custom HTML below the card title row",
         'item_slot_actions' => "Card action buttons slot cleanly placed in the card footer",
         'item_slot_header_actions' => "Compact action buttons slot in the top header row next to the delete button",
 
+        // vibe:todo.header
+        'header_slot' => "Card top header container, automatically renders padlock icon when card is locked",
+        'header_lock' => "Lock card and render padlock icon in header",
+        'header_lockable' => "Display interactive lock toggle button inside the card header",
+
         // vibe:todo.title
         'title_prop_class' => "Additional CSS utility classes to customize title text style, font, or color",
+        'title_editable' => "Enable inline editing mode for title via double-click or pencil icon",
         'title_slot' => "Text slot or HTML markup for the card title",
 
         // vibe:todo.description
         'description_prop_class' => "Additional CSS utility classes to customize description text style",
+        'description_editable' => "Enable inline editing mode for description via double-click or pencil icon",
         'description_slot' => "Text slot or HTML markup for the card description/subtitle",
+
+        // vibe:todo.content
+        'content_slot' => "Free-form card body content container for notes, title/description, or custom markup",
+
+        // vibe:todo.subitem
+        'subitem_slot' => "Free-form container for subtasks, progress bar, due date, status pills, and label tags",
+        'subitem_total' => "Total number of subtasks for automatic shortcut progress bar",
+        'subitem_completed' => "Number of completed subtasks",
+        'subitem_color' => "Shortcut progress bar color theme ('primary', 'indigo', 'blue', 'emerald', etc.)",
+        'subitem_title' => "Shortcut subtasks row label title (default 'Subtasks')",
+        'subitem_progress' => "Display automatic horizontal progress bar (default true)",
+
+        // vibe:todo.footer
+        'footer_slot' => "Card footer container for assignee avatar stacks, comments/attachments counter, or action buttons",
 
         // vibe:todo.subtask
         'subtask_id' => "Unique identifier for the subtask item",

@@ -225,8 +225,7 @@ test('vibe:todo.item :nav-buttons="true" enables buttons individually', function
         ->not->toContain('canMovePrev(\'nav-item-2\')');
 });
 
-test('vibe:todo defaults to drag-handle="hover" mode with mobile visibility and desktop hover', function () {
-    // 1. By default without explicit drag-handle prop (zero space when hidden on desktop)
+test('vibe:todo.item is directly draggable by default without requiring separate drag handle icon', function () {
     $htmlDefault = Blade::render(
         '<vibe:todo>
             <vibe:todo.item id="default-item-1" title="Item Default" />
@@ -235,56 +234,24 @@ test('vibe:todo defaults to drag-handle="hover" mode with mobile visibility and 
 
     expect($htmlDefault)
         ->toContain('data-todo-item="default-item-1"')
-        ->toContain('flex md:hidden md:group-hover:flex')
-        ->toContain('aria-label="Drag to reorder"')
-        ->toContain('hidden group-hover:flex focus:flex');
-
-    // 2. Explicit drag-handle="hover"
-    $htmlHover = Blade::render(
-        '<vibe:todo drag-handle="hover">
-            <vibe:todo.item id="hover-item-1" title="Item Hover" />
-        </vibe:todo>'
-    );
-
-    expect($htmlHover)
-        ->toContain('data-todo-item="hover-item-1"')
-        ->toContain('flex md:hidden md:group-hover:flex')
-        ->toContain('aria-label="Drag to reorder"');
+        ->toContain('draggable="true"')
+        ->toContain('cursor-grab')
+        ->not->toContain('aria-label="Drag to reorder"')
+        ->toContain('opacity-0 group-hover:opacity-100 focus:opacity-100');
 });
 
-test('vibe:todo supports drag-handle="hidden" and :drag-handle="false" mode', function () {
-    $htmlHidden = Blade::render(
-        '<vibe:todo drag-handle="hidden">
-            <vibe:todo.item id="hidden-item-1" title="Item Hidden" />
+test('vibe:todo supports lock option to disable dragging and lock item', function () {
+    $htmlLocked = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="locked-item-1" title="Item Locked" :lock="true" />
         </vibe:todo>'
     );
 
-    expect($htmlHidden)
-        ->toContain('data-todo-item="hidden-item-1"')
-        ->not->toContain('aria-label="Drag to reorder"');
-
-    $htmlFalse = Blade::render(
-        '<vibe:todo :drag-handle="false">
-            <vibe:todo.item id="hidden-item-2" title="Item False" />
-        </vibe:todo>'
-    );
-
-    expect($htmlFalse)
-        ->toContain('data-todo-item="hidden-item-2"')
-        ->not->toContain('aria-label="Drag to reorder"');
-});
-
-test('vibe:todo.item can override drag-handle per item', function () {
-    $html = Blade::render(
-        '<vibe:todo drag-handle="hidden">
-            <vibe:todo.item id="item-override-1" title="Item 1" drag-handle="visible" />
-            <vibe:todo.item id="item-override-2" title="Item 2" />
-        </vibe:todo>'
-    );
-
-    expect($html)
-        ->toContain('data-todo-item="item-override-1"')
-        ->toContain('aria-label="Drag to reorder"');
+    expect($htmlLocked)
+        ->toContain('data-todo-item="locked-item-1"')
+        ->toContain('draggable="false"')
+        ->toContain('data-locked="true"')
+        ->toContain('title="Terkunci (tidak dapat dipindah)"');
 });
 
 test('vibe:todo defaults to having NO checkbox on items in list layout', function () {
@@ -376,12 +343,11 @@ test('vibe:todo.item supports inline editing when editable=true', function () {
 
     expect($html)
         ->toContain('x-data="{')
-        ->toContain('isEditable: true')
-        ->toContain('@dblclick="startEdit()"')
+        ->toContain('@dblclick.stop="startEdit()"')
         ->toContain('x-ref="titleInput"')
         ->toContain('saveEdit()')
         ->toContain('cancelEdit()')
-        ->toContain('title="Ubah judul tugas"');
+        ->toContain('title="Ubah judul"');
 });
 
 test('vibe:todo.item supports multi-labels array and custom labels slot', function () {
@@ -454,26 +420,51 @@ test('vibe:todo.subtask renders correctly with checkbox and title', function () 
         ->toContain('line-through');
 });
 
-test('vibe:todo.item supports subtasks in slot and renders mini progress bar and counter', function () {
+test('vibe:todo.subitem renders progress bar and counter with shortcut props or slot', function () {
     $html = Blade::render(
-        '<vibe:todo>
-            <vibe:todo.item id="parent-task" title="Parent Feature Task">
-                <vibe:todo.subtask id="sub-1" title="Langkah 1" :completed="true" />
-                <vibe:todo.subtask id="sub-2" title="Langkah 2" :completed="false" />
+        '<vibe:todo.subitem :total="8" :completed="6" color="indigo" title="Subtasks" />'
+    );
+
+    expect($html)
+        ->toContain('Subtasks')
+        ->toContain('6/8')
+        ->toContain('75%')
+        ->toContain('bg-indigo-600');
+});
+
+test('vibe:todo supports full compound subcomponents (header, content, subitem, footer)', function () {
+    $html = Blade::render(
+        '<vibe:todo layout="board" :editable="true">
+            <vibe:todo.item id="modern-task" :lock="true">
+                <vibe:todo.header class="custom-header">
+                    <span class="badge">High</span>
+                </vibe:todo.header>
+                <vibe:todo.content class="custom-content">
+                    <vibe:todo.title :editable="true">Design System</vibe:todo.title>
+                    <vibe:todo.description>Create UI components</vibe:todo.description>
+                </vibe:todo.content>
+                <vibe:todo.subitem class="custom-subitem">
+                    <div class="custom-progress">75% Progress</div>
+                </vibe:todo.subitem>
+                <vibe:todo.footer class="custom-footer">
+                    <button>Done</button>
+                </vibe:todo.footer>
             </vibe:todo.item>
         </vibe:todo>'
     );
 
     expect($html)
-        ->toContain('Parent Feature Task')
-        ->toContain('Langkah 1')
-        ->toContain('Langkah 2')
-        ->toContain('data-todo-subtask="sub-1"')
-        ->toContain('data-todo-subtask="sub-2"')
-        ->toContain('subtasksCount')
-        ->toContain('completedSubtasksCount')
-        ->toContain('Subtugas selesai')
-        ->toContain('rounded-full');
+        ->toContain('custom-header')
+        ->toContain('title="Terkunci (tidak dapat dipindah)"')
+        ->toContain('custom-content')
+        ->toContain('data-todo-title')
+        ->toContain('Design System')
+        ->toContain('data-todo-description')
+        ->toContain('Create UI components')
+        ->toContain('custom-subitem')
+        ->toContain('75% Progress')
+        ->toContain('custom-footer')
+        ->toContain('Done');
 });
 
 test('vibe:todo.item supports subtasks via array prop', function () {
@@ -620,6 +611,94 @@ test('vibe:todo supports dedicated title and description subcomponents inside it
         ->toContain('note-box')
         ->toContain('Catatan Tambahan');
 });
+
+test('vibe:todo :editable="true" properly enables inline edit mode on title and description subcomponents', function () {
+    $html = Blade::render(
+        '<vibe:todo :editable="true">
+            <vibe:todo.item id="editable-item">
+                <vibe:todo.title>Tugas Dapat Diedit</vibe:todo.title>
+                <vibe:todo.description>Deskripsi Dapat Diedit</vibe:todo.description>
+            </vibe:todo.item>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('vibe:todo-item-update')
+        ->toContain('titleInput')
+        ->toContain('descInput')
+        ->toContain('Ubah judul')
+        ->toContain('Ubah deskripsi')
+        ->toContain('startEdit()')
+        ->toContain('saveEdit()');
+});
+
+test('vibe:todo.item does not render auto delete button when custom header subcomponent is used', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="custom-header-item">
+                <vibe:todo.header>
+                    <span class="custom-badge">High</span>
+                    <button type="button" class="three-dots-menu">...</button>
+                </vibe:todo.header>
+                <vibe:todo.content>
+                    <vibe:todo.title>Judul Kartu</vibe:todo.title>
+                </vibe:todo.content>
+            </vibe:todo.item>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-header')
+        ->toContain('three-dots-menu')
+        ->not->toContain('aria-label="Hapus tugas"');
+});
+
+test('vibe:todo.item supports :lockable="true" to render interactive lock toggle button', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="lockable-item" title="Tugas Interaktif" :lockable="true" />
+            <vibe:todo.item id="static-locked-item" title="Tugas Statis" :lock="true" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-lock-btn')
+        ->toContain('toggleLock(\'lockable-item\')')
+        ->toContain('data-lock-icon-locked')
+        ->toContain('data-lock-icon-unlocked')
+        ->toContain('data-todo-lock-indicator');
+});
+
+test('vibe:todo.header supports :lockable="true" to render interactive lock toggle button in header', function () {
+    $html = Blade::render(
+        '<vibe:todo>
+            <vibe:todo.item id="header-lockable-item">
+                <vibe:todo.header :lockable="true">
+                    <span>Tag</span>
+                </vibe:todo.header>
+                <vibe:todo.title>Tugas dengan Header Lock</vibe:todo.title>
+            </vibe:todo.item>
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-lock-btn')
+        ->toContain('toggleLock($el.closest(\'[data-todo-item]\')');
+});
+
+test('vibe:todo with :lockable="true" propagates lockable state to all child items', function () {
+    $html = Blade::render(
+        '<vibe:todo :lockable="true">
+            <vibe:todo.item id="inherited-lockable-item" title="Tugas Warisan" />
+        </vibe:todo>'
+    );
+
+    expect($html)
+        ->toContain('data-todo-lock-btn')
+        ->toContain('toggleLock(\'inherited-lockable-item\')');
+});
+
+
 
 
 
