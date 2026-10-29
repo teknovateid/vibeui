@@ -139,7 +139,7 @@
         @endif
 
         @if ($hasSlotContent)
-            <span>{{ $slot }}</span>
+            <span class="inline-flex items-center gap-1">{{ $slot }}</span>
         @endif
 
         @if ($hasTrailing)
@@ -183,7 +183,7 @@
         @endif
 
         @if ($hasSlotContent)
-            <span>{{ $slot }}</span>
+            <span class="inline-flex items-center gap-1">{{ $slot }}</span>
         @endif
 
         @if ($hasTrailing)
