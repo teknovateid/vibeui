@@ -126,18 +126,19 @@ export function vibeForm(config = {}) {
     // ==========================================
     // HELPER: Execute onSuccess / onError callback string
     // ==========================================
-    function executeCallback(code, data, response) {
+    function executeCallback(code, data, response, form) {
         if (!code) return;
         try {
             if (typeof code === 'function') {
-                code(data, response);
+                code(data, response, form);
                 return;
             }
             if (typeof code === 'string') {
-                // Make $vibe available in scope
+                // Make $vibe and $el available in scope
                 const $vibe = window.$vibe;
+                const $el = form;
                 // eslint-disable-next-line no-new-func
-                (new Function('$vibe', 'data', 'response', code))($vibe, data, response);
+                (new Function('$vibe', 'data', 'response', '$el', code))($vibe, data, response, form);
             }
         } catch (e) {
             console.error('[vibeForm] onSuccess/onError callback error:', e);
@@ -510,7 +511,7 @@ export function vibeForm(config = {}) {
                     const doActions = () => {
                         // Execute onSuccess callback
                         if (onSuccess) {
-                            executeCallback(onSuccess, data, res);
+                            executeCallback(onSuccess, data, res, form);
                         }
 
                         // Redirect: prop > server json
@@ -572,7 +573,7 @@ export function vibeForm(config = {}) {
 
                 // Execute onError callback
                 if (onError) {
-                    executeCallback(onError, err.data, err.response);
+                    executeCallback(onError, err.data, err.response, form);
                 }
             }
         },
