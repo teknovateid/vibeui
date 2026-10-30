@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.9.3] - 2026-10-30
+
+### 🚀 Features
+- feat: add form callback scope variables and documentation for \$el, \$vibe, data, and response (c45fa6e)
+
+
 ## [0.9.2] - 2026-10-29
 
 ### 🚀 Features
