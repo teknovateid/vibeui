@@ -486,7 +486,7 @@
                     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
                 }"
                 @click.outside="handleOutsideClick($event)"
-                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
+                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet $dimensionLimitClasses " . ($showToggle || $resizable ? 'overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden' : 'overflow-hidden') . " group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
             >
                 @if ($persist)
                     <script>
@@ -545,8 +545,9 @@
                     </script>
                 @endif
 
-                <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
-                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+                <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+                         :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                          style="{{ $innerStyle }}"
                          :style="behavior !== 'minify'
                              ? (position === 'right'
@@ -562,7 +563,7 @@
                 </div>
 
                 @if ($dismissibleButton)
-                    <div class="absolute top-3 right-3 z-30 pointer-events-auto group-data-[state=collapsed]/sheet:hidden group-data-[state=minified]/sheet:hidden">
+                    <div class="absolute top-3 right-3 z-30 pointer-events-auto transition-opacity duration-200 group-data-[state=collapsed]/sheet:hidden group-data-[state=collapsed]/sheet:opacity-0 group-data-[state=minified]/sheet:hidden">
                         <vibe:sheet.close />
                     </div>
                 @endif
@@ -888,7 +889,7 @@
     currentSize === 0 ? 'border-width: 0' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet $dimensionLimitClasses " . ($showToggle || $resizable ? 'overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden' : 'overflow-hidden') . " group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -947,8 +948,9 @@
     @endif
 
     @if ($layout === 'relative')
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+                 :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (isHorizontal
@@ -959,8 +961,9 @@
             </div>
         </div>
     @else
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+                 :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
                      ? (position === 'right'
@@ -977,7 +980,7 @@
     @endif
 
     @if ($dismissibleButton)
-        <div class="absolute top-3 right-3 z-30 pointer-events-auto group-data-[state=collapsed]/sheet:hidden group-data-[state=minified]/sheet:hidden">
+        <div class="absolute top-3 right-3 z-30 pointer-events-auto transition-opacity duration-200 group-data-[state=collapsed]/sheet:hidden group-data-[state=collapsed]/sheet:opacity-0 group-data-[state=minified]/sheet:hidden">
             <vibe:sheet.close />
         </div>
     @endif
