@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.9.4] - 2026-10-30
+
+### ⚡ Performance & Refactoring
+- refactor: improve sheet component overflow and transition animations (22621f3)
+
+
 ## [0.9.3] - 2026-10-30
 
 ### 🚀 Features
