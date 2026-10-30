@@ -131,8 +131,8 @@ return [
         'status' => 'Automatic notification after submission. <code>true</code> or <code>\'toast\'</code> = display <strong>Toast</strong> (default). <code>\'alert\'</code> = display pop-up <strong>Alert</strong>.',
         'delay' => 'Delay duration (milliseconds) before executing <code>onSuccess</code> or <code>redirect-to</code>. Auto-defaults to <code>1000ms</code> if status is active with follow-up action.',
         'redirectTo' => 'Destination redirect URL after successful submit. Also supports auto-resolving <code>data.redirect</code> from server JSON response.',
-        'onSuccess' => 'JavaScript expression executed after <code>delay</code> upon success. Example: <code>$vibe.sheet(\'id\').close()</code> or <code>$vibe.modal(\'id\').close()</code>.',
-        'onError' => 'JavaScript expression executed when the request fails/errors.',
+        'onSuccess' => 'JavaScript expression executed after <code>delay</code> upon success. Scope provides: <code>$el</code> (form element for <code>$el.reset()</code>), <code>$vibe</code>, <code>data</code> (server JSON response), and <code>response</code>.',
+        'onError' => 'JavaScript expression executed when the request fails/errors. Scope provides: <code>$el</code> (form element), <code>$vibe</code>, <code>data</code>, and <code>response</code>.',
         'confirmPassword' => 'Automatically displays an in-place password confirmation modal when the server responds with HTTP 423 (Password Confirmation Required), then auto-replays the pending form submission upon verification without page reload.',
         'confirmPasswordUrl' => 'Password verification endpoint URL (POST). Defaults to <code>/confirm-password</code> or route <code>password.confirm.post</code>.',
     ],
@@ -189,8 +189,10 @@ return [
 
     'post_submit' => [
         'title' => 'Post-Submit Actions (onSuccess, delay, redirect-to)',
-        'desc' => 'Use the <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> attribute to execute JavaScript expressions after successful submission. The <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> prop only triggers on <strong>errors</strong> automatically — success alerts, closing modals/sheets, and redirects are managed via <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
+        'desc' => 'Use the <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> attribute to execute JavaScript expressions after successful submission. The callback scope automatically provides <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$el</code> (form element for <code>$el.reset()</code>), <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe</code>, <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">data</code> (server JSON payload), and <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">response</code>. The <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> prop only triggers on <strong>errors</strong> automatically — success toasts, modal/sheet dismissals, and redirects are managed via <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
         'preview_sheet' => 'onSuccess: Toast + Close Sheet after submit',
+        'preview_reset' => 'onSuccess: Auto Reset Form via $el.reset()',
+        'reset_hint' => 'Enter your name and quick message, then submit to see the form automatically clear all inputs via $el.reset() without page reload.',
         'sheet_btn' => 'Open Form Sheet',
         'sheet_title' => 'Form inside Sheet Drawer',
         'sheet_save' => 'Save Changes',
@@ -200,10 +202,24 @@ return [
             'desc' => 'Description',
         ],
         'rows' => [
+            ['onSuccess / on-success', '\$el.reset(); \$vibe.toast.success(\'Data sent!\')', 'Resets all form inputs via \$el.reset() and displays a success toast.'],
             ['onSuccess / on-success', '\$vibe.sheet(\'demo-form-sheet\').close(); \$vibe.toast.success(\'Successfully saved!\')', 'Closes sheet + displays success toast after submission.'],
             ['onSuccess / on-success', '\$vibe.modal(\'demo-form-modal\').close(); \$vibe.toast.success(\'Successfully saved!\')', 'Closes modal + displays success toast after submission.'],
             ['delay', '500', 'Delay (ms) before onSuccess is executed. Default 0.'],
             ['redirect-to', '/users', 'Destination URL after successful submit (or resolved from server data.redirect).'],
+        ],
+        'scope_title' => 'Callback Scope Variables (onSuccess & onError)',
+        'scope_desc' => 'When configuring JavaScript expressions on <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> or <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onError</code>, the following variables are automatically injected into the local execution scope:',
+        'scope_columns' => [
+            'variable' => 'Variable',
+            'type' => 'Data Type',
+            'desc' => 'Purpose & Description',
+        ],
+        'scope_rows' => [
+            ['$el', 'HTMLFormElement', 'Direct reference to the form DOM element (&lt;form&gt;). Useful for <code>$el.reset()</code>, <code>$el.querySelector(...)</code>, or <code>$el.closest(...)</code>.'],
+            ['$vibe', 'Object', 'Instant access to global Vibe UI helpers such as <code>$vibe.toast</code>, <code>$vibe.alert</code>, <code>$vibe.sheet()</code>, and <code>$vibe.modal()</code>.'],
+            ['data', 'Object|string', 'Parsed JSON response payload returned from the server endpoint (e.g., <code>data.message</code>, <code>data.redirect</code>, or validation errors).'],
+            ['response', 'Response', 'Standard browser Fetch API Response object (contains <code>response.status</code>, <code>response.ok</code>, <code>response.headers</code>, etc.).'],
         ],
     ],
 

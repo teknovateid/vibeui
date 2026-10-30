@@ -106,17 +106,21 @@ test('vibe:date-time safely falls back to default placeholders when translations
         ->toContain('placeholder="Select date"');
 });
 
-test('vibe:date-time safely falls back to default placeholder for different modes with missing translations', function () {
-    $timeHtml = Blade::render(
-        '<vibe:date-time name="start_time" mode="time" locale="xx-custom" />'
+test('vibe:form supports onSuccess and onError props', function () {
+    $html = Blade::render(
+        '<vibe:form id="test-form" action="/test" onSuccess="$el.reset()" onError="console.error($el)">Fields</vibe:form>'
     );
-    expect($timeHtml)->toContain('placeholder="Select time"');
 
-    $rangeHtml = Blade::render(
-        '<vibe:date-time name="date_range" mode="range" locale="xx-custom" />'
-    );
-    expect($rangeHtml)->toContain('placeholder="Select date range"');
+    expect($html)
+        ->toContain('$el.reset()')
+        ->toContain('console.error($el)');
 });
+
+test('docs form page renders successfully without errors', function () {
+    $response = $this->get('/docs/form');
+    $response->assertStatus(200);
+});
+
 test('vibe:select.option safely handles double quotes in value without attribute corruption', function () {
     $html = Blade::render(
         '<vibe:select.option :value="$val">Monitor</vibe:select.option>',

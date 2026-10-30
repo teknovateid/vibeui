@@ -642,6 +642,39 @@
                     </div>
                 </vibe:preview>
 
+                {{-- Contoh 2: Auto-reset form via $el.reset() --}}
+                <vibe:preview :title="__('docs/form.post_submit.preview_reset')">
+                    <vibe:preview.code>
+                        <vibe:form
+                            class="space-y-4 max-w-md mx-auto"
+                            action="{{ route('docs.form.store') }}"
+                            method="POST"
+                            :status="true"
+                            onSuccess="$el.reset(); $vibe.toast.success('Pesan terkirim dan formulir dikosongkan!')"
+                        >
+                            @csrf
+                            <vibe:input name="sender_name" label="Nama Pengirim" placeholder="Ketik nama Anda..." required />
+                            <vibe:input name="quick_message" label="Pesan Cepat" placeholder="Ketik pesan..." required />
+                            <vibe:button type="submit" variant="primary">Kirim & Reset Form</vibe:button>
+                        </vibe:form>
+                    </vibe:preview.code>
+                    <div class="w-full max-w-md mx-auto p-4 sm:p-6 space-y-3">
+                        <p class="text-xs text-muted-foreground">{{ __('docs/form.post_submit.reset_hint') }}</p>
+                        <vibe:form
+                            class="space-y-4"
+                            action="{{ route('docs.form.store') }}"
+                            method="POST"
+                            :status="true"
+                            onSuccess="$el.reset(); $vibe.toast.success('Pesan terkirim dan formulir dikosongkan!')"
+                        >
+                            @csrf
+                            <vibe:input name="demo_reset_name" label="Nama Pengirim" placeholder="Ketik nama Anda..." required />
+                            <vibe:input name="demo_reset_message" label="Pesan Cepat" placeholder="Ketik pesan..." required />
+                            <vibe:button type="submit" variant="primary">Kirim & Reset Form</vibe:button>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
+
                 {{-- Reference Table --}}
                 <vibe:table>
                     <vibe:table.header>
@@ -659,6 +692,31 @@
                         @endforeach
                     </vibe:table.rows>
                 </vibe:table>
+
+                {{-- Scope Variables Table --}}
+                <div class="space-y-3 pt-2">
+                    <div class="space-y-1">
+                        <h3 class="text-base font-semibold text-foreground">{{ __('docs/form.post_submit.scope_title') }}</h3>
+                        <p class="text-xs text-muted-foreground">{!! __('docs/form.post_submit.scope_desc') !!}</p>
+                    </div>
+
+                    <vibe:table>
+                        <vibe:table.header>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/form.post_submit.scope_columns.variable') }}</vibe:table.column>
+                            <vibe:table.column class="whitespace-nowrap">{{ __('docs/form.post_submit.scope_columns.type') }}</vibe:table.column>
+                            <vibe:table.column>{{ __('docs/form.post_submit.scope_columns.desc') }}</vibe:table.column>
+                        </vibe:table.header>
+                        <vibe:table.rows>
+                            @foreach(__('docs/form.post_submit.scope_rows') as [$var, $type, $desc])
+                                <vibe:table.row>
+                                    <vibe:table.cell class="font-mono font-bold text-primary whitespace-nowrap">{{ $var }}</vibe:table.cell>
+                                    <vibe:table.cell class="font-mono text-xs text-muted-foreground whitespace-nowrap">{{ $type }}</vibe:table.cell>
+                                    <vibe:table.cell class="text-muted-foreground text-xs">{!! $desc !!}</vibe:table.cell>
+                                </vibe:table.row>
+                            @endforeach
+                        </vibe:table.rows>
+                    </vibe:table>
+                </div>
             </section>
 
             {{-- 11. Confirm Submit --}}

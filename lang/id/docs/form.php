@@ -131,8 +131,8 @@ return [
         'status' => 'Notifikasi otomatis setelah submit. <code>true</code> atau <code>\'toast\'</code> = tampilkan <strong>Toast</strong> (default). <code>\'alert\'</code> = tampilkan pop-up <strong>Alert</strong>.',
         'delay' => 'Jeda waktu (milidetik) sebelum aksi <code>onSuccess</code> atau <code>redirect-to</code> dieksekusi. Default auto <code>1000ms</code> jika status aktif dan ada aksi lanjutan.',
         'redirectTo' => 'URL tujuan redirect setelah submit sukses. Juga mendukung otomatis membaca <code>data.redirect</code> dari JSON respons server.',
-        'onSuccess' => 'Ekspresi JS yang dieksekusi setelah <code>delay</code> saat sukses. Contoh: <code>$vibe.sheet(\'id\').close()</code> atau <code>$vibe.modal(\'id\').close()</code>.',
-        'onError' => 'Ekspresi JS yang dieksekusi saat request gagal/error.',
+        'onSuccess' => 'Ekspresi JS yang dieksekusi setelah <code>delay</code> saat sukses. Scope menyediakan: <code>$el</code> (elemen form untuk <code>$el.reset()</code>), <code>$vibe</code>, <code>data</code> (respons JSON server), dan <code>response</code>.',
+        'onError' => 'Ekspresi JS yang dieksekusi saat request gagal/error. Scope menyediakan: <code>$el</code> (elemen form), <code>$vibe</code>, <code>data</code>, dan <code>response</code>.',
         'confirmPassword' => 'Secara otomatis menampilkan modal konfirmasi kata sandi in-place saat server merespons HTTP 423 (Password Confirmation Required), lalu otomatis melanjutkan (replay) submit form setelah kata sandi terverifikasi tanpa me-reload halaman.',
         'confirmPasswordUrl' => 'Endpoint URL verifikasi kata sandi (POST). Default menggunakan <code>/confirm-password</code> atau rute <code>password.confirm.post</code>.',
     ],
@@ -189,8 +189,10 @@ return [
 
     'post_submit' => [
         'title' => 'Aksi Pasca-Submit (onSuccess, delay, redirect-to)',
-        'desc' => 'Gunakan atribut <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> untuk menjalankan ekspresi JavaScript setelah submit sukses. <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">status</code> hanya menampilkan notifikasi <strong>error</strong> secara otomatis — notifikasi sukses, penutupan modal/sheet, dan redirect sepenuhnya diatur dari <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
+        'desc' => 'Gunakan atribut <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> untuk menjalankan ekspresi JavaScript setelah submit sukses. Di dalam scope callback, Anda dapat langsung mengakses <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$el</code> (elemen form untuk <code>$el.reset()</code>), <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">$vibe</code>, <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">data</code> (payload JSON server), dan <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">response</code>. Notifikasi sukses, penutupan modal/sheet, dan redirect sepenuhnya diatur dari <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code>.',
         'preview_sheet' => 'onSuccess: Toast + Tutup Sheet setelah submit',
+        'preview_reset' => 'onSuccess: Reset Form Otomatis via $el.reset()',
+        'reset_hint' => 'Ketik nama dan pesan, lalu submit untuk melihat formulir otomatis mengosongkan kembali isiannya via $el.reset() tanpa reload halaman.',
         'sheet_btn' => 'Buka Sheet Form',
         'sheet_title' => 'Form di dalam Sheet',
         'sheet_save' => 'Simpan',
@@ -200,10 +202,24 @@ return [
             'desc' => 'Keterangan',
         ],
         'rows' => [
+            ['onSuccess / on-success', '\$el.reset(); \$vibe.toast.success(\'Data terkirim!\')', 'Mengosongkan seluruh input form kembali via \$el.reset() dan menampilkan toast.'],
             ['onSuccess / on-success', '\$vibe.sheet(\'demo-form-sheet\').close(); \$vibe.toast.success(\'Data berhasil disimpan!\')', 'Tutup sheet + tampilkan toast sukses setelah submit.'],
             ['onSuccess / on-success', '\$vibe.modal(\'demo-form-modal\').close(); \$vibe.toast.success(\'Data berhasil disimpan!\')', 'Tutup modal + tampilkan toast sukses setelah submit.'],
             ['delay', '500', 'Jeda (ms) sebelum onSuccess dieksekusi. Default 0.'],
             ['redirect-to', '/users', 'URL tujuan setelah submit sukses (atau dari data.redirect respons server).'],
+        ],
+        'scope_title' => 'Variabel Scope Callback (onSuccess & onError)',
+        'scope_desc' => 'Saat mendefinisikan ekspresi JavaScript pada atribut <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onSuccess</code> atau <code class="font-mono text-xs bg-muted px-1 py-0.5 rounded">onError</code>, variabel-variabel berikut otomatis tersedia di dalam scope lokal:',
+        'scope_columns' => [
+            'variable' => 'Variabel',
+            'type' => 'Tipe Data',
+            'desc' => 'Fungsi & Keterangan',
+        ],
+        'scope_rows' => [
+            ['$el', 'HTMLFormElement', 'Referensi langsung ke elemen formulir DOM (&lt;form&gt;). Memungkinkan pemanggilan langsung seperti <code>$el.reset()</code>, <code>$el.querySelector(...)</code>, atau <code>$el.closest(...)</code>.'],
+            ['$vibe', 'Object', 'Akses instan ke helper UI global Vibe seperti <code>$vibe.toast</code>, <code>$vibe.alert</code>, <code>$vibe.sheet()</code>, dan <code>$vibe.modal()</code>.'],
+            ['data', 'Object|string', 'Payload respons dari server setelah di-parse (misalnya <code>data.message</code>, <code>data.redirect</code>, atau error validasi).'],
+            ['response', 'Response', 'Objek Response standar Fetch API browser (berisi <code>response.status</code>, <code>response.ok</code>, <code>response.headers</code>, dll).'],
         ],
     ],
 
