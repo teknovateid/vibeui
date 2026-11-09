@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.10.1] - 2026-11-09
+
+### 🚀 Features
+- feat(theme): Enhance global theme management with improved storage handling and UI updates (e67dcdd)
+
+
 ## [0.10.0] - 2026-11-09
 
 ### 🚀 Features
