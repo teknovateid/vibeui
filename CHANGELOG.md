@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.10.0] - 2026-11-09
+
+### 🚀 Features
+- feat(theme): Implement dual storage for theme settings with global database and local storage support (566ec28)
+
+
 ## [0.9.4] - 2026-10-30
 
 ### ⚡ Performance & Refactoring
