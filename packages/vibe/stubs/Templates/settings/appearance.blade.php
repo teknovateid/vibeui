@@ -29,27 +29,81 @@
                     x-init="init()"
                 >
                     {{-- Header with Status & Quick Actions --}}
-                    <div class="pb-4 border-border/50 border-b">
+                    <div class="pb-4 border-border/50 border-b space-y-4">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div>
-                                <div class="flex items-center gap-2">
+                                <div class="flex items-center gap-2 flex-wrap">
                                     <h2 class="font-bold text-foreground text-lg">{{ __('vibe/settings.appearance.header_title') ?? 'Appearance & Theme Tokens' }}</h2>
                                     <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
                                         {{ __('vibe/settings.appearance.live_engine') }}
                                     </vibe:badge>
+                                    <template x-if="storageMode === 'global_only'">
+                                        <vibe:badge variant="primary" size="sm" class="rounded-full">
+                                            Global Database Theme
+                                        </vibe:badge>
+                                    </template>
+                                    <template x-if="storageMode === 'hybrid' && scope === 'global'">
+                                        <vibe:badge variant="warning" size="sm" class="rounded-full">
+                                            Mode Global
+                                        </vibe:badge>
+                                    </template>
                                 </div>
                                 <p class="mt-0.5 text-muted-foreground text-xs">
                                     {{ __('vibe/settings.appearance.header_desc') }}
                                 </p>
+
+                                {{-- Scope Switcher in Hybrid Mode --}}
+                                <div x-show="storageMode === 'hybrid' && canManageGlobal" class="mt-2.5 flex items-center gap-1.5 p-1 bg-muted/60 rounded-lg w-fit border border-border/60">
+                                    <button 
+                                        type="button" 
+                                        @click="switchScope('local')"
+                                        class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer"
+                                        :class="scope === 'local' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
+                                    >
+                                        Preferensi Lokal
+                                    </button>
+                                    <button 
+                                        type="button" 
+                                        @click="switchScope('global')"
+                                        class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
+                                        :class="scope === 'global' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
+                                    >
+                                        <span>Tema Global Sistem</span>
+                                        <span x-show="isGlobalLocked" class="size-1.5 rounded-full bg-warning" title="Terkunci untuk semua pengguna"></span>
+                                    </button>
+                                </div>
                             </div>
 
-                            <div class="flex items-center gap-2 shrink-0">
+                            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                                <template x-if="(scope === 'global' || storageMode === 'global_only') && canManageGlobal">
+                                    <vibe:button 
+                                        type="button" 
+                                        variant="primary" 
+                                        size="sm" 
+                                        class="cursor-pointer text-xs" 
+                                        @click="saveGlobalSettings(false)"
+                                        x-bind:disabled="isSavingGlobal"
+                                    >
+                                        <svg x-show="!isSavingGlobal" class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                                            <polyline points="17 21 17 13 7 13 7 21" />
+                                            <polyline points="7 3 7 8 15 8" />
+                                        </svg>
+                                        <svg x-show="isSavingGlobal" class="size-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10" stroke-opacity="0.25" stroke="currentColor" stroke-width="4"></circle>
+                                            <path d="M4 12a8 8 0 018-8" stroke-opacity="0.75" stroke="currentColor" stroke-width="4"></path>
+                                        </svg>
+                                        <span x-text="isSavingGlobal ? 'Menyimpan...' : 'Simpan Tema Global'">Simpan Tema Global</span>
+                                    </vibe:button>
+                                </template>
+
                                 <vibe:button 
                                     type="button" 
                                     variant="outline" 
                                     size="sm" 
                                     class="cursor-pointer text-xs" 
                                     @click="resetToDefault()"
+                                    x-bind:disabled="isResettingGlobal"
                                 >
                                     <svg class="size-3.5 text-muted-foreground" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
@@ -60,7 +114,7 @@
 
                                 <vibe:button 
                                     type="button" 
-                                    variant="primary" 
+                                    variant="outline" 
                                     size="sm" 
                                     class="cursor-pointer text-xs" 
                                     @click="copyCssVariables()"
@@ -71,6 +125,17 @@
                                     </svg>
                                     <span x-text="copied ? @js(__('vibe/settings.appearance.copied')) : @js(__('vibe/settings.appearance.copy_css'))">{{ __('vibe/settings.appearance.copy_css') }}</span>
                                 </vibe:button>
+                            </div>
+                        </div>
+
+                        {{-- Global Lock & Updated At Banner --}}
+                        <div x-show="(scope === 'global' || storageMode === 'global_only') && canManageGlobal" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+                            <label class="flex items-center gap-2 cursor-pointer select-none text-muted-foreground hover:text-foreground">
+                                <input type="checkbox" x-model="isGlobalLocked" @change="saveState()" class="rounded border-border text-primary focus:ring-primary size-3.5" />
+                                <span>Kunci tema untuk seluruh pengguna (Nonaktifkan override lokal)</span>
+                            </label>
+                            <div x-show="globalUpdatedAt" class="text-[11px] text-muted-foreground">
+                                Terakhir disimpan: <strong class="text-foreground" x-text="new Date(globalUpdatedAt).toLocaleString()"></strong> (<span x-text="globalUpdatedBy || 'Administrator'"></span>)
                             </div>
                         </div>
                     </div>

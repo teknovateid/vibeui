@@ -794,7 +794,7 @@ export function appearanceController() {
                             let sourceData = null;
                             const stored = localStorage.getItem(themeKey);
 
-                            if (this.scope === 'global' || (this.isGlobalLocked && this.storageMode !== 'local_only')) {
+                            if (this.scope === 'global' || this.storageMode === 'global_only' || (this.isGlobalLocked && this.storageMode !== 'local_only')) {
                                 sourceData = g?.tokens || null;
                             } else if (stored && this.storageMode !== 'global_only') {
                                 try {
@@ -1499,7 +1499,7 @@ export function appearanceController() {
                     },
 
                     resetToDefault() {
-                        if (this.scope === 'global') {
+                        if (this.scope === 'global' || this.storageMode === 'global_only') {
                             this.resetGlobalSettings();
                             return;
                         }
@@ -2364,15 +2364,30 @@ html.dark, .dark {
 
                     saveState() {
                         try {
-                            if (this.scope === 'local') {
+                            if (this.scope === 'local' && this.storageMode !== 'global_only') {
                                 if (!this.isGlobalLocked || this.storageMode === 'local_only') {
                                     localStorage.setItem(themeKey, JSON.stringify(this.collectCurrentTokens()));
                                 }
+                            } else if (this.scope === 'global' || this.storageMode === 'global_only') {
+                                this.debounceSaveGlobal();
                             }
                         } catch (e) {}
                     },
 
+                    debounceSaveGlobal() {
+                        if (this._debounceSaveTimer) {
+                            clearTimeout(this._debounceSaveTimer);
+                        }
+                        this._debounceSaveTimer = setTimeout(() => {
+                            this.saveGlobalSettings(true);
+                        }, 800);
+                    },
+
                     switchScope(targetScope) {
+                        if (this.storageMode === 'global_only') {
+                            this.scope = 'global';
+                            return;
+                        }
                         if (this.scope === targetScope) return;
                         this.scope = targetScope;
 
@@ -2397,7 +2412,7 @@ html.dark, .dark {
                         this.applyTheme();
                     },
 
-                    async saveGlobalSettings() {
+                    async saveGlobalSettings(isAuto = false) {
                         if (this.isSavingGlobal) return;
                         this.isSavingGlobal = true;
 
@@ -2431,12 +2446,16 @@ html.dark, .dark {
                                     window.VibeTheme.setCssOverride(css, { ...tokens });
                                 }
 
-                                this.notify('global_theme_saved', 'Tampilan global berhasil disimpan ke database & cache untuk semua pengguna.', {}, 'success', 'Tampilan Global Disimpan');
+                                if (!isAuto) {
+                                    this.notify('global_theme_saved', 'Tampilan global berhasil disimpan ke database & cache untuk semua pengguna.', {}, 'success', 'Tampilan Global Disimpan');
+                                }
                             } else {
                                 throw new Error(data.message || 'Gagal menyimpan tampilan global.');
                             }
                         } catch (err) {
-                            this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat menyimpan tema global.', {}, 'destructive', 'Gagal Menyimpan');
+                            if (!isAuto) {
+                                this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat menyimpan tema global.', {}, 'destructive', 'Gagal Menyimpan');
+                            }
                         } finally {
                             this.isSavingGlobal = false;
                         }

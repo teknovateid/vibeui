@@ -31,10 +31,28 @@ class ThemeService
     public function getGlobalTheme(): array
     {
         return Cache::rememberForever($this->getCacheKey(), function () {
-            $modelClass = $this->getModelClass();
-            $setting = $modelClass::where('key', 'global')->first();
+            try {
+                $modelClass = $this->getModelClass();
+                $setting = $modelClass::where('key', 'global')->first();
 
-            if (! $setting) {
+                if (! $setting) {
+                    return [
+                        'tokens' => null,
+                        'css' => null,
+                        'is_locked' => false,
+                        'updated_by' => null,
+                        'updated_at' => null,
+                    ];
+                }
+
+                return [
+                    'tokens' => $setting->tokens,
+                    'css' => $setting->css,
+                    'is_locked' => (bool) $setting->is_locked,
+                    'updated_by' => $setting->updated_by,
+                    'updated_at' => $setting->updated_at?->toIso8601String(),
+                ];
+            } catch (\Throwable $e) {
                 return [
                     'tokens' => null,
                     'css' => null,
@@ -43,14 +61,6 @@ class ThemeService
                     'updated_at' => null,
                 ];
             }
-
-            return [
-                'tokens' => $setting->tokens,
-                'css' => $setting->css,
-                'is_locked' => (bool) $setting->is_locked,
-                'updated_by' => $setting->updated_by,
-                'updated_at' => $setting->updated_at?->toIso8601String(),
-            ];
         });
     }
 
