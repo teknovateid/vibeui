@@ -69,6 +69,11 @@ class VibeServiceProvider extends ServiceProvider
             return new Services\TwoFactorManager();
         });
 
+        // Register ThemeService
+        $this->app->singleton(Services\ThemeService::class, function () {
+            return new Services\ThemeService();
+        });
+
         // Suppress passkey routes if disabled
         if (class_exists(\Laravel\Passkeys\Passkeys::class) && ! (config('passkeys.enabled') || config('vibe.passkeys_enabled'))) {
             \Laravel\Passkeys\Passkeys::ignoreRoutes();
@@ -77,6 +82,12 @@ class VibeServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Load package theme routes automatically
+        $this->loadRoutesFrom(__DIR__ . '/../routes/theme.php');
+
+        // Load package database migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__ . '/../config/vibe.php' => config_path('vibe.php'),
@@ -94,6 +105,7 @@ class VibeServiceProvider extends ServiceProvider
 
             $this->publishes([
                 __DIR__ . '/../stubs/Auth/migrations' => database_path('migrations'),
+                __DIR__ . '/../database/migrations' => database_path('migrations'),
             ], 'vibe-migrations');
         }
 

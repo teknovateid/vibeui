@@ -143,6 +143,7 @@ return [
     */
     'models' => [
         'two_factor' => \Teknovate\VibeUi\Models\TwoFactorAuthenticator::class,
+        'theme_setting' => \Teknovate\VibeUi\Models\ThemeSetting::class,
     ],
 
     /*
@@ -156,6 +157,30 @@ return [
     */
     'notifications' => [
         'two_factor_code' => \Teknovate\VibeUi\Notifications\TwoFactorCodeNotification::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Vibe Appearance & Theme Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Pengaturan untuk sistem tampilan dan tema (Theme Tokens).
+    | Mendukung metode LocalStorage (per-browser) dan Global (Database + Cache).
+    |
+    | - 'storage_mode' : 'hybrid' (default global + user local override),
+    |                   'local_only' (hanya local storage),
+    |                   'global_only' (hanya global tema dari database)
+    | - 'gate'         : (Opsional) Nama Laravel Gate untuk otorisasi pengelolaan
+    |                   tema global. Jika disetel ke null atau tidak didefinisikan,
+    |                   pengaturan global dapat diakses atau dibatasi sesuai preferensi
+    |                   developer (misal via Gate kustom atau route middleware).
+    | - 'cache_key'    : Kunci cache untuk tema global.
+    |
+    */
+    'theme' => [
+        'storage_mode' => env('VIBE_THEME_STORAGE_MODE', 'hybrid'),
+        'gate' => env('VIBE_THEME_GATE', null),
+        'cache_key' => 'vibe:theme:global',
     ],
 ];
 
