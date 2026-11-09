@@ -15,6 +15,16 @@ export function appearanceController() {
                     selectedHeaderPreset: 'default',
                     showCssDrawer: false,
 
+                    // Dual-Storage Mode State (Local Storage vs Global Database + Cache)
+                    scope: (window.VIBE_THEME_STORAGE_MODE === 'global_only') ? 'global' : 'local',
+                    canManageGlobal: typeof window.VIBE_CAN_MANAGE_THEME !== 'undefined' ? !!window.VIBE_CAN_MANAGE_THEME : true,
+                    isGlobalLocked: !!(window.VIBE_GLOBAL_THEME && window.VIBE_GLOBAL_THEME.is_locked),
+                    globalUpdatedBy: window.VIBE_GLOBAL_THEME ? window.VIBE_GLOBAL_THEME.updated_by : null,
+                    globalUpdatedAt: window.VIBE_GLOBAL_THEME ? window.VIBE_GLOBAL_THEME.updated_at : null,
+                    storageMode: window.VIBE_THEME_STORAGE_MODE || 'hybrid',
+                    isSavingGlobal: false,
+                    isResettingGlobal: false,
+
 
                     presets: {
                         zinc: {
@@ -600,6 +610,169 @@ export function appearanceController() {
                         }
                     },
 
+                    applyParsedTokens(parsed) {
+                        if (!parsed || typeof parsed !== 'object') return;
+                        if (parsed.mode) this.mode = parsed.mode;
+                        this.updateIsDarkNow();
+
+                        if (parsed.customHex) {
+                            this.customHex = parsed.customHex;
+                            this.customHexInput = parsed.customHex.replace('#', '').toUpperCase();
+                        }
+                        if (typeof parsed.highContrast !== 'undefined') this.highContrast = !!parsed.highContrast;
+
+                        // Surface
+                        if (parsed.selectedSurfaceLight) this.selectedSurfaceLight = parsed.selectedSurfaceLight;
+                        if (parsed.selectedSurfaceDark) this.selectedSurfaceDark = parsed.selectedSurfaceDark;
+                        if (parsed.selectedSurface && !parsed.selectedSurfaceLight && !parsed.selectedSurfaceDark) {
+                            this.selectedSurfaceLight = parsed.selectedSurface;
+                            this.selectedSurfaceDark = parsed.selectedSurface;
+                        }
+
+                        // Sidebar
+                        if (parsed.sidebarStyleLight) this.sidebarStyleLight = parsed.sidebarStyleLight;
+                        if (parsed.sidebarStyleDark) this.sidebarStyleDark = parsed.sidebarStyleDark;
+                        if (parsed.sidebarStyle && !parsed.sidebarStyleLight) {
+                            this.sidebarStyleLight = parsed.sidebarStyle;
+                            this.sidebarStyleDark = parsed.sidebarStyle;
+                        }
+
+                        if (parsed.sidebarCustomBgLight) this.sidebarCustomBgLight = parsed.sidebarCustomBgLight;
+                        if (parsed.sidebarCustomBgDark) this.sidebarCustomBgDark = parsed.sidebarCustomBgDark;
+                        if (parsed.sidebarCustomBg && !parsed.sidebarCustomBgLight) {
+                            this.sidebarCustomBgLight = parsed.sidebarCustomBg;
+                            this.sidebarCustomBgDark = parsed.sidebarCustomBg;
+                        }
+
+                        if (parsed.sidebarCustomBorderLight) this.sidebarCustomBorderLight = parsed.sidebarCustomBorderLight;
+                        if (parsed.sidebarCustomBorderDark) this.sidebarCustomBorderDark = parsed.sidebarCustomBorderDark;
+                        if (parsed.sidebarCustomBorder && !parsed.sidebarCustomBorderLight) {
+                            this.sidebarCustomBorderLight = parsed.sidebarCustomBorder;
+                            this.sidebarCustomBorderDark = parsed.sidebarCustomBorder;
+                        }
+
+                        if (parsed.sidebarBorderModeLight) this.sidebarBorderModeLight = parsed.sidebarBorderModeLight;
+                        if (parsed.sidebarBorderModeDark) this.sidebarBorderModeDark = parsed.sidebarBorderModeDark;
+                        if (parsed.sidebarBorderMode && !parsed.sidebarBorderModeLight) {
+                            this.sidebarBorderModeLight = parsed.sidebarBorderMode;
+                            this.sidebarBorderModeDark = parsed.sidebarBorderMode;
+                        }
+
+                        if (typeof parsed.transparentSidebarLight !== 'undefined') this.transparentSidebarLight = !!parsed.transparentSidebarLight;
+                        if (typeof parsed.transparentSidebarDark !== 'undefined') this.transparentSidebarDark = !!parsed.transparentSidebarDark;
+                        if (typeof parsed.transparentSidebar !== 'undefined' && typeof parsed.transparentSidebarLight === 'undefined') {
+                            this.transparentSidebarLight = !!parsed.transparentSidebar;
+                            this.transparentSidebarDark = !!parsed.transparentSidebar;
+                        }
+                        if (parsed.sidebarFeature) this.sidebarFeature = parsed.sidebarFeature;
+
+                        // Header
+                        if (parsed.headerStyleLight) this.headerStyleLight = parsed.headerStyleLight;
+                        if (parsed.headerStyleDark) this.headerStyleDark = parsed.headerStyleDark;
+                        if (parsed.headerStyle && !parsed.headerStyleLight) {
+                            this.headerStyleLight = parsed.headerStyle;
+                            this.headerStyleDark = parsed.headerStyle;
+                        }
+
+                        if (parsed.headerCustomBgLight) this.headerCustomBgLight = parsed.headerCustomBgLight;
+                        if (parsed.headerCustomBgDark) this.headerCustomBgDark = parsed.headerCustomBgDark;
+                        if (parsed.headerCustomBg && !parsed.headerCustomBgLight) {
+                            this.headerCustomBgLight = parsed.headerCustomBg;
+                            this.headerCustomBgDark = parsed.headerCustomBg;
+                        }
+
+                        if (parsed.headerCustomBorderLight) this.headerCustomBorderLight = parsed.headerCustomBorderLight;
+                        if (parsed.headerCustomBorderDark) this.headerCustomBorderDark = parsed.headerCustomBorderDark;
+                        if (parsed.headerCustomBorder && !parsed.headerCustomBorderLight) {
+                            this.headerCustomBorderLight = parsed.headerCustomBorder;
+                            this.headerCustomBorderDark = parsed.headerCustomBorder;
+                        }
+
+                        if (parsed.headerBorderModeLight) this.headerBorderModeLight = parsed.headerBorderModeLight;
+                        if (parsed.headerBorderModeDark) this.headerBorderModeDark = parsed.headerBorderModeDark;
+                        if (parsed.headerBorderMode && !parsed.headerBorderModeLight) {
+                            this.headerBorderModeLight = parsed.headerBorderMode;
+                            this.headerBorderModeDark = parsed.headerBorderMode;
+                        }
+
+                        if (typeof parsed.headerGlassEffectLight !== 'undefined') this.headerGlassEffectLight = !!parsed.headerGlassEffectLight;
+                        if (typeof parsed.headerGlassEffectDark !== 'undefined') this.headerGlassEffectDark = !!parsed.headerGlassEffectDark;
+                        if (typeof parsed.headerGlassEffect !== 'undefined' && typeof parsed.headerGlassEffectLight === 'undefined') {
+                            this.headerGlassEffectLight = !!parsed.headerGlassEffect;
+                            this.headerGlassEffectDark = !!parsed.headerGlassEffect;
+                        }
+
+                        // Nav
+                        if (parsed.navStyleLight) this.navStyleLight = parsed.navStyleLight;
+                        if (parsed.navStyleDark) this.navStyleDark = parsed.navStyleDark;
+                        if (parsed.navStyle && !parsed.navStyleLight) {
+                            this.navStyleLight = parsed.navStyle;
+                            this.navStyleDark = parsed.navStyle;
+                        }
+
+                        if (parsed.navDensityLight) this.navDensityLight = parsed.navDensityLight;
+                        if (parsed.navDensityDark) this.navDensityDark = parsed.navDensityDark;
+                        if (parsed.navDensity && !parsed.navDensityLight) {
+                            this.navDensityLight = parsed.navDensity;
+                            this.navDensityDark = parsed.navDensity;
+                        }
+
+                        if (typeof parsed.navIndicatorLight !== 'undefined') this.navIndicatorLight = !!parsed.navIndicatorLight;
+                        if (typeof parsed.navIndicatorDark !== 'undefined') this.navIndicatorDark = !!parsed.navIndicatorDark;
+                        if (typeof parsed.navIndicator !== 'undefined' && typeof parsed.navIndicatorLight === 'undefined') {
+                            this.navIndicatorLight = !!parsed.navIndicator;
+                            this.navIndicatorDark = !!parsed.navIndicator;
+                        }
+
+                        if (parsed.navCustomActiveBgLight) this.navCustomActiveBgLight = parsed.navCustomActiveBgLight;
+                        if (parsed.navCustomActiveBgDark) this.navCustomActiveBgDark = parsed.navCustomActiveBgDark;
+                        if (parsed.navCustomActiveBg && !parsed.navCustomActiveBgLight) {
+                            this.navCustomActiveBgLight = parsed.navCustomActiveBg;
+                            this.navCustomActiveBgDark = parsed.navCustomActiveBg;
+                        }
+
+                        if (parsed.navCustomActiveFgLight) this.navCustomActiveFgLight = parsed.navCustomActiveFgLight;
+                        if (parsed.navCustomActiveFgDark) this.navCustomActiveFgDark = parsed.navCustomActiveFgDark;
+                        if (parsed.navCustomActiveFg && !parsed.navCustomActiveFgLight) {
+                            this.navCustomActiveFgLight = parsed.navCustomActiveFg;
+                            this.navCustomActiveFgDark = parsed.navCustomActiveFg;
+                        }
+
+                        if (parsed.navCustomIndicatorLight) this.navCustomIndicatorLight = parsed.navCustomIndicatorLight;
+                        if (parsed.navCustomIndicatorDark) this.navCustomIndicatorDark = parsed.navCustomIndicatorDark;
+                        if (parsed.navCustomIndicator && !parsed.navCustomIndicatorLight) {
+                            this.navCustomIndicatorLight = parsed.navCustomIndicator;
+                            this.navCustomIndicatorDark = parsed.navCustomIndicator;
+                        }
+
+                        // Global
+                        if (parsed.selectedSemantic) this.selectedSemantic = parsed.selectedSemantic;
+                        if (parsed.selectedChartPreset) this.selectedChartPreset = parsed.selectedChartPreset;
+                        if (parsed.selectedRadius) this.selectedRadius = parsed.selectedRadius;
+                        if (parsed.selectedFontName) this.selectedFontName = parsed.selectedFontName;
+                        if (parsed.selectedFontValue) this.selectedFontValue = parsed.selectedFontValue;
+                        if (parsed.tablesView) this.tablesView = parsed.tablesView;
+
+                        // Table
+                        if (parsed.tableStyleLight) this.tableStyleLight = parsed.tableStyleLight;
+                        if (parsed.tableStyleDark) this.tableStyleDark = parsed.tableStyleDark;
+                        if (parsed.tableStyle && !parsed.tableStyleLight) {
+                            this.tableStyleLight = parsed.tableStyle;
+                            this.tableStyleDark = parsed.tableStyle;
+                        }
+                        if (parsed.tableCustomHeaderBgLight) this.tableCustomHeaderBgLight = parsed.tableCustomHeaderBgLight;
+                        if (parsed.tableCustomHeaderBgDark) this.tableCustomHeaderBgDark = parsed.tableCustomHeaderBgDark;
+                        if (parsed.tableCustomBorderLight) this.tableCustomBorderLight = parsed.tableCustomBorderLight;
+                        if (parsed.tableCustomBorderDark) this.tableCustomBorderDark = parsed.tableCustomBorderDark;
+                        if (parsed.tableCustomRowHoverLight) this.tableCustomRowHoverLight = parsed.tableCustomRowHoverLight;
+                        if (parsed.tableCustomRowHoverDark) this.tableCustomRowHoverDark = parsed.tableCustomRowHoverDark;
+                        if (typeof parsed.reduceMotion !== 'undefined') {
+                            this.reduceMotion = !!parsed.reduceMotion;
+                            this.motionActive = !this.reduceMotion;
+                        }
+                        if (typeof parsed.glassEffect !== 'undefined') this.glassEffect = !!parsed.glassEffect;
+                    },
+
                     init() {
                         this.updateIsDarkNow();
                         try {
@@ -611,168 +784,30 @@ export function appearanceController() {
                                 }
                             }
 
+                            const g = window.VIBE_GLOBAL_THEME;
+                            if (g) {
+                                this.isGlobalLocked = !!g.is_locked;
+                                this.globalUpdatedBy = g.updated_by || null;
+                                this.globalUpdatedAt = g.updated_at || null;
+                            }
+
+                            let sourceData = null;
                             const stored = localStorage.getItem(themeKey);
-                            if (stored) {
-                                const parsed = JSON.parse(stored);
-                                if (parsed.mode) this.mode = parsed.mode;
-                                this.updateIsDarkNow();
 
-                                if (parsed.customHex) {
-                                    this.customHex = parsed.customHex;
-                                    this.customHexInput = parsed.customHex.replace('#', '').toUpperCase();
-                                }
-                                if (typeof parsed.highContrast !== 'undefined') this.highContrast = !!parsed.highContrast;
+                            if (this.scope === 'global' || (this.isGlobalLocked && this.storageMode !== 'local_only')) {
+                                sourceData = g?.tokens || null;
+                            } else if (stored && this.storageMode !== 'global_only') {
+                                try {
+                                    sourceData = JSON.parse(stored);
+                                } catch (e) {}
+                            }
 
-                                // Surface
-                                if (parsed.selectedSurfaceLight) this.selectedSurfaceLight = parsed.selectedSurfaceLight;
-                                if (parsed.selectedSurfaceDark) this.selectedSurfaceDark = parsed.selectedSurfaceDark;
-                                if (parsed.selectedSurface && !parsed.selectedSurfaceLight && !parsed.selectedSurfaceDark) {
-                                    this.selectedSurfaceLight = parsed.selectedSurface;
-                                    this.selectedSurfaceDark = parsed.selectedSurface;
-                                }
+                            if (!sourceData && g?.tokens) {
+                                sourceData = g.tokens;
+                            }
 
-                                // Sidebar
-                                if (parsed.sidebarStyleLight) this.sidebarStyleLight = parsed.sidebarStyleLight;
-                                if (parsed.sidebarStyleDark) this.sidebarStyleDark = parsed.sidebarStyleDark;
-                                if (parsed.sidebarStyle && !parsed.sidebarStyleLight) {
-                                    this.sidebarStyleLight = parsed.sidebarStyle;
-                                    this.sidebarStyleDark = parsed.sidebarStyle;
-                                }
-
-                                if (parsed.sidebarCustomBgLight) this.sidebarCustomBgLight = parsed.sidebarCustomBgLight;
-                                if (parsed.sidebarCustomBgDark) this.sidebarCustomBgDark = parsed.sidebarCustomBgDark;
-                                if (parsed.sidebarCustomBg && !parsed.sidebarCustomBgLight) {
-                                    this.sidebarCustomBgLight = parsed.sidebarCustomBg;
-                                    this.sidebarCustomBgDark = parsed.sidebarCustomBg;
-                                }
-
-                                if (parsed.sidebarCustomBorderLight) this.sidebarCustomBorderLight = parsed.sidebarCustomBorderLight;
-                                if (parsed.sidebarCustomBorderDark) this.sidebarCustomBorderDark = parsed.sidebarCustomBorderDark;
-                                if (parsed.sidebarCustomBorder && !parsed.sidebarCustomBorderLight) {
-                                    this.sidebarCustomBorderLight = parsed.sidebarCustomBorder;
-                                    this.sidebarCustomBorderDark = parsed.sidebarCustomBorder;
-                                }
-
-                                if (parsed.sidebarBorderModeLight) this.sidebarBorderModeLight = parsed.sidebarBorderModeLight;
-                                if (parsed.sidebarBorderModeDark) this.sidebarBorderModeDark = parsed.sidebarBorderModeDark;
-                                if (parsed.sidebarBorderMode && !parsed.sidebarBorderModeLight) {
-                                    this.sidebarBorderModeLight = parsed.sidebarBorderMode;
-                                    this.sidebarBorderModeDark = parsed.sidebarBorderMode;
-                                }
-
-                                if (typeof parsed.transparentSidebarLight !== 'undefined') this.transparentSidebarLight = !!parsed.transparentSidebarLight;
-                                if (typeof parsed.transparentSidebarDark !== 'undefined') this.transparentSidebarDark = !!parsed.transparentSidebarDark;
-                                if (typeof parsed.transparentSidebar !== 'undefined' && typeof parsed.transparentSidebarLight === 'undefined') {
-                                    this.transparentSidebarLight = !!parsed.transparentSidebar;
-                                    this.transparentSidebarDark = !!parsed.transparentSidebar;
-                                }
-                                if (parsed.sidebarFeature) this.sidebarFeature = parsed.sidebarFeature;
-
-                                // Header
-                                if (parsed.headerStyleLight) this.headerStyleLight = parsed.headerStyleLight;
-                                if (parsed.headerStyleDark) this.headerStyleDark = parsed.headerStyleDark;
-                                if (parsed.headerStyle && !parsed.headerStyleLight) {
-                                    this.headerStyleLight = parsed.headerStyle;
-                                    this.headerStyleDark = parsed.headerStyle;
-                                }
-
-                                if (parsed.headerCustomBgLight) this.headerCustomBgLight = parsed.headerCustomBgLight;
-                                if (parsed.headerCustomBgDark) this.headerCustomBgDark = parsed.headerCustomBgDark;
-                                if (parsed.headerCustomBg && !parsed.headerCustomBgLight) {
-                                    this.headerCustomBgLight = parsed.headerCustomBg;
-                                    this.headerCustomBgDark = parsed.headerCustomBg;
-                                }
-
-                                if (parsed.headerCustomBorderLight) this.headerCustomBorderLight = parsed.headerCustomBorderLight;
-                                if (parsed.headerCustomBorderDark) this.headerCustomBorderDark = parsed.headerCustomBorderDark;
-                                if (parsed.headerCustomBorder && !parsed.headerCustomBorderLight) {
-                                    this.headerCustomBorderLight = parsed.headerCustomBorder;
-                                    this.headerCustomBorderDark = parsed.headerCustomBorder;
-                                }
-
-                                if (parsed.headerBorderModeLight) this.headerBorderModeLight = parsed.headerBorderModeLight;
-                                if (parsed.headerBorderModeDark) this.headerBorderModeDark = parsed.headerBorderModeDark;
-                                if (parsed.headerBorderMode && !parsed.headerBorderModeLight) {
-                                    this.headerBorderModeLight = parsed.headerBorderMode;
-                                    this.headerBorderModeDark = parsed.headerBorderMode;
-                                }
-
-                                if (typeof parsed.headerGlassEffectLight !== 'undefined') this.headerGlassEffectLight = !!parsed.headerGlassEffectLight;
-                                if (typeof parsed.headerGlassEffectDark !== 'undefined') this.headerGlassEffectDark = !!parsed.headerGlassEffectDark;
-                                if (typeof parsed.headerGlassEffect !== 'undefined' && typeof parsed.headerGlassEffectLight === 'undefined') {
-                                    this.headerGlassEffectLight = !!parsed.headerGlassEffect;
-                                    this.headerGlassEffectDark = !!parsed.headerGlassEffect;
-                                }
-
-                                // Nav
-                                if (parsed.navStyleLight) this.navStyleLight = parsed.navStyleLight;
-                                if (parsed.navStyleDark) this.navStyleDark = parsed.navStyleDark;
-                                if (parsed.navStyle && !parsed.navStyleLight) {
-                                    this.navStyleLight = parsed.navStyle;
-                                    this.navStyleDark = parsed.navStyle;
-                                }
-
-                                if (parsed.navDensityLight) this.navDensityLight = parsed.navDensityLight;
-                                if (parsed.navDensityDark) this.navDensityDark = parsed.navDensityDark;
-                                if (parsed.navDensity && !parsed.navDensityLight) {
-                                    this.navDensityLight = parsed.navDensity;
-                                    this.navDensityDark = parsed.navDensity;
-                                }
-
-                                if (typeof parsed.navIndicatorLight !== 'undefined') this.navIndicatorLight = !!parsed.navIndicatorLight;
-                                if (typeof parsed.navIndicatorDark !== 'undefined') this.navIndicatorDark = !!parsed.navIndicatorDark;
-                                if (typeof parsed.navIndicator !== 'undefined' && typeof parsed.navIndicatorLight === 'undefined') {
-                                    this.navIndicatorLight = !!parsed.navIndicator;
-                                    this.navIndicatorDark = !!parsed.navIndicator;
-                                }
-
-                                if (parsed.navCustomActiveBgLight) this.navCustomActiveBgLight = parsed.navCustomActiveBgLight;
-                                if (parsed.navCustomActiveBgDark) this.navCustomActiveBgDark = parsed.navCustomActiveBgDark;
-                                if (parsed.navCustomActiveBg && !parsed.navCustomActiveBgLight) {
-                                    this.navCustomActiveBgLight = parsed.navCustomActiveBg;
-                                    this.navCustomActiveBgDark = parsed.navCustomActiveBg;
-                                }
-
-                                if (parsed.navCustomActiveFgLight) this.navCustomActiveFgLight = parsed.navCustomActiveFgLight;
-                                if (parsed.navCustomActiveFgDark) this.navCustomActiveFgDark = parsed.navCustomActiveFgDark;
-                                if (parsed.navCustomActiveFg && !parsed.navCustomActiveFgLight) {
-                                    this.navCustomActiveFgLight = parsed.navCustomActiveFg;
-                                    this.navCustomActiveFgDark = parsed.navCustomActiveFg;
-                                }
-
-                                if (parsed.navCustomIndicatorLight) this.navCustomIndicatorLight = parsed.navCustomIndicatorLight;
-                                if (parsed.navCustomIndicatorDark) this.navCustomIndicatorDark = parsed.navCustomIndicatorDark;
-                                if (parsed.navCustomIndicator && !parsed.navCustomIndicatorLight) {
-                                    this.navCustomIndicatorLight = parsed.navCustomIndicator;
-                                    this.navCustomIndicatorDark = parsed.navCustomIndicator;
-                                }
-
-                                // Global
-                                if (parsed.selectedSemantic) this.selectedSemantic = parsed.selectedSemantic;
-                                if (parsed.selectedChartPreset) this.selectedChartPreset = parsed.selectedChartPreset;
-                                if (parsed.selectedRadius) this.selectedRadius = parsed.selectedRadius;
-                                if (parsed.selectedFontName) this.selectedFontName = parsed.selectedFontName;
-                                if (parsed.selectedFontValue) this.selectedFontValue = parsed.selectedFontValue;
-                                if (parsed.tablesView) this.tablesView = parsed.tablesView;
-
-                                // Table
-                                if (parsed.tableStyleLight) this.tableStyleLight = parsed.tableStyleLight;
-                                if (parsed.tableStyleDark) this.tableStyleDark = parsed.tableStyleDark;
-                                if (parsed.tableStyle && !parsed.tableStyleLight) {
-                                    this.tableStyleLight = parsed.tableStyle;
-                                    this.tableStyleDark = parsed.tableStyle;
-                                }
-                                if (parsed.tableCustomHeaderBgLight) this.tableCustomHeaderBgLight = parsed.tableCustomHeaderBgLight;
-                                if (parsed.tableCustomHeaderBgDark) this.tableCustomHeaderBgDark = parsed.tableCustomHeaderBgDark;
-                                if (parsed.tableCustomBorderLight) this.tableCustomBorderLight = parsed.tableCustomBorderLight;
-                                if (parsed.tableCustomBorderDark) this.tableCustomBorderDark = parsed.tableCustomBorderDark;
-                                if (parsed.tableCustomRowHoverLight) this.tableCustomRowHoverLight = parsed.tableCustomRowHoverLight;
-                                if (parsed.tableCustomRowHoverDark) this.tableCustomRowHoverDark = parsed.tableCustomRowHoverDark;
-                                if (typeof parsed.reduceMotion !== 'undefined') {
-                                    this.reduceMotion = !!parsed.reduceMotion;
-                                    this.motionActive = !this.reduceMotion;
-                                }
-                                if (typeof parsed.glassEffect !== 'undefined') this.glassEffect = !!parsed.glassEffect;
+                            if (sourceData) {
+                                this.applyParsedTokens(sourceData);
                             }
                         } catch (e) {}
 
@@ -1358,7 +1393,7 @@ export function appearanceController() {
                         this.notify(this.glassEffect ? 'glassmorphism_on' : 'glassmorphism_off', this.glassEffect ? 'Glassmorphism aktif.' : 'Glassmorphism nonaktif.');
                     },
 
-                    resetToDefault() {
+                    resetToDefaultsInternal() {
                         this.mode = 'system';
                         this.updateIsDarkNow();
                         this.customHex = '#18181b';
@@ -1461,6 +1496,15 @@ export function appearanceController() {
                         if (overrideEl) {
                             overrideEl.textContent = '';
                         }
+                    },
+
+                    resetToDefault() {
+                        if (this.scope === 'global') {
+                            this.resetGlobalSettings();
+                            return;
+                        }
+
+                        this.resetToDefaultsInternal();
                         try {
                             localStorage.removeItem(themeKey);
                         } catch (e) {}
@@ -2231,93 +2275,229 @@ html.dark, .dark {
                         });
                     },
 
+                    collectCurrentTokens() {
+                        return {
+                            mode: this.mode,
+                            customHex: this.customHex,
+                            highContrast: this.highContrast,
+
+                            selectedSurface: this.selectedSurface,
+                            selectedSurfaceLight: this.selectedSurfaceLight,
+                            selectedSurfaceDark: this.selectedSurfaceDark,
+
+                            sidebarStyle: this.sidebarStyle,
+                            sidebarStyleLight: this.sidebarStyleLight,
+                            sidebarStyleDark: this.sidebarStyleDark,
+                            sidebarCustomBg: this.sidebarCustomBg,
+                            sidebarCustomBgLight: this.sidebarCustomBgLight,
+                            sidebarCustomBgDark: this.sidebarCustomBgDark,
+                            sidebarCustomBorder: this.sidebarCustomBorder,
+                            sidebarCustomBorderLight: this.sidebarCustomBorderLight,
+                            sidebarCustomBorderDark: this.sidebarCustomBorderDark,
+                            sidebarBorderMode: this.sidebarBorderMode,
+                            sidebarBorderModeLight: this.sidebarBorderModeLight,
+                            sidebarBorderModeDark: this.sidebarBorderModeDark,
+                            transparentSidebar: this.transparentSidebar,
+                            transparentSidebarLight: this.transparentSidebarLight,
+                            transparentSidebarDark: this.transparentSidebarDark,
+                            sidebarFeature: this.sidebarFeature,
+
+                            headerStyle: this.headerStyle,
+                            headerStyleLight: this.headerStyleLight,
+                            headerStyleDark: this.headerStyleDark,
+                            headerCustomBg: this.headerCustomBg,
+                            headerCustomBgLight: this.headerCustomBgLight,
+                            headerCustomBgDark: this.headerCustomBgDark,
+                            headerCustomBorder: this.headerCustomBorder,
+                            headerCustomBorderLight: this.headerCustomBorderLight,
+                            headerCustomBorderDark: this.headerCustomBorderDark,
+                            headerBorderMode: this.headerBorderMode,
+                            headerBorderModeLight: this.headerBorderModeLight,
+                            headerBorderModeDark: this.headerBorderModeDark,
+                            headerGlassEffect: this.headerGlassEffect,
+                            headerGlassEffectLight: this.headerGlassEffectLight,
+                            headerGlassEffectDark: this.headerGlassEffectDark,
+
+                            navStyle: this.navStyle,
+                            navStyleLight: this.navStyleLight,
+                            navStyleDark: this.navStyleDark,
+                            navDensity: this.navDensity,
+                            navDensityLight: this.navDensityLight,
+                            navDensityDark: this.navDensityDark,
+                            navIndicator: this.navIndicator,
+                            navIndicatorLight: this.navIndicatorLight,
+                            navIndicatorDark: this.navIndicatorDark,
+                            navCustomActiveBg: this.navCustomActiveBg,
+                            navCustomActiveBgLight: this.navCustomActiveBgLight,
+                            navCustomActiveBgDark: this.navCustomActiveBgDark,
+                            navCustomActiveFg: this.navCustomActiveFg,
+                            navCustomActiveFgLight: this.navCustomActiveFgLight,
+                            navCustomActiveFgDark: this.navCustomActiveFgDark,
+                            navCustomIndicator: this.navCustomIndicator,
+                            navCustomIndicatorLight: this.navCustomIndicatorLight,
+                            navCustomIndicatorDark: this.navCustomIndicatorDark,
+
+                            selectedSemantic: this.selectedSemantic,
+                            selectedChartPreset: this.selectedChartPreset,
+                            selectedRadius: this.selectedRadius,
+                            selectedFontName: this.selectedFontName,
+                            selectedFontValue: this.selectedFontValue,
+                            tablesView: this.tablesView,
+
+                            tableStyle: this.tableStyle,
+                            tableStyleLight: this.tableStyleLight,
+                            tableStyleDark: this.tableStyleDark,
+                            tableCustomHeaderBg: this.tableCustomHeaderBg,
+                            tableCustomHeaderBgLight: this.tableCustomHeaderBgLight,
+                            tableCustomHeaderBgDark: this.tableCustomHeaderBgDark,
+                            tableCustomBorder: this.tableCustomBorder,
+                            tableCustomBorderLight: this.tableCustomBorderLight,
+                            tableCustomBorderDark: this.tableCustomBorderDark,
+                            tableCustomRowHover: this.tableCustomRowHover,
+                            tableCustomRowHoverLight: this.tableCustomRowHoverLight,
+                            tableCustomRowHoverDark: this.tableCustomRowHoverDark,
+
+                            reduceMotion: this.reduceMotion,
+                            glassEffect: this.glassEffect,
+                        };
+                    },
+
                     saveState() {
                         try {
-                            localStorage.setItem(themeKey, JSON.stringify({
-                                mode: this.mode,
-                                customHex: this.customHex,
-                                highContrast: this.highContrast,
-
-                                selectedSurface: this.selectedSurface,
-                                selectedSurfaceLight: this.selectedSurfaceLight,
-                                selectedSurfaceDark: this.selectedSurfaceDark,
-
-                                sidebarStyle: this.sidebarStyle,
-                                sidebarStyleLight: this.sidebarStyleLight,
-                                sidebarStyleDark: this.sidebarStyleDark,
-                                sidebarCustomBg: this.sidebarCustomBg,
-                                sidebarCustomBgLight: this.sidebarCustomBgLight,
-                                sidebarCustomBgDark: this.sidebarCustomBgDark,
-                                sidebarCustomBorder: this.sidebarCustomBorder,
-                                sidebarCustomBorderLight: this.sidebarCustomBorderLight,
-                                sidebarCustomBorderDark: this.sidebarCustomBorderDark,
-                                sidebarBorderMode: this.sidebarBorderMode,
-                                sidebarBorderModeLight: this.sidebarBorderModeLight,
-                                sidebarBorderModeDark: this.sidebarBorderModeDark,
-                                transparentSidebar: this.transparentSidebar,
-                                transparentSidebarLight: this.transparentSidebarLight,
-                                transparentSidebarDark: this.transparentSidebarDark,
-                                sidebarFeature: this.sidebarFeature,
-
-                                headerStyle: this.headerStyle,
-                                headerStyleLight: this.headerStyleLight,
-                                headerStyleDark: this.headerStyleDark,
-                                headerCustomBg: this.headerCustomBg,
-                                headerCustomBgLight: this.headerCustomBgLight,
-                                headerCustomBgDark: this.headerCustomBgDark,
-                                headerCustomBorder: this.headerCustomBorder,
-                                headerCustomBorderLight: this.headerCustomBorderLight,
-                                headerCustomBorderDark: this.headerCustomBorderDark,
-                                headerBorderMode: this.headerBorderMode,
-                                headerBorderModeLight: this.headerBorderModeLight,
-                                headerBorderModeDark: this.headerBorderModeDark,
-                                headerGlassEffect: this.headerGlassEffect,
-                                headerGlassEffectLight: this.headerGlassEffectLight,
-                                headerGlassEffectDark: this.headerGlassEffectDark,
-
-                                navStyle: this.navStyle,
-                                navStyleLight: this.navStyleLight,
-                                navStyleDark: this.navStyleDark,
-                                navDensity: this.navDensity,
-                                navDensityLight: this.navDensityLight,
-                                navDensityDark: this.navDensityDark,
-                                navIndicator: this.navIndicator,
-                                navIndicatorLight: this.navIndicatorLight,
-                                navIndicatorDark: this.navIndicatorDark,
-                                navCustomActiveBg: this.navCustomActiveBg,
-                                navCustomActiveBgLight: this.navCustomActiveBgLight,
-                                navCustomActiveBgDark: this.navCustomActiveBgDark,
-                                navCustomActiveFg: this.navCustomActiveFg,
-                                navCustomActiveFgLight: this.navCustomActiveFgLight,
-                                navCustomActiveFgDark: this.navCustomActiveFgDark,
-                                navCustomIndicator: this.navCustomIndicator,
-                                navCustomIndicatorLight: this.navCustomIndicatorLight,
-                                navCustomIndicatorDark: this.navCustomIndicatorDark,
-
-                                selectedSemantic: this.selectedSemantic,
-                                selectedChartPreset: this.selectedChartPreset,
-                                selectedRadius: this.selectedRadius,
-                                selectedFontName: this.selectedFontName,
-                                selectedFontValue: this.selectedFontValue,
-                                tablesView: this.tablesView,
-
-                                tableStyle: this.tableStyle,
-                                tableStyleLight: this.tableStyleLight,
-                                tableStyleDark: this.tableStyleDark,
-                                tableCustomHeaderBg: this.tableCustomHeaderBg,
-                                tableCustomHeaderBgLight: this.tableCustomHeaderBgLight,
-                                tableCustomHeaderBgDark: this.tableCustomHeaderBgDark,
-                                tableCustomBorder: this.tableCustomBorder,
-                                tableCustomBorderLight: this.tableCustomBorderLight,
-                                tableCustomBorderDark: this.tableCustomBorderDark,
-                                tableCustomRowHover: this.tableCustomRowHover,
-                                tableCustomRowHoverLight: this.tableCustomRowHoverLight,
-                                tableCustomRowHoverDark: this.tableCustomRowHoverDark,
-
-                                reduceMotion: this.reduceMotion,
-                                glassEffect: this.glassEffect,
-                            }));
+                            if (this.scope === 'local') {
+                                if (!this.isGlobalLocked || this.storageMode === 'local_only') {
+                                    localStorage.setItem(themeKey, JSON.stringify(this.collectCurrentTokens()));
+                                }
+                            }
                         } catch (e) {}
+                    },
+
+                    switchScope(targetScope) {
+                        if (this.scope === targetScope) return;
+                        this.scope = targetScope;
+
+                        if (targetScope === 'global') {
+                            const g = window.VIBE_GLOBAL_THEME;
+                            if (g && g.tokens) {
+                                this.applyParsedTokens(g.tokens);
+                                this.isGlobalLocked = !!g.is_locked;
+                            }
+                        } else {
+                            try {
+                                const stored = localStorage.getItem(themeKey);
+                                if (stored) {
+                                    this.applyParsedTokens(JSON.parse(stored));
+                                } else if (window.VIBE_GLOBAL_THEME?.tokens) {
+                                    this.applyParsedTokens(window.VIBE_GLOBAL_THEME.tokens);
+                                }
+                            } catch (e) {}
+                        }
+
+                        this.syncActiveModeValues();
+                        this.applyTheme();
+                    },
+
+                    async saveGlobalSettings() {
+                        if (this.isSavingGlobal) return;
+                        this.isSavingGlobal = true;
+
+                        try {
+                            const tokens = this.collectCurrentTokens();
+                            const css = this.generateCssText();
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+                            const response = await fetch('/vibe-api/theme/global', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken || ''
+                                },
+                                body: JSON.stringify({
+                                    tokens: tokens,
+                                    css: css,
+                                    is_locked: !!this.isGlobalLocked
+                                })
+                            });
+
+                            const data = await response.json();
+                            if (response.ok && data.success) {
+                                window.VIBE_GLOBAL_THEME = data.theme;
+                                this.isGlobalLocked = !!data.theme.is_locked;
+                                this.globalUpdatedBy = data.theme.updated_by;
+                                this.globalUpdatedAt = data.theme.updated_at;
+
+                                if (window.VibeTheme?.setCssOverride) {
+                                    window.VibeTheme.setCssOverride(css, { ...tokens });
+                                }
+
+                                this.notify('global_theme_saved', 'Tampilan global berhasil disimpan ke database & cache untuk semua pengguna.', {}, 'success', 'Tampilan Global Disimpan');
+                            } else {
+                                throw new Error(data.message || 'Gagal menyimpan tampilan global.');
+                            }
+                        } catch (err) {
+                            this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat menyimpan tema global.', {}, 'destructive', 'Gagal Menyimpan');
+                        } finally {
+                            this.isSavingGlobal = false;
+                        }
+                    },
+
+                    async resetGlobalSettings() {
+                        if (this.isResettingGlobal) return;
+                        this.isResettingGlobal = true;
+
+                        try {
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                            const response = await fetch('/vibe-api/theme/global/reset', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken || ''
+                                }
+                            });
+
+                            const data = await response.json();
+                            if (response.ok && data.success) {
+                                window.VIBE_GLOBAL_THEME = {
+                                    tokens: null,
+                                    css: null,
+                                    is_locked: false,
+                                    updated_by: null,
+                                    updated_at: null
+                                };
+                                this.isGlobalLocked = false;
+                                this.globalUpdatedBy = null;
+                                this.globalUpdatedAt = null;
+
+                                this.resetToDefaultsInternal();
+                                this.applyTheme();
+
+                                this.notify('global_theme_reset', 'Tampilan global berhasil direset ke bawaan sistem.', {}, 'success', 'Tampilan Global Direset');
+                            } else {
+                                throw new Error(data.message || 'Gagal mereset tampilan global.');
+                            }
+                        } catch (err) {
+                            this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat mereset tema global.', {}, 'destructive', 'Gagal Mereset');
+                        } finally {
+                            this.isResettingGlobal = false;
+                        }
+                    },
+
+                    resetLocalOverrides() {
+                        try {
+                            localStorage.removeItem(themeKey);
+                        } catch (e) {}
+
+                        if (window.VIBE_GLOBAL_THEME?.tokens) {
+                            this.applyParsedTokens(window.VIBE_GLOBAL_THEME.tokens);
+                        } else {
+                            this.resetToDefaultsInternal();
+                        }
+
+                        this.syncActiveModeValues();
+                        this.applyTheme();
+                        this.notify('local_reset', 'Preferensi lokal direset ke bawaan tema global.', {}, 'success', 'Preferensi Direset');
                     },
 
                     t(key, fallback, replacements = {}) {

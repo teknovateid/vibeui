@@ -60,6 +60,16 @@
             'icon' => 'theme',
             'keywords' => 'design system color semantic warna varian primary secondary danger success warning info rules pedoman palet',
         ],
+        [
+            'id' => 'menu-appearance',
+            'title' => __('docs/sidebar.nav.appearance') ?: __('docs/search.menu_items.appearance.title'),
+            'subtitle' => __('docs/search.menu_items.appearance.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
+            'url' => route('docs.appearance.index'),
+            'icon' => 'theme',
+            'keywords' => 'appearance tampilan tema theme mode dark light tokens dual storage local storage database cache zero fouc',
+        ],
 
         // Authentication
         [

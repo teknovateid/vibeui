@@ -4,53 +4,73 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
 // Injeksi instan override CSS secepat mungkin saat theme.js dimuat
 (function() {
     try {
-        const stored = localStorage.getItem(THEME_KEY);
-        if (stored) {
-            const parsed = JSON.parse(stored);
-            if (parsed && parsed.css) {
-                const styleId = `${VIBE_PREFIX}-theme-override`;
-                let style = document.getElementById(styleId);
-                if (!style) {
-                    style = document.createElement('style');
-                    style.id = styleId;
-                    style.setAttribute('data-navigate-once', 'true');
-                    document.head.appendChild(style);
+        const globalTheme = window.VIBE_GLOBAL_THEME;
+        const isLocked = globalTheme && globalTheme.is_locked;
+        const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+
+        let activeCss = null;
+        let activeHex = null;
+
+        if ((isLocked || storageMode === 'global_only') && globalTheme) {
+            activeCss = globalTheme.css;
+            activeHex = globalTheme.tokens?.customHex;
+        } else {
+            const stored = localStorage.getItem(THEME_KEY);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (parsed) {
+                    activeCss = parsed.css;
+                    activeHex = parsed.customHex;
                 }
-                if (style.textContent !== parsed.css) {
-                    style.textContent = parsed.css;
-                }
+            }
+            if (!activeCss && !activeHex && globalTheme) {
+                activeCss = globalTheme.css;
+                activeHex = globalTheme.tokens?.customHex;
+            }
+        }
+
+        if (activeCss) {
+            const styleId = `${VIBE_PREFIX}-theme-override`;
+            let style = document.getElementById(styleId);
+            if (!style) {
+                style = document.createElement('style');
+                style.id = styleId;
+                style.setAttribute('data-navigate-once', 'true');
                 document.head.appendChild(style);
             }
-            if (parsed && parsed.customHex && !parsed.css) {
-                const root = document.documentElement;
-                const isDark = root.classList.contains('dark');
-                const isDefaultSlate = (parsed.customHex.toLowerCase() === '#18181b' || parsed.customHex.toLowerCase() === '#0a0b0a');
-                const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : parsed.customHex;
-                root.style.setProperty('--primary', activePrimary, 'important');
-                root.style.setProperty('--color-primary', activePrimary, 'important');
-                root.style.setProperty('--ring', activePrimary, 'important');
-                root.style.setProperty('--color-ring', activePrimary, 'important');
-                const isLight = (hex) => {
-                    let c = (hex || '').replace('#', '');
-                    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
-                    if (c.length < 6) return true;
-                    const r = parseInt(c.substring(0, 2), 16) || 0;
-                    const g = parseInt(c.substring(2, 4), 16) || 0;
-                    const b = parseInt(c.substring(4, 6), 16) || 0;
-                    return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
-                };
-                const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
-                root.style.setProperty('--primary-foreground', fg, 'important');
-                root.style.setProperty('--color-primary-foreground', fg, 'important');
-            } else if (parsed && parsed.css) {
-                const root = document.documentElement;
-                root.style.removeProperty('--primary');
-                root.style.removeProperty('--color-primary');
-                root.style.removeProperty('--ring');
-                root.style.removeProperty('--color-ring');
-                root.style.removeProperty('--primary-foreground');
-                root.style.removeProperty('--color-primary-foreground');
+            if (style.textContent !== activeCss) {
+                style.textContent = activeCss;
             }
+            document.head.appendChild(style);
+        } else if (activeHex) {
+            const root = document.documentElement;
+            const isDark = root.classList.contains('dark');
+            const isDefaultSlate = (activeHex.toLowerCase() === '#18181b' || activeHex.toLowerCase() === '#0a0b0a');
+            const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : activeHex;
+            root.style.setProperty('--primary', activePrimary, 'important');
+            root.style.setProperty('--color-primary', activePrimary, 'important');
+            root.style.setProperty('--ring', activePrimary, 'important');
+            root.style.setProperty('--color-ring', activePrimary, 'important');
+            const isLight = (hex) => {
+                let c = (hex || '').replace('#', '');
+                if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+                if (c.length < 6) return true;
+                const r = parseInt(c.substring(0, 2), 16) || 0;
+                const g = parseInt(c.substring(2, 4), 16) || 0;
+                const b = parseInt(c.substring(4, 6), 16) || 0;
+                return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
+            };
+            const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
+            root.style.setProperty('--primary-foreground', fg, 'important');
+            root.style.setProperty('--color-primary-foreground', fg, 'important');
+        } else {
+            const root = document.documentElement;
+            root.style.removeProperty('--primary');
+            root.style.removeProperty('--color-primary');
+            root.style.removeProperty('--ring');
+            root.style.removeProperty('--color-ring');
+            root.style.removeProperty('--primary-foreground');
+            root.style.removeProperty('--color-primary-foreground');
         }
     } catch (e) {}
 })();
@@ -84,16 +104,33 @@ const ThemeManager = {
 
     getConfig() {
         try {
-            const stored = localStorage.getItem(THEME_KEY);
-            if (stored) {
-                if (stored === 'dark' || stored === 'light' || stored === 'system') {
-                    const migratedConfig = { ...this.defaultConfig, mode: stored };
-                    localStorage.setItem(THEME_KEY, JSON.stringify(migratedConfig));
-                    return migratedConfig;
+            const globalTheme = window.VIBE_GLOBAL_THEME;
+            const isLocked = globalTheme && globalTheme.is_locked;
+            const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+
+            // If global is locked or storage mode is global_only, prioritize global tokens
+            if ((isLocked || storageMode === 'global_only') && globalTheme && globalTheme.tokens) {
+                return { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css };
+            }
+
+            // Otherwise, check localStorage first if local overrides are allowed
+            if (storageMode !== 'global_only') {
+                const stored = localStorage.getItem(THEME_KEY);
+                if (stored) {
+                    if (stored === 'dark' || stored === 'light' || stored === 'system') {
+                        const migratedConfig = { ...this.defaultConfig, mode: stored };
+                        localStorage.setItem(THEME_KEY, JSON.stringify(migratedConfig));
+                        return migratedConfig;
+                    }
+                    const parsed = JSON.parse(stored);
+                    delete parsed.animation; // Jangan biarkan cache localStorage lama menimpa konfigurasi animasi kode
+                    return { ...this.defaultConfig, ...parsed };
                 }
-                const parsed = JSON.parse(stored);
-                delete parsed.animation; // Jangan biarkan cache localStorage lama menimpa konfigurasi animasi kode
-                return { ...this.defaultConfig, ...parsed };
+            }
+
+            // Fallback to global theme if available
+            if (globalTheme && globalTheme.tokens) {
+                return { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css };
             }
         } catch (e) {
             console.warn("VibeTheme: Gagal mem-parsing konfigurasi tema, kembali ke default.", e);
@@ -102,9 +139,17 @@ const ThemeManager = {
     },
 
     saveConfig(config) {
-        const toSave = { ...config };
-        delete toSave.animation;
-        localStorage.setItem(THEME_KEY, JSON.stringify(toSave));
+        const globalTheme = window.VIBE_GLOBAL_THEME;
+        const isLocked = globalTheme && globalTheme.is_locked;
+        const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+
+        // Do not persist personal localStorage overrides when locked or global_only
+        if (!isLocked && storageMode !== 'global_only') {
+            const toSave = { ...config };
+            delete toSave.animation;
+            localStorage.setItem(THEME_KEY, JSON.stringify(toSave));
+        }
+
         this.applyComponentThemes(config);
         
         window.dispatchEvent(new CustomEvent(`${VIBE_PREFIX}-theme-changed`, { 

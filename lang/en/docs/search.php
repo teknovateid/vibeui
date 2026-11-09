@@ -99,6 +99,10 @@ return [
             'title' => 'Color Design System',
             'subtitle' => 'Semantic color variant rules, UI guidelines, and palette',
         ],
+        'appearance' => [
+            'title' => 'Appearance',
+            'subtitle' => 'Theme settings with dual storage (Local Storage & Global Database + Cache)',
+        ],
         'form' => [
             'title' => 'Form',
             'subtitle' => 'Form container, validation, and input handling',

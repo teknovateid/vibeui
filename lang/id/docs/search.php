@@ -99,6 +99,10 @@ return [
             'title' => 'Color Design System',
             'subtitle' => 'Aturan semantik varian warna, pedoman UI, dan palet',
         ],
+        'appearance' => [
+            'title' => 'Appearance & Tema',
+            'subtitle' => 'Pengaturan tema dengan dual storage (Local Storage & Global Database + Cache)',
+        ],
         'form' => [
             'title' => 'Form',
             'subtitle' => 'Container form, validasi, dan handling input',

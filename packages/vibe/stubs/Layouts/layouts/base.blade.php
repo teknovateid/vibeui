@@ -16,6 +16,72 @@
         <meta name="vibe-confirm-url" content="{{ $idleConfirmUrl }}">
         <meta name="vibe-keep-alive-url" content="{{ $keepAliveUrl }}">
     @endif
+    @php
+        $vibeThemeService = app(\Teknovate\VibeUi\Services\ThemeService::class);
+        $globalThemeData = $vibeThemeService->getGlobalTheme();
+        $themeStorageMode = config('vibe.theme.storage_mode', 'hybrid');
+        $canManageTheme = $vibeThemeService->canManage(auth()->user());
+    @endphp
+    <script data-navigate-once="true">
+        window.VIBE_GLOBAL_THEME = @json($globalThemeData);
+        window.VIBE_THEME_STORAGE_MODE = @json($themeStorageMode);
+        window.VIBE_CAN_MANAGE_THEME = @json($canManageTheme);
+        (function() {
+            try {
+                var prefix = window.VIBE_PREFIX || 'vibe';
+                var g = window.VIBE_GLOBAL_THEME;
+                var mode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+                var isLocked = g && g.is_locked;
+                var stored = null;
+
+                if (!isLocked && mode !== 'global_only') {
+                    try {
+                        stored = localStorage.getItem(prefix + '-theme');
+                    } catch(e) {}
+                }
+
+                var activeCss = null;
+                var activeMode = null;
+
+                if (stored) {
+                    try {
+                        var parsed = JSON.parse(stored);
+                        activeCss = parsed.css;
+                        activeMode = parsed.mode;
+                    } catch(e) {}
+                }
+
+                if (!activeCss && g && g.css) {
+                    activeCss = g.css;
+                }
+                if (!activeMode && g && g.tokens && g.tokens.mode) {
+                    activeMode = g.tokens.mode;
+                }
+
+                if (activeMode) {
+                    var isDark = activeMode === 'dark' || (activeMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                    if (isDark) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                }
+
+                if (activeCss) {
+                    var styleEl = document.getElementById(prefix + '-theme-override');
+                    if (!styleEl) {
+                        styleEl = document.createElement('style');
+                        styleEl.id = prefix + '-theme-override';
+                        styleEl.setAttribute('data-navigate-once', 'true');
+                        document.head.appendChild(styleEl);
+                    }
+                    if (styleEl.textContent !== activeCss) {
+                        styleEl.textContent = activeCss;
+                    }
+                }
+            } catch(e) {}
+        })();
+    </script>
     @vibeStyles
     @stack('seo')
     @vite(['resources/css/app.css', 'resources/js/app.js'])

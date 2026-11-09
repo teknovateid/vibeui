@@ -13,6 +13,7 @@ return [
         'instalation' => 'Instalasi',
         'directories' => 'Direktori',
         'design_system' => 'Desain Sistem Warna',
+        'appearance' => 'Tampilan & Tema',
         'form' => 'Form',
         'input' => 'Input',
         'input_group' => [

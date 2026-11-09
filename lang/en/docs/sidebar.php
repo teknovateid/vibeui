@@ -13,6 +13,7 @@ return [
         'instalation' => 'Instalation',
         'directories' => 'Directories',
         'design_system' => 'Color Design System',
+        'appearance' => 'Appearance',
         'form' => 'Form',
         'input' => 'Input',
         'input_group' => [

@@ -50,6 +50,18 @@
             {{ __('docs/sidebar.nav.design_system') }}
         </vibe:nav.item>
 
+        <!-- Appearance (Dual Storage) -->
+        <vibe:nav.item href="{{ route('docs.appearance.index') }}" :active="request()->routeIs('docs.appearance.*')">
+            <x-slot:icon>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+                    <path d="M2 12h20" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.appearance') }}
+        </vibe:nav.item>
+
         <!-- Authentication -->
         <vibe:nav.group :title="__('docs/sidebar.nav.auth.group')" :active="request()->routeIs('docs.auth.*')" persist>
             <x-slot:icon>
