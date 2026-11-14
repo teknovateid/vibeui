@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.10.2] - 2026-11-14
+
+### 🚀 Features
+- feat: Enhance DataTable and DateTime components with Livewire integration (56009e2)
+
+### 🧰 Maintenance & Documentation
+- Implement code changes to enhance functionality and improve performance (3fc59ca)
+
+
 ## [0.10.1] - 2026-11-09
 
 ### 🚀 Features
