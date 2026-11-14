@@ -66,7 +66,10 @@
     $resolvedValue = $normalizeDate($value);
     $resolvedMode = $mode ?? $type;
     $resolvedLocale = $locale ?? app()->getLocale();
-    $name = $name ?? $attributes->whereStartsWith('wire:model')->first();
+    $wireModel = $attributes->wire('model');
+    $wireModelName = $wireModel ? ($wireModel->value() ?: null) : null;
+    $isWireLive = $wireModel ? $wireModel->hasModifier('live') : false;
+    $name = $name ?? ($wireModelName ?: $attributes->whereStartsWith('wire:model')->first());
     $dtId = $id ?? ($name ? 'dt-' . str_replace(['[', ']', '.'], ['-', '', '-'], $name) : 'vibe-dt-' . Str::random(8));
 
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
@@ -165,6 +168,8 @@
         'format' => $format ?: '',
         'displayFormat' => $displayFormat ?: '',
         'value' => $resolvedValue,
+        'wireModelName' => $wireModelName,
+        'isWireLive' => (bool) $isWireLive,
     ], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT);
 @endphp
 
@@ -175,11 +180,18 @@
 <div
     data-vibe-date-time
     class="w-full space-y-1.5 text-left {{ $attributes->get('class') }}"
-    x-data="typeof window.vibeDateTime === 'function' ? window.vibeDateTime({{ $configJson }}) : {
+    :class="{ 'relative z-50': isOpen }"
+    x-data="typeof window.vibeDateTime === 'function' ? window.vibeDateTime(Object.assign({{ $configJson }}, {
+        value: @if ($wireModelName) (typeof $wire !== 'undefined' ? $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} : @js($resolvedValue)) @else @js($resolvedValue) @endif
+    })) : {
         id: '{{ $dtId }}',
         mode: '{{ $resolvedMode }}',
         locale: '{{ $resolvedLocale }}',
+        wireModelName: @js($wireModelName),
+        isWireLive: {{ $isWireLive ? 'true' : 'false' }},
+        value: @if ($wireModelName) (typeof $wire !== 'undefined' ? $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} : @js($resolvedValue)) @else @js($resolvedValue) @endif,
         isOpen: {{ $inline ? 'true' : 'false' }},
+        openUp: false,
         viewMode: 'days',
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
@@ -231,7 +243,7 @@
         setYear() {}, setMonth() {}, toggleViewMode() {},
         getMonthDays() { return []; },
         selectDay() {}, onDayHover() {}, selectPreset() {},
-        updateTime() {}, setTimeNow() {}, stepTime() {}, onTimeInput() {}, onTimeBlur() {}, onTimeKeydown() {}, onTimeWheel() {}, onTimeFocus() {}, getTimeValue() {}, clear() {}, onManualInput() {},
+        updateTime() {}, setTimeNow() {}, stepTime() {}, onTimeInput() {}, onTimeBlur() {}, onTimeKeydown() {}, onTimeWheel() {}, onTimeFocus() {}, getTimeValue() {}, clear() {}, apply() {}, onManualInput() {},
         adjustPosition() {}
     }"
     @if (!$inline)
@@ -249,9 +261,15 @@
         </label>
     @endif
 
-    {{-- Hidden Form Input(s) for Backend Submission --}}
+    {{-- Hidden Form Input(s) for Backend Submission & Form Listeners --}}
     @if ($name)
-        <input type="hidden" name="{{ $name }}" :value="formValue" />
+        <input 
+            type="hidden" 
+            id="{{ $dtId }}-value"
+            name="{{ $name }}" 
+            :value="formValue" 
+            x-ref="hiddenInput"
+        />
     @endif
     @if ($startName)
         <input type="hidden" name="{{ $startName }}" :value="inputStartText" />
@@ -262,7 +280,7 @@
 
     {{-- Interactive Input Trigger (if not inline) --}}
     @if (!$inline)
-        <div class="relative w-full">
+        <div class="relative w-full" :class="{ 'z-50': isOpen }">
             {{-- Leading Icon (Calendar or Clock) --}}
             <span class="absolute top-1/2 -translate-y-1/2 {{ $iconSize }} flex items-center justify-center text-muted-foreground pointer-events-none z-10">
                 @if (in_array($resolvedMode, ['time', 'time-range']))
@@ -342,7 +360,8 @@
                 x-transition:leave="transition ease-in duration-100"
                 x-transition:leave-start="opacity-100 translate-y-0 scale-100"
                 x-transition:leave-end="opacity-0 translate-y-1 scale-98"
-                class="absolute left-0 top-full z-40 mt-1.5 w-max max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card text-card-foreground shadow-xl overflow-hidden focus:outline-none"
+                class="absolute left-0 z-50 w-max max-w-[calc(100vw-2rem)] rounded-2xl border border-border bg-card text-card-foreground shadow-xl overflow-hidden focus:outline-none"
+                :class="openUp ? 'bottom-full mb-1.5' : 'top-full mt-1.5'"
             >
                 <div class="flex flex-col sm:flex-row w-full sm:items-stretch">
                     {{-- Presets Sidebar (if enabled) --}}
@@ -397,7 +416,7 @@
                                 type="button"
                                 variant="primary"
                                 size="sm"
-                                @click="isOpen = false"
+                                @click="apply()"
                                 class="px-3 text-xs"
                             >
                                 <span x-text="dict.apply"></span>

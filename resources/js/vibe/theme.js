@@ -474,11 +474,9 @@ document.addEventListener('livewire:init', () => {
 
 function isTableDataRegistered() {
     if (registeredAlpineData.has('laravellivewiretable')) return true;
-    if (window.Alpine && typeof window.Alpine.evaluate === 'function') {
+    if (window.Alpine && typeof window.Alpine.data === 'function') {
         try {
-            const testEl = document.createElement('div');
-            const result = window.Alpine.evaluate(testEl, 'typeof laravellivewiretable');
-            if (result === 'function') {
+            if (window.Alpine.data('laravellivewiretable')) {
                 registeredAlpineData.add('laravellivewiretable');
                 return true;
             }
@@ -521,25 +519,24 @@ window.VibeInitDataTable = function () {
         } catch (e) {}
     }
 
-    // 2. If laravellivewiretable is registered, safely initialize any table roots stuck with x-cloak
-    if (isTableDataRegistered()) {
-        const cloakedTables = document.querySelectorAll('.vibe-datatable-root [x-cloak], [x-data*="laravellivewiretable"][x-cloak]');
-        cloakedTables.forEach((el) => {
-            try {
-                if (typeof window.Alpine.initTree === 'function') {
-                    if (el._x_dataStack && !el._x_dataStack[0]) {
-                        delete el._x_dataStack;
-                    }
-                    if (!el._x_dataStack) {
-                        window.Alpine.initTree(el);
-                    }
+    // 2. Safely initialize any table roots and strip stuck x-cloak
+    const cloakedTables = document.querySelectorAll('.vibe-datatable-root [x-cloak], [x-data*="laravellivewiretable"][x-cloak], .vibe-datatable-root[x-cloak]');
+    cloakedTables.forEach((el) => {
+        try {
+            if (typeof window.Alpine.initTree === 'function') {
+                const stack = el._x_dataStack;
+                const data = stack && stack[0];
+                const isProperlyInitialized = data && typeof data.setTableId === 'function';
+                if (!isProperlyInitialized) {
+                    delete el._x_dataStack;
+                    window.Alpine.initTree(el);
                 }
-            } catch (e) {}
-            if (el.hasAttribute('x-cloak')) {
-                el.removeAttribute('x-cloak');
             }
-        });
-    }
+        } catch (e) {}
+        if (el.hasAttribute('x-cloak')) {
+            el.removeAttribute('x-cloak');
+        }
+    });
 };
 
 // Detect when core.min.js is injected into DOM by Livewire SPA navigation
@@ -577,6 +574,24 @@ if (document.readyState === 'loading') {
     setupDataTableScriptObserver();
 }
 
+function checkAndInitDatatables() {
+    if (document.querySelector('.vibe-datatable-root, [x-data*="laravellivewiretable"]')) {
+        window.VibeInitDataTable();
+        [50, 150, 300, 600].forEach((delay) => {
+            setTimeout(() => {
+                window.VibeInitDataTable();
+            }, delay);
+        });
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', checkAndInitDatatables);
+} else {
+    checkAndInitDatatables();
+}
+document.addEventListener('livewire:init', checkAndInitDatatables);
+
 // Re-apply theme before and after Livewire SPA navigation
 document.addEventListener('livewire:navigating', () => {
     ThemeManager.init();
@@ -595,15 +610,7 @@ document.addEventListener('livewire:navigated', () => {
         }, { once: true });
     }
 
-    // Initialize datatables if present on the navigated page
-    if (document.querySelector('.vibe-datatable-root, [x-data*="laravellivewiretable"]')) {
-        window.VibeInitDataTable();
-        [50, 150, 300, 600].forEach((delay) => {
-            setTimeout(() => {
-                window.VibeInitDataTable();
-            }, delay);
-        });
-    }
+    checkAndInitDatatables();
 });
 
 // Safely catch and suppress browser View Transition abort errors (e.g. viewport size changes or tab visibility changes)
