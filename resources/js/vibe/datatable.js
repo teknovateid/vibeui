@@ -46,6 +46,10 @@ export function ensureDatatablesReady(root = document) {
             }
         });
 
+        if (container.hasAttribute("x-cloak")) {
+            container.removeAttribute("x-cloak");
+        }
+
         // Strip stuck x-cloak on any children
         container.querySelectorAll("[x-cloak]").forEach((el) => {
             el.removeAttribute("x-cloak");
@@ -53,16 +57,36 @@ export function ensureDatatablesReady(root = document) {
     });
 }
 
-// Automatically register components on startup
+// Automatically register components and ensure initialization on startup
 if (typeof window !== "undefined") {
+    function initOnReady() {
+        if (window.Alpine) {
+            registerLivewireTableComponents(window.Alpine);
+        }
+        ensureDatatablesReady();
+        [50, 150, 300, 600].forEach((delay) => {
+            setTimeout(ensureDatatablesReady, delay);
+        });
+    }
+
     if (window.Alpine) {
         registerLivewireTableComponents(window.Alpine);
     }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initOnReady);
+    } else {
+        initOnReady();
+    }
+
     document.addEventListener("alpine:init", () => {
         if (window.Alpine) registerLivewireTableComponents(window.Alpine);
+        initOnReady();
     });
+
     document.addEventListener("livewire:init", () => {
         if (window.Alpine) registerLivewireTableComponents(window.Alpine);
+        initOnReady();
 
         if (window.Livewire && typeof window.Livewire.hook === "function") {
             window.Livewire.hook("morph.updated", ({ el }) => {
@@ -75,10 +99,7 @@ if (typeof window !== "undefined") {
     });
 
     document.addEventListener("livewire:navigated", () => {
-        ensureDatatablesReady();
-        [50, 150, 300].forEach((delay) => {
-            setTimeout(ensureDatatablesReady, delay);
-        });
+        initOnReady();
     });
 
     window.VibeInitDataTable = function () {

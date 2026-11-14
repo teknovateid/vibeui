@@ -30,9 +30,14 @@ export function vibeDateTime(config = {}) {
         displayFormat: config.displayFormat || '',
         presets: config.presets !== undefined ? config.presets : false,
         activePreset: null,
+        wireModelName: config.wireModelName || null,
+        isWireLive: Boolean(config.isWireLive),
+        value: config.value !== undefined ? config.value : null,
 
         // UI State
         isOpen: false,
+        openUp: false,
+        elevatedAncestors: [],
         viewMode: 'days', // 'days', 'months', 'years'
         currentMonth: new Date().getMonth(),
         currentYear: new Date().getFullYear(),
@@ -142,8 +147,17 @@ export function vibeDateTime(config = {}) {
             this.endTime.minutes = this.time.minutes;
             this.endTime.period = (now.getHours() + 1) >= 12 ? 'PM' : 'AM';
 
-            // Parse initial value if provided
-            this.parseInitialValue(config.value);
+            // Watch for value changes (from Livewire, external Alpine data, or reset)
+            this.$watch('value', (newVal) => {
+                if (newVal === this.formValue) return;
+                this.setValue(newVal, true);
+            });
+
+            // Parse initial value if provided (either from entangled this.value or config.value)
+            const initialVal = (this.value !== undefined && this.value !== null && this.value !== '')
+                ? this.value
+                : config.value;
+            this.parseInitialValue(initialVal);
 
             if (this.selectedDate) {
                 this.currentMonth = this.selectedDate.getMonth();
@@ -162,12 +176,24 @@ export function vibeDateTime(config = {}) {
 
             this.updateInputDisplay();
 
+            // Ensure this.value is synced if initial formValue was present
+            if (this.wireModelName && this.formValue && !this.value) {
+                this.value = this.formValue;
+            }
+
             // Watch for open state changes
             this.$watch('isOpen', (val) => {
                 if (val && !this.inline) {
+                    this.elevateAncestors();
                     this.$nextTick(() => this.adjustPosition());
+                } else if (!val && !this.inline) {
+                    this.restoreAncestors();
                 }
             });
+        },
+
+        destroy() {
+            this.restoreAncestors();
         },
 
         parseInitialValue(val) {
@@ -194,6 +220,12 @@ export function vibeDateTime(config = {}) {
                         const parts = val.split(separator);
                         this.rangeStart = this.parseDateString(parts[0].trim());
                         this.rangeEnd = this.parseDateString(parts[1].trim());
+                    } else if (typeof val === 'string' && val.trim() !== '') {
+                        const single = this.parseDateString(val.trim());
+                        if (single) {
+                            this.rangeStart = single;
+                            this.rangeEnd = single;
+                        }
                     }
                 } else if (this.mode === 'multiple' && Array.isArray(val)) {
                     this.multipleDates = val.map(d => this.parseDateString(d)).filter(Boolean);
@@ -218,9 +250,22 @@ export function vibeDateTime(config = {}) {
         parseDateString(str) {
             if (!str) return null;
             if (str instanceof Date) return isNaN(str.getTime()) ? null : str;
-            // Support YYYY-MM-DD or ISO
-            const d = new Date(str);
-            return isNaN(d.getTime()) ? null : d;
+            if (typeof str === 'string') {
+                const s = str.trim();
+                const ymdMatch = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{1,2})(?::(\d{1,2}))?)?/);
+                if (ymdMatch) {
+                    const year = parseInt(ymdMatch[1], 10);
+                    const month = parseInt(ymdMatch[2], 10) - 1;
+                    const day = parseInt(ymdMatch[3], 10);
+                    const hours = ymdMatch[4] ? parseInt(ymdMatch[4], 10) : 0;
+                    const minutes = ymdMatch[5] ? parseInt(ymdMatch[5], 10) : 0;
+                    const seconds = ymdMatch[6] ? parseInt(ymdMatch[6], 10) : 0;
+                    return new Date(year, month, day, hours, minutes, seconds);
+                }
+                const d = new Date(s);
+                return isNaN(d.getTime()) ? null : d;
+            }
+            return null;
         },
 
         parseTimeString(str, target = 'start') {
@@ -1246,13 +1291,29 @@ export function vibeDateTime(config = {}) {
                     this.selectedDate = parsed;
                     this.currentMonth = parsed.getMonth();
                     this.currentYear = parsed.getFullYear();
+                    this.yearsStart = Math.floor(this.currentYear / 12) * 12;
                     this.dispatchChange();
+                }
+            } else if (this.mode === 'range' || this.mode === 'datetime-range') {
+                if (raw.includes(' to ') || raw.includes(' - ')) {
+                    const sep = raw.includes(' to ') ? ' to ' : ' - ';
+                    const parts = raw.split(sep);
+                    const s = this.parseDateString(parts[0].trim());
+                    const e = this.parseDateString(parts[1].trim());
+                    if (s && e) {
+                        this.rangeStart = s < e ? s : e;
+                        this.rangeEnd = s < e ? e : s;
+                        this.currentMonth = this.rangeStart.getMonth();
+                        this.currentYear = this.rangeStart.getFullYear();
+                        this.yearsStart = Math.floor(this.currentYear / 12) * 12;
+                        this.dispatchChange();
+                    }
                 }
             }
         },
 
         // --- Clear & Reset ---
-        clear() {
+        clear(silent = false) {
             this.selectedDate = null;
             this.rangeStart = null;
             this.rangeEnd = null;
@@ -1262,7 +1323,9 @@ export function vibeDateTime(config = {}) {
             this.inputStartText = '';
             this.inputEndText = '';
             this.activePreset = null;
-            this.dispatchChange();
+            if (!silent) {
+                this.dispatchChange();
+            }
         },
 
         // --- Value Output for Forms & Livewire ---
@@ -1304,9 +1367,9 @@ export function vibeDateTime(config = {}) {
             this.setValue(val);
         },
 
-        setValue(val) {
+        setValue(val, silent = false) {
             if (!val) {
-                this.clear();
+                this.clear(silent);
                 return;
             }
             this.parseInitialValue(val);
@@ -1317,11 +1380,37 @@ export function vibeDateTime(config = {}) {
                 this.currentMonth = this.rangeStart.getMonth();
                 this.currentYear = this.rangeStart.getFullYear();
             }
+            this.yearsStart = Math.floor(this.currentYear / 12) * 12;
+            this.updateInputDisplay();
+            if (!silent) {
+                this.dispatchChange();
+            }
+        },
+
+        apply() {
             this.updateInputDisplay();
             this.dispatchChange();
+            this.isOpen = false;
         },
 
         dispatchChange() {
+            // 1. Sync entangled Livewire property if present
+            if (this.wireModelName || this.value !== undefined) {
+                if (this.value !== this.formValue) {
+                    this.value = this.formValue;
+                }
+            }
+
+            // 2. Sync hidden input element & trigger its events for form listeners
+            const hiddenInput = (this.$refs && this.$refs.hiddenInput) 
+                ? this.$refs.hiddenInput 
+                : (this.$el ? this.$el.querySelector('input[type="hidden"]') : null);
+            if (hiddenInput) {
+                hiddenInput.value = this.formValue;
+                hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
+                hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
             const detail = {
                 id: this.id,
                 mode: this.mode,
@@ -1332,16 +1421,84 @@ export function vibeDateTime(config = {}) {
                 multipleDates: this.multipleDates
             };
 
-            this.$dispatch('input', this.formValue);
-            this.$dispatch('change', detail);
-            this.$dispatch('vibe-date-time-change', detail);
+            // 3. Dispatch standard and custom events
+            if (this.$el) {
+                this.$el.dispatchEvent(new CustomEvent('input', {
+                    bubbles: true,
+                    composed: true,
+                    detail: this.formValue
+                }));
+                this.$el.dispatchEvent(new CustomEvent('change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: detail
+                }));
+                this.$el.dispatchEvent(new CustomEvent('vibe-date-time-change', {
+                    bubbles: true,
+                    composed: true,
+                    detail: detail
+                }));
+            }
             window.dispatchEvent(new CustomEvent('vibe-date-time-change', { detail }));
+        },
+
+        // --- Dynamic Ancestor Elevation (Stacking Context Protection) ---
+        elevateAncestors() {
+            this.restoreAncestors();
+            let parent = this.$el ? this.$el.parentElement : null;
+            while (parent && parent !== document.body && parent !== document.documentElement) {
+                const style = window.getComputedStyle(parent);
+                const hasStackingContext = 
+                    (style.backdropFilter && style.backdropFilter !== 'none') ||
+                    (style.filter && style.filter !== 'none') ||
+                    (style.transform && style.transform !== 'none') ||
+                    (style.perspective && style.perspective !== 'none') ||
+                    (style.contain && (style.contain.includes('paint') || style.contain.includes('layout'))) ||
+                    (style.opacity && parseFloat(style.opacity) < 1) ||
+                    (style.position !== 'static' && (style.zIndex === 'auto' || parseInt(style.zIndex, 10) < 50));
+
+                if (hasStackingContext) {
+                    this.elevatedAncestors.push({
+                        el: parent,
+                        prevZIndex: parent.style.zIndex,
+                        prevPosition: parent.style.position,
+                    });
+                    if (style.position === 'static') {
+                        parent.style.position = 'relative';
+                    }
+                    parent.style.zIndex = '50';
+                }
+                parent = parent.parentElement;
+            }
+        },
+
+        restoreAncestors() {
+            if (!this.elevatedAncestors || this.elevatedAncestors.length === 0) return;
+            for (const item of this.elevatedAncestors) {
+                if (item.el) {
+                    item.el.style.zIndex = item.prevZIndex;
+                    item.el.style.position = item.prevPosition;
+                }
+            }
+            this.elevatedAncestors = [];
         },
 
         // --- Popover Smart Positioning ---
         adjustPosition() {
             if (this.inline || !this.$refs.popover) return;
             const popover = this.$refs.popover;
+
+            // Check vertical placement (open upwards if not enough room below)
+            const inputEl = this.$el ? (this.$el.querySelector('input') || this.$el) : this.$el;
+            if (inputEl) {
+                const rect = inputEl.getBoundingClientRect();
+                const popoverHeight = popover.offsetHeight || 380;
+                const spaceBelow = window.innerHeight - rect.bottom;
+                const spaceAbove = rect.top;
+                this.openUp = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
+            }
+
+            // Horizontal alignment
             popover.classList.remove('right-0');
             popover.classList.add('left-0');
 

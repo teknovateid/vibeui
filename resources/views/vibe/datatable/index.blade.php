@@ -80,46 +80,55 @@
                         }
                         if (el.hasAttribute('x-cloak')) el.removeAttribute('x-cloak');
                     });
+                    if (root.hasAttribute('x-cloak')) root.removeAttribute('x-cloak');
                     root.querySelectorAll('[x-cloak]').forEach(function (el) {
                         el.removeAttribute('x-cloak');
                     });
                 });
             }
-            document.addEventListener('alpine:init', function () {
+
+            function triggerDatatableInit() {
                 loadDatatableModule()
                     .then(function (mod) {
                         if (mod && typeof mod.registerLivewireTableComponents === 'function') {
                             mod.registerLivewireTableComponents(window.Alpine);
                         }
-                        setTimeout(function () { reinitDatatableElements(mod); }, 0);
-                    })
-                    .catch(function (e) {
-                        console.warn('[Vibe DataTable] Module load error during alpine:init:', e);
-                    });
-            });
-
-            document.addEventListener('livewire:init', function () {
-                loadDatatableModule()
-                    .then(function (mod) {
                         if (mod && typeof mod.ensureDatatablesReady === 'function') {
                             mod.ensureDatatablesReady();
                         } else {
                             reinitDatatableElements(mod);
                         }
+                        [50, 150, 300, 600].forEach(function (d) {
+                            setTimeout(function () {
+                                if (mod && typeof mod.ensureDatatablesReady === 'function') {
+                                    mod.ensureDatatablesReady();
+                                } else {
+                                    reinitDatatableElements(mod);
+                                }
+                            }, d);
+                        });
                     })
-                    .catch(function () {});
+                    .catch(function () {
+                        reinitDatatableElements(null);
+                    });
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', triggerDatatableInit);
+            } else {
+                triggerDatatableInit();
+            }
+
+            document.addEventListener('alpine:init', function () {
+                triggerDatatableInit();
             });
+
+            document.addEventListener('livewire:init', function () {
+                triggerDatatableInit();
+            });
+
             document.addEventListener('livewire:navigated', function () {
-                loadDatatableModule()
-                    .then(function (mod) {
-                        if (mod && typeof mod.ensureDatatablesReady === 'function') {
-                            mod.ensureDatatablesReady();
-                            [50, 150, 300].forEach(function (d) {
-                                setTimeout(function () { mod.ensureDatatablesReady(); }, d);
-                            });
-                        }
-                    })
-                    .catch(function () {});
+                triggerDatatableInit();
             });
 
             var observer = new MutationObserver(function (mutations) {
@@ -143,13 +152,7 @@
                 }
 
                 if (hasNewDatatable) {
-                    loadDatatableModule()
-                        .then(function (mod) {
-                            if (mod && typeof mod.ensureDatatablesReady === 'function') {
-                                setTimeout(function () { mod.ensureDatatablesReady(); }, 50);
-                            }
-                        })
-                        .catch(function () {});
+                    triggerDatatableInit();
                 }
             });
 

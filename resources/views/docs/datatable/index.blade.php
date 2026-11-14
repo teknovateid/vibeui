@@ -150,7 +150,7 @@
                     @endphp
                     <vibe:preview :title="__('docs/datatable.basic_usage.preview_title')" :center="false" :code="$basicBladeCode">
                         <div class="w-full">
-                            <vibe:datatable :component="$basicComponent" />
+                            <vibe:datatable :component="$basicComponent" lazy />
                         </div>
                     </vibe:preview>
                 </div>
