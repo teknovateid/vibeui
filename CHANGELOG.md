@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.0] - 2026-11-14
+
+### 🧰 Maintenance & Documentation
+- chore: Update dependencies in composer.lock to latest versions (7ae80f3)
+
+
 ## [0.10.3] - 2026-11-14
 
 
