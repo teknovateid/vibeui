@@ -2,7 +2,7 @@
 
 @props([
     'variant' => 'primary', // primary, secondary, outline, ghost, surface, destructive/danger, success, warning, info, link, default
-    'size' => 'md',        // xs, sm, md, lg, xl, icon-xs, icon-sm, icon-md, icon-lg
+    'size' => 'md',        // xs, sm, md, lg, xl, icon-xs, icon-sm, icon-md, icon-lg, icon-xl, icon-2xl, icon-10, icon-12, auto, none
     'type' => 'button',
     'href' => null,
     'loading' => false,    // boolean, string loading text, or auto
@@ -13,7 +13,11 @@
 ])
 
 @php
-    $baseClasses = 'group/vbtn relative inline-flex items-center justify-center font-medium select-none whitespace-nowrap cursor-pointer transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[loading=true]:pointer-events-none data-[loading=true]:opacity-70';
+    $baseClasses = 'group/vbtn relative inline-flex items-center justify-center font-medium select-none whitespace-nowrap cursor-pointer transition-all duration-150 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 data-[loading=true]:pointer-events-none data-[loading=true]:opacity-70 [&_svg]:pointer-events-none [&_svg]:shrink-0';
+
+    $userClasses = (string) $attributes->get('class', '');
+    $isFlexCol = str_contains($userClasses, 'flex-col') || str_contains($userClasses, 'flex-column');
+    $hasCustomHeight = (bool) preg_match('/(?:^|\s)(?:h-|size-)/', $userClasses);
 
     $variantClasses = match ($variant) {
         'tab', 'plain', 'unstyled' => '',
@@ -30,19 +34,37 @@
         default => 'border border-border bg-card text-card-foreground shadow-2xs hover:bg-muted hover:text-foreground',
     };
 
-    $sizeClasses = match ($size) {
-        'xs' => 'h-7 px-2 text-xs gap-1 rounded-sm',
-        'sm' => 'h-8 px-2.5 text-xs gap-1.5 rounded-md',
-        'md' => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
-        'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
-        'xl' => 'h-11 px-4.5 text-base sm:text-sm gap-3 rounded-xl',
-        'icon-xs' => 'size-7 p-0 rounded-sm',
-        'icon-sm' => 'size-8 p-0 rounded-md',
-        'icon-md' => 'size-11 sm:size-9 p-0 rounded-lg',
-        'icon-lg' => 'size-11 sm:size-10 p-0 rounded-lg',
-        'icon-xl' => 'size-12 sm:size-11 p-0 rounded-xl',
-        default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
-    };
+    if ($isFlexCol && ! $hasCustomHeight) {
+        $sizeClasses = match ($size) {
+            'xs' => 'h-auto py-1 px-2 text-xs gap-1 rounded-sm',
+            'sm' => 'h-auto py-1.5 px-2.5 text-xs gap-1 rounded-md',
+            'md' => 'h-auto py-2.5 sm:py-2 px-3.5 sm:px-3 text-base sm:text-sm gap-1.5 rounded-lg',
+            'lg' => 'h-auto py-3 px-4 text-sm gap-2 rounded-lg',
+            'xl' => 'h-auto py-3.5 px-4.5 text-base sm:text-sm gap-2.5 rounded-xl',
+            'none' => '',
+            'auto' => 'h-auto py-2 px-3 text-sm gap-1.5 rounded-lg',
+            default => 'h-auto py-2 px-3 text-sm gap-1.5 rounded-lg',
+        };
+    } else {
+        $sizeClasses = match ($size) {
+            'xs' => 'h-7 px-2 text-xs gap-1 rounded-sm',
+            'sm' => 'h-8 px-2.5 text-xs gap-1.5 rounded-md',
+            'md' => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
+            'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
+            'xl' => 'h-11 px-4.5 text-base sm:text-sm gap-3 rounded-xl',
+            'icon-xs' => 'size-7 p-0 rounded-sm',
+            'icon-sm' => 'size-8 p-0 rounded-md',
+            'icon-md' => 'size-11 sm:size-9 p-0 rounded-lg',
+            'icon-lg' => 'size-11 sm:size-10 p-0 rounded-lg',
+            'icon-xl' => 'size-12 sm:size-11 p-0 rounded-xl',
+            'icon-2xl' => 'size-14 sm:size-12 p-0 rounded-xl',
+            '10', 'icon-10' => 'size-10 p-0 rounded-lg',
+            '12', 'icon-12' => 'size-12 p-0 rounded-xl',
+            'auto' => 'h-auto py-2 px-3 text-sm gap-2 rounded-lg',
+            'none' => '',
+            default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
+        };
+    }
 
     if ($variant === 'tab') {
         $sizeClasses = match ($size) {
@@ -51,6 +73,7 @@
             'lg' => 'h-10 px-4 text-sm gap-2.5 rounded-lg',
             'xl' => 'h-11 px-4.5 text-base sm:text-sm gap-3 rounded-xl',
             'none' => '',
+            'auto' => 'h-auto py-2 px-3 text-sm gap-2 rounded-lg',
             default => 'h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg',
         };
     } elseif ($variant === 'link') {
@@ -67,7 +90,7 @@
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$animationClass}");
     $hasCustomXData = $attributes->has('x-data');
-    $isIcon = str_starts_with($size, 'icon-');
+    $isIcon = str_starts_with($size, 'icon-') || in_array($size, ['10', '12', '14']);
     $hasSlotContent = $slot->isNotEmpty() && trim($slot) !== '';
 
     $hasLoadingText = is_string($loading) && $loading !== '' && $loading !== 'auto' && $loading !== '1';
@@ -133,6 +156,8 @@
         'md', 'icon-md' => 'size-4',
         'lg', 'icon-lg' => 'size-4.5 sm:size-4',
         'xl', 'icon-xl' => 'size-5 sm:size-4.5',
+        '10', 'icon-10' => 'size-5',
+        '12', 'icon-12', 'icon-2xl' => 'size-6',
         default => 'size-4',
     };
 

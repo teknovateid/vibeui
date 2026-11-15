@@ -50,6 +50,12 @@ return [
         'download' => 'Download File',
         'continue' => 'Continue',
         'filter' => 'Filter Data',
+        'stacked_title' => 'Vertical / Stacked Buttons (Custom Icon Sizing & Labels)',
+        'stacked_desc' => 'You can create vertical action buttons (such as POS menu tiles, kiosk items, or navigation tabs) by applying <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">flex flex-col</code>. The button component automatically adapts its height (<code class="font-mono text-xs text-foreground">h-auto</code>) and prevents inner SVGs from shrinking (<code class="font-mono text-xs text-foreground">[&_svg]:shrink-0</code>), allowing large icons like <code class="font-mono text-xs text-foreground">size-8</code>, <code class="font-mono text-xs text-foreground">size-10</code>, or <code class="font-mono text-xs text-foreground">size-12</code> to render with crisp dimensions without clipping.',
+        'order' => 'Order',
+        'payment' => 'Pay',
+        'table' => 'Table',
+        'history' => 'History',
     ],
 
     // Section 5: Pill

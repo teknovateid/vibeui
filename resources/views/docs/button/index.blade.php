@@ -217,6 +217,116 @@
                         </vibe:button>
                     </div>
                 </vibe:preview>
+
+                {{-- Stacked & Custom Icon Sizing (e.g. size-10) --}}
+                <div class="space-y-1 pt-4">
+                    <h3 class="text-lg font-semibold text-foreground">{{ __('docs/button.icons.stacked_title') }}</h3>
+                    <p class="text-sm text-muted-foreground">
+                        {!! __('docs/button.icons.stacked_desc') !!}
+                    </p>
+                </div>
+
+                <vibe:preview :title="__('docs/button.icons.stacked_title')">
+                    <vibe:preview.code>
+                        {{-- Tombol Vertikal dengan Solar Icon size-10 & teks --}}
+                        <vibe:button variant="ghost" size="sm" class="flex flex-col" title="Order">
+                            {{-- solar:bag-2-line-duotone --}}
+                            <svg class="size-10" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M3.74132 20.5545C3.74132 20.5545 3.74132 20.5545 3.74132 20.5545C4.94094 22 7.17365 22 11.6391 22H12.3602C16.8257 22 19.0584 22 20.258 20.5545M3.74132 20.5545C2.5417 19.1091 2.95316 16.9146 3.77608 12.5257C4.3613 9.40452 4.65392 7.84393 5.76481 6.92196M20.258 20.5545C20.258 20.5545 20.258 20.5545 20.258 20.5545C21.4576 19.1091 21.0461 16.9146 20.2232 12.5257C19.638 9.40452 19.3454 7.84393 18.2345 6.92196M18.2345 6.92196C18.2345 6.92196 18.2345 6.92196 18.2345 6.92196C17.1236 6 15.5358 6 12.3602 6H11.6391C8.4635 6 6.87571 6 5.76481 6.92196C5.76481 6.92196 5.76482 6.92196 5.76481 6.92196" />
+                                    <path d="M15 11L16 17" opacity=".5" />
+                                    <path d="M9 11L8 17" opacity=".5" />
+                                    <path d="M9 6V5C9 3.34315 10.3431 2 12 2C13.6569 2 15 3.34315 15 5V6" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.order') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="outline" size="sm" class="flex flex-col" title="Payment">
+                            {{-- solar:card-2-line-duotone --}}
+                            <svg class="size-10" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M10 20H14C17.7712 20 19.6569 20 20.8284 18.8284C22 17.6569 22 15.7712 22 12C22 8.22876 22 6.34315 20.8284 5.17157C19.6569 4 17.7712 4 14 4H10C6.22876 4 4.34315 4 3.17157 5.17157C2 6.34315 2 8.22876 2 12C2 15.7712 2 17.6569 3.17157 18.8284C4.34315 20 6.22876 20 10 20Z" />
+                                    <path d="M10 16.5H6" opacity=".5" />
+                                    <path d="M8 13.5H6" opacity=".5" />
+                                    <path d="M2 10L22 10" opacity=".5" />
+                                    <path d="M16 17C15.0572 17 14.5858 17 14.2929 16.7071C14 16.4142 14 15.9428 14 15C14 14.0572 14 13.5858 14.2929 13.2929C14.5858 13 15.0572 13 16 13C16.9428 13 17.4142 13 17.7071 13.2929C18 13.5858 18 14.0572 18 15C18 15.9428 18 16.4142 17.7071 16.7071C17.4142 17 16.9428 17 16 17Z" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.payment') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="surface" size="sm" class="flex flex-col" title="Table">
+                            {{-- solar:armchair-2-line-duotone --}}
+                            <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M16.5332 18H6.88633C6.82438 18 6.7934 18 6.76531 17.9996C5.26517 17.9786 3.93869 17.1243 3.44197 15.8594C3.43267 15.8357 3.42288 15.8095 3.40329 15.757L2.10028 12.2643C1.68469 11.1504 2.61268 10 3.92689 10C4.7372 10 5.46079 10.4533 5.73699 11.1339L6.83511 13.84C6.93505 14.0863 6.98502 14.2094 7.05744 14.3101C7.22656 14.5452 7.49217 14.7116 7.79716 14.7735C7.92777 14.8 8.07437 14.8 8.36757 14.8H15.3467C15.9158 14.8 16.2004 14.8 16.4383 14.7019C16.5683 14.6484 16.6864 14.5744 16.787 14.4835C16.9713 14.317 17.0683 14.078 17.2623 13.6L18.263 11.1339C18.5392 10.4533 19.2628 10 20.0731 10C21.3873 10 22.3153 11.1504 21.8997 12.2643L20.7803 15.2649C20.5852 15.7879 20.4876 16.0494 20.3588 16.2717C19.8348 17.1756 18.8608 17.8028 17.7354 17.9611C17.4587 18 17.1502 18 16.5332 18Z" />
+                                    <path d="M6 11.7896V8.45117C6 6.35287 6 5.30372 6.70294 4.65186C7.40589 4 8.53726 4 10.8 4H13.2C15.4627 4 16.5941 4 17.2971 4.65186C18 5.30372 18 6.35287 18 8.45117V11.7896" opacity=".5" />
+                                    <path d="M18 20V18M6 20V18.6667" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.table') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="secondary" size="sm" class="flex flex-col" title="History">
+                            {{-- solar:history-line-duotone --}}
+                            <svg class="size-8" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                    <path d="M12 8V12L14.5 14.5" opacity=".5" />
+                                    <path d="M4.33776 6.87058L5.60414 5.6042C9.10115 2.10719 14.7996 2.13583 18.3319 5.66816C21.8642 9.2005 21.8929 14.8989 18.3959 18.3959C14.8988 21.8929 9.20044 21.8643 5.6681 18.332C3.57589 16.2397 2.71285 13.3876 3.08355 10.6831M4.32497 4.32503L4.33776 6.87058L6.88331 6.88337" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.history') }}</span>
+                        </vibe:button>
+                    </vibe:preview.code>
+                    <div class="flex flex-wrap items-center gap-4 justify-center">
+                        <vibe:button variant="ghost" size="sm" class="flex flex-col" title="Order">
+                            <svg class="size-10 text-primary" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M3.74132 20.5545C3.74132 20.5545 3.74132 20.5545 3.74132 20.5545C4.94094 22 7.17365 22 11.6391 22H12.3602C16.8257 22 19.0584 22 20.258 20.5545M3.74132 20.5545C2.5417 19.1091 2.95316 16.9146 3.77608 12.5257C4.3613 9.40452 4.65392 7.84393 5.76481 6.92196M20.258 20.5545C20.258 20.5545 20.258 20.5545 20.258 20.5545C21.4576 19.1091 21.0461 16.9146 20.2232 12.5257C19.638 9.40452 19.3454 7.84393 18.2345 6.92196M18.2345 6.92196C18.2345 6.92196 18.2345 6.92196 18.2345 6.92196C17.1236 6 15.5358 6 12.3602 6H11.6391C8.4635 6 6.87571 6 5.76481 6.92196C5.76481 6.92196 5.76482 6.92196 5.76481 6.92196" />
+                                    <path d="M15 11L16 17" opacity=".5" />
+                                    <path d="M9 11L8 17" opacity=".5" />
+                                    <path d="M9 6V5C9 3.34315 10.3431 2 12 2C13.6569 2 15 3.34315 15 5V6" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.order') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="outline" size="sm" class="flex flex-col" title="Payment">
+                            <svg class="size-10 text-success" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M10 20H14C17.7712 20 19.6569 20 20.8284 18.8284C22 17.6569 22 15.7712 22 12C22 8.22876 22 6.34315 20.8284 5.17157C19.6569 4 17.7712 4 14 4H10C6.22876 4 4.34315 4 3.17157 5.17157C2 6.34315 2 8.22876 2 12C2 15.7712 2 17.6569 3.17157 18.8284C4.34315 20 6.22876 20 10 20Z" />
+                                    <path d="M10 16.5H6" opacity=".5" />
+                                    <path d="M8 13.5H6" opacity=".5" />
+                                    <path d="M2 10L22 10" opacity=".5" />
+                                    <path d="M16 17C15.0572 17 14.5858 17 14.2929 16.7071C14 16.4142 14 15.9428 14 15C14 14.0572 14 13.5858 14.2929 13.2929C14.5858 13 15.0572 13 16 13C16.9428 13 17.4142 13 17.7071 13.2929C18 13.5858 18 14.0572 18 15C18 15.9428 18 16.4142 17.7071 16.7071C17.4142 17 16.9428 17 16 17Z" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.payment') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="surface" size="sm" class="flex flex-col" title="Table">
+                            <svg class="size-8 text-info" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5">
+                                    <path d="M16.5332 18H6.88633C6.82438 18 6.7934 18 6.76531 17.9996C5.26517 17.9786 3.93869 17.1243 3.44197 15.8594C3.43267 15.8357 3.42288 15.8095 3.40329 15.757L2.10028 12.2643C1.68469 11.1504 2.61268 10 3.92689 10C4.7372 10 5.46079 10.4533 5.73699 11.1339L6.83511 13.84C6.93505 14.0863 6.98502 14.2094 7.05744 14.3101C7.22656 14.5452 7.49217 14.7116 7.79716 14.7735C7.92777 14.8 8.07437 14.8 8.36757 14.8H15.3467C15.9158 14.8 16.2004 14.8 16.4383 14.7019C16.5683 14.6484 16.6864 14.5744 16.787 14.4835C16.9713 14.317 17.0683 14.078 17.2623 13.6L18.263 11.1339C18.5392 10.4533 19.2628 10 20.0731 10C21.3873 10 22.3153 11.1504 21.8997 12.2643L20.7803 15.2649C20.5852 15.7879 20.4876 16.0494 20.3588 16.2717C19.8348 17.1756 18.8608 17.8028 17.7354 17.9611C17.4587 18 17.1502 18 16.5332 18Z" />
+                                    <path d="M6 11.7896V8.45117C6 6.35287 6 5.30372 6.70294 4.65186C7.40589 4 8.53726 4 10.8 4H13.2C15.4627 4 16.5941 4 17.2971 4.65186C18 5.30372 18 6.35287 18 8.45117V11.7896" opacity=".5" />
+                                    <path d="M18 20V18M6 20V18.6667" opacity=".5" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.table') }}</span>
+                        </vibe:button>
+
+                        <vibe:button variant="secondary" size="sm" class="flex flex-col" title="History">
+                            <svg class="size-8 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                                    <path d="M12 8V12L14.5 14.5" opacity=".5" />
+                                    <path d="M4.33776 6.87058L5.60414 5.6042C9.10115 2.10719 14.7996 2.13583 18.3319 5.66816C21.8642 9.2005 21.8929 14.8989 18.3959 18.3959C14.8988 21.8929 9.20044 21.8643 5.6681 18.332C3.57589 16.2397 2.71285 13.3876 3.08355 10.6831M4.32497 4.32503L4.33776 6.87058L6.88331 6.88337" />
+                                </g>
+                            </svg>
+                            <span class="text-[10px] uppercase font-bold tracking-wider">{{ __('docs/button.icons.history') }}</span>
+                        </vibe:button>
+                    </div>
+                </vibe:preview>
             </section>
 
             {{-- 5. Pill Style --}}
@@ -1265,7 +1375,7 @@
                         @php
                             $props = [
                                 ['variant', "'default'|'primary'|'secondary'|'outline'|'ghost'|'surface'|'destructive'|'success'|'warning'|'info'|'link'", "'default'", 'Skema warna dan gaya tombol visual.'],
-                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'", "'md'", 'Ukuran tinggi, padding, dan font tombol.'],
+                                ['size', "'xs'|'sm'|'md'|'lg'|'xl'|'auto'|'none'|'icon-xs'|'icon-sm'|'icon-md'|'icon-lg'|'icon-xl'|'icon-2xl'|'icon-10'|'icon-12'", "'md'", 'Ukuran tinggi, padding, dan font tombol. Mendukung ukuran teks, icon-only, auto, none, serta adaptasi h-auto otomatis pada tombol bertumpuk vertical (flex-col).'],
                                 ['type', "'button'|'submit'|'reset'", "'button'", 'Atribut tipe tombol HTML standar (jika bukan link).'],
                                 ['href', 'string|null', 'null', 'Jika diisi, tombol dirender sebagai elemen `<a>`. Otomatis mengaktifkan SPA navigation via `wire:navigate` kecuali terdapat atribut `target` (seperti `target="_blank"`) atau `:navigate="false"`.'],
                                 ['navigate', 'bool|null', 'null', 'Mengontrol penggunaan SPA navigation (`wire:navigate`). Default: auto (aktif jika tanpa atribut target selain `_self`, nonaktif jika target="_blank" atau link eksternal).'],

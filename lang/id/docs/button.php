@@ -50,6 +50,12 @@ return [
         'download' => 'Unduh Berkas',
         'continue' => 'Lanjutkan',
         'filter' => 'Filter Data',
+        'stacked_title' => 'Tombol Vertikal / Stacked (Ikon Bebas & Label)',
+        'stacked_desc' => 'Anda dapat membuat tombol aksi vertikal (seperti tombol menu POS, kiosk, atau tab navigasi) dengan menambahkan class <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">flex flex-col</code>. Komponen otomatis menyesuaikan tinggi tombol (<code class="font-mono text-xs text-foreground">h-auto</code>) dan mencegah SVG menyusut (<code class="font-mono text-xs text-foreground">[&_svg]:shrink-0</code>), sehingga ikon berukuran bebas seperti <code class="font-mono text-xs text-foreground">size-8</code>, <code class="font-mono text-xs text-foreground">size-10</code>, hingga <code class="font-mono text-xs text-foreground">size-12</code> tampil sempurna tanpa terpotong.',
+        'order' => 'Order',
+        'payment' => 'Bayar',
+        'table' => 'Meja',
+        'history' => 'Riwayat',
     ],
 
     // Section 5: Pill
