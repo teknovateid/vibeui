@@ -19,7 +19,7 @@
 @php($localisationPath = $this->getLocalisationPath)
 
 <div class="vibe-datatable-root">
-    <div x-data="Object.assign({ shouldBeDisplayed: true }, {{ $this->getAlpineFallbackScope }})">
+    <div x-data="Object.assign({ shouldBeDisplayed: true, filterPopoverOpen: false, paginationCurrentCount: 0, setTableId() {}, setAlpineBulkActions() {}, setPrimaryKeyName() {}, showTable() {}, hideTable() {}, clearSelected() {}, toggleSelectAll() {}, laravellivewiretable() { return { __hasLivewireWire: false, setTableId() {}, setAlpineBulkActions() {}, setPrimaryKeyName() {}, showTable() {}, hideTable() {}, clearSelected() {}, toggleSelectAll() {} }; } }, {{ $this->getAlpineFallbackScope }}, { hideBulkActionsWhenEmpty: @js((bool) $this->getHideBulkActionsWhenEmptyStatus()) })">
         <div {{ $this->getTopLevelAttributes() }}>
 
             @includeWhen(

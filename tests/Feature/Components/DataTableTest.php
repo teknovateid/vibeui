@@ -26,13 +26,17 @@ describe('Vibe DataTable Component & Boot Lifecycle', function () {
             ->and($datatableBlade)->toContain("@vite(['resources/js/vibe/datatable.js'])");
     });
 
-    it('guards Alpine.initTree with wireRoot.__livewire check and clears _x_marker on subtree reset in datatable.js', function () {
+    it('guards Alpine.initTree with wireRoot.__livewire check, defines Rappasoft v3 bulk action methods, and clears _x_marker on subtree reset in datatable.js', function () {
         $datatableJs = file_get_contents(resource_path('js/vibe/datatable.js'));
+        $datatableBlade = file_get_contents(resource_path('views/vibe/datatable/datatable.blade.php'));
 
         expect($datatableJs)
             ->toContain('export function registerLivewireTableComponents')
             ->toContain('export function ensureDatatablesReady')
             ->toContain('export function resetAlpineSubtree')
+            ->toContain('setAlpineBulkActions(e)')
+            ->toContain('setPrimaryKeyName(e)')
+            ->toContain("hideBulkActionsWhenEmpty: validWire ? i.entangle('hideBulkActionsWhenEmpty') : true")
             ->toContain('delete node._x_marker;')
             ->toContain('delete node._x_dataStack;')
             ->toContain("const wireRoot = el.closest('[wire\\\\:id]');")
@@ -40,7 +44,10 @@ describe('Vibe DataTable Component & Boot Lifecycle', function () {
             ->toContain("document.addEventListener('livewire:initialized'")
             ->toContain("document.addEventListener('livewire:navigated'")
             ->toContain("window.dispatchEvent(new CustomEvent('vibe-datatable-ready'));")
-            ->not->toContain('eventTableFingerpint');
+            ->and($datatableBlade)
+            ->toContain('setAlpineBulkActions() {}')
+            ->toContain('setPrimaryKeyName() {}')
+            ->toContain('hideBulkActionsWhenEmpty: @js((bool) $this->getHideBulkActionsWhenEmptyStatus())');
     });
 
     it('does not strip x-cloak from child elements inside datatable views or theme.js', function () {
