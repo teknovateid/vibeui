@@ -20,8 +20,8 @@
     } else {
         $finalConfig = [
             'type' => $type,
-            'data' => is_string($data) ? json_decode($data, true) ?? [] : ($data ?? []),
-            'options' => is_string($options) ? json_decode($options, true) ?? [] : ($options ?? []),
+            'data' => is_string($data) ? json_decode($data, true) ?? [] : $data ?? [],
+            'options' => is_string($options) ? json_decode($options, true) ?? [] : $options ?? [],
         ];
     }
 
@@ -65,47 +65,37 @@
     @vite(['resources/css/vibe/chart.css', 'resources/js/vibe/chart.js'])
 @endPushOnce
 
-<div
-    id="{{ $chartId }}"
-    data-vibe-chart
-    {{ $attributes->twMerge(['class' => 'vibe-chart-wrapper relative w-full overflow-hidden transition-all duration-200 select-none']) }}
-    style="{{ $heightStyle }}"
-    x-data="typeof vibeChart !== 'undefined' ? vibeChart({{ $configJson }}) : {
-        chart: null,
-        loading: true,
-        destroy() {
-            if (this.chart) {
-                try { this.chart.destroy(); } catch (e) {}
-                this.chart = null;
-            }
-        },
-        init() {
-            var self = this;
-            var bindChart = function() {
-                if (typeof window.vibeChart !== 'undefined') {
-                    clearInterval(timer);
-                    if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
-                        var el = self.$el;
-                        if (typeof window.Alpine.destroyTree === 'function') {
-                            try { window.Alpine.destroyTree(el); } catch (e) {}
-                        }
-                        delete el._x_dataStack;
-                        window.Alpine.initTree(el);
-                    }
-                }
-            };
-            window.addEventListener('vibe-chart-ready', bindChart, { once: true });
-            var timer = setInterval(bindChart, 25);
-            setTimeout(function() { clearInterval(timer); }, 3000);
+<div id="{{ $chartId }}" data-vibe-chart {{ $attributes->twMerge(['class' => 'vibe-chart-wrapper relative w-full overflow-hidden transition-all duration-200 select-none']) }} style="{{ $heightStyle }}" x-data="typeof vibeChart !== 'undefined' ? vibeChart({{ $configJson }}) : {
+    chart: null,
+    loading: true,
+    destroy() {
+        if (this.chart) {
+            try { this.chart.destroy(); } catch (e) {}
+            this.chart = null;
         }
-    }"
->
+    },
+    init() {
+        var self = this;
+        var bindChart = function() {
+            if (typeof window.vibeChart !== 'undefined') {
+                clearInterval(timer);
+                if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
+                    var el = self.$el;
+                    if (typeof window.Alpine.destroyTree === 'function') {
+                        try { window.Alpine.destroyTree(el); } catch (e) {}
+                    }
+                    delete el._x_dataStack;
+                    window.Alpine.initTree(el);
+                }
+            }
+        };
+        window.addEventListener('vibe-chart-ready', bindChart, { once: true });
+        var timer = setInterval(bindChart, 25);
+        setTimeout(function() { clearInterval(timer); }, 3000);
+    }
+}">
     {{-- Shimmer Skeleton Placeholder while loading --}}
-    <div
-        x-show="loading"
-        x-cloak
-        class="vibe-chart-skeleton absolute inset-0 z-10 flex flex-col justify-end gap-2 p-3 bg-card/40 backdrop-blur-[1px] rounded-xl pointer-events-none"
-    >
+    <div x-show="loading" x-cloak class="vibe-chart-skeleton absolute inset-0 z-10 flex flex-col justify-end gap-2 p-3 bg-card/40 backdrop-blur-[1px] rounded-xl pointer-events-none">
         <div class="w-full h-full flex items-end gap-2.5 pb-2 px-2">
             <div class="flex-1 bg-muted/40 rounded-t-md h-[40%] animate-pulse"></div>
             <div class="flex-1 bg-muted/50 rounded-t-md h-[70%] animate-pulse"></div>
@@ -117,8 +107,5 @@
     </div>
 
     {{-- HTML5 Canvas Render Target --}}
-    <canvas
-        x-ref="canvas"
-        class="w-full h-full relative z-0"
-    ></canvas>
+    <canvas x-ref="canvas" class="w-full h-full relative z-0"></canvas>
 </div>
