@@ -1,108 +1,674 @@
 /**
- * Vibe UI - DataTable Component Bundle & Lifecycle Manager
- * Bundles Rappasoft Livewire Tables Alpine components and provides bulletproof initialization
- * across Livewire 3 wire:navigate, lazy loading, and dynamic morphing.
+ * Vibe DataTable - Bundled Rappasoft Livewire Tables Alpine Components
+ * Self-contained module to guarantee registration on initial load, hard refresh (F5), and SPA navigation (wire:navigate).
  */
 
 export function registerLivewireTableComponents(Alpine = window.Alpine) {
-    if (!Alpine || Alpine._vibeDatatableComponentsRegistered) return;
-    Alpine._vibeDatatableComponentsRegistered = true;
+    if (!Alpine || typeof Alpine.data !== 'function') return;
+    if (Alpine._vibeLivewireTablesRegistered) return;
+    Alpine._vibeLivewireTablesRegistered = true;
 
-    Alpine.data("laravellivewiretable",e=>({tableId:"",showBulkActionsAlpine:!1,primaryKeyName:"",shouldBeDisplayed:e.entangle("shouldBeDisplayed"),tableName:e.entangle("tableName"),dataTableFingerprint:e.entangle("dataTableFingerprint"),listeners:[],childElementOpen:!1,filtersOpen:e.entangle("filterSlideDownDefaultVisible"),paginationCurrentCount:e.entangle("paginationCurrentCount"),paginationTotalItemCount:e.entangle("paginationTotalItemCount"),paginationCurrentItems:e.entangle("paginationCurrentItems"),selectedItems:e.entangle("selected"),selectAllStatus:e.entangle("selectAll"),delaySelectAll:e.entangle("delaySelectAll"),hideBulkActionsWhenEmpty:e.entangle("hideBulkActionsWhenEmpty"),dragging:!1,reorderEnabled:!1,sourceID:"",targetID:"",evenRowClasses:"",oddRowClasses:"",currentlyHighlightedElement:"",evenRowClassArray:{},oddRowClassArray:{},evenNotInOdd:{},oddNotInEven:{},orderedRows:[],defaultReorderColumn:e.entangle("defaultReorderColumn"),reorderStatus:e.entangle("reorderStatus"),currentlyReorderingStatus:e.entangle("currentlyReorderingStatus"),hideReorderColumnUnlessReorderingStatus:e.entangle("hideReorderColumnUnlessReorderingStatus"),reorderDisplayColumn:e.entangle("reorderDisplayColumn"),externalFilterPillsVals:e.entangle("externalFilterPillsValues"),internalFilterPillsVals:e.entangle("internalFilterPillsVals"),showFilterPillLabel:[],filterPillsSeparator:", ",showFilterPillsSection:!0,removeHTMLTags(e){let t=new DOMParser;return(t.parseFromString(e,"text/html").body.innerText||"").trim()},resetSpecificFilter(t){this.externalFilterPillsVals[t]=[],e.call("resetFilter",t)},resetAllFilters(){this.externalFilterPillsVals=[],e.call("setFilterDefaults")},setInternalFilterPillVal(e,t){void 0!==t&&(this.internalFilterPillsVals[e]=t)},syncExternalFilterPillsValues(e,t){this.externalFilterPillsVals[e]=t,this.showFilterPillLabel[e]=this.getFilterPillsLength(e)},getFilterPillsLength(e){return Object.keys(this.externalFilterPillsVals[e]).length??0},showFilterPillsValue(e,t){void 0!==t?this.externalFilterPillsVals[e]=t:this.externalFilterPillsVals[e]=null},setFilterPillsLength(e){let t=0;return void 0!==e?Object.keys(e).length??0:0},showFilterPillsLabel(e){return this.getFilterPillsLength(e),this.getFilterPillsLength(e)>0},getFilterPillImplodedValues(e,t){let l=this.externalFilterPillsVals[e];return"undefined"!==l?l.join(t):""},showFilterPillsSeparator(e,t){return t+1<this.getFilterPillsLength(e)},dragStart(e){this.$nextTick(()=>{this.setupEvenOddClasses()}),this.sourceID=e.target.id,e.dataTransfer.effectAllowed="move",e.dataTransfer.setData("text/plain",e.target.id),e.target.classList.add("laravel-livewire-tables-dragging")},dragOverEvent(e){"object"==typeof this.currentlyHighlightedElement&&this.currentlyHighlightedElement.classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top");let t=e.target.closest("tr");this.currentlyHighlightedElement=t,e.offsetY<t.getBoundingClientRect().height/2?(t.classList.add("laravel-livewire-tables-highlight-top"),t.classList.remove("laravel-livewire-tables-highlight-bottom")):(t.classList.remove("laravel-livewire-tables-highlight-top"),t.classList.add("laravel-livewire-tables-highlight-bottom"))},dragLeaveEvent(e){e.target.closest("tr").classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top")},dropEvent(e){"object"==typeof this.currentlyHighlightedElement&&this.currentlyHighlightedElement.classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top");let t=e.target.closest("tr"),l=e.target.closest("tr").parentNode,i=document.getElementById(this.sourceID).closest("tr");i.classList.remove("laravel-livewire-table-dragging");let s=i.rowIndex,a=t.rowIndex,r=document.getElementById(this.tableId),n=s;e.offsetY>t.getBoundingClientRect().height/2?l.insertBefore(i,t.nextSibling):l.insertBefore(i,t),a<s&&(n=a);let o="even";for(let h=1,d;d=r.rows[h];h++)d.classList.contains("hidden")||d.classList.contains("md:hidden")||("even"===o?(d.classList.remove(...this.oddNotInEven),d.classList.add(...this.evenNotInOdd),o="odd"):(d.classList.remove(...this.evenNotInOdd),d.classList.add(...this.oddNotInEven),o="even"))},reorderToggle(){this.currentlyReorderingStatus?e.disableReordering():(this.hideReorderColumnUnlessReorderingStatus&&(this.reorderDisplayColumn=!0),this.setupEvenOddClasses(),e.enableReordering()),this.$nextTick(()=>{this.setupEvenOddClasses()})},cancelReorder(){this.hideReorderColumnUnlessReorderingStatus&&(this.reorderDisplayColumn=!1),e.disableReordering()},updateOrderedItems(){let t=document.getElementById(this.tableId),l=[];for(let i=1,s;s=t.rows[i];i++)l.push({[this.primaryKeyName]:s.getAttribute("rowpk"),[this.defaultReorderColumn]:i});e.storeReorder(l)},setupEvenOddClasses(){if(void 0===this.evenNotInOdd.length||0==this.evenNotInOdd.length||void 0===this.oddNotInEven.length||0==this.oddNotInEven.length){let e=document.getElementById(this.tableId).getElementsByTagName("tbody")[0],t=[],l=[];void 0!==e.rows[0]&&void 0!==e.rows[1]&&(t=Array.from(e.rows[0].classList),l=Array.from(e.rows[1].classList),this.evenNotInOdd=t.filter(e=>!l.includes(e)),this.oddNotInEven=l.filter(e=>!t.includes(e)),t=[],l=[])}},toggleSelectAll(){this.showBulkActionsAlpine&&(this.paginationTotalItemCount===this.selectedItems.length?(this.clearSelected(),this.selectAllStatus=!1):this.delaySelectAll?this.setAllItemsSelected():this.setAllSelected())},setAllItemsSelected(){this.showBulkActionsAlpine&&(this.selectAllStatus=!0,this.selectAllOnPage())},setAllSelected(){this.showBulkActionsAlpine&&(this.delaySelectAll?(this.selectAllStatus=!0,this.selectAllOnPage()):e.setAllSelected())},clearSelected(){this.showBulkActionsAlpine&&(this.selectAllStatus=!1,e.clearSelected())},selectAllOnPage(){if(!this.showBulkActionsAlpine)return;let e=this.selectedItems,t=this.paginationCurrentItems.values();for(let l of t)e.push(l.toString());this.selectedItems=[...new Set(e)]},setTableId(e){this.tableId=e},setAlpineBulkActions(e){this.showBulkActionsAlpine=e},setPrimaryKeyName(e){this.primaryKeyName=e},showTable(e){let t=e.detail.tableName??"",l=e.detail.tableFingerpint??"";((t??"")!=""&&t===this.tableName||""!=l&&eventTableFingerpint===this.dataTableFingerprint)&&(this.shouldBeDisplayed=!0)},hideTable(e){let t=e.detail.tableName??"",l=e.detail.tableFingerpint??"";(""!=t&&t===this.tableName||""!=l&&eventTableFingerpint===this.dataTableFingerprint)&&(this.shouldBeDisplayed=!1)},destroy(){this.listeners.forEach(e=>{e()})}})),Alpine.data("booleanFilter",(e,t,l,i)=>({localListeners:[],switchOn:!1,value:e.entangle("filterComponents."+t).live,init(){this.switchOn=!1,void 0!==this.value&&(this.switchOn=Boolean(Number(this.value))),this.localListeners.push(Livewire.on("filter-was-set",e=>{e.tableName==this.tableName&&e.filterKey==t&&(this.switchOn=e.value??i)}))},destroy(){this.localListeners.forEach(e=>{e()})}})),Alpine.data("newBooleanFilter",(e,t,l)=>({booleanFilterKey:e,switchOn:!1,value:!1,toggleStatus(){let e=!Boolean(Number(this.$wire.get("filterComponents."+this.booleanFilterKey)??this.value));return this.switchOn=this.value=e,Number(e)},toggleStatusWithUpdate(){let e=this.toggleStatus();this.$wire.set("filterComponents."+this.booleanFilterKey,e)},toggleStatusWithReset(){this.toggleStatus(),this.$wire.call("resetFilter",this.booleanFilterKey)},setSwitchOn(e){let t=Number(e??0);this.switchOn=Boolean(t)},init(){this.$nextTick(()=>{this.value=this.$wire.get("filterComponents."+this.booleanFilterKey)??l,this.setSwitchOn(this.value??0)}),this.listeners.push(Livewire.on("filter-was-set",e=>{e.tableName==this.tableName&&e.filterKey==this.booleanFilterKey&&(this.switchOn=e.value??l)}))}})),Alpine.data("booleanFilterLatest",e=>({booleanFilterKey:e.filterKey,booleanFilterDefaultValue:e.defaultValue,switchOn:!1,value:!1,toggleStatus(){let e=!Boolean(Number(this.$wire.get("filterComponents."+this.booleanFilterKey)??this.value));return this.switchOn=this.value=e,Number(e)},toggleStatusWithUpdate(){let e=this.toggleStatus();this.$wire.set("filterComponents."+this.booleanFilterKey,e)},toggleStatusWithReset(){this.toggleStatus(),this.$wire.call("resetFilter",this.booleanFilterKey)},setSwitchOn(e){let t=Number(e??0);this.switchOn=Boolean(t)},init(){this.$nextTick(()=>{this.value=this.$wire.get("filterComponents."+this.booleanFilterKey)??this.booleanFilterDefaultValue,this.setSwitchOn(this.value??0)}),this.listeners.push(Livewire.on("filter-was-set",e=>{e.tableName==this.tableName&&e.filterKey==this.booleanFilterKey&&(this.switchOn=e.value??this.booleanFilterDefaultValue)}))}})),Alpine.data("numberRangeFilter",(e,t,l,i,s)=>({allFilters:e.entangle("filterComponents",!1),originalMin:0,originalMax:100,filterMin:0,filterMax:100,currentMin:0,currentMax:100,hasUpdate:!1,wireValues:e.entangle("filterComponents."+t,!1),defaultMin:i.minRange,defaultMax:i.maxRange,restrictUpdates:!1,initialiseStyles(){let e=document.getElementById(l);e.style.setProperty("--value-a",this.wireValues.min??this.filterMin),e.style.setProperty("--text-value-a",JSON.stringify(this.wireValues.min??this.filterMin)),e.style.setProperty("--value-b",this.wireValues.max??this.filterMax),e.style.setProperty("--text-value-b",JSON.stringify(this.wireValues.max??this.filterMax))},updateStyles(e,t){let i=document.getElementById(l);i.style.setProperty("--value-a",e),i.style.setProperty("--text-value-a",JSON.stringify(e)),i.style.setProperty("--value-b",t),i.style.setProperty("--text-value-b",JSON.stringify(t))},setupWire(){void 0!==this.wireValues?(this.filterMin=this.originalMin=void 0!==this.wireValues.min?this.wireValues.min:this.defaultMin,this.filterMax=this.originalMax=void 0!==this.wireValues.max?this.wireValues.max:this.defaultMax):(this.filterMin=this.originalMin=this.defaultMin,this.filterMax=this.originalMax=this.defaultMax),this.updateStyles(this.filterMin,this.filterMax)},allowUpdates(){this.updateWire()},updateWire(){let e=parseInt(this.filterMin),t=parseInt(this.filterMax);(e!=this.originalMin||t!=this.originalMax)&&(t<e&&(this.filterMin=t,this.filterMax=e),this.hasUpdate=!0,this.originalMin=e,this.originalMax=t),this.updateStyles(this.filterMin,this.filterMax)},updateWireable(){this.hasUpdate&&(this.hasUpdate=!1,this.wireValues={min:this.filterMin,max:this.filterMax},e.set("filterComponents."+t,this.wireValues))},init(){this.initialiseStyles(),this.setupWire(),this.$watch("allFilters",e=>this.setupWire())}})),Alpine.data("flatpickrFilter",(e,t,l,i,s)=>({wireValues:e.entangle("filterComponents."+t),flatpickrInstance:flatpickr(i,{mode:"range",altFormat:l.altFormat??"F j, Y",altInput:l.altInput??!1,allowInput:l.allowInput??!1,allowInvalidPreload:l.allowInvalidPreload??!0,ariaDateFormat:l.ariaDateFormat??"F j, Y",clickOpens:!0,dateFormat:l.dateFormat??"Y-m-d",defaultDate:l.defaultDate??null,defaultHour:l.defaultHour??12,defaultMinute:l.defaultMinute??0,enableTime:l.enableTime??!1,enableSeconds:l.enableSeconds??!1,hourIncrement:l.hourIncrement??1,locale:l.locale??"en",minDate:l.earliestDate??null,maxDate:l.latestDate??null,minuteIncrement:l.minuteIncrement??5,shorthandCurrentMonth:l.shorthandCurrentMonth??!1,time_24hr:l.time_24hr??!1,weekNumbers:l.weekNumbers??!1,onOpen:function(){window.childElementOpen=!0},onChange:function(l,i,s){if(l.length>1){var a=i.split(" "),r={};window.childElementOpen=!1,window.filterPopoverOpen=!1,r={minDate:a[0],maxDate:void 0===a[2]?a[0]:a[2]},e.set("filterComponents."+t,r)}}}),changedValue:function(l){l.length<5&&(this.flatpickrInstance.setDate([]),e.set("filterComponents."+t,{}))},setupWire(){if(void 0!==this.wireValues){if(void 0!==this.wireValues.minDate&&void 0!==this.wireValues.maxDate){let e=[this.wireValues.minDate,this.wireValues.maxDate];this.flatpickrInstance.setDate(e)}else this.flatpickrInstance.setDate([])}else this.flatpickrInstance.setDate([])},init(){this.setupWire(),this.$watch("wireValues",e=>this.setupWire())}})),Alpine.data("tableWrapper",(e,t)=>({shouldBeDisplayed:e.entangle("shouldBeDisplayed"),listeners:[],childElementOpen:!1,filtersOpen:e.entangle("filterSlideDownDefaultVisible"),paginationCurrentCount:e.entangle("paginationCurrentCount"),paginationTotalItemCount:e.entangle("paginationTotalItemCount"),paginationCurrentItems:e.entangle("paginationCurrentItems"),selectedItems:e.entangle("selected"),selectAllStatus:e.entangle("selectAll"),delaySelectAll:e.entangle("delaySelectAll"),hideBulkActionsWhenEmpty:e.entangle("hideBulkActionsWhenEmpty"),toggleSelectAll(){t&&(this.paginationTotalItemCount===this.selectedItems.length?(this.clearSelected(),this.selectAllStatus=!1):this.delaySelectAll?this.setAllItemsSelected():this.setAllSelected())},setAllItemsSelected(){t&&(this.selectAllStatus=!0,this.selectAllOnPage())},setAllSelected(){t&&(this.delaySelectAll?(this.selectAllStatus=!0,this.selectAllOnPage()):e.setAllSelected())},clearSelected(){t&&(this.selectAllStatus=!1,e.clearSelected())},selectAllOnPage(){if(!t)return;let e=this.selectedItems,l=this.paginationCurrentItems.values();for(let i of l)e.push(i.toString());this.selectedItems=[...new Set(e)]},destroy(){this.listeners.forEach(e=>{e()})}})),Alpine.data("reorderFunction",(e,t,l)=>({dragging:!1,reorderEnabled:!1,sourceID:"",targetID:"",evenRowClasses:"",oddRowClasses:"",currentlyHighlightedElement:"",evenRowClassArray:{},oddRowClassArray:{},evenNotInOdd:{},oddNotInEven:{},orderedRows:[],defaultReorderColumn:e.get("defaultReorderColumn"),reorderStatus:e.get("reorderStatus"),currentlyReorderingStatus:e.entangle("currentlyReorderingStatus"),hideReorderColumnUnlessReorderingStatus:e.entangle("hideReorderColumnUnlessReorderingStatus"),reorderDisplayColumn:e.entangle("reorderDisplayColumn"),dragStart(e){this.$nextTick(()=>{this.setupEvenOddClasses()}),this.sourceID=e.target.id,e.dataTransfer.effectAllowed="move",e.dataTransfer.setData("text/plain",e.target.id),e.target.classList.add("laravel-livewire-tables-dragging")},dragOverEvent(e){"object"==typeof this.currentlyHighlightedElement&&this.currentlyHighlightedElement.classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top");let t=e.target.closest("tr");this.currentlyHighlightedElement=t,e.offsetY<t.getBoundingClientRect().height/2?(t.classList.add("laravel-livewire-tables-highlight-top"),t.classList.remove("laravel-livewire-tables-highlight-bottom")):(t.classList.remove("laravel-livewire-tables-highlight-top"),t.classList.add("laravel-livewire-tables-highlight-bottom"))},dragLeaveEvent(e){e.target.closest("tr").classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top")},dropEvent(e){"object"==typeof this.currentlyHighlightedElement&&this.currentlyHighlightedElement.classList.remove("laravel-livewire-tables-highlight-bottom","laravel-livewire-tables-highlight-top");let l=e.target.closest("tr"),i=e.target.closest("tr").parentNode,s=document.getElementById(this.sourceID).closest("tr");s.classList.remove("laravel-livewire-table-dragging");let a=s.rowIndex,r=l.rowIndex,n=document.getElementById(t),o=a;e.offsetY>l.getBoundingClientRect().height/2?i.insertBefore(s,l.nextSibling):i.insertBefore(s,l),r<a&&(o=r);let h="even";for(let d=1,u;u=n.rows[d];d++)u.classList.contains("hidden")||u.classList.contains("md:hidden")||("even"===h?(u.classList.remove(...this.oddNotInEven),u.classList.add(...this.evenNotInOdd),h="odd"):(u.classList.remove(...this.evenNotInOdd),u.classList.add(...this.oddNotInEven),h="even"))},reorderToggle(){this.$nextTick(()=>{this.setupEvenOddClasses()}),this.currentlyReorderingStatus?e.disableReordering():(this.setupEvenOddClasses(),this.hideReorderColumnUnlessReorderingStatus&&(this.reorderDisplayColumn=!0),e.enableReordering())},cancelReorder(){this.hideReorderColumnUnlessReorderingStatus&&(this.reorderDisplayColumn=!1),e.disableReordering()},updateOrderedItems(){let i=document.getElementById(t),s=[];for(let a=1,r;r=i.rows[a];a++)s.push({[l]:r.getAttribute("rowpk"),[this.defaultReorderColumn]:a});e.storeReorder(s)},setupEvenOddClasses(){if(void 0===this.evenNotInOdd.length||0==this.evenNotInOdd.length||void 0===this.oddNotInEven.length||0==this.oddNotInEven.length){let e=document.getElementById(t).getElementsByTagName("tbody")[0],l=[],i=[];void 0!==e.rows[0]&&void 0!==e.rows[1]&&(l=Array.from(e.rows[0].classList),i=Array.from(e.rows[1].classList),this.evenNotInOdd=l.filter(e=>!i.includes(e)),this.oddNotInEven=i.filter(e=>!l.includes(e)),l=[],i=[])}},init(){}})),Alpine.data("filterPillsHandler",e=>({localData:e,localFilterKey:"",localFilterTitle:"",isExternalFilter:!1,shouldRenderAsHTML:!1,shouldWatchPillValues:!1,pillsSeparator:",",pillValues:null,pillHasValues:!1,displayString:"",generateLocalFilterPillImplodedValues(e){if(void 0!==e){var t,l="---tablepillsseparator---",i=RegExp(l,"g");if(t=Array.isArray(e)?e.join(l):e,this.shouldRenderAsHTML||(t=this.removeHTMLTags(t)),null!==t)return t.replace(i,this.pillsSeparator)}return""},clearExternalFilterPill(){this.isExternalFilter&&(this.externalFilterPillsVals[this.localFilterKey]=[],this.displayString=this.generateLocalFilterPillImplodedValues(this.externalFilterPillsVals[this.localFilterKey]),this.updatePillHasValues(),this.resetSpecificFilter(this.localFilterKey))},trigger:{"@filterpillupdate.window"(e){this.watchForUpdateEvent(e)}},checkEventIsValid(e,t){return this.tableName===e&&this.localFilterKey===t},watchForUpdateEvent(e){if(this.checkEventIsValid(e.detail.tableName??"",e.detail.filterKey??"")){let t=e.detail.pillItem??"";if(this.shouldRenderAsHTML||(t=this.removeHTMLTags(t)),""!=t){if(this.isExternalFilter){let l=this.externalFilterPillsVals[this.localFilterKey];l.push(t),this.updatePillValues(l)}else this.updatePillValues(t)}}},updatePillValues(e){return this.pillValues=e,this.displayString=this.generateLocalFilterPillImplodedValues(e),this.updatePillHasValues(),this.displayString},updatePillHasValues(){this.pillHasValues=this.displayString.length>0},init(){this.localFilterKey=this.localData.filterKey??"unknown",this.localFilterTitle=this.localData.filterPillTitle??"Unknown",this.pillsSeparator=this.localData.separator??",",this.shouldWatchPillValues=Boolean(this.localData.watchForEvents??0),this.isExternalFilter=Boolean(this.localData.isAnExternalLivewireFilter??0),this.shouldRenderAsHTML=Boolean(this.localData.renderPillsAsHtml??0),this.pillValues=this.localData.pillValues??null,this.$nextTick(()=>{this.isExternalFilter?this.updatePillValues(this.externalFilterPillsVals[this.localFilterKey]):this.updatePillValues(this.pillValues)}),this.isExternalFilter&&this.shouldWatchPillValues&&this.$watch("externalFilterPillsVals."+this.localFilterKey,e=>{this.updatePillValues(e)})}})),Alpine.data("tablesExternalFilter",(e,t)=>({externalFilterKey:t,pillValues:[],optionsAvailable:e.entangle("optionsAvailable"),optionsSelected:e.entangle("optionsSelected").live,selectedItems:e.entangle("selectedItems"),sendValueToPill(e){let t=this.removeHTMLTags(e);this.$dispatch("filterpillupdate",{tableName:this.tableName,filterKey:this.externalFilterKey,pillItem:t})},overridePill(e){let t=this.removeHTMLTags(e);this.$dispatch("filterpillupdate",{tableName:this.tableName,filterKey:this.externalFilterKey,pillItem:t})},syncItems(t){this.pillValues=[],t.forEach(e=>{this.pillValues.push(this.optionsAvailable[e])}),this.pillValues.length>0&&(this.pillValues.sort(),this.syncExternalFilterPillsValues(this.externalFilterKey,this.pillValues)),this.optionsSelected=this.selectedItems,e.set("value",this.selectedItems)},init(){this.selectedItems=this.optionsSelected,this.syncItems(this.selectedItems),this.$watch("selectedItems",e=>this.syncItems(e))}}))
+    const hasValidWire = (wire) => Boolean(wire && typeof wire.entangle === 'function');
+
+    Alpine.data('laravellivewiretable', (e) => {
+        const validWire = hasValidWire(e);
+
+        return {
+            __hasLivewireWire: validWire,
+            paginationCurrentCount: validWire ? e.entangle('paginationCurrentCount') : 0,
+            paginationTotalItemCount: validWire ? e.entangle('paginationTotalItemCount') : 0,
+            childRow: -1,
+            currentlyReorderingStatus: validWire ? e.entangle('currentlyReorderingStatus') : false,
+            selectedItems: validWire ? e.entangle('selected') : [],
+            selectAllStatus: validWire ? e.entangle('selectAll') : false,
+            filterSlideDownDefaultVisible: validWire ? e.entangle('filterSlideDownDefaultVisible') : false,
+            filtersOpen: validWire ? e.entangle('filterSlideDownDefaultVisible').live : false,
+            filterPopoverOpen: false,
+            tableId: null,
+            toggleChildRow(t) {
+                this.childRow = t === this.childRow ? -1 : t;
+            },
+            shouldBeDisplayed: (t) => true,
+            showTable(t) {
+                const l = t?.detail?.tableFingerprint;
+                if (this.$wire?.__instance?.id && l === this.$wire.__instance.id) {
+                    this.$root.classList.remove('hidden');
+                }
+            },
+            hideTable(t) {
+                const l = t?.detail?.tableFingerprint;
+                if (this.$wire?.__instance?.id && l === this.$wire.__instance.id) {
+                    this.$root.classList.add('hidden');
+                }
+            },
+            setTableId(t) {
+                this.tableId = t;
+            },
+            clearSelected() {
+                this.unsetAllSelected();
+                this.selectedItems = [];
+            },
+            setAllSelected() {
+                this.selectAllStatus = true;
+            },
+            unsetAllSelected() {
+                this.selectAllStatus = false;
+            },
+            toggleSelectAll() {
+                if (
+                    !this.selectAllStatus &&
+                    Array.isArray(this.selectedItems) &&
+                    this.paginationTotalItemCount === this.selectedItems.length
+                ) {
+                    this.setAllSelected();
+                    this.selectAllStatus = true;
+                }
+            },
+            getReorderTable() {
+                if (!this.tableId) return null;
+                const tableEl = document.getElementById(this.tableId);
+                return tableEl ? tableEl.getElementsByTagName('tbody')[0] ?? null : null;
+            },
+            getReorderRows() {
+                const tbody = this.getReorderTable();
+                return tbody ? tbody.rows ?? [] : [];
+            },
+            setupEvenOddClasses() {
+                const rows = Array.from(this.getReorderRows());
+                let evenClass = [];
+                let oddClass = [];
+
+                rows.forEach((row, idx) => {
+                    if (evenClass.length === 0 && oddClass.length === 0) {
+                        if (idx % 2 === 0) {
+                            row.classList.forEach((cls) => {
+                                if (cls.startsWith('even:')) evenClass.push(cls);
+                            });
+                        } else {
+                            row.classList.forEach((cls) => {
+                                if (cls.startsWith('odd:')) oddClass.push(cls);
+                            });
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+
+                const strippedEvenClasses = evenClass.map((s) => s.slice(5));
+                const strippedOddClasses = oddClass.map((s) => s.slice(4));
+
+                rows.forEach((row, idx) => {
+                    row.classList.remove(...evenClass, ...oddClass, ...strippedEvenClasses, ...strippedOddClasses);
+                    if (idx % 2 === 0) {
+                        row.classList.add(...strippedOddClasses);
+                    } else {
+                        row.classList.add(...strippedEvenClasses);
+                    }
+                });
+            },
+            sourceID: null,
+            targetID: null,
+            evenClasses: null,
+            oddClasses: null,
+            dragStart(t) {
+                this.setupEvenOddClasses();
+                this.sourceID = t.target.id;
+                t.dataTransfer.effectAllowed = 'move';
+                t.dataTransfer.setData('text/plain', t.target.id);
+                t.target.classList.add('laravel-livewire-tables-reordering-drag');
+            },
+            dragOverEvent(t) {
+                if (typeof t.target.closest !== 'function') return false;
+                const n = t.target.closest('tr');
+                if (!n) return false;
+                Array.from(n.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.add('!border-t-2', '!border-t-blue-500');
+                });
+                this.targetID = n.id;
+            },
+            dragLeaveEvent(t) {
+                if (typeof t.target.closest !== 'function') return false;
+                const n = t.target.closest('tr');
+                if (!n) return false;
+                Array.from(n.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.remove('!border-t-2', '!border-t-blue-500');
+                });
+            },
+            dropEvent(t) {
+                if (typeof t.target.closest !== 'function') return false;
+                const tbody = this.getReorderTable();
+                if (!tbody || !this.sourceID) return false;
+                const sourceRow = document.getElementById(this.sourceID);
+                if (!sourceRow) return false;
+                sourceRow.classList.remove('laravel-livewire-tables-reordering-drag');
+                const n = t.target.closest('tr');
+                if (!n) return false;
+                Array.from(n.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.remove('!border-t-2', '!border-t-blue-500');
+                });
+                const i = n.parentNode.rowIndex;
+                const r = sourceRow.rowIndex;
+                if (i > r) {
+                    tbody.insertBefore(sourceRow, n.nextSibling);
+                } else {
+                    tbody.insertBefore(sourceRow, n);
+                }
+                this.setupEvenOddClasses();
+            },
+            updateOrderedItems() {
+                if (!validWire) return;
+                const rows = Array.from(this.getReorderRows());
+                const n = [];
+                const i = e.get('reorderDisplayColumn');
+                const r = e.get('defaultReorderColumn');
+                rows.forEach((row, a) => {
+                    const o = a + 1;
+                    if (i) {
+                        const cell = row.getElementsByClassName('reorder-current-value-' + this.tableId)[0];
+                        if (cell) cell.innerHTML = o;
+                    }
+                    n.push({ value: row.getAttribute('wire:sortable.item'), [r]: o });
+                });
+                e.reorderItems(n);
+            },
+            init() {
+                this.filtersOpen = this.filterSlideDownDefaultVisible;
+            },
+        };
+    });
+
+    Alpine.data('booleanFilter', (e, t, n) => {
+        const validWire = hasValidWire(e);
+        return {
+            value: validWire ? e.entangle('filterComponents.' + t) : null,
+            hasValue: false,
+            selectValue: -1,
+            toggleStatusWithUpdate() {
+                this.toggleStatus();
+                this.value = this.selectValue;
+            },
+            toggleStatus() {
+                this.selectValue = Boolean(parseInt(this.selectValue)) !== true ? 1 : 0;
+                this.hasValue = true;
+            },
+            resetValue() {
+                this.value = null;
+                this.hasValue = false;
+            },
+            init() {
+                if (typeof this.value === 'boolean' || typeof this.value === 'string' || typeof this.value === 'number') {
+                    this.selectValue = Boolean(parseInt(this.value)) === true ? 1 : 0;
+                    this.hasValue = true;
+                }
+                this.$watch('value', (i) => {
+                    if (i === null) this.hasValue = false;
+                });
+            },
+        };
+    });
+
+    Alpine.data('newBooleanFilter', (e, t, n) => ({
+        value: hasValidWire(e) ? e.entangle('filterComponents.' + t) : null,
+        hasValue: false,
+        toggleStatusWithUpdate() {
+            this.toggleStatus();
+        },
+        toggleStatus() {
+            this.value = Boolean(parseInt(this.value)) !== true ? 1 : 0;
+        },
+        resetValue() {
+            this.value = null;
+        },
+    }));
+
+    Alpine.data('booleanFilterLatest', (e, t, n) => {
+        const validWire = hasValidWire(e);
+        return {
+            filterKey: t,
+            localValue: validWire ? e.entangle('filterComponents.' + t) : null,
+            toggleStatus() {
+                this.localValue = Boolean(parseInt(this.localValue)) !== true ? 1 : 0;
+            },
+            resetValue() {
+                this.localValue = null;
+            },
+            updateWireable() {
+                if (validWire) {
+                    e.set('filterComponents.' + this.filterKey, this.localValue);
+                }
+            },
+            init() {
+                this.$watch('localValue', (i) => i !== null && this.updateWireable());
+            },
+        };
+    });
+
+    Alpine.data('numberRangeFilter', (e, t, n, i) => {
+        const validWire = hasValidWire(e);
+        return {
+            filterValues: validWire ? e.entangle('filterComponents.' + t) : { min: 0, max: 100 },
+            currentMin: 0,
+            currentMax: 100,
+            allowUpdates: false,
+            filterMin: 0,
+            filterMax: 100,
+            minThumb: 0,
+            maxThumb: 0,
+            updateMin() {
+                this.currentMin = Math.min(this.currentMin, this.currentMax - 1);
+                this.minThumb = ((this.currentMin - this.filterMin) / (this.filterMax - this.filterMin)) * 100;
+            },
+            updateMax() {
+                this.currentMax = Math.max(this.currentMax, this.currentMin + 1);
+                this.maxThumb = 100 - ((this.currentMax - this.filterMin) / (this.filterMax - this.filterMin)) * 100;
+            },
+            updateWireable() {
+                if (this.allowUpdates) {
+                    this.allowUpdates = false;
+                    this.filterValues = { min: this.currentMin, max: this.currentMax };
+                }
+            },
+            init() {
+                this.filterMin = i.minRange;
+                this.filterMax = i.maxRange;
+                this.currentMin = this.filterValues.min !== void 0 ? this.filterValues.min : this.filterMin;
+                this.currentMax = this.filterValues.max !== void 0 ? this.filterValues.max : this.filterMax;
+                this.$watch('filterValues', (r) => {
+                    this.currentMin = r.min !== void 0 ? r.min : this.filterMin;
+                    this.currentMax = r.max !== void 0 ? r.max : this.filterMax;
+                    this.updateMin();
+                    this.updateMax();
+                });
+                this.updateMin();
+                this.updateMax();
+            },
+        };
+    });
+
+    Alpine.data('flatpickrFilter', (e, t, n, i, r) => {
+        const validWire = hasValidWire(e);
+        return {
+            flatpickrInstance: null,
+            shouldUpdate: false,
+            filterKey: t,
+            filterConfig: n,
+            wireValues: validWire ? e.entangle('filterComponents.' + t) : [],
+            wireValuesArray: [],
+            dateValues: [],
+            setupFlatpickr() {
+                if (typeof flatpickr !== 'function') return;
+                this.flatpickrInstance = flatpickr(this.$refs.rangeInput, {
+                    mode: 'range',
+                    altFormat: n.ariaDateFormat,
+                    altInput: true,
+                    allowInvalidPreload: true,
+                    dateFormat: n.dateFormat,
+                    defaultDate: [this.wireValues.minDate, this.wireValues.maxDate],
+                    enableTime: n.enableTime,
+                    locale: r,
+                    maxDate: n.maxDate,
+                    minDate: n.minDate,
+                    shorthandCurrentMonth: n.shorthandCurrentMonth,
+                    time_24hr: n.time_24hr,
+                    weekNumbers: n.weekNumbers,
+                    onOpen: () => {
+                        this.childElementOpen = true;
+                        this.shouldUpdate = true;
+                    },
+                    onChange: (a, o, s) => {
+                        if (a.length > 1) {
+                            const d = o.split(s.l10n.rangeSeparator);
+                            const c = d[0];
+                            const f = d[1];
+                            if (this.shouldUpdate) {
+                                this.wireValues = { minDate: c, maxDate: f };
+                                this.childElementOpen = false;
+                            }
+                        }
+                    },
+                });
+            },
+            init() {
+                if (this.wireValues !== void 0) {
+                    if (this.wireValues.minDate !== void 0 && this.wireValues.maxDate !== void 0) {
+                        this.wireValuesArray = [this.wireValues.minDate, this.wireValues.maxDate];
+                    } else {
+                        this.wireValues = [];
+                    }
+                } else {
+                    this.wireValuesArray = [];
+                }
+                this.setupFlatpickr();
+                this.$watch('wireValues', (a) => {
+                    if (!this.flatpickrInstance) return;
+                    if (a.minDate === void 0 && a.maxDate === void 0) {
+                        this.flatpickrInstance.clear();
+                    } else if (a.minDate !== void 0 && a.maxDate !== void 0) {
+                        this.shouldUpdate = false;
+                        this.flatpickrInstance.setDate([a.minDate, a.maxDate]);
+                    }
+                });
+            },
+        };
+    });
+
+    Alpine.data('tableWrapper', (e, t) => ({
+        childElementOpen: false,
+        filtersOpen: hasValidWire(e) ? e.entangle('filterSlideDownDefaultVisible').live : false,
+        filterPopoverOpen: false,
+    }));
+
+    Alpine.data('reorderFunction', (e, t, n) => {
+        const validWire = hasValidWire(e);
+        return {
+            tableId: t,
+            sourceID: '',
+            targetID: '',
+            currentlyReorderingStatus: validWire ? e.entangle('currentlyReorderingStatus') : false,
+            evenClasses: null,
+            oddClasses: null,
+            defaultReorderColumn: validWire ? e.entangle('defaultReorderColumn') : null,
+            hideReorderColumnUnlessReorderingStatus: validWire ? e.entangle('hideReorderColumnUnlessReorderingStatus') : false,
+            reorderDisplayColumn: validWire ? e.entangle('reorderDisplayColumn') : false,
+            dragStart(i) {
+                this.setupEvenOddClasses();
+                this.sourceID = i.target.id;
+                i.dataTransfer.effectAllowed = 'move';
+                i.dataTransfer.setData('text/plain', i.target.id);
+                i.target.classList.add('laravel-livewire-tables-reordering-drag');
+            },
+            dragOverEvent(i) {
+                if (typeof i.target.closest !== 'function') return false;
+                const r = i.target.closest('tr');
+                if (!r) return false;
+                Array.from(r.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.add('!border-t-2', '!border-t-blue-500');
+                });
+                this.targetID = r.id;
+            },
+            dragLeaveEvent(i) {
+                if (typeof i.target.closest !== 'function') return false;
+                const r = i.target.closest('tr');
+                if (!r) return false;
+                Array.from(r.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.remove('!border-t-2', '!border-t-blue-500');
+                });
+            },
+            dropEvent(i) {
+                if (typeof i.target.closest !== 'function') return false;
+                const tbody = this.getReorderTable();
+                if (!tbody || !this.sourceID) return false;
+                const sourceRow = document.getElementById(this.sourceID);
+                if (!sourceRow) return false;
+                sourceRow.classList.remove('laravel-livewire-tables-reordering-drag');
+                const r = i.target.closest('tr');
+                if (!r) return false;
+                Array.from(r.getElementsByTagName('td')).forEach((el) => {
+                    el.classList.remove('!border-t-2', '!border-t-blue-500');
+                });
+                const a = r.parentNode.rowIndex;
+                const o = sourceRow.rowIndex;
+                if (a > o) {
+                    tbody.insertBefore(sourceRow, r.nextSibling);
+                } else {
+                    tbody.insertBefore(sourceRow, r);
+                }
+                this.setupEvenOddClasses();
+            },
+            reorderEnabled() {
+                this.currentlyReorderingStatus = true;
+            },
+            cancelReorder() {
+                this.currentlyReorderingStatus = false;
+                if (validWire) e.resetReorder();
+            },
+            updateOrderedItems() {
+                if (!validWire) return;
+                const rows = Array.from(this.getReorderRows());
+                const r = [];
+                rows.forEach((row, o) => {
+                    const s = o + 1;
+                    if (this.reorderDisplayColumn) {
+                        const cell = row.getElementsByClassName('reorder-current-value-' + this.tableId)[0];
+                        if (cell) cell.innerHTML = s;
+                    }
+                    r.push({ value: row.getAttribute('wire:sortable.item'), [n]: s });
+                });
+                e.reorderItems(r);
+            },
+            getReorderTable() {
+                if (!this.tableId) return null;
+                const tableEl = document.getElementById(this.tableId);
+                return tableEl ? tableEl.getElementsByTagName('tbody')[0] ?? null : null;
+            },
+            getReorderRows() {
+                const tbody = this.getReorderTable();
+                return tbody ? tbody.rows ?? [] : [];
+            },
+            setupEvenOddClasses() {
+                const rows = Array.from(this.getReorderRows());
+                let evenClass = [];
+                let oddClass = [];
+
+                rows.forEach((row, idx) => {
+                    if (evenClass.length === 0 && oddClass.length === 0) {
+                        if (idx % 2 === 0) {
+                            row.classList.forEach((cls) => {
+                                if (cls.startsWith('even:')) evenClass.push(cls);
+                            });
+                        } else {
+                            row.classList.forEach((cls) => {
+                                if (cls.startsWith('odd:')) oddClass.push(cls);
+                            });
+                        }
+                    } else {
+                        return false;
+                    }
+                });
+
+                const strippedEvenClasses = evenClass.map((c) => c.slice(5));
+                const strippedOddClasses = oddClass.map((c) => c.slice(4));
+
+                rows.forEach((row, idx) => {
+                    row.classList.remove(...evenClass, ...oddClass, ...strippedEvenClasses, ...strippedOddClasses);
+                    if (idx % 2 === 0) {
+                        row.classList.add(...strippedOddClasses);
+                    } else {
+                        row.classList.add(...strippedEvenClasses);
+                    }
+                });
+            },
+        };
+    });
+
+    Alpine.data('filterPillsHandler', (e, t) => ({
+        localFilterKey: t,
+        resetSpecificFilter(n) {
+            if (hasValidWire(e)) {
+                e.resetFilter(n);
+            }
+        },
+    }));
+
+    Alpine.data('tablesExternalFilter', (e, t) => ({
+        tableComponent: window.Livewire ? window.Livewire.find(e) : null,
+        selectedValue: '',
+        filterKey: t,
+        updateStatus() {
+            if (this.tableComponent) {
+                this.tableComponent.set('filterComponents.' + this.filterKey, this.selectedValue);
+            }
+        },
+        init() {
+            if (this.tableComponent) {
+                this.selectedValue = this.tableComponent.get('filterComponents.' + this.filterKey);
+                this.$watch('selectedValue', () => {
+                    this.updateStatus();
+                });
+            }
+        },
+    }));
+}
+
+export function isTableElementInitialized(el) {
+    if (!el || !Array.isArray(el._x_dataStack) || el._x_dataStack.length === 0) {
+        return false;
+    }
+
+    return el._x_dataStack.some(
+        (scope) => scope && typeof scope.setTableId === 'function' && scope.__hasLivewireWire !== false
+    );
+}
+
+export function resetAlpineSubtree(el) {
+    if (!el) return;
+
+    if (window.Alpine && typeof window.Alpine.destroyTree === 'function') {
+        try {
+            window.Alpine.destroyTree(el);
+        } catch (_) {
+            // Ignore cleanup errors on partially initialized subtrees
+        }
+    }
+
+    const clearNode = (node) => {
+        if (!node) return;
+        delete node._x_marker;
+        delete node._x_dataStack;
+    };
+
+    clearNode(el);
+    if (typeof el.querySelectorAll === 'function') {
+        el.querySelectorAll('*').forEach(clearNode);
+    }
 }
 
 export function ensureDatatablesReady(root = document) {
-    const Alpine = window.Alpine;
-    if (!Alpine) return;
+    registerLivewireTableComponents(window.Alpine);
 
-    registerLivewireTableComponents(Alpine);
+    if (!window.Alpine || typeof window.Alpine.initTree !== 'function') {
+        return;
+    }
 
-    if (!root || !root.querySelectorAll) return;
+    const scopeRoot = root && typeof root.querySelectorAll === 'function' ? root : document;
+    const selector = '[x-data*="laravellivewiretable"]';
+    const tables = [];
 
-    const containers = root.querySelectorAll(".vibe-datatable-root, [x-data*=\"laravellivewiretable\"]");
-    containers.forEach((container) => {
-        const tableEls = container.matches && container.matches("[x-data*=\"laravellivewiretable\"]")
-            ? [container]
-            : container.querySelectorAll("[x-data*=\"laravellivewiretable\"]");
+    if (scopeRoot instanceof Element && scopeRoot.matches(selector)) {
+        tables.push(scopeRoot);
+    }
+    scopeRoot.querySelectorAll(selector).forEach((el) => tables.push(el));
 
-        tableEls.forEach((el) => {
-            const stack = el._x_dataStack;
-            const data = stack && stack[0];
-            const isProperlyInitialized = data && typeof data.setTableId === "function";
+    if (tables.length === 0) {
+        return;
+    }
 
-            if (!isProperlyInitialized) {
+    const livewireBootFinished = Boolean(window.Livewire?.initialRenderIsFinished);
+
+    tables.forEach((el) => {
+        const wireRoot = el.closest('[wire\\:id]');
+
+        // Never call Alpine.initTree(el) before Livewire has mounted its enclosing [wire:id] component.
+        // Initializing the inner table before wireRoot.__livewire exists causes "$wire is not defined"
+        // and stamps _x_marker on the subtree, blocking Livewire's own initialization.
+        if (!wireRoot) {
+            return;
+        }
+
+        if (!wireRoot.__livewire) {
+            if (livewireBootFinished) {
                 try {
-                    delete el._x_dataStack;
-                    if (typeof Alpine.initTree === "function") {
-                        Alpine.initTree(el);
-                    }
-                } catch (err) {
-                    console.warn("[Vibe DataTable] Init recovery error:", err);
+                    window.Alpine.initTree(wireRoot);
+                } catch (_) {
+                    // Wait for Livewire to mount wireRoot
                 }
             }
 
-            if (el.hasAttribute("x-cloak")) {
-                el.removeAttribute("x-cloak");
+            if (!wireRoot.__livewire) {
+                return;
             }
-        });
-
-        if (container.hasAttribute("x-cloak")) {
-            container.removeAttribute("x-cloak");
         }
 
-        // Strip stuck x-cloak on any children
-        container.querySelectorAll("[x-cloak]").forEach((el) => {
-            el.removeAttribute("x-cloak");
-        });
+        if (!isTableElementInitialized(el)) {
+            resetAlpineSubtree(el);
+            try {
+                window.Alpine.initTree(el);
+            } catch (err) {
+                console.warn('[Vibe UI DataTable] Re-init warning:', err);
+            }
+        }
+
+        if (isTableElementInitialized(el)) {
+            if (el.hasAttribute('x-cloak')) {
+                el.removeAttribute('x-cloak');
+            }
+            const wrapperRoot = el.closest('.vibe-datatable-root');
+            if (wrapperRoot && wrapperRoot.hasAttribute('x-cloak')) {
+                wrapperRoot.removeAttribute('x-cloak');
+            }
+        }
     });
 }
 
-// Automatically register components and ensure initialization on startup
-if (typeof window !== "undefined") {
-    function initOnReady() {
-        if (window.Alpine) {
-            registerLivewireTableComponents(window.Alpine);
-        }
-        ensureDatatablesReady();
-        [50, 150, 300, 600].forEach((delay) => {
-            setTimeout(ensureDatatablesReady, delay);
-        });
-    }
+// Expose global helpers for VibeServiceProvider and Blade hooks
+window.VibeRegisterDataTableComponents = registerLivewireTableComponents;
+window.VibeInitDataTable = ensureDatatablesReady;
 
-    if (window.Alpine) {
-        registerLivewireTableComponents(window.Alpine);
-    }
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", initOnReady);
-    } else {
-        initOnReady();
-    }
-
-    document.addEventListener("alpine:init", () => {
-        if (window.Alpine) registerLivewireTableComponents(window.Alpine);
-        initOnReady();
-    });
-
-    document.addEventListener("livewire:init", () => {
-        if (window.Alpine) registerLivewireTableComponents(window.Alpine);
-        initOnReady();
-
-        if (window.Livewire && typeof window.Livewire.hook === "function") {
-            window.Livewire.hook("morph.updated", ({ el }) => {
-                ensureDatatablesReady(el);
-            });
-            window.Livewire.hook("commit", () => {
-                ensureDatatablesReady();
-            });
-        }
-    });
-
-    document.addEventListener("livewire:navigated", () => {
-        initOnReady();
-    });
-
-    window.VibeInitDataTable = function () {
-        ensureDatatablesReady();
-    };
+if (window.Alpine) {
+    registerLivewireTableComponents(window.Alpine);
 }
+
+const scheduleEnsureDatatables = (root = document) => {
+    ensureDatatablesReady(root);
+    if (typeof requestAnimationFrame === 'function') {
+        requestAnimationFrame(() => ensureDatatablesReady(root));
+    }
+    setTimeout(() => ensureDatatablesReady(root), 60);
+};
+
+const bindLivewireHooks = () => {
+    if (!window.Livewire || typeof window.Livewire.hook !== 'function') return;
+    if (window.__vibeDatatableLivewireHookRegistered) return;
+    window.__vibeDatatableLivewireHookRegistered = true;
+
+    window.Livewire.hook('morph.updated', ({ el }) => {
+        queueMicrotask(() => ensureDatatablesReady(el || document));
+    });
+
+    window.Livewire.hook('morphed', ({ el }) => {
+        queueMicrotask(() => ensureDatatablesReady(el || document));
+    });
+};
+
+// Register Alpine component definitions BEFORE Livewire/Alpine walks the DOM tree
+document.addEventListener('alpine:init', () => {
+    registerLivewireTableComponents(window.Alpine);
+});
+
+document.addEventListener('livewire:init', () => {
+    registerLivewireTableComponents(window.Alpine);
+    bindLivewireHooks();
+});
+
+// Run tree verification ONLY AFTER Livewire/Alpine initial boot or SPA navigation finishes
+document.addEventListener('livewire:initialized', () => {
+    bindLivewireHooks();
+    scheduleEnsureDatatables(document);
+});
+
+document.addEventListener('alpine:initialized', () => {
+    scheduleEnsureDatatables(document);
+});
+
+document.addEventListener('livewire:navigated', () => {
+    bindLivewireHooks();
+    scheduleEnsureDatatables(document);
+});
+
+// If this module was loaded on-demand (e.g. via @pushOnce('head') during wire:navigate) after Livewire booted
+if (window.Livewire?.initialRenderIsFinished) {
+    bindLivewireHooks();
+    scheduleEnsureDatatables(document);
+}
+
+window.dispatchEvent(new CustomEvent('vibe-datatable-ready'));

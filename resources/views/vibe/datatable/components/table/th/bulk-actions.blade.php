@@ -22,10 +22,13 @@
                 bulkActionHeaderChecked: false,
                 init() {
                     this.$watch('selectedItems', value => {
-                        this.indeterminateCheckbox = (!this.selectAllStatus && value.length > 0 && value.length < this.paginationTotalItemCount);
+                        const len = Array.isArray(value) ? value.length : 0;
+                        this.indeterminateCheckbox = (!this.selectAllStatus && len > 0 && len < this.paginationTotalItemCount);
                     });
                     this.$watch('indeterminateCheckbox', value => {
-                        this.$refs.checkbox.indeterminate = value;
+                        if (this.$refs.checkbox) {
+                            this.$refs.checkbox.indeterminate = value;
+                        }
                     });
                 }
             }"

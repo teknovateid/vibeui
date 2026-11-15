@@ -1,4 +1,4 @@
-import './theme'
-import './state'
-import './shortcut'
-import './idle'
+import './theme';
+import './state';
+import './shortcut';
+import './idle';
