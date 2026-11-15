@@ -2,6 +2,16 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.1] - 2026-11-15
+
+### 🚀 Features
+- feat: Enhance button component with vertical stacking, custom icon sizing, and new size options (ad13057)
+- feat: Add canvas rendering and skeleton structure to chart component (27a2652)
+
+### 🐛 Bug Fixes
+- fix: Simplify data and options handling in chart configuration (4c14522)
+
+
 ## [0.11.0] - 2026-11-14
 
 ### 🧰 Maintenance & Documentation
