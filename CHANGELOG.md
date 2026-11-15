@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.2] - 2026-11-15
+
+### 🧰 Maintenance & Documentation
+- Refactor Vibe DataTable integration and improve Alpine.js handling (4abd585)
+
+
 ## [0.11.1] - 2026-11-15
 
 ### 🚀 Features
