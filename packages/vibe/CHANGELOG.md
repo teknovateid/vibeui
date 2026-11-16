@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.4] - 2026-11-16
+
+### 🧰 Maintenance & Documentation
+- Refactor settings views to use uniform column widths and grid layout (f325865)
+
+
 ## [0.11.3] - 2026-11-15
 
 ### 🧰 Maintenance & Documentation
