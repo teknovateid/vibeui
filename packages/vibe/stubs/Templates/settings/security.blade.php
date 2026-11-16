@@ -37,9 +37,9 @@
                     <vibe:separator />
 
                     @if (config('passkeys.enabled', true))
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20" x-data="passkeyController()">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12" x-data="passkeyController()">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.security.passkey_title') }}</h3>
                                 <vibe:badge size="sm" variant="success" dot class="rounded-full" x-show="supported" x-cloak>
                                     {{ __('vibe/settings.security.browser_supported') }}
@@ -53,7 +53,7 @@
                             </p>
                         </div>
 
-                        <div class="space-y-4 w-full">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             <div x-show="isIpAddress" x-cloak>
                                 <vibe:card.alert variant="warning" size="sm">
                                     <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 w-full">
@@ -178,11 +178,6 @@
 
                     {{-- 2FA Section (Livewire Component) --}}
                     <livewire:settings.two-factor />
-
-                    <vibe:separator />
-
-                    {{-- Active Sessions Section (Livewire Component) --}}
-                    <livewire:settings.login-history />
 
                     <vibe:separator />
 

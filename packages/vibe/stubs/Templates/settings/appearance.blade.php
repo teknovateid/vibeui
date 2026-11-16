@@ -141,16 +141,16 @@
                     </div>
 
                     {{-- 1. Custom Primary Color (--primary, --primary-foreground, --ring) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.primary_color_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{{ __('vibe/settings.appearance.modes_badge') }}</span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.primary_color_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             {{-- Preset Swatches --}}
                             <div class="flex items-center gap-2.5 flex-wrap">
                                 <template x-for="color in primaryColors" :key="color.hex">
@@ -204,13 +204,13 @@
                     <vibe:separator />
 
                     {{-- 2. Interface Theme Mode & High Contrast --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.theme_mode_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.theme_mode_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl 2xl:max-w-3xl">
                                 {{-- Card 1: System preference --}}
                                 <button 
@@ -369,16 +369,16 @@
                     <vibe:separator />
 
                     {{-- 3. Canvas & Surface Palette (--background, --card, --popover) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.canvas_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.canvas_desc') }}</p>
                         </div>
 
-                        <div class="space-y-3 w-full max-w-2xl 2xl:max-w-3xl">
+                        <div class="xl:col-span-8 space-y-3 w-full min-w-0">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <template x-for="surface in surfacePresets" :key="surface.id">
                                     <button 
@@ -408,16 +408,16 @@
                     <vibe:separator />
 
                     {{-- 4. Desktop Sidebar (--sidebar, --sidebar-border, --sidebar-accent) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_sidebar_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.sidebar_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
 
                             {{-- Sidebar Style Cards --}}
                             <div class="space-y-2">
@@ -543,16 +543,16 @@
                     <vibe:separator />
 
                     {{-- 5. Navigation Items (--nav-active-bg, --nav-active-fg, --nav-indicator) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.nav_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.nav_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             {{-- Nav Style Preset Cards --}}
                             <div class="space-y-2">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.nav_style_label') }}</label>
@@ -717,16 +717,16 @@
                     <vibe:separator />
 
                     {{-- 6. Application Header (--header, --header-border, --header-accent) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_header_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.header_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             {{-- Header Blur Glassmorphism Switch --}}
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
@@ -863,13 +863,13 @@
                     <vibe:separator />
 
                     {{-- 7. Semantic Status Colors (--success, --warning, --destructive, --info) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.semantic_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.semantic_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             {{-- Preset Status Themes --}}
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 <template x-for="st in semanticPresets" :key="st.id">
@@ -907,13 +907,13 @@
                     <vibe:separator />
 
                     {{-- 8. Data Charts Palette (--chart-1 s/d --chart-5) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.charts_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.charts_desc') }}</p>
                         </div>
 
-                        <div class="space-y-4 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-4 w-full min-w-0">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <template x-for="ch in chartPresets" :key="ch.id">
                                     <button 
@@ -943,13 +943,13 @@
                     <vibe:separator />
 
                     {{-- 9. Border Radius (--radius, --radius-xs s/d --radius-3xl) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.radius_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.radius_desc') }}</p>
                         </div>
 
-                        <div class="space-y-3 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-3 w-full min-w-0">
                             <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
                                 <template x-for="r in radii" :key="r.value">
                                     <button 
@@ -975,13 +975,13 @@
                     <vibe:separator />
 
                     {{-- 10. Typography (--font-sans) --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.font_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.font_desc') }}</p>
                         </div>
 
-                        <div class="space-y-3 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-3 w-full min-w-0">
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <template x-for="f in fonts" :key="f.name">
                                     <button 
@@ -1018,16 +1018,16 @@
                     <vibe:separator />
 
                     {{-- 11. Tables View & Custom Colors --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
-                            <div class="flex items-center gap-2">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.table_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.table_desc') }}</p>
                         </div>
 
-                        <div class="space-y-5 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-5 w-full min-w-0">
                             {{-- Density Cards --}}
                             <div class="space-y-2">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_density_label') }}</label>
@@ -1289,13 +1289,13 @@
                     <vibe:separator />
 
                     {{-- 12. Motion & Visual Effects --}}
-                    <div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-                        <div class="space-y-1 max-w-lg w-full">
+                    <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
                             <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.motion_title') }}</h3>
                             <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.motion_desc') }}</p>
                         </div>
 
-                        <div class="space-y-3 w-full max-w-xl">
+                        <div class="xl:col-span-8 space-y-3 w-full min-w-0">
                             <vibe:card class="p-3.5 border border-border/80 bg-card">
                                 <vibe:switch 
                                     :label="__('vibe/settings.appearance.motion_label')" 

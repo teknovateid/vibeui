@@ -143,3 +143,52 @@ test('delete user component validates password and deletes user account', functi
 
     expect(User::find($this->user->id))->toBeNull();
 });
+
+test('security settings page omits sessions section and uses uniform column widths', function () {
+    $response = $this->actingAs($this->user)
+        ->withSession([
+            'auth.password_confirmed_at' => time(),
+            'auth.confirmed_route' => 'docs.settings.security',
+        ])
+        ->get(route('docs.settings.security'))
+        ->assertOk()
+        ->assertDontSeeLivewire(LoginHistory::class)
+        ->assertDontSee(__('vibe/settings.security.sessions_title'))
+        ->assertDontSee(__('vibe/settings.login_history.all_sessions'))
+        ->assertSee('xl:grid-cols-12', false)
+        ->assertSee('xl:col-span-4', false)
+        ->assertSee('xl:col-span-8', false)
+        ->assertDontSee('gap-x-20', false);
+
+    $html = $response->getContent();
+    expect(substr_count($html, 'xl:grid-cols-12'))->toBeGreaterThanOrEqual(4);
+});
+
+test('login history settings page exclusively renders sessions section with uniform column widths', function () {
+    $this->actingAs($this->user)
+        ->withSession([
+            'auth.password_confirmed_at' => time(),
+        ])
+        ->get(route('docs.settings.login-history'))
+        ->assertOk()
+        ->assertSeeLivewire(LoginHistory::class)
+        ->assertSee(__('vibe/settings.security.sessions_title'))
+        ->assertSee(__('vibe/settings.login_history.all_sessions'))
+        ->assertSee('xl:grid-cols-12', false)
+        ->assertSee('xl:col-span-4', false)
+        ->assertSee('xl:col-span-8', false)
+        ->assertDontSee('gap-x-20', false);
+});
+
+test('appearance settings page uses uniform column widths', function () {
+    $response = $this->actingAs($this->user)
+        ->get(route('docs.settings.appearance'))
+        ->assertOk()
+        ->assertSee('xl:grid-cols-12', false)
+        ->assertSee('xl:col-span-4', false)
+        ->assertSee('xl:col-span-8', false)
+        ->assertDontSee('gap-x-20', false);
+
+    $html = $response->getContent();
+    expect(substr_count($html, 'xl:grid-cols-12'))->toBe(12);
+});

@@ -1,4 +1,4 @@
-<div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
+<div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
     @php
         $currentSession = $sessions->firstWhere('is_current', true);
         $otherSessions = $sessions->where('is_current', false);
@@ -6,8 +6,8 @@
     @endphp
 
     {{-- Left Column: Section Title & Description (Security Tab Pattern) --}}
-    <div class="space-y-1 max-w-lg w-full">
-        <div class="flex items-center gap-2">
+    <div class="xl:col-span-4 space-y-1 min-w-0">
+        <div class="flex flex-wrap items-center gap-2">
             <h3 class="font-semibold text-foreground text-base">
                 {{ __('vibe/settings.security.sessions_title') }}
             </h3>
@@ -21,7 +21,7 @@
     </div>
 
     {{-- Right Column: Interactive Content & Sessions List --}}
-    <div class="space-y-4 w-full">
+    <div class="xl:col-span-8 space-y-4 w-full min-w-0">
         {{-- Header & Quick Info --}}
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>

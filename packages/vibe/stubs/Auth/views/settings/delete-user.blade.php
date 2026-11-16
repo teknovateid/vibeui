@@ -1,10 +1,10 @@
-<div class="space-y-6 flex flex-col xl:flex-row items-start w-full gap-x-20">
-    <div class="space-y-1 max-w-lg w-full">
+<div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+    <div class="xl:col-span-4 space-y-1 min-w-0">
         <h3 class="font-semibold text-destructive text-base">{{ __('vibe/settings.security.danger_zone_title') }}</h3>
         <p class="text-muted-foreground text-xs">{{ __('vibe/settings.security.danger_zone_desc') }}</p>
     </div>
 
-    <div class="space-y-4 w-full">
+    <div class="xl:col-span-8 space-y-4 w-full min-w-0">
         <div class="flex justify-between items-center gap-4">
             <div>
                 <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.security.delete_account_title') }}</p>
