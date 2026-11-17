@@ -127,9 +127,10 @@
 
                     let initialVal = getVal();
                     if (initialVal !== null && initialVal !== undefined && initialVal !== '') {
-                        this.rawValue = this.sanitizeRaw(initialVal);
+                        this.rawValue = this.normalizeRaw(initialVal);
                         this.displayValue = this.formatNumber(this.rawValue);
                     } else if (this.rawValue !== '') {
+                        this.rawValue = this.normalizeRaw(this.rawValue);
                         this.displayValue = this.formatNumber(this.rawValue);
                     }
 
@@ -140,7 +141,7 @@
                             return null;
                         }
                     }, (newVal) => {
-                        let clean = (newVal !== null && newVal !== undefined && newVal !== '') ? this.sanitizeRaw(newVal) : '';
+                        let clean = (newVal !== null && newVal !== undefined && newVal !== '') ? this.normalizeRaw(newVal) : '';
                         if (clean !== this.rawValue) {
                             this.rawValue = clean;
                             this.displayValue = this.formatNumber(this.rawValue);
@@ -152,32 +153,64 @@
                     });
                 @else
                     if (this.rawValue !== '') {
-                        if (/^-?\d*(\.\d+)?$/.test(String(this.rawValue).trim())) {
-                            this.rawValue = (this.isInteger || this.precision === 0) 
-                                ? (this.round && String(this.rawValue).includes('.') ? String(Math.round(parseFloat(this.rawValue))) : String(this.rawValue).split('.')[0])
-                                : String(this.rawValue);
-                        } else {
-                            this.rawValue = this.sanitizeRaw(this.rawValue);
-                        }
+                        this.rawValue = this.normalizeRaw(this.rawValue);
                         this.displayValue = this.formatNumber(this.rawValue);
                     }
                 @endif
 
+                this.bindHiddenInput();
                 this.$nextTick(() => {
-                    let hidden = this.$refs.hiddenInput;
-                    if (hidden) {
-                        hidden.addEventListener('input', (e) => {
-                            let clean = this.sanitizeRaw(e.target.value);
-                            if (clean !== this.rawValue) {
-                                this.rawValue = clean;
-                                this.displayValue = this.formatNumber(this.rawValue);
-                                @if ($xModel)
-                                    this.syncModel();
-                                @endif
-                            }
-                        });
+                    this.bindHiddenInput();
+                });
+            },
+
+            bindHiddenInput() {
+                let hidden = this.$refs.hiddenInput;
+                if (!hidden || hidden._vibeCurrencyBound) return;
+                hidden._vibeCurrencyBound = true;
+                hidden.addEventListener('input', (e) => {
+                    let clean = this.normalizeRaw(e.target.value);
+                    if (clean !== this.rawValue) {
+                        this.rawValue = clean;
+                        this.displayValue = this.formatNumber(this.rawValue);
+                        @if ($xModel)
+                            this.syncModel();
+                        @endif
+                    }
+                    if (hidden.value !== this.rawValue) {
+                        hidden.value = this.rawValue;
                     }
                 });
+            },
+
+            normalizeRaw(val) {
+                if (val === null || val === undefined || val === '') return '';
+                if (typeof val === 'number') {
+                    if (!Number.isFinite(val)) return '';
+                    val = String(val);
+                }
+                let str = String(val).trim();
+                if (!str) return '';
+
+                // Canonical numeric/decimal strings (e.g. '300000.00' from DB or vibe:show) use '.' as decimal point, not thousandSep
+                if (/^-?(?:\d+(?:\.\d+)?|\.\d+)$/.test(str)) {
+                    let isNeg = this.allowNegative && str.startsWith('-');
+                    let unsigned = str.replace(/^-/, '');
+
+                    if (this.isInteger || this.precision === 0) {
+                        let num = this.round && unsigned.includes('.')
+                            ? String(Math.round(parseFloat(unsigned)))
+                            : (unsigned.split('.')[0] || '0').replace(/^0+(?=\d)/, '');
+                        return (isNeg && num !== '0' ? '-' : '') + num;
+                    }
+
+                    let parts = unsigned.split('.');
+                    let intPart = (parts[0] || '0').replace(/^0+(?=\d)/, '');
+                    let decPart = parts[1] !== undefined ? parts[1].slice(0, this.precision) : '';
+                    return (isNeg && (intPart !== '0' || decPart) ? '-' : '') + (decPart ? intPart + '.' + decPart : intPart);
+                }
+
+                return this.sanitizeRaw(str);
             },
 
             sanitizeRaw(val) {

@@ -138,6 +138,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
             'is_active' => true,
             'gender' => 'male',
             'skill_level' => 85,
+            'min_spent' => '300000.00',
             'birth_date' => '1995-08-17',
             'avatar' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
             'status' => 'Verified Member',

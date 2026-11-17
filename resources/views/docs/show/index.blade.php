@@ -197,7 +197,8 @@
             <\vibe:input name="email" label="Alamat Email" />
             <\vibe:textarea name="bio" label="Biografi Singkat" class="sm:col-span-2" rows="2" />
             <\vibe:select name="role" label="Peran Akun" :options="['admin' => 'Administrator', 'user' => 'Reguler User']" />
-            <div class="flex items-center pt-6">
+            <\vibe:input.currency name="min_spent" label="Min. Belanja" prefix="Rp" placeholder="0" />
+            <div class="flex items-center sm:col-span-2">
                 <\vibe:switch name="is_active" label="Status Akun Aktif" />
             </div>
         </div>
@@ -258,7 +259,8 @@
                                     <vibe:input name="email" label="Alamat Email" />
                                     <vibe:textarea name="bio" label="Biografi Singkat" class="sm:col-span-2" rows="2" />
                                     <vibe:select name="role" label="Peran Akun" :options="['admin' => 'Administrator', 'user' => 'Reguler User']" />
-                                    <div class="flex items-center pt-6">
+                                    <vibe:input.currency name="min_spent" label="Min. Belanja" prefix="Rp" placeholder="0" />
+                                    <div class="flex items-center sm:col-span-2">
                                         <vibe:switch name="is_active" label="Status Akun Aktif" />
                                     </div>
                                 </div>

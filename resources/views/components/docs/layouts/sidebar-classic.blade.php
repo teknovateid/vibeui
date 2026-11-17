@@ -8,7 +8,7 @@
 @endphp
 
 <x-docs.layouts.base>
-    <div class="flex h-screen overflow-hidden relative">
+    <div class="flex h-dvh overflow-hidden relative">
         <vibe:sheet variant="sidebar" id="sidebar-menu" position="left" layout="relative" class="absolute md:relative left-0 top-0 bottom-0 z-60 md:z-30 shadow-xl md:shadow-none" :resizable="true" behavior="minify" minSize="200" minifiedSize="80" defaultSize="260" mobileSize="280" :persist="true">
             <vibe:sheet.header class="flex items-center justify-between minified:justify-center minified:px-0 border-none">
                 <h1 class="text-2xl font-bold block minified:hidden truncate transition-opacity duration-300">{{ config('app.name') }}</h1>
@@ -213,7 +213,7 @@
             style="display: none;"
         ></div>
 
-        <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full overflow-y-auto vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
+        <div id="docs-main-scroll" class="flex flex-col flex-1 min-w-0 h-full min-h-0 overflow-y-auto overscroll-y-contain vibe-scrollbar group/docs {{ $isHeaderSticky ? 'has-sticky-header' : '' }}" style="--docs-toc-top: {{ $isHeaderSticky ? '5rem' : '1.5rem' }};">
             <vibe:header variant="header" :sticky="$isHeaderSticky" size="sm" class="{{ $isHeaderSticky ? '' : 'bg-transparent! border-none' }}" x-data>
                 <vibe:header.heading class="gap-2 flex items-center">
                     <vibe:button variant="ghost" size="icon-md" class="hidden sidebar-minified:inline-flex sidebar-collapsed:inline-flex text-muted-foreground hover:text-foreground transition-colors" @click.stop="$dispatch('toggle-sheet', 'sidebar-menu')" aria-label="Toggle sidebar menu">

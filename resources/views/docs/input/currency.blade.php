@@ -214,30 +214,90 @@
                 </div>
             </section>
 
-            {{-- 6. Kompatibilitas dengan vibe:form --}}
+            {{-- 6. Kompatibilitas dengan vibe:form & vibe:show --}}
             <section id="dukungan-vibe-form" class="space-y-4">
                 <div class="space-y-1">
-                    <h2 class="text-xl font-bold text-foreground">6. Kompatibilitas Penuh dengan vibe:form</h2>
+                    <h2 class="text-xl font-bold text-foreground">6. Kompatibilitas Penuh dengan vibe:form &amp; vibe:show</h2>
                     <p class="text-sm text-muted-foreground">
-                        Dapat langsung diletakkan di dalam <code>&lt;vibe:form&gt;</code>:
+                        Dapat langsung diletakkan di dalam <code>&lt;vibe:form&gt;</code> maupun diisi otomatis oleh <code>vibe:show</code> dari data API/database (termasuk string desimal seperti <code>"300000.00"</code> yang otomatis dinormalisasi sesuai prop <code>precision</code> tanpa menambah digit <code>0</code>):
                     </p>
                 </div>
 
-                <vibe:highlightjs language="blade">
-<\vibe:form id="budget-form" action="/budget" method="POST" save-to-storage>
+                @once
+                    @vite('resources/js/vibe/show.js')
+                @endonce
+
+                <vibe:preview title="Uji Populasi Otomatis via vibe:show (Decimal DB)">
+                    <vibe:preview.code>
+<\div class="flex flex-wrap gap-2 mb-4">
+    <\vibe:button type="button" size="sm" variant="outline"
+        @click="$dispatch('vibe:show', { target: 'currency-show-demo', open: false, data: { min_spent: '300000.00', service_fee: '12500.50' } })">
+        Load "300000.00" &amp; "12500.50"
+    <\/vibe:button>
+    <\vibe:button type="button" size="sm" variant="outline"
+        @click="$dispatch('vibe:show', { target: 'currency-show-demo', open: false, data: { min_spent: '2500000.00', service_fee: '0.00' } })">
+        Load "2500000.00" &amp; "0.00"
+    <\/vibe:button>
+<\/div>
+
+<\vibe:form id="currency-show-demo" action="{{ route('docs.form.store') }}" method="POST">
     @@csrf
+    <\vibe:input.currency name="min_spent" label="Min. Belanja (Integer / Default)" prefix="Rp" placeholder="0" required />
+    <\vibe:input.currency name="service_fee" label="Tarif Layanan (Precision 2)" prefix="Rp" thousand-separator="." decimal-separator="," precision="2" placeholder="0,00" />
+    <\vibe:button type="submit">Kirim &amp; Cek $request-&gt;all()<\/vibe:button>
+<\/vibe:form>
+                    </vibe:preview.code>
 
-    <\vibe:input.currency 
-        name="project_budget" 
-        label="Anggaran Proyek" 
-        prefix="Rp" 
-        thousand-separator="." 
-        required 
-    />
+                    <div class="w-full max-w-lg mx-auto space-y-4">
+                        <div class="flex flex-wrap gap-2">
+                            <vibe:button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                @click="$dispatch('vibe:show', { target: 'currency-show-demo', open: false, data: { min_spent: '300000.00', service_fee: '12500.50' } })"
+                            >
+                                Load "300000.00" &amp; "12500.50"
+                            </vibe:button>
+                            <vibe:button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                @click="$dispatch('vibe:show', { target: 'currency-show-demo', open: false, data: { min_spent: '2500000.00', service_fee: '0.00' } })"
+                            >
+                                Load "2500000.00" &amp; "0.00"
+                            </vibe:button>
+                        </div>
 
-    <\vibe:button type="submit">Simpan Anggaran</\vibe:button>
-</\vibe:form>
-</vibe:highlightjs>
+                        <vibe:form id="currency-show-demo" action="{{ route('docs.form.store') }}" method="POST">
+                            @csrf
+                            <vibe:card>
+                                <vibe:card.content class="space-y-4 pt-5">
+                                    <vibe:input.currency
+                                        name="min_spent"
+                                        label="Min. Belanja (Integer / Default)"
+                                        prefix="Rp"
+                                        placeholder="0"
+                                        required
+                                    />
+                                    <vibe:input.currency
+                                        name="service_fee"
+                                        label="Tarif Layanan (Precision 2)"
+                                        prefix="Rp"
+                                        thousand-separator="."
+                                        decimal-separator=","
+                                        precision="2"
+                                        placeholder="0,00"
+                                    />
+                                </vibe:card.content>
+                                <vibe:card.footer>
+                                    <vibe:button class="w-full" type="submit" variant="primary">
+                                        Kirim &amp; Cek $request-&gt;all()
+                                    </vibe:button>
+                                </vibe:card.footer>
+                            </vibe:card>
+                        </vibe:form>
+                    </div>
+                </vibe:preview>
             </section>
 
             {{-- Pengujian Form Submit ke Controller --}}

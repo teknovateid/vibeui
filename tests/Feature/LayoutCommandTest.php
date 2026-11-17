@@ -89,6 +89,14 @@ test('vibe:layout generates settings pages including appearance', function () {
     expect($menuContent)->toContain("route('admin-test.settings.index')");
     expect($menuContent)->toContain("vibe/settings.breadcrumb.settings");
 
+    // Verify published sidebar layout prevents mobile scroll-chaining hiding sticky header
+    $sidebarLayout = File::get(resource_path('views/components/admin-test/layouts/sidebar.blade.php'));
+    expect($sidebarLayout)
+        ->toContain('flex h-dvh overflow-hidden relative')
+        ->toContain('h-full min-h-0 overflow-y-auto overscroll-y-contain')
+        ->not->toContain('flex h-screen')
+        ->not->toContain('min-h-screen');
+
     // Clean up
     File::deleteDirectory(resource_path('views/admin-test'));
     File::deleteDirectory(resource_path('views/components/admin-test'));
