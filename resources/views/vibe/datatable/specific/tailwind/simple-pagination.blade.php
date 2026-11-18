@@ -19,6 +19,7 @@
                     wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->previousCursor()->encode() }}"
                     wire:click="setPage('{{$paginator->previousCursor()->encode()}}','{{ $paginator->getCursorName() }}')"
                     wire:loading.attr="disabled"
+                    data-shortcut-prev-page="true"
                     aria-label="{{ __('pagination.previous') }}"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
                 >
@@ -31,6 +32,7 @@
                     type="button"
                     wire:click="previousPage('{{ $paginator->getPageName() }}')"
                     wire:loading.attr="disabled"
+                    data-shortcut-prev-page="true"
                     aria-label="{{ __('pagination.previous') }}"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
                 >
@@ -49,6 +51,7 @@
                     wire:key="cursor-{{ $paginator->getCursorName() }}-{{ $paginator->nextCursor()->encode() }}"
                     wire:click="setPage('{{$paginator->nextCursor()->encode()}}','{{ $paginator->getCursorName() }}')"
                     wire:loading.attr="disabled"
+                    data-shortcut-next-page="true"
                     aria-label="{{ __('pagination.next') }}"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
                 >
@@ -61,6 +64,7 @@
                     type="button"
                     wire:click="nextPage('{{ $paginator->getPageName() }}')"
                     wire:loading.attr="disabled"
+                    data-shortcut-next-page="true"
                     aria-label="{{ __('pagination.next') }}"
                     class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
                 >

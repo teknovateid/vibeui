@@ -44,7 +44,7 @@
     $variantClasses = $isSticky ? 'sticky top-0 z-50' : '';
 
     $sizeClasses = match ($size) {
-        'sm' => 'py-2.5 px-4',
+        'sm' => 'py-1.5 px-3 sm:py-2.5 sm:px-4',
         'default' => 'py-4 px-6',
         'lg' => 'py-6 px-8',
         default => 'py-4 px-6',

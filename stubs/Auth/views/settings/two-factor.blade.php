@@ -4,10 +4,10 @@
             <div class="flex flex-wrap items-center gap-2">
                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.two_factor.title') }}</h3>
                 <div>
-                    <vibe:badge size="sm" variant="success" class="rounded-full font-semibold" x-show="enabled" x-cloak>
+                    <vibe:badge variant="success" class="rounded-full font-semibold" x-show="enabled" x-cloak>
                         {{ __('vibe/settings.two_factor.enabled') }}
                     </vibe:badge>
-                    <vibe:badge size="sm" variant="secondary" class="rounded-full font-medium" x-show="!enabled">
+                    <vibe:badge variant="secondary" class="rounded-full font-medium" x-show="!enabled">
                         {{ __('vibe/settings.two_factor.disabled') }}
                     </vibe:badge>
                 </div>
@@ -90,13 +90,13 @@
                         <div class="min-w-0">
                             <div class="flex items-center gap-2">
                                 <p class="font-semibold text-foreground text-sm">{{ __('vibe/settings.two_factor.whatsapp_title') }}</p>
-                                <vibe:badge size="sm" variant="secondary" class="rounded-full">{{ __('vibe/settings.two_factor.coming_soon') }}</vibe:badge>
+                                <vibe:badge variant="secondary" class="rounded-full">{{ __('vibe/settings.two_factor.coming_soon') }}</vibe:badge>
                             </div>
                             <p class="text-xs text-muted-foreground truncate">{{ __('vibe/settings.two_factor.whatsapp_desc') }}</p>
                         </div>
                     </div>
                     <div class="shrink-0">
-                        <vibe:badge size="sm" variant="outline" class="rounded-full font-mono">{{ __('vibe/settings.two_factor.stub_ready') }}</vibe:badge>
+                        <vibe:badge variant="outline" class="rounded-full font-mono">{{ __('vibe/settings.two_factor.stub_ready') }}</vibe:badge>
                     </div>
                 </div>
             </div>

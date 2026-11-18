@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'paginator',
@@ -22,13 +22,13 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                         {!! __('vibe/pagination.previous') !!}
                     </vibe:button>
                 @else
-                    <vibe:button size="sm" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled">
+                    <vibe:button size="sm" data-shortcut-prev-page="true" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled">
                         {!! __('vibe/pagination.previous') !!}
                     </vibe:button>
                 @endif
 
                 @if ($paginator->hasMorePages())
-                    <vibe:button size="sm" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled">
+                    <vibe:button size="sm" data-shortcut-next-page="true" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" wire:loading.attr="disabled">
                         {!! __('vibe/pagination.next') !!}
                     </vibe:button>
                 @else
@@ -61,7 +61,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                                 </svg>
                             </vibe:button>
                         @else
-                            <vibe:button size="icon-sm" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" aria-label="{{ __('vibe/pagination.previous') }}">
+                            <vibe:button size="icon-sm" data-shortcut-prev-page="true" wire:click="previousPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" aria-label="{{ __('vibe/pagination.previous') }}">
                                 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M15 19l-7-7 7-7" />
                                 </svg>
@@ -85,7 +85,7 @@ $scrollIntoViewJsSnippet = ($scrollTo !== false)
                         @endforeach
 
                         @if ($paginator->hasMorePages())
-                            <vibe:button size="icon-sm" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" aria-label="{{ __('vibe/pagination.next') }}">
+                            <vibe:button size="icon-sm" data-shortcut-next-page="true" wire:click="nextPage('{{ $paginator->getPageName() }}')" x-on:click="{{ $scrollIntoViewJsSnippet }}" aria-label="{{ __('vibe/pagination.next') }}">
                                 <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                     <path d="M9 5l7 7-7 7" />
                                 </svg>

@@ -16,9 +16,6 @@
                 :placeholder="__('vibe/settings.security.new_password_placeholder')" 
                 required 
             />
-            @error('password')
-                <p class="text-xs text-destructive mt-1 font-medium">{{ $message }}</p>
-            @enderror
         </div>
 
         <div>
@@ -31,9 +28,6 @@
                 :placeholder="__('vibe/settings.security.confirm_password_placeholder')" 
                 required 
             />
-            @error('password_confirmation')
-                <p class="text-xs text-destructive mt-1 font-medium">{{ $message }}</p>
-            @enderror
         </div>
 
         <div class="flex justify-end pt-2">

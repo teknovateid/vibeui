@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'title', 
@@ -146,7 +146,7 @@
                     @click.stop.prevent="if(typeof togglePin !== 'undefined') togglePin('{{ $groupId }}')" 
                     class="inline-flex items-center justify-center size-6 rounded hover:bg-muted hover:text-foreground transition-colors cursor-pointer text-muted-foreground opacity-100 lg:opacity-0 lg:group-hover/nav-item:opacity-100 group-hover/nav-item:text-foreground data-[pinned=true]:text-foreground data-[pinned=true]:opacity-100" 
                     style="display:none" 
-                    title="Pin"
+                    title="{{ __('vibe/nav.pin') }}"
                 >
                     <!-- Pinned Icon (Solid Fill) -->
                     <svg class="size-3 pin-icon-pinned pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">

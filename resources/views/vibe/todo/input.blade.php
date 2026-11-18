@@ -1,10 +1,15 @@
-@blaze(fold: true)
+@blaze
 
 @props([
-    'placeholder' => 'Tambah tugas baru... (tekan Enter)',
+    'placeholder' => null,
     'group' => null,
-    'buttonText' => 'Tambah',
+    'buttonText' => null,
 ])
+
+@php
+    $resolvedPlaceholder = $placeholder ?? __('vibe/todo.input_placeholder');
+    $resolvedButtonText = $buttonText ?? __('vibe/todo.add_button');
+@endphp
 
 <div 
     x-data="{
@@ -33,7 +38,7 @@
             x-model="newTitle"
             @keydown.enter.prevent="submitAdd()"
             @keydown.escape="newTitle = ''"
-            placeholder="{{ $placeholder }}"
+            placeholder="{{ $resolvedPlaceholder }}"
             class="w-full h-10 px-3.5 pr-10 text-sm rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"
         />
 
@@ -54,6 +59,6 @@
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
         </svg>
-        {{ $buttonText }}
+        {{ $resolvedButtonText }}
     </vibe:button>
 </div>

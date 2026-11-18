@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props(['title', 'persist' => false, 'id' => null, 'active' => false, 'open' => true, 'pinnable' => false, 'pinnedContainer' => false])
 
