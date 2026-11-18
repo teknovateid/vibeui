@@ -42,7 +42,7 @@ test('input file supports logo variant with checkerboard pattern and aspect rati
     $html = Blade::render('<vibe:input.file name="company_logo" variant="logo" aspect-ratio="horizontal" />');
 
     expect($html)
-        ->toContain('Logo Preview')
+        ->toContain(__('vibe/input.logo_preview'))
         ->toContain('rounded-xl')
         ->toContain('Pilih Logo');
 });
@@ -52,7 +52,7 @@ test('input file supports logo variant with square aspect ratio', function () {
 
     expect($html)
         ->toContain('size-20')
-        ->toContain('Logo Preview');
+        ->toContain(__('vibe/input.logo_preview'));
 });
 
 test('input file supports avatar variant', function () {

@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'total' => null,
@@ -6,10 +6,11 @@
     'progress' => true,
     'percentage' => true,
     'color' => 'primary',
-    'title' => 'Subtasks',
+    'title' => null,
 ])
 
 @php
+    $resolvedTitle = $title ?? __('vibe/todo.subtasks_title');
     $hasShortcut = $total !== null;
     $totalCount = (int) ($total ?? 0);
     $completedCount = (int) ($completed ?? 0);
@@ -34,7 +35,7 @@
                     <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
                     <path d="m9 12 2 2 4-4"/>
                 </svg>
-                <span>{{ $title }}</span>
+                <span>{{ $resolvedTitle }}</span>
             </span>
             <span class="text-muted-foreground font-semibold">{{ $completedCount }}/{{ $totalCount }}</span>
         </div>
@@ -44,7 +45,7 @@
             <div class="space-y-1">
                 @if ($percentage)
                     <div class="flex items-center justify-between text-xs text-muted-foreground">
-                        <span>Progress</span>
+                        <span>{{ __('vibe/todo.progress') }}</span>
                         <span class="font-semibold text-foreground">{{ $pct }}%</span>
                     </div>
                 @endif

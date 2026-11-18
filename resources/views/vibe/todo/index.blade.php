@@ -307,7 +307,7 @@
                     type="text"
                     x-model="searchQuery"
                     @input="typeof filterItems === 'function' ? filterItems(searchQuery) : null"
-                    placeholder="{{ $searchPlaceholder ?? 'Cari tugas...' }}"
+                    placeholder="{{ $searchPlaceholder ?? __('vibe/todo.search_placeholder') }}"
                     class="w-full pl-10 pr-9 py-2 text-xs rounded-xl border border-input bg-background/80 text-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all placeholder:text-muted-foreground/60 shadow-2xs"
                 />
                 <button

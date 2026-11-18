@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'id' => null,
@@ -39,7 +39,7 @@
         @click.stop="toggle()"
         :class="completed ? 'bg-primary border-primary text-primary-foreground' : 'border-border bg-background hover:border-primary/60'"
         class="size-3.5 rounded border flex items-center justify-center transition-all shrink-0 cursor-pointer focus:outline-none"
-        aria-label="Toggle subtask"
+        aria-label="{{ __('vibe/todo.toggle_subtask') }}"
     >
         <svg x-show="completed" class="size-2.5 stroke-current stroke-[3]" viewBox="0 0 24 24" fill="none">
             <polyline points="20 6 9 17 4 12" />

@@ -217,7 +217,7 @@
                                     size="md" 
                                     @click="closeConfirmPasswordModal()"
                                 >
-                                    {{ $i18n['cancel'] ?? __('auth/actions.cancel') }}
+                                    {{ $i18n['cancel'] ?? __('vibe/form.cancel') }}
                                 </vibe:button>
 
                                 <vibe:button 

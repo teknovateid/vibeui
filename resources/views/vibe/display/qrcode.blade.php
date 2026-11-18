@@ -166,8 +166,8 @@
                     type="button" 
                     @click="downloadPng()" 
                     class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors focus:outline-none cursor-pointer"
-                    title="Unduh format PNG"
-                    aria-label="Unduh QR Code format PNG"
+                    title="{{ __('vibe/qrcode.download_png_title') }}"
+                    aria-label="{{ __('vibe/qrcode.download_png_aria') }}"
                 >
                     <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
@@ -179,8 +179,8 @@
                     type="button" 
                     @click="downloadSvg()" 
                     class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors focus:outline-none cursor-pointer"
-                    title="Unduh format SVG vector"
-                    aria-label="Unduh QR Code format SVG"
+                    title="{{ __('vibe/qrcode.download_svg_title') }}"
+                    aria-label="{{ __('vibe/qrcode.download_svg_aria') }}"
                 >
                     <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
@@ -194,8 +194,8 @@
                     type="button" 
                     @click="copyPayload()" 
                     class="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-100 transition-colors focus:outline-none cursor-pointer"
-                    title="Salin isi data QR"
-                    aria-label="Salin data QR"
+                    title="{{ __('vibe/qrcode.copy_title') }}"
+                    aria-label="{{ __('vibe/qrcode.copy_aria') }}"
                 >
                     <template x-if="!copied">
                         <span class="inline-flex items-center gap-1">
@@ -203,7 +203,7 @@
                                 <path d="M16 12.9V17.1C16 20.6 14.6 22 11.1 22H6.9C3.4 22 2 20.6 2 17.1V12.9C2 9.4 3.4 8 6.9 8H11.1C14.6 8 16 9.4 16 12.9Z" />
                                 <path d="M22 6.9V11.1C22 14.6 20.6 16 17.1 16H16V12.9C16 9.4 14.6 8 11.1 8H8V6.9C8 3.4 9.4 2 12.9 2H17.1C20.6 2 22 3.4 22 6.9Z" />
                             </svg>
-                            <span>Salin</span>
+                            <span>{{ __('vibe/qrcode.copy_btn') }}</span>
                         </span>
                     </template>
                     <template x-if="copied">
@@ -211,7 +211,7 @@
                             <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 12l5 5L20 7"/>
                             </svg>
-                            <span>Tersalin!</span>
+                            <span>{{ __('vibe/qrcode.copied_btn') }}</span>
                         </span>
                     </template>
                 </button>

@@ -363,10 +363,10 @@ const vibeManager = {
             if (typeof opts === 'string') {
                 return vibeManager.alert({
                     type: 'confirm',
-                    title: title || 'Konfirmasi',
+                    title: title || window.VibeCommonI18n?.confirm_title || 'Confirmation',
                     message: opts,
                     confirmButton: {
-                        text: 'Konfirmasi',
+                        text: window.VibeCommonI18n?.confirm_btn || 'Confirm',
                         action: onConfirm
                     }
                 });

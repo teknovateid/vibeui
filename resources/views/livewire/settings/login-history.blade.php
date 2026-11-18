@@ -11,7 +11,7 @@
             <h3 class="font-semibold text-foreground text-base">
                 {{ __('vibe/settings.security.sessions_title') }}
             </h3>
-            <vibe:badge size="sm" variant="secondary" class="rounded-full font-medium">
+            <vibe:badge variant="secondary" class="rounded-full font-medium">
                 {{ __('vibe/settings.login_history.sessions_count', ['count' => $sessions->count()]) }}
             </vibe:badge>
         </div>
@@ -117,7 +117,7 @@
                                 <div class="min-w-0">
                                     <div class="flex items-center gap-2 flex-wrap">
                                         <span class="font-semibold text-foreground text-sm truncate">{{ $currentSession->device }}</span>
-                                        <vibe:badge size="sm" variant="success" dot class="rounded-full text-[10px]">
+                                        <vibe:badge variant="success" dot class="rounded-full text-[10px]">
                                             {{ __('vibe/settings.login_history.this_session_badge') }}
                                         </vibe:badge>
                                     </div>
@@ -184,7 +184,7 @@
                                         <div class="flex items-center gap-2 flex-wrap">
                                             <span class="font-semibold text-foreground text-sm truncate">{{ $session->device }}</span>
                                             @if (!empty($session->is_online))
-                                                <vibe:badge size="sm" variant="secondary" class="rounded-full text-[10px]">
+                                                <vibe:badge variant="secondary" class="rounded-full text-[10px]">
                                                     {{ __('vibe/settings.login_history.active_now') }}
                                                 </vibe:badge>
                                             @endif

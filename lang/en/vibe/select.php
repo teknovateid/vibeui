@@ -12,4 +12,6 @@ return [
     'loading' => 'Loading data...',
     'network_error' => 'Failed to load data from server.',
     'min_chars' => 'Type at least :min characters...',
+    'clear' => 'Clear selection',
+    'retry' => 'Try again',
 ];

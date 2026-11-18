@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 <nav
     aria-label="{{ __('vibe/stepper.progress') }}"
     {{ $attributes->twMerge([

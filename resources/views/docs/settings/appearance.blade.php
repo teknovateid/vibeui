@@ -34,17 +34,17 @@
                             <div>
                                 <div class="flex items-center gap-2 flex-wrap">
                                     <h2 class="font-bold text-foreground text-lg">{{ __('vibe/settings.appearance.header_title') ?? 'Appearance & Theme Tokens' }}</h2>
-                                    <vibe:badge variant="success" size="sm" class="rounded-full" dot dotPulse>
+                                    <vibe:badge variant="success" class="rounded-full" dot dotPulse>
                                         {{ __('vibe/settings.appearance.live_engine') }}
                                     </vibe:badge>
                                     <template x-if="storageMode === 'global_only'">
-                                        <vibe:badge variant="primary" size="sm" class="rounded-full">
-                                            Global Database Theme
+                                        <vibe:badge variant="primary" class="rounded-full">
+                                            {{ __('vibe/settings.appearance.global_db_badge') }}
                                         </vibe:badge>
                                     </template>
                                     <template x-if="storageMode === 'hybrid' && scope === 'global'">
-                                        <vibe:badge variant="warning" size="sm" class="rounded-full">
-                                            Mode Global
+                                        <vibe:badge variant="warning" class="rounded-full">
+                                            {{ __('vibe/settings.appearance.global_mode_badge') }}
                                         </vibe:badge>
                                     </template>
                                 </div>
@@ -60,7 +60,7 @@
                                         class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer"
                                         :class="scope === 'local' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
                                     >
-                                        Preferensi Lokal
+                                        {{ __('vibe/settings.appearance.local_pref_tab') }}
                                     </button>
                                     <button 
                                         type="button" 
@@ -68,8 +68,8 @@
                                         class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
                                         :class="scope === 'global' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
                                     >
-                                        <span>Tema Global Sistem</span>
-                                        <span x-show="isGlobalLocked" class="size-1.5 rounded-full bg-warning" title="Terkunci untuk semua pengguna"></span>
+                                        <span>{{ __('vibe/settings.appearance.global_system_tab') }}</span>
+                                        <span x-show="isGlobalLocked" class="size-1.5 rounded-full bg-warning" title="{{ __('vibe/settings.appearance.global_locked_title') }}"></span>
                                     </button>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                                             <circle cx="12" cy="12" r="10" stroke-opacity="0.25" stroke="currentColor" stroke-width="4"></circle>
                                             <path d="M4 12a8 8 0 018-8" stroke-opacity="0.75" stroke="currentColor" stroke-width="4"></path>
                                         </svg>
-                                        <span x-text="isSavingGlobal ? 'Menyimpan...' : 'Simpan Tema Global'">Simpan Tema Global</span>
+                                        <span x-text="isSavingGlobal ? @js(__('vibe/settings.appearance.saving_btn')) : @js(__('vibe/settings.appearance.save_global_btn'))">{{ __('vibe/settings.appearance.save_global_btn') }}</span>
                                     </vibe:button>
                                 </template>
 
@@ -132,10 +132,10 @@
                         <div x-show="(scope === 'global' || storageMode === 'global_only') && canManageGlobal" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
                             <label class="flex items-center gap-2 cursor-pointer select-none text-muted-foreground hover:text-foreground">
                                 <input type="checkbox" x-model="isGlobalLocked" @change="saveState()" class="rounded border-border text-primary focus:ring-primary size-3.5" />
-                                <span>Kunci tema untuk seluruh pengguna (Nonaktifkan override lokal)</span>
+                                <span>{{ __('vibe/settings.appearance.lock_all_users') }}</span>
                             </label>
                             <div x-show="globalUpdatedAt" class="text-[11px] text-muted-foreground">
-                                Terakhir disimpan: <strong class="text-foreground" x-text="new Date(globalUpdatedAt).toLocaleString()"></strong> (<span x-text="globalUpdatedBy || 'Administrator'"></span>)
+                                {{ __('vibe/settings.appearance.last_saved_prefix') }} <strong class="text-foreground" x-text="new Date(globalUpdatedAt).toLocaleString()"></strong> (<span x-text="globalUpdatedBy || @js(__('vibe/settings.appearance.admin_fallback'))"></span>)
                             </div>
                         </div>
                     </div>
@@ -993,7 +993,7 @@
                                         <div class="space-y-0.5 min-w-0">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-bold text-foreground" :style="{ fontFamily: f.value }" x-text="f.name"></span>
-                                                <vibe:badge size="sm" variant="primary" class="rounded-full" x-show="f.name === 'Figtree'">{{ __('vibe/settings.appearance.default_badge') }}</vibe:badge>
+                                                <vibe:badge variant="primary" class="rounded-full" x-show="f.name === 'Figtree'">{{ __('vibe/settings.appearance.default_badge') }}</vibe:badge>
                                             </div>
                                             <p class="text-[11px] text-muted-foreground" x-text="fontsI18n[f.name] || f.desc"></p>
                                             <span class="text-xs text-foreground/80 block pt-1 font-mono tracking-tight" :style="{ fontFamily: f.value }">
@@ -1262,7 +1262,7 @@
                                                     <vibe:checkbox disabled class="pointer-events-none" />
                                                 </td>
                                                 <td class="py-2.5 px-3 font-medium">Acme Corporation</td>
-                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.completed') }}</vibe:badge></td>
+                                                <td class="py-2.5 px-3"><vibe:badge variant="success" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.completed') }}</vibe:badge></td>
                                                 <td class="py-2.5 px-3 text-right font-mono">Rp 1.450.000</td>
                                             </tr>
                                             <tr class="transition-colors hover:bg-table-row-hover">
@@ -1270,7 +1270,7 @@
                                                     <vibe:checkbox disabled class="pointer-events-none" />
                                                 </td>
                                                 <td class="py-2.5 px-3 font-medium">Globex Industries</td>
-                                                <td class="py-2.5 px-3"><vibe:badge size="sm" variant="warning" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.pending') }}</vibe:badge></td>
+                                                <td class="py-2.5 px-3"><vibe:badge variant="warning" class="rounded-full">{{ __('vibe/settings.appearance.table_demo.pending') }}</vibe:badge></td>
                                                 <td class="py-2.5 px-3 text-right font-mono">Rp 820.000</td>
                                             </tr>
                                         </tbody>

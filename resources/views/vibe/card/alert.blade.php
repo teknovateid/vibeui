@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'variant' => 'default',       // default, neutral, info, success, warning, destructive, danger, primary
@@ -228,8 +228,8 @@
             type="button"
             @click="show = false; $dispatch('dismiss')"
             class="shrink-0 inline-flex items-center justify-center rounded-lg transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring {{ $closeButtonClass }}"
-            title="{{ __('vibe::alert.close') ?? 'Close' }}"
-            aria-label="Close"
+            title="{{ __('vibe/alert.close') }}"
+            aria-label="{{ __('vibe/alert.close') }}"
         >
             <svg class="{{ $sizeClasses['close'] }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M19 5L5 19M19 19L5 5" />

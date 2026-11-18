@@ -44,9 +44,6 @@
                             :placeholder="__('vibe/settings.security.password_placeholder')" 
                             required 
                         />
-                        @error('password')
-                            <p class="text-xs text-destructive mt-1 font-medium">{{ $message }}</p>
-                        @enderror
                     </div>
 
                     <div class="flex items-center justify-end gap-2 pt-2 border-t border-border/50">

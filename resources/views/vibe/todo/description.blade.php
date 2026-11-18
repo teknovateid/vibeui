@@ -79,8 +79,8 @@
             <button 
                 type="button" 
                 @click.stop="startEdit()" 
-                title="Ubah deskripsi"
-                aria-label="Ubah deskripsi"
+                title="{{ __('vibe/todo.edit_description') }}"
+                aria-label="{{ __('vibe/todo.edit_description') }}"
                 class="hidden group-hover:inline-flex group-hover/desc:inline-flex p-0.5 rounded text-muted-foreground/50 hover:text-foreground transition-all shrink-0 cursor-pointer"
             >
                 <svg class="size-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -107,21 +107,21 @@
                 @keydown.enter.prevent="saveEdit()" 
                 @keydown.escape.prevent="cancelEdit()" 
                 class="text-xs bg-background border border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-md px-2 py-0.5 w-full outline-none shadow-xs text-foreground transition-all"
-                placeholder="Rincian deskripsi..."
+                placeholder="{{ __('vibe/todo.description_placeholder') }}"
             />
             <button 
                 type="button" 
                 @click.stop="saveEdit()" 
                 class="px-2 py-0.5 text-xs font-semibold rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer shadow-xs shrink-0"
             >
-                Simpan
+                {{ __('vibe/todo.save') }}
             </button>
             <button 
                 type="button" 
                 @click.stop="cancelEdit()" 
                 class="px-2 py-0.5 text-xs font-medium rounded hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer shrink-0"
             >
-                Batal
+                {{ __('vibe/todo.cancel') }}
             </button>
         </div>
     </div>

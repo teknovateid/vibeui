@@ -45,7 +45,13 @@ export function vibeForm(config = {}) {
         if (statusMode === 'alert') {
             // Use vibe:alert pop-up
             window.dispatchEvent(new CustomEvent('alert', {
-                detail: { type, title: title || (type === 'error' ? 'Terjadi Kesalahan' : 'Pemberitahuan'), message }
+                detail: {
+                    type,
+                    title: title || (type === 'error'
+                        ? (i18n.error_title || window.VibeCommonI18n?.error_title || 'An Error Occurred')
+                        : (i18n.notice_title || window.VibeCommonI18n?.notice_title || 'Notice')),
+                    message
+                }
             }));
         } else {
             // Default: Toast notification
@@ -206,7 +212,7 @@ export function vibeForm(config = {}) {
             try {
                 const passkeysClient = window.Passkeys || (typeof Passkeys !== 'undefined' ? Passkeys : null);
                 if (!passkeysClient) {
-                    throw new Error(i18n.passkey_not_loaded || 'Modul Passkey belum dimuat.');
+                    throw new Error(i18n.passkey_not_loaded || window.VibeCommonI18n?.passkey?.not_loaded || 'Passkey module is not loaded yet.');
                 }
 
                 await passkeysClient.verify({
@@ -235,11 +241,11 @@ export function vibeForm(config = {}) {
                     || err?.response?.status === 401;
 
                 if (err?.name === 'NotAllowedError' || err?.name === 'UserCancelledError') {
-                    this.confirmPasswordError = i18n.passkey_cancelled || 'Autentikasi Passkey dibatalkan atau belum ada Passkey yang terdaftar di perangkat ini.';
+                    this.confirmPasswordError = i18n.passkey_cancelled || window.VibeCommonI18n?.passkey?.auth_cancelled || 'Passkey authentication was cancelled or no Passkey is registered on this device.';
                 } else if (isUnauthenticated) {
-                    this.confirmPasswordError = i18n.passkey_unauthenticated || 'Sesi login Anda belum aktif atau telah berakhir. Harap login terlebih dahulu untuk mengonfirmasi menggunakan Passkey.';
+                    this.confirmPasswordError = i18n.passkey_unauthenticated || 'Your login session is inactive or has expired. Please sign in first to confirm using a Passkey.';
                 } else {
-                    this.confirmPasswordError = err.message || (i18n.passkey_failed || 'Gagal mengonfirmasi dengan Passkey.');
+                    this.confirmPasswordError = err.message || i18n.passkey_failed || window.VibeCommonI18n?.passkey?.confirm_failed || 'Failed to confirm with Passkey.';
                 }
             } finally {
                 this.confirmPasskeyLoading = false;
@@ -305,15 +311,15 @@ export function vibeForm(config = {}) {
                 } else {
                     const data = await res.json().catch(() => ({}));
                     if (res.status === 401 || (data && (data.message === 'Unauthenticated.' || data.message === 'Unauthenticated'))) {
-                        this.confirmPasswordError = i18n.session_expired || 'Sesi login Anda telah berakhir. Harap login kembali.';
+                        this.confirmPasswordError = i18n.session_expired || 'Your login session has expired. Please sign in again.';
                     } else {
                         this.confirmPasswordError = (data && data.errors && data.errors.password && data.errors.password[0])
                             || (data && data.message)
-                            || (i18n.password_incorrect || 'Kata sandi salah.');
+                            || (i18n.password_incorrect || 'Incorrect password.');
                     }
                 }
             } catch (err) {
-                this.confirmPasswordError = i18n.network_error || 'Gagal memverifikasi kata sandi.';
+                this.confirmPasswordError = i18n.network_error || 'Failed to verify password.';
             } finally {
                 this.confirmPasswordLoading = false;
             }

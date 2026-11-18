@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'label' => null,
@@ -261,7 +261,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Decrease quantity"
+                    aria-label="{{ __('vibe/input.decrease_value') }}"
                     @mousedown="startHold('decrement')"
                     @touchstart.passive="startHold('decrement')"
                     @click.prevent
@@ -304,7 +304,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Increase quantity"
+                    aria-label="{{ __('vibe/input.increase_value') }}"
                     @mousedown="startHold('increment')"
                     @touchstart.passive="startHold('increment')"
                     @click.prevent
@@ -325,7 +325,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Decrease quantity"
+                    aria-label="{{ __('vibe/input.decrease_value') }}"
                     @mousedown="startHold('decrement')"
                     @touchstart.passive="startHold('decrement')"
                     @click.prevent
@@ -368,7 +368,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Increase quantity"
+                    aria-label="{{ __('vibe/input.increase_value') }}"
                     @mousedown="startHold('increment')"
                     @touchstart.passive="startHold('increment')"
                     @click.prevent
@@ -417,7 +417,7 @@
                     <button
                         type="button"
                         tabindex="-1"
-                        aria-label="Increase quantity"
+                        aria-label="{{ __('vibe/input.increase_value') }}"
                         @mousedown="startHold('increment')"
                         @touchstart.passive="startHold('increment')"
                         @click.prevent
@@ -431,7 +431,7 @@
                     <button
                         type="button"
                         tabindex="-1"
-                        aria-label="Decrease quantity"
+                        aria-label="{{ __('vibe/input.decrease_value') }}"
                         @mousedown="startHold('decrement')"
                         @touchstart.passive="startHold('decrement')"
                         @click.prevent
@@ -451,7 +451,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Decrease quantity"
+                    aria-label="{{ __('vibe/input.decrease_value') }}"
                     @mousedown="startHold('decrement')"
                     @touchstart.passive="startHold('decrement')"
                     @click.prevent
@@ -494,7 +494,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Increase quantity"
+                    aria-label="{{ __('vibe/input.increase_value') }}"
                     @mousedown="startHold('increment')"
                     @touchstart.passive="startHold('increment')"
                     @click.prevent
@@ -515,7 +515,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Decrease quantity"
+                    aria-label="{{ __('vibe/input.decrease_value') }}"
                     @mousedown="startHold('decrement')"
                     @touchstart.passive="startHold('decrement')"
                     @click.prevent
@@ -558,7 +558,7 @@
                 <button
                     type="button"
                     tabindex="-1"
-                    aria-label="Increase quantity"
+                    aria-label="{{ __('vibe/input.increase_value') }}"
                     @mousedown="startHold('increment')"
                     @touchstart.passive="startHold('increment')"
                     @click.prevent

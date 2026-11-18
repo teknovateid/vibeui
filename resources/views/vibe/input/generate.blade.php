@@ -261,8 +261,8 @@
                     @click.stop="copyToClipboard()" 
                     :disabled="!value || {{ $isDisabled ? 'true' : 'false' }}"
                     class="{{ $actionBtnPadding }} rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/80 focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer disabled:opacity-40 disabled:pointer-events-none"
-                    :title="copied ? 'Tersalin ke clipboard!' : 'Salin ke clipboard'"
-                    aria-label="Salin kode"
+                    :title="copied ? @js(__('vibe/input.copied_clipboard')) : @js(__('vibe/input.copy_clipboard'))"
+                    aria-label="{{ __('vibe/input.copy_code') }}"
                 >
                     {{-- Copy Icon --}}
                     <svg x-show="!copied" class="{{ $iconSizeClass }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
@@ -289,8 +289,8 @@
                 @click.stop="generate()" 
                 :disabled="isGenerating || {{ $isDisabled ? 'true' : 'false' }}"
                 class="{{ $actionBtnPadding }} rounded-md text-primary hover:text-primary-foreground hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-ring transition-all cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
-                :title="isGenerating ? 'Sedang generate...' : 'Generate kode baru'"
-                aria-label="Generate kode"
+                :title="isGenerating ? @js(__('vibe/input.generating_code')) : @js(__('vibe/input.generate_new_code'))"
+                aria-label="{{ __('vibe/input.generate_code_aria') }}"
             >
                 {{-- Sparkles / Refresh Icon with spin on generating --}}
                 <svg :class="{ 'animate-spin': isGenerating }" class="{{ $iconSizeClass }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">

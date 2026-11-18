@@ -321,7 +321,7 @@
                     :disabled="disabled || readonly || (min !== null && items.length <= min)"
                     :class="{ 'opacity-30 cursor-not-allowed': min !== null && items.length <= min }"
                     class="hover:text-destructive hover:bg-destructive/10 rounded-xs p-0.5 transition-colors cursor-pointer shrink-0"
-                    aria-label="Hapus tag"
+                    aria-label="{{ __('vibe/input.remove_tag') }}"
                 >
                     <svg class="{{ $badgeRemoveSizeClass }}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m16 8-8 8m0-8 8 8" />
@@ -354,8 +354,8 @@
                     @click="copyAll()"
                     x-show="items.length > 0"
                     x-cloak
-                    :title="copied ? 'Tersalin!' : 'Salin Semua'"
-                    aria-label="Salin Semua"
+                    :title="copied ? @js(__('vibe/input.copied_short')) : @js(__('vibe/input.copy_all'))"
+                    aria-label="{{ __('vibe/input.copy_all') }}"
                     class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors cursor-pointer flex items-center justify-center"
                 >
                     <svg x-show="!copied" class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -374,7 +374,7 @@
                     @click="clearAll()"
                     x-show="items.length > 0 && !disabled && !readonly"
                     x-cloak
-                    title="Hapus Semua"
+                    title="{{ __('vibe/input.clear_all') }}"
                     class="p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
                 >
                     <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

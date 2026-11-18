@@ -1,9 +1,14 @@
-@blaze(fold: true)
+@blaze
 
 @props([
-    'title' => 'Semua tugas selesai!',
-    'description' => 'Belum ada tugas baru atau seluruh tugas telah diselesaikan.',
+    'title' => null,
+    'description' => null,
 ])
+
+@php
+    $resolvedTitle = $title ?? __('vibe/todo.empty_title');
+    $resolvedDescription = $description ?? __('vibe/todo.empty_description');
+@endphp
 
 <div {{ $attributes->twMerge(['class' => 'flex flex-col items-center justify-center p-8 text-center rounded-2xl border border-dashed border-border/80 bg-muted/20']) }}>
     <div class="size-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-3">
@@ -18,12 +23,12 @@
     </div>
 
     <h4 class="text-sm font-semibold text-foreground">
-        {{ $title }}
+        {{ $resolvedTitle }}
     </h4>
 
-    @if ($description)
+    @if ($resolvedDescription)
         <p class="text-xs text-muted-foreground mt-1 max-w-xs">
-            {{ $description }}
+            {{ $resolvedDescription }}
         </p>
     @endif
 

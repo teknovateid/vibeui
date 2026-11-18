@@ -371,12 +371,12 @@ export function appearanceController() {
                     tableCustomRowHoverInput: 'F9F9FA',
 
                     tableStyles: [
-                        { id: 'default', name: 'Standar' },
-                        { id: 'card', name: 'Kartu' },
-                        { id: 'contrast', name: 'Kontras' },
-                        { id: 'muted', name: 'Lembut' },
-                        { id: 'dark', name: 'Gelap' },
-                        { id: 'custom', name: 'Kustom' },
+                        { id: 'default', name: 'Default' },
+                        { id: 'card', name: 'Card' },
+                        { id: 'contrast', name: 'Contrast' },
+                        { id: 'muted', name: 'Soft Muted' },
+                        { id: 'dark', name: 'Dark' },
+                        { id: 'custom', name: 'Custom' },
                     ],
                     reduceMotion: false,
                     glassEffect: true,
@@ -401,51 +401,51 @@ export function appearanceController() {
                     surfacePresets: [
                         {
                             id: 'zinc',
-                            name: 'Vibe Zinc (Bawaan)',
-                            desc: 'Karakter netral kontemporer standar Vibe UI.',
+                            name: 'Neutral Zinc',
+                            desc: 'Balanced neutral palette for modern clean interfaces.',
                             light: { bg: '#fafafa', card: '#ffffff', border: '#e4e4e7', sidebar: '#ffffff', header: '#ffffff' },
                             dark: { bg: '#09090b', card: '#121215', border: '#27272a', sidebar: '#0f0f12', header: '#0f0f12' }
                         },
                         {
                             id: 'stone',
                             name: 'Warm Stone',
-                            desc: 'Nuansa hangat lembut dan bersahabat ala Linear.',
+                            desc: 'Soft warm aesthetic inspired by Linear.',
                             light: { bg: '#fafaf9', card: '#ffffff', border: '#e7e5e4', sidebar: '#fafaf9', header: '#ffffff' },
                             dark: { bg: '#0c0a09', card: '#1c1917', border: '#292524', sidebar: '#141210', header: '#141210' }
                         },
                         {
                             id: 'slate',
                             name: 'Cool Slate',
-                            desc: 'Sentuhan kebiruan dingin ala GitHub & Tailwind.',
+                            desc: 'Cool bluish touch inspired by GitHub & Tailwind.',
                             light: { bg: '#f8fafc', card: '#ffffff', border: '#e2e8f0', sidebar: '#f8fafc', header: '#ffffff' },
                             dark: { bg: '#020617', card: '#0f172a', border: '#1e293b', sidebar: '#0b1120', header: '#0b1120' }
                         },
                         {
                             id: 'oled',
                             name: 'OLED Pure Black',
-                            desc: 'Hitam pekat 100% pada dark mode untuk efisiensi daya.',
+                            desc: '100% deep black in dark mode for maximum power efficiency.',
                             light: { bg: '#ffffff', card: '#f4f5f5', border: '#e5e6e5', sidebar: '#ffffff', header: '#ffffff' },
                             dark: { bg: '#000000', card: '#0a0a0a', border: '#27272a', sidebar: '#000000', header: '#000000' }
                         }
                     ],
 
                     sidebarStyles: [
-                        { id: 'default', name: 'Standar' },
-                        { id: 'card', name: 'Kartu' },
-                        { id: 'contrast', name: 'Kontras' },
-                        { id: 'muted', name: 'Lembut' },
-                        { id: 'dark', name: 'Gelap' },
-                        { id: 'custom', name: 'Kustom' },
+                        { id: 'default', name: 'Default' },
+                        { id: 'card', name: 'Card' },
+                        { id: 'contrast', name: 'Contrast' },
+                        { id: 'muted', name: 'Soft Muted' },
+                        { id: 'dark', name: 'Dark' },
+                        { id: 'custom', name: 'Custom' },
                     ],
 
                     headerStyles: [
-                        { id: 'default', name: 'Standar' },
-                        { id: 'card', name: 'Kartu' },
+                        { id: 'default', name: 'Default' },
+                        { id: 'card', name: 'Card' },
                         { id: 'glass', name: 'Glass Blur' },
-                        { id: 'contrast', name: 'Kontras' },
-                        { id: 'muted', name: 'Lembut' },
-                        { id: 'dark', name: 'Gelap' },
-                        { id: 'custom', name: 'Kustom' },
+                        { id: 'contrast', name: 'Contrast' },
+                        { id: 'muted', name: 'Soft Muted' },
+                        { id: 'dark', name: 'Dark' },
+                        { id: 'custom', name: 'Custom' },
                     ],
 
                     navStyles: [
@@ -453,7 +453,7 @@ export function appearanceController() {
                         { id: 'primary', name: 'Primary Filled' },
                         { id: 'subtle', name: 'Subtle Neutral' },
                         { id: 'line', name: 'Indicator Line' },
-                        { id: 'custom', name: 'Kustom' },
+                        { id: 'custom', name: 'Custom' },
                     ],
 
                     sidebarFeatures: [
@@ -505,18 +505,18 @@ export function appearanceController() {
                     ],
 
                     radii: [
-                        { label: 'Tajam', value: '0rem' },
-                        { label: 'Kecil', value: '0.25rem' },
-                        { label: 'Standar', value: '0.5rem' },
-                        { label: 'Membulat', value: '0.75rem' },
-                        { label: 'Penuh', value: '1rem' },
+                        { label: 'Sharp', value: '0rem' },
+                        { label: 'Small', value: '0.25rem' },
+                        { label: 'Medium', value: '0.5rem' },
+                        { label: 'Smooth', value: '0.75rem' },
+                        { label: 'Rounded', value: '1rem' },
                     ],
 
                     fonts: [
-                        { name: 'Figtree', desc: 'Font bawaan Vibe UI yang ramah dan seimbang', value: "'Figtree', ui-sans-serif, system-ui, sans-serif" },
-                        { name: 'Inter', desc: 'Tipografi presisi tinggi standar industri modern', value: "'Inter', ui-sans-serif, system-ui, sans-serif" },
-                        { name: 'Plus Jakarta', desc: 'Karakter geometris kontemporer yang elegan', value: "'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif" },
-                        { name: 'Outfit', desc: 'Gaya headline display dinamis dan ekspresif', value: "'Outfit', ui-sans-serif, system-ui, sans-serif" }
+                        { name: 'Figtree', desc: 'Default font for Vibe UI & Laravel', value: "'Figtree', ui-sans-serif, system-ui, sans-serif" },
+                        { name: 'Inter', desc: 'Most popular font for modern web interfaces', value: "'Inter', ui-sans-serif, system-ui, sans-serif" },
+                        { name: 'Plus Jakarta', desc: 'Contemporary geometric font with clean proportions', value: "'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif" },
+                        { name: 'Outfit', desc: 'Dynamic and expressive geometric display font', value: "'Outfit', ui-sans-serif, system-ui, sans-serif" }
                     ],
 
                     get currentSemanticColors() {
@@ -851,7 +851,7 @@ export function appearanceController() {
                         this.customHexInput = hex.replace('#', '').toUpperCase();
                         this.updateMonoChart(hex);
                         this.applyTheme();
-                        this.notify('color_changed', 'Custom primary color diubah ke ' + hex, { hex });
+                        this.notify('color_changed', 'Custom primary color changed to ' + hex, { hex });
                     },
 
                     selectBrandColor(hex) {
@@ -889,8 +889,8 @@ export function appearanceController() {
                         }
                         this.selectedSurface = id;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify('surface_updated', `Kanvas permukaan (${modeText}) diperbarui.`, { mode: modeText });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify('surface_updated', `Surface canvas (${modeText}) updated.`, { mode: modeText });
                     },
 
                     // Sidebar Methods
@@ -902,9 +902,9 @@ export function appearanceController() {
                         }
                         this.sidebarStyle = id;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
                         const styleName = this.styleNames?.[id] || id;
-                        this.notify('sidebar_style', `Gaya bilah sisi (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
+                        this.notify('sidebar_style', `Sidebar style (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectSidebarBorderMode(mode) {
@@ -915,8 +915,8 @@ export function appearanceController() {
                         }
                         this.sidebarBorderMode = mode;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify('sidebar_border', `Batas border sidebar (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify('sidebar_border', `Sidebar border (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
                     },
 
                     onSidebarCustomBgChange(val) {
@@ -980,8 +980,8 @@ export function appearanceController() {
                         }
                         this.transparentSidebar = next;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify(this.transparentSidebar ? 'sidebar_transparent_on' : 'sidebar_transparent_off', this.transparentSidebar ? `Sidebar transparan (${modeText}) aktif.` : `Sidebar solid (${modeText}) aktif.`, { mode: modeText });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify(this.transparentSidebar ? 'sidebar_transparent_on' : 'sidebar_transparent_off', this.transparentSidebar ? `Transparent sidebar (${modeText}) enabled.` : `Solid sidebar (${modeText}) enabled.`, { mode: modeText });
                     },
 
                     selectSidebarFeature(name) {
@@ -1004,9 +1004,9 @@ export function appearanceController() {
                         }
                         this.headerStyle = id;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
                         const styleName = this.styleNames?.[id] || id;
-                        this.notify('header_style', `Gaya bilah atas (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
+                        this.notify('header_style', `Header style (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectHeaderBorderMode(mode) {
@@ -1017,8 +1017,8 @@ export function appearanceController() {
                         }
                         this.headerBorderMode = mode;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify('header_border', `Batas border header (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify('header_border', `Header border (${modeText}): ${mode}`, { mode: modeText, mode_name: mode });
                     },
 
                     toggleHeaderGlassEffect(val) {
@@ -1030,8 +1030,8 @@ export function appearanceController() {
                         }
                         this.headerGlassEffect = next;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify(this.headerGlassEffect ? 'header_glass_on' : 'header_glass_off', this.headerGlassEffect ? `Header glassmorphism (${modeText}) aktif.` : `Header glassmorphism (${modeText}) nonaktif.`, { mode: modeText });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify(this.headerGlassEffect ? 'header_glass_on' : 'header_glass_off', this.headerGlassEffect ? `Header glassmorphism (${modeText}) enabled.` : `Header glassmorphism (${modeText}) disabled.`, { mode: modeText });
                     },
 
                     onHeaderCustomBgChange(val) {
@@ -1095,9 +1095,9 @@ export function appearanceController() {
                         }
                         this.navStyle = id;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
                         const styleName = this.styleNames?.[id] || id;
-                        this.notify('nav_style', `Gaya item navigasi (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
+                        this.notify('nav_style', `Nav item style (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     selectNavDensity(density) {
@@ -1108,8 +1108,8 @@ export function appearanceController() {
                         }
                         this.navDensity = density;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify('nav_density', `Kerapatan navigasi (${modeText}): ${density}`, { mode: modeText, density });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify('nav_density', `Nav density (${modeText}): ${density}`, { mode: modeText, density });
                     },
 
                     toggleNavIndicator(val) {
@@ -1121,8 +1121,8 @@ export function appearanceController() {
                         }
                         this.navIndicator = next;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
-                        this.notify(this.navIndicator ? 'nav_indicator_on' : 'nav_indicator_off', this.navIndicator ? `Garis indikator (${modeText}) aktif.` : `Garis indikator (${modeText}) nonaktif.`, { mode: modeText });
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
+                        this.notify(this.navIndicator ? 'nav_indicator_on' : 'nav_indicator_off', this.navIndicator ? `Indicator line (${modeText}) enabled.` : `Indicator line (${modeText}) disabled.`, { mode: modeText });
                     },
 
                     onNavCustomActiveBgChange(val) {
@@ -1245,25 +1245,25 @@ export function appearanceController() {
                             document.documentElement.classList.toggle('dark', isDark);
                         }
                         this.applyTheme();
-                        this.notify('theme_mode', 'Mode tema diubah ke ' + newMode, { mode: newMode });
+                        this.notify('theme_mode', 'Theme mode changed to ' + newMode, { mode: newMode });
                     },
 
                     toggleHighContrast(val) {
                         this.highContrast = typeof val !== 'undefined' ? !!val : !this.highContrast;
                         this.applyTheme();
-                        this.notify(this.highContrast ? 'high_contrast_on' : 'high_contrast_off', this.highContrast ? 'Kontras tinggi aktif.' : 'Kontras standar.');
+                        this.notify(this.highContrast ? 'high_contrast_on' : 'high_contrast_off', this.highContrast ? 'High contrast enabled.' : 'Standard contrast.');
                     },
 
                     selectSemanticPreset(id) {
                         this.selectedSemantic = id;
                         this.applyTheme();
-                        this.notify('semantic_updated', 'Palet status diperbarui.');
+                        this.notify('semantic_updated', 'Status palette updated.');
                     },
 
                     selectChartPreset(id) {
                         this.selectedChartPreset = id;
                         this.applyTheme();
-                        this.notify('chart_updated', 'Palet grafik diperbarui.');
+                        this.notify('chart_updated', 'Chart palette updated.');
                     },
 
                     selectRadius(val) {
@@ -1282,7 +1282,7 @@ export function appearanceController() {
                     setTablesView(view) {
                         this.tablesView = view;
                         this.applyTheme();
-                        this.notify('table_view', 'Tampilan tabel: ' + view, { view });
+                        this.notify('table_view', 'Table density: ' + view, { view });
                     },
 
                     selectTableStyle(id) {
@@ -1293,9 +1293,9 @@ export function appearanceController() {
                         }
                         this.tableStyle = id;
                         this.applyTheme();
-                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Mode Gelap') : this.t('mode_light', 'Mode Terang');
+                        const modeText = this.isDarkNow ? this.t('mode_dark', 'Dark Mode') : this.t('mode_light', 'Light Mode');
                         const styleName = this.styleNames?.[id] || id;
-                        this.notify('table_style', `Gaya tabel (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
+                        this.notify('table_style', `Table style (${modeText}): ${styleName}`, { mode: modeText, style: styleName });
                     },
 
                     onTableCustomHeaderBgChange(val) {
@@ -1384,13 +1384,13 @@ export function appearanceController() {
                         }
                         this.reduceMotion = !this.motionActive;
                         this.applyTheme();
-                        this.notify(this.reduceMotion ? 'reduced_motion_on' : 'reduced_motion_off', this.reduceMotion ? 'Reduced motion aktif.' : 'Animasi halus aktif.');
+                        this.notify(this.reduceMotion ? 'reduced_motion_on' : 'reduced_motion_off', this.reduceMotion ? 'Reduced motion enabled.' : 'Smooth animation enabled.');
                     },
 
                     toggleGlassEffect(val) {
                         this.glassEffect = typeof val !== 'undefined' ? !!val : !this.glassEffect;
                         this.applyTheme();
-                        this.notify(this.glassEffect ? 'glassmorphism_on' : 'glassmorphism_off', this.glassEffect ? 'Glassmorphism aktif.' : 'Glassmorphism nonaktif.');
+                        this.notify(this.glassEffect ? 'glassmorphism_on' : 'glassmorphism_off', this.glassEffect ? 'Glassmorphism enabled.' : 'Glassmorphism disabled.');
                     },
 
                     resetToDefaultsInternal() {
@@ -1511,7 +1511,7 @@ export function appearanceController() {
 
                         this.setMode('system');
                         this.applyTheme();
-                        this.notify('reset_all', 'Semua token tema di-reset ke nilai bawaan.');
+                        this.notify('reset_all', 'All theme tokens reset to default.');
                     },
 
                     isLight(hex) {
@@ -2268,10 +2268,10 @@ html.dark, .dark {
                         const css = this.generateCssText();
                         navigator.clipboard?.writeText(css).then(() => {
                             this.copied = true;
-                            this.notify('css_copied', 'Design tokens CSS berhasil disalin ke clipboard!', {}, 'success', this.t('css_copied_title', 'CSS Disalin'));
+                            this.notify('css_copied', 'Design tokens CSS copied to clipboard!', {}, 'success', this.t('css_copied_title', 'CSS Copied'));
                             setTimeout(() => this.copied = false, 2500);
                         }).catch(() => {
-                            this.notify('css_copy_failed', 'Gagal menyalin CSS tokens.', {}, 'destructive');
+                            this.notify('css_copy_failed', 'Failed to copy CSS tokens.', {}, 'destructive');
                         });
                     },
 
@@ -2447,14 +2447,14 @@ html.dark, .dark {
                                 }
 
                                 if (!isAuto) {
-                                    this.notify('global_theme_saved', 'Tampilan global berhasil disimpan ke database & cache untuk semua pengguna.', {}, 'success', 'Tampilan Global Disimpan');
+                                    this.notify('global_saved_msg', 'Global appearance has been saved to database & cache for all users.', {}, 'success', this.t('global_saved_title', 'Global Appearance Saved'));
                                 }
                             } else {
-                                throw new Error(data.message || 'Gagal menyimpan tampilan global.');
+                                throw new Error(data.message || this.t('global_save_failed_msg', 'Failed to save global theme.'));
                             }
                         } catch (err) {
                             if (!isAuto) {
-                                this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat menyimpan tema global.', {}, 'destructive', 'Gagal Menyimpan');
+                                this.notify('global_save_failed_msg', err.message || 'An error occurred while saving the global theme.', {}, 'destructive', this.t('global_save_failed_title', 'Save Failed'));
                             }
                         } finally {
                             this.isSavingGlobal = false;
@@ -2492,12 +2492,12 @@ html.dark, .dark {
                                 this.resetToDefaultsInternal();
                                 this.applyTheme();
 
-                                this.notify('global_theme_reset', 'Tampilan global berhasil direset ke bawaan sistem.', {}, 'success', 'Tampilan Global Direset');
+                                this.notify('global_reset_msg', 'Global appearance has been reset to system defaults.', {}, 'success', this.t('global_reset_title', 'Global Appearance Reset'));
                             } else {
-                                throw new Error(data.message || 'Gagal mereset tampilan global.');
+                                throw new Error(data.message || this.t('global_reset_failed_msg', 'Failed to reset global theme.'));
                             }
                         } catch (err) {
-                            this.notify('global_theme_error', err.message || 'Terjadi kesalahan saat mereset tema global.', {}, 'destructive', 'Gagal Mereset');
+                            this.notify('global_reset_failed_msg', err.message || 'An error occurred while resetting the global theme.', {}, 'destructive', this.t('global_reset_failed_title', 'Reset Failed'));
                         } finally {
                             this.isResettingGlobal = false;
                         }
@@ -2516,7 +2516,7 @@ html.dark, .dark {
 
                         this.syncActiveModeValues();
                         this.applyTheme();
-                        this.notify('local_reset', 'Preferensi lokal direset ke bawaan tema global.', {}, 'success', 'Preferensi Direset');
+                        this.notify('local_reset_msg', 'Local preferences reset to global theme defaults.', {}, 'success', this.t('local_reset_title', 'Preferences Reset'));
                     },
 
                     t(key, fallback, replacements = {}) {
@@ -2753,7 +2753,7 @@ html.dark, .dark {
                         this.customSidebarBorder = isLight ? '#e5e6e5' : '#262726';
                         this.updateGeneratedCss();
                         this.injectOverrideCss();
-                        this.notify('sidebar_contrast', 'Kontras warna sidebar berhasil disesuaikan secara otomatis.', {}, 'info', this.t('auto_contrast_title', 'Auto Kontras'));
+                        this.notify('sidebar_contrast', 'Sidebar color contrast automatically adjusted.', {}, 'info', this.t('auto_contrast_title', 'Auto Contrast'));
                     },
 
                     selectHeaderPreset(key) {
@@ -2799,7 +2799,7 @@ html.dark, .dark {
                         this.customHeaderBorder = isLight ? '#e5e6e5' : '#262726';
                         this.updateGeneratedCss();
                         this.injectOverrideCss();
-                        this.notify('header_contrast', 'Kontras warna header berhasil disesuaikan secara otomatis.', {}, 'info', this.t('auto_contrast_title', 'Auto Kontras'));
+                        this.notify('header_contrast', 'Header color contrast automatically adjusted.', {}, 'info', this.t('auto_contrast_title', 'Auto Contrast'));
                     },
 
                     updateGeneratedCss() {
@@ -2900,7 +2900,7 @@ body {
                         if (navigator.clipboard && navigator.clipboard.writeText) {
                             navigator.clipboard.writeText(this.generatedCss).then(() => {
                                 this.copied = true;
-                                this.notify('css_copied', 'CSS Berhasil Disalin', {}, 'success', this.t('css_copied_title', 'CSS Disalin'));
+                                this.notify('css_copied', 'Design tokens CSS copied to clipboard!', {}, 'success', this.t('css_copied_title', 'CSS Copied'));
                                 setTimeout(() => {
                                     this.copied = false;
                                 }, 2500);
@@ -2944,7 +2944,7 @@ body {
                             localStorage.removeItem(prefix + '-app-css-overrides');
                         } catch (e) {}
 
-                        this.notify('theme_saved', 'Preferensi tema berhasil disimpan.', {}, 'success', this.t('theme_saved_title', 'Tema Disimpan'));
+                        this.notify('theme_saved', 'Theme preferences saved successfully.', {}, 'success', this.t('theme_saved_title', 'Theme Saved'));
                     },
 };
             }

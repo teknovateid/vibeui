@@ -12,4 +12,6 @@ return [
     'loading' => 'Memuat data...',
     'network_error' => 'Gagal memuat data dari server.',
     'min_chars' => 'Ketik minimal :min karakter...',
+    'clear' => 'Hapus pilihan',
+    'retry' => 'Coba lagi',
 ];

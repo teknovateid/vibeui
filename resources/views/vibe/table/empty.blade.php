@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'title' =>  __('vibe/table.no_data'),

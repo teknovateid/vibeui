@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @aware([
     'dragHandle' => null,
@@ -47,9 +47,9 @@
     }
 
     $lockTooltip = match ($lockType) {
-        'reorder' => 'Posisi dikunci — tidak dapat dipindahkan',
-        'resize'  => 'Ukuran dikunci — tidak dapat di-resize',
-        'both'    => 'Dikunci sepenuhnya — tidak dapat dipindahkan atau di-resize',
+        'reorder' => __('vibe/grid.lock_reorder'),
+        'resize'  => __('vibe/grid.lock_resize'),
+        'both'    => __('vibe/grid.lock_both'),
         default   => '',
     };
 
@@ -114,7 +114,7 @@
         class="absolute top-2.5 right-2.5 px-2.5 py-1 rounded-md bg-primary text-primary-foreground text-xs font-mono font-bold shadow-lg pointer-events-none z-30 flex items-center gap-1.5 animate-in fade-in zoom-in-95 duration-100"
     >
         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10l7-7m0 0h-5m5 0v5M10 14l-7 7m0 0h5m-5 0v-5"/></svg>
-        <span x-text="(previewCols || (spans['{{ $cardId }}'] ? spans['{{ $cardId }}'].col : '{{ $colSpan }}')) + ' / ' + cols + ' Kolom'"></span>
+        <span x-text="(previewCols || (spans['{{ $cardId }}'] ? spans['{{ $cardId }}'].col : '{{ $colSpan }}')) + ' / ' + cols + @js(__('vibe/grid.cols_suffix'))"></span>
     </div>
 
     {{-- Swap Target Overlay Indicator (hanya untuk kartu yang reorderable) --}}
@@ -141,8 +141,8 @@
 
                 {{-- Label --}}
                 <div class="flex flex-col items-center gap-0.5">
-                    <span class="text-xs font-semibold text-primary/90 tracking-tight">Tukar Posisi</span>
-                    <span class="text-[10px] text-primary/55 font-normal">Lepaskan untuk menukar</span>
+                    <span class="text-xs font-semibold text-primary/90 tracking-tight">{{ __('vibe/grid.swap_position') }}</span>
+                    <span class="text-[10px] text-primary/55 font-normal">{{ __('vibe/grid.drop_to_swap') }}</span>
                 </div>
             </div>
         </div>
@@ -159,7 +159,7 @@
                 <svg class="size-3 opacity-60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M5 9l-3 3 3 3M19 9l3 3-3 3M2 12h20"/>
                 </svg>
-                <span>Dipindahkan</span>
+                <span>{{ __('vibe/grid.moved') }}</span>
             </div>
         </div>
     @endif
@@ -171,7 +171,7 @@
                 draggable="true"
                 @dragstart="startDrag('{{ $cardId }}', $event)"
                 @dragend="endDrag()"
-                title="Tarik header untuk menukar posisi kartu"
+                title="{{ __('vibe/grid.drag_header') }}"
             @endif
             class="group/header flex items-center justify-between border-b border-border/60 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors touch-none' : '' }}"
         >
@@ -183,7 +183,7 @@
                 draggable="true"
                 @dragstart="startDrag('{{ $cardId }}', $event)"
                 @dragend="endDrag()"
-                title="Tarik header untuk menukar posisi kartu"
+                title="{{ __('vibe/grid.drag_header') }}"
             @endif
             class="group/header flex items-center justify-between gap-2 border-b border-border/50 {{ $headerPadding }} {{ $reorderable ? 'cursor-grab active:cursor-grabbing select-none hover:bg-muted/30 transition-colors touch-none' : '' }}"
         >
@@ -246,7 +246,7 @@
                         @endphp
                         <div
                             data-action-drag-handle
-                            title="Tarik header untuk menukar posisi kartu"
+                            title="{{ __('vibe/grid.drag_header') }}"
                             class="{{ $gripClass }} size-7 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 items-center justify-center shrink-0 transition-all duration-150 pointer-events-none"
                         >
                             <svg class="size-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -282,7 +282,7 @@
             data-resize-handle
             @mousedown.stop.prevent="startResize('{{ $cardId }}', $event, $el.closest('[data-grid-item]'))"
             @touchstart.stop.prevent="startResize('{{ $cardId }}', $event, $el.closest('[data-grid-item]'))"
-            title="Tarik sudut untuk mengubah ukuran kartu"
+            title="{{ __('vibe/grid.resize_corner') }}"
             class="hidden lg:flex absolute bottom-0 right-0 size-10 cursor-se-resize items-end justify-end p-2.5 text-muted-foreground/0 group-hover:text-muted-foreground/35 hover:text-primary! hover:bg-primary/10 rounded-tl-xl transition-all select-none z-20 group/resize touch-none"
         >
             <svg class="size-3.5 pointer-events-none group-hover/resize:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

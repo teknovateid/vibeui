@@ -1270,8 +1270,8 @@ export function vibeTodo(config = {}) {
                 if (window.VibeToast && typeof window.VibeToast.show === 'function') {
                     window.VibeToast.show({
                         variant: 'destructive',
-                        title: 'Gagal Menyimpan',
-                        message: 'Urutan tugas tidak dapat disimpan ke server.'
+                        title: window.VibeTodoI18n?.save_failed_title || 'Save Failed',
+                        message: window.VibeTodoI18n?.save_failed_msg || 'Task order could not be saved to the server.'
                     });
                 }
             }

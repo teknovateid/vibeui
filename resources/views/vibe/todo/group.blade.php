@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
  
 @aware([
     'layout' => 'board',
@@ -16,11 +16,11 @@
     'title' => null,
     'count' => null,
     'color' => 'default',
-    'emptyText' => 'Tarik tugas ke sini',
+    'emptyText' => null,
     'lock' => null,
     'locked' => null,
     'quickAdd' => null,
-    'quickAddText' => 'Tambah Tugas',
+    'quickAddText' => null,
     'max' => null,
     'wipLimit' => null,
     'wip' => null,
@@ -38,6 +38,8 @@
         default => 'bg-muted text-muted-foreground border-border',
     };
 
+    $resolvedEmptyText = $emptyText ?? __('vibe/todo.drag_here');
+    $resolvedQuickAddText = $quickAddText ?? __('vibe/todo.quick_add_text');
     $resolvedMax = $max !== null ? (int) $max : ($wipLimit !== null ? (int) $wipLimit : ($wip !== null ? (int) $wip : null));
     $showQuickAdd = $quickAdd !== null ? (bool) $quickAdd : false;
     $isCollapsible = filter_var($collapsible, FILTER_VALIDATE_BOOLEAN);
@@ -80,7 +82,7 @@
             type="button"
             @click.stop="isCollapsed = false"
             class="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/60 transition-colors"
-            title="Buka kolom {{ $title }}"
+            title="{{ __('vibe/todo.expand_column', ['title' => $title]) }}"
         >
             <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
@@ -114,7 +116,7 @@
                         <span 
                             class="text-xs px-2 py-0.5 rounded-full font-medium border transition-all duration-150"
                             :class="isOverWip() ? 'text-destructive bg-destructive/10 border-destructive/30 font-semibold ring-1 ring-destructive/40' : '{{ $accentColor }}'"
-                            :title="wipMax !== null ? ('Batas WIP: ' + wipMax) : ''"
+                            :title="wipMax !== null ? (@js(__('vibe/todo.wip_limit', ['max' => '__MAX__'])).replace('__MAX__', wipMax)) : ''"
                             x-text="getLiveCount() + (wipMax !== null ? ('/' + wipMax) : '')"
                         >
                             {{ $count ?? 0 }}{{ $resolvedMax !== null ? '/' . $resolvedMax : '' }}
@@ -132,7 +134,7 @@
                             type="button"
                             @click.stop="isCollapsed = true"
                             class="p-1 rounded-md text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
-                            title="Lipat kolom"
+                            title="{{ __('vibe/todo.collapse_column') }}"
                         >
                             <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <polyline points="15 18 9 12 15 6"/>
@@ -160,7 +162,7 @@
                 class="flex flex-1 items-center justify-center p-6 rounded-xl border border-dashed border-border/70 text-xs text-muted-foreground/60 select-none pointer-events-none text-center min-h-25"
                 x-cloak
             >
-                {{ $emptyText }}
+                {{ $resolvedEmptyText }}
             </div>
         </div>
 
@@ -177,7 +179,7 @@
                         <line x1="12" y1="5" x2="12" y2="19"/>
                         <line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
-                    <span>{{ $quickAddText }}</span>
+                    <span>{{ $resolvedQuickAddText }}</span>
                 </button>
 
                 {{-- Quick Add Input Inline Form --}}
@@ -190,7 +192,7 @@
                         x-ref="quickAddInput"
                         x-model="newTaskTitle"
                         type="text"
-                        placeholder="Judul tugas baru..."
+                        placeholder="{{ __('vibe/todo.new_task_placeholder') }}"
                         @keydown.enter.prevent="if (newTaskTitle.trim()) { if (typeof add === 'function') { add(newTaskTitle.trim(), '{{ $name }}'); } else { $dispatch('vibe:todo-add', { title: newTaskTitle.trim(), group: '{{ $name }}' }); } newTaskTitle = ''; addingTask = false; }"
                         @keydown.escape.prevent="addingTask = false; newTaskTitle = '';"
                         class="w-full px-2.5 py-1.5 text-xs rounded-lg border border-input bg-background text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
@@ -201,14 +203,14 @@
                             @click.stop="if (newTaskTitle.trim()) { if (typeof add === 'function') { add(newTaskTitle.trim(), '{{ $name }}'); } else { $dispatch('vibe:todo-add', { title: newTaskTitle.trim(), group: '{{ $name }}' }); } newTaskTitle = ''; addingTask = false; }"
                             class="px-2.5 py-1 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all cursor-pointer"
                         >
-                            Tambah
+                            {{ __('vibe/todo.add_button') }}
                         </button>
                         <button
                             type="button"
                             @click.stop="addingTask = false; newTaskTitle = '';"
                             class="px-2.5 py-1 text-xs font-medium rounded-md hover:bg-muted text-muted-foreground hover:text-foreground transition-all cursor-pointer"
                         >
-                            Batal
+                            {{ __('vibe/todo.cancel') }}
                         </button>
                     </div>
                 </div>

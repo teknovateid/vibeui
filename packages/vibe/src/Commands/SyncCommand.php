@@ -72,6 +72,16 @@ class SyncCommand extends Command
                 'label' => 'Lang ID',
             ],
             [
+                'src' => lang_path('en/auth'),
+                'dest' => base_path('packages/vibe/lang/en/auth'),
+                'label' => 'Lang EN Auth',
+            ],
+            [
+                'src' => lang_path('id/auth'),
+                'dest' => base_path('packages/vibe/lang/id/auth'),
+                'label' => 'Lang ID Auth',
+            ],
+            [
                 'src' => resource_path('views/auth/layouts'),
                 'dest' => base_path('packages/vibe/stubs/Auth/layouts'),
                 'label' => 'Auth Layouts',

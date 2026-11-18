@@ -764,7 +764,7 @@
                         type="button"
                         @click.stop="clearAll()"
                         class="size-4 hover:text-foreground inline-flex items-center justify-center transition-colors cursor-pointer mr-0.5"
-                        aria-label="{{ __('vibe/select.clear') ?? 'Clear' }}">
+                        aria-label="{{ __('vibe/select.clear') }}">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10" />
                             <path d="m14.5 9.5-5 5m0-5 5 5" />
@@ -885,7 +885,7 @@
                         <path d="M12 8v5M12 16h.01" />
                     </svg>
                     <span>{{ __('vibe/select.network_error') }}</span>
-                    <button type="button" @click="fetchData()" class="mt-1 text-[11px] underline text-foreground hover:text-primary cursor-pointer">Coba lagi</button>
+                    <button type="button" @click="fetchData()" class="mt-1 text-[11px] underline text-foreground hover:text-primary cursor-pointer">{{ __('vibe/select.retry') }}</button>
                 </div>
 
                 {{-- Empty Search Results Message --}}

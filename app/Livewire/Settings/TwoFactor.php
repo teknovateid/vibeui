@@ -374,7 +374,7 @@ class TwoFactor extends Component
         $this->validate([
             'code' => ['required', 'string', 'min:6'],
         ], [], [
-            'code' => 'Kode Verifikasi',
+            'code' => __('auth/two_factor.code'),
         ]);
 
         /** @var User|null $user */

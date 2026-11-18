@@ -147,9 +147,9 @@
     };
 
     $dueDateTooltip = match ($dueDateUrgency) {
-        'overdue' => 'Terlewat / Overdue',
-        'today' => 'Jatuh tempo hari ini',
-        default => 'Jatuh tempo: ' . $dueDate,
+        'overdue' => __('vibe/todo.due_overdue'),
+        'today' => __('vibe/todo.due_today'),
+        default => __('vibe/todo.due_date', ['date' => $dueDate]),
     };
 
     $cardStyles = match ($variant) {
@@ -268,8 +268,8 @@
                                 draggable="false"
                                 data-todo-lock-btn
                                 aria-pressed="{{ $isLocked ? 'true' : 'false' }}"
-                                aria-label="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
-                                title="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                                aria-label="{{ $isLocked ? __('vibe/todo.unlock_card') : __('vibe/todo.lock_card') }}"
+                                title="{{ $isLocked ? __('vibe/todo.unlock_card') : __('vibe/todo.lock_card') }}"
                                 @click.stop="typeof toggleLock === 'function' ? toggleLock('{{ $itemId }}') : null"
                                 class="p-1 rounded-md transition-all cursor-pointer flex items-center justify-center {{ $isLocked ? 'text-amber-500 dark:text-amber-400' : 'text-muted-foreground opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-foreground hover:bg-muted' }}"
                             >
@@ -283,7 +283,7 @@
                                 </svg>
                             </button>
                         @elseif ($isLocked)
-                            <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
+                            <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="{{ __('vibe/todo.locked') }}" title="{{ __('vibe/todo.locked_no_move') }}">
                                 <svg class="size-3.5 select-none pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                     <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
                                     <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -295,8 +295,8 @@
                             <button
                                 type="button"
                                 draggable="false"
-                                aria-label="Hapus tugas"
-                                title="Hapus tugas"
+                                aria-label="{{ __('vibe/todo.delete_task') }}"
+                                title="{{ __('vibe/todo.delete_task') }}"
                                 @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
                                 class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity cursor-pointer flex items-center justify-center"
                             >
@@ -318,8 +318,8 @@
                             draggable="false"
                             data-todo-lock-btn
                             aria-pressed="{{ $isLocked ? 'true' : 'false' }}"
-                            aria-label="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
-                            title="{{ $isLocked ? 'Buka kunci kartu' : 'Kunci kartu' }}"
+                            aria-label="{{ $isLocked ? __('vibe/todo.unlock_card') : __('vibe/todo.lock_card') }}"
+                            title="{{ $isLocked ? __('vibe/todo.unlock_card') : __('vibe/todo.lock_card') }}"
                             @click.stop="typeof toggleLock === 'function' ? toggleLock('{{ $itemId }}') : null"
                             class="p-1 rounded-md transition-all cursor-pointer flex items-center justify-center {{ $isLocked ? 'text-amber-500 dark:text-amber-400' : 'text-muted-foreground opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-foreground hover:bg-muted' }}"
                         >
@@ -333,7 +333,7 @@
                             </svg>
                         </button>
                     @elseif ($isLocked)
-                        <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="Terkunci" title="Terkunci (tidak dapat dipindah)">
+                        <div data-todo-lock-indicator class="inline-flex items-center text-muted-foreground/60 p-1" aria-label="{{ __('vibe/todo.locked') }}" title="{{ __('vibe/todo.locked_no_move') }}">
                             <svg class="size-3.5 select-none pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                                 <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
                                 <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
@@ -345,8 +345,8 @@
                             <button
                                 type="button"
                                 draggable="false"
-                                aria-label="Hapus tugas"
-                                title="Hapus tugas"
+                                aria-label="{{ __('vibe/todo.delete_task') }}"
+                                title="{{ __('vibe/todo.delete_task') }}"
                                 @click.stop="typeof remove === 'function' ? remove('{{ $itemId }}') : null"
                                 class="opacity-0 group-hover:opacity-100 focus:opacity-100 p-1 rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-opacity cursor-pointer flex items-center justify-center"
                             >
@@ -407,8 +407,8 @@
                             <button
                                 type="button"
                                 draggable="false"
-                                aria-label="Pindahkan ke kolom sebelumnya"
-                                title="Pindahkan ke kolom sebelumnya"
+                                aria-label="{{ __('vibe/todo.move_prev_col') }}"
+                                title="{{ __('vibe/todo.move_prev_col') }}"
                                 x-show="typeof canMovePrev === 'function' && canMovePrev('{{ $itemId }}')"
                                 @click.stop="typeof moveToPrevGroup === 'function' ? moveToPrevGroup('{{ $itemId }}') : null"
                                 class="p-1 rounded-md text-muted-foreground/70 hover:text-foreground hover:bg-muted active:scale-95 transition-all cursor-pointer"
@@ -420,8 +420,8 @@
                             <button
                                 type="button"
                                 draggable="false"
-                                aria-label="Pindahkan ke kolom selanjutnya"
-                                title="Pindahkan ke kolom selanjutnya"
+                                aria-label="{{ __('vibe/todo.move_next_col') }}"
+                                title="{{ __('vibe/todo.move_next_col') }}"
                                 x-show="typeof canMoveNext === 'function' && canMoveNext('{{ $itemId }}')"
                                 @click.stop="typeof moveToNextGroup === 'function' ? moveToNextGroup('{{ $itemId }}') : null"
                                 class="p-1 rounded-md text-muted-foreground/70 hover:text-foreground hover:bg-muted active:scale-95 transition-all cursor-pointer"

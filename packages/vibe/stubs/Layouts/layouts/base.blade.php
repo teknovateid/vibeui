@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" translate="no">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google" content="notranslate">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
         $currentIdleTimeout = request()->attributes->get('vibeIdleTimeout', $vibeIdleTimeout ?? null);
@@ -36,6 +37,10 @@
     {{ $slot }}
     <vibe:alert position="top-right" />
     <vibe:toast position="top-right" />
+    <script data-navigate-once="true">
+        window.VibeCommonI18n = @js(__('vibe/common'));
+        window.VibeTodoI18n = @js(__('vibe/todo'));
+    </script>
     @livewireScripts
     @stack('body')
 </body>

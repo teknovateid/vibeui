@@ -20,6 +20,7 @@
                 wire:click="previousPage('{{ $paginator->getPageName() }}')"
                 wire:loading.attr="disabled"
                 rel="prev"
+                data-shortcut-prev-page="true"
                 aria-label="{{ __('pagination.previous') }}"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
             >
@@ -73,6 +74,7 @@
                 wire:click="nextPage('{{ $paginator->getPageName() }}')"
                 wire:loading.attr="disabled"
                 rel="next"
+                data-shortcut-next-page="true"
                 aria-label="{{ __('pagination.next') }}"
                 class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-background text-foreground hover:bg-muted shadow-2xs transition-colors cursor-pointer"
             >

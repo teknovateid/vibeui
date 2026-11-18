@@ -62,17 +62,13 @@
 
     // Localised labels
     $browseLabel    = $browseText ?? match ($variant) {
-        'logo'   => trans()->has('vibe/input.file_change_logo')
-                        ? ($existingUrl ? __('vibe/input.file_change_logo')   : __('vibe/input.file_select_logo'))
-                        : ($existingUrl ? 'Ganti Logo'  : 'Pilih Logo'),
-        'avatar' => trans()->has('vibe/input.file_change_avatar')
-                        ? ($existingUrl ? __('vibe/input.file_change_avatar') : __('vibe/input.file_select_avatar'))
-                        : ($existingUrl ? 'Ubah Foto'   : 'Pilih Foto'),
-        default  => trans()->has('vibe/input.file_browse') ? __('vibe/input.file_browse') : 'Pilih Berkas',
+        'logo'   => $existingUrl ? __('vibe/input.file_change_logo')   : __('vibe/input.file_select_logo'),
+        'avatar' => $existingUrl ? __('vibe/input.file_change_avatar') : __('vibe/input.file_select_avatar'),
+        default  => __('vibe/input.file_browse'),
     };
-    $removeLabel     = $removeText     ?? (trans()->has('vibe/input.file_remove')       ? __('vibe/input.file_remove')       : 'Hapus');
-    $placeholderText = $placeholder    ?? (trans()->has('vibe/input.file_placeholder')  ? __('vibe/input.file_placeholder')  : 'Tidak ada berkas yang dipilih');
-    $dragDropText    = $dropText       ?? (trans()->has('vibe/input.file_dropzone_text')? __('vibe/input.file_dropzone_text'): 'Klik untuk mengunggah atau seret dan lepas berkas ke sini');
+    $removeLabel     = $removeText     ?? __('vibe/input.file_remove');
+    $placeholderText = $placeholder    ?? __('vibe/input.file_placeholder');
+    $dragDropText    = $dropText       ?? __('vibe/input.file_dropzone_text');
 
     // Aspect ratio normalisation
     $aspectRatio = match ($aspectRatio) {
@@ -137,12 +133,12 @@
             if (!fileList || fileList.length === 0) return;
             let incoming = Array.from(fileList);
             if (this.maxFilesCount && this.isMultiple && (this.files.length + incoming.length > this.maxFilesCount)) {
-                this.clientError = 'Maksimal ' + this.maxFilesCount + ' berkas diperbolehkan.';
+                this.clientError = @js(__('vibe/input.file_max_files_error')).replace(':count', this.maxFilesCount);
                 return;
             }
             for (let f of incoming) {
                 if (this.maxSizeBytes && f.size > this.maxSizeBytes) {
-                    this.clientError = 'Ukuran berkas \'' + f.name + '\' melebihi batas {{ $maxSize ?? '' }}.';
+                    this.clientError = @js(__('vibe/input.file_max_size_error', ['max' => $maxSize ?? ''])).replace(':name', f.name);
                     return;
                 }
             }
@@ -293,7 +289,7 @@
                 <template x-if="files.length === 0 && existingUrl && !isRemoved">
                     <span class="text-xs text-foreground font-medium truncate flex items-center gap-1.5">
                         <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span class="truncate">Berkas saat ini aktif</span>
+                        <span class="truncate">{{ __('vibe/input.file_active_current') }}</span>
                     </span>
                 </template>
 
@@ -309,7 +305,7 @@
                 {{-- Multiple files --}}
                 <template x-if="files.length > 1">
                     <span class="text-xs text-foreground font-medium flex items-center gap-1.5">
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary" x-text="files.length + ' berkas'"></span>
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/10 text-primary" x-text="files.length + @js(__('vibe/input.file_count_suffix'))"></span>
                         <span class="text-muted-foreground truncate" x-text="files.map(f => f.name).join(', ')"></span>
                     </span>
                 </template>
@@ -333,8 +329,8 @@
             <template x-if="files.length > 1">
                 <div class="mt-2 space-y-1.5">
                     <div class="flex items-center justify-between text-xs px-0.5">
-                        <span class="text-muted-foreground" x-text="files.length + ' berkas terpilih'"></span>
-                        <button type="button" @click="clearAll()" class="text-destructive hover:underline font-medium cursor-pointer text-[11px]">Hapus Semua</button>
+                        <span class="text-muted-foreground" x-text="files.length + @js(__('vibe/input.file_selected_suffix'))"></span>
+                        <button type="button" @click="clearAll()" class="text-destructive hover:underline font-medium cursor-pointer text-[11px]">{{ __('vibe/input.clear_all') }}</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                         <template x-for="(item, idx) in files" :key="idx">
@@ -391,28 +387,28 @@
 
                 <p class="text-sm font-semibold text-foreground mb-1">
                     <span class="text-primary">{{ $browseLabel }}</span>
-                    <span class="text-muted-foreground font-normal"> atau seret & lepas di sini</span>
+                    <span class="text-muted-foreground font-normal">{{ __('vibe/input.or_drag_drop') }}</span>
                 </p>
 
                 <p class="text-xs text-muted-foreground max-w-xs leading-relaxed">
                     @if ($hint)
                         {{ $hint }}
                     @elseif ($accept)
-                        Format: <span class="font-medium text-foreground">{{ $accept }}</span>{{ $maxSize ? ' &bull; Maks. ' . $maxSize : '' }}
+                        {{ __('vibe/input.format_prefix') }} <span class="font-medium text-foreground">{{ $accept }}</span>{{ $maxSize ? ' • ' . __('vibe/input.max_prefix') . ' ' . $maxSize : '' }}
                     @else
-                        Semua format berkas didukung{{ $maxSize ? ' (Maks. ' . $maxSize . ')' : '' }}
+                        {{ __('vibe/input.all_formats_supported') }}{{ $maxSize ? ' (' . __('vibe/input.max_prefix') . ' ' . $maxSize . ')' : '' }}
                     @endif
                 </p>
 
                 @if ($maxFilesCount && $multiple)
-                    <p class="mt-1 text-[11px] text-muted-foreground/70">Hingga {{ $maxFilesCount }} berkas sekaligus</p>
+                    <p class="mt-1 text-[11px] text-muted-foreground/70">{{ __('vibe/input.up_to_files', ['count' => $maxFilesCount]) }}</p>
                 @endif
             </div>
 
             {{-- Drag hint overlay --}}
             <div x-show="isDragging" x-cloak
                  class="pointer-events-none absolute inset-0 rounded-xl flex items-center justify-center bg-primary/5">
-                <p class="text-sm font-semibold text-primary">Lepaskan untuk mengunggah&hellip;</p>
+                <p class="text-sm font-semibold text-primary">{{ __('vibe/input.drop_to_upload') }}</p>
             </div>
         </div>
 
@@ -420,8 +416,8 @@
         <template x-if="files.length > 0">
             <div class="mt-3 space-y-2">
                 <div class="flex items-center justify-between text-xs px-0.5">
-                    <span class="font-medium text-foreground" x-text="files.length + ' berkas siap diunggah'"></span>
-                    <button type="button" @click="clearAll()" class="text-destructive hover:underline font-medium cursor-pointer">Hapus Semua</button>
+                    <span class="font-medium text-foreground" x-text="files.length + @js(__('vibe/input.file_ready_suffix'))"></span>
+                    <button type="button" @click="clearAll()" class="text-destructive hover:underline font-medium cursor-pointer">{{ __('vibe/input.clear_all') }}</button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                     <template x-for="(item, idx) in files" :key="idx">
@@ -445,7 +441,7 @@
 
                             <button type="button" @click="removeFile(idx)"
                                 class="shrink-0 size-6 flex items-center justify-center rounded-md text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer opacity-0 group-hover/card:opacity-100"
-                                title="Hapus berkas ini">
+                                title="{{ __('vibe/input.remove_this_file') }}">
                                 <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                             </button>
                         </div>
@@ -498,7 +494,7 @@
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
                         <circle cx="12" cy="13" r="4"/>
                     </svg>
-                    <span class="text-white text-[9px] font-bold tracking-widest uppercase">Ubah</span>
+                    <span class="text-white text-[9px] font-bold tracking-widest uppercase">{{ __('vibe/input.change_action') }}</span>
                 </div>
             </div>
 
@@ -519,7 +515,7 @@
                 </div>
 
                 <p class="text-xs text-muted-foreground leading-relaxed">
-                    {{ $hint ?? 'Format: JPG, PNG, atau WebP' . ($maxSize ? ' &bull; Maks. ' . $maxSize : '') }}
+                    {{ $hint ?? __('vibe/input.default_image_hint') . ($maxSize ? ' • ' . __('vibe/input.max_prefix') . ' ' . $maxSize : '') }}
                 </p>
 
                 {{-- Selected file name --}}
@@ -550,7 +546,7 @@
                     'opacity-50 pointer-events-none' => $isDisabled,
                     $animationClass,
                 ])
-                title="Klik untuk memilih logo"
+                title="{{ __('vibe/input.click_to_select_logo') }}"
             >
                 <template x-if="files.length > 0 && files[0].isImage">
                     <img :src="files[0].previewUrl" class="max-h-full max-w-full object-contain p-2 drop-shadow-xs" />
@@ -567,7 +563,7 @@
                             <circle cx="8.5" cy="8.5" r="1.5"/>
                             <polyline points="21 15 16 10 5 21"/>
                         </svg>
-                        <span class="text-[10px] font-medium tracking-wide select-none">Logo Preview</span>
+                        <span class="text-[10px] font-medium tracking-wide select-none">{{ __('vibe/input.logo_preview') }}</span>
                     </div>
                 </template>
 
@@ -575,7 +571,7 @@
                 <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 bg-black/35 backdrop-blur-[2px]">
                     <div class="flex items-center gap-1.5 text-[11px] font-semibold text-white bg-black/50 px-2.5 py-1.5 rounded-lg">
                         <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                        <span>Ganti</span>
+                        <span>{{ __('vibe/input.replace_action') }}</span>
                     </div>
                 </div>
             </div>
@@ -600,12 +596,12 @@
                     @if ($hint)
                         <p class="font-medium text-foreground">{{ $hint }}</p>
                     @else
-                        <p>Format: <span class="font-medium text-foreground">SVG, PNG transparan, WebP</span></p>
+                        <p>{{ __('vibe/input.format_prefix') }} <span class="font-medium text-foreground">{{ __('vibe/input.logo_formats') }}</span></p>
                         <p class="text-[11px] text-muted-foreground/80">
                             {{ $aspectRatio === 'square'
-                                ? 'Rasio 1:1 &bull; Rekomendasi min. 512&times;512px'
-                                : 'Rasio horizontal 3:1 atau 4:1 &bull; Rekomendasi 512&times;128px' }}
-                            @if ($maxSize) &bull; Maks. {{ $maxSize }} @endif
+                                ? __('vibe/input.logo_ratio_square')
+                                : __('vibe/input.logo_ratio_wide') }}
+                            @if ($maxSize) &bull; {{ __('vibe/input.max_prefix') }} {{ $maxSize }} @endif
                         </p>
                     @endif
                 </div>
@@ -627,7 +623,7 @@
     {{-- ================================================================ --}}
     <div x-show="isUploading" x-cloak class="mt-3 space-y-1.5">
         <div class="flex items-center justify-between text-xs font-medium text-primary">
-            <span>Mengunggah berkas&hellip;</span>
+            <span>{{ __('vibe/input.uploading_files') }}</span>
             <span x-text="uploadProgress + '%'"></span>
         </div>
         <div class="w-full h-1.5 bg-muted rounded-full overflow-hidden">

@@ -192,7 +192,7 @@
                         tabindex="-1"
                         @click.stop="showPassword = !showPassword" 
                         class="text-muted-foreground hover:text-foreground p-1.5 sm:p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
-                        aria-label="Toggle password visibility"
+                        aria-label="{{ __('vibe/input.toggle_password') }}"
                         :aria-pressed="showPassword"
                     >
                         <svg x-show="!showPassword" class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">

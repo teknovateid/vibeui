@@ -33,7 +33,7 @@ window.FilePond = FilePond;
  */
 function openImageLightbox(src, title, i18n = {}) {
     let backdrop = document.getElementById('vibe-filepond-lightbox');
-    const closeText = i18n.close || 'Tutup';
+    const closeText = i18n.close || 'Close';
     const previewAlt = title || i18n.image_preview || 'Image preview';
 
     if (!backdrop) {
@@ -1014,7 +1014,9 @@ export function vibeFilepond(config = {}) {
             const i18n = this.config?.i18n || {};
 
             if (this.statusMode === 'alert') {
-                const defaultTitle = type === 'error' ? (i18n.error_title || 'Terjadi Kesalahan') : (i18n.notice_title || 'Pemberitahuan');
+                const defaultTitle = type === 'error'
+                    ? (i18n.error_title || window.VibeCommonI18n?.error_title || 'An Error Occurred')
+                    : (i18n.notice_title || window.VibeCommonI18n?.notice_title || 'Notice');
                 window.dispatchEvent(new CustomEvent('alert', {
                     detail: { type, title: title || defaultTitle, message }
                 }));
@@ -1083,13 +1085,13 @@ export function vibeFilepond(config = {}) {
                     if (errorLines.length > 0) {
                         const first = errorLines[0];
                         const remaining = errorLines.length - 1;
-                        const suffix = httpMap.and_more_errors || '(:count error lainnya)';
+                        const suffix = httpMap.and_more_errors || '(:count more errors)';
                         message = remaining > 0 ? `${first} ${suffix.replace(':count', remaining)}` : first;
                     }
                 }
                 return {
-                    title: fallbackTitle || (i18n.upload_failed || 'Gagal Mengunggah Berkas'),
-                    message: message || (httpMap['422'] && httpMap['422'].message) || fallbackMessage || (i18n.validation_failed || 'Validasi Gagal')
+                    title: fallbackTitle || (i18n.upload_failed || 'File Upload Failed'),
+                    message: message || (httpMap['422'] && httpMap['422'].message) || fallbackMessage || (i18n.validation_failed || 'Validation Failed')
                 };
             }
 
@@ -1104,7 +1106,7 @@ export function vibeFilepond(config = {}) {
 
             // Generic HTTP status
             if (status) {
-                const generic = httpMap.generic || { title: 'Error :status', message: 'Permintaan gagal (:status)' };
+                const generic = httpMap.generic || { title: 'Error :status', message: 'Request failed (:status)' };
                 return {
                     title: generic.title ? generic.title.replace(':status', status) : (fallbackTitle || `Error ${status}`),
                     message: (data && data.message) || (generic.message ? generic.message.replace(':status', status) : (fallbackMessage || `HTTP ${status}`))
@@ -1113,7 +1115,7 @@ export function vibeFilepond(config = {}) {
 
             // Network error fallback
             if (status === 0 || status === null) {
-                const net = httpMap.network || { title: (i18n.error_title || 'Kesalahan Jaringan'), message: 'Tidak dapat terhubung ke server.' };
+                const net = httpMap.network || { title: (i18n.error_title || 'Network Error'), message: 'Unable to connect to the server.' };
                 return {
                     title: fallbackTitle || net.title,
                     message: (data && data.message) || fallbackMessage || net.message
@@ -1121,8 +1123,8 @@ export function vibeFilepond(config = {}) {
             }
 
             return {
-                title: fallbackTitle || (i18n.error_title || 'Terjadi Kesalahan'),
-                message: (data && data.message) || fallbackMessage || (i18n.process_error || 'Terjadi kesalahan saat memproses berkas.')
+                title: fallbackTitle || (i18n.error_title || window.VibeCommonI18n?.error_title || 'An Error Occurred'),
+                message: (data && data.message) || fallbackMessage || (i18n.process_error || 'An error occurred while processing the file.')
             };
         },
 
@@ -1141,8 +1143,8 @@ export function vibeFilepond(config = {}) {
 
             const i18n = this.config?.i18n || {};
             const type = 'error';
-            const title = payload.title || (i18n.upload_failed || 'Gagal Mengunggah Berkas');
-            const message = payload.message || (i18n.generic_upload_error || 'Terjadi kesalahan saat mengunggah berkas.');
+            const title = payload.title || (i18n.upload_failed || 'File Upload Failed');
+            const message = payload.message || (i18n.generic_upload_error || 'An error occurred while uploading the file.');
 
             this.notify(type, title, message);
 
@@ -1416,7 +1418,7 @@ export function vibeFilepond(config = {}) {
                     if (err) {
                         const extractedMsg = self.serverError || self.extractErrorMessage(err);
                         self.notifyError({
-                            title: self.config?.i18n?.invalid_file || self.config?.i18n?.upload_failed || 'Berkas Tidak Valid',
+                            title: self.config?.i18n?.invalid_file || self.config?.i18n?.upload_failed || 'Invalid File',
                             message: extractedMsg,
                             file: item?.file,
                             filename: item?.filename || item?.file?.name,
@@ -1462,7 +1464,7 @@ export function vibeFilepond(config = {}) {
                         self.fireEvent('error', { error: err, item: item });
                         const extractedMsg = self.serverError || self.extractErrorMessage(err);
                         self.notifyError({
-                            title: self.config?.i18n?.upload_failed || 'Gagal Mengunggah Berkas',
+                            title: self.config?.i18n?.upload_failed || 'File Upload Failed',
                             message: extractedMsg,
                             file: item?.file,
                             filename: item?.filename || item?.file?.name,
@@ -1719,13 +1721,13 @@ export function vibeFilepond(config = {}) {
                                     self.activeUploads.delete(uploadId);
                                     self.updateReactiveState();
                                     self.hasError = true;
-                                    const errMsg = self.config?.i18n?.presigned_html_error || 'Endpoint presigned mengembalikan HTML (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
+                                    const errMsg = self.config?.i18n?.presigned_html_error || 'Presigned endpoint returned HTML (not JSON). Ensure the endpoint returns JSON and does not call dd().';
                                     self.serverError = errMsg;
                                     error(errMsg);
                                     self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                     window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg, status: xhrPresign.status } }));
                                     self.notifyError({
-                                        title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                        title: self.config?.i18n?.presigned_failed || 'Failed to Request Upload URL',
                                         message: errMsg,
                                         file: file,
                                         filename: fileName,
@@ -1766,13 +1768,13 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = self.config?.i18n?.missing_upload_url || 'Respons presigned tidak menyertakan upload URL';
+                                        const errMsg = self.config?.i18n?.missing_upload_url || 'Presigned response did not include an upload URL';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                         self.notifyError({
-                                            title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                            title: self.config?.i18n?.presigned_failed || 'Failed to Request Upload URL',
                                             message: errMsg,
                                             file: file,
                                             filename: fileName,
@@ -1832,14 +1834,14 @@ export function vibeFilepond(config = {}) {
                                             if (xhrUpload.status === 403) {
                                                 cloudMsg = self.config?.i18n?.cloud_forbidden || 'Akses cloud storage ditolak (HTTP 403). Periksa CORS bucket S3/R2 atau permission URL presigned.';
                                             } else if (xhrUpload.status === 400) {
-                                                cloudMsg = self.config?.i18n?.cloud_bad_request || 'Permintaan upload ke cloud tidak valid (HTTP 400). Periksa header presigned.';
+                                                cloudMsg = self.config?.i18n?.cloud_bad_request || 'Invalid cloud upload request (HTTP 400). Check presigned headers.';
                                             }
                                             self.serverError = cloudMsg;
                                             error(cloudMsg);
                                             self.fireEvent('error', { error: cloudMsg, status: xhrUpload.status, file, filename: fileName });
                                             window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: cloudMsg, status: xhrUpload.status } }));
                                             self.notifyError({
-                                                title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                                title: self.config?.i18n?.cloud_upload_failed || 'Cloud Storage Upload Failed',
                                                 message: cloudMsg,
                                                 file: file,
                                                 filename: fileName,
@@ -1852,13 +1854,13 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = self.config?.i18n?.cloud_network_error || 'Koneksi terputus saat mengunggah langsung ke cloud storage. Periksa jaringan Anda.';
+                                        const errMsg = self.config?.i18n?.cloud_network_error || 'Connection interrupted while uploading directly to cloud storage. Check your network.';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                         self.notifyError({
-                                            title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                            title: self.config?.i18n?.cloud_upload_failed || 'Cloud Storage Upload Failed',
                                             message: errMsg,
                                             file: file,
                                             filename: fileName,
@@ -1870,13 +1872,13 @@ export function vibeFilepond(config = {}) {
                                         self.activeUploads.delete(uploadId);
                                         self.updateReactiveState();
                                         self.hasError = true;
-                                        const errMsg = self.config?.i18n?.cloud_timeout || 'Waktu pengunggahan berkas ke cloud telah habis (timeout).';
+                                        const errMsg = self.config?.i18n?.cloud_timeout || 'Direct cloud upload timed out.';
                                         self.serverError = errMsg;
                                         error(errMsg);
                                         self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                         window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                         self.notifyError({
-                                            title: self.config?.i18n?.cloud_upload_failed || 'Gagal Mengunggah ke Cloud Storage',
+                                            title: self.config?.i18n?.cloud_upload_failed || 'Cloud Storage Upload Failed',
                                             message: errMsg,
                                             file: file,
                                             filename: fileName
@@ -1888,14 +1890,14 @@ export function vibeFilepond(config = {}) {
                                     self.activeUploads.delete(uploadId);
                                     self.updateReactiveState();
                                     self.hasError = true;
-                                    const jsonErrTpl = self.config?.i18n?.json_parse_error || 'Error membaca respons JSON presigned: :message';
+                                    const jsonErrTpl = self.config?.i18n?.json_parse_error || 'Failed reading presigned JSON response: :message';
                                     const errMsg = jsonErrTpl.replace(':message', e.message);
                                     self.serverError = errMsg;
                                     error(errMsg);
                                     self.fireEvent('error', { error: errMsg, file, filename: fileName });
                                     window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-error', { detail: { error: errMsg } }));
                                     self.notifyError({
-                                        title: self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
+                                        title: self.config?.i18n?.presigned_failed || 'Failed to Request Upload URL',
                                         message: errMsg,
                                         file: file,
                                         filename: fileName
@@ -1918,12 +1920,12 @@ export function vibeFilepond(config = {}) {
                                 let parsed = self.parseErrorMessage(
                                     xhrPresign.status,
                                     errData,
-                                    self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan',
-                                    xhrPresign.statusText || self.config?.i18n?.presigned_failed || 'Gagal meminta URL presigned'
+                                    self.config?.i18n?.presigned_failed || 'Failed to Request Upload URL',
+                                    xhrPresign.statusText || self.config?.i18n?.presigned_failed || 'Failed to request presigned URL'
                                 );
 
                                 if (contentType.includes('text/html') || resText.startsWith('<') || resText.includes('<script') || resText.includes('<html')) {
-                                    const htmlStatusTpl = self.config?.i18n?.presigned_html_status || 'Endpoint presigned mengembalikan HTML / error HTTP :status (bukan JSON). Pastikan endpoint mengembalikan JSON dan jangan gunakan dd().';
+                                    const htmlStatusTpl = self.config?.i18n?.presigned_html_status || 'Presigned endpoint returned HTML / HTTP :status error (not JSON). Ensure endpoint returns JSON.';
                                     parsed.message = htmlStatusTpl.replace(':status', xhrPresign.status);
                                 } else if (!errData && resText) {
                                     parsed.message = resText;
@@ -1948,8 +1950,8 @@ export function vibeFilepond(config = {}) {
                             self.activeUploads.delete(uploadId);
                             self.updateReactiveState();
                             self.hasError = true;
-                            const netErr = self.config?.i18n?.presigned_network_error || 'Tidak dapat terhubung ke server untuk meminta URL presigned.';
-                            const parsed = self.parseErrorMessage(0, null, self.config?.i18n?.presigned_failed || 'Gagal Meminta URL Unggahan', netErr);
+                            const netErr = self.config?.i18n?.presigned_network_error || 'Unable to connect to server to request presigned URL.';
+                            const parsed = self.parseErrorMessage(0, null, self.config?.i18n?.presigned_failed || 'Failed to Request Upload URL', netErr);
                             self.serverError = parsed.message;
                             error(parsed.message);
                             self.fireEvent('error', { error: parsed.message, file, filename: fileName });
@@ -2023,7 +2025,7 @@ export function vibeFilepond(config = {}) {
                                 self.fireEvent('error', { error: errMsg, file });
                                 self.$dispatch('vibe-filepond-error', { error: errMsg });
                                 self.notifyError({
-                                    title: self.config?.i18n?.upload_failed || 'Gagal Mengunggah Berkas',
+                                    title: self.config?.i18n?.upload_failed || 'File Upload Failed',
                                     message: errMsg,
                                     file: file,
                                     filename: file.name

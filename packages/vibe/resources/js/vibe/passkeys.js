@@ -3,6 +3,8 @@ import { Passkeys, UserCancelledError, InvalidDomainError } from '@laravel/passk
 window.Passkeys = Passkeys;
 window.VibePasskeys = Passkeys;
 
+const pk = () => window.VibeCommonI18n?.passkey || {};
+
 export const VibePasskeyService = {
     client: Passkeys,
 
@@ -17,11 +19,13 @@ export const VibePasskeyService = {
     async authenticate(options = {}) {
         if (typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1')) {
             const port = window.location.port ? `:${window.location.port}` : '';
+            const localhostUrl = `http://localhost${port}${window.location.pathname}${window.location.search}`;
+            const tpl = pk().ip_address_notice || 'WebAuthn (Passkey) requires a valid domain name. During local development, please use localhost instead of IP address 127.0.0.1 (e.g. :url).';
             return {
                 success: false,
                 isIpAddress: true,
-                localhostUrl: `http://localhost${port}${window.location.pathname}${window.location.search}`,
-                message: `WebAuthn (Passkey) mewajibkan nama domain. Saat masih dalam tahap pengembangan (development), silakan gunakan localhost alih-alih alamat IP 127.0.0.1 (misal: http://localhost${port}${window.location.pathname}).`
+                localhostUrl,
+                message: tpl.replace(':url', `http://localhost${port}${window.location.pathname}`)
             };
         }
 
@@ -33,9 +37,10 @@ export const VibePasskeyService = {
 
             if (error instanceof InvalidDomainError || error?.name === 'InvalidDomainError') {
                 const port = typeof window !== 'undefined' && window.location.port ? `:${window.location.port}` : '';
+                const tpl = pk().invalid_domain || 'Invalid domain for Passkey. Please use :url';
                 return { 
                     success: false, 
-                    message: `Domain tidak valid untuk Passkey. Pada masa development, silakan gunakan http://localhost${port}` 
+                    message: tpl.replace(':url', `http://localhost${port}`) 
                 };
             }
 
@@ -43,52 +48,56 @@ export const VibePasskeyService = {
                 return { 
                     success: false, 
                     cancelled: true, 
-                    message: 'Belum ada Passkey yang terdaftar di perangkat ini untuk aplikasi ini, atau dialog autentikasi dibatalkan. Silakan masuk dengan kata sandi terlebih dahulu, lalu daftarkan Passkey perangkat Anda.' 
+                    message: pk().auth_cancelled || 'No Passkey is registered on this device for this application yet, or the authentication prompt was cancelled. Please sign in with your password first and register a Passkey.' 
                 };
             }
 
-            return { success: false, message: error?.message || 'Gagal memverifikasi passkey.' };
+            return { success: false, message: error?.message || pk().verify_failed || 'Failed to verify passkey.' };
         }
     },
 
-    async register(name = 'Perangkat Saya') {
+    async register(name) {
+        const deviceName = name || pk().default_device || 'My Device';
         if (typeof window !== 'undefined' && (window.location.hostname === '127.0.0.1' || window.location.hostname === '::1')) {
             const port = window.location.port ? `:${window.location.port}` : '';
+            const localhostUrl = `http://localhost${port}${window.location.pathname}${window.location.search}`;
+            const tpl = pk().ip_address_notice || 'WebAuthn (Passkey) requires a valid domain name. During local development, please use localhost instead of IP address 127.0.0.1 (e.g. :url).';
             return {
                 success: false,
                 isIpAddress: true,
-                localhostUrl: `http://localhost${port}${window.location.pathname}${window.location.search}`,
-                message: `WebAuthn (Passkey) mewajibkan nama domain. Saat masih dalam tahap pengembangan (development), silakan gunakan localhost alih-alih alamat IP 127.0.0.1 (misal: http://localhost${port}${window.location.pathname}).`
+                localhostUrl,
+                message: tpl.replace(':url', `http://localhost${port}${window.location.pathname}`)
             };
         }
 
         try {
-            const response = await Passkeys.register({ name });
+            const response = await Passkeys.register({ name: deviceName });
             return { success: true, response };
         } catch (error) {
             console.warn('Passkey register error:', error);
 
             if (error instanceof InvalidDomainError || error?.name === 'InvalidDomainError') {
                 const port = typeof window !== 'undefined' && window.location.port ? `:${window.location.port}` : '';
+                const tpl = pk().invalid_domain || 'Invalid domain for Passkey. Please use :url';
                 return { 
                     success: false, 
-                    message: `Domain tidak valid untuk Passkey. Silakan gunakan http://localhost${port}` 
+                    message: tpl.replace(':url', `http://localhost${port}`) 
                 };
             }
 
             if (error instanceof UserCancelledError || error?.name === 'NotAllowedError' || error?.name === 'UserCancelledError') {
-                return { success: false, cancelled: true, message: 'Pendaftaran passkey dibatalkan oleh pengguna.' };
+                return { success: false, cancelled: true, message: pk().register_cancelled || 'Passkey registration was cancelled by user.' };
             }
 
             if (error?.status === 423 || error?.response?.status === 423 || error?.message?.includes('423') || error?.message?.toLowerCase().includes('password confirmation')) {
                 return { 
                     success: false, 
                     confirmationRequired: true, 
-                    message: 'Konfirmasi kata sandi (sudo mode) diperlukan sebelum mendaftarkan Passkey baru.' 
+                    message: pk().sudo_required || 'Password confirmation (sudo mode) is required before registering a new Passkey.' 
                 };
             }
 
-            return { success: false, message: error?.message || 'Gagal mendaftarkan passkey.', error };
+            return { success: false, message: error?.message || pk().register_failed || 'Failed to register passkey.', error };
         }
     },
 };
@@ -123,7 +132,7 @@ window.vibeLoginWithPasskey = async function(btn, redirectUrl) {
         }
     } catch (e) {
         if (wire && typeof wire.handlePasskeyError === 'function') {
-            await wire.handlePasskeyError(e.message || 'Terjadi kesalahan saat memverifikasi passkey.', false, null);
+            await wire.handlePasskeyError(e.message || pk().verify_error || 'An error occurred while verifying passkey.', false, null);
         }
     } finally {
         if (btn) {
@@ -148,7 +157,7 @@ window.vibeConfirmWithPasskey = async function(btn, redirectUrl) {
 
     try {
         if (!Passkeys) {
-            throw new Error('Modul Passkey belum dimuat.');
+            throw new Error(pk().not_loaded || 'Passkey module is not loaded yet.');
         }
 
         const res = await Passkeys.verify({
@@ -168,9 +177,9 @@ window.vibeConfirmWithPasskey = async function(btn, redirectUrl) {
             if (loadingSpan) loadingSpan.style.display = 'none';
         }
         if (window.vibeToast) {
-            window.vibeToast(e.message || 'Gagal mengkonfirmasi dengan passkey.', { type: 'error' });
+            window.vibeToast(e.message || pk().confirm_failed || 'Failed to confirm with passkey.', { type: 'error' });
         } else {
-            alert(e.message || 'Gagal mengkonfirmasi dengan passkey.');
+            alert(e.message || pk().confirm_failed || 'Failed to confirm with passkey.');
         }
     }
 };

@@ -206,8 +206,8 @@ test('vibe:todo renders column navigation buttons when :nav-buttons="true"', fun
         ->toContain('moveToPrevGroup(\'nav-item-1\')')
         ->toContain('canMoveNext(\'nav-item-1\')')
         ->toContain('moveToNextGroup(\'nav-item-1\')')
-        ->toContain('Pindahkan ke kolom sebelumnya')
-        ->toContain('Pindahkan ke kolom selanjutnya');
+        ->toContain(__('vibe/todo.move_prev_col'))
+        ->toContain(__('vibe/todo.move_next_col'));
 });
 
 test('vibe:todo.item :nav-buttons="true" enables buttons individually', function () {
@@ -251,7 +251,7 @@ test('vibe:todo supports lock option to disable dragging and lock item', functio
         ->toContain('data-todo-item="locked-item-1"')
         ->toContain('draggable="false"')
         ->toContain('data-locked="true"')
-        ->toContain('title="Terkunci (tidak dapat dipindah)"');
+        ->toContain('title="' . __('vibe/todo.locked_no_move') . '"');
 });
 
 test('vibe:todo defaults to having NO checkbox on items in list layout', function () {
@@ -301,7 +301,7 @@ test('vibe:todo supports lock option to prevent items from being moved', functio
         ->toContain('data-todo-item="free-item"')
         ->toContain('data-todo-item="locked-item"')
         ->toContain('data-locked="true"')
-        ->toContain('title="Terkunci (tidak dapat dipindah)"');
+        ->toContain('title="' . __('vibe/todo.locked_no_move') . '"');
 
     // 2. Lock on container locks all items
     $htmlTodoLock = Blade::render(
@@ -313,8 +313,8 @@ test('vibe:todo supports lock option to prevent items from being moved', functio
     expect($htmlTodoLock)
         ->toContain('data-locked="true"')
         ->toContain('draggable="false"')
-        ->toContain('title="Terkunci (tidak dapat dipindah)"')
-        ->not->toContain('aria-label="Drag to reorder"');
+        ->toContain('title="' . __('vibe/todo.locked_no_move') . '"')
+        ->not->toContain('aria-label="' . __('vibe/todo.drag_to_reorder') . '"');
 });
 
 test('locked items in board mode do not show navigation buttons', function () {
@@ -347,7 +347,7 @@ test('vibe:todo.item supports inline editing when editable=true', function () {
         ->toContain('x-ref="titleInput"')
         ->toContain('saveEdit()')
         ->toContain('cancelEdit()')
-        ->toContain('title="Ubah judul"');
+        ->toContain('title="' . __('vibe/todo.edit_title') . '"');
 });
 
 test('vibe:todo.item supports multi-labels array and custom labels slot', function () {
@@ -388,7 +388,7 @@ test('vibe:todo.item supports smart due date urgency styling', function () {
     );
 
     expect($html)
-        ->toContain('title="Terlewat / Overdue"')
+        ->toContain('title="' . __('vibe/todo.due_overdue') . '"')
         ->toContain('text-destructive bg-destructive/10')
         ->toContain('2020-01-01')
         ->toContain('2099-12-31');
@@ -455,7 +455,7 @@ test('vibe:todo supports full compound subcomponents (header, content, subitem, 
 
     expect($html)
         ->toContain('custom-header')
-        ->toContain('title="Terkunci (tidak dapat dipindah)"')
+        ->toContain('title="' . __('vibe/todo.locked_no_move') . '"')
         ->toContain('custom-content')
         ->toContain('data-todo-title')
         ->toContain('Design System')
@@ -496,7 +496,7 @@ test('vibe:todo.group supports quick add per column', function () {
 
     expect($html)
         ->toContain('Buat Tugas Baru')
-        ->toContain('Judul tugas baru...')
+        ->toContain(__('vibe/todo.new_task_placeholder'))
         ->toContain('vibe:todo-add');
 });
 
@@ -527,8 +527,8 @@ test('vibe:todo.group supports collapsible columns', function () {
     expect($html)
         ->toContain('isCollapsed: true')
         ->toContain('isCollapsible: true')
-        ->toContain('Buka kolom Selesai')
-        ->toContain('Lipat kolom');
+        ->toContain(__('vibe/todo.expand_column', ['title' => 'Selesai']))
+        ->toContain(__('vibe/todo.collapse_column'));
 });
 
 test('vibe:todo supports live client-side search bar', function () {
@@ -626,8 +626,8 @@ test('vibe:todo :editable="true" properly enables inline edit mode on title and 
         ->toContain('vibe:todo-item-update')
         ->toContain('titleInput')
         ->toContain('descInput')
-        ->toContain('Ubah judul')
-        ->toContain('Ubah deskripsi')
+        ->toContain(__('vibe/todo.edit_title'))
+        ->toContain(__('vibe/todo.edit_description'))
         ->toContain('startEdit()')
         ->toContain('saveEdit()');
 });
@@ -650,7 +650,7 @@ test('vibe:todo.item does not render auto delete button when custom header subco
     expect($html)
         ->toContain('data-todo-header')
         ->toContain('three-dots-menu')
-        ->not->toContain('aria-label="Hapus tugas"');
+        ->not->toContain('aria-label="' . __('vibe/todo.delete_task') . '"');
 });
 
 test('vibe:todo.item supports :lockable="true" to render interactive lock toggle button', function () {
