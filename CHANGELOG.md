@@ -2,6 +2,15 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.5] - 2026-11-18
+
+### 🚀 Features
+- feat: enhance currency input normalization and update documentation for vibe:show compatibility (e13736c)
+
+### 🧰 Maintenance & Documentation
+- Refactor Blade components to remove unnecessary @blaze(fold: true) directives and update translations for various UI elements in the Vibe package. Enhance localization support by resolving placeholders and ensuring consistency across language files. Update tests to verify translation keys and ensure synchronization between language files and component outputs. (9fe29fb)
+
+
 ## [0.11.4] - 2026-11-16
 
 ### 🧰 Maintenance & Documentation
