@@ -227,411 +227,83 @@
     }
 @endphp
 
+@pushOnce('head', 'vibe-select-scripts')
+    @vite(['resources/js/vibe/select.js'])
+@endPushOnce
+
+@php
+    $remoteSelectInitialVal = $multiple
+        ? (is_array($value) ? array_map('strval', array_values($value)) : ($value !== null && $value !== '' ? [(string) $value] : []))
+        : ($value !== null && $value !== '' ? (string) $value : '');
+
+    $remoteSelectConfigJson = \Illuminate\Support\Js::from([
+        'name' => $name,
+        'selectedLabel' => $initialLabel ?? '',
+        'selectedAvatar' => $initialAvatar ?? '',
+        'selectedIcon' => $initialIcon ?? '',
+        'selectedItems' => $initialItemsData,
+        'disabled' => (bool) $disabled,
+        'keyboard' => (bool) $keyboard,
+        'multiple' => (bool) $multiple,
+        'badgeVariant' => $badgeVariant,
+        'colorCycle' => $colorCycle,
+        'min' => $min !== null ? (int) $min : null,
+        'max' => $max !== null ? (int) $max : null,
+        'api' => $api,
+        'searchParam' => $searchParam,
+        'minChars' => (int) $minChars,
+        'debounce' => (int) $debounce,
+        'placement' => $placement,
+        'openUp' => $placement === 'top',
+        'headers' => (object) $headers,
+    ])->toHtml();
+@endphp
+
 <div data-vibe-select="{{ $name }}" data-multiple="{{ $multiple ? 'true' : 'false' }}" {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}
-    x-data="{
+    x-data="typeof window.vibeRemoteSelect === 'function' ? window.vibeRemoteSelect(Object.assign({!! $remoteSelectConfigJson !!}, {
+        value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($remoteSelectInitialVal) @endif
+    })) : Object.assign({!! $remoteSelectConfigJson !!}, {
         open: false,
         search: '',
-        value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($multiple ? (is_array($value) ? array_map('strval', array_values($value)) : ($value !== null && $value !== '' ? [(string) $value] : [])) : ($value !== null && $value !== '' ? (string) $value : '')) @endif,
-        selectedLabel: @js($initialLabel ?? ''),
-        selectedAvatar: @js($initialAvatar ?? ''),
-        selectedIcon: @js($initialIcon ?? ''),
-        selectedItems: @js($initialItemsData),
+        value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($remoteSelectInitialVal) @endif,
         items: [],
         loading: false,
         hasLoadedOnce: false,
         hasNetworkError: false,
-        disabled: {{ $disabled ? 'true' : 'false' }},
-        keyboard: {{ $keyboard ? 'true' : 'false' }},
-        multiple: {{ $multiple ? 'true' : 'false' }},
-        badgeVariant: @js($badgeVariant),
-        colorCycle: @js($colorCycle),
-        min: {{ $min !== null ? (int) $min : 'null' }},
-        max: {{ $max !== null ? (int) $max : 'null' }},
-        api: '{{ $api }}',
-        searchParam: '{{ $searchParam }}',
-        minChars: {{ (int) $minChars }},
-        debounce: {{ (int) $debounce }},
-        placement: '{{ $placement }}',
-        openUp: {{ $placement === 'top' ? 'true' : 'false' }},
         abortController: null,
-
-        getBadgeClasses(index) {
-            if (this.badgeVariant === 'cycle') {
-                const cycle = [
-                    'bg-info/15 text-info border-info/30 hover:bg-info/20',
-                    'bg-primary/15 text-primary border-primary/30 hover:bg-primary/20',
-                    'bg-success/15 text-success border-success/30 hover:bg-success/20',
-                    'bg-warning/15 text-warning border-warning/30 hover:bg-warning/20',
-                    'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
-                    'bg-pink-500/15 text-pink-600 dark:text-pink-400 border-pink-500/30 hover:bg-pink-500/20',
-                    'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20',
-                    'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
-                ];
-                return cycle[index % cycle.length];
-            }
-            if (this.badgeVariant === 'primary') {
-                return 'bg-primary text-primary-foreground border-transparent shadow-2xs';
-            }
-            if (this.badgeVariant === 'outline') {
-                return 'bg-transparent text-foreground border-border hover:bg-muted';
-            }
-            return 'bg-muted/80 text-foreground border-border/70 hover:bg-muted';
-        },
-
-        decodeHtml(str) {
-            if (!str || typeof str !== 'string' || !str.includes('&')) return str || '';
-            let txt = document.createElement('textarea');
-            txt.innerHTML = str;
-            return txt.value;
-        },
-
+        getBadgeClasses: () => '',
+        isSelected: () => false,
+        isOptionDisabled: () => false,
+        getVisibleItems: () => [],
+        toggle() {},
+        close() {},
+        clearAll() {},
+        removeTag() {},
+        selectItem() {},
+        fetchData() {},
+        calculatePlacement() {},
+        focusNext() {},
+        focusPrevious() {},
         init() {
-            if (this.multiple) {
-                let initialVals = Array.isArray(this.value) ? this.value : (this.value ? [this.value] : []);
-                this.value = initialVals.map(String);
-                
-                if (this.selectedItems.length === 0 && this.value.length > 0) {
-                    let labels = Array.isArray(this.selectedLabel) ? this.selectedLabel : (this.selectedLabel ? [this.selectedLabel] : []);
-                    let avatars = Array.isArray(this.selectedAvatar) ? this.selectedAvatar : (this.selectedAvatar ? [this.selectedAvatar] : []);
-                    let icons = Array.isArray(this.selectedIcon) ? this.selectedIcon : (this.selectedIcon ? [this.selectedIcon] : []);
-                    this.selectedItems = this.value.map((v, i) => ({
-                        value: v,
-                        label: this.decodeHtml(labels[i] || v),
-                        avatar: avatars[i] || '',
-                        icon: icons[i] || '',
-                        description: ''
-                    }));
-                }
-            } else {
-                this.value = this.value !== null && this.value !== undefined ? String(this.value) : '';
-                if (this.selectedItems.length > 0) {
-                    if (!this.selectedLabel && this.selectedItems[0].label) {
-                        this.selectedLabel = this.decodeHtml(this.selectedItems[0].label);
-                    }
-                    if (!this.selectedAvatar && this.selectedItems[0].avatar) {
-                        this.selectedAvatar = this.selectedItems[0].avatar;
-                    }
-                    if (!this.selectedIcon && this.selectedItems[0].icon) {
-                        this.selectedIcon = this.selectedItems[0].icon;
-                    }
-                }
-            }
-
-            // Restore from enclosing form storage if initial value is empty
-            let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
-            if (isEmptyValue) {
-                const form = this.$el ? this.$el.closest('form') : null;
-                if (form && form._x_dataStack && form._x_dataStack[0]?.getStorageData) {
-                    const formAlpine = form._x_dataStack[0];
-                    if (formAlpine.saveToStorage && form.id) {
-                        const storageArray = formAlpine.getStorageData();
-                        const myData = storageArray.find(item => item.id === form.id);
-                        if (myData && myData.data) {
-                            const rawKey = @js($name);
-                            const storedVal = myData.data[rawKey] !== undefined ? myData.data[rawKey] : myData.data[`${rawKey}[]`];
-                            if (storedVal !== undefined && storedVal !== null && storedVal !== '') {
-                                this.value = storedVal;
-                                isEmptyValue = false;
-                            }
-                        }
-                    }
-                }
-            }
-
-            this.$watch('value', (val) => {
-                if (!this.multiple) {
-                    if (!val || val === '') {
-                        this.selectedLabel = '';
-                        this.selectedAvatar = '';
-                        this.selectedIcon = '';
-                    } else if (this.items && this.items.length > 0) {
-                        let found = this.items.find(i => String(i.value) === String(val));
-                        if (found) {
-                            this.selectedLabel = found.label;
-                            this.selectedAvatar = found.avatar || '';
-                            this.selectedIcon = !found.avatar && found.icon ? found.icon : '';
-                        }
-                    }
-                }
-                this.$nextTick(() => this.dispatchChangeEvent());
-            });
-
-            this.$el.addEventListener('vibe-select-restore', (e) => {
-                if (e.detail && e.detail.value !== undefined) {
-                    this.value = e.detail.value;
-                    if (this.$refs.hiddenInput) {
-                        if (this.multiple) {
-                            this.$refs.hiddenInput.value = JSON.stringify(this.value);
-                        } else {
-                            this.$refs.hiddenInput.value = this.value;
-                        }
-                    }
-                    this.dispatchChangeEvent();
-                }
-            });
-        },
-
-        toggle() {
-            if (this.disabled) return;
-            this.open = !this.open;
-            if (this.open) {
-                this.calculatePlacement();
-                this.$nextTick(() => {
-                    this.calculatePlacement();
-                    if (this.$refs.searchInput) {
-                        this.$refs.searchInput.focus();
-                    } else if (this.keyboard) {
-                        this.focusNext();
-                    }
-                    if (!this.hasLoadedOnce || (this.items.length === 0 && this.minChars === 0)) {
-                        this.fetchData('');
+            var self = this;
+            var attach = function() {
+                if (self._vibeSelectBound || typeof window.vibeRemoteSelect !== 'function') return;
+                self._vibeSelectBound = true;
+                var comp = window.vibeRemoteSelect({!! $remoteSelectConfigJson !!});
+                Object.keys(comp).forEach(function(k) {
+                    if (k !== 'init' && k !== 'value' && typeof comp[k] === 'function') {
+                        self[k] = comp[k];
                     }
                 });
+                comp.init.call(self);
+            };
+            if (typeof window.vibeRemoteSelect === 'function') {
+                attach();
             } else {
-                this.search = '';
-            }
-        },
-
-        close() {
-            this.open = false;
-            this.search = '';
-        },
-
-        async fetchData(q = null) {
-            let query = q !== null ? q : this.search;
-            if (query.length < this.minChars) {
-                this.items = [];
-                this.loading = false;
-                return;
-            }
-
-            if (this.abortController) {
-                this.abortController.abort();
-            }
-            this.abortController = new AbortController();
-
-            this.loading = true;
-            this.hasNetworkError = false;
-
-            try {
-                let url = new URL(this.api, window.location.origin);
-                url.searchParams.set(this.searchParam, query);
-
-                let res = await fetch(url.toString(), {
-                    signal: this.abortController.signal,
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        @foreach ($headers as $hKey => $hVal)
-                            '{{ $hKey }}': '{{ $hVal }}',
-                        @endforeach
-                    }
-                });
-
-                if (!res.ok) throw new Error('Network error');
-                let json = await res.json();
-                let rawItems = Array.isArray(json) ? json : (Array.isArray(json.data) ? json.data : []);
-
-                this.items = rawItems.map(item => ({
-                    value: String(item.value ?? item.id ?? ''),
-                    label: this.decodeHtml(String(item.label ?? item.name ?? item.title ?? item.value ?? '')),
-                    description: item.description ?? item.desc ?? null,
-                    avatar: item.avatar ?? (item.icon && (String(item.icon).startsWith('http') || String(item.icon).startsWith('/') || String(item.icon).startsWith('data:')) ? item.icon : null),
-                    icon: item.icon ?? item.avatar ?? null,
-                    disabled: Boolean(item.disabled)
-                }));
-
-                this.hasLoadedOnce = true;
-
-                if (this.multiple) {
-                    if (Array.isArray(this.selectedItems) && this.selectedItems.length > 0) {
-                        this.selectedItems.forEach(sel => {
-                            let found = this.items.find(i => String(i.value) === String(sel.value));
-                            if (found) {
-                                if (!sel.label || sel.label === sel.value) sel.label = found.label;
-                                if (!sel.avatar && found.avatar) sel.avatar = found.avatar;
-                                if (!sel.icon && found.icon) sel.icon = found.icon;
-                                if (!sel.description && found.description) sel.description = found.description;
-                            }
-                        });
-                    }
-                } else {
-                    if (this.value && (!this.selectedLabel || !this.selectedAvatar)) {
-                        let found = this.items.find(i => String(i.value) === String(this.value));
-                        if (found) {
-                            this.selectedLabel = found.label;
-                            this.selectedAvatar = found.avatar || '';
-                            this.selectedIcon = !found.avatar && found.icon ? found.icon : '';
-                        }
-                    }
-                }
-            } catch (e) {
-                if (e.name !== 'AbortError') {
-                    this.hasNetworkError = true;
-                    this.items = [];
-                }
-            } finally {
-                this.loading = false;
-            }
-        },
-
-        isSelected(val) {
-            let strVal = String(val);
-            if (this.multiple) {
-                return Array.isArray(this.value) && this.value.includes(strVal);
-            }
-            return String(this.value) === strVal;
-        },
-
-        canSelectMore() {
-            if (!this.multiple) return true;
-            if (this.max === null) return true;
-            return Array.isArray(this.value) && this.value.length < this.max;
-        },
-
-        isOptionDisabled(val, isDisabled) {
-            if (isDisabled) return true;
-            if (this.multiple && this.max !== null && !this.isSelected(val) && !this.canSelectMore()) {
-                return true;
-            }
-            return false;
-        },
-
-        selectItem(item) {
-            if (!item || item.disabled) return;
-            if (this.isOptionDisabled(item.value, false)) return;
-
-            if (this.multiple) {
-                let strVal = String(item.value);
-                if (this.isSelected(strVal)) {
-                    if (this.min !== null && this.value.length <= this.min) return;
-                    this.value = this.value.filter(v => v !== strVal);
-                    this.selectedItems = this.selectedItems.filter(i => String(i.value) !== strVal);
-                } else {
-                    if (this.max !== null && this.value.length >= this.max) return;
-                    this.value.push(strVal);
-                    this.selectedItems.push({
-                        value: strVal,
-                        label: this.decodeHtml(item.label),
-                        avatar: item.avatar || '',
-                        icon: item.icon || '',
-                        description: item.description || ''
-                    });
-                }
-                this.dispatchChangeEvent();
-                return;
-            }
-
-            this.value = String(item.value);
-            this.selectedLabel = this.decodeHtml(item.label);
-            this.selectedAvatar = item.avatar || '';
-            this.selectedIcon = !item.avatar && item.icon ? item.icon : '';
-            this.close();
-            this.dispatchChangeEvent();
-        },
-
-        removeTag(val) {
-            if (this.disabled) return;
-            let strVal = String(val);
-            if (this.min !== null && this.value.length <= this.min) return;
-            this.value = this.value.filter(v => v !== strVal);
-            this.selectedItems = this.selectedItems.filter(i => String(i.value) !== strVal);
-            this.dispatchChangeEvent();
-        },
-
-        clearAll() {
-            if (this.disabled) return;
-            if (this.multiple) {
-                if (this.min !== null && this.min > 0) {
-                    if (Array.isArray(this.value) && this.value.length > this.min) {
-                        this.value = this.value.slice(0, this.min);
-                        this.selectedItems = this.selectedItems.slice(0, this.min);
-                        this.dispatchChangeEvent();
-                    }
-                    return;
-                }
-                this.value = [];
-                this.selectedItems = [];
-                this.dispatchChangeEvent();
-                return;
-            }
-            this.value = '';
-            this.selectedLabel = '';
-            this.selectedAvatar = '';
-            this.selectedIcon = '';
-            this.dispatchChangeEvent();
-        },
-
-        dispatchChangeEvent() {
-            this.$nextTick(() => {
-                if (this.$refs.hiddenInput) {
-                    this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
-                    this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
-                }
-                this.$el.dispatchEvent(new CustomEvent('vibe-select-change', {
-                    bubbles: true,
-                    detail: { name: @js($name), value: this.value }
-                }));
-                this.$el.dispatchEvent(new Event('input', { bubbles: true }));
-                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
-            });
-        },
-
-        calculatePlacement() {
-            if (this.placement === 'top') {
-                this.openUp = true;
-                return;
-            }
-            if (this.placement === 'bottom') {
-                this.openUp = false;
-                return;
-            }
-            let trigger = this.$refs.triggerBtn || this.$el;
-            let rect = trigger.getBoundingClientRect();
-            let spaceBelow = window.innerHeight - rect.bottom;
-            let spaceAbove = rect.top;
-            let popoverHeight = 250;
-            this.openUp = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
-        },
-
-        getVisibleItems() {
-            return Array.from(this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelectorAll('[role=\'option\']:not([disabled]):not(.cursor-not-allowed)') : [])
-                .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0);
-        },
-
-        focusNext(e) {
-            if (!this.open) return;
-            e?.preventDefault();
-            let items = this.getVisibleItems();
-            if (!items.length) return;
-            let currentIndex = items.indexOf(document.activeElement);
-            let nextIndex = Math.min(currentIndex + 1, items.length - 1);
-            if (items[nextIndex]) {
-                items[nextIndex].focus();
-                items[nextIndex].scrollIntoView({ block: 'nearest' });
-            }
-        },
-
-        focusPrevious(e) {
-            if (!this.open) return;
-            e?.preventDefault();
-            let items = this.getVisibleItems();
-            if (!items.length) return;
-            let currentIndex = items.indexOf(document.activeElement);
-            if (currentIndex <= 0) {
-                if (this.$refs.searchInput) {
-                    this.$refs.searchInput.focus();
-                    return;
-                }
-                currentIndex = items.length;
-            }
-            let nextIndex = Math.max(currentIndex - 1, 0);
-            if (items[nextIndex]) {
-                items[nextIndex].focus();
-                items[nextIndex].scrollIntoView({ block: 'nearest' });
+                window.addEventListener('vibe-select-ready', attach, { once: true });
             }
         }
-    }"
+    })"
     @click.outside="close()"
     @keydown.escape.window="close()"
     @scroll.window.debounce.50ms="open ? calculatePlacement() : null"
