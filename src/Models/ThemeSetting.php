@@ -20,6 +20,7 @@ class ThemeSetting extends Model
      */
     protected $fillable = [
         'key',
+        'storage_mode',
         'tokens',
         'css',
         'is_locked',

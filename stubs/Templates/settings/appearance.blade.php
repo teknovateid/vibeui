@@ -24,6 +24,7 @@
                         radiiLabels: @js(__('vibe/settings.appearance.radii_labels')),
                         surfacePresetsI18n: @js(__('vibe/settings.appearance.surface_presets')),
                         fontsI18n: @js(__('vibe/settings.appearance.fonts_desc')),
+                        storageModesI18n: @js(__('vibe/settings.appearance.storage_modes')),
                         i18n: @js(__('vibe/settings.appearance.toasts')),
                     })" 
                     x-init="init()"
@@ -42,40 +43,19 @@
                                             {{ __('vibe/settings.appearance.global_db_badge') }}
                                         </vibe:badge>
                                     </template>
-                                    <template x-if="storageMode === 'hybrid' && scope === 'global'">
-                                        <vibe:badge variant="warning" class="rounded-full">
-                                            {{ __('vibe/settings.appearance.global_mode_badge') }}
+                                    <template x-if="storageMode === 'local_only'">
+                                        <vibe:badge variant="secondary" class="rounded-full">
+                                            {{ __('vibe/settings.appearance.local_only_badge') }}
                                         </vibe:badge>
                                     </template>
                                 </div>
                                 <p class="mt-0.5 text-muted-foreground text-xs">
                                     {{ __('vibe/settings.appearance.header_desc') }}
                                 </p>
-
-                                {{-- Scope Switcher in Hybrid Mode --}}
-                                <div x-show="storageMode === 'hybrid' && canManageGlobal" class="mt-2.5 flex items-center gap-1.5 p-1 bg-muted/60 rounded-lg w-fit border border-border/60">
-                                    <button 
-                                        type="button" 
-                                        @click="switchScope('local')"
-                                        class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer"
-                                        :class="scope === 'local' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
-                                    >
-                                        {{ __('vibe/settings.appearance.local_pref_tab') }}
-                                    </button>
-                                    <button 
-                                        type="button" 
-                                        @click="switchScope('global')"
-                                        class="px-2.5 py-0.5 rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5"
-                                        :class="scope === 'global' ? 'bg-background text-foreground shadow-xs font-semibold' : 'text-muted-foreground hover:text-foreground'"
-                                    >
-                                        <span>{{ __('vibe/settings.appearance.global_system_tab') }}</span>
-                                        <span x-show="isGlobalLocked" class="size-1.5 rounded-full bg-warning" title="{{ __('vibe/settings.appearance.global_locked_title') }}"></span>
-                                    </button>
-                                </div>
                             </div>
 
                             <div class="flex items-center gap-2 shrink-0 flex-wrap">
-                                <template x-if="(scope === 'global' || storageMode === 'global_only') && canManageGlobal">
+                                <template x-if="storageMode !== 'local_only' && canManageGlobal">
                                     <vibe:button 
                                         type="button" 
                                         variant="primary" 
@@ -129,16 +109,67 @@
                         </div>
 
                         {{-- Global Lock & Updated At Banner --}}
-                        <div x-show="(scope === 'global' || storageMode === 'global_only') && canManageGlobal" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
-                            <label class="flex items-center gap-2 cursor-pointer select-none text-muted-foreground hover:text-foreground">
-                                <input type="checkbox" x-model="isGlobalLocked" @change="saveState()" class="rounded border-border text-primary focus:ring-primary size-3.5" />
-                                <span>{{ __('vibe/settings.appearance.lock_all_users') }}</span>
-                            </label>
+                        <div x-show="storageMode !== 'local_only' && canManageGlobal" class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
+                            <vibe:checkbox
+                                name="is_global_locked"
+                                size="sm"
+                                x-model="isGlobalLocked"
+                                @change="saveGlobalSettings(true)"
+                                :label="__('vibe/settings.appearance.lock_all_users')"
+                            />
                             <div x-show="globalUpdatedAt" class="text-[11px] text-muted-foreground">
                                 {{ __('vibe/settings.appearance.last_saved_prefix') }} <strong class="text-foreground" x-text="new Date(globalUpdatedAt).toLocaleString()"></strong> (<span x-text="globalUpdatedBy || @js(__('vibe/settings.appearance.admin_fallback'))"></span>)
                             </div>
                         </div>
                     </div>
+
+                    {{-- 0. Theme Storage Method Selector --}}
+                    <div x-show="canManageGlobal" class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">
+                        <div class="xl:col-span-4 space-y-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.storage_mode_title') }}</h3>
+                                <vibe:badge size="sm" variant="primary" class="rounded-full font-medium" x-text="storageModeLabel()"></vibe:badge>
+                            </div>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.storage_mode_desc') }}</p>
+                        </div>
+
+                        <div class="xl:col-span-8 space-y-3 w-full min-w-0">
+                            <vibe:radio.group :label="__('vibe/settings.appearance.storage_mode_group_label')" orientation="grid" :columns="3">
+                                <vibe:radio
+                                    variant="card"
+                                    name="theme_storage_mode"
+                                    value="hybrid"
+                                    x-model="storageMode"
+                                    @change="changeStorageMode('hybrid')"
+                                    x-bind:disabled="isSavingStorageMode"
+                                    :label="__('vibe/settings.appearance.storage_modes.hybrid.title')"
+                                    :description="__('vibe/settings.appearance.storage_modes.hybrid.desc')"
+                                />
+                                <vibe:radio
+                                    variant="card"
+                                    name="theme_storage_mode"
+                                    value="local_only"
+                                    x-model="storageMode"
+                                    @change="changeStorageMode('local_only')"
+                                    x-bind:disabled="isSavingStorageMode"
+                                    :label="__('vibe/settings.appearance.storage_modes.local_only.title')"
+                                    :description="__('vibe/settings.appearance.storage_modes.local_only.desc')"
+                                />
+                                <vibe:radio
+                                    variant="card"
+                                    name="theme_storage_mode"
+                                    value="global_only"
+                                    x-model="storageMode"
+                                    @change="changeStorageMode('global_only')"
+                                    x-bind:disabled="isSavingStorageMode"
+                                    :label="__('vibe/settings.appearance.storage_modes.global_only.title')"
+                                    :description="__('vibe/settings.appearance.storage_modes.global_only.desc')"
+                                />
+                            </vibe:radio.group>
+                        </div>
+                    </div>
+
+                    <vibe:separator x-show="canManageGlobal" />
 
                     {{-- 1. Custom Primary Color (--primary, --primary-foreground, --ring) --}}
                     <div class="grid grid-cols-1 xl:grid-cols-12 items-start w-full gap-6 xl:gap-x-12">

@@ -271,9 +271,9 @@ class VibeServiceProvider extends ServiceProvider
                 try {
                     \$vibeThemeService = app(\Teknovate\VibeUi\Services\ThemeService::class);
                     \$globalTheme = \$vibeThemeService->getGlobalTheme();
-                    \$storageMode = \Illuminate\Support\Facades\Config::get('vibe.theme.storage_mode', 'hybrid');
+                    \$storageMode = \$vibeThemeService->getStorageMode();
                     \$canManageTheme = \$vibeThemeService->canManage(\Illuminate\Support\Facades\Auth::user()) ? 'true' : 'false';
-                    \$preRenderedCss = (\$globalTheme && !empty(\$globalTheme['css'])) ? \$globalTheme['css'] : '';
+                    \$preRenderedCss = (\$storageMode !== 'local_only' && \$globalTheme && !empty(\$globalTheme['css'])) ? \$globalTheme['css'] : '';
                 } catch (\Throwable \$e) {
                     \$globalTheme = null;
                     \$storageMode = 'hybrid';
@@ -303,9 +303,11 @@ class VibeServiceProvider extends ServiceProvider
                             var mode = window.VIBE_THEME_STORAGE_MODE || \'hybrid\';
                             var g = window.VIBE_GLOBAL_THEME;
                             var isLocked = g && g.is_locked;
+                            var allowLocalMode = (mode === \'global_only\') || !isLocked;
+                            var allowLocalTokens = (mode === \'local_only\') || (mode === \'hybrid\' && !isLocked);
                             var s = null;
 
-                            if (!isLocked && mode !== \'global_only\') {
+                            if (allowLocalMode) {
                                 try {
                                     s = localStorage.getItem(k);
                                 } catch (e) {}
@@ -323,7 +325,7 @@ class VibeServiceProvider extends ServiceProvider
                                         d = parsed.mode === \'dark\' || (parsed.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
                                     } catch (e) {}
                                 }
-                            } else if (g && g.tokens && g.tokens.mode) {
+                            } else if (mode !== \'local_only\' && g && g.tokens && g.tokens.mode) {
                                 d = g.tokens.mode === \'dark\' || (g.tokens.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
                             } else {
                                 d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
@@ -343,11 +345,11 @@ class VibeServiceProvider extends ServiceProvider
 
                             // Anti-FOUC Theme CSS Override:
                             var activeCss = null;
-                            if (parsed && parsed.css) {
+                            if (allowLocalTokens && parsed && parsed.css) {
                                 activeCss = parsed.css;
-                            } else if (g && g.css) {
+                            } else if (mode !== \'local_only\' && g && g.css) {
                                 activeCss = g.css;
-                            } else if (parsed && (parsed.preset || parsed.customHex)) {
+                            } else if (allowLocalTokens && parsed && (parsed.preset || parsed.customHex)) {
                                 var presets = {
                                     zinc: { light: \'#0a0b0a\', lightFg: \'#f9fafa\', dark: \'#f9fafa\', darkFg: \'#0a0b0a\' },
                                     indigo: { light: \'#4f46e5\', lightFg: \'#ffffff\', dark: \'#818cf8\', darkFg: \'#0a0b0a\' },
