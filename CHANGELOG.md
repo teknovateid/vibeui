@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.7] - 2026-11-19
+
+### 🚀 Features
+- feat: Enhance theme management with dynamic storage modes and user profile updates (278a763)
+
+
 ## [0.11.6] - 2026-11-19
 
 
