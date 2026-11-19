@@ -96,10 +96,13 @@
                         <strong class="text-foreground">Injeksi Server (Anti-FOUC):</strong> Server mengambil CSS tema global langsung dari Cache server dan menyuntikkannya ke tag <code class="font-mono bg-muted px-1 py-0.5 rounded">&lt;head&gt;</code> sebelum browser mulai menggambar (*zero flash*).
                     </li>
                     <li>
-                        <strong class="text-foreground">Pemeriksaan Penguncian (*Theme Lock*):</strong> Jika pengelola sistem mengaktifkan opsi <strong>Kunci Tampilan Global</strong> (<code class="font-mono bg-muted px-1 py-0.5 rounded">is_locked = true</code>), seluruh override browser lokal diabaikan dan tema resmi dipaksakan secara seragam.
+                        <strong class="text-foreground">Pemeriksaan Penguncian (*Theme Lock*) &amp; Mode <code class="font-mono bg-muted px-1 py-0.5 rounded">global_only</code>:</strong> Jika opsi <strong>Kunci Tampilan Global</strong> (<code class="font-mono bg-muted px-1 py-0.5 rounded">is_locked = true</code>) atau metode penyimpanan <code class="font-mono bg-muted px-1 py-0.5 rounded">global_only</code> aktif, seluruh token desain CSS (warna utama, surface, sidebar, header, radius, font) diambil secara terpusat dari tema global. Pada mode <code class="font-mono bg-muted px-1 py-0.5 rounded">global_only</code>, pilihan mode <strong>Light / Dark / System</strong> tetap disimpan personal per-browser di <code class="font-mono bg-muted px-1 py-0.5 rounded">localStorage</code> (<code class="font-mono bg-muted px-1 py-0.5 rounded">Ctrl+D</code> maupun kartu mode tetap tersimpan lokal).
                     </li>
                     <li>
-                        <strong class="text-foreground">Personal Override:</strong> Jika tema tidak dikunci, skrip klien memeriksa preferensi di <code class="font-mono bg-muted px-1 py-0.5 rounded">localStorage</code>. Jika ada, preferensi personal pengguna diterapkan secara otomatis.
+                        <strong class="text-foreground">Personal Override (<code class="font-mono bg-muted px-1 py-0.5 rounded">hybrid</code> / <code class="font-mono bg-muted px-1 py-0.5 rounded">local_only</code>):</strong> Jika tema tidak dikunci dan mode bukan <code class="font-mono bg-muted px-1 py-0.5 rounded">global_only</code>, skrip klien memeriksa preferensi penuh di <code class="font-mono bg-muted px-1 py-0.5 rounded">localStorage</code> untuk diterapkan per perangkat.
+                    </li>
+                    <li>
+                        <strong class="text-foreground">Pemilihan Metode Simpan Dinamis:</strong> Pengelola tema (<code class="font-mono bg-muted px-1 py-0.5 rounded">canManage</code>) dapat mengganti metode penyimpanan (<code class="font-mono bg-muted px-1 py-0.5 rounded">hybrid</code>, <code class="font-mono bg-muted px-1 py-0.5 rounded">local_only</code>, <code class="font-mono bg-muted px-1 py-0.5 rounded">global_only</code>) langsung dari halaman Settings &rarr; Appearance menggunakan <code class="font-mono bg-muted px-1 py-0.5 rounded">&lt;vibe:radio&gt;</code>; pilihan ini menimpa nilai default <code class="font-mono bg-muted px-1 py-0.5 rounded">.env</code> melalui tabel &amp; cache <code class="font-mono bg-muted px-1 py-0.5 rounded">theme_settings</code>.
                     </li>
                 </ol>
             </div>
@@ -172,10 +175,14 @@ use Teknovate\VibeUi\Services\ThemeService;
 
 $themeService = app(ThemeService::class);
 
-// 1. Ambil tema global saat ini dari cache (0 query jika sudah ter-cache):
+// 1. Ambil tema global & metode penyimpanan aktif saat ini (0 query jika sudah ter-cache):
 $global = $themeService->getGlobalTheme();
+$storageMode = $themeService->getStorageMode();
 
-// 2. Simpan atau perbarui tema global:
+// 2. Ubah metode penyimpanan secara dinamis via database + cache ('hybrid', 'local_only', 'global_only'):
+$themeService->saveStorageMode('global_only', auth()->user()?->name ?? 'Admin');
+
+// 3. Simpan atau perbarui tema global:
 $themeService->saveGlobalTheme(
     tokens: [
         'mode' => 'dark',
@@ -188,10 +195,10 @@ $themeService->saveGlobalTheme(
     updatedBy: auth()->user()?->name ?? 'Admin'
 );
 
-// 3. Reset tema global ke bawaan Vibe UI:
+// 4. Reset tema global ke bawaan Vibe UI:
 $themeService->resetGlobalTheme();
 
-// 4. Bersihkan cache saja:
+// 5. Bersihkan cache saja:
 $themeService->clearCache();
             </vibe:highlightjs>
         </section>
@@ -214,13 +221,19 @@ $themeService->clearCache();
                             <td class="py-2.5 px-3"><vibe:badge size="sm" variant="info">GET</vibe:badge></td>
                             <td class="py-2.5 px-3 font-mono">/vibe-api/theme/global</td>
                             <td class="py-2.5 px-3 font-mono">vibe.theme.global.show</td>
-                            <td class="py-2.5 px-3">Mengambil data tema global dan status izin pengguna saat ini.</td>
+                            <td class="py-2.5 px-3">Mengambil data tema global, metode simpan aktif, dan status izin pengguna saat ini.</td>
                         </tr>
                         <tr>
                             <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success">POST</vibe:badge></td>
                             <td class="py-2.5 px-3 font-mono">/vibe-api/theme/global</td>
                             <td class="py-2.5 px-3 font-mono">vibe.theme.global.save</td>
                             <td class="py-2.5 px-3">Menyimpan tokens dan string CSS ke database & memperbarui cache.</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2.5 px-3"><vibe:badge size="sm" variant="success">POST</vibe:badge></td>
+                            <td class="py-2.5 px-3 font-mono">/vibe-api/theme/global/storage-mode</td>
+                            <td class="py-2.5 px-3 font-mono">vibe.theme.global.storage-mode</td>
+                            <td class="py-2.5 px-3">Menyimpan pilihan metode penyimpanan tema (<code class="font-mono">hybrid</code>, <code class="font-mono">local_only</code>, <code class="font-mono">global_only</code>) ke database & cache.</td>
                         </tr>
                         <tr>
                             <td class="py-2.5 px-3"><vibe:badge size="sm" variant="destructive">POST</vibe:badge></td>

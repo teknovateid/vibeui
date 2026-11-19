@@ -15,6 +15,7 @@ return new class extends Migration
             Schema::create('theme_settings', function (Blueprint $table) {
                 $table->id();
                 $table->string('key')->unique()->default('global');
+                $table->string('storage_mode')->nullable();
                 $table->json('tokens')->nullable();
                 $table->longText('css')->nullable();
                 $table->boolean('is_locked')->default(false);

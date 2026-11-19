@@ -1,8 +1,7 @@
 const VIBE_PREFIX = window.VIBE_PREFIX || 'vibe';
 const THEME_KEY = `${VIBE_PREFIX}-theme`;
 
-// Injeksi instan override CSS secepat mungkin saat theme.js dimuat
-(function() {
+function applyInitialOverride() {
     try {
         const globalTheme = window.VIBE_GLOBAL_THEME;
         const isLocked = globalTheme && globalTheme.is_locked;
@@ -11,27 +10,29 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
         let activeCss = null;
         let activeHex = null;
 
-        if ((isLocked || storageMode === 'global_only') && globalTheme) {
-            activeCss = globalTheme.css;
-            activeHex = globalTheme.tokens?.customHex;
+        if (storageMode === 'global_only' || (isLocked && storageMode !== 'local_only')) {
+            if (globalTheme) {
+                activeCss = globalTheme.css;
+                activeHex = globalTheme.tokens?.customHex;
+            }
         } else {
             const stored = localStorage.getItem(THEME_KEY);
-            if (stored) {
+            if (stored && stored.startsWith('{')) {
                 const parsed = JSON.parse(stored);
                 if (parsed) {
                     activeCss = parsed.css;
                     activeHex = parsed.customHex;
                 }
             }
-            if (!activeCss && !activeHex && globalTheme) {
+            if (!activeCss && !activeHex && storageMode !== 'local_only' && globalTheme) {
                 activeCss = globalTheme.css;
                 activeHex = globalTheme.tokens?.customHex;
             }
         }
 
+        const styleId = `${VIBE_PREFIX}-theme-override`;
+        let style = document.getElementById(styleId);
         if (activeCss) {
-            const styleId = `${VIBE_PREFIX}-theme-override`;
-            let style = document.getElementById(styleId);
             if (!style) {
                 style = document.createElement('style');
                 style.id = styleId;
@@ -42,38 +43,46 @@ const THEME_KEY = `${VIBE_PREFIX}-theme`;
                 style.textContent = activeCss;
             }
             document.head.appendChild(style);
-        } else if (activeHex) {
-            const root = document.documentElement;
-            const isDark = root.classList.contains('dark');
-            const isDefaultSlate = (activeHex.toLowerCase() === '#18181b' || activeHex.toLowerCase() === '#0a0b0a');
-            const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : activeHex;
-            root.style.setProperty('--primary', activePrimary, 'important');
-            root.style.setProperty('--color-primary', activePrimary, 'important');
-            root.style.setProperty('--ring', activePrimary, 'important');
-            root.style.setProperty('--color-ring', activePrimary, 'important');
-            const isLight = (hex) => {
-                let c = (hex || '').replace('#', '');
-                if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
-                if (c.length < 6) return true;
-                const r = parseInt(c.substring(0, 2), 16) || 0;
-                const g = parseInt(c.substring(2, 4), 16) || 0;
-                const b = parseInt(c.substring(4, 6), 16) || 0;
-                return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
-            };
-            const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
-            root.style.setProperty('--primary-foreground', fg, 'important');
-            root.style.setProperty('--color-primary-foreground', fg, 'important');
         } else {
-            const root = document.documentElement;
-            root.style.removeProperty('--primary');
-            root.style.removeProperty('--color-primary');
-            root.style.removeProperty('--ring');
-            root.style.removeProperty('--color-ring');
-            root.style.removeProperty('--primary-foreground');
-            root.style.removeProperty('--color-primary-foreground');
+            if (style) {
+                style.textContent = '';
+            }
+            if (activeHex) {
+                const root = document.documentElement;
+                const isDark = root.classList.contains('dark');
+                const isDefaultSlate = (activeHex.toLowerCase() === '#18181b' || activeHex.toLowerCase() === '#0a0b0a');
+                const activePrimary = isDefaultSlate ? (isDark ? '#f9fafa' : '#0a0b0a') : activeHex;
+                root.style.setProperty('--primary', activePrimary, 'important');
+                root.style.setProperty('--color-primary', activePrimary, 'important');
+                root.style.setProperty('--ring', activePrimary, 'important');
+                root.style.setProperty('--color-ring', activePrimary, 'important');
+                const isLight = (hex) => {
+                    let c = (hex || '').replace('#', '');
+                    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+                    if (c.length < 6) return true;
+                    const r = parseInt(c.substring(0, 2), 16) || 0;
+                    const g = parseInt(c.substring(2, 4), 16) || 0;
+                    const b = parseInt(c.substring(4, 6), 16) || 0;
+                    return ((r * 299) + (g * 587) + (b * 114)) / 1000 > 128;
+                };
+                const fg = isLight(activePrimary) ? '#0a0b0a' : '#ffffff';
+                root.style.setProperty('--primary-foreground', fg, 'important');
+                root.style.setProperty('--color-primary-foreground', fg, 'important');
+            } else {
+                const root = document.documentElement;
+                root.style.removeProperty('--primary');
+                root.style.removeProperty('--color-primary');
+                root.style.removeProperty('--ring');
+                root.style.removeProperty('--color-ring');
+                root.style.removeProperty('--primary-foreground');
+                root.style.removeProperty('--color-primary-foreground');
+            }
         }
     } catch (e) {}
-})();
+}
+
+// Injeksi instan override CSS secepat mungkin saat theme.js dimuat
+applyInitialOverride();
 
 const ThemeManager = {
     animation: 'curtain', // curtain, shutter, diagonal, wipe
@@ -95,11 +104,37 @@ const ThemeManager = {
         const config = this.getConfig();
         this.applyTheme(config.mode);
         this.applyComponentThemes(config);
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-            if (this.getConfig().mode === 'system') {
-                this.applyTheme('system');
+        if (!this._mediaListenerRegistered) {
+            this._mediaListenerRegistered = true;
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                if (this.getConfig().mode === 'system') {
+                    this.applyTheme('system');
+                }
+            });
+        }
+    },
+
+    syncFromStorageMode() {
+        applyInitialOverride();
+        this.init();
+    },
+
+    readLocalStored() {
+        try {
+            const stored = localStorage.getItem(THEME_KEY);
+            if (!stored) return null;
+            if (stored === 'dark' || stored === 'light' || stored === 'system') {
+                const migratedConfig = { ...this.defaultConfig, mode: stored };
+                localStorage.setItem(THEME_KEY, JSON.stringify(migratedConfig));
+                return migratedConfig;
             }
-        });
+            const parsed = JSON.parse(stored);
+            if (parsed && typeof parsed === 'object') {
+                delete parsed.animation;
+                return parsed;
+            }
+        } catch (e) {}
+        return null;
     },
 
     getConfig() {
@@ -107,28 +142,34 @@ const ThemeManager = {
             const globalTheme = window.VIBE_GLOBAL_THEME;
             const isLocked = globalTheme && globalTheme.is_locked;
             const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+            const localStored = this.readLocalStored();
 
-            // If global is locked or storage mode is global_only, prioritize global tokens
-            if ((isLocked || storageMode === 'global_only') && globalTheme && globalTheme.tokens) {
+            // In global_only: design tokens/CSS come strictly from global theme,
+            // while light/dark/system mode remains per-browser in localStorage.
+            if (storageMode === 'global_only') {
+                const base = (globalTheme && globalTheme.tokens)
+                    ? { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css }
+                    : { ...this.defaultConfig };
+                const localMode = localStored?.mode;
+                if (localMode === 'dark' || localMode === 'light' || localMode === 'system') {
+                    base.mode = localMode;
+                }
+                return base;
+            }
+
+            if (storageMode === 'local_only') {
+                return localStored ? { ...this.defaultConfig, ...localStored } : { ...this.defaultConfig };
+            }
+
+            // Hybrid mode: respect lock if active, else localStorage, else global fallback
+            if (isLocked && globalTheme && globalTheme.tokens) {
                 return { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css };
             }
 
-            // Otherwise, check localStorage first if local overrides are allowed
-            if (storageMode !== 'global_only') {
-                const stored = localStorage.getItem(THEME_KEY);
-                if (stored) {
-                    if (stored === 'dark' || stored === 'light' || stored === 'system') {
-                        const migratedConfig = { ...this.defaultConfig, mode: stored };
-                        localStorage.setItem(THEME_KEY, JSON.stringify(migratedConfig));
-                        return migratedConfig;
-                    }
-                    const parsed = JSON.parse(stored);
-                    delete parsed.animation; // Jangan biarkan cache localStorage lama menimpa konfigurasi animasi kode
-                    return { ...this.defaultConfig, ...parsed };
-                }
+            if (localStored) {
+                return { ...this.defaultConfig, ...localStored };
             }
 
-            // Fallback to global theme if available
             if (globalTheme && globalTheme.tokens) {
                 return { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css };
             }
@@ -143,12 +184,20 @@ const ThemeManager = {
         const isLocked = globalTheme && globalTheme.is_locked;
         const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
 
-        // Do not persist personal localStorage overrides when locked or global_only
-        if (!isLocked && storageMode !== 'global_only') {
-            const toSave = { ...config };
-            delete toSave.animation;
-            localStorage.setItem(THEME_KEY, JSON.stringify(toSave));
-        }
+        try {
+            if (storageMode === 'global_only') {
+                // Keep non-mode keys intact if user temporarily toggled storage modes,
+                // while persisting only light/dark/system mode in localStorage.
+                const existing = this.readLocalStored() || {};
+                const nextLocal = { ...existing, mode: config.mode || 'system' };
+                delete nextLocal.animation;
+                localStorage.setItem(THEME_KEY, JSON.stringify(nextLocal));
+            } else if (!isLocked || storageMode === 'local_only') {
+                const toSave = { ...config };
+                delete toSave.animation;
+                localStorage.setItem(THEME_KEY, JSON.stringify(toSave));
+            }
+        } catch (e) {}
 
         this.applyComponentThemes(config);
         

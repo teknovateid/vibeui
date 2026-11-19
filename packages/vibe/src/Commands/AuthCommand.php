@@ -414,11 +414,17 @@ class AuthCommand extends Command
                     );
                 }
 
-                // Ensure username and phone in fillable if not present
+                // Ensure username, phone, position, and avatar in fillable if not present
                 if (! str_contains($content, "'username'")) {
                     $content = preg_replace(
                         "/'name',/",
-                        "'name',\n        'username',\n        'phone',\n        'position',",
+                        "'name',\n        'username',\n        'phone',\n        'position',\n        'avatar',",
+                        $content
+                    );
+                } elseif (! str_contains($content, "'avatar'")) {
+                    $content = preg_replace(
+                        "/'name',/",
+                        "'name',\n        'avatar',",
                         $content
                     );
                 }

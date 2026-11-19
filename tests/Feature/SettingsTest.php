@@ -5,10 +5,16 @@ use App\Livewire\Settings\LoginHistory;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 
 uses(DatabaseTransactions::class);
@@ -33,7 +39,12 @@ test('authenticated user can view settings account page', function () {
     $this->actingAs($this->user)
         ->get(route('docs.settings.account'))
         ->assertOk()
-        ->assertSeeLivewire(Profile::class);
+        ->assertSeeLivewire(Profile::class)
+        ->assertSee('xl:grid-cols-12', false)
+        ->assertSee('filepond-avatar-mode', false)
+        ->assertSee(__('vibe/settings.profile.account_detail_title'))
+        ->assertSee(__('vibe/settings.profile.interface_language'))
+        ->assertDontSee('name="position"', false);
 });
 
 test('authenticated user can view appearance page with sidebar, header, and custom primary color controls', function () {
@@ -56,15 +67,67 @@ test('profile component updates user details in database', function () {
         ->assertSet('name', 'John Doe')
         ->assertSet('email', $this->user->email)
         ->set('name', 'John Updated')
-        ->set('position', 'Engineering Lead')
+        ->set('username', 'john_updated_' . uniqid())
+        ->set('phone', '081399998888')
         ->call('updateProfile')
         ->assertHasNoErrors()
         ->assertDispatched('toast');
 
     $this->user->refresh();
 
-    expect($this->user->name)->toBe('John Updated');
-    expect($this->user->position)->toBe('Engineering Lead');
+    expect($this->user->name)->toBe('John Updated')
+        ->and($this->user->phone)->toBe('081399998888');
+});
+
+test('profile component uploads and removes user avatar on public disk', function () {
+    Config::set('filesystems.default', 'public');
+    Config::set('livewire.temporary_file_upload.disk', 'public');
+    Storage::fake('public');
+
+    $file = UploadedFile::fake()->image('avatar.png', 200, 200);
+
+    Livewire::actingAs($this->user)
+        ->test(Profile::class)
+        ->set('avatar_file', $file)
+        ->assertHasNoErrors()
+        ->assertDispatched('profile-avatar-saved')
+        ->assertDispatched('toast');
+
+    $this->user->refresh();
+
+    expect($this->user->avatar)->not->toBeNull();
+    Storage::disk('public')->assertExists($this->user->avatar);
+
+    $storedAvatar = $this->user->avatar;
+
+    Livewire::actingAs($this->user)
+        ->test(Profile::class)
+        ->call('removeAvatar')
+        ->assertHasNoErrors()
+        ->assertSet('avatar', null)
+        ->assertSet('avatarUrl', null)
+        ->assertDispatched('profile-avatar-removed')
+        ->assertDispatched('toast');
+
+    $this->user->refresh();
+
+    expect($this->user->avatar)->toBeNull();
+    Storage::disk('public')->assertMissing($storedAvatar);
+});
+
+test('profile component resends email verification notification with rate limiting', function () {
+    Notification::fake();
+
+    $unverifiedUser = User::factory()->unverified()->create();
+    RateLimiter::clear('verify-email-profile|' . $unverifiedUser->id);
+
+    Livewire::actingAs($unverifiedUser)
+        ->test(Profile::class)
+        ->assertSet('emailVerified', false)
+        ->call('resendEmailVerification')
+        ->assertDispatched('toast');
+
+    Notification::assertSentTo($unverifiedUser, VerifyEmail::class);
 });
 
 test('password component validates password confirmation correctly', function () {
@@ -190,5 +253,5 @@ test('appearance settings page uses uniform column widths', function () {
         ->assertDontSee('gap-x-20', false);
 
     $html = $response->getContent();
-    expect(substr_count($html, 'xl:grid-cols-12'))->toBe(12);
+    expect(substr_count($html, 'xl:grid-cols-12'))->toBe(13);
 });

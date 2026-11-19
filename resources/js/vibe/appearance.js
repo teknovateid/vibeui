@@ -24,6 +24,7 @@ export function appearanceController() {
                     storageMode: window.VIBE_THEME_STORAGE_MODE || 'hybrid',
                     isSavingGlobal: false,
                     isResettingGlobal: false,
+                    isSavingStorageMode: false,
 
 
                     presets: {
@@ -774,6 +775,7 @@ export function appearanceController() {
                     },
 
                     init() {
+                        const localMode = window.VibeTheme?.getConfig()?.mode;
                         this.updateIsDarkNow();
                         try {
                             if (window.VibeTheme) {
@@ -789,6 +791,9 @@ export function appearanceController() {
                                 this.isGlobalLocked = !!g.is_locked;
                                 this.globalUpdatedBy = g.updated_by || null;
                                 this.globalUpdatedAt = g.updated_at || null;
+                                if (g.storage_mode && ['hybrid', 'local_only', 'global_only'].includes(g.storage_mode)) {
+                                    this.storageMode = g.storage_mode;
+                                }
                             }
 
                             let sourceData = null;
@@ -802,15 +807,21 @@ export function appearanceController() {
                                 } catch (e) {}
                             }
 
-                            if (!sourceData && g?.tokens) {
+                            if (!sourceData && this.storageMode !== 'local_only' && g?.tokens) {
                                 sourceData = g.tokens;
                             }
 
                             if (sourceData) {
                                 this.applyParsedTokens(sourceData);
                             }
+
+                            // Under global_only, light/dark/system mode stays strictly per-browser in localStorage.
+                            if (this.storageMode === 'global_only' && localMode) {
+                                this.mode = localMode;
+                            }
                         } catch (e) {}
 
+                        this.updateIsDarkNow();
                         this.syncActiveModeValues();
 
                         const shouldBeDark = this.mode === 'dark' || (this.mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -829,7 +840,7 @@ export function appearanceController() {
                                 if (this.mode === 'system') {
                                     this.updateIsDarkNow();
                                     this.syncActiveModeValues();
-                                    this.applyTheme();
+                                    this.applyTheme(true);
                                 }
                             });
                         }
@@ -839,11 +850,11 @@ export function appearanceController() {
                                 this.mode = e.detail.mode;
                                 this.updateIsDarkNow();
                                 this.syncActiveModeValues();
-                                this.applyTheme();
+                                this.applyTheme(this.storageMode === 'global_only' || this.scope === 'global');
                             }
                         });
 
-                        this.applyTheme();
+                        this.applyTheme(true);
                     },
 
                     selectPrimaryColor(hex) {
@@ -1244,7 +1255,7 @@ export function appearanceController() {
                             const isDark = newMode === 'dark' || (newMode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                             document.documentElement.classList.toggle('dark', isDark);
                         }
-                        this.applyTheme();
+                        this.applyTheme(this.storageMode === 'global_only' || this.scope === 'global');
                         this.notify('theme_mode', 'Theme mode changed to ' + newMode, { mode: newMode });
                     },
 
@@ -1784,7 +1795,7 @@ export function appearanceController() {
                         };
                     },
 
-                    applyTheme() {
+                    applyTheme(skipSave = false) {
                         const isDefaultSlate = (this.customHex.toLowerCase() === '#18181b' || this.customHex.toLowerCase() === '#0a0b0a');
                         const lightPrimary = isDefaultSlate ? '#0a0b0a' : this.customHex;
                         const lightFg = this.isLight(lightPrimary) ? '#0a0b0a' : '#ffffff';
@@ -2154,7 +2165,9 @@ export function appearanceController() {
                             });
                         }
 
-                        this.saveState();
+                        if (!skipSave) {
+                            this.saveState();
+                        }
                     },
 
                     generateCssText() {
@@ -2364,7 +2377,7 @@ html.dark, .dark {
 
                     saveState() {
                         try {
-                            if (this.scope === 'local' && this.storageMode !== 'global_only') {
+                            if (this.storageMode === 'local_only' || (this.scope === 'local' && this.storageMode !== 'global_only')) {
                                 if (!this.isGlobalLocked || this.storageMode === 'local_only') {
                                     localStorage.setItem(themeKey, JSON.stringify(this.collectCurrentTokens()));
                                 }
@@ -2384,8 +2397,8 @@ html.dark, .dark {
                     },
 
                     switchScope(targetScope) {
-                        if (this.storageMode === 'global_only') {
-                            this.scope = 'global';
+                        if (this.storageMode !== 'hybrid') {
+                            this.scope = this.storageMode === 'global_only' ? 'global' : 'local';
                             return;
                         }
                         if (this.scope === targetScope) return;
@@ -2408,8 +2421,131 @@ html.dark, .dark {
                             } catch (e) {}
                         }
 
+                        this.updateIsDarkNow();
                         this.syncActiveModeValues();
-                        this.applyTheme();
+                        this.applyTheme(true);
+                    },
+
+                    storageModeLabel(mode = null) {
+                        const target = mode || this.storageMode || 'hybrid';
+                        const i18nModes = this.storageModesI18n || {};
+                        if (i18nModes[target]?.title) {
+                            return i18nModes[target].title;
+                        }
+                        if (target === 'local_only') return 'Local Storage Only';
+                        if (target === 'global_only') return 'Global Database Only';
+                        return 'Hybrid';
+                    },
+
+                    async changeStorageMode(nextMode) {
+                        const allowed = ['hybrid', 'local_only', 'global_only'];
+                        const previousMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+                        if (!allowed.includes(nextMode)) {
+                            this.storageMode = previousMode;
+                            return;
+                        }
+                        if (!this.canManageGlobal) {
+                            this.storageMode = previousMode;
+                            return;
+                        }
+                        if (nextMode === previousMode && !this.isSavingStorageMode) {
+                            return;
+                        }
+
+                        if (this._debounceSaveTimer) {
+                            clearTimeout(this._debounceSaveTimer);
+                            this._debounceSaveTimer = null;
+                        }
+
+                        this.isSavingStorageMode = true;
+
+                        try {
+                            const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                            const response = await fetch('/vibe-api/theme/global/storage-mode', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken || ''
+                                },
+                                body: JSON.stringify({
+                                    storage_mode: nextMode
+                                })
+                            });
+
+                            const data = await response.json();
+                            if (!response.ok || !data.success) {
+                                throw new Error(data.message || this.t('storage_mode_save_failed_msg', 'Failed to update storage method.'));
+                            }
+
+                            const activeMode = data.storage_mode || nextMode;
+                            window.VIBE_THEME_STORAGE_MODE = activeMode;
+                            this.storageMode = activeMode;
+                            if (data.theme) {
+                                window.VIBE_GLOBAL_THEME = data.theme;
+                                this.isGlobalLocked = !!data.theme.is_locked;
+                                this.globalUpdatedBy = data.theme.updated_by || null;
+                                this.globalUpdatedAt = data.theme.updated_at || null;
+                            }
+
+                            this.scope = activeMode === 'global_only' ? 'global' : 'local';
+
+                            const preservedLocalMode = window.VibeTheme?.getConfig()?.mode || this.mode;
+                            this.resetToDefaultsInternal();
+
+                            if (activeMode === 'global_only') {
+                                if (window.VIBE_GLOBAL_THEME?.tokens) {
+                                    this.applyParsedTokens(window.VIBE_GLOBAL_THEME.tokens);
+                                }
+                                if (preservedLocalMode) {
+                                    this.mode = preservedLocalMode;
+                                }
+                            } else {
+                                let loaded = false;
+                                try {
+                                    const stored = localStorage.getItem(themeKey);
+                                    if (stored) {
+                                        this.applyParsedTokens(JSON.parse(stored));
+                                        loaded = true;
+                                    }
+                                } catch (e) {}
+                                if (!loaded && activeMode === 'hybrid' && window.VIBE_GLOBAL_THEME?.tokens) {
+                                    this.applyParsedTokens(window.VIBE_GLOBAL_THEME.tokens);
+                                }
+                            }
+
+                            if (window.VibeTheme?.syncFromStorageMode) {
+                                window.VibeTheme.syncFromStorageMode();
+                            }
+
+                            const activeThemeMode = window.VibeTheme?.getConfig()?.mode;
+                            if (activeThemeMode) {
+                                this.mode = activeThemeMode;
+                            }
+
+                            this.updateIsDarkNow();
+                            this.syncActiveModeValues();
+                            this.applyTheme(true);
+
+                            this.notify(
+                                'storage_mode_saved_msg',
+                                'Storage method updated to :mode.',
+                                { mode: this.storageModeLabel(activeMode) },
+                                'success',
+                                this.t('storage_mode_saved_title', 'Storage Method Updated')
+                            );
+                        } catch (err) {
+                            this.storageMode = previousMode;
+                            this.notify(
+                                'storage_mode_save_failed_msg',
+                                err.message || 'Failed to update storage method.',
+                                {},
+                                'destructive',
+                                this.t('global_save_failed_title', 'Save Failed')
+                            );
+                        } finally {
+                            this.isSavingStorageMode = false;
+                        }
                     },
 
                     async saveGlobalSettings(isAuto = false) {
@@ -2418,6 +2554,9 @@ html.dark, .dark {
 
                         try {
                             const tokens = this.collectCurrentTokens();
+                            if (this.storageMode === 'global_only') {
+                                tokens.mode = window.VIBE_GLOBAL_THEME?.tokens?.mode || 'system';
+                            }
                             const css = this.generateCssText();
                             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
@@ -2431,19 +2570,28 @@ html.dark, .dark {
                                 body: JSON.stringify({
                                     tokens: tokens,
                                     css: css,
-                                    is_locked: !!this.isGlobalLocked
+                                    is_locked: !!this.isGlobalLocked,
+                                    storage_mode: this.storageMode
                                 })
                             });
 
                             const data = await response.json();
                             if (response.ok && data.success) {
                                 window.VIBE_GLOBAL_THEME = data.theme;
+                                if (data.storage_mode) {
+                                    window.VIBE_THEME_STORAGE_MODE = data.storage_mode;
+                                    this.storageMode = data.storage_mode;
+                                }
                                 this.isGlobalLocked = !!data.theme.is_locked;
                                 this.globalUpdatedBy = data.theme.updated_by;
                                 this.globalUpdatedAt = data.theme.updated_at;
 
                                 if (window.VibeTheme?.setCssOverride) {
-                                    window.VibeTheme.setCssOverride(css, { ...tokens });
+                                    const localMode = window.VibeTheme?.getConfig()?.mode;
+                                    const overrideTokens = this.storageMode === 'global_only' && localMode
+                                        ? { ...tokens, mode: localMode }
+                                        : { ...tokens };
+                                    window.VibeTheme.setCssOverride(css, overrideTokens);
                                 }
 
                                 if (!isAuto) {
@@ -2466,6 +2614,9 @@ html.dark, .dark {
                         this.isResettingGlobal = true;
 
                         try {
+                            const preservedLocalMode = this.storageMode === 'global_only'
+                                ? (window.VibeTheme?.getConfig()?.mode || this.mode)
+                                : null;
                             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
                             const response = await fetch('/vibe-api/theme/global/reset', {
                                 method: 'POST',
@@ -2479,6 +2630,7 @@ html.dark, .dark {
                             const data = await response.json();
                             if (response.ok && data.success) {
                                 window.VIBE_GLOBAL_THEME = {
+                                    storage_mode: this.storageMode,
                                     tokens: null,
                                     css: null,
                                     is_locked: false,
@@ -2490,7 +2642,12 @@ html.dark, .dark {
                                 this.globalUpdatedAt = null;
 
                                 this.resetToDefaultsInternal();
-                                this.applyTheme();
+                                if (preservedLocalMode) {
+                                    this.mode = preservedLocalMode;
+                                }
+                                this.updateIsDarkNow();
+                                this.syncActiveModeValues();
+                                this.applyTheme(true);
 
                                 this.notify('global_reset_msg', 'Global appearance has been reset to system defaults.', {}, 'success', this.t('global_reset_title', 'Global Appearance Reset'));
                             } else {
@@ -2508,14 +2665,15 @@ html.dark, .dark {
                             localStorage.removeItem(themeKey);
                         } catch (e) {}
 
-                        if (window.VIBE_GLOBAL_THEME?.tokens) {
+                        if (this.storageMode !== 'local_only' && window.VIBE_GLOBAL_THEME?.tokens) {
                             this.applyParsedTokens(window.VIBE_GLOBAL_THEME.tokens);
                         } else {
                             this.resetToDefaultsInternal();
                         }
 
+                        this.updateIsDarkNow();
                         this.syncActiveModeValues();
-                        this.applyTheme();
+                        this.applyTheme(true);
                         this.notify('local_reset_msg', 'Local preferences reset to global theme defaults.', {}, 'success', this.t('local_reset_title', 'Preferences Reset'));
                     },
 
