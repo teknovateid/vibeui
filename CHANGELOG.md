@@ -2,6 +2,9 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.6] - 2026-11-19
+
+
 ## [0.11.5] - 2026-11-18
 
 ### 🚀 Features
