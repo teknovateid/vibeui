@@ -192,6 +192,8 @@ export default defineConfig({
                 'resources/js/vibe/idle.js',
                 'resources/js/vibe/qrcode.js',
                 'resources/js/vibe/datatable.js',
+                'resources/js/vibe/select.js',
+                'resources/js/vibe/sheet.js',
                 'resources/js/vibe/show.js',
                 'resources/js/vibe/image-lightbox.js',
                 'resources/js/vibe/todo.js',

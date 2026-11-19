@@ -30,7 +30,7 @@
     data-icon="{{ $icon ?? '' }}"
     data-description="{{ $description ?? '' }}"
     data-selected="{{ $isSelectedDefault ? 'true' : 'false' }}"
-    x-show="!search || $el.innerText.toLowerCase().includes(search.toLowerCase().trim()) || ($el.dataset.value || '').toLowerCase().includes(search.toLowerCase().trim())"
+    x-show="isOptionVisible($el)"
     @if(!$disabled)
         @click="selectOption($el)"
         @keydown.enter.prevent="selectOption($el)"
@@ -42,13 +42,7 @@
         'opacity-40 cursor-not-allowed pointer-events-none' => $disabled,
         'cursor-pointer focus:bg-muted focus:text-foreground focus:ring-1 focus:ring-foreground/15 focus:ring-inset' => !$disabled,
     ])
-    :class="{
-        'bg-muted text-foreground font-medium': !multiple && isSelected($el.dataset.value),
-        'font-medium text-foreground': multiple && isSelected($el.dataset.value),
-        'text-popover-foreground hover:bg-muted/60': !isSelected($el.dataset.value) && !isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }}),
-        'hover:bg-muted/60': multiple && isSelected($el.dataset.value) && !isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }}),
-        'opacity-40 cursor-not-allowed pointer-events-none': isOptionDisabled($el.dataset.value, {{ $disabled ? 'true' : 'false' }})
-    }"
+    :class="getOptionClasses($el, {{ $disabled ? 'true' : 'false' }})"
 >
     
     {{-- Left Avatar or Icon --}}

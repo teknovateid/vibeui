@@ -165,16 +165,35 @@ test('vibe:select.option decodes html entities in label without double-encoding 
         ->not->toContain('&amp;amp;');
 });
 
-test('vibe:select decodes html entities in options and includes decodeHtml in alpine data', function () {
+test('vibe:select decodes html entities in options and delegates logic to vibeSelect module', function () {
     $html = Blade::render(
         '<vibe:select name="category" :options="$options" multiple />',
         ['options' => ['cemilan' => 'Cemilan & Finger Food', 'manual' => 'Manual Brew']]
     );
 
     expect($html)
-        ->toContain('decodeHtml(str)')
-        ->toContain('getOptionLabel(el)')
+        ->toContain('window.vibeSelect(')
+        ->not->toContain('decodeHtml(str)')
         ->toContain('data-label="Cemilan &amp; Finger Food"')
         ->not->toContain('&amp;amp;');
+
+    $selectJs = file_get_contents(resource_path('js/vibe/select.js'));
+    expect($selectJs)
+        ->toContain('decodeHtml(str)')
+        ->toContain('getOptionLabel(el)')
+        ->toContain('window.vibeSelect')
+        ->toContain('window.vibeRemoteSelect');
+});
+
+test('vibe:select.remote delegates logic to vibeRemoteSelect module', function () {
+    $html = Blade::render(
+        '<vibe:select.remote name="product" api="/api/products" placeholder="Pick one" />'
+    );
+
+    expect($html)
+        ->toContain('window.vibeRemoteSelect(')
+        ->toContain('\u0022api\u0022:')
+        ->toContain('products')
+        ->toContain('vibe-select-ready');
 });
 

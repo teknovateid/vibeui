@@ -156,457 +156,76 @@
     }
 @endphp
 
+@pushOnce('head', 'vibe-select-scripts')
+    @vite(['resources/js/vibe/select.js'])
+@endPushOnce
+
+@php
+    $selectConfigJson = \Illuminate\Support\Js::from([
+        'name' => $name,
+        'separator' => $separator,
+        'badgeVariant' => $badgeVariant,
+        'colorCycle' => $colorCycle,
+        'disabled' => (bool) $disabled,
+        'keyboard' => (bool) $keyboard,
+        'multiple' => (bool) $multiple,
+        'min' => $min !== null ? (int) $min : null,
+        'max' => $max !== null ? (int) $max : null,
+        'placement' => $placement,
+        'openUp' => $placement === 'top',
+    ])->toHtml();
+@endphp
+
 <div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}
     data-vibe-select="{{ $name }}"
     data-multiple="{{ $multiple ? 'true' : 'false' }}"
-    x-data="{
-    open: false,
-    search: '',
-    value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($initialSelectVal) @endif,
-    separator: @js($separator),
-    badgeVariant: @js($badgeVariant),
-    colorCycle: @js($colorCycle),
-    selectedLabel: '',
-    selectedAvatar: '',
-    selectedIcon: '',
-    selectedDescription: '',
-    selectedItems: [],
-    hasVisibleOptions: true,
-    disabled: {{ $disabled ? 'true' : 'false' }},
-    keyboard: {{ $keyboard ? 'true' : 'false' }},
-    multiple: {{ $multiple ? 'true' : 'false' }},
-    min: {{ $min !== null ? (int) $min : 'null' }},
-    max: {{ $max !== null ? (int) $max : 'null' }},
-    placement: '{{ $placement }}',
-    openUp: {{ $placement === 'top' ? 'true' : 'false' }},
-
-    getBadgeClasses(index) {
-        if (this.badgeVariant === 'cycle') {
-            const cycle = [
-                'bg-info/15 text-info border-info/30 hover:bg-info/20',
-                'bg-primary/15 text-primary border-primary/30 hover:bg-primary/20',
-                'bg-success/15 text-success border-success/30 hover:bg-success/20',
-                'bg-warning/15 text-warning border-warning/30 hover:bg-warning/20',
-                'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/30 hover:bg-purple-500/20',
-                'bg-pink-500/15 text-pink-600 dark:text-pink-400 border-pink-500/30 hover:bg-pink-500/20',
-                'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20',
-                'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border-cyan-500/30 hover:bg-cyan-500/20',
-            ];
-            return cycle[index % cycle.length];
-        }
-        if (this.badgeVariant === 'primary') {
-            return 'bg-primary text-primary-foreground border-transparent shadow-2xs';
-        }
-        if (this.badgeVariant === 'outline') {
-            return 'bg-transparent text-foreground border-border hover:bg-muted';
-        }
-        return 'bg-muted/80 text-foreground border-border/70 hover:bg-muted';
-    },
-
-    decodeHtml(str) {
-        if (!str || typeof str !== 'string' || !str.includes('&')) return str || '';
-        let txt = document.createElement('textarea');
-        txt.innerHTML = str;
-        return txt.value;
-    },
-
-    getOptionLabel(el) {
-        if (!el) return '';
-        let lbl = el.getAttribute('data-label') || el.innerText.trim();
-        return this.decodeHtml(lbl);
-    },
-
-    init() {
-        this.$nextTick(() => {
-            let isEmptyValue = this.value === '' || this.value === null || this.value === undefined || (Array.isArray(this.value) && this.value.length === 0);
-            if (isEmptyValue) {
-                const form = this.$el ? this.$el.closest('form') : null;
-                if (form && form._x_dataStack && form._x_dataStack[0]?.getStorageData) {
-                    const formAlpine = form._x_dataStack[0];
-                    if (formAlpine.saveToStorage && form.id) {
-                        const storageArray = formAlpine.getStorageData();
-                        const myData = storageArray.find(item => item.id === form.id);
-                        if (myData && myData.data) {
-                            const rawKey = @js($name);
-                            const storedVal = myData.data[rawKey] !== undefined ? myData.data[rawKey] : myData.data[`${rawKey}[]`];
-                            if (storedVal !== undefined && storedVal !== null && storedVal !== '') {
-                                this.value = storedVal;
-                                isEmptyValue = false;
-                            }
-                        }
+    x-data="typeof window.vibeSelect === 'function' ? window.vibeSelect(Object.assign({!! $selectConfigJson !!}, {
+        value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($initialSelectVal) @endif
+    })) : Object.assign({!! $selectConfigJson !!}, {
+        open: false,
+        search: '',
+        value: @if ($wireModelName) $wire.entangle('{{ $wireModelName }}'){{ $isWireLive ? '.live' : '' }} @else @js($initialSelectVal) @endif,
+        selectedLabel: '',
+        selectedAvatar: '',
+        selectedIcon: '',
+        selectedDescription: '',
+        selectedItems: [],
+        hasVisibleOptions: true,
+        getBadgeClasses: () => '',
+        isOptionVisible: () => true,
+        getOptionClasses: () => ({}),
+        isSelected: () => false,
+        isOptionDisabled: () => false,
+        getVisibleItems: () => [],
+        toggle() {},
+        close() {},
+        clearAll() {},
+        removeTag() {},
+        selectOption() {},
+        handleHiddenInput() {},
+        calculatePlacement() {},
+        focusNext() {},
+        focusPrevious() {},
+        init() {
+            var self = this;
+            var attach = function() {
+                if (self._vibeSelectBound || typeof window.vibeSelect !== 'function') return;
+                self._vibeSelectBound = true;
+                var comp = window.vibeSelect({!! $selectConfigJson !!});
+                Object.keys(comp).forEach(function(k) {
+                    if (k !== 'init' && k !== 'value' && typeof comp[k] === 'function') {
+                        self[k] = comp[k];
                     }
-                }
-            }
-            if (isEmptyValue && this.$refs.hiddenInput && this.$refs.hiddenInput.value) {
-                if (this.multiple) {
-                    if (this.separator && typeof this.$refs.hiddenInput.value === 'string') {
-                        let parsed = this.$refs.hiddenInput.value.split(this.separator).map(s => s.trim()).filter(Boolean);
-                        if (parsed.length > 0) {
-                            this.value = parsed;
-                            isEmptyValue = false;
-                        }
-                    } else {
-                        try {
-                            let parsed = JSON.parse(this.$refs.hiddenInput.value);
-                            if (Array.isArray(parsed) && parsed.length > 0) {
-                                this.value = parsed;
-                                isEmptyValue = false;
-                            }
-                        } catch(e) {}
-                    }
-                } else {
-                    this.value = this.$refs.hiddenInput.value;
-                    isEmptyValue = false;
-                }
-            }
-            if (isEmptyValue && this.$refs.optionsContainer) {
-                let preselected = Array.from(this.$refs.optionsContainer.querySelectorAll('[data-selected=\'true\']'));
-                if (preselected.length > 0) {
-                    if (this.multiple) {
-                        this.value = preselected.map(el => el.getAttribute('data-value'));
-                    } else {
-                        this.value = preselected[0].getAttribute('data-value');
-                    }
-                }
-            }
-            this.updateSelectionFromValue();
-        });
-        this.$watch('value', () => {
-            this.updateSelectionFromValue();
-        });
-        this.$watch('search', () => {
-            this.$nextTick(() => this.checkVisibility());
-        });
-        this.$el.addEventListener('vibe-select-restore', (e) => {
-            if (e.detail && e.detail.value !== undefined) {
-                this.value = e.detail.value;
-                this.updateSelectionFromValue();
-                if (this.$refs.hiddenInput) {
-                    if (this.multiple) {
-                        this.$refs.hiddenInput.value = this.separator ? (Array.isArray(this.value) ? this.value.join(this.separator) : this.value) : JSON.stringify(this.value);
-                    } else {
-                        this.$refs.hiddenInput.value = this.value;
-                    }
-                }
-            }
-        });
-    },
-
-    selectOption(el) {
-        if (!el) return;
-        let val = el.getAttribute('data-value');
-        let lbl = this.getOptionLabel(el);
-        let av = el.getAttribute('data-avatar') || '';
-        let ic = el.getAttribute('data-icon') || '';
-        let desc = el.getAttribute('data-description') || '';
-        this.select(val, lbl, av, ic, desc);
-    },
-
-    isSelected(val) {
-        if (this.multiple) {
-            return Array.isArray(this.value) && this.value.some(v => String(v) === String(val));
-        }
-        return String(this.value) === String(val);
-    },
-
-    canSelectMore() {
-        if (!this.multiple) return true;
-        if (this.max === null) return true;
-        return Array.isArray(this.value) && this.value.length < this.max;
-    },
-
-    canDeselect() {
-        if (!this.multiple) return true;
-        if (this.min === null) return true;
-        return Array.isArray(this.value) && this.value.length > this.min;
-    },
-
-    isOptionDisabled(val, isDisabled) {
-        if (isDisabled) return true;
-        if (this.multiple && this.max !== null && !this.isSelected(val) && !this.canSelectMore()) {
-            return true;
-        }
-        return false;
-    },
-
-    removeTag(val) {
-        if (this.disabled) return;
-        if (this.min !== null && Array.isArray(this.value) && this.value.length <= this.min) {
-            return;
-        }
-        let strVal = String(val);
-        this.value = this.value.filter(v => String(v) !== strVal);
-        this.updateSelectionFromValue();
-        this.$nextTick(() => {
-            this.dispatchChangeEvent();
-        });
-    },
-
-    clearAll() {
-        if (this.disabled) return;
-        if (this.multiple) {
-            if (this.min !== null && this.min > 0) {
-                if (Array.isArray(this.value) && this.value.length > this.min) {
-                    this.value = this.value.slice(0, this.min);
-                    this.updateSelectionFromValue();
-                    this.$nextTick(() => {
-                        this.dispatchChangeEvent();
-                    });
-                }
-                return;
-            }
-            this.value = [];
-            this.updateSelectionFromValue();
-            this.$nextTick(() => {
-                this.dispatchChangeEvent();
-            });
-            return;
-        }
-        this.value = '';
-        this.selectedLabel = '';
-        this.selectedAvatar = '';
-        this.selectedIcon = '';
-        this.selectedDescription = '';
-        this.updateSelectionFromValue();
-        this.$nextTick(() => {
-            this.dispatchChangeEvent();
-        });
-    },
-
-    dispatchChangeEvent() {
-        if (this.$refs.hiddenInput) {
-            this.$refs.hiddenInput.dispatchEvent(new Event('input', { bubbles: true }));
-            this.$refs.hiddenInput.dispatchEvent(new Event('change', { bubbles: true }));
-        }
-        this.$el.dispatchEvent(new CustomEvent('vibe-select-change', {
-            bubbles: true,
-            detail: { name: @js($name), value: this.value }
-        }));
-        this.$el.dispatchEvent(new Event('input', { bubbles: true }));
-        this.$el.dispatchEvent(new Event('change', { bubbles: true }));
-    },
-
-    handleHiddenInput(el) {
-        if (!el) return;
-        if (this.multiple) {
-            if (this.separator && typeof el.value === 'string') {
-                let p = el.value ? el.value.split(this.separator).map(s => s.trim()).filter(Boolean) : [];
-                if (JSON.stringify(p) !== JSON.stringify(this.value)) {
-                    this.value = p;
-                    this.updateSelectionFromValue();
-                }
+                });
+                comp.init.call(self);
+            };
+            if (typeof window.vibeSelect === 'function') {
+                attach();
             } else {
-                try {
-                    let p = JSON.parse(el.value);
-                    if (Array.isArray(p) && JSON.stringify(p) !== JSON.stringify(this.value)) {
-                        this.value = p;
-                        this.updateSelectionFromValue();
-                    }
-                } catch(e) {}
-            }
-        } else {
-            if (this.value !== el.value) {
-                this.value = el.value;
-                this.updateSelectionFromValue();
+                window.addEventListener('vibe-select-ready', attach, { once: true });
             }
         }
-    },
-
-    updateSelectionFromValue() {
-        if (this.multiple) {
-            if (!Array.isArray(this.value)) {
-                if (this.separator && typeof this.value === 'string') {
-                    this.value = this.value ? this.value.split(this.separator).map(s => s.trim()).filter(Boolean) : [];
-                } else {
-                    this.value = this.value !== null && this.value !== undefined && this.value !== '' ? [this.value] : [];
-                }
-            }
-            let items = [];
-            this.value.forEach(val => {
-                let strVal = String(val);
-                let el = this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelector(`[data-value='${strVal}']`) : null;
-                if (el) {
-                    items.push({
-                        value: val,
-                        label: this.getOptionLabel(el),
-                        avatar: el.getAttribute('data-avatar') || '',
-                        icon: el.getAttribute('data-icon') || '',
-                        description: el.getAttribute('data-description') || ''
-                    });
-                } else {
-                    items.push({
-                        value: val,
-                        label: this.decodeHtml(String(val)),
-                        avatar: '',
-                        icon: '',
-                        description: ''
-                    });
-                }
-            });
-            this.selectedItems = items;
-            return;
-        }
-
-        if (this.value === '' || this.value === null || this.value === undefined) {
-            this.selectedLabel = '';
-            this.selectedAvatar = '';
-            this.selectedIcon = '';
-            this.selectedDescription = '';
-            return;
-        }
-        let el = this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelector(`[data-value='${this.value}']`) : null;
-        if (el) {
-            this.selectedLabel = this.getOptionLabel(el);
-            this.selectedAvatar = el.getAttribute('data-avatar') || '';
-            this.selectedIcon = el.getAttribute('data-icon') || '';
-            this.selectedDescription = el.getAttribute('data-description') || '';
-        }
-    },
-
-    select(val, lbl, av, ic, desc) {
-        if (this.disabled) return;
-        if (this.isOptionDisabled(val, false)) return;
-
-        if (this.multiple) {
-            if (!Array.isArray(this.value)) {
-                this.value = [];
-            }
-            let strVal = String(val);
-            let exists = this.value.some(v => String(v) === strVal);
-
-            if (exists) {
-                if (this.min !== null && this.value.length <= this.min) {
-                    return;
-                }
-                this.value = this.value.filter(v => String(v) !== strVal);
-            } else {
-                if (this.max !== null && this.value.length >= this.max) {
-                    return;
-                }
-                this.value = [...this.value, val];
-            }
-            this.updateSelectionFromValue();
-            this.$nextTick(() => {
-                this.dispatchChangeEvent();
-            });
-            return;
-        }
-
-        this.value = val;
-        this.selectedLabel = this.decodeHtml(lbl);
-        this.selectedAvatar = av || '';
-        this.selectedIcon = ic || '';
-        this.selectedDescription = desc || '';
-        this.open = false;
-        this.search = '';
-
-        this.$nextTick(() => {
-            this.dispatchChangeEvent();
-        });
-    },
-
-    checkVisibility() {
-        if (!this.$refs.optionsContainer) return;
-        let options = Array.from(this.$refs.optionsContainer.querySelectorAll('[data-select-option]'));
-        if (options.length === 0) {
-            this.hasVisibleOptions = false;
-            return;
-        }
-        let q = (this.search || '').toLowerCase().trim();
-        if (!q) {
-            this.hasVisibleOptions = true;
-            return;
-        }
-        let anyVisible = options.some(el => {
-            if (el.style.display === 'none') return false;
-            let val = (el.getAttribute('data-value') || '').toLowerCase();
-            let lbl = (this.getOptionLabel(el) || '').toLowerCase();
-            return val.includes(q) || lbl.includes(q);
-        });
-        this.hasVisibleOptions = anyVisible;
-    },
-
-    calculatePlacement() {
-        if (this.placement === 'top') {
-            this.openUp = true;
-            return;
-        }
-        if (this.placement === 'bottom') {
-            this.openUp = false;
-            return;
-        }
-        // Dynamic auto placement
-        let trigger = this.$refs.triggerBtn || this.$el;
-        let rect = trigger.getBoundingClientRect();
-        let spaceBelow = window.innerHeight - rect.bottom;
-        let spaceAbove = rect.top;
-        let popoverHeight = 250;
-
-        this.openUp = spaceBelow < popoverHeight && spaceAbove > spaceBelow;
-    },
-
-    toggle() {
-        if (this.disabled) return;
-        this.open = !this.open;
-        if (this.open) {
-            this.search = '';
-            this.hasVisibleOptions = true;
-            this.calculatePlacement();
-            this.$nextTick(() => {
-                this.calculatePlacement();
-                if (this.$refs.searchInput) {
-                    this.$refs.searchInput.focus();
-                } else if (this.keyboard) {
-                    this.focusNext();
-                }
-                this.checkVisibility();
-            });
-        }
-    },
-
-    getVisibleItems() {
-        return Array.from(this.$refs.optionsContainer ? this.$refs.optionsContainer.querySelectorAll('[role=\'option\']:not([disabled]):not(.cursor-not-allowed)') : [])
-            .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0);
-    },
-
-    focusNext(e) {
-        if (!this.open) return;
-        e?.preventDefault();
-        let items = this.getVisibleItems();
-        if (!items.length) return;
-        let currentIndex = items.indexOf(document.activeElement);
-        let nextIndex = Math.min(currentIndex + 1, items.length - 1);
-        if (items[nextIndex]) {
-            items[nextIndex].focus();
-            items[nextIndex].scrollIntoView({ block: 'nearest' });
-        }
-    },
-
-    focusPrevious(e) {
-        if (!this.open) return;
-        e?.preventDefault();
-        let items = this.getVisibleItems();
-        if (!items.length) return;
-        let currentIndex = items.indexOf(document.activeElement);
-        if (currentIndex <= 0) {
-            if (this.$refs.searchInput) {
-                this.$refs.searchInput.focus();
-                return;
-            }
-            currentIndex = items.length;
-        }
-        let nextIndex = Math.max(currentIndex - 1, 0);
-        if (items[nextIndex]) {
-            items[nextIndex].focus();
-            items[nextIndex].scrollIntoView({ block: 'nearest' });
-        }
-    },
-
-    close() {
-        this.open = false;
-        this.search = '';
-    }
-}" @click.outside="close()" @keydown.escape.window="close()" @scroll.window.debounce.50ms="open ? calculatePlacement() : null" @resize.window.debounce.50ms="open ? calculatePlacement() : null" @if ($keyboard)
+    })" @click.outside="close()" @keydown.escape.window="close()" @scroll.window.debounce.50ms="open ? calculatePlacement() : null" @resize.window.debounce.50ms="open ? calculatePlacement() : null" @if ($keyboard)
     @keydown.up.window="focusPrevious($event)"
     @keydown.down.window="focusNext($event)"
     @endif

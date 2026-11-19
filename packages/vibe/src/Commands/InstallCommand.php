@@ -306,6 +306,8 @@ class InstallCommand extends Command
             'resources/js/vibe/idle.js',
             'resources/js/vibe/passkeys.js',
             'resources/js/vibe/qrcode.js',
+            'resources/js/vibe/select.js',
+            'resources/js/vibe/sheet.js',
             'resources/js/vibe/table.js',
             'resources/js/vibe/datatable.js',
             'resources/js/vibe/show.js',

@@ -110,14 +110,14 @@ test('sheet applies responsive mobile width constraint on sidebar variant and su
     expect($htmlSidebar)
         ->toContain('max-w-[calc(100vw-3rem)]')
         ->toContain('md:max-w-full')
-        ->toContain("mobileSize: '280'");
+        ->toContain('\u0022mobileSize\u0022:\u0022280\u0022');
 
     $htmlCustom = Blade::render(
         '<vibe:sheet id="test-custom-mobile" position="left" layout="relative" mobileSize="260">Content</vibe:sheet>'
     );
 
     expect($htmlCustom)
-        ->toContain("mobileSize: '260'");
+        ->toContain('\u0022mobileSize\u0022:\u0022260\u0022');
 });
 
 test('sheet supports mobileSize full and w-full class on mobile with max-w on larger screens', function () {
@@ -126,7 +126,7 @@ test('sheet supports mobileSize full and w-full class on mobile with max-w on la
     );
 
     expect($htmlFull)
-        ->toContain("mobileSize: 'full'")
+        ->toContain('\u0022mobileSize\u0022:\u0022full\u0022')
         ->toContain('w-full')
         ->toContain('sm:max-w-md')
         ->not->toContain('max-w-[calc(100vw-3rem)]');
@@ -139,5 +139,30 @@ test('sheet with dismissibleButton false does not render outer floating close bu
 
     expect($htmlWithoutBtn)
         ->not->toContain('absolute top-3 right-3 z-30');
+});
+
+test('sheet delegates logic to vibeSheet module in both teleport and non-teleport modes', function () {
+    $htmlTeleport = Blade::render(
+        '<vibe:sheet id="test-teleport-sheet" layout="fixed">Content</vibe:sheet>'
+    );
+    $htmlRelative = Blade::render(
+        '<vibe:sheet id="test-relative-sheet" layout="relative">Content</vibe:sheet>'
+    );
+
+    expect($htmlTeleport)
+        ->toContain('window.vibeSheet(')
+        ->toContain('x-teleport="body"')
+        ->not->toContain('doResize(e)');
+
+    expect($htmlRelative)
+        ->toContain('window.vibeSheet(')
+        ->not->toContain('x-teleport="body"')
+        ->not->toContain('doResize(e)');
+
+    $sheetJs = file_get_contents(resource_path('js/vibe/sheet.js'));
+    expect($sheetJs)
+        ->toContain('function vibeSheet(')
+        ->toContain('window.vibeSheet')
+        ->toContain('vibe-sheet-ready');
 });
 
