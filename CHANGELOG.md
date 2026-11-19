@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.11.8] - 2026-11-19
+
+### 🚀 Features
+- feat: add vibeSelect and vibeRemoteSelect components for enhanced select functionality (9df858e)
+
+
 ## [0.11.7] - 2026-11-19
 
 ### 🚀 Features
