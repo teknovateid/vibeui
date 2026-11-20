@@ -205,6 +205,21 @@ export default defineConfig({
                     display: 'swap',
                     preload: false,
                 }),
+                bunny('Inter', {
+                    weights: [400, 500, 600, 700],
+                    display: 'swap',
+                    preload: false,
+                }),
+                bunny('Plus Jakarta Sans', {
+                    weights: [400, 500, 600, 700],
+                    display: 'swap',
+                    preload: false,
+                }),
+                bunny('Outfit', {
+                    weights: [400, 500, 600, 700],
+                    display: 'swap',
+                    preload: false,
+                }),
             ],
         }),
         tailwindcss(),

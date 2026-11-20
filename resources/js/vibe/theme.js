@@ -87,6 +87,7 @@ applyInitialOverride();
 const ThemeManager = {
     animation: 'curtain', // curtain, shutter, diagonal, wipe
     duration: 700, // Durasi animasi transisi dalam milidetik (misal: 650ms agar terlihat mulus dan elegan)
+    _liveGlobalOverride: null,
 
     defaultConfig: {
         mode: 'system',
@@ -115,6 +116,7 @@ const ThemeManager = {
     },
 
     syncFromStorageMode() {
+        this._liveGlobalOverride = null;
         applyInitialOverride();
         this.init();
     },
@@ -150,6 +152,14 @@ const ThemeManager = {
                 const base = (globalTheme && globalTheme.tokens)
                     ? { ...this.defaultConfig, ...globalTheme.tokens, css: globalTheme.css }
                     : { ...this.defaultConfig };
+                if (this._liveGlobalOverride) {
+                    if (this._liveGlobalOverride.tokens && typeof this._liveGlobalOverride.tokens === 'object') {
+                        Object.assign(base, this._liveGlobalOverride.tokens);
+                    }
+                    if (typeof this._liveGlobalOverride.css === 'string') {
+                        base.css = this._liveGlobalOverride.css;
+                    }
+                }
                 const localMode = localStored?.mode;
                 if (localMode === 'dark' || localMode === 'light' || localMode === 'system') {
                     base.mode = localMode;
@@ -243,6 +253,12 @@ const ThemeManager = {
     },
 
     setCssOverride(css, extraData = {}) {
+        const storageMode = window.VIBE_THEME_STORAGE_MODE || 'hybrid';
+        if (storageMode === 'global_only') {
+            const sanitizedExtra = { ...extraData };
+            delete sanitizedExtra.mode;
+            this._liveGlobalOverride = { css, tokens: sanitizedExtra };
+        }
         const config = this.getConfig();
         config.css = css;
         Object.assign(config, extraData);
@@ -250,6 +266,7 @@ const ThemeManager = {
     },
 
     clearCssOverride() {
+        this._liveGlobalOverride = null;
         const config = this.getConfig();
         delete config.css;
         delete config.preset;
@@ -460,6 +477,17 @@ const ThemeManager = {
             }
         }
 
+        let configuredFont = config.fontValue || config.fontName || config.selectedFontValue || config.selectedFontName || null;
+        if (!configuredFont && typeof config.css === 'string') {
+            const fontMatch = config.css.match(/--font-sans\s*:\s*([^;!]+)/i);
+            if (fontMatch && fontMatch[1]) {
+                configuredFont = fontMatch[1].trim();
+            }
+        }
+        if (configuredFont) {
+            ensureFontLoaded(configuredFont);
+        }
+
         if (config.customHex && !config.css) {
             const isDark = root.classList.contains('dark');
             const isDefaultSlate = (config.customHex.toLowerCase() === '#18181b' || config.customHex.toLowerCase() === '#0a0b0a');
@@ -564,7 +592,7 @@ if (typeof window !== 'undefined' && !window.__vibe_vt_handler_registered__) {
     });
 }
 
-import './appearance';
-export { appearanceController } from './appearance';
+import { appearanceController, ensureFontLoaded } from './appearance.js';
+export { appearanceController, ensureFontLoaded };
 
 

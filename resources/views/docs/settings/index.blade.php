@@ -838,7 +838,7 @@
                                 </div>
                                 <div class="grid grid-cols-2 gap-2">
                                     <template x-for="f in fonts" :key="f.name">
-                                        <button type="button" @click="selectFont(f.value, f.name)" class="p-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-left flex items-center gap-3 group" :class="selectedFontName === f.name ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:border-primary/40 hover:bg-muted/50'">
+                                        <button type="button" @click="selectFont(f.name, f.value)" class="p-2.5 rounded-xl border transition-all duration-200 cursor-pointer text-left flex items-center gap-3 group" :class="selectedFontName === f.name ? 'bg-card border-primary ring-2 ring-primary/20 shadow-xs' : 'bg-muted/20 border-border hover:border-primary/40 hover:bg-muted/50'">
                                             <span class="text-xl font-bold text-foreground/80 group-hover:text-primary transition-colors" :style="{ fontFamily: f.value }">Aa</span>
                                             <div class="min-w-0 flex-1">
                                                 <p class="text-xs font-semibold text-foreground truncate" :style="{ fontFamily: f.value }" x-text="f.name"></p>

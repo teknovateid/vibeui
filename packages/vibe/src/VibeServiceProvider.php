@@ -256,10 +256,13 @@ class VibeServiceProvider extends ServiceProvider
         // Register custom @vibeStyles directive for theme init (Anti-FOUC), fonts preloading, and global configuration in <head>
         Blade::directive('vibeStyles', function () {
             return "<?php
+                \$fontsHtml = '';
                 if (class_exists(\Illuminate\Support\Facades\Vite::class)) {
                     try {
-                        \$fonts = \Illuminate\Support\Facades\Vite::fonts();
-                        echo str_replace('<link ', '<link data-navigate-once ', str_replace('<style', '<style data-navigate-once', \$fonts));
+                        \$fontsHtml = (string) \Illuminate\Support\Facades\Vite::fonts();
+                        if (\$fontsHtml !== '') {
+                            echo str_replace('<link ', '<link data-navigate-once ', str_replace('<style', '<style data-navigate-once', \$fontsHtml));
+                        }
                     } catch (\Throwable \$e) {}
                 }
                 \$prefix = \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
@@ -279,6 +282,23 @@ class VibeServiceProvider extends ServiceProvider
                     \$storageMode = 'hybrid';
                     \$canManageTheme = 'false';
                     \$preRenderedCss = '';
+                }
+                \$activeGlobalFont = (\$storageMode !== 'local_only' && is_array(\$globalTheme) && is_array(\$globalTheme['tokens'] ?? null))
+                    ? (string) (\$globalTheme['tokens']['selectedFontName'] ?? \$globalTheme['tokens']['fontName'] ?? '')
+                    : '';
+                \$bunnyFontSlugMap = [
+                    'figtree' => ['slug' => 'figtree', 'family' => 'Figtree'],
+                    'inter' => ['slug' => 'inter', 'family' => 'Inter'],
+                    'plus jakarta' => ['slug' => 'plus-jakarta-sans', 'family' => 'Plus Jakarta Sans'],
+                    'plus jakarta sans' => ['slug' => 'plus-jakarta-sans', 'family' => 'Plus Jakarta Sans'],
+                    'outfit' => ['slug' => 'outfit', 'family' => 'Outfit'],
+                ];
+                \$normalizedGlobalFontKey = strtolower(trim(\$activeGlobalFont));
+                if (isset(\$bunnyFontSlugMap[\$normalizedGlobalFontKey])) {
+                    \$fontMeta = \$bunnyFontSlugMap[\$normalizedGlobalFontKey];
+                    if (stripos(\$fontsHtml, \$fontMeta['family']) === false) {
+                        echo '<link id=\"vibe-bunny-font-' . \$fontMeta['slug'] . '\" rel=\"stylesheet\" href=\"https://fonts.bunny.net/css?family=' . \$fontMeta['slug'] . ':400,500,600,700&display=swap\" data-navigate-once=\"true\" />';
+                    }
                 }
                 \$globalThemeJson = json_encode(\$globalTheme);
 

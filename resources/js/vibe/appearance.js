@@ -3,6 +3,45 @@
  * Modular Single Source of Truth for Appearance Settings & Theme Customization.
  */
 
+const VIBE_BUNNY_FONT_SLUGS = {
+    figtree: 'figtree',
+    inter: 'inter',
+    'plus jakarta': 'plus-jakarta-sans',
+    'plus jakarta sans': 'plus-jakarta-sans',
+    outfit: 'outfit',
+};
+
+export function ensureFontLoaded(fontNameOrStack) {
+    if (typeof document === 'undefined' || !fontNameOrStack || typeof fontNameOrStack !== 'string') return;
+    const primary = fontNameOrStack.split(',')[0].replace(/['"]/g, '').trim();
+    if (!primary) return;
+
+    const slug = VIBE_BUNNY_FONT_SLUGS[primary.toLowerCase()];
+    if (!slug) return;
+
+    const canonicalFamily = slug === 'plus-jakarta-sans' ? 'plus jakarta sans' : slug.replace(/-/g, ' ');
+    if (document.fonts) {
+        for (const face of document.fonts) {
+            const faceFamily = (face.family || '').replace(/['"]/g, '').trim().toLowerCase();
+            if (faceFamily === canonicalFamily) {
+                return;
+            }
+        }
+    }
+
+    const linkId = `vibe-bunny-font-${slug}`;
+    if (document.getElementById(linkId)) return;
+
+    const link = document.createElement('link');
+    link.id = linkId;
+    link.rel = 'stylesheet';
+    link.href = `https://fonts.bunny.net/css?family=${slug}:400,500,600,700&display=swap`;
+    link.setAttribute('data-navigate-once', 'true');
+    if (document.head) {
+        document.head.appendChild(link);
+    }
+}
+
 export function appearanceController() {
                 const prefix = window.VIBE_PREFIX || 'vibe';
                 const themeKey = prefix + '-theme-tokens';
@@ -23,6 +62,9 @@ export function appearanceController() {
                     globalUpdatedAt: window.VIBE_GLOBAL_THEME ? window.VIBE_GLOBAL_THEME.updated_at : null,
                     storageMode: window.VIBE_THEME_STORAGE_MODE || 'hybrid',
                     isSavingGlobal: false,
+                    _pendingGlobalSave: false,
+                    _debounceSaveTimer: null,
+                    _listenersBound: false,
                     isResettingGlobal: false,
                     isSavingStorageMode: false,
 
@@ -750,8 +792,14 @@ export function appearanceController() {
                         if (parsed.selectedSemantic) this.selectedSemantic = parsed.selectedSemantic;
                         if (parsed.selectedChartPreset) this.selectedChartPreset = parsed.selectedChartPreset;
                         if (parsed.selectedRadius) this.selectedRadius = parsed.selectedRadius;
-                        if (parsed.selectedFontName) this.selectedFontName = parsed.selectedFontName;
-                        if (parsed.selectedFontValue) this.selectedFontValue = parsed.selectedFontValue;
+                        if (parsed.selectedFontName || parsed.fontName || parsed.selectedFontValue || parsed.fontValue) {
+                            const resolvedFont = this.resolveFont(
+                                parsed.selectedFontName || parsed.fontName,
+                                parsed.selectedFontValue || parsed.fontValue
+                            );
+                            this.selectedFontName = resolvedFont.name;
+                            this.selectedFontValue = resolvedFont.value;
+                        }
                         if (parsed.tablesView) this.tablesView = parsed.tablesView;
 
                         // Table
@@ -834,25 +882,45 @@ export function appearanceController() {
                         }
 
                         // Listen for system theme changes
-                        const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
-                        if (mediaDark.addEventListener) {
-                            mediaDark.addEventListener('change', () => {
-                                if (this.mode === 'system') {
+                        if (!this._listenersBound) {
+                            this._listenersBound = true;
+                            const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
+                            if (mediaDark.addEventListener) {
+                                mediaDark.addEventListener('change', () => {
+                                    if (!this.$el || !this.$el.isConnected) return;
+                                    if (this.mode === 'system') {
+                                        this.updateIsDarkNow();
+                                        this.syncActiveModeValues();
+                                        this.applyTheme(true);
+                                    }
+                                });
+                            }
+
+                            window.addEventListener('vibe-theme-changed', (e) => {
+                                if (!this.$el || !this.$el.isConnected) return;
+                                if (e.detail && e.detail.mode && e.detail.mode !== this.mode) {
+                                    this.mode = e.detail.mode;
                                     this.updateIsDarkNow();
                                     this.syncActiveModeValues();
-                                    this.applyTheme(true);
+                                    this.applyTheme(this.storageMode === 'global_only' || this.scope === 'global');
                                 }
+                            });
+
+                            window.addEventListener('pagehide', () => {
+                                if (!this.$el || !this.$el.isConnected) return;
+                                this.flushPendingGlobalSave();
+                            });
+
+                            document.addEventListener('livewire:navigating', () => {
+                                if (!this.$el || !this.$el.isConnected) return;
+                                this.flushPendingGlobalSave();
                             });
                         }
 
-                        window.addEventListener('vibe-theme-changed', (e) => {
-                            if (e.detail && e.detail.mode && e.detail.mode !== this.mode) {
-                                this.mode = e.detail.mode;
-                                this.updateIsDarkNow();
-                                this.syncActiveModeValues();
-                                this.applyTheme(this.storageMode === 'global_only' || this.scope === 'global');
-                            }
-                        });
+                        if (Array.isArray(this.fonts)) {
+                            this.fonts.forEach((fontItem) => ensureFontLoaded(fontItem.value || fontItem.name));
+                        }
+                        ensureFontLoaded(this.selectedFontValue || this.selectedFontName);
 
                         this.applyTheme(true);
                     },
@@ -1277,17 +1345,55 @@ export function appearanceController() {
                         this.notify('chart_updated', 'Chart palette updated.');
                     },
 
+                    resolveFont(nameOrVal, valOrName = null) {
+                        const findMatch = (candidate) => {
+                            if (!candidate || typeof candidate !== 'string') return null;
+                            const normalized = candidate.trim().toLowerCase();
+                            return this.fonts.find(f =>
+                                f.name.toLowerCase() === normalized ||
+                                f.value.toLowerCase() === normalized ||
+                                (normalized === 'plus jakarta sans' && f.name === 'Plus Jakarta')
+                            ) || null;
+                        };
+
+                        const matched = findMatch(nameOrVal) || findMatch(valOrName);
+                        if (matched) {
+                            return { name: matched.name, value: matched.value };
+                        }
+
+                        const looksLikeStack = (s) => typeof s === 'string' && (s.includes(',') || s.includes("'"));
+                        let name = typeof nameOrVal === 'string' && nameOrVal.trim() ? nameOrVal.trim() : 'Figtree';
+                        let value = typeof valOrName === 'string' && valOrName.trim()
+                            ? valOrName.trim()
+                            : `'${name}', ui-sans-serif, system-ui, sans-serif`;
+
+                        if (looksLikeStack(nameOrVal) && valOrName && !looksLikeStack(valOrName)) {
+                            name = valOrName.trim();
+                            value = nameOrVal.trim();
+                        }
+
+                        return { name, value };
+                    },
+
                     selectRadius(val) {
                         this.selectedRadius = val;
+                        if (typeof this.updateGeneratedCss === 'function') {
+                            this.updateGeneratedCss();
+                        }
                         this.applyTheme();
                         this.notify('radius_updated', 'Border radius: ' + val, { val });
                     },
 
-                    selectFont(name, val) {
-                        this.selectedFontName = name;
-                        this.selectedFontValue = val;
+                    selectFont(name, val = null) {
+                        const resolved = this.resolveFont(name, val);
+                        this.selectedFontName = resolved.name;
+                        this.selectedFontValue = resolved.value;
+                        ensureFontLoaded(resolved.value || resolved.name);
+                        if (typeof this.updateGeneratedCss === 'function') {
+                            this.updateGeneratedCss();
+                        }
                         this.applyTheme();
-                        this.notify('font_updated', 'Font: ' + name, { name });
+                        this.notify('font_updated', 'Font: ' + resolved.name, { name: resolved.name });
                     },
 
                     setTablesView(view) {
@@ -1795,7 +1901,7 @@ export function appearanceController() {
                         };
                     },
 
-                    applyTheme(skipSave = false) {
+                    buildThemeCss() {
                         const isDefaultSlate = (this.customHex.toLowerCase() === '#18181b' || this.customHex.toLowerCase() === '#0a0b0a');
                         const lightPrimary = isDefaultSlate ? '#0a0b0a' : this.customHex;
                         const lightFg = this.isLight(lightPrimary) ? '#0a0b0a' : '#ffffff';
@@ -1813,39 +1919,6 @@ export function appearanceController() {
                         const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
                         const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
                         const tbl = this.getResolvedTableColors(surfaceLight, surfaceDark);
-
-                        // Hapus inline style dari documentElement agar stylesheet berperan sebagai single source of truth
-                        const root = document.documentElement;
-                        root.style.removeProperty('--primary');
-                        root.style.removeProperty('--color-primary');
-                        root.style.removeProperty('--ring');
-                        root.style.removeProperty('--color-ring');
-                        root.style.removeProperty('--primary-foreground');
-                        root.style.removeProperty('--color-primary-foreground');
-                        root.style.removeProperty('--nav-active-bg');
-                        root.style.removeProperty('--nav-active-fg');
-                        root.style.removeProperty('--nav-hover-bg');
-                        root.style.removeProperty('--nav-hover-fg');
-                        root.style.removeProperty('--nav-indicator');
-                        root.style.removeProperty('--color-nav-active-bg');
-                        root.style.removeProperty('--color-nav-active-fg');
-                        root.style.removeProperty('--color-nav-hover-bg');
-                        root.style.removeProperty('--color-nav-hover-fg');
-                        root.style.removeProperty('--color-nav-indicator');
-                        root.style.removeProperty('--background');
-                        root.style.removeProperty('--card');
-                        root.style.removeProperty('--popover');
-                        root.style.removeProperty('--container');
-                        root.style.removeProperty('--sidebar');
-                        root.style.removeProperty('--header');
-                        root.style.removeProperty('--table-header');
-                        root.style.removeProperty('--table-header-foreground');
-                        root.style.removeProperty('--table-border');
-                        root.style.removeProperty('--table-row-hover');
-                        root.style.removeProperty('--color-table-header');
-                        root.style.removeProperty('--color-table-header-foreground');
-                        root.style.removeProperty('--color-table-border');
-                        root.style.removeProperty('--color-table-row-hover');
 
                         let css = `
                             :root, html, body, [data-canvas-theme] {
@@ -2040,20 +2113,39 @@ export function appearanceController() {
                             `;
                         }
 
-                        // Navigation density rules
-                        const activeNavDensity = this.isDarkNow ? this.navDensityDark : this.navDensityLight;
-                        if (activeNavDensity === 'compact') {
+                        // Navigation density rules (mode-aware)
+                        if (this.navDensityLight === 'compact') {
                             css += `
-                                nav [data-pin-type="item"], nav [data-pin-type="group"] [data-nav-group-trigger] {
+                                html:not(.dark) nav [data-pin-type="item"], html:not(.dark) nav [data-pin-type="group"] [data-nav-group-trigger] {
                                     min-height: 2rem !important;
                                     padding-top: 0.35rem !important;
                                     padding-bottom: 0.35rem !important;
                                     font-size: 0.75rem !important;
                                 }
                             `;
-                        } else if (activeNavDensity === 'relaxed') {
+                        } else if (this.navDensityLight === 'relaxed') {
                             css += `
-                                nav [data-pin-type="item"], nav [data-pin-type="group"] [data-nav-group-trigger] {
+                                html:not(.dark) nav [data-pin-type="item"], html:not(.dark) nav [data-pin-type="group"] [data-nav-group-trigger] {
+                                    min-height: 2.5rem !important;
+                                    padding-top: 0.6rem !important;
+                                    padding-bottom: 0.6rem !important;
+                                    font-size: 0.875rem !important;
+                                }
+                            `;
+                        }
+
+                        if (this.navDensityDark === 'compact') {
+                            css += `
+                                html.dark nav [data-pin-type="item"], html.dark nav [data-pin-type="group"] [data-nav-group-trigger] {
+                                    min-height: 2rem !important;
+                                    padding-top: 0.35rem !important;
+                                    padding-bottom: 0.35rem !important;
+                                    font-size: 0.75rem !important;
+                                }
+                            `;
+                        } else if (this.navDensityDark === 'relaxed') {
+                            css += `
+                                html.dark nav [data-pin-type="item"], html.dark nav [data-pin-type="group"] [data-nav-group-trigger] {
                                     min-height: 2.5rem !important;
                                     padding-top: 0.6rem !important;
                                     padding-bottom: 0.6rem !important;
@@ -2140,6 +2232,45 @@ export function appearanceController() {
                             `;
                         }
 
+                        return css.replace(/^ {24}/gm, '').trim();
+                    },
+
+                    applyTheme(skipSave = false) {
+                        // Hapus inline style dari documentElement agar stylesheet berperan sebagai single source of truth
+                        const root = document.documentElement;
+                        root.style.removeProperty('--primary');
+                        root.style.removeProperty('--color-primary');
+                        root.style.removeProperty('--ring');
+                        root.style.removeProperty('--color-ring');
+                        root.style.removeProperty('--primary-foreground');
+                        root.style.removeProperty('--color-primary-foreground');
+                        root.style.removeProperty('--nav-active-bg');
+                        root.style.removeProperty('--nav-active-fg');
+                        root.style.removeProperty('--nav-hover-bg');
+                        root.style.removeProperty('--nav-hover-fg');
+                        root.style.removeProperty('--nav-indicator');
+                        root.style.removeProperty('--color-nav-active-bg');
+                        root.style.removeProperty('--color-nav-active-fg');
+                        root.style.removeProperty('--color-nav-hover-bg');
+                        root.style.removeProperty('--color-nav-hover-fg');
+                        root.style.removeProperty('--color-nav-indicator');
+                        root.style.removeProperty('--background');
+                        root.style.removeProperty('--card');
+                        root.style.removeProperty('--popover');
+                        root.style.removeProperty('--container');
+                        root.style.removeProperty('--sidebar');
+                        root.style.removeProperty('--header');
+                        root.style.removeProperty('--table-header');
+                        root.style.removeProperty('--table-header-foreground');
+                        root.style.removeProperty('--table-border');
+                        root.style.removeProperty('--table-row-hover');
+                        root.style.removeProperty('--color-table-header');
+                        root.style.removeProperty('--color-table-header-foreground');
+                        root.style.removeProperty('--color-table-border');
+                        root.style.removeProperty('--color-table-row-hover');
+
+                        const css = this.buildThemeCss();
+
                         let styleEl = document.getElementById(styleId);
                         if (!styleEl) {
                             styleEl = document.createElement('style');
@@ -2152,17 +2283,14 @@ export function appearanceController() {
 
                         // Sinkronkan ke ThemeManager agar persisten lintas navigasi
                         if (window.VibeTheme && typeof window.VibeTheme.setCssOverride === 'function') {
-                            window.VibeTheme.setCssOverride(css, {
-                                customHex: this.customHex,
-                                sidebarStyle: this.sidebarStyle,
-                                headerStyle: this.headerStyle,
-                                navStyle: this.navStyle,
-                                navDensity: this.navDensity,
-                                navIndicator: this.navIndicator,
-                                navCustomActiveBg: this.navCustomActiveBg,
-                                navCustomActiveFg: this.navCustomActiveFg,
-                                navCustomIndicator: this.navCustomIndicator,
-                            });
+                            const overrideTokens = this.collectCurrentTokens();
+                            overrideTokens.radius = this.selectedRadius;
+                            overrideTokens.fontName = this.selectedFontName;
+                            overrideTokens.fontValue = this.selectedFontValue;
+                            if (this.storageMode === 'global_only') {
+                                delete overrideTokens.mode;
+                            }
+                            window.VibeTheme.setCssOverride(css, overrideTokens);
                         }
 
                         if (!skipSave) {
@@ -2171,110 +2299,7 @@ export function appearanceController() {
                     },
 
                     generateCssText() {
-                        const isDefaultSlate = (this.customHex.toLowerCase() === '#18181b' || this.customHex.toLowerCase() === '#0a0b0a');
-                        const lightPrimary = isDefaultSlate ? '#0a0b0a' : this.customHex;
-                        const lightFg = this.isLight(lightPrimary) ? '#0a0b0a' : '#ffffff';
-                        const darkPrimary = isDefaultSlate ? '#f9fafa' : this.customHex;
-                        const darkFg = this.isLight(darkPrimary) ? '#0a0b0a' : '#ffffff';
-
-                        const r = this.selectedRadius;
-                        const surfaceLight = this.surfacePresets.find(s => s.id === this.selectedSurfaceLight) || this.surfacePresets[0];
-                        const surfaceDark = this.surfacePresets.find(s => s.id === this.selectedSurfaceDark) || this.surfacePresets[0];
-                        const semantic = this.semanticPresets.find(s => s.id === this.selectedSemantic) || this.semanticPresets[0];
-                        const chart = this.chartPresets.find(c => c.id === this.selectedChartPreset) || this.chartPresets[0];
-
-                        const sb = this.getResolvedSidebarColors(surfaceLight, surfaceDark);
-                        const hd = this.getResolvedHeaderColors(surfaceLight, surfaceDark);
-                        const nav = this.getResolvedNavColors(surfaceLight, surfaceDark, sb);
-                        const tbl = this.getResolvedTableColors(surfaceLight, surfaceDark);
-
-                        return `:root {
-    --primary: ${lightPrimary};
-    --primary-foreground: ${lightFg};
-    --ring: ${lightPrimary};
-    --color-primary: ${lightPrimary};
-    --color-primary-foreground: ${lightFg};
-    --color-ring: ${lightPrimary};
-    --font-sans: ${this.selectedFontValue};
-    --radius: ${r};
-    --success: ${semantic.colors.success};
-    --warning: ${semantic.colors.warning};
-    --destructive: ${semantic.colors.destructive};
-    --info: ${semantic.colors.info};
-    --chart-1: ${chart.colors[0]};
-    --chart-2: ${chart.colors[1]};
-    --chart-3: ${chart.colors[2]};
-    --chart-4: ${chart.colors[3]};
-    --chart-5: ${chart.colors[4]};
-}
-
-:root, html:not(.dark), .light {
-    --background: ${surfaceLight.light.bg};
-    --foreground: #0a0b0a;
-    --card: ${surfaceLight.light.card};
-    --card-foreground: #0a0b0a;
-    --popover: ${surfaceLight.light.card};
-    --popover-foreground: #0a0b0a;
-    --container: ${surfaceLight.light.card};
-    --container-foreground: #0a0b0a;
-    --border: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border};
-    --input: ${this.highContrast ? '#a1a1aa' : surfaceLight.light.border};
-    --primary: ${lightPrimary};
-    --primary-foreground: ${lightFg};
-    --ring: ${lightPrimary};
-    --color-primary: ${lightPrimary};
-    --color-primary-foreground: ${lightFg};
-    --color-ring: ${lightPrimary};
-    --sidebar: ${sb.light.bg};
-    --sidebar-foreground: ${sb.light.fg};
-    --sidebar-border: ${sb.light.border};
-    --header: ${hd.light.bg};
-    --header-foreground: ${hd.light.fg};
-    --header-border: ${hd.light.border};
-    --nav-active-bg: ${nav.light.activeBg};
-    --nav-active-fg: ${nav.light.activeFg};
-    --nav-hover-bg: ${nav.light.hoverBg};
-    --nav-hover-fg: ${nav.light.hoverFg};
-    --nav-indicator: ${nav.light.indicator};
-    --table-header: ${tbl.light.headerBg};
-    --table-header-foreground: ${tbl.light.fg};
-    --table-border: ${tbl.light.border};
-    --table-row-hover: ${tbl.light.hover};
-}
-
-html.dark, .dark {
-    --background: ${surfaceDark.dark.bg};
-    --foreground: #f9fafa;
-    --card: ${surfaceDark.dark.card};
-    --card-foreground: #f9fafa;
-    --popover: ${surfaceDark.dark.card};
-    --popover-foreground: #f9fafa;
-    --container: ${surfaceDark.dark.card};
-    --container-foreground: #f9fafa;
-    --border: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border};
-    --input: ${this.highContrast ? '#3f3f46' : surfaceDark.dark.border};
-    --primary: ${darkPrimary};
-    --primary-foreground: ${darkFg};
-    --ring: ${darkPrimary};
-    --color-primary: ${darkPrimary};
-    --color-primary-foreground: ${darkFg};
-    --color-ring: ${darkPrimary};
-    --sidebar: ${sb.dark.bg};
-    --sidebar-foreground: ${sb.dark.fg};
-    --sidebar-border: ${sb.dark.border};
-    --header: ${hd.dark.bg};
-    --header-foreground: ${hd.dark.fg};
-    --header-border: ${hd.dark.border};
-    --nav-active-bg: ${nav.dark.activeBg};
-    --nav-active-fg: ${nav.dark.activeFg};
-    --nav-hover-bg: ${nav.dark.hoverBg};
-    --nav-hover-fg: ${nav.dark.hoverFg};
-    --nav-indicator: ${nav.dark.indicator};
-    --table-header: ${tbl.dark.headerBg};
-    --table-header-foreground: ${tbl.dark.fg};
-    --table-border: ${tbl.dark.border};
-    --table-row-hover: ${tbl.dark.hover};
-}`;
+                        return this.buildThemeCss();
                     },
 
                     copyCssVariables() {
@@ -2387,13 +2412,58 @@ html.dark, .dark {
                         } catch (e) {}
                     },
 
+                    buildGlobalSavePayload() {
+                        const tokens = this.collectCurrentTokens();
+                        if (this.storageMode === 'global_only') {
+                            tokens.mode = window.VIBE_GLOBAL_THEME?.tokens?.mode || 'system';
+                        }
+                        return {
+                            tokens: tokens,
+                            css: this.buildThemeCss(),
+                            is_locked: !!this.isGlobalLocked,
+                            storage_mode: this.storageMode
+                        };
+                    },
+
                     debounceSaveGlobal() {
+                        if (!this.canManageGlobal) return;
                         if (this._debounceSaveTimer) {
                             clearTimeout(this._debounceSaveTimer);
                         }
                         this._debounceSaveTimer = setTimeout(() => {
+                            this._debounceSaveTimer = null;
                             this.saveGlobalSettings(true);
-                        }, 800);
+                        }, 250);
+                    },
+
+                    flushPendingGlobalSave() {
+                        if (!this._debounceSaveTimer) return;
+                        clearTimeout(this._debounceSaveTimer);
+                        this._debounceSaveTimer = null;
+                        if (!this.canManageGlobal) return;
+
+                        const payload = this.buildGlobalSavePayload();
+                        window.VIBE_GLOBAL_THEME = {
+                            ...(window.VIBE_GLOBAL_THEME || {}),
+                            storage_mode: this.storageMode,
+                            tokens: payload.tokens,
+                            css: payload.css,
+                            is_locked: payload.is_locked
+                        };
+
+                        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+                        try {
+                            fetch('/vibe-api/theme/global', {
+                                method: 'POST',
+                                keepalive: true,
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/json',
+                                    'X-CSRF-TOKEN': csrfToken || ''
+                                },
+                                body: JSON.stringify(payload)
+                            }).catch(() => {});
+                        } catch (e) {}
                     },
 
                     switchScope(targetScope) {
@@ -2549,15 +2619,18 @@ html.dark, .dark {
                     },
 
                     async saveGlobalSettings(isAuto = false) {
-                        if (this.isSavingGlobal) return;
+                        if (this._debounceSaveTimer) {
+                            clearTimeout(this._debounceSaveTimer);
+                            this._debounceSaveTimer = null;
+                        }
+                        if (this.isSavingGlobal) {
+                            this._pendingGlobalSave = true;
+                            return;
+                        }
                         this.isSavingGlobal = true;
 
                         try {
-                            const tokens = this.collectCurrentTokens();
-                            if (this.storageMode === 'global_only') {
-                                tokens.mode = window.VIBE_GLOBAL_THEME?.tokens?.mode || 'system';
-                            }
-                            const css = this.generateCssText();
+                            const payload = this.buildGlobalSavePayload();
                             const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
 
                             const response = await fetch('/vibe-api/theme/global', {
@@ -2567,15 +2640,14 @@ html.dark, .dark {
                                     'Accept': 'application/json',
                                     'X-CSRF-TOKEN': csrfToken || ''
                                 },
-                                body: JSON.stringify({
-                                    tokens: tokens,
-                                    css: css,
-                                    is_locked: !!this.isGlobalLocked,
-                                    storage_mode: this.storageMode
-                                })
+                                body: JSON.stringify(payload)
                             });
 
-                            const data = await response.json();
+                            let data = {};
+                            try {
+                                data = await response.json();
+                            } catch (parseErr) {}
+
                             if (response.ok && data.success) {
                                 window.VIBE_GLOBAL_THEME = data.theme;
                                 if (data.storage_mode) {
@@ -2589,27 +2661,40 @@ html.dark, .dark {
                                 if (window.VibeTheme?.setCssOverride) {
                                     const localMode = window.VibeTheme?.getConfig()?.mode;
                                     const overrideTokens = this.storageMode === 'global_only' && localMode
-                                        ? { ...tokens, mode: localMode }
-                                        : { ...tokens };
-                                    window.VibeTheme.setCssOverride(css, overrideTokens);
+                                        ? { ...payload.tokens, mode: localMode }
+                                        : { ...payload.tokens };
+                                    window.VibeTheme.setCssOverride(payload.css, overrideTokens);
                                 }
 
                                 if (!isAuto) {
                                     this.notify('global_saved_msg', 'Global appearance has been saved to database & cache for all users.', {}, 'success', this.t('global_saved_title', 'Global Appearance Saved'));
                                 }
                             } else {
-                                throw new Error(data.message || this.t('global_save_failed_msg', 'Failed to save global theme.'));
+                                const errMsg = data?.message || (response.status === 419
+                                    ? 'Session expired (CSRF mismatch). Please reload the page.'
+                                    : `HTTP ${response.status}`);
+                                throw new Error(errMsg);
                             }
                         } catch (err) {
-                            if (!isAuto) {
+                            if (err?.name !== 'AbortError') {
+                                console.error('[VibeUI] Failed to save global theme:', err);
                                 this.notify('global_save_failed_msg', err.message || 'An error occurred while saving the global theme.', {}, 'destructive', this.t('global_save_failed_title', 'Save Failed'));
                             }
                         } finally {
                             this.isSavingGlobal = false;
+                            if (this._pendingGlobalSave) {
+                                this._pendingGlobalSave = false;
+                                this.saveGlobalSettings(true);
+                            }
                         }
                     },
 
                     async resetGlobalSettings() {
+                        if (this._debounceSaveTimer) {
+                            clearTimeout(this._debounceSaveTimer);
+                            this._debounceSaveTimer = null;
+                        }
+                        this._pendingGlobalSave = false;
                         if (this.isResettingGlobal) return;
                         this.isResettingGlobal = true;
 
@@ -2714,19 +2799,6 @@ html.dark, .dark {
                     applyCustomHex(hex) {
                         this.selectedPreset = 'custom';
                         this.customHex = hex;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    selectRadius(value) {
-                        this.selectedRadius = value;
-                        this.updateGeneratedCss();
-                        this.injectOverrideCss();
-                    },
-
-                    selectFont(value, name) {
-                        this.selectedFontValue = value;
-                        this.selectedFontName = name;
                         this.updateGeneratedCss();
                         this.injectOverrideCss();
                     },

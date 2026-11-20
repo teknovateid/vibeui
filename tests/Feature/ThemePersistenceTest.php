@@ -127,3 +127,105 @@ test('appearance settings page renders vibe:radio controls for selecting storage
         ->assertDontSee(__('vibe/settings.appearance.local_pref_tab'))
         ->assertDontSee(__('vibe/settings.appearance.global_system_tab'));
 });
+
+test('appearance settings font radio cards and font module avoid duplicate selectFont overrides and register all four fonts', function () {
+    $user = User::factory()->create();
+
+    $this->actingAs($user)
+        ->get(route('docs.settings.appearance'))
+        ->assertOk()
+        ->assertSee('role="radiogroup"', false)
+        ->assertSee('@click="selectFont(f.name, f.value)"', false)
+        ->assertSee("selectedFontName === f.name ? 'border-primary bg-primary text-primary-foreground'", false)
+        ->assertSee(':style="{ fontFamily: f.value }"', false)
+        ->assertDontSee('block pt-1 font-mono', false);
+
+    $appearanceJs = file_get_contents(resource_path('js/vibe/appearance.js'));
+    expect($appearanceJs)
+        ->toContain('resolveFont(')
+        ->toContain('ensureFontLoaded(');
+
+    expect(substr_count($appearanceJs, 'selectFont('))->toBe(1)
+        ->and(substr_count($appearanceJs, 'selectRadius('))->toBe(1);
+
+    $viteConfig = file_get_contents(base_path('vite.config.js'));
+    expect($viteConfig)
+        ->toContain("bunny('Figtree'")
+        ->toContain("bunny('Inter'")
+        ->toContain("bunny('Plus Jakarta Sans'")
+        ->toContain("bunny('Outfit'");
+});
+
+test('global theme save endpoint persists tokens and css in global_only mode and appearance.js uses unified buildThemeCss', function () {
+    $user = User::factory()->create();
+
+    $tokens = [
+        'mode' => 'system',
+        'customHex' => '#2563eb',
+        'selectedRadius' => '0.75rem',
+        'selectedFontName' => 'Outfit',
+        'selectedFontValue' => "'Outfit', ui-sans-serif, system-ui, sans-serif",
+        'tablesView' => 'compact',
+    ];
+    $css = ":root, html, body { --primary: #2563eb !important; --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif !important; }";
+
+    $this->actingAs($user)
+        ->postJson(route('vibe.theme.global.save'), [
+            'tokens' => $tokens,
+            'css' => $css,
+            'is_locked' => false,
+            'storage_mode' => 'global_only',
+        ])
+        ->assertOk()
+        ->assertJsonPath('success', true)
+        ->assertJsonPath('storage_mode', 'global_only')
+        ->assertJsonPath('theme.tokens.selectedFontName', 'Outfit')
+        ->assertJsonPath('theme.tokens.customHex', '#2563eb')
+        ->assertJsonPath('theme.css', $css);
+
+    $this->actingAs($user)
+        ->getJson(route('vibe.theme.global.show'))
+        ->assertOk()
+        ->assertJsonPath('storage_mode', 'global_only')
+        ->assertJsonPath('theme.tokens.selectedFontName', 'Outfit')
+        ->assertJsonPath('theme.css', $css);
+
+    $appearanceJs = file_get_contents(resource_path('js/vibe/appearance.js'));
+    expect($appearanceJs)
+        ->toContain('buildThemeCss()')
+        ->toContain('return this.buildThemeCss();')
+        ->toContain('flushPendingGlobalSave()')
+        ->toContain('_pendingGlobalSave');
+
+    $themeJs = file_get_contents(resource_path('js/vibe/theme.js'));
+    expect($themeJs)
+        ->toContain('_liveGlobalOverride');
+});
+
+test('vibeStyles adds fallback bunny stylesheet link for global selected font only when missing from Vite fonts', function () {
+    $themeService = app(ThemeService::class);
+    $themeService->saveGlobalTheme(
+        tokens: ['selectedFontName' => 'Outfit'],
+        css: ":root { --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif !important; }",
+        isLocked: false,
+        updatedBy: 'Admin',
+        storageMode: 'global_only',
+    );
+
+    \Illuminate\Support\Facades\Vite::shouldReceive('fonts')
+        ->once()
+        ->andReturn('<style>@font-face { font-family: "Instrument Sans"; }</style>');
+
+    $missingRendered = Blade::render('@vibeStyles');
+    expect($missingRendered)
+        ->toContain('id="vibe-bunny-font-outfit"')
+        ->toContain('https://fonts.bunny.net/css?family=outfit:400,500,600,700&display=swap');
+
+    \Illuminate\Support\Facades\Vite::shouldReceive('fonts')
+        ->once()
+        ->andReturn('<style>@font-face { font-family: "Outfit"; }</style>');
+
+    $presentRendered = Blade::render('@vibeStyles');
+    expect($presentRendered)
+        ->not->toContain('id="vibe-bunny-font-outfit"');
+});

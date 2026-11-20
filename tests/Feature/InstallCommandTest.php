@@ -139,3 +139,126 @@ test('vibe:install creates routes/web.php if it does not exist when registering 
 
     File::delete($tempWebRoute);
 });
+
+test('vibe:install injects bunny fonts into vite.config when laravel-vite-plugin v3+ is used', function () {
+    $tempViteConfig = sys_get_temp_dir().'/vite.fonts.fresh.test.js';
+    $tempPackageJson = sys_get_temp_dir().'/package.fonts.v3.test.json';
+
+    File::put($tempViteConfig, <<<'JS'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+    ],
+});
+JS);
+
+    File::put($tempPackageJson, json_encode([
+        'devDependencies' => [
+            'laravel-vite-plugin' => '^3.1',
+        ],
+    ]));
+
+    $command = new InstallCommand;
+    $changed = $command->registerViteFonts($tempViteConfig, $tempPackageJson);
+
+    expect($changed)->toBeTrue();
+
+    $content = File::get($tempViteConfig);
+    expect($content)
+        ->toContain("import { bunny } from 'laravel-vite-plugin/fonts';")
+        ->toContain("fonts: [")
+        ->toContain("bunny('Figtree'")
+        ->toContain("bunny('Inter'")
+        ->toContain("bunny('Plus Jakarta Sans'")
+        ->toContain("bunny('Outfit'");
+
+    // Idempotent second run
+    expect($command->registerViteFonts($tempViteConfig, $tempPackageJson))->toBeFalse();
+
+    File::delete([$tempViteConfig, $tempPackageJson]);
+});
+
+test('vibe:install preserves existing fonts array entries including nested weights brackets', function () {
+    $tempViteConfig = sys_get_temp_dir().'/vite.fonts.existing.test.js';
+    $tempPackageJson = sys_get_temp_dir().'/package.fonts.existing.test.json';
+
+    File::put($tempViteConfig, <<<'JS'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+import { bunny } from 'laravel-vite-plugin/fonts';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+            fonts: [
+                bunny('Instrument Sans', {
+                    weights: [400, 500, 600],
+                    preload: false,
+                }),
+            ],
+        }),
+    ],
+});
+JS);
+
+    File::put($tempPackageJson, json_encode([
+        'devDependencies' => [
+            'laravel-vite-plugin' => '^3.1',
+        ],
+    ]));
+
+    $command = new InstallCommand;
+    $changed = $command->registerViteFonts($tempViteConfig, $tempPackageJson);
+
+    expect($changed)->toBeTrue();
+
+    $content = File::get($tempViteConfig);
+    expect($content)
+        ->toContain("bunny('Instrument Sans'")
+        ->toContain("bunny('Figtree'")
+        ->toContain("bunny('Inter'")
+        ->toContain("bunny('Plus Jakarta Sans'")
+        ->toContain("bunny('Outfit'");
+    expect(substr_count($content, 'fonts: ['))->toBe(1);
+
+    File::delete([$tempViteConfig, $tempPackageJson]);
+});
+
+test('vibe:install skips vite font injection cleanly when laravel-vite-plugin is below v3', function () {
+    $tempViteConfig = sys_get_temp_dir().'/vite.fonts.v2.test.js';
+    $tempPackageJson = sys_get_temp_dir().'/package.fonts.v2.test.json';
+
+    $original = <<<'JS'
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: ['resources/css/app.css', 'resources/js/app.js'],
+            refresh: true,
+        }),
+    ],
+});
+JS;
+    File::put($tempViteConfig, $original);
+    File::put($tempPackageJson, json_encode([
+        'devDependencies' => [
+            'laravel-vite-plugin' => '^2.0',
+        ],
+    ]));
+
+    $command = new InstallCommand;
+    expect($command->registerViteFonts($tempViteConfig, $tempPackageJson))->toBeFalse();
+    expect(File::get($tempViteConfig))->toBe($original);
+
+    File::delete([$tempViteConfig, $tempPackageJson]);
+});
