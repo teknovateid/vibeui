@@ -1013,11 +1013,13 @@
                         </div>
 
                         <div class="xl:col-span-8 space-y-3 w-full min-w-0">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" role="radiogroup">
                                 <template x-for="f in fonts" :key="f.name">
                                     <button 
                                         type="button" 
                                         @click="selectFont(f.name, f.value)"
+                                        role="radio"
+                                        :aria-checked="(selectedFontName === f.name).toString()"
                                         class="p-3.5 rounded-xl border text-left flex items-start justify-between gap-3 transition-all cursor-pointer group"
                                         :class="selectedFontName === f.name ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
                                     >
@@ -1027,7 +1029,7 @@
                                                 <vibe:badge variant="primary" class="rounded-full" x-show="f.name === 'Figtree'">{{ __('vibe/settings.appearance.default_badge') }}</vibe:badge>
                                             </div>
                                             <p class="text-[11px] text-muted-foreground" x-text="fontsI18n[f.name] || f.desc"></p>
-                                            <span class="text-xs text-foreground/80 block pt-1 font-mono tracking-tight" :style="{ fontFamily: f.value }">
+                                            <span class="text-xs text-foreground/80 block pt-1 tracking-tight" :style="{ fontFamily: f.value }">
                                                 Aa Bb Gg 123
                                             </span>
                                         </div>

@@ -67,9 +67,10 @@ class InstallCommand extends Command
             }
         });
 
-        // 6. Inject entry points to vite.config.js
+        // 6. Inject entry points & fonts to vite.config.js
         $this->components->task('Registering Vite entry points', function () {
             $this->registerViteAssets();
+            $this->registerViteFonts();
         });
 
         // 7. Inject dependencies to package.json
@@ -315,21 +316,31 @@ class InstallCommand extends Command
     }
 
     /**
+     * Resolve target vite.config.* file path.
+     */
+    protected function resolveViteConfigPath(?string $customVitePath = null): ?string
+    {
+        if ($customVitePath) {
+            return file_exists($customVitePath) ? $customVitePath : null;
+        }
+
+        foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
+            if (file_exists(base_path($file))) {
+                return base_path($file);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Register Vibe UI on-demand assets in vite.config.js
      */
     public function registerViteAssets(?string $customVitePath = null): void
     {
-        $vitePath = $customVitePath;
-        if (! $vitePath) {
-            foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
-                if (file_exists(base_path($file))) {
-                    $vitePath = base_path($file);
-                    break;
-                }
-            }
-        }
+        $vitePath = $this->resolveViteConfigPath($customVitePath);
 
-        if (! $vitePath || ! file_exists($vitePath)) {
+        if (! $vitePath) {
             return;
         }
 
@@ -370,6 +381,236 @@ class InstallCommand extends Command
             $content = str_replace($matches[0], $replacement, $content);
             file_put_contents($vitePath, $content);
         }
+    }
+
+    /**
+     * Get the Bunny font families used by Vibe UI appearance presets.
+     *
+     * @return array<string>
+     */
+    public function getVibeFonts(): array
+    {
+        return ['Figtree', 'Inter', 'Plus Jakarta Sans', 'Outfit'];
+    }
+
+    /**
+     * Determine whether the target app supports laravel-vite-plugin/fonts.
+     */
+    protected function supportsViteFonts(string $viteContent, ?string $customPackageJsonPath = null): bool
+    {
+        if (str_contains($viteContent, 'laravel-vite-plugin/fonts') || preg_match('/\bfonts\s*:\s*\[/', $viteContent)) {
+            return true;
+        }
+
+        $packageJsonPath = $customPackageJsonPath ?: base_path('package.json');
+        if (file_exists($packageJsonPath)) {
+            $pkg = json_decode(file_get_contents($packageJsonPath), true) ?: [];
+            $constraint = $pkg['devDependencies']['laravel-vite-plugin']
+                ?? $pkg['dependencies']['laravel-vite-plugin']
+                ?? null;
+
+            if (is_string($constraint) && preg_match('/(?:^|[~^>=<\s|])([3-9]|\d{2,})\./', $constraint)) {
+                return true;
+            }
+        }
+
+        return $customPackageJsonPath === null
+            && is_dir(base_path('node_modules/laravel-vite-plugin/dist/fonts'));
+    }
+
+    /**
+     * Find the matching closing delimiter index, respecting JS string literals.
+     */
+    protected function findMatchingDelimiter(string $content, int $openPos, string $openChar, string $closeChar): ?int
+    {
+        $len = strlen($content);
+        $depth = 0;
+        $quote = null;
+
+        for ($i = $openPos; $i < $len; $i++) {
+            $ch = $content[$i];
+
+            if ($quote !== null) {
+                if ($ch === '\\') {
+                    $i++;
+
+                    continue;
+                }
+                if ($ch === $quote) {
+                    $quote = null;
+                }
+
+                continue;
+            }
+
+            if ($ch === "'" || $ch === '"' || $ch === '`') {
+                $quote = $ch;
+
+                continue;
+            }
+
+            if ($ch === $openChar) {
+                $depth++;
+            } elseif ($ch === $closeChar) {
+                $depth--;
+                if ($depth === 0) {
+                    return $i;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Build a formatted bunny() font entry for vite.config.js.
+     */
+    protected function buildBunnyFontEntry(string $family, string $indent = '                '): string
+    {
+        return "{$indent}bunny('{$family}', {\n"
+            ."{$indent}    weights: [400, 500, 600, 700],\n"
+            ."{$indent}    display: 'swap',\n"
+            ."{$indent}    preload: false,\n"
+            ."{$indent}}),";
+    }
+
+    /**
+     * Register Vibe UI Bunny fonts inside vite.config.js when supported.
+     */
+    public function registerViteFonts(?string $customVitePath = null, ?string $customPackageJsonPath = null): bool
+    {
+        $vitePath = $this->resolveViteConfigPath($customVitePath);
+        if (! $vitePath) {
+            return false;
+        }
+
+        $content = file_get_contents($vitePath);
+        if (! $this->supportsViteFonts($content, $customPackageJsonPath)) {
+            return false;
+        }
+
+        $missingFonts = array_values(array_filter(
+            $this->getVibeFonts(),
+            fn (string $family) => ! preg_match('/\b(?:bunny|google|fontsource|local)\s*\(\s*[\'"]'.preg_quote($family, '/').'[\'"]/i', $content)
+        ));
+
+        if (empty($missingFonts)) {
+            return false;
+        }
+
+        $updated = $content;
+
+        // Ensure bunny import from laravel-vite-plugin/fonts exists
+        if (preg_match('/import\s*\{([^}]+)\}\s*from\s*[\'"]laravel-vite-plugin\/fonts[\'"]\s*;?/', $updated, $importMatch, PREG_OFFSET_CAPTURE)) {
+            if (! preg_match('/\bbunny\b/', $importMatch[1][0])) {
+                $newImports = trim($importMatch[1][0]) !== ''
+                    ? 'bunny, '.trim($importMatch[1][0])
+                    : 'bunny';
+                $updated = substr_replace(
+                    $updated,
+                    "import { {$newImports} } from 'laravel-vite-plugin/fonts';",
+                    $importMatch[0][1],
+                    strlen($importMatch[0][0])
+                );
+            }
+        } elseif (preg_match('/import\s+laravel\s+from\s+[\'"]laravel-vite-plugin[\'"]\s*;?/', $updated, $laravelImport, PREG_OFFSET_CAPTURE)) {
+            $insertPos = $laravelImport[0][1] + strlen($laravelImport[0][0]);
+            $updated = substr_replace(
+                $updated,
+                "\nimport { bunny } from 'laravel-vite-plugin/fonts';",
+                $insertPos,
+                0
+            );
+        }
+
+        // Locate laravel({ ... }) block
+        if (! preg_match('/\blaravel\s*\(\s*\{/', $updated, $laravelCall, PREG_OFFSET_CAPTURE)) {
+            return false;
+        }
+
+        $laravelOpenBrace = strpos($updated, '{', $laravelCall[0][1]);
+        $laravelCloseBrace = $laravelOpenBrace !== false
+            ? $this->findMatchingDelimiter($updated, $laravelOpenBrace, '{', '}')
+            : null;
+
+        if ($laravelCloseBrace === null) {
+            return false;
+        }
+
+        $laravelInner = substr($updated, $laravelOpenBrace, $laravelCloseBrace - $laravelOpenBrace + 1);
+
+        if (preg_match('/\bfonts\s*:\s*\[/', $laravelInner, $fontsProp, PREG_OFFSET_CAPTURE)) {
+            $fontsOpenBracket = strpos($updated, '[', $laravelOpenBrace + $fontsProp[0][1]);
+            $fontsCloseBracket = $fontsOpenBracket !== false
+                ? $this->findMatchingDelimiter($updated, $fontsOpenBracket, '[', ']')
+                : null;
+
+            if ($fontsCloseBracket === null) {
+                return false;
+            }
+
+            $existingInner = substr($updated, $fontsOpenBracket + 1, $fontsCloseBracket - $fontsOpenBracket - 1);
+            $indent = '                ';
+            if (preg_match('/\n([ \t]+)(?:bunny|google|fontsource|local)\s*\(/', $existingInner, $indentMatch)) {
+                $indent = $indentMatch[1];
+            }
+
+            $closingIndent = "\n            ";
+            if (preg_match('/(\n[ \t]*)$/', $existingInner, $closingMatch)) {
+                $closingIndent = $closingMatch[1];
+            }
+
+            $trimmedInner = rtrim($existingInner);
+            if ($trimmedInner !== '' && ! str_ends_with($trimmedInner, ',')) {
+                $trimmedInner .= ',';
+            }
+
+            $entries = implode("\n", array_map(fn (string $f) => $this->buildBunnyFontEntry($f, $indent), $missingFonts));
+            $newFontsInner = ($trimmedInner !== '' ? $trimmedInner."\n" : "\n").$entries.$closingIndent;
+
+            $updated = substr_replace(
+                $updated,
+                $newFontsInner,
+                $fontsOpenBracket + 1,
+                $fontsCloseBracket - $fontsOpenBracket - 1
+            );
+        } else {
+            $propIndent = '            ';
+            if (preg_match('/\n([ \t]+)(?:input|refresh|ssr|detectTls)\s*:/', $laravelInner, $propIndentMatch)) {
+                $propIndent = $propIndentMatch[1];
+            }
+            $entryIndent = $propIndent.'    ';
+
+            $existingLaravelInner = substr($updated, $laravelOpenBrace + 1, $laravelCloseBrace - $laravelOpenBrace - 1);
+            $closingIndent = "\n        ";
+            if (preg_match('/(\n[ \t]*)$/', $existingLaravelInner, $closingMatch)) {
+                $closingIndent = $closingMatch[1];
+            }
+
+            $trimmedLaravelInner = rtrim($existingLaravelInner);
+            if ($trimmedLaravelInner !== '' && ! str_ends_with($trimmedLaravelInner, ',')) {
+                $trimmedLaravelInner .= ',';
+            }
+
+            $entries = implode("\n", array_map(fn (string $f) => $this->buildBunnyFontEntry($f, $entryIndent), $missingFonts));
+            $fontsBlock = "{$propIndent}fonts: [\n{$entries}\n{$propIndent}],";
+            $newLaravelInner = ($trimmedLaravelInner !== '' ? $trimmedLaravelInner."\n" : "\n").$fontsBlock.$closingIndent;
+
+            $updated = substr_replace(
+                $updated,
+                $newLaravelInner,
+                $laravelOpenBrace + 1,
+                $laravelCloseBrace - $laravelOpenBrace - 1
+            );
+        }
+
+        if ($updated !== $content) {
+            file_put_contents($vitePath, $updated);
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
