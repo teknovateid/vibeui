@@ -254,7 +254,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="blade">
+                <vibe:highlight language="blade">
 <\vibe:input.file 
     wire:model="avatar"
     variant="avatar"
@@ -268,7 +268,7 @@
     multiple
     label="Dokumen Klaim"
 />
-</vibe:highlightjs>
+</vibe:highlight>
             </section>
 
             {{-- 8. Tabel Spesifikasi Props --}}

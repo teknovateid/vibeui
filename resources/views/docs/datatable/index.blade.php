@@ -60,7 +60,7 @@
                         <vibe:datatable :component="\\App\\Livewire\\DemoBasicTable::class" lazy />
                         HTML;
                     @endphp
-                    <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callVibeTagCode" />
+                    <vibe:highlight language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callVibeTagCode" />
                 </div>
 
                 {{-- 2. Menggunakan Tag Asli <livewire:...> --}}
@@ -76,7 +76,7 @@
                         <livewire:demo-basic-table />
                         HTML;
                     @endphp
-                    <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callLivewireTagCode" />
+                    <vibe:highlight language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callLivewireTagCode" />
                 </div>
 
                 {{-- 3. Menggunakan Direktif @livewire --}}
@@ -95,7 +95,7 @@
                         @livewire('demo-basic-table')
                         HTML;
                     @endphp
-                    <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callDirectiveCode" />
+                    <vibe:highlight language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callDirectiveCode" />
                 </div>
 
                 {{-- 4. Forwarding Parameter --}}
@@ -121,7 +121,7 @@
                         />
                         HTML;
                     @endphp
-                    <vibe:highlightjs language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callPropForwardCode" />
+                    <vibe:highlight language="blade" title="resources/views/example.blade.php" :lineNumbers="true" :code="$callPropForwardCode" />
                 </div>
             </section>
 
@@ -208,7 +208,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoBasicTable.php" :lineNumbers="true" :code="$basicPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoBasicTable.php" :lineNumbers="true" :code="$basicPhpCode" />
                 </div>
             </section>
 
@@ -299,7 +299,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoBorderedTable.php" :lineNumbers="true" :code="$borderedPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoBorderedTable.php" :lineNumbers="true" :code="$borderedPhpCode" />
                 </div>
             </section>
 
@@ -406,7 +406,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoActionsTable.php" :lineNumbers="true" :code="$columnsPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoActionsTable.php" :lineNumbers="true" :code="$columnsPhpCode" />
                 </div>
             </section>
 
@@ -499,7 +499,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoBulkTable.php" :lineNumbers="true" :code="$bulkPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoBulkTable.php" :lineNumbers="true" :code="$bulkPhpCode" />
                 </div>
 
                 {{-- Kustomisasi Tampilan Aksi Massal (bulkActionsView) --}}
@@ -602,7 +602,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/CustomBulkTable.php" :lineNumbers="true" :code="$customBulkPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/CustomBulkTable.php" :lineNumbers="true" :code="$customBulkPhpCode" />
                 </div>
             </section>
 
@@ -701,7 +701,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoColumnSearchTable.php" :lineNumbers="true" :code="$colSearchPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoColumnSearchTable.php" :lineNumbers="true" :code="$colSearchPhpCode" />
                 </div>
             </section>
 
@@ -800,7 +800,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoFooterColumnSearchTable.php" :lineNumbers="true" :code="$footerSearchPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoFooterColumnSearchTable.php" :lineNumbers="true" :code="$footerSearchPhpCode" />
                 </div>
             </section>
 
@@ -894,7 +894,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoFilterTable.php" :lineNumbers="true" :code="$filterPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoFilterTable.php" :lineNumbers="true" :code="$filterPhpCode" />
                 </div>
             </section>
 
@@ -981,7 +981,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoFooterTable.php" :lineNumbers="true" :code="$footerPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoFooterTable.php" :lineNumbers="true" :code="$footerPhpCode" />
                 </div>
             </section>
 
@@ -1069,7 +1069,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoHeaderFooterTable.php" :lineNumbers="true" :code="$headerFooterPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoHeaderFooterTable.php" :lineNumbers="true" :code="$headerFooterPhpCode" />
                 </div>
             </section>
 
@@ -1161,7 +1161,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/DemoPerformanceTable.php" :lineNumbers="true" :code="$perfPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/DemoPerformanceTable.php" :lineNumbers="true" :code="$perfPhpCode" />
                 </div>
             </section>
 
@@ -1210,7 +1210,7 @@
                         <livewire:user-table lazy />
                         HTML;
                     @endphp
-                    <vibe:highlightjs language="blade" title="resources/views/users.blade.php" :lineNumbers="true" :code="$lazyUsageCode" />
+                    <vibe:highlight language="blade" title="resources/views/users.blade.php" :lineNumbers="true" :code="$lazyUsageCode" />
                 </div>
 
                 {{-- Keuntungan Utama --}}
@@ -1287,7 +1287,7 @@
                         }
                         PHP;
                     @endphp
-                    <vibe:highlightjs language="php" title="app/Livewire/UserTable.php" :lineNumbers="true" :code="$placeholderPhpCode" />
+                    <vibe:highlight language="php" title="app/Livewire/UserTable.php" :lineNumbers="true" :code="$placeholderPhpCode" />
                 </div>
             </section>
 

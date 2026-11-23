@@ -219,8 +219,12 @@ return [
             'title' => 'Tabs',
             'subtitle' => 'Modular tab-based content panel switcher',
         ],
+        'highlight' => [
+            'title' => 'Highlight',
+            'subtitle' => 'Syntax highlighter with varied theme styles',
+        ],
         'highlightjs' => [
-            'title' => 'Highlight.js',
+            'title' => 'Highlight',
             'subtitle' => 'Syntax highlighter with varied theme styles',
         ],
         'chart' => [

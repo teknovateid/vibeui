@@ -9,7 +9,7 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Penggunaan Dasar',
-        'desc' => 'Gunakan tag komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:highlightjs&gt;</code> dengan menentukan atribut <code class="font-mono text-xs text-foreground">language</code> (misalnya <code class="font-mono text-xs text-foreground">php</code>, <code class="font-mono text-xs text-foreground">javascript</code>, <code class="font-mono text-xs text-foreground">blade</code>, <code class="font-mono text-xs text-foreground">css</code>). Kode dapat dituliskan langsung di dalam slot komponen atau melalui prop <code class="font-mono text-xs text-foreground">code</code>.',
+        'desc' => 'Gunakan tag komponen <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:highlight&gt;</code> dengan menentukan atribut <code class="font-mono text-xs text-foreground">language</code> (misalnya <code class="font-mono text-xs text-foreground">php</code>, <code class="font-mono text-xs text-foreground">javascript</code>, <code class="font-mono text-xs text-foreground">blade</code>, <code class="font-mono text-xs text-foreground">css</code>). Kode dapat dituliskan langsung di dalam slot komponen atau melalui prop <code class="font-mono text-xs text-foreground">code</code>.',
         'preview_title' => 'Contoh Penyorotan Sintaks PHP & JavaScript',
     ],
 
@@ -44,7 +44,7 @@ return [
     // Section 6: Props Reference
     'props' => [
         'title' => 'Referensi Props & Parameter',
-        'desc' => 'Daftar atribut dan konfigurasi yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:highlightjs&gt;</code>.',
+        'desc' => 'Daftar atribut dan konfigurasi yang didukung oleh komponen <code class="font-mono text-xs text-foreground">&lt;vibe:highlight&gt;</code>.',
         'columns' => [
             'prop' => 'Prop',
             'type' => 'Tipe',

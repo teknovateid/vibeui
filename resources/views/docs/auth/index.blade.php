@@ -345,7 +345,7 @@
                             <span class="size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px]">1</span>
                             Jalankan Perintah Scaffolding
                         </div>
-                        <vibe:highlightjs language="bash" code="php artisan vibe:auth" />
+                        <vibe:highlight language="bash" code="php artisan vibe:auth" />
                     </div>
 
                     <div class="p-4 rounded-xl border border-border bg-card space-y-2">
@@ -363,7 +363,7 @@
                             <span class="size-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[10px]">3</span>
                             Jalankan Migrasi Database
                         </div>
-                        <vibe:highlightjs language="bash" code="php artisan migrate" />
+                        <vibe:highlight language="bash" code="php artisan migrate" />
                     </div>
                 </div>
 

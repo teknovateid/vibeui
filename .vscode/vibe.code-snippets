@@ -288,12 +288,12 @@
         ],
         "description": "Vibe UI Toast Container Component"
     },
-    "Vibe HighlightJS": {
-        "prefix": "vibe:highlightjs",
+    "Vibe Highlight": {
+        "prefix": "vibe:highlight",
         "body": [
-            "<vibe:highlightjs lang=\"${1:php}\" filename=\"${2:example.php}\" copyable>",
+            "<vibe:highlight lang=\"${1:php}\" filename=\"${2:example.php}\" copyable>",
             "${3:// Kode Anda di sini}",
-            "</vibe:highlightjs>$0"
+            "</vibe:highlight>$0"
         ],
         "description": "Vibe UI Code Highlight Component"
     },

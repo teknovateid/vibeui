@@ -20,7 +20,7 @@
 @endphp
 
 <div data-vibe-preview-code style="display: none;" {{ $attributes->twMerge(['class' => 'relative w-full border-t border-border']) }}>
-    <vibe:highlightjs
+    <vibe:highlight
         :language="$resolvedLang"
         :title="$resolvedTitle"
         :theme="$theme"

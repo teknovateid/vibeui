@@ -219,8 +219,12 @@ return [
             'title' => 'Tabs',
             'subtitle' => 'Peralihan panel konten berbasis tab',
         ],
+        'highlight' => [
+            'title' => 'Highlight',
+            'subtitle' => 'Penyorot sintaks kode dengan tema bervariasi',
+        ],
         'highlightjs' => [
-            'title' => 'Highlight.js',
+            'title' => 'Highlight',
             'subtitle' => 'Penyorot sintaks kode dengan tema bervariasi',
         ],
         'chart' => [

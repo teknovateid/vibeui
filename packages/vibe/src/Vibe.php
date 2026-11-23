@@ -70,4 +70,55 @@ class Vibe
     {
         return app(\Teknovate\VibeUi\Services\TwoFactorManager::class);
     }
+
+    /**
+     * Parse and interpolate dynamic variables in editor HTML template.
+     * Replaces both <span class="vibe-editor-variable" data-variable="..."> badges and raw {{ model.column }} tokens.
+     *
+     * @param  string  $content  HTML content containing variables
+     * @param  array  $data  Data array or Eloquent models (e.g. ['user' => $user, 'order' => $order])
+     * @param  bool  $escape  Whether to escape variable replacement values against XSS (default: true)
+     * @param  bool  $stripMissing  Whether to strip unparsed variable badges/tokens from output (default: false)
+     * @return string Parsed clean HTML ready for email, PDF, or display
+     */
+    public static function parseTemplate(string $content, array $data = [], bool $escape = true, bool $stripMissing = false): string
+    {
+        if (empty($content)) {
+            return '';
+        }
+
+        // 1. Replace <span class="vibe-editor-variable"... data-variable="key">...</span>
+        $content = preg_replace_callback(
+            '/<span[^>]*class="[^"]*vibe-editor-variable[^"]*"[^>]*data-variable="([^"]+)"[^>]*>.*?<\/span>/is',
+            function ($matches) use ($data, $escape, $stripMissing) {
+                $key = trim($matches[1]);
+                $val = array_key_exists($key, $data) ? $data[$key] : data_get($data, $key);
+
+                if ($val !== null) {
+                    return $escape ? htmlspecialchars((string) $val, ENT_QUOTES, 'UTF-8') : (string) $val;
+                }
+
+                return $stripMissing ? '' : $matches[0];
+            },
+            $content
+        );
+
+        // 2. Replace raw {{ variable.key }} tokens
+        $content = preg_replace_callback(
+            '/\{\{\s*([a-zA-Z0-9_\-\.]+)\s*\}\}/',
+            function ($matches) use ($data, $escape, $stripMissing) {
+                $key = trim($matches[1]);
+                $val = array_key_exists($key, $data) ? $data[$key] : data_get($data, $key);
+
+                if ($val !== null) {
+                    return $escape ? htmlspecialchars((string) $val, ENT_QUOTES, 'UTF-8') : (string) $val;
+                }
+
+                return $stripMissing ? '' : $matches[0];
+            },
+            $content
+        );
+
+        return $content;
+    }
 }

@@ -84,6 +84,21 @@ hljs.registerLanguage('blade', function(hljs) {
 
 window.hljs = hljs;
 
+export function decodeBase64(str) {
+    if (!str) return '';
+    try {
+        const binString = atob(str);
+        const bytes = Uint8Array.from(binString, (m) => m.codePointAt(0));
+        return new TextDecoder().decode(bytes);
+    } catch {
+        try {
+            return atob(str);
+        } catch {
+            return str;
+        }
+    }
+}
+
 function decodeHtmlEntities(str) {
     if (!str) return '';
     return str
@@ -143,11 +158,17 @@ export function cleanAndUnindent(raw) {
 export function highlightElement(el) {
     if (!el || el.dataset.highlighted === 'yes') return;
     try {
-        // Extract raw code
-        let rawContent = el.dataset.rawCode || el.innerHTML;
-        let rawCode = cleanAndUnindent(decodeHtmlEntities(rawContent));
+        // Extract raw code: prefer untouched base64 payload if available
+        let rawCode = '';
+        if (el.dataset.rawCodeBase64) {
+            rawCode = decodeBase64(el.dataset.rawCodeBase64);
+        } else if (el.dataset.rawCode) {
+            rawCode = el.dataset.rawCode;
+        } else {
+            rawCode = cleanAndUnindent(decodeHtmlEntities(el.innerHTML));
+        }
         
-        // Save clean raw code for copy button
+        // Save clean raw code for copy button and gutter
         el.dataset.rawCode = rawCode;
         
         // Detect language from class e.g. language-blade
@@ -203,6 +224,7 @@ window.VibeHighlight = {
     highlightElement,
     highlightAll,
     cleanAndUnindent,
+    decodeBase64,
     highlightAuto(code) {
         return hljs.highlightAuto(code).value;
     },

@@ -963,7 +963,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.livewire_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.livewire_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" title="app/Livewire/TaskBoard.php" :code="$livewireCode" :line-numbers="true" />
+                            <vibe:highlight language="php" title="app/Livewire/TaskBoard.php" :code="$livewireCode" :line-numbers="true" />
                         </vibe:card>
                     </vibe:tabs.panel>
 
@@ -974,7 +974,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.api_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.api_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" title="app/Http/Controllers/Api/TaskApiController.php" :code="$apiControllerCode" :line-numbers="true" />
+                            <vibe:highlight language="php" title="app/Http/Controllers/Api/TaskApiController.php" :code="$apiControllerCode" :line-numbers="true" />
                         </vibe:card>
                     </vibe:tabs.panel>
 
@@ -985,7 +985,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/todo.backend.form_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/todo.backend.form_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" title="app/Http/Controllers/TaskBatchController.php" :code="$formControllerCode" :line-numbers="true" />
+                            <vibe:highlight language="php" title="app/Http/Controllers/TaskBatchController.php" :code="$formControllerCode" :line-numbers="true" />
                         </vibe:card>
                     </vibe:tabs.panel>
                 </vibe:tabs>

@@ -449,7 +449,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                             <span class="text-sm font-semibold text-foreground">JavaScript vibeToast</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Global function invocation.</p>
-                        <vibe:highlightjs language="javascript" :lineNumbers="false" :code="$jsHelperSnippet" />
+                        <vibe:highlight language="javascript" :lineNumbers="false" :code="$jsHelperSnippet" />
                     </vibe:card>
 
                     {{-- 2. Alpine.js Dispatch --}}
@@ -459,7 +459,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                             <span class="text-sm font-semibold text-foreground">Alpine.js $dispatch</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Alpine event dispatch.</p>
-                        <vibe:highlightjs language="html" :lineNumbers="false" :code="$alpineSnippet" />
+                        <vibe:highlight language="html" :lineNumbers="false" :code="$alpineSnippet" />
                     </vibe:card>
 
                     {{-- 3. Laravel Flash Session --}}
@@ -469,7 +469,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                             <span class="text-sm font-semibold text-foreground">Laravel Flash Session</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Controller session flash.</p>
-                        <vibe:highlightjs language="php" :lineNumbers="false" :code="$laravelSnippet" />
+                        <vibe:highlight language="php" :lineNumbers="false" :code="$laravelSnippet" />
                     </vibe:card>
 
                     {{-- 4. Livewire Event Dispatch --}}
@@ -479,7 +479,7 @@ vibeToast({ position: 'bottom-left', type: 'info', message: '{{ __('docs/toast.p
                             <span class="text-sm font-semibold text-foreground">Livewire Component</span>
                         </div>
                         <p class="text-xs text-muted-foreground">Livewire event dispatch.</p>
-                        <vibe:highlightjs language="php" :lineNumbers="false" :code="$livewireSnippet" />
+                        <vibe:highlight language="php" :lineNumbers="false" :code="$livewireSnippet" />
                     </vibe:card>
                 </div>
             </section>

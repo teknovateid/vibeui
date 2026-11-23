@@ -106,6 +106,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     });
 
     Route::view('/textarea', 'docs.textarea.index')->name('textarea.index');
+    Route::view('/editor', 'docs.editor.index')->name('editor.index');
     Route::get('/select', [SelectController::class, 'index'])->name('select.index');
     Route::get('/select/api', [SelectController::class, 'api'])->name('select.api');
     Route::view('/checkbox', 'docs.checkbox.index')->name('checkbox.index');
@@ -171,7 +172,8 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/tabs', 'docs.tabs.index')->name('tabs.index');
     Route::view('/accordion', 'docs.accordion.index')->name('accordion.index');
     Route::view('/stepper', 'docs.stepper.index')->name('stepper.index');
-    Route::view('/highlightjs', 'docs.highlightjs.index')->name('highlightjs.index');
+    Route::view('/highlight', 'docs.highlight.index')->name('highlight.index');
+    Route::redirect('/highlightjs', '/docs/highlight')->name('highlightjs.index');
     Route::view('/todo', 'docs.todo.index')->name('todo.index');
 
     Route::prefix('todo-demo')->name('todo.demo.')->group(function () {

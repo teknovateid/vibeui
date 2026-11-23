@@ -217,9 +217,9 @@
                         BLADE;
                     @endphp
 
-                    <vibe:highlightjs language="php" title="app/Http/Controllers/DashboardController.php" :code="$dashboardControllerCode" />
+                    <vibe:highlight language="php" title="app/Http/Controllers/DashboardController.php" :code="$dashboardControllerCode" />
 
-                    <vibe:highlightjs language="blade" title="resources/views/dashboard.blade.php" :code="$bladeUsageCode" />
+                    <vibe:highlight language="blade" title="resources/views/dashboard.blade.php" :code="$bladeUsageCode" />
                 </div>
 
                 {{-- Sub 3: Pembungkusan dalam Vibe Card --}}
@@ -229,7 +229,7 @@
                         {!! __('docs/chart.usage.steps.step3_desc') !!}
                     </p>
 
-                    <vibe:highlightjs language="blade" :title="__('docs/chart.usage.step2_demo.example_title')" :code="$cardStructureCode" />
+                    <vibe:highlight language="blade" :title="__('docs/chart.usage.step2_demo.example_title')" :code="$cardStructureCode" />
                 </div>
 
                 {{-- Sub 4: Sistem Warna Tema & Opasitas Slash --}}

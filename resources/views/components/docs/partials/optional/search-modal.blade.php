@@ -245,6 +245,16 @@
             'keywords' => 'textarea multi line text input note catatan auto resize textarea',
         ],
         [
+            'id' => 'menu-editor',
+            'title' => __('docs/sidebar.nav.editor') ?: 'Editor (WYSIWYG)',
+            'subtitle' => 'Rich Text WYSIWYG editor powered by TinyMCE with variables autocompleter',
+            'category' => $catMenu,
+            'section' => $navSections['forms'],
+            'url' => route('docs.editor.index'),
+            'icon' => 'textarea',
+            'keywords' => 'editor tinymce wysiwyg rich text html formatted content variabel mustache variable autocomplete',
+        ],
+        [
             'id' => 'menu-select',
             'title' => __('docs/sidebar.nav.select') ?: __('docs/search.menu_items.select.title'),
             'subtitle' => __('docs/search.menu_items.select.subtitle'),
@@ -599,12 +609,12 @@
 
         // Components - Extra
         [
-            'id' => 'menu-highlightjs',
-            'title' => __('docs/sidebar.nav.highlightjs') ?: __('docs/search.menu_items.highlightjs.title'),
+            'id' => 'menu-highlight',
+            'title' => __('docs/sidebar.nav.highlight') ?: __('docs/sidebar.nav.highlightjs'),
             'subtitle' => __('docs/search.menu_items.highlightjs.subtitle'),
             'category' => $catMenu,
             'section' => $navSections['extra'],
-            'url' => route('docs.highlightjs.index'),
+            'url' => route('docs.highlight.index'),
             'icon' => 'code',
             'keywords' => 'highlight code syntax prism pre snippet penyorot sintaks tema kode syntax',
         ],

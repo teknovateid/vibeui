@@ -74,7 +74,7 @@
                         . "    └── docs.php                      # " . __('docs/directories.overview.tree_comments.routes');
                 @endphp
 
-                <vibe:highlightjs language="plaintext" :title="__('docs/directories.overview.tree_title')" :code="$directoryTree" />
+                <vibe:highlight language="plaintext" :title="__('docs/directories.overview.tree_title')" :code="$directoryTree" />
             </section>
 
             {{-- ─── 2. Komponen Blade ─── --}}
@@ -230,7 +230,7 @@ return [
 PHP;
                 @endphp
 
-                <vibe:highlightjs language="php" title="config/vibe.php" :code="$configSnippet" />
+                <vibe:highlight language="php" title="config/vibe.php" :code="$configSnippet" />
             </section>
 
         </div>

@@ -2,47 +2,90 @@
 
 @props([
     'position' => 'bottom-right',
-    'timeout' => 3000,
+    'timeout' => 2800,
     'sound' => false,
     'animation' => false,
+    'max' => 3,
+    'dedupMs' => 1500,
+    'compact' => true,
 ])
 
-<div 
+@php
+    $maxToasts = max(1, (int) $max);
+    $dedupWindow = max(0, (int) $dedupMs);
+    $isCompact = filter_var($compact, FILTER_VALIDATE_BOOLEAN);
+    $timeoutMs = max(500, (int) $timeout);
+@endphp
+
+<div
     x-data="{
         toasts: [],
         heights: {},
+        recentSignatures: new Map(),
         globalPosition: '{{ $position }}',
         globalSound: '{{ $sound }}',
         globalAnimation: @js($animation),
+        isCompact: {{ $isCompact ? 'true' : 'false' }},
+        maxToasts: {{ $maxToasts }},
+        dedupMs: {{ $dedupWindow }},
         expanded: false,
         hoverTimeout: null,
-        
+
+        redundantTitles: new Set([
+            'berhasil',
+            'berhasil!',
+            'sukses',
+            'sukses!',
+            'tersimpan',
+            'tersimpan!',
+            'diperbarui',
+            'dihapus',
+            'info',
+            'informasi',
+            'pemberitahuan',
+            'notifikasi',
+            'status diperbarui',
+            'pengaturan disimpan',
+            'akses ditolak',
+            'akses ditolak (403)',
+            'akses dibatasi',
+            'success',
+            'success!',
+            'saved',
+            'updated',
+            'deleted',
+            'notice',
+            'status updated',
+            'settings saved',
+            'access restricted',
+        ]),
+
         typeClasses: {
-            success: 'bg-card text-card-foreground border border-border',
-            error: 'bg-card text-card-foreground border border-border',
-            warning: 'bg-card text-card-foreground border border-border',
-            info: 'bg-card text-card-foreground border border-border'
-        },
-        bubbleClasses: {
-            success: 'bg-muted',
-            error: 'bg-muted',
-            warning: 'bg-muted',
-            info: 'bg-muted'
+            success: 'bg-card/95 text-card-foreground border border-border/80',
+            error: 'bg-card/95 text-card-foreground border border-destructive/30',
+            danger: 'bg-card/95 text-card-foreground border border-destructive/30',
+            destructive: 'bg-card/95 text-card-foreground border border-destructive/30',
+            warning: 'bg-card/95 text-card-foreground border border-warning/30',
+            info: 'bg-card/95 text-card-foreground border border-border/80'
         },
         iconClasses: {
             success: 'bg-success/15 text-success',
             error: 'bg-destructive/15 text-destructive',
+            danger: 'bg-destructive/15 text-destructive',
+            destructive: 'bg-destructive/15 text-destructive',
             warning: 'bg-warning/15 text-warning',
             info: 'bg-info/15 text-info'
         },
-        
+
         icons: {
-            success: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m8.5 12.5 2 2 5-5' /></svg>`,
-            error: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
-            warning: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><path d='M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z' /><path d='M12 8v5M12 16h.01' /></svg>`,
-            info: `<svg class='size-7' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='M12 7v6M12 16h.01' /></svg>`
+            success: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m8.5 12.5 2 2 5-5' /></svg>`,
+            error: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
+            danger: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
+            destructive: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='m14.5 9.5-5 5m0-5 5 5' /></svg>`,
+            warning: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><path d='M5.312 10.762C8.23 5.587 9.69 3 12 3c2.31 0 3.77 2.587 6.688 7.762l.364.644c2.425 4.3 3.638 6.45 2.542 8.022C20.498 21 17.786 21 12.364 21h-.728c-5.422 0-8.134 0-9.23-1.572-1.096-1.572.117-3.722 2.542-8.022l.364-.644Z' /><path d='M12 8v5M12 16h.01' /></svg>`,
+            info: `<svg class='size-4' fill='none' viewBox='0 0 24 24' stroke-width='2' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10' /><path d='M12 7v6M12 16h.01' /></svg>`
         },
-        
+
         getActivePosition() {
             return this.toasts.length > 0 ? (this.toasts[0].position || this.globalPosition) : this.globalPosition;
         },
@@ -59,38 +102,119 @@
             };
             return positions[pos] || positions['bottom-right'];
         },
-        
+
         getMarginClasses() {
             let pos = this.getActivePosition();
             const margins = {
-                'top-right': 'mt-4 mr-4 sm:mt-6 sm:mr-6',
-                'top-left': 'mt-4 ml-4 sm:mt-6 sm:ml-6',
-                'bottom-right': 'mb-4 mr-4 sm:mb-6 sm:mr-6',
-                'bottom-left': 'mb-4 ml-4 sm:mb-6 sm:ml-6',
-                'top-center': 'mt-4 sm:mt-6',
-                'bottom-center': 'mb-4 sm:mb-6',
+                'top-right': 'mt-3.5 mr-3.5 sm:mt-5 sm:mr-5',
+                'top-left': 'mt-3.5 ml-3.5 sm:mt-5 sm:ml-5',
+                'bottom-right': 'mb-3.5 mr-3.5 sm:mb-5 sm:mr-5',
+                'bottom-left': 'mb-3.5 ml-3.5 sm:mb-5 sm:ml-5',
+                'top-center': 'mt-3.5 sm:mt-5',
+                'bottom-center': 'mb-3.5 sm:mb-5',
             };
             return margins[pos] || margins['bottom-right'];
         },
-        
+
+        cleanText(val) {
+            return typeof val === 'string' ? val.replace(/\s+/g, ' ').trim() : '';
+        },
+
+        normalizePayload(raw) {
+            if (typeof raw === 'string') {
+                return { type: 'info', title: '', message: this.cleanText(raw) };
+            }
+            if (!raw || typeof raw !== 'object') {
+                return null;
+            }
+
+            let title = this.cleanText(raw.title);
+            let message = this.cleanText(raw.message);
+
+            if (!message && title) {
+                message = title;
+                title = '';
+            }
+
+            if (title && message && title.toLowerCase() === message.toLowerCase()) {
+                title = '';
+            }
+
+            if (this.isCompact && !raw.keepTitle && title && message && message.length <= 80 && this.redundantTitles.has(title.toLowerCase())) {
+                title = '';
+            }
+
+            const rawType = raw.type || raw.variant || 'info';
+            const isError = rawType === 'error' || rawType === 'danger' || rawType === 'destructive';
+            if (this.isCompact && message.length > 115 && !isError) {
+                message = `${message.slice(0, 112).trimEnd()}...`;
+            }
+
+            if (!message && !title) {
+                return null;
+            }
+
+            return {
+                ...raw,
+                type: rawType,
+                title,
+                message,
+            };
+        },
+
+        shouldSuppressToast(item) {
+            if (item.fromBell) {
+                const sheet = document.getElementById('notification-sheet');
+                if (sheet && sheet.getAttribute('data-state') === 'expanded') {
+                    return true;
+                }
+            }
+
+            if (this.dedupMs > 0) {
+                const now = Date.now();
+                const sig = `${item.type || 'info'}|${item.title || ''}|${item.message || ''}`;
+                const lastSeen = this.recentSignatures.get(sig);
+                if (lastSeen && now - lastSeen < this.dedupMs) {
+                    return true;
+                }
+                this.recentSignatures.set(sig, now);
+
+                if (this.recentSignatures.size > 40) {
+                    for (const [k, ts] of this.recentSignatures.entries()) {
+                        if (now - ts > this.dedupMs) {
+                            this.recentSignatures.delete(k);
+                        }
+                    }
+                }
+            }
+
+            return false;
+        },
+
         add(toast) {
-            let id = Date.now() + Math.random().toString(36).substr(2, 9);
-            
-            let s = toast.sound !== undefined ? toast.sound : this.globalSound;
+            const normalized = this.normalizePayload(toast);
+            if (!normalized || this.shouldSuppressToast(normalized)) {
+                return;
+            }
+
+            let id = normalized.id || (Date.now() + Math.random().toString(36).slice(2, 11));
+
+            let s = normalized.sound !== undefined ? normalized.sound : this.globalSound;
             if (s === 'true' || s === '1') s = true;
             if (s === 'false' || s === '0' || s === '') s = false;
 
-            let anim = toast.animation !== undefined ? toast.animation : this.globalAnimation;
+            let anim = normalized.animation !== undefined ? normalized.animation : this.globalAnimation;
             if (anim === 'false' || anim === '0' || anim === '') anim = false;
-            
-            let item = { ...toast, id, timer: null, hover: false, sound: s, animation: anim };
+
+            let item = { ...normalized, id, timer: null, hover: false, sound: s, animation: anim };
 
             this.toasts.unshift(item);
             this.startTimer(item);
             this.playSound(item);
-            
-            if (this.toasts.length > 5) {
+
+            while (this.toasts.length > this.maxToasts) {
                 let oldest = this.toasts[this.toasts.length - 1];
+                if (!oldest) break;
                 this.remove(oldest.id);
             }
         },
@@ -113,7 +237,7 @@
             };
             return map[anim] || '';
         },
-        
+
         getAudioContext() {
             if (!window.vibeAudioContext || window.vibeAudioContext.state === 'closed') {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -147,18 +271,18 @@
 
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    
+
                     osc.connect(gain);
                     gain.connect(ctx.destination);
-                    
+
                     const now = ctx.currentTime;
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(800, now);
                     osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
-                    
+
                     gain.gain.setValueAtTime(0.3, now);
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-                    
+
                     osc.start(now);
                     osc.stop(now + 0.12);
                 } catch (e) {
@@ -166,34 +290,34 @@
                 }
             }
         },
-        
+
         remove(id) {
             let t = this.toasts.find(t => t.id === id);
             if (t && t.timer) clearTimeout(t.timer);
             this.toasts = this.toasts.filter(t => t.id !== id);
             delete this.heights[id];
         },
-        
+
         startTimer(toast) {
-            if (toast.timeout !== false && (toast.timeout || {{ $timeout }})) {
-                let duration = toast.timeout || {{ $timeout }};
+            if (toast.timeout !== false && (toast.timeout || {{ $timeoutMs }})) {
+                let duration = toast.timeout || {{ $timeoutMs }};
                 toast.timer = setTimeout(() => {
                     this.remove(toast.id);
                 }, duration);
             }
         },
-        
+
         pauseTimer(toast) {
             if (toast.timer) {
                 clearTimeout(toast.timer);
                 toast.timer = null;
             }
         },
-        
+
         resumeTimer(toast) {
             this.startTimer(toast);
         },
-        
+
         onMouseEnter() {
             if (this.hoverTimeout) {
                 clearTimeout(this.hoverTimeout);
@@ -202,12 +326,12 @@
             this.expanded = true;
             this.toasts.forEach(t => this.pauseTimer(t));
         },
-        
+
         onMouseLeave() {
             this.hoverTimeout = setTimeout(() => {
                 this.expanded = false;
                 this.toasts.forEach(t => this.resumeTimer(t));
-            }, 300); // 300ms grace period for gaps
+            }, 300);
         },
 
         updateHeight(id, height) {
@@ -218,26 +342,26 @@
 
         getExpandedOffset(index) {
             let offset = 0;
-            const gap = 12; // Gap/jarak antar toast saat expanded (12px)
+            const gap = 8;
             for (let i = 0; i < index; i++) {
                 let t = this.toasts[i];
-                let h = (t && this.heights[t.id]) ? this.heights[t.id] : (t && t.title ? 96 : 64);
+                let h = (t && this.heights[t.id]) ? this.heights[t.id] : (t && t.title ? 66 : 46);
                 offset += h + gap;
             }
             return offset;
         },
-        
+
         getTransform(index) {
             let isTop = this.getActivePosition().includes('top');
-            
+
             if (this.expanded) {
                 let y = this.getExpandedOffset(index);
                 return `translateY(${isTop ? y : -y}px) scale(1)`;
             }
-            
-            let scale = 1 - (index * 0.05);
-            let y = index * 14; 
-            
+
+            let scale = 1 - (index * 0.04);
+            let y = index * 9;
+
             return `translateY(${isTop ? y : -y}px) scale(${scale})`;
         }
     }"
@@ -268,13 +392,13 @@
         @if (session()->has('toast_info')) add({ type: 'info', message: '{{ session('toast_info') }}', title: '{{ __('vibe/toast.info') }}' }); @endif
     "></div>
 
-    <div 
-        class="relative w-full min-w-xs max-w-sm flex flex-col items-center pointer-events-none"
+    <div
+        class="relative w-[min(calc(100vw-1.75rem),340px)] sm:w-[340px] flex flex-col items-center pointer-events-none"
         @mouseenter="onMouseEnter()"
         @mouseleave="onMouseLeave()"
     >
         <template x-for="(toast, index) in toasts" :key="toast.id">
-            <div 
+            <div
                 x-init="
                     $nextTick(() => {
                         updateHeight(toast.id, $el.offsetHeight);
@@ -286,38 +410,44 @@
                         ro.observe($el);
                     }
                 "
-                x-transition:enter="transition-all ease-out duration-300"
-                x-transition:enter-start="opacity-0 translate-y-4 scale-95"
+                x-transition:enter="transition-all ease-out duration-250"
+                x-transition:enter-start="opacity-0 translate-y-2 scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"
-                x-transition:leave="transition-all ease-in duration-200"
+                x-transition:leave="transition-all ease-in duration-150"
                 x-transition:leave-start="opacity-100 scale-100"
-                x-transition:leave-end="opacity-0 scale-90"
-                class="absolute left-0 right-0 p-4 rounded-xl lg:rounded-2xl shadow-lg pointer-events-auto flex items-center gap-3 overflow-hidden"
+                x-transition:leave-end="opacity-0 scale-95"
+                class="absolute left-0 right-0 px-3.5 py-2.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto flex gap-2.5 overflow-hidden"
                 :class="[
                     typeClasses[toast.type] || typeClasses.info,
+                    toast.title ? 'items-start' : 'items-center',
                     getActivePosition().includes('top') ? 'top-0 origin-top' : 'bottom-0 origin-bottom',
                     getAnimationClass(toast)
                 ]"
-                :style="`transform: ${getTransform(index)}; z-index: ${50 - index}; opacity: ${index > 2 && !expanded ? 0 : 1}; transition-property: transform, opacity; transition-duration: 300ms;`"
+                :style="`transform: ${getTransform(index)}; z-index: ${50 - index}; opacity: ${index > 2 && !expanded ? 0 : 1}; transition-property: transform, opacity; transition-duration: 250ms;`"
             >
-                <!-- Dekorasi Background Bulatan -->
-                <div class="absolute -left-6 -top-6 size-24 rounded-full opacity-25 dark:opacity-40 mix-blend-multiply dark:mix-blend-overlay pointer-events-none" :class="bubbleClasses[toast.type] || bubbleClasses.info"></div>
-                <div class="absolute left-6 -bottom-8 size-20 rounded-full opacity-15 dark:opacity-30 mix-blend-multiply dark:mix-blend-overlay pointer-events-none" :class="bubbleClasses[toast.type] || bubbleClasses.info"></div>
-
-                <!-- Ikon dalam Lingkaran Putih -->
-                <div class="shrink-0 relative z-10 w-11 h-11 rounded-full flex items-center justify-center" :class="iconClasses[toast.type] || iconClasses.info">
+                <!-- Ikon Status -->
+                <div class="shrink-0 size-7 rounded-lg flex items-center justify-center" :class="[iconClasses[toast.type] || iconClasses.info, toast.title ? 'mt-0.5' : '']">
                     <span x-html="toast.icon || icons[toast.type] || icons.info"></span>
                 </div>
-                
-                <!-- Teks Judul & Deskripsi -->
-                <div class="flex-1 flex flex-col min-w-0 relative z-10 py-1 pl-1">
-                    <h4 class="text-[15px] font-bold leading-tight" x-show="toast.title" x-text="toast.title"></h4>
-                    <p class="text-[13px] opacity-85 leading-snug" :class="{'mt-1': toast.title}" x-text="toast.message"></p>
+
+                <!-- Konten Ringkas -->
+                <div class="flex-1 flex flex-col min-w-0">
+                    <h4 class="text-[13px] font-semibold leading-snug text-foreground truncate" x-show="toast.title" x-text="toast.title"></h4>
+                    <p
+                        class="leading-snug line-clamp-2"
+                        :class="toast.title ? 'text-xs text-muted-foreground mt-0.5' : 'text-[13px] font-medium text-foreground'"
+                        x-text="toast.message"
+                    ></p>
                 </div>
-                
+
                 <!-- Tombol Close -->
-                <button @click="remove(toast.id)" aria-label="{{ __('vibe/toast.close') }}" class="shrink-0 relative z-10 text-current opacity-40 hover:opacity-100 p-1.5 rounded-full hover:bg-muted hover:text-foreground transition-all">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <button
+                    type="button"
+                    @click="remove(toast.id)"
+                    aria-label="{{ __('vibe/toast.close') }}"
+                    class="shrink-0 text-muted-foreground/60 hover:text-foreground p-1 -mr-1 rounded-lg hover:bg-muted transition-colors cursor-pointer"
+                >
+                    <svg class="size-3.5" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 5L5 19M19 19L5 5" />
                     </svg>
                 </button>
@@ -328,18 +458,19 @@
 
 <script>
     if (typeof window.vibeToast === 'undefined') {
-        window.vibeToast = function(payload) {
+        window.vibeToast = function(payload, options = {}) {
             if (typeof payload === 'string') {
-                payload = { message: payload, type: 'info' };
+                payload = { ...(options && typeof options === 'object' ? options : {}), message: payload };
+                if (!payload.type) payload.type = 'info';
             }
-            
+
             let fired = false;
             let dispatchEvent = () => {
                 if (fired) return;
                 fired = true;
                 window.dispatchEvent(new CustomEvent('toast', { detail: payload }));
             };
-            
+
             if (document.readyState === 'loading') {
                 document.addEventListener('alpine:initialized', () => setTimeout(dispatchEvent, 50));
                 document.addEventListener('DOMContentLoaded', () => setTimeout(dispatchEvent, 150));

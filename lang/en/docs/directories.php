@@ -64,7 +64,7 @@ return [
         ],
         'highlight_card' => [
             'title' => 'Syntax Highlighter',
-            'desc' => 'Lightweight initializer for <code class="font-mono text-foreground">&lt;vibe:highlightjs&gt;</code> and <code class="font-mono text-foreground">&lt;vibe:preview&gt;</code> with code copying and automatic language detection.',
+            'desc' => 'Lightweight initializer for <code class="font-mono text-foreground">&lt;vibe:highlight&gt;</code> and <code class="font-mono text-foreground">&lt;vibe:preview&gt;</code> with code copying and automatic language detection.',
         ],
     ],
 

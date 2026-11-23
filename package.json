@@ -26,6 +26,7 @@
         "filepond-plugin-image-preview": "^4.6.12",
         "filepond-plugin-image-resize": "^2.0.10",
         "filepond-plugin-image-transform": "^3.8.8",
-        "highlight.js": "^11.12.0"
+        "highlight.js": "^11.12.0",
+        "tinymce": "^7.9.3"
     }
 }

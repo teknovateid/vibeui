@@ -2556,8 +2556,8 @@
       ]
     },
     {
-      "name": "vibe:highlightjs",
-      "description": "Vibe UI HighlightJS - Penampil sintaks kode program dengan tombol salin otomatis.",
+      "name": "vibe:highlight",
+      "description": "Vibe UI Highlight - Penampil sintaks kode program dengan tombol salin otomatis.",
       "attributes": [
         {
           "name": "code"

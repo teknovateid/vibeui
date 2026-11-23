@@ -618,27 +618,27 @@ vibeAlert({
 
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">1. JavaScript Function (vibeAlert)</p>
-                        <vibe:highlightjs language="javascript" title="app.js / script" :code="$jsSnippet" />
+                        <vibe:highlight language="javascript" title="app.js / script" :code="$jsSnippet" />
                     </div>
 
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">2. Blade Directive (&#64;vibeAlert)</p>
-                        <vibe:highlightjs language="html" title="resources/views/pages/dashboard.blade.php" :code="$bladeSnippet" />
+                        <vibe:highlight language="html" title="resources/views/pages/dashboard.blade.php" :code="$bladeSnippet" />
                     </div>
 
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">3. Livewire Component Event Dispatch</p>
-                        <vibe:highlightjs language="php" title="app/Livewire/UserManager.php" :code="$livewireSnippet" />
+                        <vibe:highlight language="php" title="app/Livewire/UserManager.php" :code="$livewireSnippet" />
                     </div>
 
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">4. Alpine.js Magic Helper ($vibe.alert & $vibe.alerts)</p>
-                        <vibe:highlightjs language="html" title="resources/views/components/form.blade.php" :code="$alpineSnippet" />
+                        <vibe:highlight language="html" title="resources/views/components/form.blade.php" :code="$alpineSnippet" />
                     </div>
 
                     <div>
                         <p class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">5. Laravel Controller Flash Session</p>
-                        <vibe:highlightjs language="php" title="app/Http/Controllers/OrderController.php" :code="$laravelSnippet" />
+                        <vibe:highlight language="php" title="app/Http/Controllers/OrderController.php" :code="$laravelSnippet" />
                     </div>
                 </div>
             </section>

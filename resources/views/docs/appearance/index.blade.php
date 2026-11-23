@@ -122,7 +122,7 @@
                     Untuk membatasi hak akses agar hanya role tertentu yang dapat menyimpan tema global ke database/cache, daftarkan Gate di <code class="font-mono text-foreground bg-muted px-1 py-0.5 rounded">app/Providers/AppServiceProvider.php</code>:
                 </p>
 
-                <vibe:highlightjs language="php" title="app/Providers/AppServiceProvider.php">
+                <vibe:highlight language="php" title="app/Providers/AppServiceProvider.php">
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -145,19 +145,19 @@ class AppServiceProvider extends ServiceProvider
         });
     }
 }
-                </vibe:highlightjs>
+                </vibe:highlight>
 
                 <p class="text-xs text-muted-foreground">
                     Kemudian tentukan nama gate tersebut pada <code class="font-mono text-foreground bg-muted px-1 py-0.5 rounded">config/vibe.php</code>:
                 </p>
 
-                <vibe:highlightjs language="php" title="config/vibe.php">
+                <vibe:highlight language="php" title="config/vibe.php">
 'theme' => [
     'storage_mode' => env('VIBE_THEME_STORAGE_MODE', 'hybrid'), // 'hybrid', 'local_only', 'global_only'
     'gate' => env('VIBE_THEME_GATE', 'vibe.manage-theme'),
     'cache_key' => 'vibe:theme:global',
 ],
-                </vibe:highlightjs>
+                </vibe:highlight>
             </div>
         </section>
 
@@ -170,7 +170,7 @@ class AppServiceProvider extends ServiceProvider
                 </p>
             </div>
 
-            <vibe:highlightjs language="php" title="PHP / Controller Usage">
+            <vibe:highlight language="php" title="PHP / Controller Usage">
 use Teknovate\VibeUi\Services\ThemeService;
 
 $themeService = app(ThemeService::class);
@@ -200,7 +200,7 @@ $themeService->resetGlobalTheme();
 
 // 5. Bersihkan cache saja:
 $themeService->clearCache();
-            </vibe:highlightjs>
+            </vibe:highlight>
         </section>
 
         <!-- Section 5: HTTP Endpoints -->

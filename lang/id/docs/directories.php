@@ -64,7 +64,7 @@ return [
         ],
         'highlight_card' => [
             'title' => 'Syntax Highlighter',
-            'desc' => 'Inisialisasi ringan untuk komponen <code class="font-mono text-foreground">&lt;vibe:highlightjs&gt;</code> dan <code class="font-mono text-foreground">&lt;vibe:preview&gt;</code> dengan fitur copy code dan auto-detect bahasa.',
+            'desc' => 'Inisialisasi ringan untuk komponen <code class="font-mono text-foreground">&lt;vibe:highlight&gt;</code> dan <code class="font-mono text-foreground">&lt;vibe:preview&gt;</code> dengan fitur copy code dan auto-detect bahasa.',
         ],
     ],
 

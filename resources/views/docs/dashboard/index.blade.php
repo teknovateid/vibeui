@@ -851,7 +851,7 @@
                 }
             @endphp
 
-            <vibe:highlightjs
+            <vibe:highlight
                 language="blade"
                 title="resources/views/docs/dashboard/index.blade.php"
                 :lineNumbers="true"

@@ -1,0 +1,825 @@
+/**
+ * Vibe UI - Rich WYSIWYG Editor Styles (TinyMCE Integration)
+ * Seamlessly integrates TinyMCE with Vibe UI theme tokens, borders, and colors.
+ */
+
+/* =========================================================================
+   Skeleton Loader (Anti-FOUC prior to TinyMCE mount)
+   ========================================================================= */
+.vibe-editor-skeleton {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid var(--border, #e4e4e7);
+    border-radius: var(--radius, 0.5rem);
+    background-color: var(--card, #ffffff);
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+
+.dark .vibe-editor-skeleton,
+[data-canvas-theme="dark"] .vibe-editor-skeleton {
+    border-color: var(--border, #27272a);
+    background-color: var(--card, #121215);
+}
+
+.vibe-editor-skeleton-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border, #e4e4e7);
+    background-color: var(--muted, #f4f4f5);
+}
+
+.dark .vibe-editor-skeleton-toolbar,
+[data-canvas-theme="dark"] .vibe-editor-skeleton-toolbar {
+    border-bottom-color: var(--border, #27272a);
+    background-color: var(--muted, #18181b);
+}
+
+.vibe-editor-skeleton-btn {
+    height: 1.5rem;
+    width: 1.75rem;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75);
+    background-color: rgba(148, 163, 184, 0.2);
+    animation: vibe-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.vibe-editor-skeleton-btn-wide {
+    width: 3.5rem;
+}
+
+.vibe-editor-skeleton-divider {
+    height: 1.25rem;
+    width: 1px;
+    background-color: var(--border, #e4e4e7);
+    margin: 0 0.25rem;
+}
+
+.dark .vibe-editor-skeleton-divider,
+[data-canvas-theme="dark"] .vibe-editor-skeleton-divider {
+    background-color: var(--border, #27272a);
+}
+
+.vibe-editor-skeleton-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-height: 180px;
+}
+
+.vibe-editor-skeleton-line {
+    height: 0.875rem;
+    border-radius: 0.25rem;
+    background-color: rgba(148, 163, 184, 0.15);
+    animation: vibe-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* =========================================================================
+   TinyMCE Vibe UI Container & Border Harmonization
+   ========================================================================= */
+.vibe-editor-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.vibe-editor-wrapper .tox-tinymce {
+    border: 1px solid var(--border, #e4e4e7) !important;
+    border-radius: var(--radius, 0.5rem) !important;
+    background-color: var(--card, #ffffff) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
+    overflow: hidden !important;
+}
+
+.dark .vibe-editor-wrapper .tox-tinymce,
+[data-canvas-theme="dark"] .vibe-editor-wrapper .tox-tinymce {
+    border-color: var(--border, #27272a) !important;
+    background-color: var(--card, #121215) !important;
+}
+
+/* Focus State - Removed focus ring/border as requested */
+.vibe-editor-wrapper.is-focused .tox-tinymce,
+.vibe-editor-wrapper .tox-tinymce.tox-tinymce--focused {
+    border-color: var(--border, #e4e4e7) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    outline: none !important;
+}
+
+.dark .vibe-editor-wrapper.is-focused .tox-tinymce,
+.dark .vibe-editor-wrapper .tox-tinymce.tox-tinymce--focused,
+[data-canvas-theme="dark"] .vibe-editor-wrapper.is-focused .tox-tinymce,
+[data-canvas-theme="dark"] .vibe-editor-wrapper .tox-tinymce.tox-tinymce--focused {
+    border-color: var(--border, #27272a) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    outline: none !important;
+}
+
+/* Error State */
+.vibe-editor-wrapper.has-error .tox-tinymce {
+    border-color: var(--destructive, #ef4444) !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+}
+
+/* Disabled State */
+.vibe-editor-wrapper.is-disabled .tox-tinymce {
+    opacity: 0.6 !important;
+    pointer-events: none !important;
+    cursor: not-allowed !important;
+    background-color: var(--muted, #f4f4f5) !important;
+}
+
+/* =========================================================================
+   TinyMCE Toolbar, Buttons & Controls Styling (Overriding Oxide Navy Blue)
+   ========================================================================= */
+.tox .tox-editor-header {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-bottom: 1px solid var(--border, #e4e4e7) !important;
+    box-shadow: none !important;
+    padding: 3px 6px !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+}
+
+.dark .tox .tox-editor-header,
+[data-canvas-theme="dark"] .tox .tox-editor-header {
+    background-color: var(--muted, #18181b) !important;
+    border-bottom-color: var(--border, #27272a) !important;
+}
+
+/* TinyMCE Sticky Toolbar State */
+.tox.tox-tinymce--toolbar-sticky-on .tox-editor-header,
+.tox:not(.tox-tinymce-inline).tox-tinymce--toolbar-sticky-on .tox-editor-header {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-bottom: 1px solid var(--border, #e4e4e7) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+}
+
+.dark .tox.tox-tinymce--toolbar-sticky-on .tox-editor-header,
+.dark .tox:not(.tox-tinymce-inline).tox-tinymce--toolbar-sticky-on .tox-editor-header,
+[data-canvas-theme="dark"] .tox.tox-tinymce--toolbar-sticky-on .tox-editor-header,
+[data-canvas-theme="dark"] .tox:not(.tox-tinymce-inline).tox-tinymce--toolbar-sticky-on .tox-editor-header {
+    background-color: var(--muted, #18181b) !important;
+    border-bottom-color: var(--border, #27272a) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.tox .tox-toolbar,
+.tox .tox-toolbar__primary {
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+}
+
+/* Toolbar Sliding Overflow Drawer (Contained inside editor; never transparent) */
+.tox .tox-toolbar__overflow {
+    background-color: var(--muted, #f4f4f5) !important;
+    background-image: none !important;
+    border-top: 1px solid var(--border, #e4e4e7) !important;
+    border-bottom: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
+    padding: 2px 0 !important;
+}
+
+.dark .tox .tox-toolbar__overflow,
+[data-canvas-theme="dark"] .tox .tox-toolbar__overflow {
+    background-color: var(--muted, #18181b) !important;
+    border-top-color: var(--border, #27272a) !important;
+}
+
+/* Auxiliary / Floating Overflow Fallback (if rendered in .tox-tinymce-aux) */
+.tox.tox-tinymce-aux .tox-toolbar__overflow,
+.tox-pop .tox-pop__dialog .tox-toolbar {
+    background-color: var(--popover, #ffffff) !important;
+    background-image: none !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    border-radius: var(--radius, 0.5rem) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+    padding: 4px 6px !important;
+}
+
+.dark .tox.tox-tinymce-aux .tox-toolbar__overflow,
+.dark .tox-pop .tox-pop__dialog .tox-toolbar,
+[data-canvas-theme="dark"] .tox.tox-tinymce-aux .tox-toolbar__overflow,
+[data-canvas-theme="dark"] .tox-pop .tox-pop__dialog .tox-toolbar {
+    background-color: var(--popover, #121215) !important;
+    border-color: var(--border, #27272a) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -4px rgba(0, 0, 0, 0.2) !important;
+}
+
+.tox .tox-toolbar-overlord {
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+}
+
+.tox .tox-toolbar__group {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 2px !important;
+    margin: 0 !important;
+}
+
+/* Toolbar Buttons - Vibe UI Ghost/Action Button Style */
+.tox .tox-tbtn {
+    height: 30px !important;
+    min-width: 30px !important;
+    width: auto !important;
+    padding: 0 6px !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    border: 1px solid transparent !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--muted-foreground, #71717a) !important;
+    margin: 2px 1px !important;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+    cursor: pointer !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.dark .tox .tox-tbtn,
+[data-canvas-theme="dark"] .tox .tox-tbtn {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--muted-foreground, #a1a1aa) !important;
+}
+
+.tox .tox-tbtn svg {
+    fill: currentColor !important;
+}
+
+.tox .tox-tbtn:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    color: var(--foreground, #09090b) !important;
+    border-color: transparent !important;
+}
+
+.dark .tox .tox-tbtn:hover,
+[data-canvas-theme="dark"] .tox .tox-tbtn:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--foreground, #fafafa) !important;
+    border-color: transparent !important;
+}
+
+/* Active / Pressed Toolbar Buttons - Vibe UI Secondary Button Style */
+.tox .tox-tbtn--enabled,
+.tox .tox-tbtn--active,
+.tox .tox-tbtn:active {
+    background-color: var(--secondary, #f4f4f5) !important;
+    color: var(--secondary-foreground, #18181b) !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .tox .tox-tbtn--enabled,
+.dark .tox .tox-tbtn--active,
+.dark .tox .tox-tbtn:active,
+[data-canvas-theme="dark"] .tox .tox-tbtn--enabled,
+[data-canvas-theme="dark"] .tox .tox-tbtn--active,
+[data-canvas-theme="dark"] .tox .tox-tbtn:active {
+    background-color: var(--secondary, #27272a) !important;
+    color: var(--secondary-foreground, #fafafa) !important;
+    border: 1px solid var(--border, #3f3f46) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.tox .tox-tbtn:focus,
+.tox .tox-tbtn:focus:not(.tox-tbtn--disabled) {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.tox .tox-tbtn:focus::after,
+.tox .tox-tbtn--enabled:focus::after {
+    display: none !important;
+}
+
+/* Disabled Toolbar Buttons */
+.tox .tox-tbtn--disabled,
+.tox .tox-tbtn:disabled,
+.tox .tox-tbtn--disabled:hover {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--muted-foreground, #71717a) !important;
+    opacity: 0.4 !important;
+    cursor: not-allowed !important;
+    border-color: transparent !important;
+}
+
+.dark .tox .tox-tbtn--disabled,
+.dark .tox .tox-tbtn:disabled,
+.dark .tox .tox-tbtn--disabled:hover,
+[data-canvas-theme="dark"] .tox .tox-tbtn--disabled,
+[data-canvas-theme="dark"] .tox .tox-tbtn:disabled,
+[data-canvas-theme="dark"] .tox .tox-tbtn--disabled:hover {
+    color: var(--muted-foreground, #a1a1aa) !important;
+}
+
+/* Select & Bespoke Dropdowns in Toolbar (e.g., Paragraph / Font) */
+.tox .tox-tbtn--select,
+.tox .tox-tbtn--bespoke {
+    background-color: var(--card, #ffffff) !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    margin: 2px 2px !important;
+    padding: 0 8px !important;
+    height: 30px !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .tox .tox-tbtn--select,
+.dark .tox .tox-tbtn--bespoke,
+[data-canvas-theme="dark"] .tox .tox-tbtn--select,
+[data-canvas-theme="dark"] .tox .tox-tbtn--bespoke {
+    background-color: var(--card, #121215) !important;
+    border-color: var(--border, #27272a) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2) !important;
+}
+
+.tox .tox-tbtn--select:hover,
+.tox .tox-tbtn--bespoke:hover {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-color: var(--border, #d4d4d8) !important;
+}
+
+.dark .tox .tox-tbtn--select:hover,
+.dark .tox .tox-tbtn--bespoke:hover,
+[data-canvas-theme="dark"] .tox .tox-tbtn--select:hover,
+[data-canvas-theme="dark"] .tox .tox-tbtn--bespoke:hover {
+    background-color: var(--muted, #18181b) !important;
+    border-color: var(--border, #3f3f46) !important;
+}
+
+.tox .tox-tbtn--select .tox-tbtn__select-label {
+    color: var(--foreground, #09090b) !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+}
+
+.dark .tox .tox-tbtn--select .tox-tbtn__select-label,
+[data-canvas-theme="dark"] .tox .tox-tbtn--select .tox-tbtn__select-label {
+    color: var(--foreground, #fafafa) !important;
+}
+
+.tox .tox-tbtn--select .tox-tbtn__select-chevron svg {
+    fill: var(--muted-foreground, #71717a) !important;
+}
+
+.dark .tox .tox-tbtn--select .tox-tbtn__select-chevron svg,
+[data-canvas-theme="dark"] .tox .tox-tbtn--select .tox-tbtn__select-chevron svg {
+    fill: var(--muted-foreground, #a1a1aa) !important;
+}
+
+/* Split Buttons (Color Pickers, List dropdowns, etc.) */
+.tox .tox-split-button {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    margin: 2px 1px !important;
+    box-shadow: none !important;
+    transition: background-color 0.15s ease, border-color 0.15s ease !important;
+}
+
+.tox .tox-split-button:hover {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.dark .tox .tox-split-button:hover,
+[data-canvas-theme="dark"] .tox .tox-split-button:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: transparent !important;
+}
+
+.tox .tox-split-button .tox-tbtn {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+}
+
+.tox .tox-split-button .tox-tbtn:hover {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+.tox .tox-split-button:focus,
+.tox .tox-split-button:focus-within {
+    box-shadow: none !important;
+}
+
+.tox .tox-split-button:focus::after {
+    display: none !important;
+}
+
+.tox .tox-split-button__chevron {
+    width: 18px !important;
+    color: var(--muted-foreground, #71717a) !important;
+}
+
+.dark .tox .tox-split-button__chevron,
+[data-canvas-theme="dark"] .tox .tox-split-button__chevron {
+    color: var(--muted-foreground, #a1a1aa) !important;
+}
+
+/* Toolbar Separators */
+.tox .tox-separator {
+    width: 1px !important;
+    height: 18px !important;
+    background-color: var(--border, #e4e4e7) !important;
+    margin: auto 4px !important;
+    align-self: center !important;
+}
+
+.dark .tox .tox-separator,
+[data-canvas-theme="dark"] .tox .tox-separator {
+    background-color: var(--border, #27272a) !important;
+}
+
+/* Menubar */
+.tox .tox-menubar {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-bottom: 1px solid var(--border, #e4e4e7) !important;
+    padding: 2px 4px !important;
+}
+
+.dark .tox .tox-menubar,
+[data-canvas-theme="dark"] .tox .tox-menubar {
+    background-color: var(--muted, #18181b) !important;
+    border-bottom-color: var(--border, #27272a) !important;
+}
+
+.tox .tox-mbtn {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--foreground, #09090b) !important;
+    border: 1px solid transparent !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    height: 28px !important;
+    font-size: 13px !important;
+    transition: background-color 0.15s ease !important;
+}
+
+.dark .tox .tox-mbtn,
+[data-canvas-theme="dark"] .tox .tox-mbtn {
+    color: var(--foreground, #fafafa) !important;
+}
+
+.tox .tox-mbtn:hover,
+.tox .tox-mbtn--active {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .tox .tox-mbtn:hover,
+.dark .tox .tox-mbtn--active,
+[data-canvas-theme="dark"] .tox .tox-mbtn:hover,
+[data-canvas-theme="dark"] .tox .tox-mbtn--active {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* =========================================================================
+   TinyMCE Edit Area & Statusbar
+   ========================================================================= */
+.tox .tox-edit-area {
+    background-color: var(--card, #ffffff) !important;
+}
+
+/* Disable TinyMCE internal focus ring on edit area */
+.tox .tox-edit-area::before,
+.tox.tox-edit-focus .tox-edit-area::before {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    opacity: 0 !important;
+}
+
+.dark .tox .tox-edit-area,
+[data-canvas-theme="dark"] .tox .tox-edit-area {
+    background-color: var(--card, #121215) !important;
+}
+
+.tox .tox-edit-area__iframe {
+    background-color: transparent !important;
+}
+
+.tox .tox-statusbar {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-top: 1px solid var(--border, #e4e4e7) !important;
+    color: var(--muted-foreground, #71717a) !important;
+    font-size: 12px !important;
+    padding: 4px 10px !important;
+}
+
+.dark .tox .tox-statusbar,
+[data-canvas-theme="dark"] .tox .tox-statusbar {
+    background-color: var(--muted, #18181b) !important;
+    border-top-color: var(--border, #27272a) !important;
+    color: var(--muted-foreground, #a1a1aa) !important;
+}
+
+.tox .tox-statusbar a,
+.tox .tox-statusbar__text-container,
+.tox .tox-statusbar__path-item,
+.tox .tox-statusbar__wordcount {
+    color: inherit !important;
+    font-size: 11px !important;
+}
+
+.tox .tox-statusbar a:hover {
+    color: var(--foreground, #09090b) !important;
+}
+
+.dark .tox .tox-statusbar a:hover,
+[data-canvas-theme="dark"] .tox .tox-statusbar a:hover {
+    color: var(--foreground, #fafafa) !important;
+}
+
+.tox .tox-statusbar__resize-handle svg {
+    fill: currentColor !important;
+    opacity: 0.6;
+}
+
+/* =========================================================================
+   TinyMCE Popups, Autocompleter, Menus & Dialogs
+   ========================================================================= */
+.tox .tox-menu,
+.tox .tox-pop,
+.tox .tox-dialog {
+    background-color: var(--popover, #ffffff) !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    border-radius: var(--radius, 0.5rem) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05) !important;
+    color: var(--popover-foreground, #09090b) !important;
+}
+
+.dark .tox .tox-menu,
+.dark .tox .tox-pop,
+.dark .tox .tox-dialog,
+[data-canvas-theme="dark"] .tox .tox-menu,
+[data-canvas-theme="dark"] .tox .tox-pop,
+[data-canvas-theme="dark"] .tox .tox-dialog {
+    background-color: var(--popover, #121215) !important;
+    border-color: var(--border, #27272a) !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.2) !important;
+    color: var(--popover-foreground, #fafafa) !important;
+}
+
+/* =========================================================================
+   TinyMCE Tooltips (Harmonized with Vibe UI Popover & Tooltip Tokens)
+   ========================================================================= */
+.tox .tox-tooltip,
+.tox-tooltip {
+    z-index: 1350 !important;
+    pointer-events: none !important;
+}
+
+.tox .tox-tooltip__body,
+.tox-tooltip__body {
+    background-color: var(--popover, #ffffff) !important;
+    color: var(--popover-foreground, #09090b) !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    font-family: inherit !important;
+    font-size: 11.5px !important;
+    font-weight: 500 !important;
+    line-height: 1.35 !important;
+    padding: 3px 8px !important;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.04) !important;
+    outline: none !important;
+    text-transform: none !important;
+}
+
+.dark .tox .tox-tooltip__body,
+.dark .tox-tooltip__body,
+[data-canvas-theme="dark"] .tox .tox-tooltip__body,
+[data-canvas-theme="dark"] .tox-tooltip__body {
+    background-color: var(--popover, #121215) !important;
+    color: var(--popover-foreground, #fafafa) !important;
+    border-color: var(--border, #27272a) !important;
+    box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Tooltip Arrows */
+.tox .tox-tooltip--down .tox-tooltip__arrow,
+.tox-tooltip--down .tox-tooltip__arrow {
+    border-top-color: var(--popover, #ffffff) !important;
+}
+
+.dark .tox .tox-tooltip--down .tox-tooltip__arrow,
+.dark .tox-tooltip--down .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox .tox-tooltip--down .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox-tooltip--down .tox-tooltip__arrow {
+    border-top-color: var(--popover, #121215) !important;
+}
+
+.tox .tox-tooltip--up .tox-tooltip__arrow,
+.tox-tooltip--up .tox-tooltip__arrow {
+    border-bottom-color: var(--popover, #ffffff) !important;
+}
+
+.dark .tox .tox-tooltip--up .tox-tooltip__arrow,
+.dark .tox-tooltip--up .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox .tox-tooltip--up .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox-tooltip--up .tox-tooltip__arrow {
+    border-bottom-color: var(--popover, #121215) !important;
+}
+
+.tox .tox-tooltip--right .tox-tooltip__arrow,
+.tox-tooltip--right .tox-tooltip__arrow {
+    border-left-color: var(--popover, #ffffff) !important;
+}
+
+.dark .tox .tox-tooltip--right .tox-tooltip__arrow,
+.dark .tox-tooltip--right .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox .tox-tooltip--right .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox-tooltip--right .tox-tooltip__arrow {
+    border-left-color: var(--popover, #121215) !important;
+}
+
+.tox .tox-tooltip--left .tox-tooltip__arrow,
+.tox-tooltip--left .tox-tooltip__arrow {
+    border-right-color: var(--popover, #ffffff) !important;
+}
+
+.dark .tox .tox-tooltip--left .tox-tooltip__arrow,
+.dark .tox-tooltip--left .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox .tox-tooltip--left .tox-tooltip__arrow,
+[data-canvas-theme="dark"] .tox-tooltip--left .tox-tooltip__arrow {
+    border-right-color: var(--popover, #121215) !important;
+}
+
+.tox .tox-collection__item {
+    color: inherit !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.6) !important;
+    margin: 2px 4px !important;
+    transition: background-color 0.1s ease !important;
+}
+
+.tox .tox-collection__item:hover,
+.tox .tox-collection__item--active {
+    background-color: var(--muted, #f4f4f5) !important;
+    color: var(--foreground, #09090b) !important;
+}
+
+.dark .tox .tox-collection__item:hover,
+.dark .tox .tox-collection__item--active,
+[data-canvas-theme="dark"] .tox .tox-collection__item:hover,
+[data-canvas-theme="dark"] .tox .tox-collection__item--active {
+    background-color: var(--muted, #18181b) !important;
+    color: var(--foreground, #fafafa) !important;
+}
+
+.tox .tox-collection__item-label {
+    color: inherit !important;
+}
+
+.tox .tox-collection__item-accessory {
+    color: var(--muted-foreground) !important;
+}
+
+/* Dialog Header & Body */
+.tox .tox-dialog__header {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-bottom: 1px solid var(--border, #e4e4e7) !important;
+    color: var(--foreground, #09090b) !important;
+}
+
+.dark .tox .tox-dialog__header,
+[data-canvas-theme="dark"] .tox .tox-dialog__header {
+    background-color: var(--muted, #18181b) !important;
+    border-bottom-color: var(--border, #27272a) !important;
+    color: var(--foreground, #fafafa) !important;
+}
+
+.tox .tox-dialog__title {
+    color: inherit !important;
+    font-weight: 600 !important;
+}
+
+.tox .tox-dialog__body {
+    background-color: var(--card, #ffffff) !important;
+    color: var(--card-foreground, #09090b) !important;
+}
+
+.dark .tox .tox-dialog__body,
+[data-canvas-theme="dark"] .tox .tox-dialog__body {
+    background-color: var(--card, #121215) !important;
+    color: var(--card-foreground, #fafafa) !important;
+}
+
+.tox .tox-dialog__footer {
+    background-color: var(--muted, #f4f4f5) !important;
+    border-top: 1px solid var(--border, #e4e4e7) !important;
+    padding: 8px 12px !important;
+}
+
+.dark .tox .tox-dialog__footer,
+[data-canvas-theme="dark"] .tox .tox-dialog__footer {
+    background-color: var(--muted, #18181b) !important;
+    border-top-color: var(--border, #27272a) !important;
+}
+
+/* Dialog Buttons - Matching Vibe UI Primary & Secondary Buttons */
+.tox .tox-button {
+    background-color: var(--primary, #09090b) !important;
+    border: 1px solid transparent !important;
+    color: var(--primary-foreground, #fafafa) !important;
+    border-radius: calc(var(--radius, 0.5rem) * 0.75) !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    height: 32px !important;
+    padding: 0 14px !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+    transition: background-color 0.15s ease, opacity 0.15s ease !important;
+}
+
+.dark .tox .tox-button,
+[data-canvas-theme="dark"] .tox .tox-button {
+    background-color: var(--primary, #fafafa) !important;
+    border-color: transparent !important;
+    color: var(--primary-foreground, #09090b) !important;
+}
+
+.tox .tox-button:hover {
+    opacity: 0.9 !important;
+}
+
+.tox .tox-button--secondary {
+    background-color: var(--secondary, #f4f4f5) !important;
+    border: 1px solid var(--border, #e4e4e7) !important;
+    color: var(--secondary-foreground, #18181b) !important;
+}
+
+.dark .tox .tox-button--secondary,
+[data-canvas-theme="dark"] .tox .tox-button--secondary {
+    background-color: var(--secondary, #27272a) !important;
+    border: 1px solid var(--border, #3f3f46) !important;
+    color: var(--secondary-foreground, #fafafa) !important;
+}
+
+.tox .tox-button--secondary:hover {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.dark .tox .tox-button--secondary:hover,
+[data-canvas-theme="dark"] .tox .tox-button--secondary:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* =========================================================================
+   Variable Badges / Pills (Styling for inside & outside TinyMCE)
+   ========================================================================= */
+.vibe-editor-variable {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.125rem 0.5rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: var(--secondary-foreground, #18181b);
+    background-color: var(--secondary, #f4f4f5);
+    border: 1px solid var(--border, #e4e4e7);
+    border-radius: 9999px;
+    user-select: all;
+    cursor: default;
+    vertical-align: middle;
+    margin: 0 2px;
+    white-space: nowrap;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.15s ease;
+}
+
+.dark .vibe-editor-variable,
+[data-canvas-theme="dark"] .vibe-editor-variable {
+    color: var(--secondary-foreground, #fafafa);
+    background-color: var(--secondary, #27272a);
+    border-color: var(--border, #3f3f46);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth keyframe for skeleton pulse */
+@keyframes vibe-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}

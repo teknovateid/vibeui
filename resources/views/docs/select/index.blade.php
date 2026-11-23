@@ -1018,21 +1018,21 @@ BLADE;
                     {{-- 1. Route Definition --}}
                     <div class="space-y-2">
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.route_title') }}</h4>
-                        <vibe:highlightjs language="php" title="routes/web.php" :code="$routeCode" />
+                        <vibe:highlight language="php" title="routes/web.php" :code="$routeCode" />
                     </div>
 
                     {{-- 2. Controller Function Implementation --}}
                     <div class="space-y-2">
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.controller_title') }}</h4>
                         <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.controller_desc') }}</p>
-                        <vibe:highlightjs language="php" title="app/Http/Controllers/SelectController.php" :code="$controllerCode" />
+                        <vibe:highlight language="php" title="app/Http/Controllers/SelectController.php" :code="$controllerCode" />
                     </div>
 
                     {{-- 3. JSON Response Schema Structure --}}
                     <div class="space-y-2">
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.schema_title') }}</h4>
                         <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.schema_desc') }}</p>
-                        <vibe:highlightjs language="json" title="Response JSON Schema" :code="$schemaCode" />
+                        <vibe:highlight language="json" title="Response JSON Schema" :code="$schemaCode" />
 
                         <div class="pt-2">
                             <vibe:table>
@@ -1082,7 +1082,7 @@ BLADE;
                     <div class="space-y-2 pt-2">
                         <h4 class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{{ __('docs/select.remote.advanced_title') }}</h4>
                         <p class="text-xs text-muted-foreground">{{ __('docs/select.remote.advanced_desc') }}</p>
-                        <vibe:highlightjs language="blade" title="Contoh Penggunaan Props Lanjutan" :code="$advancedBladeCode" />
+                        <vibe:highlight language="blade" title="Contoh Penggunaan Props Lanjutan" :code="$advancedBladeCode" />
                     </div>
                 </div>
             </section>

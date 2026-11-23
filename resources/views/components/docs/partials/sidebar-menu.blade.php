@@ -154,6 +154,17 @@
             {{ __('docs/sidebar.nav.textarea') }}
         </vibe:nav.item>
 
+        <!-- Editor (WYSIWYG) -->
+        <vibe:nav.item href="{{ route('docs.editor.index') }}" :active="request()->routeIs('docs.editor.index')">
+            <x-slot:icon>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 20h9" />
+                    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.editor') }}
+        </vibe:nav.item>
+
         <!-- Select -->
         <vibe:nav.item href="{{ route('docs.select.index') }}" :active="request()->routeIs('docs.select.index')">
             <x-slot:icon>
@@ -515,14 +526,14 @@
             {{ __('docs/sidebar.nav.todo') }}
         </vibe:nav.item>
 
-        <!-- Highlight.js -->
-        <vibe:nav.item href="{{ route('docs.highlightjs.index') }}" :active="request()->routeIs('docs.highlightjs.*')">
+        <!-- Highlight -->
+        <vibe:nav.item href="{{ route('docs.highlight.index') }}" :active="request()->routeIs('docs.highlight.*') || request()->routeIs('docs.highlightjs.*')">
             <x-slot:icon>
                 <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                     <path d="m17 7.83 1.696 1.527c1.543 1.388 2.314 2.082 2.314 2.973s-.771 1.585-2.314 2.973L17 16.83M13.987 5 12 12.415 10.013 19.83M7 7.83 5.304 9.357C3.76 10.745 2.99 11.439 2.99 12.33s.77 1.585 2.314 2.973L7 16.83" />
                 </svg>
             </x-slot:icon>
-            {{ __('docs/sidebar.nav.highlightjs') }}
+            {{ __('docs/sidebar.nav.highlight') ?: __('docs/sidebar.nav.highlightjs') }}
         </vibe:nav.item>
 
         <!-- Display Group -->

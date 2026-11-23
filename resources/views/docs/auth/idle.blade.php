@@ -150,7 +150,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="php">
+                <vibe:highlight language="php">
 use Illuminate\Support\Facades\Route;
 
 // Proteksi rute riwayat login dengan batas inaktivitas 600 detik (10 menit)
@@ -158,7 +158,7 @@ Route::middleware(['auth', 'idle:600'])->group(function () {
     Route::get('/settings/login-history', [LoginHistoryController::class, 'index']);
     Route::get('/finance/dashboard', [FinanceController::class, 'dashboard']);
 });
-</vibe:highlightjs>
+</vibe:highlight>
 
                 <div class="p-4 rounded-xl bg-muted/40 border border-border space-y-2 text-xs text-muted-foreground">
                     <p class="font-semibold text-foreground">Apa yang Terjadi di Balik Layar?</p>
@@ -180,7 +180,7 @@ Route::middleware(['auth', 'idle:600'])->group(function () {
                     </p>
                 </div>
 
-                <vibe:highlightjs language="javascript">
+                <vibe:highlight language="javascript">
 // idle.js mengirim ping ringan setiap beberapa menit saat aktivitas terdeteksi
 fetch('/keep-alive', {
     method: 'POST',
@@ -189,7 +189,7 @@ fetch('/keep-alive', {
         'Accept': 'application/json'
     }
 });
-</vibe:highlightjs>
+</vibe:highlight>
             </section>
 
             {{-- Navigation Footer --}}

@@ -59,11 +59,11 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="bash" code="php artisan vibe:auth" />
+                <vibe:highlight language="bash" code="php artisan vibe:auth" />
 
                 <div class="space-y-2 text-sm text-muted-foreground">
                     <p>Atau jalankan secara non-interaktif dengan menyertakan argumen:</p>
-                    <vibe:highlightjs language="bash" code="php artisan vibe:auth --layout=card --login-by=email --force" />
+                    <vibe:highlight language="bash" code="php artisan vibe:auth --layout=card --login-by=email --force" />
                 </div>
 
                 <div class="p-4 rounded-xl bg-muted/40 border border-border space-y-2 text-xs text-muted-foreground">
@@ -138,12 +138,12 @@
 
                 <div class="space-y-2 text-sm text-muted-foreground pt-1">
                     <p>Atur layout default aplikasi di <code class="text-xs bg-muted px-1.5 py-0.5 rounded-md text-foreground font-mono">config/vibe.php</code>, atau ganti secara dinamis per halaman lewat parameter URL <code class="text-xs bg-muted px-1.5 py-0.5 rounded-md text-foreground font-mono">?layout=split</code>:</p>
-                    <vibe:highlightjs language="php">
+                    <vibe:highlight language="php">
 // config/vibe.php
 'auth' => [
     'default_layout' => 'card', // Opsi: 'card', 'simple', 'split'
 ],
-</vibe:highlightjs>
+</vibe:highlight>
                 </div>
             </section>
 
@@ -156,7 +156,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="php">
+                <vibe:highlight language="php">
 // config/vibe.php
 'auth' => [
     /*
@@ -175,7 +175,7 @@
     'redirect_after_login' => '/docs',
     'redirect_after_logout' => '/login',
 ],
-</vibe:highlightjs>
+</vibe:highlight>
 
                 <vibe:alert variant="info" class="text-xs">
                     Komponen Livewire <code>Login.php</code> secara otomatis menguji format input saat form dikirim: jika berformat alamat email akan divalidasi via kolom <code>email</code>, jika berupa format nomor HP divalidasi via kolom <code>phone</code>, dan jika berupa teks biasa divalidasi via <code>username</code>.

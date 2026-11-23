@@ -29,6 +29,7 @@ return [
             'file' => 'Input File / Upload',
         ],
         'textarea' => 'Textarea',
+        'editor' => 'Editor (WYSIWYG)',
         'select' => 'Select',
         'checkbox' => 'Checkbox',
         'radio' => 'Radio',
@@ -61,7 +62,8 @@ return [
         'todo' => 'Todo',
         'alert' => 'Alert',
         'toast' => 'Toast',
-        'highlightjs' => 'Highlight.js',
+        'highlight' => 'Highlight',
+        'highlightjs' => 'Highlight',
         'display' => [
             'group' => 'Display',
             'qrcode' => 'QR Code',

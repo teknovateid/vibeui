@@ -142,13 +142,13 @@
                         <p class="text-muted-foreground leading-relaxed">
                             Cukup sertakan atribut <code>name="token"</code>. Di controller, ambil nilai dengan <code>$request->token</code> (menghasilkan string utuh misal <code>"829103"</code>).
                         </p>
-                        <vibe:highlightjs language="blade">
+                        <vibe:highlight language="blade">
 <form method="POST" action="/verify">
     @@csrf
     <\vibe:input.otp name="token" length="6" />
     <\vibe:button type="submit">Kirim</\vibe:button>
 </form>
-</vibe:highlightjs>
+</vibe:highlight>
                     </div>
 
                     {{-- vibe:form AJAX & Auto-Save --}}
@@ -157,12 +157,12 @@
                         <p class="text-muted-foreground leading-relaxed">
                             Mendukung pengiriman AJAX via <code>FormData</code> dan auto-save ke storage. Saat user kembali, kode otomatis direstorasi ke kotak-kotak slot.
                         </p>
-                        <vibe:highlightjs language="blade">
+                        <vibe:highlight language="blade">
 <\vibe:form id="otp-form" action="/verify" save-to-storage>
     @@csrf
     <\vibe:input.otp name="token" length="6" auto-submit />
 </\vibe:form>
-</vibe:highlightjs>
+</vibe:highlight>
                     </div>
                 </div>
             </section>

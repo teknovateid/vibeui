@@ -158,7 +158,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="blade">
+                <vibe:highlight language="blade">
 {{-- Blade View --}}
 <\vibe:input.phone 
     wire:model="phone" 
@@ -166,9 +166,9 @@
     label="Nomor WhatsApp" 
     placeholder="+62 812-3456-7890" 
 />
-                </vibe:highlightjs>
+                </vibe:highlight>
 
-                <vibe:highlightjs language="php">
+                <vibe:highlight language="php">
 // Livewire Component PHP
 class ContactForm extends Component
 {
@@ -182,7 +182,7 @@ class ContactForm extends Component
         ]);
     }
 }
-                </vibe:highlightjs>
+                </vibe:highlight>
             </section>
 
             {{-- 5. Kompatibilitas dengan vibe:form --}}
@@ -194,7 +194,7 @@ class ContactForm extends Component
                     </p>
                 </div>
 
-                <vibe:highlightjs language="blade">
+                <vibe:highlight language="blade">
 <\vibe:form id="customer-form" action="/customers" method="POST" save-to-storage>
     @@csrf
 
@@ -208,7 +208,7 @@ class ContactForm extends Component
 
     <\vibe:button type="submit">Simpan Kontak</\vibe:button>
 </\vibe:form>
-                </vibe:highlightjs>
+                </vibe:highlight>
             </section>
 
             {{-- 6. Pengujian Request ke Controller --}}

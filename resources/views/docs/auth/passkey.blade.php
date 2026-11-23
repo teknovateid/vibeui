@@ -293,7 +293,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="javascript">
+                <vibe:highlight language="javascript">
 // 1. Pendaftaran Passkey Baru (setelah verifikasi password akun)
 async function registerPasskey(name) {
     const response = await window.VibePasskeyService.register(name);
@@ -309,7 +309,7 @@ async function loginWithPasskey() {
         window.location.href = '/docs';
     }
 }
-</vibe:highlightjs>
+</vibe:highlight>
             </section>
 
             {{-- 6. Disabling Passkeys Configuration --}}
@@ -330,10 +330,10 @@ async function loginWithPasskey() {
                     <p class="text-xs text-muted-foreground leading-relaxed">
                         Cukup ubah variabel <code class="font-mono text-primary font-semibold">PASSKEYS_ENABLED</code> di dalam file <code class="font-mono">.env</code> Anda menjadi <code class="font-mono">false</code>:
                     </p>
-                    <vibe:highlightjs language="ini" class="rounded-xl overflow-hidden text-xs">
+                    <vibe:highlight language="ini" class="rounded-xl overflow-hidden text-xs">
 # Nonaktifkan autentikasi Passkey & WebAuthn secara global
 PASSKEYS_ENABLED=false
-</vibe:highlightjs>
+</vibe:highlight>
                     <p class="text-xs text-muted-foreground leading-relaxed pt-1">
                         Secara otomatis sistem akan:
                     </p>
@@ -355,9 +355,9 @@ PASSKEYS_ENABLED=false
                     <p class="text-xs text-muted-foreground leading-relaxed">
                         Saat men-scaffold sistem otentikasi Vibe UI pertama kali, gunakan opsi <code class="font-mono text-primary font-semibold">--without-passkeys</code>:
                     </p>
-                    <vibe:highlightjs language="bash" class="rounded-xl overflow-hidden text-xs">
+                    <vibe:highlight language="bash" class="rounded-xl overflow-hidden text-xs">
 php artisan vibe:auth --without-passkeys
-</vibe:highlightjs>
+</vibe:highlight>
                     <p class="text-xs text-muted-foreground leading-relaxed">
                         Atau jawab <strong>No</strong> saat prompt interaktif CLI menanyakan: <em>"Do you want to enable Passkey (WebAuthn / Biometric) authentication?"</em>. Generator akan otomatis melewati migrasi passkey, trait pada model User, dan aset skrip passkey.
                     </p>

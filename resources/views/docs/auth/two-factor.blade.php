@@ -253,7 +253,7 @@
                     </p>
                 </div>
 
-                <vibe:highlightjs language="blade">
+                <vibe:highlight language="blade">
 {{-- Form Tantangan 2FA pada Login Menggunakan vibe:input.otp --}}
 <form wire:submit="verifyTwoFactor" class="space-y-4">
     <\vibe:input.otp 
@@ -268,7 +268,7 @@
         Masuk ke Akun
     </\vibe:button>
 </form>
-</vibe:highlightjs>
+</vibe:highlight>
 
                 <div class="pt-1">
                     <vibe:button href="{{ route('docs.input.otp') }}" variant="outline" size="xs">

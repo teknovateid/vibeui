@@ -197,13 +197,13 @@
                     <p class="text-muted-foreground leading-relaxed">
                         Endpoint backend Anda cukup mengembalikan JSON dengan key boolean <code>available</code> atau <code>valid</code> beserta opsional <code>message</code>:
                     </p>
-                    <vibe:highlightjs language="json">
+                    <vibe:highlight language="json">
 {
     "available": true,
     "code": "PROMO-7K9W2",
     "message": "Kode 'PROMO-7K9W2' tersedia dan belum terpakai."
 }
-                    </vibe:highlightjs>
+                    </vibe:highlight>
                 </div>
             </section>
 

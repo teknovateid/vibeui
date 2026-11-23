@@ -188,7 +188,7 @@
                     <p class="text-xs text-muted-foreground">
                         Halaman ini dikelola otomatis oleh komponen Livewire <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">App\Livewire\Auth\ConfirmPassword</code> dan rute <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">Route::get('/confirm-password', ...)->name('password.confirm')</code>:
                     </p>
-                    <vibe:highlightjs language="php">
+                    <vibe:highlight language="php">
 // routes/auth.php
 Route::get('/confirm-password', ConfirmPassword::class)->name('password.confirm');
 
@@ -204,7 +204,7 @@ Route::post('/confirm-password', function (Request $request) {
     // Otomatis arahkan kembali ke intended URL setelah verifikasi
     return redirect()->intended('/dashboard');
 })->name('password.confirm.post');
-</vibe:highlightjs>
+</vibe:highlight>
                 </div>
             </section>
 
@@ -285,7 +285,7 @@ Route::post('/confirm-password', function (Request $request) {
                     <p class="text-xs text-muted-foreground">
                         Cukup gunakan tag <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">&lt;vibe:form&gt;</code> seperti biasa. Fitur <code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">confirmPassword</code> aktif secara bawaan (<code class="text-xs bg-muted px-1.5 py-0.5 rounded font-mono text-foreground">true</code>):
                     </p>
-                    <vibe:highlightjs language="blade">
+                    <vibe:highlight language="blade">
 <\vibe:form method="PUT" action="@{{ route('users.update', $user->id) }}" status="toast">
     <\vibe:input name="name" label="Nama" :value="$user->name" required />
     <\vibe:input name="email" label="Email" :value="$user->email" required />
@@ -294,7 +294,7 @@ Route::post('/confirm-password', function (Request $request) {
         Simpan Perubahan
     </\vibe:button>
 </\vibe:form>
-</vibe:highlightjs>
+</vibe:highlight>
 
                     {{-- Tips Integrasi dengan Sheet --}}
                     <div class="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-start gap-3 mt-4">
@@ -334,11 +334,11 @@ Route::post('/confirm-password', function (Request $request) {
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             Mewajibkan verifikasi untuk satu aksi mutasi atau halaman saja. Setelah aksi <code class="text-[11px] font-mono">PUT/POST/DELETE</code> selesai dijalankan, sesi konfirmasi langsung dihanguskan (<code class="text-[11px] font-mono">one-time consume</code>) demi proteksi maksimal pada aksi berisiko fatal seperti hapus akun.
                         </p>
-                        <vibe:highlightjs language="php">
+                        <vibe:highlight language="php">
 Route::middleware(['auth', 'confirm'])->group(function () {
     Route::delete('/user/account', [UserController::class, 'destroy']);
 });
-</vibe:highlightjs>
+</vibe:highlight>
                     </div>
 
                     {{-- Mode 2 --}}
@@ -350,13 +350,13 @@ Route::middleware(['auth', 'confirm'])->group(function () {
                         <p class="text-xs text-muted-foreground leading-relaxed">
                             Membuka jendela waktu aman (misalnya 100 detik atau 300 detik). Selama jendela waktu tersebut belum habis, pengguna bebas berpindah antar halaman atau melakukan aksi pembaruan berulang tanpa diminta kata sandi terus-menerus.
                         </p>
-                        <vibe:highlightjs language="php">
+                        <vibe:highlight language="php">
 Route::prefix('users')->middleware(['auth', 'confirm:100'])->group(function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/store', [UserController::class, 'store']);
     Route::put('/update/{id}', [UserController::class, 'update']);
 });
-</vibe:highlightjs>
+</vibe:highlight>
                     </div>
                 </div>
             </section>

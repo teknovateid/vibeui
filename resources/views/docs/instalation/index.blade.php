@@ -36,7 +36,7 @@
             <p class="text-sm text-muted-foreground">
                 {{ __('docs/instalation.steps.step_1.desc') }}
             </p>
-            <vibe:highlightjs language="bash" title="Terminal" code="composer require teknovate/vibeui" />
+            <vibe:highlight language="bash" title="Terminal" code="composer require teknovate/vibeui" />
         </section>
 
         <!-- Step 2: Publish Assets & Config -->
@@ -52,9 +52,9 @@
             <p class="text-sm text-muted-foreground">
                 {{ __('docs/instalation.steps.step_2.desc') }}
             </p>
-            <vibe:highlightjs>
+            <vibe:highlight>
 php artisan vibe:install
-            </vibe:highlightjs>
+            </vibe:highlight>
         </section>
 
         <!-- Step 3: Configure Tailwind CSS -->
@@ -70,10 +70,10 @@ php artisan vibe:install
             <p class="text-sm text-muted-foreground">
                 {{ __('docs/instalation.steps.step_3.desc') }}
             </p>
-            <vibe:highlightjs language="css" title="resources/css/app.css" :lineNumbers="true">
+            <vibe:highlight language="css" title="resources/css/app.css" :lineNumbers="true">
 @import "tailwindcss";
 @import "./vibe/custom-variant.css";
-            </vibe:highlightjs>
+            </vibe:highlight>
         </section>
 
         <!-- Step 4: Setup Base Layout -->
@@ -116,7 +116,7 @@ php artisan vibe:install
 </html>
 HTML;
             @endphp
-            <vibe:highlightjs language="html" title="resources/views/components/layouts/base.blade.php" :lineNumbers="true" :code="$baseLayoutCode" />
+            <vibe:highlight language="html" title="resources/views/components/layouts/base.blade.php" :lineNumbers="true" :code="$baseLayoutCode" />
         </section>
 
         <!-- Step 5: Ready to Use Components -->
@@ -148,16 +148,16 @@ HTML;
     </vibe:button>
 
     <!-- Syntax Highlighter -->
-    <vibe:highlightjs language="php" title="Controller.php">
+    <vibe:highlight language="php" title="Controller.php">
         public function index()
         {
             return view('dashboard');
         }
-    </vibe:highlightjs>
+    </vibe:highlight>
 </div>
 HTML;
             @endphp
-            <vibe:highlightjs language="html" title="resources/views/example.blade.php" :lineNumbers="true" :code="$componentsExampleCode" />
+            <vibe:highlight language="html" title="resources/views/example.blade.php" :lineNumbers="true" :code="$componentsExampleCode" />
         </section>
     </div>
 </x-docs.layouts.sidebar>

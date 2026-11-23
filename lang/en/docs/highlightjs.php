@@ -9,7 +9,7 @@ return [
     // Section 1: Basic Usage
     'basic_usage' => [
         'title' => 'Basic Usage',
-        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:highlightjs&gt;</code> component specifying the <code class="font-mono text-xs text-foreground">language</code> prop (e.g. <code class="font-mono text-xs text-foreground">php</code>, <code class="font-mono text-xs text-foreground">javascript</code>, <code class="font-mono text-xs text-foreground">blade</code>, <code class="font-mono text-xs text-foreground">css</code>). Code can be passed directly inside the slot or via the <code class="font-mono text-xs text-foreground">code</code> attribute.',
+        'desc' => 'Use the <code class="px-1.5 py-0.5 rounded bg-muted text-xs font-mono text-foreground">&lt;vibe:highlight&gt;</code> component specifying the <code class="font-mono text-xs text-foreground">language</code> prop (e.g. <code class="font-mono text-xs text-foreground">php</code>, <code class="font-mono text-xs text-foreground">javascript</code>, <code class="font-mono text-xs text-foreground">blade</code>, <code class="font-mono text-xs text-foreground">css</code>). Code can be passed directly inside the slot or via the <code class="font-mono text-xs text-foreground">code</code> attribute.',
         'preview_title' => 'PHP & JavaScript Syntax Highlighting',
     ],
 
@@ -44,7 +44,7 @@ return [
     // Section 6: Props Reference
     'props' => [
         'title' => 'Props & Parameters Reference',
-        'desc' => 'Complete specification of attributes and configuration options for <code class="font-mono text-xs text-foreground">&lt;vibe:highlightjs&gt;</code>.',
+        'desc' => 'Complete specification of attributes and configuration options for <code class="font-mono text-xs text-foreground">&lt;vibe:highlight&gt;</code>.',
         'columns' => [
             'prop' => 'Prop',
             'type' => 'Type',

@@ -511,7 +511,7 @@
                         {{ __('docs/filepond.presigned.backend_desc') }}
                     </p>
 
-                    <vibe:highlightjs language="php">
+                    <vibe:highlight language="php">
                         // App\Http\Controllers\FilepondController.php
     public function presigned(Request $request)
     {
@@ -532,7 +532,7 @@
             'url' => $url,
         ]);
     }
-                    </vibe:highlightjs>
+                    </vibe:highlight>
                 </vibe:card>
             </section>
 
@@ -673,7 +673,7 @@
 </vibe:form>
 BLADE;
                     @endphp
-                    <vibe:highlightjs language="blade" :code="$editFormBladeCode" />
+                    <vibe:highlight language="blade" :code="$editFormBladeCode" />
                 </vibe:card>
             </section>
 
@@ -1011,7 +1011,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.controller_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.controller_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" :code="$reorderControllerCode" />
+                            <vibe:highlight language="php" :code="$reorderControllerCode" />
                         </vibe:card>
                     </vibe:tabs.panel>
 
@@ -1022,7 +1022,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.trait_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.trait_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" :code="$reorderTraitCode" />
+                            <vibe:highlight language="php" :code="$reorderTraitCode" />
 
                             {{-- Quick Tip One-Liner --}}
                             <div class="p-4 rounded-xl border border-border/70 bg-muted/30 space-y-2">
@@ -1031,7 +1031,7 @@ PHP;
                                     <vibe:badge variant="secondary" size="xs">Shortcut</vibe:badge>
                                 </div>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/filepond.reorder_section.quick_tip_desc') }}</p>
-                                <vibe:highlightjs language="php" :code="$reorderQuickTipCode" />
+                                <vibe:highlight language="php" :code="$reorderQuickTipCode" />
                             </div>
                         </vibe:card>
                     </vibe:tabs.panel>
@@ -1043,7 +1043,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.validation_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.validation_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" :code="$reorderValidationCode" />
+                            <vibe:highlight language="php" :code="$reorderValidationCode" />
                         </vibe:card>
                     </vibe:tabs.panel>
 
@@ -1054,7 +1054,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.blade_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.blade_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="blade" :code="$reorderBladeCode" />
+                            <vibe:highlight language="blade" :code="$reorderBladeCode" />
                         </vibe:card>
                     </vibe:tabs.panel>
 
@@ -1065,7 +1065,7 @@ PHP;
                                 <h3 class="text-sm font-semibold text-foreground">{{ __('docs/filepond.reorder_section.migration_card_title') }}</h3>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{!! __('docs/filepond.reorder_section.migration_card_desc') !!}</p>
                             </div>
-                            <vibe:highlightjs language="php" :code="$reorderMigrationCode" />
+                            <vibe:highlight language="php" :code="$reorderMigrationCode" />
 
                             {{-- JSON Column Alternative --}}
                             <div class="p-4 rounded-xl border border-border/70 bg-muted/30 space-y-2">
@@ -1074,7 +1074,7 @@ PHP;
                                     <vibe:badge variant="warning" size="xs">Alternative</vibe:badge>
                                 </div>
                                 <p class="text-xs text-muted-foreground leading-relaxed">{{ __('docs/filepond.reorder_section.json_tip_desc') }}</p>
-                                <vibe:highlightjs language="php" :code="$reorderJsonTipCode" />
+                                <vibe:highlight language="php" :code="$reorderJsonTipCode" />
                             </div>
                         </vibe:card>
                     </vibe:tabs.panel>
@@ -1142,7 +1142,7 @@ PHP;
                 </div>
 
                 <vibe:card class="space-y-4">
-                    <vibe:highlightjs language="php">
+                    <vibe:highlight language="php">
                         namespace App\Livewire;
 
                         use Livewire\Component;
@@ -1173,7 +1173,7 @@ PHP;
                         return view('livewire.upload-gallery');
                         }
                         }
-                    </vibe:highlightjs>
+                    </vibe:highlight>
 
                     @php
                         $livewireBladeCode = <<<'BLADE'
@@ -1190,7 +1190,7 @@ PHP;
                         </form>
                         BLADE;
                     @endphp
-                    <vibe:highlightjs language="blade" :code="$livewireBladeCode" />
+                    <vibe:highlight language="blade" :code="$livewireBladeCode" />
                 </vibe:card>
             </section>
 
@@ -1261,7 +1261,7 @@ PHP;
                         {{ __('docs/filepond.events.payload_desc') }}
                     </p>
                     <vibe:card class="space-y-3 bg-muted/30">
-                        <vibe:highlightjs language="javascript">
+                        <vibe:highlight language="javascript">
                             // Objek $event.detail yang dikirimkan pada setiap event
                             {
                             id: 'avatar', // [string] ID komponen FilePond (contoh: id="avatar")
@@ -1279,7 +1279,7 @@ PHP;
                             error: null, // [string|object|null] Pesan/objek error jika terjadi galat
                             pond: FilePondInstance // [object] Instance FilePond aktif untuk kontrol manual
                             }
-                        </vibe:highlightjs>
+                        </vibe:highlight>
                     </vibe:card>
                 </div>
 
@@ -1613,7 +1613,7 @@ BLADE;
                                 {{ __('docs/filepond.patterns.pattern_a_title') }}
                             </div>
                             <p class="text-muted-foreground text-[11px]">Dengarkan satu event <code class="font-mono text-primary font-semibold">vibe-filepond</code> lalu filter ID komponen:</p>
-                            <vibe:highlightjs language="blade" :code="$eventPatternACode" />
+                            <vibe:highlight language="blade" :code="$eventPatternACode" />
                         </vibe:card>
 
                         <vibe:card class="space-y-2 p-4 text-xs">
@@ -1622,7 +1622,7 @@ BLADE;
                                 Pola B: Event Berdasarkan Aksi Tertentu
                             </div>
                             <p class="text-muted-foreground text-[11px]">Dengarkan hanya jenis event tertentu dengan akhiran <code class="font-mono text-success font-semibold">:{action}</code>:</p>
-                            <vibe:highlightjs language="blade" :code="$eventPatternBCode" />
+                            <vibe:highlight language="blade" :code="$eventPatternBCode" />
                         </vibe:card>
 
                         <vibe:card class="space-y-2 p-4 text-xs">
@@ -1631,7 +1631,7 @@ BLADE;
                                 {{ __('docs/filepond.patterns.pattern_c_title') }}
                             </div>
                             <p class="text-muted-foreground text-[11px]">Langsung pasang listener shorthand pada tag <code class="font-mono text-warning font-semibold">&lt;vibe:filepond&gt;</code> tanpa modifier window:</p>
-                            <vibe:highlightjs language="blade" :code="$eventPatternCCode" />
+                            <vibe:highlight language="blade" :code="$eventPatternCCode" />
                         </vibe:card>
 
                         <vibe:card class="space-y-2 p-4 text-xs">
@@ -1640,7 +1640,7 @@ BLADE;
                                 {{ __('docs/filepond.patterns.pattern_d_title') }}
                             </div>
                             <p class="text-muted-foreground text-[11px]">{!! __('docs/filepond.patterns.pattern_d_desc') !!}</p>
-                            <vibe:highlightjs language="javascript" :code="$eventPatternDCode" />
+                            <vibe:highlight language="javascript" :code="$eventPatternDCode" />
                         </vibe:card>
                     </div>
                 </div>
@@ -1655,7 +1655,7 @@ BLADE;
                         <p class="text-muted-foreground leading-relaxed">
                             {!! __('docs/filepond.events.recipe_1_desc') !!}
                         </p>
-                        <vibe:highlightjs language="blade" :code="$recipe1Code" />
+                        <vibe:highlight language="blade" :code="$recipe1Code" />
                     </vibe:card>
 
                     {{-- Resep 2: Auto-Disable Tombol Submit --}}
@@ -1664,7 +1664,7 @@ BLADE;
                         <p class="text-muted-foreground leading-relaxed">
                             {!! __('docs/filepond.events.recipe_2_desc') !!}
                         </p>
-                        <vibe:highlightjs language="blade" :code="$recipe2Code" />
+                        <vibe:highlight language="blade" :code="$recipe2Code" />
                     </vibe:card>
 
                     {{-- Resep 3: Custom Progress Bar --}}
@@ -1673,7 +1673,7 @@ BLADE;
                         <p class="text-muted-foreground leading-relaxed">
                             {!! __('docs/filepond.events.recipe_3_desc') !!}
                         </p>
-                        <vibe:highlightjs language="blade" :code="$recipe3Code" />
+                        <vibe:highlight language="blade" :code="$recipe3Code" />
                     </vibe:card>
                 </div>
 
