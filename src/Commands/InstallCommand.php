@@ -295,11 +295,13 @@ class InstallCommand extends Command
 
         return [
             'resources/css/vibe/chart.css',
+            'resources/css/vibe/editor.css',
             'resources/css/vibe/filepond.css',
             'resources/css/vibe/highlightjs.css',
             'resources/js/vibe/chart.js',
             'resources/js/vibe/date-time.js',
             'resources/js/vibe/dynamic-form.js',
+            'resources/js/vibe/editor.js',
             'resources/js/vibe/filepond.js',
             'resources/js/vibe/form.js',
             'resources/js/vibe/grid.js',

@@ -22,6 +22,15 @@
     $showLines = $lines !== null ? (bool) $lines : (bool) $lineNumbers;
     $rawCode = $code !== null ? (string) $code : (isset($slot) ? (string) $slot : '');
     
+    // Decode any pre-escaped HTML entities from Blade attribute forwarding (handles nested Blade components)
+    while (preg_match('/&(?:amp;|lt;|gt;|quot;|#039;|#39;)/i', $rawCode)) {
+        $decoded = htmlspecialchars_decode($rawCode, ENT_QUOTES | ENT_HTML5);
+        if ($decoded === $rawCode) {
+            break;
+        }
+        $rawCode = $decoded;
+    }
+    
     // Normalize compiled <x-vibe:: tags back to custom <vibe: tags for documentation code display
     $rawCode = preg_replace('/<x-vibe::([a-zA-Z0-9\-\.]+)/', '<vibe:$1', $rawCode);
     $rawCode = preg_replace('/<\/x-vibe::([a-zA-Z0-9\-\.]+)/', '</vibe:$1', $rawCode);
@@ -142,7 +151,7 @@
     $wrapClass = $wrap ? 'whitespace-pre-wrap break-words' : 'whitespace-pre overflow-x-auto';
 @endphp
 
-@pushOnce('head', 'vibe-highlightjs')
+@pushOnce('head', 'vibe-highlight')
     @vite(['resources/css/vibe/highlightjs.css', 'resources/js/vibe/highlightjs.js'])
 @endPushOnce
 
@@ -151,8 +160,17 @@
         copied: false,
         copyCode() {
             let codeEl = this.$refs.codeBlock;
-            let text = codeEl ? (codeEl.dataset.rawCode || codeEl.innerText || codeEl.textContent) : '';
-            if (navigator.clipboard) {
+            let text = '';
+            if (codeEl) {
+                if (codeEl.dataset.rawCode) {
+                    text = codeEl.dataset.rawCode;
+                } else if (codeEl.dataset.rawCodeBase64 && window.VibeHighlight && window.VibeHighlight.decodeBase64) {
+                    text = window.VibeHighlight.decodeBase64(codeEl.dataset.rawCodeBase64);
+                } else {
+                    text = codeEl.innerText || codeEl.textContent || '';
+                }
+            }
+            if (navigator.clipboard && text) {
                 navigator.clipboard.writeText(text.trim()).then(() => {
                     this.copied = true;
                     setTimeout(() => this.copied = false, 2000);
@@ -276,6 +294,6 @@
             </div>
         @endif
 
-        <pre class="flex-1 p-4 font-mono text-xs sm:text-sm leading-relaxed {{ $wrapClass }} focus:outline-none"><code x-ref="codeBlock" data-vibe-highlight class="hljs @if($resolvedLang) language-{{ $resolvedLang }} @endif">{!! htmlspecialchars($rawCode, ENT_QUOTES, 'UTF-8') !!}</code></pre>
+        <pre class="flex-1 p-4 font-mono text-xs sm:text-sm leading-relaxed {{ $wrapClass }} focus:outline-none"><code x-ref="codeBlock" data-vibe-highlight data-raw-code-base64="{{ base64_encode($rawCode) }}" class="hljs @if($resolvedLang) language-{{ $resolvedLang }} @endif">{!! htmlspecialchars($rawCode, ENT_QUOTES, 'UTF-8') !!}</code></pre>
     </div>
 </div>
