@@ -69,7 +69,11 @@ test('toast renders close-toast window listener', function () {
     expect($html)
         ->toContain('x-on:toast.window')
         ->toContain('x-on:close-toast.window')
-        ->toContain("!t || t === '*'");
+        ->toContain("!t || t === '*'")
+        ->toContain('maxToasts: 3')
+        ->toContain('dedupMs: 1500')
+        ->toContain('normalizePayload')
+        ->toContain('shouldSuppressToast');
 });
 
 test('alert renders close-alert window listener', function () {
