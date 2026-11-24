@@ -166,3 +166,20 @@ test('sheet delegates logic to vibeSheet module in both teleport and non-telepor
         ->toContain('vibe-sheet-ready');
 });
 
+test('sheet allows overflow when expanded or minified so dropdowns and popovers are not clipped', function () {
+    $relativeHtml = Blade::render(
+        '<vibe:sheet id="test-sidebar-overflow" variant="sidebar" position="left" layout="relative" behavior="minify">Content</vibe:sheet>'
+    );
+    $fixedHtml = Blade::render(
+        '<vibe:sheet id="test-fixed-overflow" position="right" layout="fixed">Content</vibe:sheet>'
+    );
+
+    expect($relativeHtml)
+        ->toContain('overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden')
+        ->not->toContain('group-data-[state=minified]/sheet:overflow-visible');
+
+    expect($fixedHtml)
+        ->toContain('overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden')
+        ->not->toContain('group-data-[state=minified]/sheet:overflow-visible');
+});
+

@@ -180,7 +180,7 @@
         'teleport' => (bool) $teleport,
     ])->toHtml();
 
-    $sheetXDataExpr = "typeof window.vibeSheet === 'function' ? window.vibeSheet({$sheetConfigJson}) : Object.assign({$sheetConfigJson}, { isResizing: false, isInitialized: false, lastTriggerTime: 0, startSize: 0, startPos: 0, isMobile: typeof window !== 'undefined' ? window.innerWidth < 768 : false, get isHorizontal() { return this.position === 'left' || this.position === 'right'; }, get currentSize() { if (this.isResizing || this.behavior === 'static') return this.size; if (this.state === 'collapsed') return 0; if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize; if (this.isMobile) { if (this.mobileSize === 'full') return '100%'; var n = parseInt(this.mobileSize, 10) || 280; var m = this.isHorizontal ? Math.min(n, window.innerWidth - 48) : Math.min(n, window.innerHeight - 48); return Math.max(0, m); } return this.size; }, toggle() {}, close() {}, open() {}, saveToStorage() {}, startResize() {}, doResize() {}, stopResize() {}, handleOutsideClick() {}, init() { var self = this; var attach = function() { if (self._vibeSheetBound || typeof window.vibeSheet !== 'function') return; self._vibeSheetBound = true; var comp = window.vibeSheet({$sheetConfigJson}); Object.keys(comp).forEach(function(k) { if (k !== 'init' && k !== 'isHorizontal' && k !== 'currentSize' && typeof comp[k] === 'function') { self[k] = comp[k]; } }); comp.init.call(self); }; if (typeof window.vibeSheet === 'function') { attach(); } else { window.addEventListener('vibe-sheet-ready', attach, { once: true }); } } })";
+    $sheetXDataExpr = "typeof window.vibeSheet === 'function' ? window.vibeSheet({$sheetConfigJson}) : Object.assign({$sheetConfigJson}, { isResizing: false, isExpanding: false, isInitialized: false, lastTriggerTime: 0, startSize: 0, startPos: 0, isMobile: typeof window !== 'undefined' ? window.innerWidth < 768 : false, get isHorizontal() { return this.position === 'left' || this.position === 'right'; }, get currentSize() { if (this.isResizing || this.behavior === 'static') return this.size; if (this.state === 'collapsed') return 0; if (this.state === 'minified') return this.isMobile ? 0 : this.minifiedSize; if (this.isMobile) { if (this.mobileSize === 'full') return '100%'; var n = parseInt(this.mobileSize, 10) || 280; var m = this.isHorizontal ? Math.min(n, window.innerWidth - 48) : Math.min(n, window.innerHeight - 48); return Math.max(0, m); } return this.size; }, toggle() {}, close() {}, open() {}, saveToStorage() {}, startResize() {}, doResize() {}, stopResize() {}, handleOutsideClick() {}, init() { var self = this; var attach = function() { if (self._vibeSheetBound || typeof window.vibeSheet !== 'function') return; self._vibeSheetBound = true; var comp = window.vibeSheet({$sheetConfigJson}); Object.keys(comp).forEach(function(k) { if (k !== 'init' && k !== 'isHorizontal' && k !== 'currentSize' && typeof comp[k] === 'function') { self[k] = comp[k]; } }); comp.init.call(self); }; if (typeof window.vibeSheet === 'function') { attach(); } else { window.addEventListener('vibe-sheet-ready', attach, { once: true }); } } })";
 @endphp
 
 @pushOnce('head', 'vibe-sheet-scripts')
@@ -213,7 +213,8 @@
                     isHorizontal
                         ? (typeof currentSize === 'string' ? `width: ${currentSize}` : `width: ${currentSize}px`)
                         : (typeof currentSize === 'string' ? `height: ${currentSize}` : `height: ${currentSize}px`),
-                    currentSize === 0 ? 'border-width: 0' : ''
+                    currentSize === 0 ? 'border-width: 0' : '',
+                    isExpanding ? 'overflow: hidden' : ''
                 ].filter(Boolean).join('; ')"
                 data-state="{{ $defaultState }}"
                 :data-state="state"
@@ -224,7 +225,7 @@
                     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
                 }"
                 @click.outside="handleOutsideClick($event)"
-                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet $dimensionLimitClasses " . ($showToggle || $resizable ? 'overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden' : 'overflow-hidden') . " group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
+                {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 z-20 pointer-events-auto $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}
             >
                 @if ($persist)
                     <script>
@@ -283,8 +284,8 @@
                     </script>
                 @endif
 
-                <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+                <div data-sheet-content :style="isExpanding ? 'overflow: hidden' : null" class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
+                    <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                          :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                          style="{{ $innerStyle }}"
                          :style="behavior !== 'minify'
@@ -365,10 +366,11 @@
     isHorizontal
         ? (typeof currentSize === 'string' ? `width: ${currentSize}` : `width: ${currentSize}px`)
         : (typeof currentSize === 'string' ? `height: ${currentSize}` : `height: ${currentSize}px`),
-    currentSize === 0 ? 'border-width: 0' : ''
+    currentSize === 0 ? 'border-width: 0' : '',
+    isExpanding ? 'overflow: hidden' : ''
 ].filter(Boolean).join('; ')" data-state="{{ $defaultState }}" :data-state="state" data-variant="{{ $variant }}" data-layout="{{ $layout }}" data-dismissible="{{ $closeOnOutsideClick ? 'true' : 'false' }}" :class="{
     'transition-[width,height,transform] duration-300 ease-in-out': !isResizing && isInitialized
-}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet $dimensionLimitClasses " . ($showToggle || $resizable ? 'overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden' : 'overflow-hidden') . " group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
+}" {{ $attributes->twMerge(['class' => "$variantClasses flex flex-col shrink-0 $zIndexClasses $positionClasses $layoutClasses group/sheet $dimensionLimitClasses overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden group-data-[state=collapsed]/sheet:pointer-events-none group-data-[state=collapsed]/sheet:shadow-none"]) }}>
     @if ($persist)
         <script>
             (function() {
@@ -427,8 +429,8 @@
     @endif
 
     @if ($layout === 'relative')
-        <div data-sheet-content class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+        <div data-sheet-content :style="isExpanding ? 'overflow: hidden' : null" class="flex-1 flex flex-col w-full h-full min-w-0 max-h-full min-h-0 overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
+            <div class="flex-1 flex flex-col h-full min-h-0 w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                  :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'
@@ -440,8 +442,8 @@
             </div>
         </div>
     @else
-        <div data-sheet-content class="absolute inset-0 pointer-events-none flex flex-col overflow-hidden group-data-[state=minified]/sheet:overflow-visible">
-            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-hidden group-data-[state=minified]/sheet:overflow-visible transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
+        <div data-sheet-content :style="isExpanding ? 'overflow: hidden' : null" class="absolute inset-0 pointer-events-none flex flex-col overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden">
+            <div class="absolute flex flex-col pointer-events-auto h-full w-full overflow-visible group-data-[state=collapsed]/sheet:overflow-hidden transition-opacity duration-300 ease-in-out [&>form]:flex [&>form]:flex-col [&>form]:flex-1 [&>form]:h-full [&>form]:min-h-0"
                  :class="state === 'collapsed' ? 'opacity-0 pointer-events-none' : 'opacity-100'"
                  style="{{ $innerStyle }}"
                  :style="behavior !== 'minify'

@@ -10,10 +10,12 @@ export function vibeSheet(config = {}) {
         behavior: 'collapsible',
         position: 'right',
         isResizing: false,
+        isExpanding: false,
         isInitialized: false,
         lastTriggerTime: 0,
         startSize: 0,
         startPos: 0,
+        _expandTimer: null,
         minifiedSize: 80,
         minSize: 0,
         maxSize: 600,
@@ -79,7 +81,18 @@ export function vibeSheet(config = {}) {
                 }, 50);
             });
 
-            this.$watch('state', value => {
+            this.$watch('state', (value, oldValue) => {
+                if (oldValue === 'collapsed' && value !== 'collapsed') {
+                    clearTimeout(this._expandTimer);
+                    this.isExpanding = true;
+                    this._expandTimer = setTimeout(() => {
+                        this.isExpanding = false;
+                    }, 320);
+                } else if (value === 'collapsed') {
+                    clearTimeout(this._expandTimer);
+                    this.isExpanding = false;
+                }
+
                 if (this.teleport && this.layout === 'fixed') {
                     if (value !== 'collapsed') {
                         window._vibeOpenSheetCount = (window._vibeOpenSheetCount || 0) + 1;
@@ -102,6 +115,7 @@ export function vibeSheet(config = {}) {
 
             if (typeof this.$cleanup === 'function') {
                 this.$cleanup(() => {
+                    clearTimeout(this._expandTimer);
                     if (this._onWindowResize) {
                         window.removeEventListener('resize', this._onWindowResize);
                     }
