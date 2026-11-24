@@ -2,6 +2,14 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.12.0] - 2026-11-24
+
+### 🚀 Features
+- feat: enhance sheet component to support overflow behavior when expanded or minified (52aee52)
+- feat: enhance toast component tests with additional listener checks and configurations (7ad8e04)
+- feat: add vibe editor and highlight components with configuration options (01310c5)
+
+
 ## [0.11.9] - 2026-11-20
 
 ### 🚀 Features
