@@ -14,7 +14,7 @@
     'menubar' => false,
     'toolbar' => null,
     'toolbarMode' => 'sliding', // 'sliding', 'floating', 'wrap', 'scrolling'
-    'toolbarSticky' => true,
+    'toolbarSticky' => false,
     'toolbarStickyOffset' => 0,
     'plugins' => null,
     'statusbar' => true,
@@ -145,34 +145,65 @@
 @endPushOnce
 
 <div {{ $attributes->only('class')->twMerge(['class' => trim("w-full space-y-1.5 {$wrapperClass}")]) }}
+     data-vibe-editor-root="{{ $id }}"
      x-data="typeof window.vibeEditor === 'function' ? window.vibeEditor(@js($config)) : {
+         _isVibeEditorFallback: true,
+         _isDestroyed: false,
+         _rebound: false,
+         _timer: null,
+         _timeout: null,
+         _readyHandler: null,
          id: @js($id),
          isMounted: false,
          isFocused: false,
          value: @js($resolvedValue),
-         destroy() {
-             if (window.tinymce) {
-                 try { window.tinymce.remove('#' + this.id); } catch (e) {}
+         _cleanup() {
+             if (this._timer) {
+                 clearInterval(this._timer);
+                 this._timer = null;
+             }
+             if (this._timeout) {
+                 clearTimeout(this._timeout);
+                 this._timeout = null;
+             }
+             if (this._readyHandler) {
+                 window.removeEventListener('vibe-editor-ready', this._readyHandler);
+                 this._readyHandler = null;
              }
          },
-         init() {
-             var self = this;
-             var bindEditor = function() {
-                 if (typeof window.vibeEditor === 'function') {
-                     clearInterval(timer);
-                     if (window.Alpine && typeof window.Alpine.initTree === 'function' && self.$el) {
-                         var el = self.$el;
-                         if (typeof window.Alpine.destroyTree === 'function') {
-                             try { window.Alpine.destroyTree(el); } catch (e) {}
-                         }
-                         delete el._x_dataStack;
-                         window.Alpine.initTree(el);
+         rebind() {
+             if (this._isDestroyed || this._rebound || typeof window.vibeEditor !== 'function') return;
+             var el = this.$el;
+             if (!el || !el.isConnected || el._vibeEditorRebinding) return;
+             this._rebound = true;
+             this._cleanup();
+             if (window.Alpine && typeof window.Alpine.initTree === 'function') {
+                 el._vibeEditorRebinding = true;
+                 try {
+                     if (typeof window.Alpine.destroyTree === 'function') {
+                         try { window.Alpine.destroyTree(el); } catch (e) {}
                      }
+                     delete el._x_dataStack;
+                     window.Alpine.initTree(el);
+                 } finally {
+                     delete el._vibeEditorRebinding;
                  }
-             };
-             window.addEventListener('vibe-editor-ready', bindEditor, { once: true });
-             var timer = setInterval(bindEditor, 25);
-             setTimeout(function() { clearInterval(timer); }, 3000);
+             }
+         },
+         destroy() {
+             this._isDestroyed = true;
+             this._cleanup();
+         },
+         init() {
+             if (typeof window.vibeEditor === 'function') {
+                 this.$nextTick(() => this.rebind());
+                 return;
+             }
+             var self = this;
+             this._readyHandler = function() { self.rebind(); };
+             window.addEventListener('vibe-editor-ready', this._readyHandler, { once: true });
+             this._timer = setInterval(function() { self.rebind(); }, 25);
+             this._timeout = setTimeout(function() { self._cleanup(); }, 15000);
          }
      }">
 
@@ -198,6 +229,7 @@
 
     {{-- Editor Wrapper Container --}}
     <div 
+        wire:ignore
         class="vibe-editor-wrapper"
         data-vibe-editor="{{ $name }}"
         :class="{
