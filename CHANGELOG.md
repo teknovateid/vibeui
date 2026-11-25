@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.12.1] - 2026-11-25
+
+### 🚀 Features
+- feat: update vibe editor component to enhance toolbar behavior and lifecycle management (0654584)
+
+
 ## [0.12.0] - 2026-11-24
 
 ### 🚀 Features
