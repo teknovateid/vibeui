@@ -113,7 +113,7 @@ return [
             'menubar' => 'Menampilkan atau menyembunyikan menubar atas TinyMCE (default: <code>false</code>).',
             'toolbar' => 'String kustomisasi tombol toolbar untuk menggantikan susunan default preset.',
             'toolbarMode' => 'Mode tampilan overflow toolbar: <code>\'sliding\'</code> (default: slide ke bawah di dalam header), <code>\'floating\'</code>, <code>\'wrap\'</code>, atau <code>\'scrolling\'</code>.',
-            'toolbarSticky' => 'Membuat bilah toolbar tetap menempel (sticky) di bagian atas saat halaman atau editor digulir (default: <code>true</code>).',
+            'toolbarSticky' => 'Mengaktifkan docking toolbar JS TinyMCE saat halaman panjang digulir; CSS sticky di dalam editor sudah aktif secara bawaan (default: <code>false</code>).',
             'toolbarStickyOffset' => 'Offset jarak tambahan dalam satuan pixel dari batas atas viewport saat toolbar sticky aktif (default: <code>0</code>).',
             'plugins' => 'String atau array plugin TinyMCE tambahan yang ingin diaktifkan.',
             'uploadUrl' => 'Endpoint backend URL untuk memproses unggah gambar secara otomatis dengan token CSRF.',

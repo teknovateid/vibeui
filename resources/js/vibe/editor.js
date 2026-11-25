@@ -96,13 +96,20 @@ export function vibeEditor(config = {}) {
         debounceTimer: null,
         themeObserver: null,
         _onThemeChange: null,
+        _navigatingHandler: null,
+        _resetHandler: null,
+        _formEl: null,
+        _isDestroyed: false,
+        _isMounting: false,
 
         init() {
+            this._isDestroyed = false;
+            this._isMounting = false;
             this.isDark = document.documentElement.classList.contains('dark');
-            
+
             // Watch for external Livewire / Alpine value changes
             this.$watch('value', (newVal) => {
-                if (this.editor && this.editor.initialized) {
+                if (!this._isDestroyed && this.editor && this.editor.initialized) {
                     const current = this.editor.getContent();
                     if ((newVal || '') !== current) {
                         this.editor.setContent(newVal || '');
@@ -111,19 +118,21 @@ export function vibeEditor(config = {}) {
             });
 
             // Handle parent form reset
-            const form = this.$el.closest('form');
-            if (form) {
-                form.addEventListener('reset', () => {
+            this._formEl = this.$el.closest('form');
+            if (this._formEl) {
+                this._resetHandler = () => {
                     setTimeout(() => {
-                        if (this.editor && this.editor.initialized) {
+                        if (!this._isDestroyed && this.editor && this.editor.initialized) {
                             this.editor.setContent(this.value || '');
                         }
                     }, 50);
-                });
+                };
+                this._formEl.addEventListener('reset', this._resetHandler);
             }
 
             // Listen for theme change events
             this._onThemeChange = () => {
+                if (this._isDestroyed) return;
                 const currentIsDark = document.documentElement.classList.contains('dark');
                 if (this.isDark !== currentIsDark && this.editor) {
                     this.isDark = currentIsDark;
@@ -134,6 +143,7 @@ export function vibeEditor(config = {}) {
 
             // MutationObserver on documentElement for class changes (dark mode toggle)
             this.themeObserver = new MutationObserver((mutations) => {
+                if (this._isDestroyed) return;
                 for (const mutation of mutations) {
                     if (mutation.attributeName === 'class') {
                         const currentIsDark = document.documentElement.classList.contains('dark');
@@ -146,16 +156,56 @@ export function vibeEditor(config = {}) {
             });
             this.themeObserver.observe(document.documentElement, { attributes: true });
 
+            // Clean up TinyMCE before Livewire swaps or snapshots the DOM
+            this._navigatingHandler = () => {
+                this.destroy();
+            };
+            document.addEventListener('livewire:navigating', this._navigatingHandler);
+
             // Mount TinyMCE
             this.$nextTick(() => {
-                this.mountEditor();
+                if (!this._isDestroyed) {
+                    this.mountEditor();
+                }
             });
         },
 
         mountEditor() {
+            if (this._isDestroyed || this._isMounting) return;
+
             const self = this;
-            const targetEl = document.getElementById(this.id);
-            if (!targetEl) return;
+            const targetEl = this.$refs?.textarea || document.getElementById(this.id);
+            if (!targetEl || !targetEl.isConnected) return;
+
+            this._isMounting = true;
+
+            // Remove any detached TinyMCE editors and any stale instance sharing this ID
+            if (Array.isArray(tinymce.editors)) {
+                [...tinymce.editors].forEach((ed) => {
+                    const el = typeof ed.getElement === 'function' ? ed.getElement() : null;
+                    if (!el || !el.isConnected) {
+                        try {
+                            tinymce.remove(ed);
+                        } catch (e) {}
+                    }
+                });
+            }
+
+            const existingEditor = typeof tinymce.get === 'function' ? tinymce.get(this.id) : null;
+            if (existingEditor) {
+                try {
+                    tinymce.remove(existingEditor);
+                } catch (e) {}
+            }
+
+            // Strip any stale .tox-tinymce containers left over from cached DOM snapshots
+            const wrapper = targetEl.closest('.vibe-editor-wrapper');
+            if (wrapper) {
+                wrapper.querySelectorAll(':scope > .tox-tinymce').forEach((node) => node.remove());
+            }
+            targetEl.style.display = '';
+            targetEl.style.visibility = '';
+            targetEl.removeAttribute('aria-hidden');
 
             // Resolve Plugins
             let pluginsList = this.resolvePlugins();
@@ -196,15 +246,21 @@ export function vibeEditor(config = {}) {
 
                 // Content CSS Styles inside Iframe
                 content_style: `
+                    html {
+                        background-color: ${this.isDark ? '#121215' : '#ffffff'};
+                    }
                     body {
                         font-family: var(--font-sans, Figtree, ui-sans-serif, system-ui, sans-serif);
                         font-size: 14.5px;
                         line-height: 1.65;
                         color: ${this.isDark ? '#fafafa' : '#09090b'};
                         background-color: ${this.isDark ? '#121215' : '#ffffff'};
-                        padding: 0.875rem 1rem;
+                        padding: 1rem 1.25rem;
                         margin: 0;
                         outline: none !important;
+                    }
+                    body > *:first-child {
+                        margin-top: 0;
                     }
                     body:focus, .mce-content-body:focus {
                         outline: none !important;
@@ -214,6 +270,16 @@ export function vibeEditor(config = {}) {
                         color: ${this.isDark ? '#71717a' : '#a1a1aa'} !important;
                         font-style: normal !important;
                         opacity: 0.8 !important;
+                        top: 1rem !important;
+                        pointer-events: none;
+                    }
+                    .mce-content-body:not([dir=rtl])[data-mce-placeholder]:not(.mce-visualblocks)::before {
+                        left: 1.25rem !important;
+                        right: 1.25rem !important;
+                    }
+                    .mce-content-body[dir=rtl][data-mce-placeholder]:not(.mce-visualblocks)::before {
+                        right: 1.25rem !important;
+                        left: 1.25rem !important;
                     }
                     a {
                         color: ${this.isDark ? '#60a5fa' : '#2563eb'};
@@ -346,6 +412,16 @@ export function vibeEditor(config = {}) {
 
                     // Init Finish
                     editor.on('init', () => {
+                        self._isMounting = false;
+                        if (self._isDestroyed || !targetEl.isConnected) {
+                            try {
+                                tinymce.remove(editor);
+                            } catch (e) {}
+                            self.editor = null;
+                            self.isMounted = false;
+                            return;
+                        }
+                        self.editor = editor;
                         self.isMounted = true;
                         if (self.value) {
                             editor.setContent(self.value);
@@ -409,8 +485,30 @@ export function vibeEditor(config = {}) {
                 }
             };
 
-            tinymce.init(initConfig).catch(err => {
-                console.error('[Vibe Editor] Failed to initialize TinyMCE:', err);
+            tinymce.init(initConfig).then((editors) => {
+                self._isMounting = false;
+                const activeEditor = Array.isArray(editors) ? editors[0] : null;
+                if (self._isDestroyed || !targetEl.isConnected) {
+                    if (activeEditor) {
+                        try {
+                            tinymce.remove(activeEditor);
+                        } catch (e) {}
+                    }
+                    self.editor = null;
+                    self.isMounted = false;
+                    return;
+                }
+                if (activeEditor && !self.editor) {
+                    self.editor = activeEditor;
+                }
+                if (activeEditor && !self.isMounted && activeEditor.initialized) {
+                    self.isMounted = true;
+                }
+            }).catch(err => {
+                self._isMounting = false;
+                if (!self._isDestroyed) {
+                    console.error('[Vibe Editor] Failed to initialize TinyMCE:', err);
+                }
             });
         },
 
@@ -486,21 +584,40 @@ export function vibeEditor(config = {}) {
         },
 
         reinit() {
+            if (this._isDestroyed) return;
+            const currentContent = (this.editor && this.editor.initialized)
+                ? this.editor.getContent()
+                : (this.value || '');
             if (this.editor) {
-                const currentContent = this.editor.getContent();
                 try {
-                    tinymce.remove('#' + this.id);
+                    tinymce.remove(this.editor);
                 } catch (e) {}
                 this.editor = null;
-                this.isMounted = false;
-                this.value = currentContent;
-                this.$nextTick(() => {
-                    this.mountEditor();
-                });
             }
+            this._isMounting = false;
+            this.isMounted = false;
+            this.value = currentContent;
+            this.$nextTick(() => {
+                if (!this._isDestroyed) {
+                    this.mountEditor();
+                }
+            });
         },
 
         destroy() {
+            if (this._isDestroyed) return;
+            this._isDestroyed = true;
+            this._isMounting = false;
+
+            if (this._navigatingHandler) {
+                document.removeEventListener('livewire:navigating', this._navigatingHandler);
+                this._navigatingHandler = null;
+            }
+            if (this._formEl && this._resetHandler) {
+                this._formEl.removeEventListener('reset', this._resetHandler);
+                this._resetHandler = null;
+                this._formEl = null;
+            }
             if (this.themeObserver) {
                 this.themeObserver.disconnect();
                 this.themeObserver = null;
@@ -513,27 +630,60 @@ export function vibeEditor(config = {}) {
                 clearTimeout(this.debounceTimer);
                 this.debounceTimer = null;
             }
-            if (this.editor) {
+
+            const targetEl = this.$refs?.textarea;
+            const instanceToRemove = this.editor
+                || (targetEl && typeof tinymce.get === 'function' ? (() => {
+                    const candidate = tinymce.get(this.id);
+                    return candidate && candidate.getElement?.() === targetEl ? candidate : null;
+                })() : null);
+
+            if (instanceToRemove) {
                 try {
-                    tinymce.remove('#' + this.id);
+                    tinymce.remove(instanceToRemove);
                 } catch (e) {}
-                this.editor = null;
             }
+            this.editor = null;
+            this.isMounted = false;
         }
     };
+}
+
+function registerVibeEditorComponent() {
+    if (typeof window !== 'undefined' && window.Alpine && typeof window.Alpine.data === 'function') {
+        window.Alpine.data('vibeEditor', vibeEditor);
+    }
+}
+
+function rebindFallbackVibeEditors() {
+    if (typeof document === 'undefined' || typeof window === 'undefined' || typeof window.vibeEditor !== 'function') {
+        return;
+    }
+
+    document.querySelectorAll('[data-vibe-editor-root]').forEach((el) => {
+        const stack = el._x_dataStack;
+        if (Array.isArray(stack) && stack[0] && stack[0]._isVibeEditorFallback && typeof stack[0].rebind === 'function') {
+            stack[0].rebind();
+        }
+    });
 }
 
 if (typeof window !== 'undefined') {
     window.vibeEditor = vibeEditor;
 
-    document.addEventListener('alpine:init', () => {
-        if (window.Alpine && typeof window.Alpine.data === 'function') {
-            window.Alpine.data('vibeEditor', vibeEditor);
-        }
+    registerVibeEditorComponent();
+
+    document.addEventListener('alpine:init', registerVibeEditorComponent);
+    document.addEventListener('livewire:init', registerVibeEditorComponent);
+    document.addEventListener('livewire:navigated', () => {
+        registerVibeEditorComponent();
+        rebindFallbackVibeEditors();
     });
 
-    if (window.Alpine && typeof window.Alpine.data === 'function') {
-        window.Alpine.data('vibeEditor', vibeEditor);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', rebindFallbackVibeEditors, { once: true });
+    } else {
+        rebindFallbackVibeEditors();
     }
 
     window.dispatchEvent(new CustomEvent('vibe-editor-ready'));

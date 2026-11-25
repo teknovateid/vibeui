@@ -140,3 +140,30 @@ test('docs editor page renders successfully', function () {
     $response->assertSee('vibe:editor', false);
     $response->assertSee('user.name', false);
 });
+
+test('renders wire:ignore on wrapper, root marker, and safe fallback lifecycle attributes', function () {
+    $html = Blade::render('<vibe:editor name="content" id="nav-editor" />');
+
+    expect($html)
+        ->toContain('data-vibe-editor-root="nav-editor"')
+        ->toContain('wire:ignore')
+        ->toContain('_isVibeEditorFallback: true')
+        ->toContain('rebind()')
+        ->toContain('\u0022toolbarSticky\u0022:false')
+        ->not->toContain("window.tinymce.remove('#' + this.id)");
+});
+
+test('editor script cleans up by editor instance and handles livewire navigation hooks', function () {
+    $js = file_get_contents(resource_path('js/vibe/editor.js'));
+
+    expect($js)
+        ->toContain("document.addEventListener('livewire:navigating', this._navigatingHandler)")
+        ->toContain("document.addEventListener('livewire:navigated'")
+        ->toContain("document.addEventListener('livewire:init', registerVibeEditorComponent)")
+        ->toContain('tinymce.remove(this.editor)')
+        ->toContain('rebindFallbackVibeEditors')
+        ->toContain('padding: 1rem 1.25rem;')
+        ->toContain('left: 1.25rem !important;')
+        ->toContain('top: 1rem !important;')
+        ->not->toContain("tinymce.remove('#' + this.id)");
+});

@@ -667,7 +667,7 @@ BLADE;
                                 ['menubar', 'bool|string', 'false', __('docs/editor.props.items.menubar')],
                                 ['toolbar', 'string', 'null', __('docs/editor.props.items.toolbar')],
                                 ['toolbarMode', 'string', "'sliding'", __('docs/editor.props.items.toolbarMode')],
-                                ['toolbarSticky', 'bool', 'true', __('docs/editor.props.items.toolbarSticky')],
+                                ['toolbarSticky', 'bool', 'false', __('docs/editor.props.items.toolbarSticky')],
                                 ['toolbarStickyOffset', 'int', '0', __('docs/editor.props.items.toolbarStickyOffset')],
                                 ['plugins', 'array|string', 'null', __('docs/editor.props.items.plugins')],
                                 ['uploadUrl', 'string', 'null', __('docs/editor.props.items.uploadUrl')],

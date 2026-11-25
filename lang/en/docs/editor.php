@@ -113,7 +113,7 @@ return [
             'menubar' => 'Display or hide top TinyMCE menubar (default: <code>false</code>).',
             'toolbar' => 'Custom toolbar configuration string overriding preset defaults.',
             'toolbarMode' => 'Toolbar overflow drawer display mode: <code>\'sliding\'</code> (default: slides inside header), <code>\'floating\'</code>, <code>\'wrap\'</code>, or <code>\'scrolling\'</code>.',
-            'toolbarSticky' => 'Keep the toolbar docked (sticky) at the top when scrolling (default: <code>true</code>).',
+            'toolbarSticky' => 'Enable TinyMCE JS toolbar docking when scrolling long pages; CSS sticky inside the editor is active by default (default: <code>false</code>).',
             'toolbarStickyOffset' => 'Offset distance in pixels from the top of the viewport when toolbar sticky is active (default: <code>0</code>).',
             'plugins' => 'String or array of TinyMCE plugins to enable.',
             'uploadUrl' => 'Backend URL endpoint for processing automatic image uploads with CSRF token.',
