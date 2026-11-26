@@ -6,6 +6,7 @@ use App\Livewire\Settings\TwoFactor;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
+use Livewire\Features\SupportLockedProperties\CannotUpdateLockedPropertyException;
 use Livewire\Livewire;
 use Teknovate\VibeUi\Vibe;
 
@@ -510,5 +511,24 @@ test('two factor sensitive actions allow direct setup when password confirmation
     Livewire::test(TwoFactor::class)
         ->call('setupTotp')
         ->assertDispatched('open-modal', 'modal-2fa-totp');
+});
+
+test('two factor sensitive configuration and state properties cannot be tampered via Livewire updates', function () {
+    config(['vibe.auth.confirm_password_for_2fa' => true]);
+
+    $user = User::factory()->create();
+    $this->actingAs($user);
+
+    expect(fn () => Livewire::test(TwoFactor::class)->set('requirePasswordConfirmation', false))
+        ->toThrow(CannotUpdateLockedPropertyException::class);
+
+    expect(fn () => Livewire::test(TwoFactor::class)->set('passwordConfirmationTimeout', 999999))
+        ->toThrow(CannotUpdateLockedPropertyException::class);
+
+    expect(fn () => Livewire::test(TwoFactor::class)->set('totpEnabled', true))
+        ->toThrow(CannotUpdateLockedPropertyException::class);
+
+    expect(fn () => Livewire::test(TwoFactor::class)->set('recoveryCodes', ['tampered-code']))
+        ->toThrow(CannotUpdateLockedPropertyException::class);
 });
 

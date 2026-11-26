@@ -229,3 +229,68 @@ test('vibeStyles adds fallback bunny stylesheet link for global selected font on
     expect($presentRendered)
         ->not->toContain('id="vibe-bunny-font-outfit"');
 });
+
+test('theme service and vibeStyles sanitize CSS and JSON payloads to prevent stored XSS', function () {
+    $themeService = app(ThemeService::class);
+    $maliciousCss = ":root { --primary: #2563eb; }\n</style><script>alert(1)</script><img src=x onerror=alert(2)>\n@import url(https://evil.example/x.css);\nbody { background: expression(alert(3)); }";
+    $maliciousTokens = [
+        'customHex' => '</script><script>alert(4)</script>',
+        'mode' => 'light',
+    ];
+
+    $saved = $themeService->saveGlobalTheme(
+        tokens: $maliciousTokens,
+        css: $maliciousCss,
+        isLocked: false,
+        updatedBy: 'Auditor',
+        storageMode: 'global_only',
+    );
+
+    expect($saved['css'])
+        ->toContain('--primary: #2563eb;')
+        ->not->toContain('</style>')
+        ->not->toContain('<script>')
+        ->not->toContain('<img')
+        ->not->toContain('@import')
+        ->not->toContain('expression(');
+
+    $rendered = Blade::render('@vibeStyles');
+
+    expect($rendered)
+        ->not->toContain('</style><script>')
+        ->not->toContain('</script><script>')
+        ->toContain('\u003C\/script\u003E\u003Cscript\u003Ealert(4)\u003C\/script\u003E');
+});
+
+test('theme gate authorization respects dynamic Gate::before abilities even without Gate::define', function () {
+    $allowedUser = User::factory()->create();
+    $deniedUser = User::factory()->create();
+
+    Config::set('vibe.theme.gate', 'dynamic.spatie.like.permission');
+
+    Gate::before(function ($user, string $ability) use ($allowedUser) {
+        if ($ability === 'dynamic.spatie.like.permission') {
+            return (int) $user->id === (int) $allowedUser->id ? true : null;
+        }
+
+        return null;
+    });
+
+    $themeService = app(ThemeService::class);
+    expect($themeService->canManage($deniedUser))->toBeFalse()
+        ->and($themeService->canManage($allowedUser))->toBeTrue();
+
+    $this->actingAs($deniedUser)
+        ->postJson(route('vibe.theme.global.storage-mode'), [
+            'storage_mode' => 'global_only',
+        ])
+        ->assertForbidden();
+
+    $this->actingAs($allowedUser)
+        ->postJson(route('vibe.theme.global.storage-mode'), [
+            'storage_mode' => 'global_only',
+        ])
+        ->assertOk();
+
+    Config::set('vibe.theme.gate', null);
+});

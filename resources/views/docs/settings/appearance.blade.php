@@ -201,11 +201,10 @@
                             </div>
 
                             {{-- Custom Color Input --}}
-                            <div class="flex items-center gap-3 pt-1">
-                                <span class="text-xs text-muted-foreground font-medium">{{ __('vibe/settings.appearance.custom_color_label') }}</span>
-                                <div class="w-36">
+                            <div class="flex flex-wrap items-center gap-3 pt-1">
+                                <span class="text-xs text-muted-foreground font-medium whitespace-nowrap shrink-0">{{ __('vibe/settings.appearance.custom_color_label') }}</span>
+                                <div class="w-36 shrink-0">
                                     <vibe:input 
-                                        size="sm" 
                                         prefix="#" 
                                         x-model="customHexInput" 
                                         @input="onHexInput($event.target.value)" 
@@ -215,7 +214,7 @@
                                     />
                                 </div>
                                 <label 
-                                    class="relative size-8 rounded-full ring-2 ring-offset-2 cursor-pointer shadow-xs transition-transform hover:scale-105 shrink-0 flex items-center justify-center overflow-hidden" 
+                                    class="relative size-9 rounded-full ring-2 ring-offset-2 cursor-pointer shadow-xs transition-transform hover:scale-105 shrink-0 flex items-center justify-center overflow-hidden" 
                                     :style="{ backgroundColor: customHex, borderColor: customHex, '--tw-ring-color': customHex }"
                                     :title="@js(__('vibe/settings.appearance.color_picker_title'))"
                                 >
@@ -415,7 +414,7 @@
                                     <button 
                                         type="button" 
                                         @click="selectSurfacePreset(surface.id)"
-                                        class="p-3 rounded-xl border text-left flex items-start gap-3 transition-all cursor-pointer group"
+                                        class="h-full p-3 rounded-xl border text-left flex items-start gap-3 transition-all cursor-pointer group"
                                        :class="selectedSurface === surface.id ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
                                     >
                                         {{-- Visual Surface Preview Dot --}}
@@ -479,7 +478,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.background_color') }} (<code class="text-[10px] font-mono">--sidebar</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: sidebarCustomBg }"
                                             >
                                                 <input 
@@ -489,9 +488,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-28">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="sidebarCustomBgInput" 
                                                     @input="onSidebarCustomBgInput($event.target.value)" 
@@ -507,7 +505,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.border_color') }} (<code class="text-[10px] font-mono">--sidebar-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: sidebarCustomBorder }"
                                             >
                                                 <input 
@@ -517,9 +515,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-28">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="sidebarCustomBorderInput" 
                                                     @input="onSidebarCustomBorderInput($event.target.value)" 
@@ -535,14 +532,14 @@
                             {{-- Sidebar Border Mode --}}
                             <div class="space-y-1.5">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.sidebar_border_mode_label') }}</label>
-                                <div class="grid grid-cols-3 gap-2">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                                     <vibe:button 
                                         type="button" 
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectSidebarBorderMode('default')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="sidebarBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="sidebarBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.default') }}
                                     </vibe:button>
@@ -551,8 +548,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectSidebarBorderMode('none')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="sidebarBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="sidebarBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.none') }}
                                     </vibe:button>
@@ -561,8 +558,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectSidebarBorderMode('high')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="sidebarBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="sidebarBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.high') }}
                                     </vibe:button>
@@ -613,7 +610,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_active_bg') }} (<code class="text-[10px] font-mono">--nav-active-bg</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: navCustomActiveBg }"
                                             >
                                                 <input 
@@ -623,9 +620,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-full">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="navCustomActiveBgInput" 
                                                     @input="onNavCustomActiveBgInput($event.target.value)" 
@@ -641,7 +637,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_active_fg') }} (<code class="text-[10px] font-mono">--nav-active-fg</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: navCustomActiveFg }"
                                             >
                                                 <input 
@@ -651,9 +647,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-full">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="navCustomActiveFgInput" 
                                                     @input="onNavCustomActiveFgInput($event.target.value)" 
@@ -669,7 +664,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.nav_indicator') }} (<code class="text-[10px] font-mono">--nav-indicator</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: navCustomIndicator }"
                                             >
                                                 <input 
@@ -679,9 +674,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-full">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="navCustomIndicatorInput" 
                                                     @input="onNavCustomIndicatorInput($event.target.value)" 
@@ -697,14 +691,14 @@
                             {{-- Nav Density Options --}}
                             <div class="space-y-1.5">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.nav_density_label') }}</label>
-                                <div class="grid grid-cols-3 gap-2">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                                     <vibe:button 
                                         type="button" 
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectNavDensity('compact')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="navDensity === 'compact' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="navDensity === 'compact' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.nav_density.compact') }}
                                     </vibe:button>
@@ -713,8 +707,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectNavDensity('default')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="navDensity === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="navDensity === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.nav_density.default') }}
                                     </vibe:button>
@@ -723,8 +717,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectNavDensity('relaxed')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="navDensity === 'relaxed' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="navDensity === 'relaxed' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.nav_density.relaxed') }}
                                     </vibe:button>
@@ -737,7 +731,7 @@
                                     :label="__('vibe/settings.appearance.nav_indicator_label')" 
                                     :description="__('vibe/settings.appearance.nav_indicator_desc')" 
                                     labelPlacement="justify" 
-                                    size="md" 
+                                    size="sm" 
                                     x-model="navIndicator" 
                                     @change="toggleNavIndicator($el.checked)" 
                                 />
@@ -754,7 +748,7 @@
                                 <h3 class="font-semibold text-foreground text-base">{{ __('vibe/settings.appearance.desktop_header_title') }}</h3>
                                 <span class="text-[10px] font-medium px-2 py-0.5 rounded-full border transition-colors" :class="isDarkNow ? 'bg-zinc-900 text-zinc-200 border-zinc-700' : 'bg-amber-100/70 text-amber-900 border-amber-300'" x-text="isDarkNow ? @js(__('vibe/settings.appearance.modes.dark')) : @js(__('vibe/settings.appearance.modes.light'))"></span>
                             </div>
-                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.header_desc') }}</p>
+                            <p class="text-muted-foreground text-xs">{{ __('vibe/settings.appearance.header_surface_desc') }}</p>
                         </div>
 
                         <div class="xl:col-span-8 space-y-4 w-full min-w-0">
@@ -764,7 +758,7 @@
                                     :label="__('vibe/settings.appearance.header_blur_label')" 
                                     :description="__('vibe/settings.appearance.header_blur_desc')" 
                                     labelPlacement="justify" 
-                                    size="md" 
+                                    size="sm" 
                                     x-model="headerGlassEffect" 
                                     @change="toggleHeaderGlassEffect($el.checked)" 
                                 />
@@ -773,7 +767,7 @@
                             {{-- Header Style Cards --}}
                             <div class="space-y-2">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_surface_style') }}</label>
-                                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                                     <template x-for="st in headerStyles" :key="st.id">
                                         <vibe:button 
                                             type="button" 
@@ -791,7 +785,7 @@
 
                             {{-- Custom Header Color Picker (Shown when style is 'custom') --}}
                             <vibe:card x-show="headerStyle === 'custom'" x-cloak class="p-3.5 border border-primary/30 bg-primary/5 space-y-3">
-                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_title') }}</span>
+                                <span class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_custom_title') }}</span>
                                 
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     {{-- Header Background --}}
@@ -799,7 +793,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.background_color') }} (<code class="text-[10px] font-mono">--header</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: headerCustomBg }"
                                             >
                                                 <input 
@@ -809,9 +803,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-28">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="headerCustomBgInput" 
                                                     @input="onHeaderCustomBgInput($event.target.value)" 
@@ -827,7 +820,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.border_color') }} (<code class="text-[10px] font-mono">--header-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: headerCustomBorder }"
                                             >
                                                 <input 
@@ -837,9 +830,8 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-28">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="headerCustomBorderInput" 
                                                     @input="onHeaderCustomBorderInput($event.target.value)" 
@@ -855,14 +847,14 @@
                             {{-- Header Border Mode --}}
                             <div class="space-y-1.5">
                                 <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.header_border_mode_label') }}</label>
-                                <div class="grid grid-cols-3 gap-2">
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                                     <vibe:button 
                                         type="button" 
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectHeaderBorderMode('default')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="headerBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="headerBorderMode === 'default' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.default') }}
                                     </vibe:button>
@@ -871,8 +863,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectHeaderBorderMode('none')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="headerBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="headerBorderMode === 'none' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.none') }}
                                     </vibe:button>
@@ -881,8 +873,8 @@
                                         variant="outline" 
                                         size="sm" 
                                         @click="selectHeaderBorderMode('high')" 
-                                        class="text-xs justify-center transition-all"
-                                        x-bind:class="headerBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground'"
+                                        class="h-auto py-2 text-xs font-medium justify-center transition-all"
+                                        x-bind:class="headerBorderMode === 'high' ? 'border-primary bg-primary/10 text-primary font-semibold ring-1 ring-primary hover:bg-primary/15' : 'border-border/80 text-muted-foreground hover:text-foreground hover:bg-muted/40'"
                                     >
                                         {{ __('vibe/settings.appearance.border_mode.high') }}
                                     </vibe:button>
@@ -1020,7 +1012,7 @@
                                         @click="selectFont(f.name, f.value)"
                                         role="radio"
                                         :aria-checked="(selectedFontName === f.name).toString()"
-                                        class="p-3.5 rounded-xl border text-left flex items-start justify-between gap-3 transition-all cursor-pointer group"
+                                        class="h-full p-3.5 rounded-xl border text-left flex items-start justify-between gap-3 transition-all cursor-pointer group"
                                         :class="selectedFontName === f.name ? 'border-primary bg-primary/5 ring-1 ring-primary' : 'border-border/80 bg-card hover:bg-muted/40'"
                                     >
                                         <div class="space-y-0.5 min-w-0">
@@ -1190,7 +1182,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_header_bg') }} (<code class="text-[10px] font-mono">--table-header</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: tableCustomHeaderBg }"
                                             >
                                                 <input 
@@ -1200,13 +1192,12 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-24">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="tableCustomHeaderBgInput" 
                                                     @input="onTableCustomHeaderBgInput($event.target.value)" 
-                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    class="font-mono font-semibold uppercase" 
                                                     maxlength="6" 
                                                 />
                                             </div>
@@ -1218,7 +1209,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_border') }} (<code class="text-[10px] font-mono">--table-border</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: tableCustomBorder }"
                                             >
                                                 <input 
@@ -1228,13 +1219,12 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-24">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="tableCustomBorderInput" 
                                                     @input="onTableCustomBorderInput($event.target.value)" 
-                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    class="font-mono font-semibold uppercase" 
                                                     maxlength="6" 
                                                 />
                                             </div>
@@ -1246,7 +1236,7 @@
                                         <label class="text-[11px] text-muted-foreground font-medium block">{{ __('vibe/settings.appearance.table_row_hover') }} (<code class="text-[10px] font-mono">--table-row-hover</code>)</label>
                                         <div class="flex items-center gap-2">
                                             <label 
-                                                class="relative size-7 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
+                                                class="relative size-11 sm:size-9 rounded-lg ring-1 ring-border cursor-pointer shadow-2xs shrink-0 overflow-hidden"
                                                 :style="{ backgroundColor: tableCustomRowHover }"
                                             >
                                                 <input 
@@ -1256,13 +1246,12 @@
                                                     class="opacity-0 absolute inset-0 size-full cursor-pointer" 
                                                 />
                                             </label>
-                                            <div class="w-24">
+                                            <div class="w-full min-w-0">
                                                 <vibe:input 
-                                                    size="sm" 
                                                     prefix="#" 
                                                     x-model="tableCustomRowHoverInput" 
                                                     @input="onTableCustomRowHoverInput($event.target.value)" 
-                                                    class="font-mono font-semibold uppercase text-xs" 
+                                                    class="font-mono font-semibold uppercase" 
                                                     maxlength="6" 
                                                 />
                                             </div>
@@ -1277,8 +1266,8 @@
                                     <label class="text-xs font-semibold text-foreground block">{{ __('vibe/settings.appearance.table_preview_title') }}</label>
                                     <span class="text-[10px] text-muted-foreground">{{ __('vibe/settings.appearance.table_preview_desc') }}</span>
                                 </div>
-                                <div class="rounded-xl border border-table-border bg-card overflow-hidden shadow-2xs">
-                                    <table class="w-full text-xs text-left border-collapse">
+                                <div class="rounded-xl border border-table-border bg-card overflow-x-auto shadow-2xs">
+                                    <table class="w-full min-w-[340px] text-xs text-left border-collapse">
                                         <thead class="bg-table-header text-table-header-foreground border-b border-table-border font-semibold uppercase tracking-wider text-[10px]">
                                             <tr>
                                                 <th class="py-2.5 px-3 w-8 text-center">

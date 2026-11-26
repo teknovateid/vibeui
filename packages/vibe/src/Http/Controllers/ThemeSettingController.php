@@ -23,7 +23,7 @@ class ThemeSettingController extends Controller
     protected function authorizeManagement(): void
     {
         $gateName = Config::get('vibe.theme.gate');
-        if ($gateName && Gate::has($gateName)) {
+        if (is_string($gateName) && trim($gateName) !== '') {
             Gate::authorize($gateName);
         }
     }

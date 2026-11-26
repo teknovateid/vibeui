@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\ValidationException;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Teknovate\VibeUi\Vibe;
 
@@ -14,26 +15,31 @@ class TwoFactor extends Component
     /**
      * Apakah 2FA TOTP aktif untuk user.
      */
+    #[Locked]
     public bool $totpEnabled = false;
 
     /**
      * Apakah 2FA Email aktif untuk user.
      */
+    #[Locked]
     public bool $emailEnabled = false;
 
     /**
      * Apakah salah satu metode 2FA (TOTP atau Email) sedang aktif.
      */
+    #[Locked]
     public bool $enabled = false;
 
     /**
      * Email terdaftar user yang disamarkan (masked).
      */
+    #[Locked]
     public string $userEmail = '';
 
     /**
      * Status login user (true jika guest).
      */
+    #[Locked]
     public bool $isGuest = false;
 
     /**
@@ -49,11 +55,13 @@ class TwoFactor extends Component
     /**
      * Base32 secret key untuk TOTP.
      */
+    #[Locked]
     public string $secretKey = '';
 
     /**
      * URL otpauth:// untuk QR code TOTP.
      */
+    #[Locked]
     public string $qrCodeUrl = '';
 
     /**
@@ -74,6 +82,7 @@ class TwoFactor extends Component
     /**
      * Daftar kode pemulihan cadangan (recovery codes).
      */
+    #[Locked]
     public array $recoveryCodes = [];
 
     /**
@@ -119,6 +128,7 @@ class TwoFactor extends Component
      *    VIBE_CONFIRM_PASSWORD_FOR_2FA=false
      * =========================================================================
      */
+    #[Locked]
     public bool $requirePasswordConfirmation = true;
 
     /**
@@ -126,18 +136,25 @@ class TwoFactor extends Component
      * Selama durasi ini belum berakhir sejak konfirmasi terakhir, aksi sensitif dapat
      * dijalankan langsung tanpa meminta konfirmasi kata sandi ulang.
      */
+    #[Locked]
     public int $passwordConfirmationTimeout = 300;
+
+    /**
+     * Lifecycle boot hook. Enforce server-configured password confirmation rules on every Livewire request.
+     */
+    public function boot(): void
+    {
+        $this->requirePasswordConfirmation = (bool) config('vibe.auth.confirm_password_for_2fa', true);
+        $this->passwordConfirmationTimeout = (int) config('vibe.auth.password_timeout', 300);
+    }
 
     /**
      * Lifecycle mount hook.
      */
     public function mount(): void
     {
-        // Baca pengaturan dari config/vibe.php atau .env (default: true)
-        $this->requirePasswordConfirmation = (bool) config(
-            'vibe.auth.confirm_password_for_2fa',
-            env('VIBE_CONFIRM_PASSWORD_FOR_2FA', true)
-        );
+        // Baca pengaturan dari config/vibe.php (default: true)
+        $this->requirePasswordConfirmation = (bool) config('vibe.auth.confirm_password_for_2fa', true);
         $this->passwordConfirmationTimeout = (int) config('vibe.auth.password_timeout', 300);
 
         $this->refreshStatus();
@@ -571,8 +588,11 @@ class TwoFactor extends Component
      */
     protected function ensurePasswordIsConfirmed(): bool
     {
+        $requireConfirmation = (bool) config('vibe.auth.confirm_password_for_2fa', $this->requirePasswordConfirmation);
+        $timeout = (int) config('vibe.auth.password_timeout', $this->passwordConfirmationTimeout);
+
         // Lewati pengecekan jika proteksi dinonaktifkan oleh developer
-        if (! $this->requirePasswordConfirmation) {
+        if (! $requireConfirmation) {
             return true;
         }
 
@@ -580,7 +600,7 @@ class TwoFactor extends Component
         $now = time();
 
         // Cek apakah belum pernah konfirmasi atau sudah melewati batas timeout
-        if (! $confirmedAt || ($now - (int) $confirmedAt) >= $this->passwordConfirmationTimeout) {
+        if (! $confirmedAt || ($now - (int) $confirmedAt) >= $timeout) {
             // Simpan target URL agar setelah konfirmasi berhasil, user kembali ke halaman pengaturan
             $targetRoute = \Illuminate\Support\Facades\Route::has('docs.settings.security')
                 ? 'docs.settings.security'

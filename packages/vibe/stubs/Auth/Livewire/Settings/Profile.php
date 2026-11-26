@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -25,18 +26,24 @@ class Profile extends Component
 
     public string $phone = '';
 
+    #[Locked]
     public ?string $avatar = null;
 
+    #[Locked]
     public ?string $avatarUrl = null;
 
     public $avatar_file = null;
 
+    #[Locked]
     public bool $emailVerified = false;
 
+    #[Locked]
     public ?string $emailVerifiedAtLabel = null;
 
+    #[Locked]
     public ?string $joinedAtLabel = null;
 
+    #[Locked]
     public ?string $joinedHumanLabel = null;
 
     public function mount(): void
