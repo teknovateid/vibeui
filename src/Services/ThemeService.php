@@ -13,6 +13,25 @@ class ThemeService
     public const VALID_STORAGE_MODES = ['hybrid', 'local_only', 'global_only'];
 
     /**
+     * Sanitize global theme CSS to block HTML/style breakouts and unsafe CSS constructs.
+     */
+    public function sanitizeCss(?string $css): ?string
+    {
+        if ($css === null) {
+            return null;
+        }
+
+        $sanitized = str_replace("\0", '', $css);
+        $sanitized = preg_replace('/<\s*\/?\s*(?:style|script)\b[^>]*>/i', '', $sanitized) ?? $sanitized;
+        $sanitized = preg_replace('/<[^>]*>/s', '', $sanitized) ?? $sanitized;
+        $sanitized = str_replace('<', '', $sanitized);
+        $sanitized = preg_replace('/@import\b[^;]*(?:;|$)/i', '', $sanitized) ?? $sanitized;
+        $sanitized = preg_replace('/(?:expression\s*\(|javascript\s*:|vbscript\s*:|behavior\s*:|-moz-binding\s*:)/i', 'invalid:', $sanitized) ?? $sanitized;
+
+        return $sanitized;
+    }
+
+    /**
      * Normalize a storage mode string against allowed options.
      */
     public function normalizeStorageMode(?string $mode): ?string
@@ -85,7 +104,7 @@ class ThemeService
                 return [
                     'storage_mode' => $this->normalizeStorageMode($setting->storage_mode ?? $fallbackMode),
                     'tokens' => $tokens,
-                    'css' => $setting->css,
+                    'css' => $this->sanitizeCss($setting->css),
                     'is_locked' => (bool) $setting->is_locked,
                     'updated_by' => $setting->updated_by,
                     'updated_at' => $setting->updated_at?->toIso8601String(),
@@ -141,7 +160,7 @@ class ThemeService
 
         $attributes = [
             'tokens' => $tokens,
-            'css' => $css,
+            'css' => $this->sanitizeCss($css),
             'is_locked' => $isLocked,
             'updated_by' => $updatedBy,
         ];
@@ -254,7 +273,7 @@ class ThemeService
     {
         $gateName = Config::get('vibe.theme.gate');
 
-        if ($gateName && Gate::has($gateName)) {
+        if (is_string($gateName) && trim($gateName) !== '') {
             return $user ? Gate::forUser($user)->allows($gateName) : Gate::allows($gateName);
         }
 

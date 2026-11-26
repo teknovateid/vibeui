@@ -201,13 +201,15 @@ class VibeServiceProvider extends ServiceProvider
                 \$args = [{$expression}];
                 \$eventName = count(\$args) > 1 ? \$args[0] : 'alert';
                 \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
+                \$encodedEvent = json_encode((string) \$eventName, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+                \$encodedPayload = json_encode(\$payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
                 echo '<script>
                     (function() {
                         var fired = false;
                         var trigger = function() {
                             if (fired) return;
                             fired = true;
-                            window.dispatchEvent(new CustomEvent(\'' . \$eventName . '\', { detail: ' . json_encode(\$payload) . ' }));
+                            window.dispatchEvent(new CustomEvent(' . \$encodedEvent . ', { detail: ' . \$encodedPayload . ' }));
                         };
                         if (document.readyState === \"loading\") {
                             document.addEventListener(\"alpine:initialized\", function() {
@@ -230,13 +232,15 @@ class VibeServiceProvider extends ServiceProvider
                 \$args = [{$expression}];
                 \$eventName = count(\$args) > 1 ? \$args[0] : 'toast';
                 \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
+                \$encodedEvent = json_encode((string) \$eventName, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+                \$encodedPayload = json_encode(\$payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
                 echo '<script>
                     (function() {
                         var fired = false;
                         var trigger = function() {
                             if (fired) return;
                             fired = true;
-                            window.dispatchEvent(new CustomEvent(\'' . \$eventName . '\', { detail: ' . json_encode(\$payload) . ' }));
+                            window.dispatchEvent(new CustomEvent(' . \$encodedEvent . ', { detail: ' . \$encodedPayload . ' }));
                         };
                         if (document.readyState === \"loading\") {
                             document.addEventListener(\"alpine:initialized\", function() {
@@ -265,18 +269,22 @@ class VibeServiceProvider extends ServiceProvider
                         }
                     } catch (\Throwable \$e) {}
                 }
-                \$prefix = \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
-                \$historyConfig = json_encode(\Illuminate\Support\Facades\Config::get('vibe.history'));
-                \$confirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm') ? route('password.confirm', [], false) : '/confirm-password';
-                \$idleLockUrl = \Illuminate\Support\Facades\Route::has('password.idle-lock') ? route('password.idle-lock', [], false) : (\$confirmUrl . '/idle-lock');
-                \$keepAliveUrl = \Illuminate\Support\Facades\Route::has('auth.keep-alive') ? route('auth.keep-alive', [], false) : '/keep-alive';
+                \$rawPrefix = (string) \Illuminate\Support\Facades\Config::get('vibe.prefix', 'vibe');
+                \$prefix = preg_replace('/[^a-zA-Z0-9_-]/', '', \$rawPrefix) ?: 'vibe';
+                \$historyConfig = json_encode(\Illuminate\Support\Facades\Config::get('vibe.history'), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+                \$escapeJsSq = static fn (string \$value): string => str_replace([\"\\\\\", \"'\", \"<\", \">\", \"\\n\", \"\\r\"], [\"\\\\\\\\\", \"\\\\'\", \"\\\\u003C\", \"\\\\u003E\", '', ''], \$value);
+                \$rawConfirmUrl = \Illuminate\Support\Facades\Route::has('password.confirm') ? route('password.confirm', [], false) : '/confirm-password';
+                \$confirmUrl = \$escapeJsSq(\$rawConfirmUrl);
+                \$idleLockUrl = \$escapeJsSq(\Illuminate\Support\Facades\Route::has('password.idle-lock') ? route('password.idle-lock', [], false) : (\$rawConfirmUrl . '/idle-lock'));
+                \$keepAliveUrl = \$escapeJsSq(\Illuminate\Support\Facades\Route::has('auth.keep-alive') ? route('auth.keep-alive', [], false) : '/keep-alive');
                 
                 try {
                     \$vibeThemeService = app(\Teknovate\VibeUi\Services\ThemeService::class);
                     \$globalTheme = \$vibeThemeService->getGlobalTheme();
                     \$storageMode = \$vibeThemeService->getStorageMode();
                     \$canManageTheme = \$vibeThemeService->canManage(\Illuminate\Support\Facades\Auth::user()) ? 'true' : 'false';
-                    \$preRenderedCss = (\$storageMode !== 'local_only' && \$globalTheme && !empty(\$globalTheme['css'])) ? \$globalTheme['css'] : '';
+                    \$rawPreRenderedCss = (\$storageMode !== 'local_only' && \$globalTheme && !empty(\$globalTheme['css'])) ? (string) \$globalTheme['css'] : '';
+                    \$preRenderedCss = \$rawPreRenderedCss !== '' ? (\$vibeThemeService->sanitizeCss(\$rawPreRenderedCss) ?? '') : '';
                 } catch (\Throwable \$e) {
                     \$globalTheme = null;
                     \$storageMode = 'hybrid';
@@ -300,7 +308,7 @@ class VibeServiceProvider extends ServiceProvider
                         echo '<link id=\"vibe-bunny-font-' . \$fontMeta['slug'] . '\" rel=\"stylesheet\" href=\"https://fonts.bunny.net/css?family=' . \$fontMeta['slug'] . ':400,500,600,700&display=swap\" data-navigate-once=\"true\" />';
                     }
                 }
-                \$globalThemeJson = json_encode(\$globalTheme);
+                \$globalThemeJson = json_encode(\$globalTheme, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
                 // Pre-rendered Anti-FOUC Theme Shield style tag with server-cached global CSS
                 echo '<style id=\"' . \$prefix . '-theme-override\" data-navigate-once=\"true\">' . \$preRenderedCss . '</style>';
