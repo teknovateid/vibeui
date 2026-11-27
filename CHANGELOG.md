@@ -2,6 +2,12 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.13.1] - 2026-11-27
+
+### 🚀 Features
+- feat: enhance AuthCommand to support --skip-existing option and improve file publishing logic (6a347de)
+
+
 ## [0.13.0] - 2026-11-27
 
 ### 🚀 Features
