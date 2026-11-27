@@ -23,7 +23,8 @@ class AuthCommand extends Command
         {--without-qr-login : Scaffold authentication without QR Code login}
         {--with-qr-login : Force enable QR Code login without prompting}
         {--migrate : Run database migrations after scaffolding}
-        {--force : Overwrite existing files}';
+        {--force : Overwrite existing files (default behavior)}
+        {--skip-existing : Skip overwriting files that already exist}';
 
     /**
      * The console command description.
@@ -100,105 +101,70 @@ class AuthCommand extends Command
             $enableQrLogin = true;
         }
 
-        $force = (bool) $this->option('force');
+        $force = (bool) $this->option('force') || ! (bool) $this->option('skip-existing');
+        $stubsRoot = __DIR__.'/../../stubs/Auth';
 
         // 1. Publish Auth Layouts
-        $this->components->task('Publishing Auth Layouts', function () use ($force) {
-            $destDir = resource_path('views/auth/layouts');
-            File::ensureDirectoryExists($destDir);
-
-            $layoutsDir = __DIR__.'/../../stubs/Auth/layouts';
-            if (File::isDirectory($layoutsDir)) {
-                foreach (File::files($layoutsDir) as $file) {
-                    $dest = "{$destDir}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+        $this->components->task('Publishing Auth Layouts', function () use ($force, $stubsRoot) {
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/layouts",
+                $this->targetResourcePath('views/auth/layouts'),
+                $force,
+                recursive: true
+            );
         });
 
         // 2. Publish Livewire Concern Trait
-        $this->components->task('Publishing AuthenticatesUsers Concern', function () use ($force) {
-            $destDir = app_path('Livewire/Auth/Concerns');
-            File::ensureDirectoryExists($destDir);
-
-            $concernsDir = __DIR__.'/../../stubs/Auth/Concerns';
-            if (File::isDirectory($concernsDir)) {
-                foreach (File::files($concernsDir) as $file) {
-                    $dest = "{$destDir}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+        $this->components->task('Publishing AuthenticatesUsers Concern', function () use ($force, $stubsRoot) {
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/Concerns",
+                $this->targetAppPath('Livewire/Auth/Concerns'),
+                $force,
+                recursive: true
+            );
         });
 
         // 3. Publish Livewire Components (Auth & Settings)
-        $this->components->task('Publishing Livewire Auth & Settings Components', function () use ($force) {
-            $authLivewireDir = __DIR__.'/../../stubs/Auth/Livewire';
-            if (File::isDirectory($authLivewireDir)) {
-                $destAuth = app_path('Livewire/Auth');
-                File::ensureDirectoryExists($destAuth);
-                foreach (File::files($authLivewireDir) as $file) {
-                    $dest = "{$destAuth}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+        $this->components->task('Publishing Livewire Auth & Settings Components', function () use ($force, $stubsRoot) {
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/Livewire",
+                $this->targetAppPath('Livewire/Auth'),
+                $force,
+                recursive: false
+            );
 
-            $settingsLivewireDir = __DIR__.'/../../stubs/Auth/Livewire/Settings';
-            if (File::isDirectory($settingsLivewireDir)) {
-                $destSettings = app_path('Livewire/Settings');
-                File::ensureDirectoryExists($destSettings);
-                foreach (File::files($settingsLivewireDir) as $file) {
-                    $dest = "{$destSettings}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/Livewire/Settings",
+                $this->targetAppPath('Livewire/Settings'),
+                $force,
+                recursive: true
+            );
         });
 
         // 4. Publish Auth & Settings Views
-        $this->components->task('Publishing Auth & Settings Views', function () use ($force) {
-            $authViewsDir = __DIR__.'/../../stubs/Auth/views';
-            if (File::isDirectory($authViewsDir)) {
-                $destAuthViews = resource_path('views/auth');
-                File::ensureDirectoryExists($destAuthViews);
-                foreach (File::files($authViewsDir) as $file) {
-                    $dest = "{$destAuthViews}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+        $this->components->task('Publishing Auth & Settings Views', function () use ($force, $stubsRoot) {
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/views",
+                $this->targetResourcePath('views/auth'),
+                $force,
+                recursive: false
+            );
 
-            $settingsViewsDir = __DIR__.'/../../stubs/Auth/views/settings';
-            if (File::isDirectory($settingsViewsDir)) {
-                $destSettingsViews = resource_path('views/livewire/settings');
-                File::ensureDirectoryExists($destSettingsViews);
-                foreach (File::files($settingsViewsDir) as $file) {
-                    $dest = "{$destSettingsViews}/{$file->getFilename()}";
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($file->getPathname(), $dest);
-                    }
-                }
-            }
+            $this->publishDirectoryFiles(
+                "{$stubsRoot}/views/settings",
+                $this->targetResourcePath('views/livewire/settings'),
+                $force,
+                recursive: true
+            );
         });
 
         // 5. Publish Routes
-        $this->components->task('Registering Auth Routes', function () use ($force) {
-            $src = base_path('routes/auth.php');
-            if (! File::exists($src)) {
-                $src = __DIR__.'/../../stubs/Auth/routes/auth.php';
-            }
-            $dest = base_path('routes/auth.php');
-
-            if ($force || ! File::exists($dest)) {
-                File::copy($src, $dest);
-            }
+        $this->components->task('Registering Auth Routes', function () use ($force, $stubsRoot) {
+            $this->publishSingleFile(
+                "{$stubsRoot}/routes/auth.php",
+                $this->targetBasePath('routes/auth.php'),
+                $force
+            );
 
             // Register in bootstrap/app.php
             $this->registerRouteInBootstrap();
@@ -207,37 +173,24 @@ class AuthCommand extends Command
         // 6. Publish Auth Language Files
         $this->components->task('Publishing Auth Language Files', function () use ($force) {
             foreach (['id', 'en'] as $locale) {
-                $dest = lang_path("{$locale}/auth.php");
-                $src = __DIR__."/../../lang/{$locale}/auth.php";
-                if (File::exists($src)) {
-                    File::ensureDirectoryExists(dirname($dest));
-                    if ($force || ! File::exists($dest)) {
-                        File::copy($src, $dest);
-                    }
-                }
+                $this->publishSingleFile(
+                    __DIR__."/../../lang/{$locale}/auth.php",
+                    $this->targetLangPath("{$locale}/auth.php"),
+                    $force
+                );
 
-                $srcDir = __DIR__."/../../lang/{$locale}/auth";
-                $destDir = lang_path("{$locale}/auth");
-                if (File::isDirectory($srcDir)) {
-                    File::ensureDirectoryExists($destDir);
-                    if ($force) {
-                        File::copyDirectory($srcDir, $destDir);
-                    } else {
-                        foreach (File::allFiles($srcDir) as $file) {
-                            $target = $destDir.'/'.$file->getRelativePathname();
-                            if (! File::exists($target)) {
-                                File::ensureDirectoryExists(dirname($target));
-                                File::copy($file->getPathname(), $target);
-                            }
-                        }
-                    }
-                }
+                $this->publishDirectoryFiles(
+                    __DIR__."/../../lang/{$locale}/auth",
+                    $this->targetLangPath("{$locale}/auth"),
+                    $force,
+                    recursive: true
+                );
             }
         });
 
         // 7. Update Configuration
         $this->components->task('Updating config/vibe.php settings', function () use ($loginBy, $layout, $enablePasskeys, $enableQrLogin) {
-            $configFile = config_path('vibe.php');
+            $configFile = $this->targetConfigPath('vibe.php');
             if (File::exists($configFile)) {
                 $content = File::get($configFile);
                 if (str_contains($content, "'auth' => [")) {
@@ -269,7 +222,7 @@ class AuthCommand extends Command
                     }
                     File::put($configFile, $content);
 
-                    $envFile = base_path('.env');
+                    $envFile = $this->targetBasePath('.env');
                     if (File::exists($envFile)) {
                         $envContent = File::get($envFile);
                         $passkeyValue = $enablePasskeys ? 'true' : 'false';
@@ -306,17 +259,16 @@ class AuthCommand extends Command
 
         if ($enablePasskeys) {
             // 8. Publish Passkeys Configuration
-            $this->components->task('Publishing Passkeys Configuration', function () use ($force) {
-                $dest = config_path('passkeys.php');
+            $this->components->task('Publishing Passkeys Configuration', function () use ($force, $stubsRoot) {
+                $dest = $this->targetConfigPath('passkeys.php');
                 if ($force || ! File::exists($dest)) {
-                    $src = __DIR__.'/../../stubs/Auth/config/passkeys.php';
+                    $src = "{$stubsRoot}/config/passkeys.php";
                     if (! File::exists($src)) {
                         $src = base_path('vendor/laravel/passkeys/config/passkeys.php');
                     }
 
                     if (File::exists($src)) {
-                        File::ensureDirectoryExists(dirname($dest));
-                        File::copy($src, $dest);
+                        $this->publishSingleFile($src, $dest, $force);
                     } else {
                         $this->callSilent('vendor:publish', ['--tag' => 'passkeys-config', '--force' => true]);
                     }
@@ -326,71 +278,68 @@ class AuthCommand extends Command
 
         if ($enablePasskeys || $enableQrLogin) {
             // 9. Ensure Vite Assets & NPM Dependencies for Passkeys & QR Login
-            $this->components->task('Ensuring Vite assets and Auth JS dependencies', function () use ($enablePasskeys, $enableQrLogin) {
+            $this->components->task('Ensuring Vite assets and Auth JS dependencies', function () use ($force, $enablePasskeys, $enableQrLogin) {
+                $assetsToSync = [];
                 if ($enablePasskeys) {
-                    $passkeysDest = resource_path('js/vibe/passkeys.js');
-                    if (! File::exists($passkeysDest)) {
-                        $src = __DIR__.'/../../resources/js/vibe/passkeys.js';
-                        if (File::exists($src)) {
-                            File::ensureDirectoryExists(dirname($passkeysDest));
-                            File::copy($src, $passkeysDest);
-                        } else {
-                            $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
-                        }
+                    $assetsToSync[] = 'passkeys.js';
+                }
+                if ($enableQrLogin) {
+                    $assetsToSync[] = 'qr-login.js';
+                    $assetsToSync[] = 'qrcode.js';
+                }
+
+                $needsVendorPublishFallback = false;
+                foreach ($assetsToSync as $assetFile) {
+                    $src = __DIR__."/../../resources/js/vibe/{$assetFile}";
+                    $dest = $this->targetResourcePath("js/vibe/{$assetFile}");
+
+                    if (File::exists($src)) {
+                        $this->publishSingleFile($src, $dest, $force);
+                    } elseif ($force || ! File::exists($dest)) {
+                        $needsVendorPublishFallback = true;
                     }
                 }
 
-                if ($enableQrLogin) {
-                    $qrLoginDest = resource_path('js/vibe/qr-login.js');
-                    if (! File::exists($qrLoginDest)) {
-                        $src = __DIR__.'/../../resources/js/vibe/qr-login.js';
-                        if (File::exists($src)) {
-                            File::ensureDirectoryExists(dirname($qrLoginDest));
-                            File::copy($src, $qrLoginDest);
-                        } else {
-                            $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
-                        }
-                    }
+                if ($needsVendorPublishFallback) {
+                    $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
                 }
 
                 $installCmd = new InstallCommand;
-                $installCmd->registerViteAssets();
-                $installCmd->updateNpmDependencies();
+                $installCmd->registerViteAssets($this->resolveViteConfigTargetPath());
+                $installCmd->updateNpmDependencies($this->targetBasePath('package.json'));
             });
         }
 
         // 10. Publish & Rewrite User and 2FA Migration
-        $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () {
-            $src = __DIR__.'/../../stubs/Auth/migrations/0001_01_01_000000_create_users_table.php';
+        $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () use ($force, $stubsRoot) {
+            $src = "{$stubsRoot}/migrations/0001_01_01_000000_create_users_table.php";
 
-            $existing = File::glob(database_path('migrations/*_create_users_table.php'));
+            $existing = File::glob($this->targetDatabasePath('migrations/*_create_users_table.php'));
             $dest = ! empty($existing)
                 ? $existing[0]
-                : database_path('migrations/0001_01_01_000000_create_users_table.php');
+                : $this->targetDatabasePath('migrations/0001_01_01_000000_create_users_table.php');
 
-            File::ensureDirectoryExists(dirname($dest));
-            File::copy($src, $dest);
+            $this->publishSingleFile($src, $dest, $force);
         });
 
         if ($enablePasskeys) {
             // 11. Publish Passkeys Migration
-            $this->components->task('Publishing Passkeys Migration', function () use ($force) {
-                $existing = File::glob(database_path('migrations/*_create_passkeys_table.php'));
+            $this->components->task('Publishing Passkeys Migration', function () use ($force, $stubsRoot) {
+                $existing = File::glob($this->targetDatabasePath('migrations/*_create_passkeys_table.php'));
 
                 if (empty($existing) || $force) {
                     $timestamp = date('Y_m_d_His');
                     $dest = ! empty($existing)
                         ? $existing[0]
-                        : database_path("migrations/{$timestamp}_create_passkeys_table.php");
+                        : $this->targetDatabasePath("migrations/{$timestamp}_create_passkeys_table.php");
 
-                    $src = __DIR__.'/../../stubs/Auth/migrations/create_passkeys_table.php';
+                    $src = "{$stubsRoot}/migrations/create_passkeys_table.php";
                     if (! File::exists($src)) {
                         $src = base_path('vendor/laravel/passkeys/database/migrations/2024_01_01_000000_create_passkeys_table.php');
                     }
 
                     if (File::exists($src)) {
-                        File::ensureDirectoryExists(dirname($dest));
-                        File::copy($src, $dest);
+                        $this->publishSingleFile($src, $dest, $force);
                     } else {
                         $this->callSilent('vendor:publish', ['--tag' => 'passkeys-migrations', '--force' => true]);
                     }
@@ -400,7 +349,7 @@ class AuthCommand extends Command
 
         // 12. Ensure User Model has Passkey & TwoFactorAuthenticatable traits and required fillables
         $this->components->task('Updating User Model Traits & Fillables', function () use ($enablePasskeys) {
-            $userModel = app_path('Models/User.php');
+            $userModel = $this->targetAppPath('Models/User.php');
             if (File::exists($userModel)) {
                 $content = File::get($userModel);
 
@@ -509,9 +458,80 @@ class AuthCommand extends Command
         $this->newLine();
     }
 
+    protected function publishDirectoryFiles(string $srcDir, string $destDir, bool $overwrite, bool $recursive = false): void
+    {
+        if (! File::isDirectory($srcDir)) {
+            return;
+        }
+
+        File::ensureDirectoryExists($destDir);
+        $files = $recursive ? File::allFiles($srcDir) : File::files($srcDir);
+
+        foreach ($files as $file) {
+            $relative = $recursive ? $file->getRelativePathname() : $file->getFilename();
+            $dest = $destDir.DIRECTORY_SEPARATOR.$relative;
+
+            $this->publishSingleFile($file->getPathname(), $dest, $overwrite);
+        }
+    }
+
+    protected function publishSingleFile(string $src, string $dest, bool $overwrite): void
+    {
+        if (! File::exists($src)) {
+            return;
+        }
+
+        if ($overwrite || ! File::exists($dest)) {
+            File::ensureDirectoryExists(dirname($dest));
+            File::copy($src, $dest);
+        }
+    }
+
+    protected function resolveViteConfigTargetPath(): ?string
+    {
+        foreach (['vite.config.js', 'vite.config.ts', 'vite.config.mjs'] as $file) {
+            $candidate = $this->targetBasePath($file);
+            if (File::exists($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return null;
+    }
+
+    protected function targetBasePath(string $path = ''): string
+    {
+        return base_path($path);
+    }
+
+    protected function targetAppPath(string $path = ''): string
+    {
+        return app_path($path);
+    }
+
+    protected function targetResourcePath(string $path = ''): string
+    {
+        return resource_path($path);
+    }
+
+    protected function targetConfigPath(string $path = ''): string
+    {
+        return config_path($path);
+    }
+
+    protected function targetDatabasePath(string $path = ''): string
+    {
+        return database_path($path);
+    }
+
+    protected function targetLangPath(string $path = ''): string
+    {
+        return lang_path($path);
+    }
+
     protected function registerRouteInBootstrap(): void
     {
-        $appFile = base_path('bootstrap/app.php');
+        $appFile = $this->targetBasePath('bootstrap/app.php');
         if (! File::exists($appFile)) {
             return;
         }
