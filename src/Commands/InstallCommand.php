@@ -281,9 +281,12 @@ class InstallCommand extends Command
             }
         }
 
-        // Always guarantee passkeys.js is included if the file exists
+        // Always guarantee passkeys.js and qr-login.js are included if the files exist
         if (File::exists(__DIR__.'/../../resources/js/vibe/passkeys.js') || File::exists(resource_path('js/vibe/passkeys.js'))) {
             $assets[] = 'resources/js/vibe/passkeys.js';
+        }
+        if (File::exists(__DIR__.'/../../resources/js/vibe/qr-login.js') || File::exists(resource_path('js/vibe/qr-login.js'))) {
+            $assets[] = 'resources/js/vibe/qr-login.js';
         }
 
         $assets = array_values(array_unique(array_filter($assets)));
@@ -308,6 +311,7 @@ class InstallCommand extends Command
             'resources/js/vibe/highlightjs.js',
             'resources/js/vibe/idle.js',
             'resources/js/vibe/passkeys.js',
+            'resources/js/vibe/qr-login.js',
             'resources/js/vibe/qrcode.js',
             'resources/js/vibe/select.js',
             'resources/js/vibe/sheet.js',

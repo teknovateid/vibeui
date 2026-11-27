@@ -72,6 +72,14 @@ class Vibe
     }
 
     /**
+     * Get the QrLoginManager instance (supports swapping or extending drivers).
+     */
+    public static function qrLogin(): \Teknovate\VibeUi\Services\QrLogin\QrLoginManager
+    {
+        return app(\Teknovate\VibeUi\Services\QrLogin\QrLoginManager::class);
+    }
+
+    /**
      * Parse and interpolate dynamic variables in editor HTML template.
      * Replaces both <span class="vibe-editor-variable" data-variable="..."> badges and raw {{ model.column }} tokens.
      *

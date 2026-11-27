@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Auth\Concerns;
 
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
@@ -237,6 +239,31 @@ trait AuthenticatesUsers
         session()->put('auth.2fa.user_id', $userId);
         session()->put('auth.2fa.remember', $remember);
         session()->put('auth.2fa.timestamp', time());
+    }
+
+    /**
+     * Finalize authentication after credentials or QR verification, honoring 2FA policy.
+     */
+    public function completeAuthenticatedLogin(
+        Authenticatable $user,
+        bool $remember = false,
+        bool $bypassTwoFactor = false,
+    ) {
+        if (! $bypassTwoFactor && method_exists($user, 'hasTwoFactorEnabled') && $user->hasTwoFactorEnabled()) {
+            Auth::logout();
+
+            $this->initTwoFactorSession($user->getAuthIdentifier(), $remember);
+
+            return redirect()->route('two-factor.challenge');
+        }
+
+        if (Auth::id() !== $user->getAuthIdentifier()) {
+            Auth::login($user, $remember);
+        }
+
+        $this->regenerateAuthSession();
+
+        return redirect()->intended($this->redirectAfterLoginUrl());
     }
 
     /**

@@ -130,6 +130,26 @@ return [
         | Developer juga dapat menonaktifkannya via .env: VIBE_CONFIRM_PASSWORD_FOR_2FA=false
         */
         'confirm_password_for_2fa' => env('VIBE_CONFIRM_PASSWORD_FOR_2FA', true),
+
+        /*
+        | Pengaturan Login dengan QR Code Lintas Perangkat:
+        | Menggunakan sistem Broadcasting bawaan Laravel (config/broadcasting.php).
+        | - 'enabled'          : Aktifkan / nonaktifkan fitur QR Login di halaman /login.
+        | - 'driver'           : Nama koneksi broadcasting ('pusher', 'reverb', 'ably', 'mercure', dll.)
+        |                        atau 'polling' (HTTP polling tanpa WebSocket), atau driver custom.
+        | - 'ttl'              : Masa berlaku / durasi QR & Pairing Code dalam detik (min. 10, default: 120).
+        | - 'auto_refresh'     : Otomatis generate QR & Pairing Code baru saat sudah expired (default: true).
+        | - 'max_auto_refresh' : Batas maksimum generate ulang otomatis per sesi halaman (0 = tanpa batas, default: 0).
+        | - 'bypass_two_factor': Lewati tantangan 2FA setelah QR disetujui dari perangkat lain.
+        */
+        'qr_login' => [
+            'enabled' => env('VIBE_QR_LOGIN_ENABLED', true),
+            'driver' => env('VIBE_QR_LOGIN_DRIVER', 'pusher'),
+            'ttl' => (int) env('VIBE_QR_LOGIN_TTL', 120),
+            'auto_refresh' => env('VIBE_QR_LOGIN_AUTO_REFRESH', true),
+            'max_auto_refresh' => (int) env('VIBE_QR_LOGIN_MAX_AUTO_REFRESH', 0),
+            'bypass_two_factor' => env('VIBE_QR_LOGIN_BYPASS_2FA', false),
+        ],
     ],
 
     /*

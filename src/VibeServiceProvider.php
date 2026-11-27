@@ -74,6 +74,17 @@ class VibeServiceProvider extends ServiceProvider
             return new Services\ThemeService();
         });
 
+        // Register QR Login Manager and Service
+        $this->app->singleton(Services\QrLogin\QrLoginManager::class, function ($app) {
+            return new Services\QrLogin\QrLoginManager($app);
+        });
+
+        $this->app->singleton(Services\QrLogin\QrLoginService::class, function ($app) {
+            return new Services\QrLogin\QrLoginService(
+                $app->make(Services\QrLogin\QrLoginManager::class),
+            );
+        });
+
         // Suppress passkey routes if disabled
         if (class_exists(\Laravel\Passkeys\Passkeys::class) && ! (config('passkeys.enabled') || config('vibe.passkeys_enabled'))) {
             \Laravel\Passkeys\Passkeys::ignoreRoutes();
