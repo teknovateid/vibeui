@@ -127,11 +127,32 @@ class Login extends Component
 
     /**
      * Enter QR login mode and resume any active session challenge (or create a fresh one).
+     *
+     * @return array<string, mixed>|null
      */
-    public function startQrLogin(QrLoginService $qrLogin, bool $forceNew = false): void
+    public function startQrLogin(QrLoginService $qrLogin, bool $forceNew = false): ?array
     {
         if (! $qrLogin->isEnabled()) {
-            return;
+            return null;
+        }
+
+        if ($forceNew || ! session()->has('auth.qr_login.active_token')) {
+            $throttleKey = 'qr-create:' . request()->ip();
+            if (RateLimiter::tooManyAttempts($throttleKey, 20)) {
+                $seconds = RateLimiter::availableIn($throttleKey);
+                $this->qrMode = true;
+                $this->qrStatus = 'error';
+                $this->qrError = __('auth/qr_login.qr_throttled', ['seconds' => $seconds]);
+                $this->resetQrChallengeState();
+                $this->dispatch('vibe-qr-login-stopped');
+
+                return [
+                    'status' => 'error',
+                    'error' => $this->qrError,
+                ];
+            }
+
+            RateLimiter::hit($throttleKey, 60);
         }
 
         $this->qrMode = true;
@@ -142,31 +163,40 @@ class Login extends Component
                 ? $qrLogin->createChallenge(request())
                 : $qrLogin->resumeOrCreateChallenge(request());
         } catch (\Throwable $e) {
-            $this->qrStatus = 'error';
-            $this->qrError = $e->getMessage();
-            $this->qrToken = null;
-            $this->qrCode = null;
-            $this->qrApproveUrl = null;
-            $this->qrClientConfig = [];
+            logger()->warning('[VibeUI QR Login] Challenge setup failed: ' . $e->getMessage());
 
-            return;
+            $this->qrStatus = 'error';
+            $this->qrError = config('app.debug')
+                ? $e->getMessage()
+                : __('auth/qr_login.complete_failed');
+            $this->resetQrChallengeState();
+            $this->dispatch('vibe-qr-login-stopped');
+
+            return [
+                'status' => 'error',
+                'error' => $this->qrError,
+            ];
         }
 
-        $this->qrDriver = (string) ($challenge['driver'] ?? 'pusher');
-        $this->qrClientConfig = (array) ($challenge['client'] ?? []);
+        $driver = (string) ($challenge['driver'] ?? 'pusher');
+        $clientConfig = (array) ($challenge['client'] ?? []);
 
-        if (($this->qrClientConfig['configured'] ?? true) === false) {
+        if (($clientConfig['configured'] ?? true) === false) {
+            $this->resetQrChallengeState();
+            $this->qrDriver = $driver;
+            $this->qrClientConfig = $clientConfig;
             $this->qrStatus = 'unconfigured';
-            $this->qrToken = null;
-            $this->qrCode = null;
-            $this->qrApproveUrl = null;
-            $this->qrExpiresAt = null;
             $this->qrError = __('auth/qr_login.not_configured', ['driver' => $this->qrDriver]);
             $this->dispatch('vibe-qr-login-stopped');
 
-            return;
+            return [
+                'status' => 'unconfigured',
+                'error' => $this->qrError,
+            ];
         }
 
+        $this->qrDriver = $driver;
+        $this->qrClientConfig = $clientConfig;
         $this->qrToken = (string) $challenge['token'];
         $this->qrCode = (string) ($challenge['code'] ?? '');
         $this->qrApproveUrl = (string) $challenge['approve_url'];
@@ -177,33 +207,52 @@ class Login extends Component
         $this->qrMaxAutoRefresh = (int) ($challenge['max_auto_refresh'] ?? 0);
         $this->qrStatus = (string) ($challenge['status'] ?? 'pending');
 
-        $this->dispatch(
-            'vibe-qr-login-started',
-            token: $this->qrToken,
-            expiresAt: $this->qrExpiresAt,
-            status: $this->qrStatus,
-            exchangeCode: $this->qrExchangeCode,
-            autoRefresh: $this->qrAutoRefresh,
-            maxAutoRefresh: $this->qrMaxAutoRefresh,
-            config: $this->qrClientConfig,
-        );
+        $payload = [
+            'token' => $this->qrToken,
+            'ttl' => $this->qrTtl,
+            'expiresAt' => $this->qrExpiresAt,
+            'status' => $this->qrStatus,
+            'exchangeCode' => $this->qrExchangeCode,
+            'autoRefresh' => $this->qrAutoRefresh,
+            'maxAutoRefresh' => $this->qrMaxAutoRefresh,
+            'config' => $this->qrClientConfig,
+        ];
+
+        $this->dispatch('vibe-qr-login-started', ...$payload);
+
+        return $payload;
     }
 
     /**
      * Force-generate a brand-new QR challenge (explicit refresh or auto-refresh on expiry).
+     *
+     * @return array<string, mixed>|null
      */
-    public function refreshQrLogin(QrLoginService $qrLogin): void
+    public function refreshQrLogin(QrLoginService $qrLogin): ?array
     {
-        $this->startQrLogin($qrLogin, forceNew: true);
+        return $this->startQrLogin($qrLogin, forceNew: true);
     }
 
     /**
-     * Exit QR login mode and return to standard credentials form.
+     * Exit QR login mode, revoke active session challenge, and return to password form.
      */
-    public function cancelQrLogin(): void
+    public function cancelQrLogin(?QrLoginService $qrLogin = null): void
     {
+        ($qrLogin ?? app(QrLoginService::class))->cancelActiveChallenge(request());
+
         $this->qrMode = false;
         $this->qrStatus = 'idle';
+        $this->qrError = null;
+        $this->resetQrChallengeState();
+
+        $this->dispatch('vibe-qr-login-stopped');
+    }
+
+    /**
+     * Clear the active QR challenge fields without discarding qrMode or error state.
+     */
+    protected function resetQrChallengeState(): void
+    {
         $this->qrToken = null;
         $this->qrCode = null;
         $this->qrApproveUrl = null;
@@ -211,9 +260,6 @@ class Login extends Component
         $this->qrExchangeCode = null;
         $this->qrDriver = null;
         $this->qrClientConfig = [];
-        $this->qrError = null;
-
-        $this->dispatch('vibe-qr-login-stopped');
     }
 
     /**
@@ -224,6 +270,17 @@ class Login extends Component
         if (! $qrLogin->isEnabled()) {
             return null;
         }
+
+        $throttleKey = 'qr-complete:' . request()->ip();
+        if (RateLimiter::tooManyAttempts($throttleKey, 15)) {
+            $seconds = RateLimiter::availableIn($throttleKey);
+            $this->qrStatus = 'error';
+            $this->qrError = __('auth/qr_login.qr_throttled', ['seconds' => $seconds]);
+
+            return null;
+        }
+
+        RateLimiter::hit($throttleKey, 60);
 
         $result = $qrLogin->complete($token, $exchangeCode, request());
 
@@ -245,6 +302,8 @@ class Login extends Component
 
             return null;
         }
+
+        RateLimiter::clear($throttleKey);
 
         return $this->completeAuthenticatedLogin(
             $result['user'],

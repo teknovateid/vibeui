@@ -81,7 +81,9 @@ class QrApprove extends Component
 
         $token = $qrLogin->findTokenByCode($this->pairingCode);
         if (! $token) {
+            $this->pairingCode = '';
             $this->addError('pairingCode', __('auth/qr_login.code_invalid'));
+            $this->dispatch('vibe-otp-reset', id: 'pairingCode');
 
             return;
         }
@@ -132,10 +134,10 @@ class QrApprove extends Component
 
     protected function loadTokenChallenge(string $token, QrLoginService $qrLogin): void
     {
-        $this->token = $token;
         $challenge = $qrLogin->markScanned($token);
 
         if (! $challenge) {
+            $this->token = '';
             $this->valid = false;
             $this->status = 'expired';
             $this->feedback = __('auth/qr_login.approve_expired');
@@ -144,6 +146,7 @@ class QrApprove extends Component
         }
 
         if (! in_array($challenge['status'] ?? '', ['pending', 'scanned'], true)) {
+            $this->token = '';
             $this->valid = false;
             $this->status = (string) ($challenge['status'] ?? 'already_processed');
             $this->feedback = __('auth/qr_login.already_processed');
@@ -151,6 +154,7 @@ class QrApprove extends Component
             return;
         }
 
+        $this->token = $token;
         $this->valid = true;
         $this->status = (string) $challenge['status'];
         $this->device = (array) ($challenge['device'] ?? []);
@@ -160,7 +164,7 @@ class QrApprove extends Component
     public function approve(QrLoginService $qrLogin): void
     {
         $user = Auth::user();
-        if (! $user || $this->token === '') {
+        if (! $user || $this->entryMode || ! $this->valid || $this->token === '') {
             return;
         }
 
@@ -187,7 +191,7 @@ class QrApprove extends Component
 
     public function reject(QrLoginService $qrLogin): void
     {
-        if ($this->token === '') {
+        if ($this->entryMode || ! $this->valid || $this->token === '') {
             return;
         }
 

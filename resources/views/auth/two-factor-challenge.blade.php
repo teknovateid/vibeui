@@ -231,11 +231,8 @@
 
             {{-- Cancel Link (Hanya ada di layar verifikasi) --}}
             <div class="pt-1 flex items-center justify-center text-xs">
-                <button type="button" wire:click="cancel" class="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 transition-colors cursor-pointer">
-                    <svg class="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 19l-7-7 7-7"/>
-                    </svg>
-                    <span>{{ __('auth/two_factor.cancel_and_login') }}</span>
+                <button type="button" wire:click="cancel" class="text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                    {{ __('auth/two_factor.cancel_and_login') }}
                 </button>
             </div>
         </div>
@@ -301,10 +298,7 @@
                     wire:click="toggleMethodSelector" 
                     class="w-full justify-center text-xs font-semibold cursor-pointer shadow-2xs"
                 >
-                    <svg class="size-3.5 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 19l-7-7 7-7"/>
-                    </svg>
-                    <span>{{ __('auth/two_factor.back_to_challenge') }}</span>
+                    {{ __('auth/two_factor.back_to_challenge') }}
                 </vibe:button>
             </div>
         </div>

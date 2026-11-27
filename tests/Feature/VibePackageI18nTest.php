@@ -98,17 +98,21 @@ test('synced vibe components and auth layouts localize dynamically in id and en 
         $splitHtml = view('auth.layouts.split', ['title' => 'Login', 'slot' => 'Form'])->render();
         expect($splitHtml)
             ->toContain(e(__('auth/layout.headline', [], $locale)))
-            ->toContain(__('auth/layout.toggle_theme', [], $locale))
-            ->toContain('window.VibeCommonI18n');
+            ->toContain(e(__('auth/layout.documentation', [], $locale)))
+            ->toContain('window.VibeCommonI18n')
+            ->not->toContain(__('auth/layout.toggle_theme', [], $locale))
+            ->not->toContain(__('auth/language.switch', [], $locale));
 
         $cardHtml = view('auth.layouts.card', ['title' => 'Login', 'slot' => 'Form'])->render();
         expect($cardHtml)
-            ->toContain(__('auth/layout.toggle_theme', [], $locale))
-            ->toContain('window.VibeCommonI18n');
+            ->toContain('window.VibeCommonI18n')
+            ->not->toContain(__('auth/layout.toggle_theme', [], $locale))
+            ->not->toContain(__('auth/language.switch', [], $locale));
 
         $simpleHtml = view('auth.layouts.simple', ['title' => 'Login', 'slot' => 'Form'])->render();
         expect($simpleHtml)
-            ->toContain(__('auth/layout.toggle_theme', [], $locale))
-            ->toContain('window.VibeCommonI18n');
+            ->toContain('window.VibeCommonI18n')
+            ->not->toContain(__('auth/layout.toggle_theme', [], $locale))
+            ->not->toContain(__('auth/language.switch', [], $locale));
     }
 });

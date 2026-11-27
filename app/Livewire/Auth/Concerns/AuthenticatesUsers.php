@@ -216,6 +216,10 @@ trait AuthenticatesUsers
      */
     public function regenerateAuthSession(): void
     {
+        if (class_exists(\Teknovate\VibeUi\Services\QrLogin\QrLoginService::class)) {
+            app(\Teknovate\VibeUi\Services\QrLogin\QrLoginService::class)->clearSessionState(request());
+        }
+
         session()->forget(['auth.2fa.user_id', 'auth.2fa.remember', 'auth.2fa.timestamp']);
         session()->regenerate();
         session()->put('auth.last_activity_time', time());
@@ -235,6 +239,10 @@ trait AuthenticatesUsers
      */
     public function initTwoFactorSession(mixed $userId, bool $remember = false): void
     {
+        if (class_exists(\Teknovate\VibeUi\Services\QrLogin\QrLoginService::class)) {
+            app(\Teknovate\VibeUi\Services\QrLogin\QrLoginService::class)->clearSessionState(request());
+        }
+
         session()->regenerate();
         session()->put('auth.2fa.user_id', $userId);
         session()->put('auth.2fa.remember', $remember);

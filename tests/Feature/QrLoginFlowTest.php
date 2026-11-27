@@ -21,6 +21,8 @@ afterEach(function () {
     Config::set('vibe.auth.qr_login.auto_refresh', true);
     Config::set('vibe.auth.qr_login.max_auto_refresh', 0);
     Config::set('vibe.auth.qr_login.bypass_two_factor', false);
+    \Illuminate\Support\Facades\RateLimiter::clear('qr-create:127.0.0.1');
+    \Illuminate\Support\Facades\RateLimiter::clear('qr-complete:127.0.0.1');
 });
 
 test('login page renders QR login trigger when enabled and hides it when disabled', function () {
@@ -29,6 +31,8 @@ test('login page renders QR login trigger when enabled and hides it when disable
     $enabled->assertStatus(200);
     $enabled->assertSee('startQrLogin');
     $enabled->assertSee('vibeQrLogin');
+    $enabled->assertDontSee(__('auth/layout.toggle_theme'));
+    $enabled->assertDontSee(__('auth/language.switch'));
 
     Config::set('vibe.auth.qr_login.enabled', false);
     $disabled = $this->get('/login');
@@ -232,7 +236,10 @@ test('pairing code shown below QR allows cross-device login via code entry and b
         ->assertSee('data-otp-index="7"', false)
         ->assertSee('inputmode="text"', false)
         ->assertSee('autoSubmit: true', false)
-        ->assertSee('alphanumeric: true', false);
+        ->assertSee('alphanumeric: true', false)
+        ->assertDontSee(__('auth/layout.toggle_theme'))
+        ->assertDontSee(__('auth/language.switch'))
+        ->assertDontSee('&larr;', false);
 
     $approveComponent = Livewire::actingAs($user)
         ->test(QrApprove::class)
@@ -435,4 +442,187 @@ test('docs qr login page renders successfully', function () {
     $response->assertStatus(200);
     $response->assertSee('VIBE_QR_LOGIN_DRIVER', false);
     $response->assertSee('pusher', false);
+});
+
+test('wrong exchange code fails closed and burns the approved challenge', function () {
+    Config::set('vibe.auth.qr_login.driver', 'polling');
+
+    $loginComponent = Livewire::test(Login::class)->call('startQrLogin');
+    $token = $loginComponent->get('qrToken');
+
+    $user = User::factory()->create();
+    $approved = app(QrLoginService::class)->approve($token, $user);
+    expect($approved['ok'])->toBeTrue();
+
+    // Wrong exchange code must fail and burn the challenge permanently.
+    $loginComponent
+        ->call('completeQrLogin', $token, 'wrong-exchange-code')
+        ->assertNoRedirect()
+        ->assertSet('qrStatus', 'error');
+
+    $this->assertGuest();
+
+    // Even retrying immediately with the real exchange_code cannot succeed once burned.
+    $loginComponent
+        ->call('completeQrLogin', $token, $approved['exchange_code'])
+        ->assertNoRedirect();
+
+    $this->assertGuest();
+});
+
+test('cancelling or force-refreshing QR login revokes prior challenge and pairing code', function () {
+    Config::set('vibe.auth.qr_login.driver', 'polling');
+    $service = app(QrLoginService::class);
+
+    $comp = Livewire::test(Login::class)->call('startQrLogin');
+    $token1 = $comp->get('qrToken');
+    $code1 = $comp->get('qrCode');
+    expect($service->findTokenByCode($code1))->toBe($token1);
+
+    // Force-refreshing revokes challenge 1 & pairing code 1 immediately.
+    $comp->call('refreshQrLogin');
+    $token2 = $comp->get('qrToken');
+    $code2 = $comp->get('qrCode');
+    expect($service->findTokenByCode($code1))->toBeNull();
+    expect($service->inspectChallenge($token1))->toBeNull();
+    expect($service->findTokenByCode($code2))->toBe($token2);
+
+    // Cancelling back to password login revokes active challenge 2 & pairing code 2.
+    $comp->call('cancelQrLogin');
+    expect($service->findTokenByCode($code2))->toBeNull();
+    expect($service->inspectChallenge($token2))->toBeNull();
+});
+
+test('QrApprove guards approve/reject by valid state and resets OTP on invalid code', function () {
+    Config::set('vibe.auth.qr_login.driver', 'polling');
+
+    $loginComponent = Livewire::test(Login::class)->call('startQrLogin');
+    $token = $loginComponent->get('qrToken');
+
+    $user = User::factory()->create();
+
+    // Invalid pairing code resets property and dispatches vibe-otp-reset.
+    Livewire::actingAs($user)
+        ->test(QrApprove::class)
+        ->set('pairingCode', 'ZZZZZZZZ')
+        ->call('submitPairingCode')
+        ->assertHasErrors(['pairingCode'])
+        ->assertSet('pairingCode', '')
+        ->assertDispatched('vibe-otp-reset');
+
+    // In entryMode ($valid = false), calling approve() or reject() has no effect on the active challenge.
+    Livewire::actingAs($user)
+        ->test(QrApprove::class)
+        ->call('approve')
+        ->assertSet('status', 'entry');
+
+    expect(app(QrLoginService::class)->inspectChallenge($token)['status'] ?? null)->toBe('pending');
+});
+
+test('broadcast exceptions are sanitized in production debug mode', function () {
+    Vibe::qrLogin()->extend('failing-ws', fn (): QrLoginDriver => new class implements QrLoginDriver {
+        public function name(): string
+        {
+            return 'failing-ws';
+        }
+
+        public function broadcast(string $channelName, string $eventName, array $payload = []): void
+        {
+            throw new \RuntimeException('Connection refused to tcp://internal-pusher-secret:6001');
+        }
+
+        public function clientConfig(string $channelName, string $eventName, string $statusUrl): array
+        {
+            return ['driver' => 'polling', 'configured' => true, 'channel' => $channelName, 'event' => $eventName, 'statusUrl' => $statusUrl];
+        }
+    });
+
+    $originalDebug = config('app.debug');
+    Config::set('vibe.auth.qr_login.driver', 'failing-ws');
+    Config::set('app.debug', false);
+
+    try {
+        $loginComponent = Livewire::test(Login::class)->call('startQrLogin');
+        $token = $loginComponent->get('qrToken');
+
+        $user = User::factory()->create();
+
+        Livewire::actingAs($user)
+            ->test(QrApprove::class, ['token' => $token])
+            ->call('approve')
+            ->assertSet('status', 'approved')
+            ->assertSet('broadcastWarning', __('auth/qr_login.broadcast_warning_desc'))
+            ->assertDontSee('internal-pusher-secret');
+    } finally {
+        Config::set('app.debug', $originalDebug);
+    }
+});
+
+test('Livewire QR creation and completion enforce rate limits', function () {
+    Config::set('vibe.auth.qr_login.driver', 'polling');
+
+    $comp = Livewire::test(Login::class);
+
+    for ($i = 0; $i < 20; $i++) {
+        $comp->call('refreshQrLogin');
+    }
+
+    $comp->call('refreshQrLogin')
+        ->assertSet('qrStatus', 'error')
+        ->assertSet('qrToken', null);
+
+    // Separate completion limiter
+    for ($i = 0; $i < 15; $i++) {
+        $comp->call('completeQrLogin', 'fake-token', 'fake-exchange');
+    }
+
+    $comp->call('completeQrLogin', 'fake-token', 'fake-exchange')
+        ->assertSet('qrStatus', 'error');
+});
+
+test('QR login root x-data stays invariant across refreshes while returning challenge payload cleanly', function () {
+    Config::set('vibe.auth.qr_login.driver', 'polling');
+    Config::set('vibe.auth.qr_login.ttl', 120);
+
+    $guestLogin = $this->get('/login');
+    $guestLogin->assertStatus(200);
+    $guestHtml = $guestLogin->getContent();
+
+    $comp = Livewire::test(Login::class);
+    $returned1 = null;
+    $comp->call('startQrLogin')->assertReturned(function ($payload) use (&$returned1) {
+        $returned1 = $payload;
+        return is_array($payload);
+    });
+    $token1 = $comp->get('qrToken');
+
+    expect($returned1)->toBeArray()
+        ->and($returned1['token'] ?? null)->toBe($token1)
+        ->and($returned1['ttl'] ?? null)->toBe(120);
+
+    // Consecutive refreshes return brand-new token + full TTL directly
+    $returned2 = null;
+    $comp->call('refreshQrLogin')->assertReturned(function ($payload) use (&$returned2) {
+        $returned2 = $payload;
+        return is_array($payload);
+    });
+    $token2 = $comp->get('qrToken');
+
+    expect($token2)->not->toBe($token1);
+    expect($returned2)->toBeArray()
+        ->and($returned2['token'] ?? null)->toBe($token2)
+        ->and($returned2['ttl'] ?? null)->toBe(120);
+
+    // Rendered SSR QR login view keeps x-data free of mutable token/payload values and isolates status pill with wire:ignore
+    $qrPage = $this->get('/login?method=qrcode');
+    $qrPage->assertStatus(200);
+    $qrHtml = $qrPage->getContent();
+    $qrPage->assertSee('data-qr-challenge', false);
+    $qrPage->assertSee('wire:ignore', false);
+    $qrPage->assertDontSee("initial: {", false);
+
+    preg_match('/x-data="([^"]*vibeQrLogin[^"]*)"/s', $guestHtml, $guestMatches);
+    preg_match('/x-data="([^"]*vibeQrLogin[^"]*)"/s', $qrHtml, $qrMatches);
+    expect($guestMatches[1] ?? null)->not->toBeNull()
+        ->and($qrMatches[1] ?? null)->toBe($guestMatches[1]);
 });

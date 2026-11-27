@@ -58,6 +58,8 @@ class QrLoginService
      */
     public function createChallenge(Request $request): array
     {
+        $this->cancelActiveChallenge($request);
+
         $token = Str::random(40);
         $tokenHash = $this->tokenHash($token);
         $rawCode = $this->generateUniquePairingCode();
@@ -400,6 +402,10 @@ class QrLoginService
             }
 
             if (! hash_equals((string) ($data['exchange_code_hash'] ?? ''), hash('sha256', $exchangeCode))) {
+                $this->forgetCodeLookup($data);
+                $this->cache()->forget($key);
+                $this->forgetDeviceSecret($request, $tokenHash);
+
                 return ['ok' => false, 'reason' => 'invalid_exchange_code'];
             }
 
@@ -421,6 +427,7 @@ class QrLoginService
     {
         $alphabet = self::PAIRING_ALPHABET;
         $maxIndex = strlen($alphabet) - 1;
+        $code = '';
 
         for ($attempt = 0; $attempt < 5; $attempt++) {
             $code = '';
@@ -433,7 +440,7 @@ class QrLoginService
             }
         }
 
-        return substr(strtoupper(Str::random(12)), 0, 8);
+        return $code;
     }
 
     protected function normalizePairingCode(string $code): string
@@ -572,6 +579,46 @@ class QrLoginService
         }
     }
 
+    /**
+     * Revoke any active QR challenge bound to the caller's session so orphaned codes cannot be used.
+     */
+    public function cancelActiveChallenge(Request $request): void
+    {
+        $activeToken = $this->getActiveToken($request);
+        if (! is_string($activeToken) || $activeToken === '') {
+            return;
+        }
+
+        $tokenHash = $this->tokenHash($activeToken);
+        $sessionSecret = $this->getDeviceSecret($request, $tokenHash);
+        $key = $this->challengeKey($tokenHash);
+
+        $this->withLock($tokenHash, function () use ($key, $sessionSecret, $request, $tokenHash): void {
+            $data = $this->cache()->get($key);
+
+            if (
+                is_array($data)
+                && is_string($sessionSecret)
+                && $sessionSecret !== ''
+                && hash_equals((string) ($data['device_secret_hash'] ?? ''), hash('sha256', $sessionSecret))
+            ) {
+                $this->forgetCodeLookup($data);
+                $this->cache()->forget($key);
+            }
+
+            $this->forgetDeviceSecret($request, $tokenHash);
+        });
+    }
+
+    /**
+     * Clear all QR login tracking keys from the caller's session.
+     */
+    public function clearSessionState(Request $request): void
+    {
+        $this->cancelActiveChallenge($request);
+        $this->sessionStore($request)->forget(['auth.qr_login.secrets', 'auth.qr_login.active_token']);
+    }
+
     protected function rememberActiveToken(Request $request, string $token): void
     {
         $this->sessionStore($request)->put('auth.qr_login.active_token', $token);
@@ -598,7 +645,9 @@ class QrLoginService
         } catch (Throwable $e) {
             logger()->warning('[VibeUI QR Login] Broadcast failed: ' . $e->getMessage());
 
-            return $e->getMessage();
+            return config('app.debug')
+                ? $e->getMessage()
+                : __('auth/qr_login.broadcast_warning_desc');
         }
     }
 }

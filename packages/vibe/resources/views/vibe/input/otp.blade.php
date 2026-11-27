@@ -261,6 +261,7 @@
         }"
         class="flex items-center justify-center {{ $gapClasses }}"
         @paste="handlePaste($event)"
+        @vibe-otp-reset.window="if (!$event.detail?.id || $event.detail.id === '{{ $id }}') { populateFromValue(''); updateValue(); focusBox(0); }"
     >
         {{-- Hidden input for traditional HTML form submit, vibe:form, and Livewire --}}
         <input

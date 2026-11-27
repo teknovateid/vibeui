@@ -58,5 +58,7 @@ return [
     'approve_expired' => 'QR Code ini sudah kedaluwarsa atau tidak valid. Buat ulang QR Code di halaman login.',
     'already_processed' => 'QR Code ini sudah diproses sebelumnya.',
     'broadcast_warning_title' => 'Peringatan Broadcast',
+    'broadcast_warning_desc' => 'Notifikasi realtime gagal dikirim. Perangkat peminta mungkin butuh beberapa saat untuk sinkron.',
+    'qr_throttled' => 'Terlalu banyak percobaan login QR. Tunggu :seconds detik sebelum mencoba lagi.',
     'back_home' => 'Kembali ke Aplikasi',
 ];

@@ -28,6 +28,7 @@ export function vibeQrLogin(options = {}) {
         errorMessage: null,
 
         _pusher: null,
+        _pusherSignature: null,
         _channel: null,
         _pollTimer: null,
         _countdownTimer: null,
@@ -35,6 +36,8 @@ export function vibeQrLogin(options = {}) {
         _stoppedHandler: null,
         _navigatingHandler: null,
         _visibilityHandler: null,
+        _deadlineMs: null,
+        _pollingInFlight: false,
         _autoRefreshCount: 0,
         _pendingAutoRefresh: false,
         _refreshing: false,
@@ -56,9 +59,17 @@ export function vibeQrLogin(options = {}) {
                 this.destroy();
             };
             this._visibilityHandler = () => {
-                if (this._isDestroyed || document.hidden || !this._pendingAutoRefresh) return;
-                this._pendingAutoRefresh = false;
-                this.attemptAutoRefresh();
+                if (this._isDestroyed || document.hidden) return;
+
+                if (this._pendingAutoRefresh) {
+                    this._pendingAutoRefresh = false;
+                    this.attemptAutoRefresh();
+                    return;
+                }
+
+                if (this._deadlineMs && ['pending', 'scanned'].includes(this.status)) {
+                    this.syncCountdownTick();
+                }
             };
 
             window.addEventListener('vibe-qr-login-started', this._startedHandler);
@@ -66,12 +77,27 @@ export function vibeQrLogin(options = {}) {
             document.addEventListener('livewire:navigating', this._navigatingHandler);
             document.addEventListener('visibilitychange', this._visibilityHandler);
 
-            if (options.initial && options.initial.token && !this.token) {
-                this.$nextTick(() => {
-                    if (!this._isDestroyed && !this.token) {
-                        this.start(options.initial);
+            this.$nextTick(() => {
+                if (!this._isDestroyed && !this.token) {
+                    const initial = options.initial && options.initial.token
+                        ? options.initial
+                        : this.readChallengeFromDom();
+                    if (initial && initial.token) {
+                        this.start(initial);
                     }
-                });
+                }
+            });
+        },
+
+        readChallengeFromDom() {
+            const el = this.$el?.querySelector('[data-qr-challenge]');
+            if (!el || !el.dataset.qrChallenge) {
+                return null;
+            }
+            try {
+                return JSON.parse(el.dataset.qrChallenge);
+            } catch (e) {
+                return null;
             }
         },
 
@@ -81,10 +107,15 @@ export function vibeQrLogin(options = {}) {
                 && this.token === detail.token
                 && (this._pusher || this._pollTimer || this._channel || this._customCleanup)
             ) {
+                if (detail.status === 'approved' && detail.exchangeCode) {
+                    this.handleStatusUpdate({ status: 'approved', exchange_code: detail.exchangeCode });
+                } else if (detail.status === 'scanned' && this.status === 'pending') {
+                    this.status = 'scanned';
+                }
                 return;
             }
 
-            this.stopTransport();
+            this.stopChannelOnly();
             this.stopCountdown();
 
             this._completing = false;
@@ -93,6 +124,13 @@ export function vibeQrLogin(options = {}) {
             this.errorMessage = null;
             this.token = detail.token || null;
             this.expiresAt = detail.expiresAt ? Number(detail.expiresAt) : null;
+            if (detail.ttl !== undefined && detail.ttl !== null && Number(detail.ttl) > 0) {
+                this._deadlineMs = Date.now() + (Number(detail.ttl) * 1000);
+            } else if (this.expiresAt) {
+                this._deadlineMs = this.expiresAt * 1000;
+            } else {
+                this._deadlineMs = null;
+            }
             if (typeof detail.autoRefresh === 'boolean') {
                 this.autoRefresh = detail.autoRefresh;
             }
@@ -102,10 +140,12 @@ export function vibeQrLogin(options = {}) {
             this.clientConfig = detail.config || {};
 
             if (!this.token || this.clientConfig.configured === false) {
+                this.disconnectPusher();
                 return;
             }
 
             if (detail.status === 'approved' && detail.exchangeCode) {
+                this.disconnectPusher();
                 this.status = 'approved';
                 this.handleStatusUpdate({ status: 'approved', exchange_code: detail.exchangeCode });
                 return;
@@ -121,6 +161,7 @@ export function vibeQrLogin(options = {}) {
             this.stopCountdown();
             this.token = null;
             this.expiresAt = null;
+            this._deadlineMs = null;
             this.remainingSeconds = 0;
             this.clientConfig = {};
             this.status = 'idle';
@@ -143,6 +184,7 @@ export function vibeQrLogin(options = {}) {
 
             // 1. User-registered JS transport driver
             if (typeof customDrivers[driver] === 'function') {
+                this.disconnectPusher();
                 const teardown = customDrivers[driver](cfg, onUpdate, (err) => {
                     this.errorMessage = err?.message || String(err);
                     this.status = 'error';
@@ -157,6 +199,8 @@ export function vibeQrLogin(options = {}) {
                 return;
             }
 
+            this.disconnectPusher();
+
             // 3. Laravel Echo bridge (e.g. Ably, Mercure, or custom Laravel broadcaster)
             if (driver !== 'polling' && typeof window !== 'undefined' && window.Echo && typeof window.Echo.channel === 'function') {
                 this._channel = window.Echo.channel(cfg.channel);
@@ -170,6 +214,7 @@ export function vibeQrLogin(options = {}) {
 
         connectPusher(cfg, onUpdate) {
             if (!cfg.key || !cfg.channel) {
+                this.disconnectPusher();
                 this.status = 'unconfigured';
                 this.errorMessage = this.labels.not_configured || 'Pusher credentials are missing.';
                 return;
@@ -188,18 +233,39 @@ export function vibeQrLogin(options = {}) {
                 pusherOptions.disableStats = true;
             }
 
+            const signature = JSON.stringify([
+                cfg.key,
+                pusherOptions.cluster,
+                pusherOptions.forceTLS,
+                pusherOptions.wsHost || null,
+                pusherOptions.wsPort || null,
+                pusherOptions.wssPort || null,
+            ]);
+
             try {
-                this._pusher = new Pusher(cfg.key, pusherOptions);
+                const pusherState = this._pusher?.connection?.state;
+                const canReuse = Boolean(
+                    this._pusher
+                    && this._pusherSignature === signature
+                    && !['disconnected', 'failed', 'unavailable'].includes(pusherState)
+                );
+
+                if (!canReuse) {
+                    this.disconnectPusher();
+                    this._pusher = new Pusher(cfg.key, pusherOptions);
+                    this._pusherSignature = signature;
+
+                    this._pusher.connection.bind('error', (err) => {
+                        if (this._isDestroyed) return;
+                        const message = err?.error?.data?.message || err?.data?.message || null;
+                        if (message) {
+                            this.errorMessage = message;
+                        }
+                    });
+                }
+
                 this._channel = this._pusher.subscribe(cfg.channel);
                 this._channel.bind(cfg.event || 'qr-login.status', onUpdate);
-
-                this._pusher.connection.bind('error', (err) => {
-                    if (this._isDestroyed) return;
-                    const message = err?.error?.data?.message || err?.data?.message || null;
-                    if (message) {
-                        this.errorMessage = message;
-                    }
-                });
             } catch (err) {
                 this.status = 'error';
                 this.errorMessage = err?.message || 'Failed to connect QR WebSocket transport.';
@@ -211,9 +277,17 @@ export function vibeQrLogin(options = {}) {
 
             const interval = Math.max(800, Number(cfg.intervalMs || 1500));
             const pollOnce = async () => {
-                if (this._isDestroyed || !this.token || this._completing || ['expired', 'rejected', 'approved'].includes(this.status)) {
+                if (
+                    this._isDestroyed
+                    || this._pollingInFlight
+                    || !this.token
+                    || this._completing
+                    || ['expired', 'rejected', 'approved'].includes(this.status)
+                ) {
                     return;
                 }
+
+                this._pollingInFlight = true;
 
                 try {
                     const response = await fetch(cfg.statusUrl, {
@@ -226,7 +300,7 @@ export function vibeQrLogin(options = {}) {
                     });
 
                     if (!response.ok) {
-                        if (response.status === 403 || response.status === 419) {
+                        if ([403, 404, 419].includes(response.status)) {
                             this.stopTransport();
                             this.status = 'error';
                             this.errorMessage = this.labels.invalid_session || 'Session mismatch.';
@@ -240,6 +314,8 @@ export function vibeQrLogin(options = {}) {
                     }
                 } catch (e) {
                     // Transient network failure; next interval will retry
+                } finally {
+                    this._pollingInFlight = false;
                 }
             };
 
@@ -247,29 +323,47 @@ export function vibeQrLogin(options = {}) {
         },
 
         startCountdown() {
-            const updateRemaining = () => {
-                if (!this.expiresAt) {
-                    this.remainingSeconds = 0;
-                    return;
+            this.stopCountdown();
+            this.syncCountdownTick();
+
+            if (
+                !this._isDestroyed
+                && ['pending', 'scanned'].includes(this.status)
+                && this._deadlineMs
+                && this.remainingSeconds > 0
+            ) {
+                this._countdownTimer = setInterval(() => this.syncCountdownTick(), 1000);
+            }
+        },
+
+        syncCountdownTick() {
+            if (this._isDestroyed) {
+                this.stopCountdown();
+                return true;
+            }
+
+            if (!this._deadlineMs) {
+                this.remainingSeconds = 0;
+                return false;
+            }
+
+            const diff = Math.max(0, Math.ceil((this._deadlineMs - Date.now()) / 1000));
+            this.remainingSeconds = diff;
+
+            if (diff === 0 && ['pending', 'scanned'].includes(this.status)) {
+                this.stopChannelOnly();
+                this.stopCountdown();
+
+                if (this.attemptAutoRefresh()) {
+                    return true;
                 }
 
-                const diff = Math.max(0, this.expiresAt - Math.floor(Date.now() / 1000));
-                this.remainingSeconds = diff;
+                this.disconnectPusher();
+                this.status = this._pendingAutoRefresh ? 'refreshing' : 'expired';
+                return true;
+            }
 
-                if (diff === 0 && !['approved', 'rejected', 'error', 'expired', 'refreshing'].includes(this.status)) {
-                    this.stopTransport();
-                    this.stopCountdown();
-
-                    if (this.attemptAutoRefresh()) {
-                        return;
-                    }
-
-                    this.status = this._pendingAutoRefresh ? 'refreshing' : 'expired';
-                }
-            };
-
-            updateRemaining();
-            this._countdownTimer = setInterval(updateRemaining, 1000);
+            return false;
         },
 
         getWire() {
@@ -313,16 +407,44 @@ export function vibeQrLogin(options = {}) {
             this.status = 'refreshing';
 
             Promise.resolve(wire.refreshQrLogin())
-                .then(() => {
-                    if (this._refreshing && !this._isDestroyed) {
-                        this._refreshing = false;
-                        if (this.status === 'refreshing') {
-                            this.status = 'expired';
-                        }
+                .then((payload) => {
+                    if (this._isDestroyed) {
+                        return;
+                    }
+
+                    this._refreshing = false;
+
+                    if (payload && payload.token) {
+                        this.start(payload);
+                        return;
+                    }
+
+                    if (payload && payload.status === 'error') {
+                        this.disconnectPusher();
+                        this.status = 'error';
+                        this.errorMessage = payload.error || this.labels.complete_failed || null;
+                        return;
+                    }
+
+                    if (payload && payload.status === 'unconfigured') {
+                        this.disconnectPusher();
+                        this.status = 'unconfigured';
+                        this.errorMessage = payload.error || this.labels.not_configured || null;
+                        return;
+                    }
+
+                    if (this.status === 'refreshing') {
+                        this.disconnectPusher();
+                        this.status = 'expired';
                     }
                 })
                 .catch(() => {
+                    if (this._isDestroyed) {
+                        return;
+                    }
+
                     this._refreshing = false;
+                    this.disconnectPusher();
                     this.status = 'expired';
                 });
 
@@ -336,7 +458,8 @@ export function vibeQrLogin(options = {}) {
             }
         },
 
-        stopTransport() {
+        stopChannelOnly() {
+            this._pollingInFlight = false;
             if (typeof this._customCleanup === 'function') {
                 try { this._customCleanup(); } catch (e) {}
                 this._customCleanup = null;
@@ -346,6 +469,7 @@ export function vibeQrLogin(options = {}) {
                 this._pollTimer = null;
             }
             if (this._channel) {
+                const channelName = this._channel.name || this.clientConfig?.channel;
                 try {
                     if (typeof this._channel.unbind_all === 'function') {
                         this._channel.unbind_all();
@@ -353,19 +477,48 @@ export function vibeQrLogin(options = {}) {
                     if (typeof this._channel.stopListening === 'function') {
                         this._channel.stopListening(`.${this.clientConfig?.event || 'qr-login.status'}`);
                     }
+                    if (this._pusher && channelName && typeof this._pusher.unsubscribe === 'function') {
+                        this._pusher.unsubscribe(channelName);
+                    }
                 } catch (e) {}
                 this._channel = null;
             }
-            if (this._pusher) {
-                try {
-                    this._pusher.disconnect();
-                } catch (e) {}
-                this._pusher = null;
-            } else if (typeof window !== 'undefined' && window.Echo && this.clientConfig?.channel && typeof window.Echo.leaveChannel === 'function') {
+            if (!this._pusher && typeof window !== 'undefined' && window.Echo && this.clientConfig?.channel && typeof window.Echo.leaveChannel === 'function') {
                 try {
                     window.Echo.leaveChannel(this.clientConfig.channel);
                 } catch (e) {}
             }
+        },
+
+        disconnectPusher() {
+            const pusher = this._pusher;
+            this._pusher = null;
+            this._pusherSignature = null;
+            if (!pusher) {
+                return;
+            }
+
+            try {
+                const state = pusher.connection?.state;
+                if (state === 'connecting' || state === 'initialized') {
+                    const closeWhenSettled = (states) => {
+                        if (states.current !== 'connecting' && states.current !== 'initialized') {
+                            try { pusher.connection.unbind('state_change', closeWhenSettled); } catch (e) {}
+                            try { pusher.disconnect(); } catch (e) {}
+                        }
+                    };
+                    pusher.connection.bind('state_change', closeWhenSettled);
+                } else {
+                    pusher.disconnect();
+                }
+            } catch (e) {
+                try { pusher.disconnect(); } catch (_) {}
+            }
+        },
+
+        stopTransport() {
+            this.stopChannelOnly();
+            this.disconnectPusher();
         },
 
         async handleStatusUpdate(payload) {
@@ -377,6 +530,7 @@ export function vibeQrLogin(options = {}) {
             }
 
             if (payload.status === 'rejected') {
+                this.remainingSeconds = 0;
                 this.stopTransport();
                 this.stopCountdown();
                 this.status = 'rejected';
@@ -384,19 +538,22 @@ export function vibeQrLogin(options = {}) {
             }
 
             if (payload.status === 'expired') {
-                this.stopTransport();
+                this.remainingSeconds = 0;
+                this.stopChannelOnly();
                 this.stopCountdown();
 
                 if (this.attemptAutoRefresh()) {
                     return;
                 }
 
+                this.disconnectPusher();
                 this.status = this._pendingAutoRefresh ? 'refreshing' : 'expired';
                 return;
             }
 
             if (payload.status === 'approved' && payload.exchange_code && !this._completing) {
                 this._completing = true;
+                this.remainingSeconds = 0;
                 this.status = 'approved';
                 this.stopTransport();
                 this.stopCountdown();
