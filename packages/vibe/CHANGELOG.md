@@ -2,6 +2,17 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.13.0] - 2026-11-27
+
+### 🚀 Features
+- feat: enhance FilePond component with improved error handling and deterministic ID generation (29414ea)
+
+### 🧰 Maintenance & Documentation
+- Refactor authentication layouts to remove global theme toggle and language switcher (45d0c7c)
+- Add QR Code Login feature with support for multiple drivers (8bed95d)
+- Enhance appearance settings and improve theme persistence tests (a06860a)
+
+
 ## [0.12.1] - 2026-11-25
 
 ### 🚀 Features
