@@ -74,7 +74,7 @@
 
             <p class="text-center text-xs text-muted-foreground pt-1">
                 <a href="{{ url('/') }}" wire:navigate class="font-medium hover:text-foreground transition-colors">
-                    &larr; {{ __('auth/qr_login.back_home') }}
+                    {{ __('auth/qr_login.back_home') }}
                 </a>
             </p>
         </form>

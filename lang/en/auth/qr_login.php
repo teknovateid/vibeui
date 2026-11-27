@@ -58,5 +58,7 @@ return [
     'approve_expired' => 'This QR Code has expired or is invalid. Please generate a new QR Code on the login screen.',
     'already_processed' => 'This QR Code has already been processed.',
     'broadcast_warning_title' => 'Broadcast Warning',
+    'broadcast_warning_desc' => 'Realtime notification could not be sent. The requesting device may take a moment to sync.',
+    'qr_throttled' => 'Too many QR login requests. Please wait :seconds seconds before trying again.',
     'back_home' => 'Back to Application',
 ];

@@ -1,10 +1,10 @@
 @php
     $defaultQrTtl = max(10, (int) config('vibe.auth.qr_login.ttl', 120));
     $initialRemainingQrTtl = $qrExpiresAt ? max(0, $qrExpiresAt - now()->timestamp) : $defaultQrTtl;
-    $formattedDefaultQrTtl = sprintf('%02d:%02d', intdiv($initialRemainingQrTtl, 60), $initialRemainingQrTtl % 60);
     $initialQrPayload = ($qrMode && in_array($qrStatus, ['pending', 'scanned', 'approved'], true) && $qrToken)
         ? [
             'token' => $qrToken,
+            'ttl' => $initialRemainingQrTtl,
             'expiresAt' => $qrExpiresAt,
             'status' => $qrStatus,
             'exchangeCode' => $qrExchangeCode,
@@ -18,9 +18,9 @@
 <div
     class="space-y-5"
     @if (config('vibe.auth.qr_login.enabled', true))
-        x-data="typeof window.vibeQrLogin === 'function' ? window.vibeQrLogin({ labels: @js(__('auth/qr_login')), initial: @js($initialQrPayload) }) : {
-            status: @js($qrStatus && $qrStatus !== 'idle' ? $qrStatus : 'pending'),
-            remainingSeconds: @js($initialRemainingQrTtl),
+        x-data="typeof window.vibeQrLogin === 'function' ? window.vibeQrLogin({ labels: @js(__('auth/qr_login')) }) : {
+            status: 'pending',
+            remainingSeconds: {{ $defaultQrTtl }},
             errorMessage: null,
             resetAutoRefresh() {},
             formattedRemaining() {
@@ -30,10 +30,27 @@
                 return String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
             },
             statusMessage() {
-                return this.status === 'scanned' ? @js(__('auth/qr_login.status_scanned')) : @js(__('auth/qr_login.status_pending'));
+                let s = this.status;
+                const el = this.$el?.querySelector('[data-qr-challenge]');
+                if (el && el.dataset.qrChallenge) {
+                    try { s = JSON.parse(el.dataset.qrChallenge).status || s; } catch (e) {}
+                }
+                return s === 'scanned' ? @js(__('auth/qr_login.status_scanned')) : @js(__('auth/qr_login.status_pending'));
             },
             init() {
                 var self = this;
+                const el = this.$el?.querySelector('[data-qr-challenge]');
+                if (el && el.dataset.qrChallenge) {
+                    try {
+                        const parsed = JSON.parse(el.dataset.qrChallenge);
+                        if (parsed && parsed.ttl !== undefined) {
+                            this.remainingSeconds = Number(parsed.ttl) || 0;
+                        }
+                        if (parsed && parsed.status) {
+                            this.status = parsed.status;
+                        }
+                    } catch (e) {}
+                }
                 window.addEventListener('vibe-qr-login-ready', function() {
                     if (typeof window.vibeQrLogin === 'function' && window.Alpine && self.$el && self.$el.isConnected) {
                         if (typeof window.Alpine.destroyTree === 'function') {
@@ -209,7 +226,10 @@
             @endif
 
             @if ($qrApproveUrl && $qrStatus !== 'unconfigured')
-                <div class="flex flex-col items-center gap-3.5">
+                <div
+                    class="flex flex-col items-center gap-3.5"
+                    data-qr-challenge="{{ $initialQrPayload ? json_encode($initialQrPayload) : '' }}"
+                >
                     <div class="relative inline-flex items-center justify-center" wire:key="qr-challenge-{{ $qrToken }}">
                         <div class="transition-all duration-200" :class="{ 'opacity-20 blur-[2px] pointer-events-none scale-[0.98]': ['expired', 'rejected', 'error'].includes(status) }">
                             <vibe:display.qrcode
@@ -221,36 +241,40 @@
                         </div>
 
                         <div
-                            x-show="['expired', 'rejected', 'error'].includes(status)"
-                            x-cloak
-                            class="absolute inset-0 flex items-center justify-center p-4 text-center"
+                            :class="{ 'hidden': !['expired', 'rejected', 'error'].includes(status) }"
+                            class="absolute inset-0 p-4 {{ in_array($qrStatus, ['expired', 'rejected', 'error'], true) ? '' : 'hidden' }}"
                         >
-                            <div class="rounded-xl bg-background/90 backdrop-blur-sm border border-border/80 px-4 py-3 shadow-md space-y-2.5">
-                                <p class="text-xs font-medium text-foreground" x-text="statusMessage()"></p>
-                                <vibe:button
-                                    type="button"
-                                    variant="primary"
-                                    size="xs"
-                                    class="rounded-full shadow-xs"
-                                    @click="resetAutoRefresh()"
-                                    wire:click="refreshQrLogin"
-                                    wire:target="refreshQrLogin"
-                                    :loading="__('auth/qr_login.opening')"
-                                >
-                                    <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-                                        <path d="M3 3v5h5" />
-                                        <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
-                                        <path d="M16 16h5v5" />
-                                    </svg>
-                                    <span>{{ __('auth/qr_login.refresh') }}</span>
-                                </vibe:button>
+                            <div class="size-full flex items-center justify-center text-center">
+                                <div class="rounded-xl bg-background/90 backdrop-blur-sm border border-border/80 px-4 py-3 shadow-md space-y-2.5">
+                                    <p class="text-xs font-medium text-foreground" x-text="statusMessage()"></p>
+                                    <vibe:button
+                                        type="button"
+                                        variant="primary"
+                                        size="xs"
+                                        class="rounded-full shadow-xs"
+                                        @click="resetAutoRefresh()"
+                                        wire:click="refreshQrLogin"
+                                        wire:target="refreshQrLogin"
+                                        :loading="__('auth/qr_login.opening')"
+                                    >
+                                        <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                                            <path d="M3 3v5h5" />
+                                            <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
+                                            <path d="M16 16h5v5" />
+                                        </svg>
+                                        <span>{{ __('auth/qr_login.refresh') }}</span>
+                                    </vibe:button>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     {{-- Single-Line Status & Countdown Pill --}}
-                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 bg-muted/45 text-xs max-w-full">
+                    <div
+                        wire:ignore
+                        class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/70 bg-muted/45 text-xs max-w-full"
+                    >
                         <span class="size-2 rounded-full shrink-0 animate-pulse" :class="{
                             'bg-amber-500': status === 'scanned' || status === 'refreshing',
                             'bg-emerald-500': status === 'approved' || status === 'pending',
@@ -263,7 +287,8 @@
                             'text-muted-foreground': status === 'pending'
                         }" x-text="statusMessage()">{{ $qrStatus === 'scanned' ? __('auth/qr_login.status_scanned') : __('auth/qr_login.status_pending') }}</span>
                         <span
-                            x-show="remainingSeconds > 0 && !['expired', 'rejected', 'approved'].includes(status)"
+                            x-show="remainingSeconds > 0 && ['pending', 'scanned'].includes(status)"
+                            x-cloak
                             x-text="formattedRemaining()"
                             class="pl-2 border-l border-border/70 font-mono text-[11px] font-semibold tabular-nums text-foreground/80 shrink-0"
                         ></span>

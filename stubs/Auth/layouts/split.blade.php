@@ -30,54 +30,6 @@
 
 <body class="font-medium font-sans antialiased bg-background text-foreground selection:bg-primary selection:text-primary-foreground vibe-scrollbar">
 
-    {{-- Global Theme Toggle + Language Switcher --}}
-    <div class="fixed top-4 right-4 z-50 flex items-center gap-2" x-data="{
-        isDark: document.documentElement.classList.contains('dark'),
-        toggle(e) {
-            window.VibeTheme ? window.VibeTheme.toggle(e) : document.documentElement.classList.toggle('dark');
-        }
-    }" @vibe-theme-changed.window="isDark = document.documentElement.classList.contains('dark')">
-        {{-- Language Switcher --}}
-        <div class="relative" x-data="{ open: false }" @click.outside="open = false">
-            <button type="button" @click="open = !open" class="inline-flex items-center justify-center size-8 rounded-lg border border-border/80 bg-card/80 backdrop-blur-sm text-foreground/80 hover:text-foreground shadow-2xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring" :title="'{{ __('auth/language.switch') }}'" aria-label="{{ __('auth/language.switch') }}">
-                <svg class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <ellipse cx="12" cy="12" rx="4" ry="10"/>
-                    <path d="M2 12h20"/>
-                </svg>
-            </button>
-            <div x-show="open" x-cloak x-transition:enter="transition ease-out duration-100" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95" class="absolute right-0 mt-1.5 w-36 rounded-xl border border-border bg-card shadow-md z-50 overflow-hidden">
-                @php
-                    $supportedLocales = [
-                        'id' => ['flag' => '🇮🇩', 'label' => __('auth/language.id')],
-                        'en' => ['flag' => '🇺🇸', 'label' => __('auth/language.en')],
-                    ];
-                    $activeLocale = app()->getLocale();
-                @endphp
-                @foreach ($supportedLocales as $code => $loc)
-                    @php $isActive = ($activeLocale === $code); @endphp
-                    <a href="{{ route('locale.switch', $code) }}" class="flex items-center gap-2.5 px-3 py-2 text-xs font-medium transition-colors {{ $isActive ? 'text-primary bg-primary/8 font-semibold' : 'text-foreground/80 hover:bg-muted/50 hover:text-foreground' }}">
-                        <span class="text-base leading-none">{{ $loc['flag'] }}</span>
-                        {{ $loc['label'] }}
-                        @if($isActive)
-                            <svg class="size-3 ml-auto text-primary" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>
-                        @endif
-                    </a>
-                @endforeach
-            </div>
-        </div>
-        {{-- Theme Toggle --}}
-        <button type="button" @click="toggle($event)" class="inline-flex items-center justify-center size-8 rounded-lg border border-border/80 bg-card/80 backdrop-blur-sm text-foreground/80 hover:text-foreground shadow-2xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-ring" title="{{ __('auth/layout.toggle_theme') }}" aria-label="{{ __('auth/layout.toggle_theme') }}">
-            <svg x-show="!isDark" class="size-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22C17.523 22 22 17.523 22 12c0-.463-.693-.539-.933-.143C19.929 13.74 17.862 15 15.5 15 11.91 15 9 12.09 9 8.5c0-2.362 1.26-4.429 3.143-5.567.396-.24.32-.933-.143-.933C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10Z"/>
-            </svg>
-            <svg x-show="isDark" x-cloak class="size-4 text-amber-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="5"/>
-                <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M19.78 4.22l-2.22 2.03M4.22 4.22l2.22 2.03M6.44 17.56l-2.22 2.22M19.78 19.78l-2.22-2.22"/>
-            </svg>
-        </button>
-    </div>
-
     {{-- Split Screen Layout Variant --}}
     <div class="min-h-screen w-full grid lg:grid-cols-2">
         {{-- Left Column: Visual Branding --}}
