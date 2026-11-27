@@ -60,6 +60,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
         Route::view('/idle', 'docs.auth.idle')->name('idle');
         Route::view('/two-factor', 'docs.auth.two-factor')->name('two-factor');
         Route::view('/passkey', 'docs.auth.passkey')->name('passkey');
+        Route::view('/qr-login', 'docs.auth.qr-login')->name('qr-login');
     });
 
     Route::prefix('form')->name('form.')->group(function () {

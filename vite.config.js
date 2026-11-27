@@ -191,6 +191,7 @@ export default defineConfig({
                 'resources/js/vibe/highlightjs.js',
                 'resources/js/vibe/table.js',
                 'resources/js/vibe/passkeys.js',
+                'resources/js/vibe/qr-login.js',
                 'resources/js/vibe/idle.js',
                 'resources/js/vibe/qrcode.js',
                 'resources/js/vibe/datatable.js',

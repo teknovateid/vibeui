@@ -21,6 +21,9 @@
     @if (config('passkeys.enabled', true))
         @vite(['resources/js/vibe/passkeys.js'])
     @endif
+    @if (config('vibe.auth.qr_login.enabled', true))
+        @vite(['resources/js/vibe/qr-login.js'])
+    @endif
     @livewireStyles
     @stack('head')
 </head>

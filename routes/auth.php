@@ -4,6 +4,7 @@ use App\Livewire\Auth\Concerns\AuthenticatesUsers;
 use App\Livewire\Auth\ConfirmPassword;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
+use App\Livewire\Auth\QrApprove;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\ResetPassword;
 use App\Livewire\Auth\TwoFactorChallenge;
@@ -13,9 +14,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Teknovate\VibeUi\Services\QrLogin\QrLoginService;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', Login::class)->name('login');
+    Route::get('/login/qr/status/{token}', function (Request $request, string $token, QrLoginService $qrLogin) {
+        abort_unless($qrLogin->isEnabled(), 404);
+
+        $status = $qrLogin->statusForDeviceA($token, $request);
+
+        return response()->json($status, ($status['status'] ?? '') === 'unauthorized' ? 403 : 200);
+    })->middleware('throttle:60,1')->name('qr-login.status');
     Route::get('/register', Register::class)->name('register');
     Route::get('/forgot-password', ForgotPassword::class)->name('password.request');
     Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
@@ -23,6 +32,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
+    Route::get('/qr-login/approve/{token?}', QrApprove::class)
+        ->middleware('throttle:30,1')
+        ->name('qr-login.approve');
     Route::get('/verify-email', VerifyEmail::class)->name('verification.notice');
 
     Route::get('/verify-email/{id}/{hash}', function (EmailVerificationRequest $request) {

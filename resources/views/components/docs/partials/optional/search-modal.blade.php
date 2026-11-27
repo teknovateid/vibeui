@@ -132,6 +132,16 @@
             'icon' => 'key',
             'keywords' => 'auth passkey webauthn fido2 biometrik fingerprint sidik jari faceid touchid login tanpa kata sandi security key',
         ],
+        [
+            'id' => 'menu-auth-qr-login',
+            'title' => __('docs/sidebar.nav.auth.qr_login') ?: __('docs/search.menu_items.auth_qr_login.title'),
+            'subtitle' => __('docs/search.menu_items.auth_qr_login.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['auth'],
+            'url' => route('docs.auth.qr-login'),
+            'icon' => 'key',
+            'keywords' => 'auth qr code login pusher reverb ably broadcasting realtime lintas perangkat',
+        ],
 
         // Components - Forms
         [

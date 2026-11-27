@@ -78,6 +78,7 @@ return [
             'idle' => 'Idle Timeout',
             'two_factor' => 'Two-Factor (2FA)',
             'passkey' => 'Passkey (WebAuthn)',
+            'qr_login' => 'QR Code Login',
         ],
     ],
 

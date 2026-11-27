@@ -263,6 +263,10 @@ return [
             'title' => 'Passkey (WebAuthn)',
             'subtitle' => 'Modern biometric passwordless login via TouchID, FaceID, & FIDO2',
         ],
+        'auth_qr_login' => [
+            'title' => 'QR Code Login',
+            'subtitle' => 'Cross-device passwordless login via Pusher or any swappable Laravel broadcast driver',
+        ],
         'input_standard' => [
             'title' => 'Standard Input',
             'subtitle' => 'Text, password, email, prefix icons, and helper text',

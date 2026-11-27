@@ -159,7 +159,7 @@
                     </a>
 
                     {{-- Modul 5: Passkey WebAuthn --}}
-                    <a href="{{ route('docs.auth.passkey') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3 md:col-span-2">
+                    <a href="{{ route('docs.auth.passkey') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
                         <div class="flex items-center justify-between">
                             <div class="p-2.5 rounded-xl bg-sky-500/10 text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform">
                                 <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -185,6 +185,33 @@
                             </h3>
                             <p class="text-xs text-muted-foreground mt-1 leading-relaxed">
                                 Masa depan autentikasi modern tanpa risiko phishing. Masuk dalam hitungan detik menggunakan Touch ID, Face ID, Windows Hello, atau kunci fisik YubiKey berbasis paket resmi <code>laravel/passkeys</code>.
+                            </p>
+                        </div>
+                    </a>
+
+                    {{-- Modul 6: QR Code Login --}}
+                    <a href="{{ route('docs.auth.qr-login') }}" class="group block p-5 rounded-2xl border border-border bg-card hover:border-primary/50 transition-all shadow-2xs hover:shadow-xs space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 group-hover:scale-105 transition-transform">
+                                <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect width="5" height="5" x="3" y="3" rx="1"/>
+                                    <rect width="5" height="5" x="16" y="3" rx="1"/>
+                                    <rect width="5" height="5" x="3" y="16" rx="1"/>
+                                    <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+                                    <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+                                </svg>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <vibe:badge variant="primary" size="xs" class="rounded-full">Pusher Default</vibe:badge>
+                                <vibe:badge variant="outline" size="xs" class="rounded-full">Swappable Driver</vibe:badge>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-bold text-foreground group-hover:text-primary transition-colors">
+                                Login Lintas Perangkat via QR Code &rarr;
+                            </h3>
+                            <p class="text-xs text-muted-foreground mt-1 leading-relaxed">
+                                Pindai QR Code dari ponsel yang sudah login untuk menyetujui sesi baru secara real-time. Memakai koneksi Pusher dari Laravel Broadcasting secara default dan mudah ditukar ke Reverb, Ably, Polling, atau custom driver.
                             </p>
                         </div>
                     </a>

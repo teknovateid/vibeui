@@ -215,6 +215,36 @@
                 </vibe:preview>
             </section>
 
+            {{-- 6. Mode Alfanumerik & Separator --}}
+            <section id="mode-alfanumerik" class="space-y-4">
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-foreground">6. Mode Alfanumerik, Separator &amp; Auto-Submit</h2>
+                    <p class="text-sm text-muted-foreground">
+                        Gunakan atribut <code>alphanumeric</code> untuk mengizinkan huruf kapital + angka (seperti pairing code), <code>separator="-"</code> untuk memberi pemisah grup otomatis, dan <code>auto-submit</code> agar form otomatis terkirim saat semua kotak terisi:
+                    </p>
+                </div>
+
+                <vibe:preview title="8 Karakter Pairing Code dengan Auto-Submit">
+                    <vibe:preview.code>
+<\vibe:input.otp
+    name="pairing_code"
+    label="Pairing Code"
+    length="8"
+    alphanumeric
+    separator="-"
+    auto-submit
+/>
+                    </vibe:preview.code>
+                    <vibe:input.otp
+                        name="pairing_code_demo"
+                        label="Pairing Code"
+                        length="8"
+                        alphanumeric
+                        separator="-"
+                    />
+                </vibe:preview>
+            </section>
+
         </div>
 
         {{-- Table of Contents Sidebar --}}

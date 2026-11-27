@@ -263,6 +263,10 @@ return [
             'title' => 'Passkey (WebAuthn)',
             'subtitle' => 'Autentikasi biometrik modern tanpa password via TouchID, FaceID, & FIDO2',
         ],
+        'auth_qr_login' => [
+            'title' => 'Login QR Code',
+            'subtitle' => 'Login lintas perangkat dengan Pusher (default) atau driver broadcasting Laravel yang dapat diganti',
+        ],
         'input_standard' => [
             'title' => 'Input Standar',
             'subtitle' => 'Input teks, password, email, prefix icon, dan helper text',

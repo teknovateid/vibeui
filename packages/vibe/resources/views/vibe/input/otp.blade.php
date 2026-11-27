@@ -7,6 +7,10 @@
     'length' => 6,
     'mask' => false,
     'autoSubmit' => false,
+    'alphanumeric' => false,
+    'separator' => null,
+    'separatorAt' => null,
+    'autofocus' => false,
     'description' => null,
     'size' => 'md', // xs, sm, md, lg, xl
     'variant' => 'primary', // primary, outline, filled
@@ -29,6 +33,13 @@
 
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
     $isReadonly = $readonly || ($attributes->has('readonly') && $attributes->get('readonly') !== false);
+    $isAlphanumeric = (bool) $alphanumeric;
+    $hasAutofocus = (bool) $autofocus || ($attributes->has('autofocus') && $attributes->get('autofocus') !== false);
+
+    $resolvedSeparator = is_string($separator) && $separator !== '' ? $separator : null;
+    $resolvedSeparatorAt = $resolvedSeparator !== null
+        ? ($separatorAt !== null ? max(1, min($length - 1, (int) $separatorAt)) : ($length >= 4 && $length % 2 === 0 ? intdiv($length, 2) : null))
+        : null;
 
     $initialVal = '';
     if (!empty($name) && !is_array(old($name))) {
@@ -38,13 +49,14 @@
     }
     $wireModel = $attributes->wire('model')->value();
 
+    $gapClasses = $length >= 7 ? 'gap-1 sm:gap-1.5' : 'gap-2';
     $boxSizeClasses = match ($size) {
         'xs' => 'w-7 h-8 text-xs rounded-md',
-        'sm' => 'w-8 h-9 text-sm rounded-md',
-        'md' => 'w-10 h-11 text-base rounded-lg',
-        'lg' => 'w-12 h-13 text-lg rounded-xl',
+        'sm' => $length >= 7 ? 'w-7 h-8 sm:w-8 sm:h-9 text-xs sm:text-sm rounded-md' : 'w-8 h-9 text-sm rounded-md',
+        'md' => $length >= 7 ? 'w-7 h-9 sm:w-9 sm:h-11 text-sm sm:text-base rounded-lg' : 'w-10 h-11 text-base rounded-lg',
+        'lg' => $length >= 7 ? 'w-8 h-10 sm:w-10 sm:h-12 text-base sm:text-lg rounded-xl' : 'w-12 h-13 text-lg rounded-xl',
         'xl' => 'w-14 h-15 text-xl rounded-xl',
-        default => 'w-10 h-11 text-base rounded-lg',
+        default => $length >= 7 ? 'w-7 h-9 sm:w-9 sm:h-11 text-sm sm:text-base rounded-lg' : 'w-10 h-11 text-base rounded-lg',
     };
 
     $variantClasses = match ($variant) {
@@ -56,7 +68,7 @@
     $errorBoxClasses = $hasError ? 'border-destructive text-destructive focus:border-destructive focus:ring-destructive/20' : '';
 @endphp
 
-<div class="space-y-1.5 w-fit" id="{{ $id }}-container">
+<div class="space-y-1.5 w-fit max-w-full" id="{{ $id }}-container">
     @if ($label)
         <label for="{{ $id }}-0" class="block text-xs font-semibold text-foreground select-none">
             {{ $label }}
@@ -67,26 +79,35 @@
         <p class="text-xs text-muted-foreground select-none">{{ $description }}</p>
     @endif
 
-    <div 
+    <div
         x-data="{
             length: {{ $length }},
             mask: {{ $mask ? 'true' : 'false' }},
             autoSubmit: {{ $autoSubmit ? 'true' : 'false' }},
+            alphanumeric: {{ $isAlphanumeric ? 'true' : 'false' }},
             digits: Array({{ $length }}).fill(''),
             idPrefix: '{{ $id }}-',
+            _lastAutoSubmitted: null,
+            sanitize(val) {
+                const raw = String(val ?? '');
+                return this.alphanumeric
+                    ? raw.toUpperCase().replace(/[^A-Z0-9]/g, '')
+                    : raw.replace(/\D/g, '');
+            },
             init() {
                 let initVal = '{{ addslashes($initialVal) }}';
                 if (initVal) {
                     this.populateFromValue(initVal);
                 }
 
-                // Listen to external input event for vibe:form restoreFromStorage()
+                // Listen to external input event for vibe:form restoreFromStorage() or Livewire updates
                 this.$nextTick(() => {
                     let hidden = this.$refs.hiddenInput;
                     if (hidden) {
                         hidden.addEventListener('input', (e) => {
-                            if (e.target.value !== this.digits.join('')) {
-                                this.populateFromValue(e.target.value);
+                            let sanitized = this.sanitize(e.target.value);
+                            if (sanitized !== this.digits.join('')) {
+                                this.populateFromValue(sanitized);
                             }
                         });
                     }
@@ -95,13 +116,14 @@
             populateFromValue(val) {
                 if (!val) {
                     this.digits = Array(this.length).fill('');
+                    this._lastAutoSubmitted = null;
                     for (let i = 0; i < this.length; i++) {
                         let el = document.getElementById(this.idPrefix + i);
                         if (el) el.value = '';
                     }
                     return;
                 }
-                let clean = String(val).replace(/\s+/g, '').slice(0, this.length).split('');
+                let clean = this.sanitize(val).slice(0, this.length).split('');
                 for (let i = 0; i < this.length; i++) {
                     this.digits[i] = clean[i] || '';
                     let el = document.getElementById(this.idPrefix + i);
@@ -119,7 +141,10 @@
                 }
                 this.$dispatch('otp-change', full);
 
-                if (full.length === this.length && this.autoSubmit) {
+                if (full.length < this.length) {
+                    this._lastAutoSubmitted = null;
+                } else if (this.autoSubmit && this.digits.every((d) => d !== '') && full !== this._lastAutoSubmitted) {
+                    this._lastAutoSubmitted = full;
                     this.$nextTick(() => {
                         let form = this.$el.closest('form');
                         if (form) {
@@ -135,15 +160,12 @@
                     this.updateValue();
                     return;
                 }
-                if (val.length > 1) {
-                    let digitsOnly = val.replace(/\D/g, '');
-                    if (digitsOnly.length > 1) {
-                        this.distributeText(digitsOnly, index);
-                        return;
-                    }
-                    val = digitsOnly || val.slice(-1);
+                let cleaned = this.sanitize(val);
+                if (cleaned.length > 1) {
+                    this.distributeText(cleaned, index);
+                    return;
                 }
-                let clean = val.replace(/\D/g, '');
+                let clean = cleaned;
                 this.digits[index] = clean;
                 event.target.value = clean;
                 this.updateValue();
@@ -153,11 +175,12 @@
                 }
             },
             handleKeyDown(index, event) {
-                // Intercept numeric keys 0-9 directly for instant replacement and reliable focus progression
-                if (/^[0-9]$/.test(event.key)) {
+                const keyPattern = this.alphanumeric ? /^[a-zA-Z0-9]$/ : /^[0-9]$/;
+                if (!event.ctrlKey && !event.metaKey && !event.altKey && keyPattern.test(event.key)) {
                     event.preventDefault();
-                    this.digits[index] = event.key;
-                    event.target.value = event.key;
+                    let ch = this.alphanumeric ? event.key.toUpperCase() : event.key;
+                    this.digits[index] = ch;
+                    event.target.value = ch;
                     this.updateValue();
                     if (index < this.length - 1) {
                         this.focusBox(index + 1);
@@ -204,13 +227,13 @@
             handlePaste(event) {
                 event.preventDefault();
                 let paste = (event.clipboardData || window.clipboardData)?.getData('text') || '';
-                let clean = paste.replace(/\D/g, '');
+                let clean = this.sanitize(paste);
                 if (clean) {
                     this.distributeText(clean, 0);
                 }
             },
             distributeText(text, startIndex = 0) {
-                let clean = text.replace(/\D/g, '');
+                let clean = this.sanitize(text);
                 let chars = clean.split('');
                 for (let i = 0; i < chars.length && (startIndex + i) < this.length; i++) {
                     let idx = startIndex + i;
@@ -236,12 +259,12 @@
                 setTimeout(doFocus, 10);
             }
         }"
-        class="flex items-center gap-2"
+        class="flex items-center justify-center {{ $gapClasses }}"
         @paste="handlePaste($event)"
     >
         {{-- Hidden input for traditional HTML form submit, vibe:form, and Livewire --}}
-        <input 
-            type="hidden" 
+        <input
+            type="hidden"
             x-ref="hiddenInput"
             id="{{ $id }}"
             @if($name) name="{{ $name }}" @endif
@@ -250,12 +273,16 @@
             @if($hasError) aria-invalid="true" @endif
         />
 
-        {{-- Digit Slot Boxes --}}
+        {{-- Character / Digit Slot Boxes --}}
         @for ($i = 0; $i < $length; $i++)
-            <input 
+            @if ($resolvedSeparator && $i === $resolvedSeparatorAt)
+                <span aria-hidden="true" class="text-muted-foreground font-mono font-bold select-none shrink-0 px-0.5">{{ $resolvedSeparator }}</span>
+            @endif
+
+            <input
                 type="{{ $mask ? 'password' : 'text' }}"
-                inputmode="numeric"
-                pattern="[0-9]*"
+                inputmode="{{ $isAlphanumeric ? 'text' : 'numeric' }}"
+                pattern="{{ $isAlphanumeric ? '[A-Za-z0-9]*' : '[0-9]*' }}"
                 maxlength="2"
                 id="{{ $id }}-{{ $i }}"
                 data-otp-index="{{ $i }}"
@@ -266,9 +293,16 @@
                 @focus="$event.target.select()"
                 @if($isDisabled) disabled @endif
                 @if($isReadonly) readonly @endif
-                autocomplete="one-time-code"
-                class="text-center font-bold font-mono border shadow-2xs focus:ring-2 focus:outline-none transition-all duration-150 select-none {{ $boxSizeClasses }} {{ $variantClasses }} {{ $errorBoxClasses }}"
-                aria-label="{{ __('vibe/input.digit_label', ['digit' => $i + 1, 'total' => $length]) ?? 'Digit ' . ($i + 1) }}"
+                @if($hasAutofocus && $i === 0) autofocus @endif
+                @if($isAlphanumeric)
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                @else
+                    autocomplete="one-time-code"
+                @endif
+                class="text-center font-bold font-mono border shadow-2xs focus:ring-2 focus:outline-none transition-all duration-150 select-none {{ $isAlphanumeric ? 'uppercase ' : '' }}{{ $boxSizeClasses }} {{ $variantClasses }} {{ $errorBoxClasses }}"
+                aria-label="{{ $isAlphanumeric ? ('Character ' . ($i + 1) . ' of ' . $length) : (__('vibe/input.digit_label', ['digit' => $i + 1, 'total' => $length]) ?? 'Digit ' . ($i + 1)) }}"
             />
         @endfor
     </div>

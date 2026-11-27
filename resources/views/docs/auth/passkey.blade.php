@@ -374,10 +374,10 @@ php artisan vibe:auth --without-passkeys
                     </div>
                 </a>
 
-                <a href="{{ route('docs.auth.index') }}" class="w-full sm:w-auto inline-flex items-center justify-between sm:justify-end gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group text-right">
+                <a href="{{ route('docs.auth.qr-login') }}" class="w-full sm:w-auto inline-flex items-center justify-between sm:justify-end gap-2 p-3.5 rounded-xl border border-border bg-card hover:border-primary/50 transition-colors group text-right">
                     <div>
-                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Kembali ke Hub</span>
-                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Ikhtisar Autentikasi &rarr;</span>
+                        <span class="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block">Selanjutnya</span>
+                        <span class="text-xs font-semibold text-foreground group-hover:text-primary transition-colors">Login QR Code &rarr;</span>
                     </div>
                 </a>
             </div>

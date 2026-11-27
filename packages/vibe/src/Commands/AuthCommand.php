@@ -20,6 +20,8 @@ class AuthCommand extends Command
         {--login-by= : Login identifier mode (email, username, phone, email_or_username, any)}
         {--without-passkeys : Scaffold authentication without Passkeys (WebAuthn)}
         {--with-passkeys : Force enable Passkeys without prompting}
+        {--without-qr-login : Scaffold authentication without QR Code login}
+        {--with-qr-login : Force enable QR Code login without prompting}
         {--migrate : Run database migrations after scaffolding}
         {--force : Overwrite existing files}';
 
@@ -80,6 +82,22 @@ class AuthCommand extends Command
             );
         } else {
             $enablePasskeys = true;
+        }
+
+        $withoutQrLogin = (bool) $this->option('without-qr-login');
+        $withQrLogin = (bool) $this->option('with-qr-login');
+
+        if ($withoutQrLogin) {
+            $enableQrLogin = false;
+        } elseif ($withQrLogin) {
+            $enableQrLogin = true;
+        } elseif ($this->input->isInteractive()) {
+            $enableQrLogin = confirm(
+                label: 'Do you want to enable QR Code cross-device login (Pusher default, swappable broadcast driver)?',
+                default: true
+            );
+        } else {
+            $enableQrLogin = true;
         }
 
         $force = (bool) $this->option('force');
@@ -218,7 +236,7 @@ class AuthCommand extends Command
         });
 
         // 7. Update Configuration
-        $this->components->task('Updating config/vibe.php settings', function () use ($loginBy, $layout, $enablePasskeys) {
+        $this->components->task('Updating config/vibe.php settings', function () use ($loginBy, $layout, $enablePasskeys, $enableQrLogin) {
             $configFile = config_path('vibe.php');
             if (File::exists($configFile)) {
                 $content = File::get($configFile);
@@ -260,6 +278,26 @@ class AuthCommand extends Command
                         } else {
                             $envContent .= "\nPASSKEYS_ENABLED={$passkeyValue}\n";
                         }
+
+                        $qrLoginValue = $enableQrLogin ? 'true' : 'false';
+                        if (str_contains($envContent, 'VIBE_QR_LOGIN_ENABLED=')) {
+                            $envContent = preg_replace('/VIBE_QR_LOGIN_ENABLED=[^\r\n]*/', "VIBE_QR_LOGIN_ENABLED={$qrLoginValue}", $envContent);
+                        } else {
+                            $envContent .= "VIBE_QR_LOGIN_ENABLED={$qrLoginValue}\n";
+                        }
+                        if (! str_contains($envContent, 'VIBE_QR_LOGIN_DRIVER=')) {
+                            $envContent .= "VIBE_QR_LOGIN_DRIVER=pusher\n";
+                        }
+                        if (! str_contains($envContent, 'VIBE_QR_LOGIN_TTL=')) {
+                            $envContent .= "VIBE_QR_LOGIN_TTL=120\n";
+                        }
+                        if (! str_contains($envContent, 'VIBE_QR_LOGIN_AUTO_REFRESH=')) {
+                            $envContent .= "VIBE_QR_LOGIN_AUTO_REFRESH=true\n";
+                        }
+                        if (! str_contains($envContent, 'VIBE_QR_LOGIN_MAX_AUTO_REFRESH=')) {
+                            $envContent .= "VIBE_QR_LOGIN_MAX_AUTO_REFRESH=0\n";
+                        }
+
                         File::put($envFile, $envContent);
                     }
                 }
@@ -284,18 +322,34 @@ class AuthCommand extends Command
                     }
                 }
             });
+        }
 
-            // 9. Ensure Vite Assets & NPM Dependencies for Passkeys
-            $this->components->task('Ensuring Vite assets and Passkeys dependencies', function () {
-                // Ensure passkeys.js is published if missing
-                $passkeysDest = resource_path('js/vibe/passkeys.js');
-                if (! File::exists($passkeysDest)) {
-                    $src = __DIR__.'/../../resources/js/vibe/passkeys.js';
-                    if (File::exists($src)) {
-                        File::ensureDirectoryExists(dirname($passkeysDest));
-                        File::copy($src, $passkeysDest);
-                    } else {
-                        $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
+        if ($enablePasskeys || $enableQrLogin) {
+            // 9. Ensure Vite Assets & NPM Dependencies for Passkeys & QR Login
+            $this->components->task('Ensuring Vite assets and Auth JS dependencies', function () use ($enablePasskeys, $enableQrLogin) {
+                if ($enablePasskeys) {
+                    $passkeysDest = resource_path('js/vibe/passkeys.js');
+                    if (! File::exists($passkeysDest)) {
+                        $src = __DIR__.'/../../resources/js/vibe/passkeys.js';
+                        if (File::exists($src)) {
+                            File::ensureDirectoryExists(dirname($passkeysDest));
+                            File::copy($src, $passkeysDest);
+                        } else {
+                            $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
+                        }
+                    }
+                }
+
+                if ($enableQrLogin) {
+                    $qrLoginDest = resource_path('js/vibe/qr-login.js');
+                    if (! File::exists($qrLoginDest)) {
+                        $src = __DIR__.'/../../resources/js/vibe/qr-login.js';
+                        if (File::exists($src)) {
+                            File::ensureDirectoryExists(dirname($qrLoginDest));
+                            File::copy($src, $qrLoginDest);
+                        } else {
+                            $this->callSilent('vendor:publish', ['--tag' => 'vibe-assets', '--force' => true]);
+                        }
                     }
                 }
 

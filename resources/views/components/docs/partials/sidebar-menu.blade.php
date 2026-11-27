@@ -89,6 +89,9 @@
             <vibe:nav.item href="{{ route('docs.auth.passkey') }}" :active="request()->routeIs('docs.auth.passkey')">
                 {{ __('docs/sidebar.nav.auth.passkey') }}
             </vibe:nav.item>
+            <vibe:nav.item href="{{ route('docs.auth.qr-login') }}" :active="request()->routeIs('docs.auth.qr-login')">
+                {{ __('docs/sidebar.nav.auth.qr_login') }}
+            </vibe:nav.item>
         </vibe:nav.group>
     </vibe:nav.label>
 
