@@ -72,7 +72,8 @@
 @php
     $wireModelAttr = $attributes->whereStartsWith('wire:model')->first();
     $name = $name ?? $wireModelAttr;
-    $id = $id ?? ($name ? 'filepond-' . preg_replace('/[^a-zA-Z0-9\-_]/', '-', $name) . '-' . uniqid() : uniqid('filepond-'));
+    $sanitizedPondName = $name ? trim(preg_replace('/[^a-zA-Z0-9\-_]+/', '-', (string) $name), '-') : '';
+    $id = $id ?? ($sanitizedPondName !== '' ? 'filepond-' . $sanitizedPondName : uniqid('filepond-'));
     $errorKey = $errorName ?? ($name ? str_replace(['[', ']'], ['.', ''], rtrim($name, ']')) : null);
 
     $hasError = !empty($error) || ($errorKey && $errors->has($errorKey));
@@ -339,8 +340,11 @@
 
 <div 
     id="{{ $id }}-container"
+    wire:key="{{ $attributes->get('wire:key') ?? ($id . '-container') }}"
     data-vibe-filepond="{{ $name }}"
     data-drag-handle="{{ $dragHandleMode }}"
+    data-has-error="{{ $hasError ? '1' : '0' }}"
+    data-error-message="{{ $errorMessage ?? '' }}"
     {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass} " . ($isAvatar ? 'filepond-avatar-mode ' : '') . ($isCompact ? 'filepond-compact-mode ' : '') . ($dashed ? 'filepond-dashed ' : 'filepond-solid ') . "filepond-size-{$size} " . ($hasError ? 'filepond-has-error' : ''))]) }}
     :class="{ 'filepond-has-error': hasError || Boolean(serverError) }"
     x-data="typeof window.vibeFilepond === 'function' ? window.vibeFilepond(@js($config)) : {
@@ -422,8 +426,9 @@
     @endif
 
     <div wire:ignore 
+         wire:key="{{ $id }}-pond-ignore"
          @if ($dropHeight) style="min-height: {{ $dropHeight }};" @endif 
-         {{ $attributes->except(['class', 'disabled', 'required'])->twMerge(['class' => 'relative w-full']) }}>
+         {{ $attributes->except(['class', 'disabled', 'required', 'id', 'wire:key'])->twMerge(['class' => 'relative w-full']) }}>
 
         <input 
             x-ref="input" 

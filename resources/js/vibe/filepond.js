@@ -138,6 +138,31 @@ function isSameOrigin(url) {
     }
 }
 
+function resolveUploadMimeType(fileName, rawType) {
+    if (rawType && typeof rawType === 'string' && rawType.trim() !== '') {
+        return rawType.trim();
+    }
+
+    const ext = (String(fileName || '').split('.').pop() || '').toLowerCase();
+    const extMap = {
+        mp4: 'video/mp4',
+        webm: 'video/webm',
+        mov: 'video/quicktime',
+        m4v: 'video/x-m4v',
+        ogg: 'video/ogg',
+        ogv: 'video/ogg',
+        jpg: 'image/jpeg',
+        jpeg: 'image/jpeg',
+        png: 'image/png',
+        webp: 'image/webp',
+        gif: 'image/gif',
+        avif: 'image/avif',
+        svg: 'image/svg+xml',
+    };
+
+    return extMap[ext] || 'application/octet-stream';
+}
+
 /**
  * Attaches modern preview thumbnail for images or document icon with badge for other files
  */
@@ -798,6 +823,40 @@ export function vibeFilepond(config = {}) {
 
             if (config.reorder || config.allowReorder) {
                 this.setupReordering();
+            }
+
+            if (this.$el) {
+                const syncErrorStateFromDom = () => {
+                    if (!this.$el) return;
+                    this.hasError = this.$el.getAttribute('data-has-error') === '1';
+                    this.serverError = this.$el.getAttribute('data-error-message') || null;
+                };
+
+                if (typeof MutationObserver === 'function') {
+                    const errorObserver = new MutationObserver((mutations) => {
+                        const hasErrorMutation = mutations.some(
+                            (m) => m.type === 'attributes' && (m.attributeName === 'data-has-error' || m.attributeName === 'data-error-message')
+                        );
+                        if (!hasErrorMutation) return;
+                        syncErrorStateFromDom();
+                    });
+                    errorObserver.observe(this.$el, {
+                        attributes: true,
+                        attributeFilter: ['data-has-error', 'data-error-message'],
+                    });
+                    this._cleanupListeners.push(() => errorObserver.disconnect());
+                }
+
+                if (typeof window !== 'undefined' && window.Livewire && typeof window.Livewire.hook === 'function') {
+                    const unhookMorph = window.Livewire.hook('morphed', ({ el }) => {
+                        if (this.$el && el && (el === this.$el || el.contains(this.$el))) {
+                            syncErrorStateFromDom();
+                        }
+                    });
+                    if (typeof unhookMorph === 'function') {
+                        this._cleanupListeners.push(unhookMorph);
+                    }
+                }
             }
 
 
@@ -1674,7 +1733,7 @@ export function vibeFilepond(config = {}) {
                     process: (fieldName, file, metadata, load, error, progress, abort) => {
                         const fileName = (file && file.name) || (metadata && metadata.name) || 'uploaded-file';
                         const fileSize = (file && typeof file.size === 'number') ? file.size : 0;
-                        const fileType = (file && file.type) || (/\.svg$/i.test(fileName) ? 'image/svg+xml' : 'application/octet-stream');
+                        const fileType = resolveUploadMimeType(fileName, file && file.type);
 
                         const uploadId = (metadata && metadata.id) ? metadata.id : (fileName + '_' + fileSize + '_' + Math.random());
                         self.activeUploads.add(uploadId);
@@ -1823,10 +1882,12 @@ export function vibeFilepond(config = {}) {
                                         if (xhrUpload.status >= 200 && xhrUpload.status < 300) {
                                             progress(true, fileSize, fileSize);
                                             load(fileKey);
-                                            self.handleUploadSuccess(fileKey, cfg, file);
-                                            const successDetail = { key: fileKey, url: uploadUrl.split('?')[0], isLocal: Boolean(response.is_local), filename: fileName, size: fileSize, file };
-                                            window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-success', { detail: successDetail }));
-                                            if (self.$dispatch) self.$dispatch('vibe-filepond-presigned-success', successDetail);
+                                            self.handleUploadSuccess(fileKey, cfg, file, {
+                                                url: uploadUrl.split('?')[0],
+                                                isLocal: Boolean(response.is_local),
+                                                filename: fileName,
+                                                size: fileSize,
+                                            });
                                         } else {
                                             self.hasError = true;
                                             const statusTpl = self.config?.i18n?.cloud_upload_failed_status || 'Direct upload gagal dengan HTTP :status';
@@ -2090,7 +2151,7 @@ export function vibeFilepond(config = {}) {
             return null;
         },
 
-        handleUploadSuccess(fileKey, cfg, fileObj = null) {
+        handleUploadSuccess(fileKey, cfg, fileObj = null, extraDetail = {}) {
             if (cfg.multiple) {
                 if (!this.uploadedKeys.includes(fileKey)) {
                     this.uploadedKeys.push(fileKey);
@@ -2099,31 +2160,49 @@ export function vibeFilepond(config = {}) {
                 this.uploadedKeys = [fileKey];
             }
 
-            // If Livewire wire:model is set with Presigned URL, sync key to Livewire property
+            const finalizeSuccess = () => {
+                this.updateReactiveState();
+
+                const successDetail = {
+                    ...extraDetail,
+                    key: fileKey,
+                    keys: this.uploadedKeys,
+                    file: fileObj,
+                };
+
+                // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
+                if (this.$dispatch) {
+                    this.$dispatch('vibe-filepond-presigned-success', successDetail);
+                } else {
+                    window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-success', { detail: successDetail }));
+                }
+                if (this.$el) {
+                    this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {
+                        bubbles: true,
+                        detail: { name: cfg.name, key: fileKey, keys: this.uploadedKeys }
+                    }));
+                    this.$el.dispatchEvent(new Event('input', { bubbles: true }));
+                    this.$el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            };
+
+            // If Livewire wire:model is set with Presigned URL, commit key before notifying completion
             if (cfg.wireModel && this.$wire) {
                 const val = cfg.multiple ? this.uploadedKeys : fileKey;
-                this.$wire.set(cfg.wireModel, val);
+                const wireResult = this.$wire.set(cfg.wireModel, val);
+                if (wireResult && typeof wireResult.then === 'function') {
+                    wireResult.then(finalizeSuccess, finalizeSuccess);
+                    return;
+                }
             }
 
-            this.updateReactiveState();
-
-            // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
-            if (this.$dispatch) {
-                this.$dispatch('vibe-filepond-presigned-success', { key: fileKey, keys: this.uploadedKeys });
-            }
-            if (this.$el) {
-                this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {
-                    bubbles: true,
-                    detail: { name: cfg.name, key: fileKey, keys: this.uploadedKeys }
-                }));
-                this.$el.dispatchEvent(new Event('input', { bubbles: true }));
-                this.$el.dispatchEvent(new Event('change', { bubbles: true }));
-            }
+            finalizeSuccess();
         },
 
         handleUploadRevert(fileKey, cfg) {
             if (!fileKey) return;
-            this.uploadedKeys = this.uploadedKeys.filter(k => {
+            const previousLength = this.uploadedKeys.length;
+            const nextKeys = this.uploadedKeys.filter(k => {
                 if (k === fileKey) return false;
                 try {
                     if (decodeURIComponent(k) === decodeURIComponent(fileKey)) return false;
@@ -2134,8 +2213,17 @@ export function vibeFilepond(config = {}) {
                 return true;
             });
 
+            if (nextKeys.length === previousLength) {
+                return;
+            }
+
+            this.uploadedKeys = nextKeys;
+
             if (cfg.wireModel && this.$wire) {
-                const val = cfg.multiple ? this.uploadedKeys : (this.uploadedKeys[0] || null);
+                const emptyVal = (typeof this.$wire.get === 'function' && typeof this.$wire.get(cfg.wireModel) === 'string')
+                    ? ''
+                    : null;
+                const val = cfg.multiple ? this.uploadedKeys : (this.uploadedKeys[0] || emptyVal);
                 this.$wire.set(cfg.wireModel, val);
             }
 
@@ -2144,6 +2232,8 @@ export function vibeFilepond(config = {}) {
             // [FIX BUG-8] Guard against missing $dispatch in fallback Alpine context
             if (this.$dispatch) {
                 this.$dispatch('vibe-filepond-presigned-revert', { key: fileKey, keys: this.uploadedKeys });
+            } else {
+                window.dispatchEvent(new CustomEvent('vibe-filepond-presigned-revert', { detail: { key: fileKey, keys: this.uploadedKeys } }));
             }
             if (this.$el) {
                 this.$el.dispatchEvent(new CustomEvent('vibe-filepond-change', {

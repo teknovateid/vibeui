@@ -35,3 +35,25 @@ test('vibe:filepond supports drag-handle configuration', function () {
         ->toContain('data-drag-handle="hidden"')
         ->toContain('hidden');
 });
+
+test('vibe:filepond renders deterministic id, wire:key, and server error sync attributes across renders', function () {
+    $renderOne = Blade::render('<vibe:filepond name="draft_media_tmp" />');
+    $renderTwo = Blade::render('<vibe:filepond name="draft_media_tmp" />');
+
+    expect($renderOne)
+        ->toBe($renderTwo)
+        ->toContain('id="filepond-draft_media_tmp-container"')
+        ->toContain('wire:key="filepond-draft_media_tmp-container"')
+        ->toContain('wire:key="filepond-draft_media_tmp-pond-ignore"')
+        ->toContain('data-has-error="0"');
+
+    $withError = Blade::render(
+        '<vibe:filepond id="custom-pond" name="draft_media_tmp" error="media gagal diunggah." />'
+    );
+
+    expect($withError)
+        ->toContain('id="custom-pond-container"')
+        ->toContain('wire:key="custom-pond-container"')
+        ->toContain('data-has-error="1"')
+        ->toContain('data-error-message="media gagal diunggah."');
+});
