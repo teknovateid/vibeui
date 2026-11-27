@@ -341,4 +341,150 @@ PHP;
     expect($content)->toContain('use HasFactory, Notifiable, TwoFactorAuthenticatable;');
 });
 
+test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, routes, lang, and JS assets by default', function () {
+    $sandbox = sys_get_temp_dir() . '/vibe_auth_overwrite_' . uniqid();
+    File::ensureDirectoryExists($sandbox);
+
+    try {
+        $makeSandboxCommand = function () use ($sandbox) {
+            $command = new class($sandbox) extends \Teknovate\VibeUi\Commands\AuthCommand {
+                public function __construct(protected string $root)
+                {
+                    parent::__construct();
+                }
+
+                protected function targetBasePath(string $path = ''): string
+                {
+                    return $this->root . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
+                }
+
+                protected function targetAppPath(string $path = ''): string
+                {
+                    return $this->targetBasePath('app' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                }
+
+                protected function targetResourcePath(string $path = ''): string
+                {
+                    return $this->targetBasePath('resources' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                }
+
+                protected function targetConfigPath(string $path = ''): string
+                {
+                    return $this->targetBasePath('config' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                }
+
+                protected function targetDatabasePath(string $path = ''): string
+                {
+                    return $this->targetBasePath('database' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                }
+
+                protected function targetLangPath(string $path = ''): string
+                {
+                    return $this->targetBasePath('lang' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                }
+            };
+
+            $command->setLaravel(app());
+
+            return $command;
+        };
+
+        $seedStaleFiles = function (string $marker) use ($sandbox) {
+            $targets = [
+                'app/Livewire/Auth/Login.php',
+                'app/Livewire/Auth/Register.php',
+                'app/Livewire/Auth/QrApprove.php',
+                'app/Livewire/Auth/Concerns/AuthenticatesUsers.php',
+                'app/Livewire/Settings/Profile.php',
+                'app/Livewire/Settings/TwoFactor.php',
+                'resources/views/auth/login.blade.php',
+                'resources/views/auth/register.blade.php',
+                'resources/views/auth/qr-approve.blade.php',
+                'resources/views/auth/layouts/card.blade.php',
+                'resources/views/livewire/settings/profile.blade.php',
+                'resources/views/livewire/settings/two-factor.blade.php',
+                'routes/auth.php',
+                'lang/en/auth/qr_login.php',
+                'config/passkeys.php',
+                'resources/js/vibe/passkeys.js',
+                'resources/js/vibe/qr-login.js',
+                'resources/js/vibe/qrcode.js',
+            ];
+
+            foreach ($targets as $rel) {
+                $full = $sandbox . DIRECTORY_SEPARATOR . $rel;
+                File::ensureDirectoryExists(dirname($full));
+                File::put($full, $marker);
+            }
+
+            return $targets;
+        };
+
+        File::ensureDirectoryExists("{$sandbox}/bootstrap");
+        File::put("{$sandbox}/bootstrap/app.php", "<?php\nreturn Application::configure()->withRouting(web: __DIR__.'/../routes/web.php');\n");
+        File::ensureDirectoryExists("{$sandbox}/config");
+        File::put("{$sandbox}/config/vibe.php", File::get(config_path('vibe.php')));
+        File::put("{$sandbox}/.env", "APP_NAME=Test\n");
+        File::put("{$sandbox}/package.json", json_encode(['dependencies' => []]));
+
+        $staleMarker = 'STALE_CUSTOM_OR_OLD_AUTH_CONTENT';
+        $staleTargets = $seedStaleFiles($staleMarker);
+
+        // 1. Run vibe:auth WITHOUT --force -> must overwrite ALL existing auth files
+        $tester1 = new \Symfony\Component\Console\Tester\CommandTester($makeSandboxCommand());
+        $tester1->execute([
+            '--layout' => 'split',
+            '--login-by' => 'email_or_username',
+            '--with-passkeys' => true,
+            '--with-qr-login' => true,
+        ], ['interactive' => false]);
+
+        expect($tester1->getStatusCode())->toBe(0);
+
+        foreach ($staleTargets as $rel) {
+            expect(File::get($sandbox . DIRECTORY_SEPARATOR . $rel))
+                ->not->toBe($staleMarker, "Expected {$rel} to be overwritten without --force");
+        }
+
+        // Verify ALL stub Livewire classes and views exist and match stub contents
+        foreach (File::files(base_path('packages/vibe/stubs/Auth/Livewire')) as $stub) {
+            expect(File::get("{$sandbox}/app/Livewire/Auth/{$stub->getFilename()}"))
+                ->toBe($stub->getContents());
+        }
+        foreach (File::files(base_path('packages/vibe/stubs/Auth/views')) as $stub) {
+            expect(File::get("{$sandbox}/resources/views/auth/{$stub->getFilename()}"))
+                ->toBe($stub->getContents());
+        }
+        expect(File::get("{$sandbox}/routes/auth.php"))
+            ->toBe(File::get(base_path('packages/vibe/stubs/Auth/routes/auth.php')));
+
+        // 2. Run vibe:auth WITH --skip-existing -> preserves existing files while writing missing ones
+        $skipTargets = $seedStaleFiles($staleMarker);
+        $missingFile = "{$sandbox}/app/Livewire/Auth/ConfirmPassword.php";
+        File::delete($missingFile);
+
+        $tester2 = new \Symfony\Component\Console\Tester\CommandTester($makeSandboxCommand());
+        $tester2->execute([
+            '--layout' => 'card',
+            '--login-by' => 'email',
+            '--with-passkeys' => true,
+            '--with-qr-login' => true,
+            '--skip-existing' => true,
+        ], ['interactive' => false]);
+
+        expect($tester2->getStatusCode())->toBe(0);
+
+        foreach ($skipTargets as $rel) {
+            expect(File::get($sandbox . DIRECTORY_SEPARATOR . $rel))
+                ->toBe($staleMarker, "Expected {$rel} to be preserved when --skip-existing is set");
+        }
+
+        expect(File::exists($missingFile))->toBeTrue();
+        expect(File::get($missingFile))
+            ->toBe(File::get(base_path('packages/vibe/stubs/Auth/Livewire/ConfirmPassword.php')));
+    } finally {
+        File::deleteDirectory($sandbox);
+    }
+});
+
 
