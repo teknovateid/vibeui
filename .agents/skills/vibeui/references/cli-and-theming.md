@@ -6,8 +6,8 @@
 | :--- | :--- |
 | `php artisan vibe` | Interactive console menu for Vibe UI generators and maintenance. |
 | `php artisan vibe:install [--skip-npm]` | Publishes `config/vibe.php`, `resources/{css,js}/vibe/`, `public/`, `lang/*/vibe/`, and `.agents/skills/vibeui/`, registers Vite entry points & Bunny fonts, injects CSS/JS imports, updates `package.json`, and registers `/locale/{locale}` in `routes/web.php`. Run `php artisan migrate` afterward. |
-| `php artisan vibe:layout <path>` | Generates a panel layout (e.g. `sidebar`, `sidebar-classic`) under `resources/views/components/<path>/layouts/`, `resources/views/components/<path>/partials/`, `resources/views/<path>/`, settings views, and `routes/<path>.php`. |
-| `php artisan vibe:page <layout> <name> [-r\|--resource] [-b\|--blank]` | Generates views inside an existing layout group and appends routes to `routes/<layout>.php`. |
+| `php artisan vibe:layout <path> [--style=] [--with-assets] [--no-route]` | Generates a panel layout (`sidebar`, `sidebar-classic`, `topbar`, or custom) under `resources/views/components/<path>/layouts/`, `partials/`, `resources/views/<path>/`, settings views, and `routes/<path>.php`. Pass `--with-assets` to generate panel-specific CSS/JS overrides importing the chosen layout assets. |
+| `php artisan vibe:page <layout> <name> [--style=] [-r\|--resource] [-b\|--blank]` | Generates views inside an existing layout group and appends routes & navigation menu entries (`sidebar`, `sidebar-classic`, or `topbar`). |
 | `php artisan vibe:crud <layout> <name> [--type=] [--model=]` | Generates schema-driven CRUD views (`crud-index` modal, `crud-sheet` slide-over, or `crud-resource` index/create/edit). |
 | `php artisan vibe:table <name> [--model=] [--force]` | Creates a Livewire DataTable extending `Teknovate\VibeUi\DataTable\VibeDataTableComponent` and ensures `config/livewire-tables.php` disables core/third-party asset auto-injection. |
 | `php artisan vibe:auth [--layout=card\|simple\|split] [--login-by=] [--with-passkeys\|--without-passkeys] [--with-qr-login\|--without-qr-login] [--migrate] [--force\|--skip-existing]` | Scaffolds auth Livewire components (`app/Livewire/Auth/*`), views, `routes/auth.php`, settings, `config/passkeys.php`, 2FA, QR login, and migrations (`add_vibe_auth_tables`, `create_passkeys_table`). |
@@ -17,7 +17,7 @@
 
 ## Base HTML Layout Contract
 
-Layouts wrapping Vibe UI pages must include `color-scheme` metadata, a `csrf-token` meta tag, and `@vibeStyles` in `<head>` (emits `<meta name="color-scheme">`, loads fonts, anti-FOUC theme override, dark class restoration, and `window.VIBE_*` globals) along with `@vite` and Livewire hooks:
+Layouts wrapping Vibe UI pages must include `color-scheme` metadata, a `csrf-token` meta tag, and `@vibeStyles` in `<head>` (emits `<meta name="color-scheme">`, loads fonts, anti-FOUC theme override, dark class restoration, `data-vibe-scroll` anti-FOUC restoration, and `window.VIBE_*` globals) along with `@vite` and Livewire hooks. Every built-in panel/auth layout (`sidebar`, `sidebar-classic`, `topbar`, `auth-card`, `auth-simple`, `auth-split`) loads its own scoped CSS & JS from `resources/{css,js}/vibe/layouts/` via `@vite(...)` directly inside the layout view, scopes CSS under `[data-vibe-layout="<style>"]`, and exposes props (`shell`, `styles`, `scripts`, `cssVars`, `includeDefaultAssets`, `panel`) plus named slots (`brand`, `sidebarMenu`, `topbarMenu`, `headerStart`, `headerCenter`, `headerActions`, `sidebarFooter`, `modals`). Custom `:styles`/`:scripts` and `--vibe-layout-*` variables can also be rendered via `Vibe::renderAssetTags()` and `Vibe::cssVarsStyle()`.
 
 ```blade
 <head>

@@ -283,6 +283,8 @@ class InstallCommand extends Command
             resource_path('views/vibe'),
             __DIR__.'/../../resources/views/auth/layouts',
             resource_path('views/auth/layouts'),
+            __DIR__.'/../../stubs/resources/views/components/panel/layouts',
+            resource_path('views/components'),
         ], 'is_dir');
 
         $assets = [];
@@ -317,6 +319,29 @@ class InstallCommand extends Command
                         }
                     }
                 }
+            }
+        }
+
+        // Auto-discover per-layout CSS & JS entries (shared core.js is imported by layout modules)
+        $layoutAssetDirs = [
+            ['dir' => __DIR__.'/../../resources/css/vibe/layouts', 'prefix' => 'resources/css/vibe/layouts/', 'ext' => 'css'],
+            ['dir' => resource_path('css/vibe/layouts'), 'prefix' => 'resources/css/vibe/layouts/', 'ext' => 'css'],
+            ['dir' => __DIR__.'/../../resources/js/vibe/layouts', 'prefix' => 'resources/js/vibe/layouts/', 'ext' => 'js'],
+            ['dir' => resource_path('js/vibe/layouts'), 'prefix' => 'resources/js/vibe/layouts/', 'ext' => 'js'],
+        ];
+
+        foreach ($layoutAssetDirs as $item) {
+            if (! File::isDirectory($item['dir'])) {
+                continue;
+            }
+            foreach (File::files($item['dir']) as $file) {
+                if ($file->getExtension() !== $item['ext']) {
+                    continue;
+                }
+                if ($item['ext'] === 'js' && $file->getFilename() === 'core.js') {
+                    continue;
+                }
+                $assets[] = $item['prefix'].$file->getFilename();
             }
         }
 

@@ -1,0 +1,21 @@
+/* ==========================================================================
+   Vibe UI - Auth Simple Layout Styles (auth-simple)
+   ========================================================================== */
+
+[data-vibe-layout="auth-simple"] {
+    --vibe-auth-max-width: 24rem;
+    position: relative;
+}
+
+[data-vibe-layout="auth-simple"] [data-vibe-auth-container] {
+    inline-size: 100%;
+    max-inline-size: var(--vibe-auth-max-width);
+}
+
+[data-vibe-layout="auth-simple"][data-backdrop-pattern="radial"] {
+    background-image: radial-gradient(
+        circle at 50% 15%,
+        color-mix(in srgb, var(--primary) 8%, transparent),
+        transparent 65%
+    );
+}

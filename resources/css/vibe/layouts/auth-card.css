@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Vibe UI - Auth Card Layout Styles (auth-card)
+   ========================================================================== */
+
+[data-vibe-layout="auth-card"] {
+    --vibe-auth-max-width: 28rem;
+    position: relative;
+}
+
+[data-vibe-layout="auth-card"] [data-vibe-auth-container] {
+    inline-size: 100%;
+    max-inline-size: var(--vibe-auth-max-width);
+}
+
+[data-vibe-layout="auth-card"][data-backdrop-pattern="radial"] {
+    background-image: radial-gradient(
+        ellipse 75% 55% at 50% 0%,
+        color-mix(in srgb, var(--primary) 10%, transparent),
+        transparent 70%
+    );
+}
+
+[data-vibe-layout="auth-card"][data-backdrop-pattern="grid"] {
+    background-image:
+        linear-gradient(to right, color-mix(in srgb, var(--border) 55%, transparent) 1px, transparent 1px),
+        linear-gradient(to bottom, color-mix(in srgb, var(--border) 55%, transparent) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+}
+
+[data-vibe-layout="auth-card"][data-surface="glass"] [data-vibe-auth-card] {
+    background-color: color-mix(in srgb, var(--card) 82%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
