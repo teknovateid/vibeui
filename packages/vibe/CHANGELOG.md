@@ -2,6 +2,18 @@
 
 All notable changes to **Vibe UI** (`teknovate/vibeui`) will be documented in this file.
 
+## [0.14.0] - 2026-11-28
+
+### 🚀 Features
+- feat: add new layout components and topbar menu for documentation (b967dab)
+- feat: Add Vibe UI core utilities and components (200b060)
+- feat: Update Vibe UI components documentation and guidelines (1196416)
+- feat: add login history and security settings pages with corresponding routes and views (57e7f98)
+
+### 🧰 Maintenance & Documentation
+- Add Vibe UI skill documentation and CLI references (b8bc281)
+
+
 ## [0.13.1] - 2026-11-27
 
 ### 🚀 Features
