@@ -48,7 +48,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             return;
         }
 
-        $layoutsDir = __DIR__.'/../../stubs/Layouts/layouts';
+        $layoutsDir = __DIR__.'/../../stubs/resources/views/components/panel/layouts';
         $layoutFiles = glob($layoutsDir.'/*.blade.php');
         $layoutOptions = [];
 
@@ -98,7 +98,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
 
     protected function generateLayouts(string $path, string $chosenLayout): bool
     {
-        $componentsDir = __DIR__.'/../../stubs/Layouts';
+        $componentsDir = __DIR__.'/../../stubs/resources/views/components/panel';
         $destComponentsDir = resource_path("views/components/{$path}");
 
         if (File::exists($destComponentsDir)) {
@@ -117,7 +117,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             'index' => 'pages/index.blade.php',
         ];
 
-        $settingsTemplatesDir = __DIR__.'/../../stubs/Templates/settings';
+        $settingsTemplatesDir = __DIR__.'/../../stubs/resources/views/panel/settings';
         if (File::isDirectory($settingsTemplatesDir)) {
             foreach (File::files($settingsTemplatesDir) as $file) {
                 $name = basename($file->getFilename(), '.blade.php');
@@ -126,7 +126,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         foreach ($pages as $component => $templatePath) {
-            $templateFile = __DIR__."/../../stubs/Templates/{$templatePath}";
+            $templateFile = __DIR__."/../../stubs/resources/views/panel/{$templatePath}";
             $destView = resource_path("views/{$path}/".str_replace('.', '/', $component).'.blade.php');
 
             if (File::exists($templateFile)) {
@@ -167,7 +167,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         // Ensure settings Livewire components are published dynamically if not already present
-        $settingsLivewireDir = __DIR__.'/../../stubs/Auth/Livewire/Settings';
+        $settingsLivewireDir = __DIR__.'/../../app/Livewire/Settings';
         if (File::isDirectory($settingsLivewireDir)) {
             File::ensureDirectoryExists(app_path('Livewire/Settings'));
             foreach (File::files($settingsLivewireDir) as $file) {
@@ -179,7 +179,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         // Ensure settings Livewire views are published dynamically if not already present
-        $settingsViewsDir = __DIR__.'/../../stubs/Auth/views/settings';
+        $settingsViewsDir = __DIR__.'/../../resources/views/livewire/settings';
         if (File::isDirectory($settingsViewsDir)) {
             File::ensureDirectoryExists(resource_path('views/livewire/settings'));
             foreach (File::files($settingsViewsDir) as $file) {
@@ -270,7 +270,7 @@ class LayoutCommand extends Command implements PromptsForMissingInput
         }
 
         $routePath = base_path("routes/{$path}.php");
-        $stubRouteContent = str_replace('[path]', $path, File::get(__DIR__.'/../../routes/routes.php'));
+        $stubRouteContent = str_replace('[path]', $path, File::get(__DIR__.'/../../stubs/routes/panel.stub'));
 
         if (File::exists($routePath)) {
             if (! $this->confirm("The route file '{$routePath}' already exists. Overwrite?", false)) {

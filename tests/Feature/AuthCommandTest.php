@@ -2,7 +2,12 @@
 
 declare(strict_types=1);
 
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
+use Symfony\Component\Console\Tester\CommandTester;
+use Teknovate\VibeUi\Commands\AuthCommand;
 
 afterEach(function () {
     $appPath = base_path('bootstrap/app.php');
@@ -18,13 +23,15 @@ afterEach(function () {
 
 test('vibe:auth registers routes in bootstrap/app.php when web routing is a single file or array', function () {
     // Test helper simulation of registerRouteInBootstrap method logic
-    $authCommand = new class extends \Teknovate\VibeUi\Commands\AuthCommand {
-        public function testRegister(string $content): string {
-            $tempFile = sys_get_temp_dir() . '/test_bootstrap_app_' . uniqid() . '.php';
+    $authCommand = new class extends AuthCommand
+    {
+        public function testRegister(string $content): string
+        {
+            $tempFile = sys_get_temp_dir().'/test_bootstrap_app_'.uniqid().'.php';
             File::put($tempFile, $content);
 
             // Reflection to call protected registerRouteInBootstrap pointing to temp file
-            $ref = new \ReflectionClass(\Teknovate\VibeUi\Commands\AuthCommand::class);
+            $ref = new ReflectionClass(AuthCommand::class);
             $method = $ref->getMethod('registerRouteInBootstrap');
 
             // We test the logic against different formats
@@ -45,6 +52,7 @@ test('vibe:auth registers routes in bootstrap/app.php when web routing is a sing
             }
 
             File::delete($tempFile);
+
             return $content;
         }
     };
@@ -101,18 +109,18 @@ PHP;
 });
 
 test('passkeys migration stub exists and defines passkeys schema', function () {
-    $stubPath = base_path('packages/vibe/stubs/Auth/migrations/create_passkeys_table.php');
+    $stubPath = base_path('packages/vibe/stubs/database/migrations/create_passkeys_table.php');
     expect(File::exists($stubPath))->toBeTrue();
 
     $content = File::get($stubPath);
     expect($content)->toContain("Schema::create('passkeys'");
     expect($content)->toContain("'credential_id'");
     expect($content)->toContain("'credential'");
-    expect($content)->toContain("Passkeys::userModel()");
+    expect($content)->toContain('Passkeys::userModel()');
 });
 
 test('passkeys config stub exists and contains proper development origin settings', function () {
-    $stubPath = base_path('packages/vibe/stubs/Auth/config/passkeys.php');
+    $stubPath = base_path('packages/vibe/config/passkeys.php');
     expect(File::exists($stubPath))->toBeTrue();
 
     $content = File::get($stubPath);
@@ -205,7 +213,7 @@ PHP;
     if (! str_contains($content, "'username'")) {
         $content = preg_replace(
             "/'name',/",
-            "'name',\n        'username',\n        'phone',\n        'position',",
+            "'name',\n        'username',\n        'phone',\n        'avatar',",
             $content
         );
     }
@@ -217,13 +225,15 @@ PHP;
     expect($content)->toContain('use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;');
     expect($content)->toContain("'username'");
     expect($content)->toContain("'phone'");
+    expect($content)->toContain("'avatar'");
+    expect($content)->not->toContain("'position'");
 });
 
 test('passkeys migration publishing creates file if missing and prevents duplicates', function () {
-    $tempDir = sys_get_temp_dir() . '/test_migrations_' . uniqid();
+    $tempDir = sys_get_temp_dir().'/test_migrations_'.uniqid();
     File::ensureDirectoryExists($tempDir);
 
-    $stub = base_path('packages/vibe/stubs/Auth/migrations/create_passkeys_table.php');
+    $stub = base_path('packages/vibe/stubs/database/migrations/create_passkeys_table.php');
 
     // Case 1: missing migration -> creates file
     $existing = File::glob("{$tempDir}/*_create_passkeys_table.php");
@@ -257,8 +267,8 @@ test('settings components and views stubs exist for auth and layout publishing',
     ];
 
     foreach ($expectedComponents as $component) {
-        $path = base_path("packages/vibe/stubs/Auth/Livewire/Settings/{$component}");
-        expect(File::exists($path))->toBeTrue("Expected {$component} to exist in stubs/Auth/Livewire/Settings");
+        $path = base_path("packages/vibe/app/Livewire/Settings/{$component}");
+        expect(File::exists($path))->toBeTrue("Expected {$component} to exist in app/Livewire/Settings");
     }
 
     $expectedViews = [
@@ -270,13 +280,13 @@ test('settings components and views stubs exist for auth and layout publishing',
     ];
 
     foreach ($expectedViews as $view) {
-        $path = base_path("packages/vibe/stubs/Auth/views/settings/{$view}");
-        expect(File::exists($path))->toBeTrue("Expected {$view} to exist in stubs/Auth/views/settings");
+        $path = base_path("packages/vibe/resources/views/livewire/settings/{$view}");
+        expect(File::exists($path))->toBeTrue("Expected {$view} to exist in resources/views/livewire/settings");
     }
 });
 
 test('passkeys config stub contains enabled option bound to env', function () {
-    $stubPath = base_path('packages/vibe/stubs/Auth/config/passkeys.php');
+    $stubPath = base_path('packages/vibe/config/passkeys.php');
     expect(File::exists($stubPath))->toBeTrue();
 
     $content = File::get($stubPath);
@@ -342,12 +352,13 @@ PHP;
 });
 
 test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, routes, lang, and JS assets by default', function () {
-    $sandbox = sys_get_temp_dir() . '/vibe_auth_overwrite_' . uniqid();
+    $sandbox = sys_get_temp_dir().'/vibe_auth_overwrite_'.uniqid();
     File::ensureDirectoryExists($sandbox);
 
     try {
         $makeSandboxCommand = function () use ($sandbox) {
-            $command = new class($sandbox) extends \Teknovate\VibeUi\Commands\AuthCommand {
+            $command = new class($sandbox) extends AuthCommand
+            {
                 public function __construct(protected string $root)
                 {
                     parent::__construct();
@@ -355,32 +366,32 @@ test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, r
 
                 protected function targetBasePath(string $path = ''): string
                 {
-                    return $this->root . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : '');
+                    return $this->root.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : '');
                 }
 
                 protected function targetAppPath(string $path = ''): string
                 {
-                    return $this->targetBasePath('app' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                    return $this->targetBasePath('app'.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''));
                 }
 
                 protected function targetResourcePath(string $path = ''): string
                 {
-                    return $this->targetBasePath('resources' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                    return $this->targetBasePath('resources'.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''));
                 }
 
                 protected function targetConfigPath(string $path = ''): string
                 {
-                    return $this->targetBasePath('config' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                    return $this->targetBasePath('config'.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''));
                 }
 
                 protected function targetDatabasePath(string $path = ''): string
                 {
-                    return $this->targetBasePath('database' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                    return $this->targetBasePath('database'.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''));
                 }
 
                 protected function targetLangPath(string $path = ''): string
                 {
-                    return $this->targetBasePath('lang' . ($path !== '' ? DIRECTORY_SEPARATOR . ltrim($path, DIRECTORY_SEPARATOR) : ''));
+                    return $this->targetBasePath('lang'.($path !== '' ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : ''));
                 }
             };
 
@@ -412,13 +423,17 @@ test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, r
             ];
 
             foreach ($targets as $rel) {
-                $full = $sandbox . DIRECTORY_SEPARATOR . $rel;
+                $full = $sandbox.DIRECTORY_SEPARATOR.$rel;
                 File::ensureDirectoryExists(dirname($full));
                 File::put($full, $marker);
             }
 
             return $targets;
         };
+
+        $existingUsersMigration = "{$sandbox}/database/migrations/0001_01_01_000000_create_users_table.php";
+        File::ensureDirectoryExists(dirname($existingUsersMigration));
+        File::put($existingUsersMigration, 'CUSTOM_EXISTING_USERS_MIGRATION');
 
         File::ensureDirectoryExists("{$sandbox}/bootstrap");
         File::put("{$sandbox}/bootstrap/app.php", "<?php\nreturn Application::configure()->withRouting(web: __DIR__.'/../routes/web.php');\n");
@@ -430,8 +445,8 @@ test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, r
         $staleMarker = 'STALE_CUSTOM_OR_OLD_AUTH_CONTENT';
         $staleTargets = $seedStaleFiles($staleMarker);
 
-        // 1. Run vibe:auth WITHOUT --force -> must overwrite ALL existing auth files
-        $tester1 = new \Symfony\Component\Console\Tester\CommandTester($makeSandboxCommand());
+        // 1. Run vibe:auth WITHOUT --force -> must overwrite ALL existing auth files without touching create_users_table
+        $tester1 = new CommandTester($makeSandboxCommand());
         $tester1->execute([
             '--layout' => 'split',
             '--login-by' => 'email_or_username',
@@ -442,28 +457,34 @@ test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, r
         expect($tester1->getStatusCode())->toBe(0);
 
         foreach ($staleTargets as $rel) {
-            expect(File::get($sandbox . DIRECTORY_SEPARATOR . $rel))
+            expect(File::get($sandbox.DIRECTORY_SEPARATOR.$rel))
                 ->not->toBe($staleMarker, "Expected {$rel} to be overwritten without --force");
         }
 
+        expect(File::get($existingUsersMigration))->toBe('CUSTOM_EXISTING_USERS_MIGRATION');
+        $vibeAuthMigrations = File::glob("{$sandbox}/database/migrations/*_add_vibe_auth_tables.php");
+        expect($vibeAuthMigrations)->toHaveCount(1);
+        expect(File::get($vibeAuthMigrations[0]))
+            ->toBe(File::get(base_path('packages/vibe/stubs/database/migrations/add_vibe_auth_tables.php')));
+
         // Verify ALL stub Livewire classes and views exist and match stub contents
-        foreach (File::files(base_path('packages/vibe/stubs/Auth/Livewire')) as $stub) {
+        foreach (File::files(base_path('packages/vibe/app/Livewire/Auth')) as $stub) {
             expect(File::get("{$sandbox}/app/Livewire/Auth/{$stub->getFilename()}"))
                 ->toBe($stub->getContents());
         }
-        foreach (File::files(base_path('packages/vibe/stubs/Auth/views')) as $stub) {
+        foreach (File::files(base_path('packages/vibe/resources/views/auth')) as $stub) {
             expect(File::get("{$sandbox}/resources/views/auth/{$stub->getFilename()}"))
                 ->toBe($stub->getContents());
         }
         expect(File::get("{$sandbox}/routes/auth.php"))
-            ->toBe(File::get(base_path('packages/vibe/stubs/Auth/routes/auth.php')));
+            ->toBe(File::get(base_path('packages/vibe/routes/auth.php')));
 
         // 2. Run vibe:auth WITH --skip-existing -> preserves existing files while writing missing ones
         $skipTargets = $seedStaleFiles($staleMarker);
         $missingFile = "{$sandbox}/app/Livewire/Auth/ConfirmPassword.php";
         File::delete($missingFile);
 
-        $tester2 = new \Symfony\Component\Console\Tester\CommandTester($makeSandboxCommand());
+        $tester2 = new CommandTester($makeSandboxCommand());
         $tester2->execute([
             '--layout' => 'card',
             '--login-by' => 'email',
@@ -475,16 +496,68 @@ test('vibe:auth overwrites all existing auth Livewire classes, views, layouts, r
         expect($tester2->getStatusCode())->toBe(0);
 
         foreach ($skipTargets as $rel) {
-            expect(File::get($sandbox . DIRECTORY_SEPARATOR . $rel))
+            expect(File::get($sandbox.DIRECTORY_SEPARATOR.$rel))
                 ->toBe($staleMarker, "Expected {$rel} to be preserved when --skip-existing is set");
         }
 
+        expect(File::get($existingUsersMigration))->toBe('CUSTOM_EXISTING_USERS_MIGRATION');
+        expect(File::glob("{$sandbox}/database/migrations/*_add_vibe_auth_tables.php"))->toHaveCount(1);
         expect(File::exists($missingFile))->toBeTrue();
         expect(File::get($missingFile))
-            ->toBe(File::get(base_path('packages/vibe/stubs/Auth/Livewire/ConfirmPassword.php')));
+            ->toBe(File::get(base_path('packages/vibe/app/Livewire/Auth/ConfirmPassword.php')));
     } finally {
         File::deleteDirectory($sandbox);
     }
 });
 
+test('add_vibe_auth_tables migration extends existing users table, creates 2fa table, and rolls back cleanly', function () {
+    $previousConnection = DB::getDefaultConnection();
 
+    config(['database.connections.vibe_auth_migration_test' => [
+        'driver' => 'sqlite',
+        'database' => ':memory:',
+        'prefix' => '',
+    ]]);
+
+    DB::setDefaultConnection('vibe_auth_migration_test');
+
+    try {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+
+        DB::table('users')->insert([
+            'name' => 'Existing User',
+            'email' => 'existing@example.com',
+            'password' => 'secret',
+        ]);
+
+        $migration = require base_path('packages/vibe/stubs/database/migrations/add_vibe_auth_tables.php');
+        $migration->up();
+        // Second up() call validates idempotency when columns/table already exist
+        $migration->up();
+
+        expect(Schema::hasColumns('users', ['phone', 'username', 'avatar']))->toBeTrue();
+        expect(Schema::hasColumn('users', 'position'))->toBeFalse();
+        expect(Schema::hasTable('two_factor_authenticators'))->toBeTrue();
+        expect(DB::table('users')->where('email', 'existing@example.com')->exists())->toBeTrue();
+
+        $migration->down();
+
+        expect(Schema::hasTable('two_factor_authenticators'))->toBeFalse();
+        expect(Schema::hasTable('users'))->toBeTrue();
+        expect(Schema::hasColumn('users', 'phone'))->toBeFalse();
+        expect(Schema::hasColumn('users', 'username'))->toBeFalse();
+        expect(Schema::hasColumn('users', 'avatar'))->toBeFalse();
+        expect(DB::table('users')->where('email', 'existing@example.com')->exists())->toBeTrue();
+    } finally {
+        DB::setDefaultConnection($previousConnection);
+        DB::purge('vibe_auth_migration_test');
+    }
+});

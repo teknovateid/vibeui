@@ -174,7 +174,7 @@ JS);
     $content = File::get($tempViteConfig);
     expect($content)
         ->toContain("import { bunny } from 'laravel-vite-plugin/fonts';")
-        ->toContain("fonts: [")
+        ->toContain('fonts: [')
         ->toContain("bunny('Figtree'")
         ->toContain("bunny('Inter'")
         ->toContain("bunny('Plus Jakarta Sans'")
@@ -270,7 +270,7 @@ test('vibe:install publishes the vibeui skill into .agents/skills without distur
     $skillsRoot = $tempBase.'/.agents/skills';
     $siblingSkillDir = $skillsRoot.'/modern-web-guidance';
     $targetSkillDir = $skillsRoot.'/vibeui';
-    $sourceSkillDir = base_path('packages/vibe/resources/skills/vibeui');
+    $sourceSkillDir = base_path('packages/vibe/.agents/skills/vibeui');
 
     File::ensureDirectoryExists($siblingSkillDir);
     File::put($siblingSkillDir.'/SKILL.md', "---\nname: modern-web-guidance\n---\n");

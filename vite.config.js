@@ -24,7 +24,7 @@ function vibeSyncPlugin() {
         },
         {
             srcPattern: '/.agents/skills/vibeui/',
-            destDir: 'packages/vibe/resources/skills/vibeui',
+            destDir: 'packages/vibe/.agents/skills/vibeui',
             label: 'Skill VibeUI',
         },
         {
@@ -34,7 +34,7 @@ function vibeSyncPlugin() {
         },
         {
             srcPattern: '/resources/views/components/docs/layouts/',
-            destDir: 'packages/vibe/stubs/Layouts/layouts',
+            destDir: 'packages/vibe/stubs/resources/views/components/panel/layouts',
             label: 'Docs Layouts',
             transform: (content) => {
                 return content
@@ -66,17 +66,17 @@ function vibeSyncPlugin() {
         },
         {
             srcPattern: '/resources/views/auth/layouts/',
-            destDir: 'packages/vibe/stubs/Auth/layouts',
+            destDir: 'packages/vibe/resources/views/auth/layouts',
             label: 'Auth Layouts',
         },
         {
             srcPattern: '/resources/views/auth/',
-            destDir: 'packages/vibe/stubs/Auth/views',
+            destDir: 'packages/vibe/resources/views/auth',
             label: 'Auth Views',
         },
         {
             srcPattern: '/resources/views/docs/settings/',
-            destDir: 'packages/vibe/stubs/Templates/settings',
+            destDir: 'packages/vibe/stubs/resources/views/panel/settings',
             label: 'Settings Templates',
             ignore: ['index.blade.php'],
             transform: (content) => {
@@ -91,30 +91,36 @@ function vibeSyncPlugin() {
         },
         {
             srcPattern: '/resources/views/livewire/settings/',
-            destDir: 'packages/vibe/stubs/Auth/views/settings',
+            destDir: 'packages/vibe/resources/views/livewire/settings',
             label: 'Settings Livewire Views',
         },
         {
             srcPattern: '/app/Livewire/Settings/',
-            destDir: 'packages/vibe/stubs/Auth/Livewire/Settings',
+            destDir: 'packages/vibe/app/Livewire/Settings',
             label: 'Settings Livewire Classes',
         },
         {
             srcPattern: '/app/Livewire/Auth/Concerns/',
-            destDir: 'packages/vibe/stubs/Auth/Concerns',
+            destDir: 'packages/vibe/app/Livewire/Auth/Concerns',
             label: 'Auth Concerns',
         },
         {
             srcPattern: '/app/Livewire/Auth/',
-            destDir: 'packages/vibe/stubs/Auth/Livewire',
+            destDir: 'packages/vibe/app/Livewire/Auth',
             label: 'Auth Livewire Classes',
             ignore: ['Concerns'],
         },
         {
+            srcPattern: '/config/',
+            destDir: 'packages/vibe/config',
+            label: 'Passkeys Config',
+            only: ['passkeys.php'],
+        },
+        {
             srcPattern: '/routes/',
-            destDir: 'packages/vibe/stubs/Auth/routes',
+            destDir: 'packages/vibe/routes',
             label: 'Auth Routes',
-            ignore: ['console.php', 'docs.php', 'web.php'],
+            only: ['auth.php'],
         },
     ];
 
@@ -124,9 +130,16 @@ function vibeSyncPlugin() {
             server.watcher.on('all', (event, file) => {
                 const normalizedFile = file.replace(/\\/g, '/');
 
+                if (normalizedFile.includes('/packages/vibe/')) {
+                    return;
+                }
+
                 for (const rule of syncRules) {
                     if (normalizedFile.includes(rule.srcPattern)) {
                         const relativePath = normalizedFile.substring(normalizedFile.indexOf(rule.srcPattern) + rule.srcPattern.length);
+                        if (rule.only && !rule.only.includes(relativePath)) {
+                            break;
+                        }
                         if (rule.ignore && rule.ignore.includes(relativePath)) {
                             break;
                         }
@@ -238,7 +251,7 @@ export default defineConfig({
     },
     server: {
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            ignored: ['**/storage/framework/views/**', '**/packages/vibe/**'],
         },
         cors: true,
     },

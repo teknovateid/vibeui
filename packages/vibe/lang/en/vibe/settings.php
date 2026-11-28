@@ -99,8 +99,6 @@ return [
         'email_placeholder' => 'name@domain.com',
         'phone' => 'Phone Number',
         'phone_placeholder' => '+1 555 xxxx xxxx',
-        'position' => 'Job Title / Role',
-        'position_placeholder' => 'e.g. Lead Developer, Product Designer...',
         'gravatar_toast' => 'Avatar is automatically synced from Gravatar based on your email address.',
         'gravatar_title' => 'Gravatar Avatar',
         'saving' => 'Saving to database...',

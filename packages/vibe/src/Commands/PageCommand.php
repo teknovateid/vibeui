@@ -54,11 +54,11 @@ class PageCommand extends Command implements PromptsForMissingInput
 
         foreach ($actions as $action) {
             if ($isResource) {
-                $templateFile = __DIR__."/../../stubs/Templates/crud/resource/{$action}.blade.php";
+                $templateFile = __DIR__."/../../stubs/resources/views/livewire/crud/templates/resource/{$action}.blade.php";
             } elseif ($isBlank) {
-                $templateFile = __DIR__.'/../../stubs/Templates/pages/blank.blade.php';
+                $templateFile = __DIR__.'/../../stubs/resources/views/panel/pages/blank.blade.php';
             } else {
-                $templateFile = __DIR__.'/../../stubs/Templates/pages/index.blade.php';
+                $templateFile = __DIR__.'/../../stubs/resources/views/panel/pages/index.blade.php';
             }
 
             $destView = resource_path("views/{$layout}/{$name}/{$action}.blade.php");
@@ -127,7 +127,7 @@ class PageCommand extends Command implements PromptsForMissingInput
         if (File::exists($menuPath)) {
             $menuContent = File::get($menuPath);
             $stubName = $isResource ? 'group.blade.php' : 'item.blade.php';
-            $stubPath = __DIR__."/../../stubs/Partials/{$style}/{$stubName}";
+            $stubPath = __DIR__."/../../stubs/resources/views/components/partials/{$style}/{$stubName}";
 
             if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
                 $stub = File::get($stubPath);
@@ -154,7 +154,7 @@ class PageCommand extends Command implements PromptsForMissingInput
 
     protected function promptForMissingArguments(InputInterface $input, OutputInterface $output): void
     {
-        if ($this->didReceiveOptions($input)) {
+        if ($this->didReceiveOptions($input) || ($input->getArgument('layout') && $input->getArgument('name'))) {
             return;
         }
 

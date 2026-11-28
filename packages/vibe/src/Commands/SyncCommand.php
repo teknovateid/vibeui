@@ -46,7 +46,7 @@ class SyncCommand extends Command
             ],
             [
                 'src' => base_path('.agents/skills/vibeui'),
-                'dest' => base_path('packages/vibe/resources/skills/vibeui'),
+                'dest' => base_path('packages/vibe/.agents/skills/vibeui'),
                 'label' => 'Skill VibeUI',
             ],
             [
@@ -56,7 +56,7 @@ class SyncCommand extends Command
             ],
             [
                 'src' => resource_path('views/components/docs/layouts'),
-                'dest' => base_path('packages/vibe/stubs/Layouts/layouts'),
+                'dest' => base_path('packages/vibe/stubs/resources/views/components/panel/layouts'),
                 'label' => 'Docs Layouts Stubs',
                 'transform' => function (string $content): string {
                     return str_replace(
@@ -88,18 +88,18 @@ class SyncCommand extends Command
             ],
             [
                 'src' => resource_path('views/auth/layouts'),
-                'dest' => base_path('packages/vibe/stubs/Auth/layouts'),
+                'dest' => base_path('packages/vibe/resources/views/auth/layouts'),
                 'label' => 'Auth Layouts',
             ],
             [
                 'src' => resource_path('views/auth'),
-                'dest' => base_path('packages/vibe/stubs/Auth/views'),
+                'dest' => base_path('packages/vibe/resources/views/auth'),
                 'label' => 'Auth Views',
                 'shallow' => true,
             ],
             [
                 'src' => resource_path('views/docs/settings'),
-                'dest' => base_path('packages/vibe/stubs/Templates/settings'),
+                'dest' => base_path('packages/vibe/stubs/resources/views/panel/settings'),
                 'label' => 'Settings Templates',
                 'ignore' => ['index.blade.php'],
                 'transform' => function (string $content): string {
@@ -115,32 +115,35 @@ class SyncCommand extends Command
             ],
             [
                 'src' => resource_path('views/livewire/settings'),
-                'dest' => base_path('packages/vibe/stubs/Auth/views/settings'),
+                'dest' => base_path('packages/vibe/resources/views/livewire/settings'),
                 'label' => 'Settings Livewire Views',
             ],
             [
                 'src' => app_path('Livewire/Settings'),
-                'dest' => base_path('packages/vibe/stubs/Auth/Livewire/Settings'),
+                'dest' => base_path('packages/vibe/app/Livewire/Settings'),
                 'label' => 'Settings Livewire Classes',
             ],
             [
                 'src' => app_path('Livewire/Auth/Concerns'),
-                'dest' => base_path('packages/vibe/stubs/Auth/Concerns'),
+                'dest' => base_path('packages/vibe/app/Livewire/Auth/Concerns'),
                 'label' => 'Auth Concerns',
             ],
             [
                 'src' => app_path('Livewire/Auth'),
-                'dest' => base_path('packages/vibe/stubs/Auth/Livewire'),
+                'dest' => base_path('packages/vibe/app/Livewire/Auth'),
                 'label' => 'Auth Livewire Classes',
                 'shallow' => true,
                 'ignore' => ['Concerns'],
             ],
             [
-                'src' => base_path('routes'),
-                'dest' => base_path('packages/vibe/stubs/Auth/routes'),
+                'src' => config_path('passkeys.php'),
+                'dest' => base_path('packages/vibe/config/passkeys.php'),
+                'label' => 'Passkeys Config',
+            ],
+            [
+                'src' => base_path('routes/auth.php'),
+                'dest' => base_path('packages/vibe/routes/auth.php'),
                 'label' => 'Auth Routes',
-                'shallow' => true,
-                'ignore' => ['console.php', 'docs.php', 'web.php'],
             ],
         ];
     }
@@ -174,6 +177,21 @@ class SyncCommand extends Command
             $transform = $rule['transform'] ?? null;
             $label = $rule['label'];
 
+            if (File::isFile($srcDir)) {
+                $this->syncFile(
+                    $srcDir,
+                    $destDir,
+                    $label,
+                    basename($srcDir),
+                    $transform,
+                    $checkOnly,
+                    $differences,
+                    $totalSynced
+                );
+
+                continue;
+            }
+
             if (! File::isDirectory($srcDir)) {
                 continue;
             }
@@ -193,32 +211,16 @@ class SyncCommand extends Command
                 $destPath = $destDir.DIRECTORY_SEPARATOR.$relativePath;
                 $expectedDestFiles[] = $destPath;
 
-                $srcContent = $file->getContents();
-                if ($transform) {
-                    $srcContent = $transform($srcContent);
-                }
-
-                $needsUpdate = false;
-                if (! File::exists($destPath)) {
-                    $needsUpdate = true;
-                    if ($checkOnly) {
-                        $differences[] = "[Missing in package] {$label}: {$relativePath}";
-                    }
-                } else {
-                    $destContent = File::get($destPath);
-                    if ($srcContent !== $destContent) {
-                        $needsUpdate = true;
-                        if ($checkOnly) {
-                            $differences[] = "[Content mismatch] {$label}: {$relativePath}";
-                        }
-                    }
-                }
-
-                if ($needsUpdate && ! $checkOnly) {
-                    File::ensureDirectoryExists(dirname($destPath));
-                    File::put($destPath, $srcContent);
-                    $totalSynced++;
-                }
+                $this->syncFile(
+                    $file->getPathname(),
+                    $destPath,
+                    $label,
+                    $relativePath,
+                    $transform,
+                    $checkOnly,
+                    $differences,
+                    $totalSynced
+                );
             }
 
             // 2. Check/delete orphan files in destination
@@ -260,5 +262,45 @@ class SyncCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Synchronize a single file between the host repository and packages/vibe.
+     *
+     * @param  array<int, string>  $differences
+     */
+    protected function syncFile(
+        string $srcPath,
+        string $destPath,
+        string $label,
+        string $relativePath,
+        ?callable $transform,
+        bool $checkOnly,
+        array &$differences,
+        int &$totalSynced
+    ): void {
+        $srcContent = File::get($srcPath);
+        if ($transform) {
+            $srcContent = $transform($srcContent);
+        }
+
+        $needsUpdate = false;
+        if (! File::exists($destPath)) {
+            $needsUpdate = true;
+            if ($checkOnly) {
+                $differences[] = "[Missing in package] {$label}: {$relativePath}";
+            }
+        } elseif ($srcContent !== File::get($destPath)) {
+            $needsUpdate = true;
+            if ($checkOnly) {
+                $differences[] = "[Content mismatch] {$label}: {$relativePath}";
+            }
+        }
+
+        if ($needsUpdate && ! $checkOnly) {
+            File::ensureDirectoryExists(dirname($destPath));
+            File::put($destPath, $srcContent);
+            $totalSynced++;
+        }
     }
 }

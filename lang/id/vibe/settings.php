@@ -99,8 +99,6 @@ return [
         'email_placeholder' => 'nama@domain.com',
         'phone' => 'No. Handphone',
         'phone_placeholder' => '+62 812 xxxx xxxx',
-        'position' => 'Jabatan / Peran',
-        'position_placeholder' => 'cth. Lead Developer, Product Designer...',
         'gravatar_toast' => 'Avatar disinkronkan secara otomatis dari Gravatar sesuai alamat email Anda.',
         'gravatar_title' => 'Avatar Gravatar',
         'saving' => 'Menyimpan ke database...',

@@ -28,8 +28,7 @@ class SearchController extends Controller
             ->where(function ($q) use ($query, $like) {
                 $q->where('name', $like, "%{$query}%")
                     ->orWhere('email', $like, "%{$query}%")
-                    ->orWhere('username', $like, "%{$query}%")
-                    ->orWhere('position', $like, "%{$query}%");
+                    ->orWhere('username', $like, "%{$query}%");
             })
             ->limit(8)
             ->get();
@@ -38,7 +37,6 @@ class SearchController extends Controller
             $subtitleParts = array_filter([
                 $user->email,
                 $user->username ? "@{$user->username}" : null,
-                $user->position,
             ]);
 
             $results[] = [

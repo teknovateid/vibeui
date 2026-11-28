@@ -25,7 +25,6 @@ beforeEach(function () {
         'email' => 'john.' . uniqid() . '@example.com',
         'username' => 'johndoe_' . uniqid(),
         'phone' => '0812' . rand(10000000, 99999999),
-        'position' => 'Senior Developer',
         'password' => Hash::make('password123'),
     ]);
 });

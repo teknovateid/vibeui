@@ -140,8 +140,8 @@ class AppServiceProvider extends ServiceProvider
             // Contoh jika menggunakan kolom boolean pada users:
             // return (bool) $user?->is_admin;
 
-            // Contoh jika menggunakan kolom posisi/jabatan:
-            return in_array($user?->position, ['Administrator', 'Super Admin']);
+            // Contoh jika membatasi berdasarkan email atau role user:
+            return in_array($user?->email, ['admin@example.com']);
         });
     }
 }

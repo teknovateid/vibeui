@@ -948,8 +948,7 @@ class SelectController extends Controller
                 $q->where(function ($sub) use ($query, $like) {
                     $sub->where('name', $like, "%{$query}%")
                         ->orWhere('email', $like, "%{$query}%")
-                        ->orWhere('username', $like, "%{$query}%")
-                        ->orWhere('position', $like, "%{$query}%");
+                        ->orWhere('username', $like, "%{$query}%");
                 });
             })
             ->limit(12)
@@ -959,7 +958,7 @@ class SelectController extends Controller
         $data = $users->map(function ($user) {
             $descParts = array_filter([
                 $user->email,
-                $user->position ?: ($user->username ? '@' . $user->username : null),
+                $user->username ? '@' . $user->username : null,
             ]);
 
             return [
