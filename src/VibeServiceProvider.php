@@ -115,6 +115,10 @@ class VibeServiceProvider extends ServiceProvider
             ], 'vibe-lang');
 
             $this->publishes([
+                __DIR__ . '/../resources/skills/vibeui' => base_path('.agents/skills/vibeui'),
+            ], 'vibe-skills');
+
+            $this->publishes([
                 __DIR__ . '/../stubs/Auth/migrations' => database_path('migrations'),
                 __DIR__ . '/../database/migrations' => database_path('migrations'),
             ], 'vibe-migrations');

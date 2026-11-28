@@ -45,6 +45,11 @@ class SyncCommand extends Command
                 'label' => 'JS',
             ],
             [
+                'src' => base_path('.agents/skills/vibeui'),
+                'dest' => base_path('packages/vibe/resources/skills/vibeui'),
+                'label' => 'Skill VibeUI',
+            ],
+            [
                 'src' => public_path('vibe'),
                 'dest' => base_path('packages/vibe/public/vibe'),
                 'label' => 'Public',

@@ -45,7 +45,12 @@ class InstallCommand extends Command
             $this->callSilent('vendor:publish', ['--tag' => 'vibe-lang', '--force' => true]);
         });
 
-        // 4. Inject to app.js
+        // 4. Publish AI Agent Skill (.agents/skills/vibeui)
+        $this->components->task('Publishing AI agent skill', function () {
+            $this->publishSkills();
+        });
+
+        // 5. Inject to app.js
         $this->components->task('Registering JS assets', function () {
             $jsPath = resource_path('js/app.js');
             if (file_exists($jsPath)) {
@@ -56,7 +61,7 @@ class InstallCommand extends Command
             }
         });
 
-        // 5. Inject to app.css
+        // 6. Inject to app.css
         $this->components->task('Registering CSS assets', function () {
             $cssPath = resource_path('css/app.css');
             if (file_exists($cssPath)) {
@@ -67,23 +72,23 @@ class InstallCommand extends Command
             }
         });
 
-        // 6. Inject entry points & fonts to vite.config.js
+        // 7. Inject entry points & fonts to vite.config.js
         $this->components->task('Registering Vite entry points', function () {
             $this->registerViteAssets();
             $this->registerViteFonts();
         });
 
-        // 7. Inject dependencies to package.json
+        // 8. Inject dependencies to package.json
         $this->components->task('Updating NPM dependencies', function () {
             $this->updateNpmDependencies();
         });
 
-        // 8. Register locale switch route in routes/web.php
+        // 9. Register locale switch route in routes/web.php
         $this->components->task('Registering locale switch route', function () {
             $this->registerLocaleRoute();
         });
 
-        // 9. Run NPM Install
+        // 10. Run NPM Install
         if (! $this->option('skip-npm')) {
             $this->components->info('Running npm install...');
             $process = new Process(['npm', 'install'], base_path());
@@ -97,6 +102,40 @@ class InstallCommand extends Command
         $this->components->info('Vibe UI has been successfully installed!');
         $this->line(' <fg=gray>You can now start using vibe components.</>');
         $this->newLine();
+    }
+
+    /**
+     * Publish the bundled Vibe UI AI agent skill into .agents/skills/vibeui.
+     */
+    public function publishSkills(?string $targetDir = null, ?string $sourceDir = null): bool
+    {
+        $isDefaultTarget = $targetDir === null;
+        $sourceDir = $sourceDir ?: __DIR__.'/../../resources/skills/vibeui';
+        $targetDir = $targetDir ?: base_path('.agents/skills/vibeui');
+
+        if (! File::isDirectory($sourceDir)) {
+            return false;
+        }
+
+        // In the Vibe UI monorepo, .agents/skills/vibeui is the source of truth synced into packages/vibe.
+        if ($isDefaultTarget && File::isDirectory($targetDir) && File::isDirectory(base_path('packages/vibe/src'))) {
+            return true;
+        }
+
+        $resolvedSource = realpath($sourceDir);
+        $resolvedTarget = realpath($targetDir);
+
+        if ($resolvedSource !== false && $resolvedTarget !== false && $resolvedSource === $resolvedTarget) {
+            return true;
+        }
+
+        File::ensureDirectoryExists(dirname($targetDir));
+
+        if (File::isDirectory($targetDir)) {
+            File::deleteDirectory($targetDir);
+        }
+
+        return File::copyDirectory($sourceDir, $targetDir);
     }
 
     /**
