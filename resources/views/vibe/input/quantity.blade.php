@@ -48,40 +48,15 @@
     // Sizing system (Harmonized with Vibe UI Density Scale)
     $isPill = str_contains($attributes->get('class', ''), 'rounded-full');
 
-    $heightClass = match ($size) {
-        'xs' => 'h-7 text-xs',
-        'sm' => 'h-8 text-xs',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm',
-        'lg' => 'h-10 text-sm',
-        'xl' => 'h-11 text-base',
-        default => 'h-11 sm:h-9 text-base sm:text-sm',
+    [$heightClass, $btnWidthClass, $iconSizeClass, $sizeRadius] = match ($size) {
+        'xs' => ['h-7 text-xs', 'w-7', 'size-3', 'rounded-md'],
+        'sm' => ['h-8 text-xs', 'w-8', 'size-3.5', 'rounded-md'],
+        'lg' => ['h-10 text-sm', 'w-10', 'size-4.5', 'rounded-lg'],
+        'xl' => ['h-11 text-base', 'w-11', 'size-5', 'rounded-xl'],
+        default => ['h-9 text-sm', 'w-9', 'size-4', 'rounded-lg'],
     };
 
-    $radiusClass = $isPill ? 'rounded-full' : match ($size) {
-        'xs', 'sm' => 'rounded-md',
-        'md' => 'rounded-lg',
-        'lg' => 'rounded-lg',
-        'xl' => 'rounded-xl',
-        default => 'rounded-lg',
-    };
-
-    $btnWidthClass = match ($size) {
-        'xs' => 'w-7',
-        'sm' => 'w-8',
-        'md' => 'w-11 sm:w-9',
-        'lg' => 'w-10',
-        'xl' => 'w-11',
-        default => 'w-11 sm:w-9',
-    };
-
-    $iconSizeClass = match ($size) {
-        'xs' => 'size-3',
-        'sm' => 'size-3.5',
-        'md' => 'size-4.5 sm:size-4',
-        'lg' => 'size-4.5',
-        'xl' => 'size-5',
-        default => 'size-4.5 sm:size-4',
-    };
+    $radiusClass = $isPill ? 'rounded-full' : $sizeRadius;
 
     $errorClasses = $hasError
         ? 'border-destructive focus-within:border-destructive focus-within:ring-destructive/20'
@@ -575,20 +550,6 @@
 
     </div>
 
-    {{-- Description --}}
-    @if ($description && !$hasError)
-        <p class="mt-1.5 text-xs text-muted-foreground">{{ $description }}</p>
-    @endif
-
-    {{-- Error Message --}}
-    @if ($hasError)
-        <p class="mt-1.5 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @endif
+    {{-- Error Message & Description --}}
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$description" />
 </div>

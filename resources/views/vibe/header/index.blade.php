@@ -62,6 +62,7 @@
             _onScroll: null,
             init() {
                 let findScrollTarget = () => {
+                    if (window.VibeCore) return window.VibeCore.getScrollContainer(this.$el);
                     let parent = this.$el.parentElement;
                     while (parent && parent !== document.body && parent !== document.documentElement) {
                         let style = window.getComputedStyle(parent);

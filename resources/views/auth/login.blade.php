@@ -305,13 +305,25 @@
                             class="flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl border border-border/80 bg-muted/35"
                             x-data="{
                                 copied: false,
-                                copyCode() {
+                                async copyCode(buttonEl = null) {
                                     const code = this.$el?.dataset?.qrCode || @js($qrCode);
-                                    if (!navigator.clipboard || !code) return;
-                                    navigator.clipboard.writeText(code).then(() => {
+                                    if (!code) return;
+                                    let ok = false;
+                                    if (window.VibeCore) {
+                                        ok = await window.VibeCore.copy(code, {
+                                            button: buttonEl,
+                                            statusEl: this.$refs.qrCopyStatus,
+                                            copiedText: @js(__('auth/qr_login.copied_code')),
+                                            failedText: @js(__('auth/qr_login.copy_code')),
+                                        });
+                                    } else if (navigator.clipboard) {
+                                        await navigator.clipboard.writeText(code);
+                                        ok = true;
+                                    }
+                                    if (ok) {
                                         this.copied = true;
                                         setTimeout(() => { this.copied = false; }, 2000);
-                                    });
+                                    }
                                 }
                             }"
                         >
@@ -319,9 +331,11 @@
                                 {{ $qrCode }}
                             </span>
 
+                            <span x-ref="qrCopyStatus" role="status" aria-live="polite" class="sr-only"></span>
                             <button
                                 type="button"
-                                @click="copyCode()"
+                                @click="copyCode($el)"
+                                aria-label="{{ __('auth/qr_login.copy_code') }}"
                                 class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium border border-border/70 bg-background text-muted-foreground hover:text-foreground hover:border-border transition-colors cursor-pointer shrink-0"
                             >
                                 <svg x-show="!copied" class="size-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">

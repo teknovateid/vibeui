@@ -70,13 +70,12 @@
 
     $wireModel = $attributes->wire('model')->value();
 
-    $sizeClasses = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md px-2',
-        'sm' => 'h-8 text-xs rounded-md px-2.5',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
-        'lg' => 'h-10 text-sm rounded-lg px-4',
-        'xl' => 'h-11 text-base rounded-xl px-4.5',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
+    [$sizeClasses, $affixTextClass] = match ($size) {
+        'xs' => ['h-7 text-xs rounded-md px-2.5', 'text-xs'],
+        'sm' => ['h-8 text-xs rounded-md px-3', 'text-xs'],
+        'lg' => ['h-10 text-sm rounded-lg px-4', 'text-sm'],
+        'xl' => ['h-11 text-base rounded-xl px-5', 'text-sm'],
+        default => ['h-9 text-sm rounded-lg px-3.5', 'text-xs'],
     };
 
     $variantClasses = match ($variant) {
@@ -309,7 +308,7 @@
         {{ $attributes->only('class')->twMerge(['class' => "relative flex items-center w-full border shadow-2xs transition-colors duration-150 {$sizeClasses} {$variantClasses} {$errorBorderClasses}"]) }}
     >
         @if ($prefix)
-            <span class="mr-2 text-muted-foreground font-semibold select-none text-xs pointer-events-none shrink-0">
+            <span class="mr-2 text-muted-foreground font-semibold select-none {{ $affixTextClass }} pointer-events-none shrink-0">
                 {{ $prefix }}
             </span>
         @endif
@@ -354,21 +353,18 @@
         />
 
         @if ($suffix)
-            <span class="ml-2 text-muted-foreground font-semibold select-none text-xs pointer-events-none shrink-0">
+            <span class="ml-2 text-muted-foreground font-semibold select-none {{ $affixTextClass }} pointer-events-none shrink-0">
                 {{ $suffix }}
             </span>
         @endif
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p @if($bindName) :id="'error-' + ({{ $bindName }})" @else id="{{ $id }}-error" @endif role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p @if($bindName) :id="'info-' + ({{ $bindName }})" @else id="{{ $id }}-info" @endif class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message
+        :id="$id"
+        :hasError="$hasError"
+        :errorMessage="$errorMessage"
+        :info="$info"
+        :errorBindId="$bindName ? ('\'error-\' + (' . $bindName . ')') : null"
+        :infoBindId="$bindName ? ('\'info-\' + (' . $bindName . ')') : null"
+    />
 </div>

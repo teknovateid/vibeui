@@ -1,3 +1,5 @@
+import { evalCallback } from './core';
+
 export function vibeForm(config = {}) {
     let formId = null;
     let expireHours = 24;
@@ -136,16 +138,10 @@ export function vibeForm(config = {}) {
         if (!code) return;
         try {
             if (typeof code === 'function') {
-                code(data, response, form);
+                evalCallback(code, [data, response, form]);
                 return;
             }
-            if (typeof code === 'string') {
-                // Make $vibe and $el available in scope
-                const $vibe = window.$vibe;
-                const $el = form;
-                // eslint-disable-next-line no-new-func
-                (new Function('$vibe', 'data', 'response', '$el', code))($vibe, data, response, form);
-            }
+            evalCallback(code, [window.$vibe, data, response, form], ['$vibe', 'data', 'response', '$el']);
         } catch (e) {
             console.error('[vibeForm] onSuccess/onError callback error:', e);
         }
@@ -336,6 +332,7 @@ export function vibeForm(config = {}) {
         },
 
         handleKeydownEnter(event) {
+            if (event.isComposing || event.keyCode === 229) return;
             const target = event.target;
             if (!target || event.defaultPrevented) return;
 

@@ -43,38 +43,12 @@
         $resolvedVariant = 'primary';
     }
 
-    // Outer circle sizes
-    $outerSizes = match ($size) {
-        'xs' => 'size-3',
-        'sm' => 'size-3.5',
-        'lg' => 'size-4.5',
-        'xl' => 'size-5',
-        default => 'size-5 sm:size-4',
-    };
-
-    // Inner dot sizes
-    $dotSizes = match ($size) {
-        'xs' => 'size-1',
-        'sm' => 'size-1.5',
-        'lg' => 'size-2',
-        'xl' => 'size-2.5',
-        default => 'size-2.5 sm:size-2',
-    };
-
-    // Text sizes
-    $labelSizes = match ($size) {
-        'xs', 'sm' => 'text-xs',
-        'lg' => 'text-sm',
-        'xl' => 'text-base',
-        default => 'text-base sm:text-sm',
-    };
-
-    $descSizes = match ($size) {
-        'xs' => 'text-[10px]',
-        'sm' => 'text-[11px]',
-        'lg' => 'text-xs',
-        'xl' => 'text-sm',
-        default => 'text-sm sm:text-xs',
+    [$outerSizes, $dotSizes, $labelSizes, $descSizes] = match ($size) {
+        'xs' => ['size-3', 'size-1', 'text-xs', 'text-[10px]'],
+        'sm' => ['size-3.5', 'size-1.5', 'text-xs', 'text-[11px]'],
+        'lg' => ['size-4.5', 'size-2', 'text-sm', 'text-xs'],
+        'xl' => ['size-5', 'size-2.5', 'text-base', 'text-sm'],
+        default => ['size-4', 'size-2', 'text-sm', 'text-xs'],
     };
 
     // Outer circle variant colors
@@ -167,9 +141,14 @@
         </label>
     @else
         {{-- Standard / Inline Variant --}}
-        <div class="inline-flex items-start gap-2.5">
+        @php
+            $hasInlineText = $label || $description || $slot->isNotEmpty();
+            $inlineAlignClass = ($hasInlineText && $description) ? 'items-start' : 'items-center';
+            $inlineIndicatorOffset = ($hasInlineText && $description) ? 'mt-0.5' : '';
+        @endphp
+        <label for="{{ $id }}" class="inline-flex {{ $inlineAlignClass }} gap-2.5 select-none cursor-pointer has-disabled:opacity-50 has-disabled:pointer-events-none">
             @if ($showIndicator)
-                <div class="relative flex items-center justify-center shrink-0 mt-0.5">
+                <div class="relative flex items-center justify-center shrink-0 {{ $outerSizes }} {{ $inlineIndicatorOffset }}">
                     <input
                         type="radio"
                         id="{{ $id }}"
@@ -193,27 +172,19 @@
                 />
             @endif
 
-            @if ($label || $description || $slot->isNotEmpty())
+            @if ($hasInlineText)
                 <div class="flex flex-col">
-                    <label for="{{ $id }}" class="{{ $labelSizes }} font-medium text-foreground select-none cursor-pointer leading-tight peer-disabled:opacity-50 peer-disabled:cursor-not-allowed">
+                    <span class="{{ $labelSizes }} font-medium text-foreground leading-tight peer-disabled:opacity-50">
                         {{ $label ?? $slot }}
-                    </label>
+                    </span>
                     @if ($description)
-                        <p class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal select-none">{{ $description }}</p>
+                        <p class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal">{{ $description }}</p>
                     @endif
                 </div>
             @endif
-        </div>
+        </label>
     @endif
 
     {{-- Error Message --}}
-    @if ($hasError && $errorMessage)
-        <p class="mt-1 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            {{ $errorMessage }}
-        </p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" marginClass="mt-1" />
 </div>

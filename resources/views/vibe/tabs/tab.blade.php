@@ -55,23 +55,25 @@
     // Hitung class ukuran & struktur secara statis di PHP agar twMerge bekerja sempurna
     $baseSizeClasses = match ($resolvedVariant) {
         'underline' => match ($resolvedSize) {
-            'xs' => 'h-7 px-2 text-xs pb-1.5 pt-1',
-            'sm' => 'h-8 px-2.5 text-xs pb-2 pt-1.5',
+            'xs' => 'h-7 px-2.5 text-xs pb-1.5 pt-1',
+            'sm' => 'h-8 px-3 text-xs pb-2 pt-1.5',
             'lg' => 'h-10 px-4 text-sm pb-3 pt-2.5',
-            'xl' => 'h-11 px-4.5 text-base pb-3.5 pt-3',
-            default => 'h-9 px-3 text-sm pb-2.5 pt-2',
+            'xl' => 'h-11 px-5 text-base pb-3 pt-2.5',
+            default => 'h-9 px-3.5 text-sm pb-2.5 pt-2',
         },
         'button' => match ($resolvedSize) {
-            'xs' => 'h-7 px-2 text-xs rounded-sm',
-            'sm' => 'h-8 px-2.5 text-xs rounded-md',
+            'xs' => 'h-7 px-2.5 text-xs rounded-md',
+            'sm' => 'h-8 px-3 text-xs rounded-md',
             'lg' => 'h-10 px-4 text-sm rounded-lg',
-            'xl' => 'h-11 px-4.5 text-base rounded-xl',
+            'xl' => 'h-11 px-5 text-base rounded-xl',
             default => 'h-9 px-3.5 text-sm rounded-lg',
         },
         'sidebar' => match ($resolvedSize) {
-            'sm' => 'min-h-8 px-2.5 py-1.5 text-xs rounded-md',
-            'lg' => 'min-h-10 px-3.5 py-2.5 text-sm rounded-lg',
-            default => 'min-h-9 px-3 py-2 text-sm rounded-lg',
+            'xs' => 'min-h-7 px-2.5 py-1 text-xs rounded-md',
+            'sm' => 'min-h-8 px-3 py-1.5 text-xs rounded-md',
+            'lg' => 'min-h-10 px-4 py-2.5 text-sm rounded-lg',
+            'xl' => 'min-h-11 px-5 py-2.5 text-base rounded-xl',
+            default => 'min-h-9 px-3.5 py-2 text-sm rounded-lg',
         },
         default => match ($resolvedSize) { // pill
             'xs' => 'h-6 px-2 text-xs rounded-md',
@@ -87,20 +89,20 @@
         : 'justify-center';
 
     $activeClasses = match ($resolvedVariant) {
-        'sidebar' => 'bg-muted text-foreground font-semibold shadow-2xs',
+        'sidebar' => 'bg-muted text-foreground font-semibold shadow-2xs forced-colors:outline-2 forced-colors:outline-solid',
         'underline' => $normalizedLayout === 'cols'
-            ? 'border-b-2 md:border-b-0 md:border-r-2 border-primary text-foreground font-semibold -mb-px md:-mb-0 md:-mr-px rounded-none bg-transparent hover:bg-transparent shadow-none'
-            : 'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent hover:bg-transparent shadow-none',
-        'button' => "{$activeBtnClasses} font-medium rounded-lg shadow-xs",
-        default => 'bg-card text-foreground shadow-xs font-semibold rounded-lg ring-1 ring-border/50',
+            ? 'border-b-2 md:border-b-0 md:border-r-2 border-primary text-foreground font-semibold -mb-px md:-mb-0 md:-mr-px rounded-none bg-transparent hover:bg-transparent shadow-none forced-colors:border-current'
+            : 'border-b-2 border-primary text-foreground font-semibold -mb-px rounded-none bg-transparent hover:bg-transparent shadow-none forced-colors:border-current',
+        'button' => "{$activeBtnClasses} font-medium shadow-xs forced-colors:outline-2 forced-colors:outline-solid",
+        default => 'bg-card text-foreground shadow-xs font-semibold ring-1 ring-border/50 forced-colors:outline-2 forced-colors:outline-solid',
     };
 
     $inactiveClasses = match ($resolvedVariant) {
         'underline' => $normalizedLayout === 'cols'
             ? 'border-b-2 md:border-b-0 md:border-r-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent font-medium hover:bg-transparent shadow-none'
             : 'border-b-2 border-transparent text-muted-foreground hover:text-foreground hover:border-muted-foreground/40 rounded-none bg-transparent font-medium hover:bg-transparent shadow-none',
-        'button' => "{$inactiveBtnClasses} font-medium rounded-lg shadow-2xs",
-        default => 'text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-lg font-medium',
+        'button' => "{$inactiveBtnClasses} font-medium shadow-2xs",
+        default => 'text-muted-foreground hover:text-foreground hover:bg-muted/60 font-medium',
     };
 
     $baseClasses = "vibe-tabs-tab relative inline-flex items-center select-none font-medium !transition-colors duration-150 gap-2 shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {$baseSizeClasses} {$alignmentClasses}";

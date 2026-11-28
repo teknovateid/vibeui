@@ -17,12 +17,13 @@
 
 ## Base HTML Layout Contract
 
-Layouts wrapping Vibe UI pages must include a `csrf-token` meta tag and `@vibeStyles` in `<head>` (loads fonts, anti-FOUC theme override, dark class restoration, and `window.VIBE_*` globals) along with `@vite` and Livewire hooks:
+Layouts wrapping Vibe UI pages must include `color-scheme` metadata, a `csrf-token` meta tag, and `@vibeStyles` in `<head>` (emits `<meta name="color-scheme">`, loads fonts, anti-FOUC theme override, dark class restoration, and `window.VIBE_*` globals) along with `@vite` and Livewire hooks:
 
 ```blade
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @vibeStyles
     @stack('seo')

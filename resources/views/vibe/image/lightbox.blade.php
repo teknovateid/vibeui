@@ -1,22 +1,17 @@
 @blaze
 
-<div
+<dialog
     x-data="{
         get store() {
             return (window.Alpine && window.Alpine.store) ? window.Alpine.store('vibeImageLightbox') : window.VibeImageLightbox;
         }
     }"
-    x-show="store && store.isOpen"
-    x-cloak
-    x-transition:enter="transition ease-out duration-250"
-    x-transition:enter-start="opacity-0"
-    x-transition:enter-end="opacity-100"
-    x-transition:leave="transition ease-in duration-200"
-    x-transition:leave-start="opacity-100"
-    x-transition:leave-end="opacity-0"
-    class="fixed inset-0 z-9999 flex flex-col justify-between bg-black/95 backdrop-blur-md select-none touch-none text-white overflow-hidden"
-    role="dialog"
-    aria-modal="true"
+    closedby="any"
+    data-vibe-dialog
+    x-init="window.VibeCore?.bindDialogLightDismissFallback($el, () => store?.close())"
+    x-effect="if (store && store.isOpen) { if (!$el.open) { if (typeof $el.showModal === 'function') $el.showModal(); else $el.setAttribute('open', ''); } } else if ($el.open || $el.hasAttribute('open')) { if (typeof $el.close === 'function') $el.close(); else $el.removeAttribute('open'); }"
+    @close="if (store && store.isOpen) store.close()"
+    class="open:flex m-0 max-w-none max-h-none w-full h-full flex-col justify-between bg-black/95 backdrop-blur-md select-none touch-none text-white overflow-hidden border-0 p-0 backdrop:bg-black/90"
     aria-label="{{ __('vibe/image.lightbox_title') }}"
 >
     {{-- Top Bar (Header Controls) --}}
@@ -185,4 +180,4 @@
             class="text-xs sm:text-sm text-neutral-300 font-normal max-w-2xl mx-auto line-clamp-2 leading-relaxed"
         ></p>
     </div>
-</div>
+</dialog>

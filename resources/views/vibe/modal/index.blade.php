@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'id' => null,
@@ -21,10 +21,10 @@
     $effectiveMaxWidth = $size ?? $maxWidth;
 
     $positionClasses = match ($position) {
-        'top' => 'items-start pt-16 sm:pt-24',
-        'center' => 'items-center',
-        'bottom' => 'items-end pb-16 sm:pb-24',
-        default => 'items-center',
+        'top' => 'mt-16 sm:mt-24 mb-auto mx-auto',
+        'center' => 'm-auto',
+        'bottom' => 'mt-auto mb-16 sm:mb-24 mx-auto',
+        default => 'm-auto',
     };
 
     $maxWidthClasses = match ($effectiveMaxWidth) {
@@ -51,7 +51,7 @@
         default => 'bg-card border border-border shadow-2xs',
     };
 
-    $dialogClasses = "relative overflow-hidden text-left transition-all transform shadow-2xl w-full {$maxWidthClasses} text-card-foreground rounded-xl {$variantClasses}";
+    $dialogClasses = trim("vibe-modal-container relative overflow-hidden text-left shadow-2xl w-[calc(100%-2rem)] {$maxWidthClasses} max-h-[calc(100dvh-2rem)] overflow-y-auto text-card-foreground rounded-xl {$variantClasses} {$positionClasses} backdrop:bg-black/60 backdrop:backdrop-blur-xs {$containerClass} {$backdropClass}");
 @endphp
 
 <div x-data="{
@@ -74,6 +74,27 @@
         }
     },
 
+    syncDialog(value) {
+        const dialog = document.getElementById(this.modalId);
+        if (!dialog) return;
+        if (value) {
+            if (!dialog.open) {
+                if (typeof dialog.showModal === 'function') dialog.showModal();
+                else dialog.setAttribute('open', '');
+            }
+            if ('{{ $dismissible ? 'true' : 'false' }}' === 'true') {
+                window.VibeCore?.bindDialogLightDismissFallback(dialog, () => this.close());
+            }
+            setTimeout(() => {
+                const input = dialog.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])');
+                if (input) input.focus();
+            }, 60);
+        } else if (dialog.open || dialog.hasAttribute('open')) {
+            if (typeof dialog.close === 'function') dialog.close();
+            else dialog.removeAttribute('open');
+        }
+    },
+
     init() {
         if (this.persist && this.modalId) {
             let stored = window.VibeModal?.getStored(this.modalId);
@@ -83,59 +104,24 @@
         }
 
         if (this.open) {
-            window._vibeOpenModalCount = (window._vibeOpenModalCount || 0) + 1;
-            document.body.classList.add('overflow-hidden');
+            this.$nextTick(() => this.syncDialog(true));
         }
 
         this.$watch('open', value => {
-            if (value) {
-                window._vibeOpenModalCount = (window._vibeOpenModalCount || 0) + 1;
-                document.body.classList.add('overflow-hidden');
-                if (this.persist && this.modalId) {
-                    if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
-                        Alpine.store('vibeModals').setOpen(this.modalId, true);
-                    } else if (window.VibeModal) {
-                        window.VibeModal.setOpen(this.modalId, true);
-                    }
-                }
-                setTimeout(() => {
-                    let dialog = document.getElementById(this.modalId);
-                    let input = dialog ? dialog.querySelector('input:not([type=hidden]):not([disabled]), textarea:not([disabled]), select:not([disabled])') : null;
-                    if (input) input.focus();
-                }, 100);
-            } else {
-                // BUG-FIX: Decrement counter before removing class — prevents removing
-                // overflow-hidden while another modal is still open (multi-modal scenario)
-                window._vibeOpenModalCount = Math.max(0, (window._vibeOpenModalCount || 1) - 1);
-                if (window._vibeOpenModalCount <= 0) {
-                    document.body.classList.remove('overflow-hidden');
-                }
-                if (this.persist && this.modalId) {
-                    if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
-                        Alpine.store('vibeModals').setOpen(this.modalId, false);
-                    } else if (window.VibeModal) {
-                        window.VibeModal.setOpen(this.modalId, false);
-                    }
+            this.$nextTick(() => this.syncDialog(value));
+            if (this.persist && this.modalId) {
+                if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
+                    Alpine.store('vibeModals').setOpen(this.modalId, !!value);
+                } else if (window.VibeModal) {
+                    window.VibeModal.setOpen(this.modalId, !!value);
                 }
             }
         });
-
-        if (typeof this.$cleanup === 'function') {
-            this.$cleanup(() => {
-                // Only decrement & cleanup if this modal was open when destroyed
-                if (this.open) {
-                    window._vibeOpenModalCount = Math.max(0, (window._vibeOpenModalCount || 1) - 1);
-                    if (window._vibeOpenModalCount <= 0) {
-                        document.body.classList.remove('overflow-hidden');
-                    }
-                }
-            });
-        }
     },
 
     close() {
         this.open = false;
-        // overflow-hidden is managed by the $watch handler via _vibeOpenModalCount counter
+        this.syncDialog(false);
         if (this.persist && this.modalId) {
             if (window.Alpine && Alpine.store && Alpine.store('vibeModals')) {
                 Alpine.store('vibeModals').dismiss(this.modalId);
@@ -144,26 +130,20 @@
             }
         }
     }
-}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId || t === '*' || !t) close()" @toggle-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) { open ? close() : open = true; }" @keydown.escape.window="if (open) { if ('{{ $dismissible ? 'true' : 'false' }}' === 'true') { close(); } else { triggerShake(); } }" class="vibe-modal-root">
+}" @open-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) open = true" @close-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId || t === '*' || !t) close()" @toggle-modal.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === modalId) { open ? close() : open = true; }" class="vibe-modal-root">
     @if ($teleport)
         <template x-teleport="body">
     @endif
 
-    <div id="{{ $modalId }}" x-show="open" x-cloak class="vibe-modal-container fixed inset-0 z-60 overflow-y-auto {{ $containerClass }}" aria-labelledby="modal-title" role="dialog" aria-modal="true" data-dismissible="{{ $dismissible ? 'true' : 'false' }}" style="display: none;">
-        <div class="flex justify-center min-h-screen p-4 text-center {{ $positionClasses }}">
-            <div x-show="open" x-transition.opacity class="fixed inset-0 transition-opacity bg-black/60 backdrop-blur-xs {{ $backdropClass }}" aria-hidden="true" @click="onBackdropClick"></div>
-
-            <div x-show="open" :class="{ 'animate-vibe-shake': isShaking, 'animate-vibe-pop': animation === 'pop' || animation === 'bounce', 'animate-vibe-pulse': animation === 'pulse', 'animate-vibe-wobble': animation === 'wobble' }" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" {{ $attributes->twMerge(['class' => $dialogClasses]) }}>
-                @if ($dismissibleButton)
-                    <div class="absolute top-4 right-4 z-10">
-                        <vibe:modal.close />
-                    </div>
-                @endif
-
-                {{ $slot }}
+    <dialog id="{{ $modalId }}" closedby="{{ $dismissible ? 'any' : 'none' }}" data-vibe-dialog data-dismissible="{{ $dismissible ? 'true' : 'false' }}" aria-labelledby="modal-title" @cancel.prevent="if ('{{ $dismissible ? 'true' : 'false' }}' === 'true') { close(); } else { triggerShake(); }" @close="if (open) close()" :class="{ 'animate-vibe-shake': isShaking, 'animate-vibe-pop': animation === 'pop' || animation === 'bounce', 'animate-vibe-pulse': animation === 'pulse', 'animate-vibe-wobble': animation === 'wobble' }" {{ $attributes->twMerge(['class' => $dialogClasses]) }}>
+        @if ($dismissibleButton)
+            <div class="absolute top-4 right-4 z-10">
+                <vibe:modal.close />
             </div>
-        </div>
-    </div>
+        @endif
+
+        {{ $slot }}
+    </dialog>
     @if ($teleport)
         </template>
     @endif

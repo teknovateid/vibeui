@@ -212,7 +212,7 @@
                 </div>
 
                 <div x-show="step === 1" x-cloak class="flex justify-between items-center w-full">
-                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="copyRecoveryCodes()">
                         {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="$vibe.modal('modal-2fa-totp').close(); $wire.set('step', 0)">
@@ -323,7 +323,7 @@
                 </div>
 
                 <div x-show="step === 1" x-cloak class="flex justify-between items-center w-full">
-                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                    <vibe:button type="button" variant="outline" size="sm" class="cursor-pointer" @click="copyRecoveryCodes()">
                         {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="sm" class="cursor-pointer" @click="$vibe.modal('modal-2fa-email').close(); $wire.set('step', 0)">
@@ -367,7 +367,7 @@
                     {{ __('vibe/settings.two_factor.regenerate_new_codes') }}
                 </vibe:button>
                 <div class="flex items-center gap-2">
-                    <vibe:button type="button" variant="outline" size="xs" class="cursor-pointer" @click="navigator.clipboard.writeText(recoveryCodes.join('\n')); if(window.vibeToast) vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' })">
+                    <vibe:button type="button" variant="outline" size="xs" class="cursor-pointer" @click="copyRecoveryCodes()">
                         {{ __('vibe/settings.two_factor.copy_all') }}
                     </vibe:button>
                     <vibe:button type="button" variant="primary" size="xs" class="cursor-pointer" @click="$vibe.modal('modal-2fa-recovery').close()">
@@ -470,9 +470,25 @@
                     }, 1000);
                 },
 
-                copySecret() {
-                    if (this.secretKey) {
-                        navigator.clipboard.writeText(this.secretKey);
+                async copyText(text) {
+                    if (!text) return false;
+                    if (window.VibeCore) return window.VibeCore.copy(text);
+                    if (navigator.clipboard) {
+                        await navigator.clipboard.writeText(text);
+                        return true;
+                    }
+                    return false;
+                },
+
+                async copyRecoveryCodes() {
+                    const text = Array.isArray(this.recoveryCodes) ? this.recoveryCodes.join('\n') : '';
+                    if (await this.copyText(text) && window.vibeToast) {
+                        vibeToast('{{ __('vibe/settings.two_factor.copied_all_toast') }}', { type: 'success' });
+                    }
+                },
+
+                async copySecret() {
+                    if (await this.copyText(this.secretKey)) {
                         this.copiedSecret = true;
                         setTimeout(() => {
                             this.copiedSecret = false;

@@ -1169,9 +1169,15 @@
 /* =========================================================================
    Image Preview Lightbox Modal
    ========================================================================= */
-.filepond--lightbox-backdrop {
+dialog.filepond--lightbox-backdrop {
     position: fixed;
     inset: 0;
+    margin: 0;
+    border: none;
+    max-width: none;
+    max-height: none;
+    width: 100%;
+    height: 100%;
     z-index: 99999;
     background-color: rgba(0, 0, 0, 0.88);
     backdrop-filter: blur(10px);
@@ -1181,12 +1187,37 @@
     justify-content: center;
     padding: 1.5rem;
     opacity: 0;
-    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overscroll-behavior: contain;
     cursor: zoom-out;
 }
 
-.filepond--lightbox-backdrop.active {
+dialog.filepond--lightbox-backdrop[open] {
+    display: flex;
+}
+
+dialog.filepond--lightbox-backdrop::backdrop {
+    background-color: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+
+dialog.filepond--lightbox-backdrop.active {
     opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    dialog.filepond--lightbox-backdrop {
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+            display 0.25s allow-discrete,
+            overlay 0.25s allow-discrete;
+    }
+
+    @starting-style {
+        dialog.filepond--lightbox-backdrop[open] {
+            opacity: 0;
+        }
+    }
 }
 
 .filepond--lightbox-content {

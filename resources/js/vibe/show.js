@@ -1,3 +1,5 @@
+import { isSafeUrl, setSafeHtml } from './core';
+
 /**
  * Vibe UI - Data Show & Binding Engine (VibeShow)
  *
@@ -58,7 +60,7 @@
 
         // 2. HTML injection: vibe-show-html
         if (el.hasAttribute('vibe-show-html')) {
-            el.innerHTML = val !== null && val !== undefined ? String(val) : '';
+            setSafeHtml(el, val);
             el.dispatchEvent(new CustomEvent('vibe:show:updated', { detail: { value: val }, bubbles: true }));
             return;
         }
@@ -150,19 +152,26 @@
             const isUrl = str.startsWith('http://') || str.startsWith('https://') || str.startsWith('/') || str.startsWith('data:image');
             const innerWrap = avatarContainer.querySelector('div') || avatarContainer;
 
-            if (isUrl) {
+            if (isUrl && isSafeUrl(str, true)) {
                 let img = avatarContainer.querySelector('img');
                 if (img) {
                     img.src = str;
                 } else {
-                    innerWrap.innerHTML = `<img src="${str}" class="w-full h-full object-cover" alt="" />`;
+                    img = document.createElement('img');
+                    img.src = str;
+                    img.className = 'w-full h-full object-cover';
+                    img.alt = '';
+                    innerWrap.replaceChildren(img);
                 }
             } else if (str) {
                 let span = avatarContainer.querySelector('span');
                 if (span) {
                     span.textContent = str;
                 } else {
-                    innerWrap.innerHTML = `<span class="font-semibold leading-none select-none">${str}</span>`;
+                    span = document.createElement('span');
+                    span.className = 'font-semibold leading-none select-none';
+                    span.textContent = str;
+                    innerWrap.replaceChildren(span);
                 }
             }
             el.dispatchEvent(new CustomEvent('vibe:show:updated', { detail: { value: val }, bubbles: true }));

@@ -214,67 +214,9 @@ class VibeServiceProvider extends ServiceProvider
             ]);
         }
 
-        // Register custom @alert directive
-        Blade::directive('vibeAlert', function ($expression) {
-            return "<?php
-                \$args = [{$expression}];
-                \$eventName = count(\$args) > 1 ? \$args[0] : 'alert';
-                \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
-                \$encodedEvent = json_encode((string) \$eventName, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-                \$encodedPayload = json_encode(\$payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-                echo '<script>
-                    (function() {
-                        var fired = false;
-                        var trigger = function() {
-                            if (fired) return;
-                            fired = true;
-                            window.dispatchEvent(new CustomEvent(' . \$encodedEvent . ', { detail: ' . \$encodedPayload . ' }));
-                        };
-                        if (document.readyState === \"loading\") {
-                            document.addEventListener(\"alpine:initialized\", function() {
-                                setTimeout(trigger, 10);
-                            });
-                            window.addEventListener(\"DOMContentLoaded\", function() {
-                                setTimeout(trigger, 50);
-                            });
-                        } else {
-                            setTimeout(trigger, 50);
-                        }
-                    })();
-                </script>';
-            ?>";
-        });
-
-        // Register custom @toast directive
-        Blade::directive('vibeToast', function ($expression) {
-            return "<?php
-                \$args = [{$expression}];
-                \$eventName = count(\$args) > 1 ? \$args[0] : 'toast';
-                \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
-                \$encodedEvent = json_encode((string) \$eventName, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-                \$encodedPayload = json_encode(\$payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-                echo '<script>
-                    (function() {
-                        var fired = false;
-                        var trigger = function() {
-                            if (fired) return;
-                            fired = true;
-                            window.dispatchEvent(new CustomEvent(' . \$encodedEvent . ', { detail: ' . \$encodedPayload . ' }));
-                        };
-                        if (document.readyState === \"loading\") {
-                            document.addEventListener(\"alpine:initialized\", function() {
-                                setTimeout(trigger, 10);
-                            });
-                            window.addEventListener(\"DOMContentLoaded\", function() {
-                                setTimeout(trigger, 50);
-                            });
-                        } else {
-                            setTimeout(trigger, 50);
-                        }
-                    })();
-                </script>';
-            ?>";
-        });
+        // Register custom @vibeAlert and @vibeToast directives
+        Blade::directive('vibeAlert', fn (?string $expression) => $this->compileOverlayDispatchDirective('alert', $expression));
+        Blade::directive('vibeToast', fn (?string $expression) => $this->compileOverlayDispatchDirective('toast', $expression));
 
         // Register custom @vibeStyles directive for theme init (Anti-FOUC), fonts preloading, and global configuration in <head>
         Blade::directive('vibeStyles', function () {
@@ -329,6 +271,8 @@ class VibeServiceProvider extends ServiceProvider
                 }
                 \$globalThemeJson = json_encode(\$globalTheme, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
+                echo '<meta name=\"color-scheme\" content=\"light dark\">';
+
                 // Pre-rendered Anti-FOUC Theme Shield style tag with server-cached global CSS
                 echo '<style id=\"' . \$prefix . '-theme-override\" data-navigate-once=\"true\">' . \$preRenderedCss . '</style>';
 
@@ -361,22 +305,30 @@ class VibeServiceProvider extends ServiceProvider
                             }
 
                             var d = false;
+                            var metaScheme = \'light dark\';
                             var parsed = null;
                             if (s) {
-                                if (s === \'dark\') d = true;
-                                else if (s === \'system\') d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
-                                else if (s === \'light\') d = false;
+                                if (s === \'dark\') { d = true; metaScheme = \'dark\'; }
+                                else if (s === \'system\') { d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches; metaScheme = \'light dark\'; }
+                                else if (s === \'light\') { d = false; metaScheme = \'light\'; }
                                 else {
                                     try {
                                         parsed = JSON.parse(s);
-                                        d = parsed.mode === \'dark\' || (parsed.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
+                                        if (parsed.mode === \'dark\') { d = true; metaScheme = \'dark\'; }
+                                        else if (parsed.mode === \'light\') { d = false; metaScheme = \'light\'; }
+                                        else { d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches; metaScheme = \'light dark\'; }
                                     } catch (e) {}
                                 }
                             } else if (mode !== \'local_only\' && g && g.tokens && g.tokens.mode) {
-                                d = g.tokens.mode === \'dark\' || (g.tokens.mode === \'system\' && window.matchMedia(\'(prefers-color-scheme: dark)\').matches);
+                                if (g.tokens.mode === \'dark\') { d = true; metaScheme = \'dark\'; }
+                                else if (g.tokens.mode === \'light\') { d = false; metaScheme = \'light\'; }
+                                else { d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches; metaScheme = \'light dark\'; }
                             } else {
                                 d = window.matchMedia(\'(prefers-color-scheme: dark)\').matches;
                             }
+
+                            var csMeta = document.querySelector(\'meta[name=\"color-scheme\"]\');
+                            if (csMeta) csMeta.content = metaScheme;
 
                             if (d) {
                                 document.documentElement.classList.add(\'dark\');
@@ -700,6 +652,40 @@ class VibeServiceProvider extends ServiceProvider
         }
 
         return implode('', $parts);
+    }
+
+    /**
+     * Compile @vibeAlert and @vibeToast overlay dispatch directives into a single script block.
+     */
+    protected function compileOverlayDispatchDirective(string $defaultEvent, ?string $expression): string
+    {
+        return "<?php
+            \$args = [{$expression}];
+            \$eventName = count(\$args) > 1 ? \$args[0] : '{$defaultEvent}';
+            \$payload = count(\$args) > 1 ? \$args[1] : \$args[0];
+            \$encodedEvent = json_encode((string) \$eventName, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+            \$encodedPayload = json_encode(\$payload, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+            echo '<script>
+                (function() {
+                    var fired = false;
+                    var trigger = function() {
+                        if (fired) return;
+                        fired = true;
+                        window.dispatchEvent(new CustomEvent(' . \$encodedEvent . ', { detail: ' . \$encodedPayload . ' }));
+                    };
+                    if (document.readyState === \"loading\") {
+                        document.addEventListener(\"alpine:initialized\", function() {
+                            setTimeout(trigger, 10);
+                        });
+                        window.addEventListener(\"DOMContentLoaded\", function() {
+                            setTimeout(trigger, 50);
+                        });
+                    } else {
+                        setTimeout(trigger, 50);
+                    }
+                })();
+            </script>';
+        ?>";
     }
 
     /**

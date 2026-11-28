@@ -25,36 +25,12 @@
     $errorMessage = ($error && !is_bool($error)) ? $error : ($errorKey ? $errors->first($errorKey) : null);
     $isDisabled = $disabled || ($attributes->has('disabled') && $attributes->get('disabled') !== false);
 
-    // Track dimensions
-    $trackSizes = match ($size) {
-        'xs' => 'h-3.5 w-6',
-        'sm' => 'h-4 w-7',
-        'lg' => 'h-6 w-11',
-        'xl' => 'h-7 w-12',
-        default => 'h-5 w-9',
-    };
-
-    // Thumb dimensions
-    $thumbSizes = match ($size) {
-        'xs' => 'size-2.5 peer-checked:translate-x-2.5',
-        'sm' => 'size-3 peer-checked:translate-x-3',
-        'lg' => 'size-5 peer-checked:translate-x-5',
-        'xl' => 'size-6 peer-checked:translate-x-5',
-        default => 'size-4 peer-checked:translate-x-4',
-    };
-
-    // Text sizes
-    $labelSizes = match ($size) {
-        'xs', 'sm' => 'text-xs',
-        'xl' => 'text-base',
-        default => 'text-base sm:text-sm',
-    };
-
-    $descSizes = match ($size) {
-        'xs' => 'text-[10px]',
-        'sm' => 'text-[11px]',
-        'xl' => 'text-sm',
-        default => 'text-sm sm:text-xs',
+    [$trackSizes, $thumbSizes, $labelSizes, $descSizes] = match ($size) {
+        'xs' => ['h-3.5 w-6', 'size-2.5 peer-checked:translate-x-2.5', 'text-xs', 'text-[10px]'],
+        'sm' => ['h-4 w-7', 'size-3 peer-checked:translate-x-3', 'text-xs', 'text-[11px]'],
+        'lg' => ['h-6 w-11', 'size-5 peer-checked:translate-x-5', 'text-sm', 'text-xs'],
+        'xl' => ['h-7 w-13', 'size-6 peer-checked:translate-x-6', 'text-base', 'text-sm'],
+        default => ['h-5 w-9', 'size-4 peer-checked:translate-x-4', 'text-sm', 'text-xs'],
     };
 
     // Track active colors
@@ -88,19 +64,32 @@
 
     $isJustify = $labelPlacement === 'justify';
     $isLeft = $labelPlacement === 'left';
+
+    $describedBy = [];
+    if ($description) {
+        $describedBy[] = "{$id}-description";
+    }
+    if ($hasError && $errorMessage) {
+        $describedBy[] = "{$id}-error";
+    }
+    $describedByString = !empty($describedBy) ? implode(' ', $describedBy) : null;
 @endphp
 
 <div class="{{ $wrapperClass }}">
-    <label for="{{ $id }}" class="flex {{ $isJustify ? 'flex-row-reverse items-center justify-between w-full' : ($isLeft ? 'flex-row-reverse items-center justify-end gap-3' : 'items-start gap-2.5') }} {{ $isDisabled ? 'cursor-not-allowed opacity-60 pointer-events-none' : 'cursor-pointer' }} select-none group/switch has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:pointer-events-none">
+    <label for="{{ $id }}" class="flex {{ $isJustify ? 'flex-row-reverse items-center justify-between w-full' : ($isLeft ? 'flex-row-reverse items-center justify-end gap-3' : ($description ? 'items-start gap-2.5' : 'items-center gap-2.5')) }} {{ $isDisabled ? 'cursor-not-allowed opacity-60 pointer-events-none' : 'cursor-pointer' }} select-none group/switch has-disabled:cursor-not-allowed has-disabled:opacity-60 has-disabled:pointer-events-none">
         
         {{-- The Switch Toggle Element --}}
-        <div class="relative inline-flex items-center shrink-0 {{ !$isJustify && !$isLeft ? 'mt-0.5' : '' }}">
+        <div class="relative inline-flex items-center shrink-0 {{ !$isJustify && !$isLeft && $description ? 'mt-0.5' : '' }}">
             <input
                 type="checkbox"
+                switch
                 role="switch"
                 id="{{ $id }}"
+                data-error="{{ $id }}-error"
                 @if($name) name="{{ $name }}" @endif
                 @if($value !== null) value="{{ $value }}" @elseif($name) value="1" @endif
+                @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+                @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
                 @checked($checked)
                 @disabled($isDisabled)
                 {{ $attributes->merge(['class' => 'peer sr-only']) }}
@@ -124,7 +113,7 @@
                     </span>
                 @endif
                 @if ($description)
-                    <span class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal">
+                    <span id="{{ $id }}-description" class="{{ $descSizes }} text-muted-foreground mt-0.5 leading-normal">
                         {{ $description }}
                     </span>
                 @endif
@@ -133,13 +122,5 @@
     </label>
 
     {{-- Error Message --}}
-    @if ($hasError && $errorMessage)
-        <p class="mt-1 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            {{ $errorMessage }}
-        </p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" marginClass="mt-1" />
 </div>

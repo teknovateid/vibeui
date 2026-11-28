@@ -11,6 +11,7 @@
     x-bind:aria-labelledby="tabId + '-tab-' + @js($name)"
     x-show="activeTab === @js($name)"
     x-cloak
+    @beforematch="if (activeTab !== @js($name)) activeTab = @js($name)"
     x-transition:enter="transition ease-out duration-150"
     x-transition:enter-start="opacity-0 translate-y-1"
     x-transition:enter-end="opacity-100 translate-y-0"

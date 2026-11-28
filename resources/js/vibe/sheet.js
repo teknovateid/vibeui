@@ -2,6 +2,7 @@
  * Vibe UI - Sheet / Drawer Component
  * Manages collapsible, static, and minify sheets with mobile awareness, drag resize, and persistence.
  */
+import { VibeStorage } from './core';
 
 export function vibeSheet(config = {}) {
     return {
@@ -131,31 +132,11 @@ export function vibeSheet(config = {}) {
 
         saveToStorage() {
             if (!this.persist) return;
-            try {
-                const stored = localStorage.getItem(this.persistKey);
-                let data = [];
-                if (stored) {
-                    const parsed = JSON.parse(stored);
-                    if (Array.isArray(parsed)) {
-                        data = parsed;
-                    }
-                }
-
-                const index = data.findIndex(i => i.id === this.id);
-                const newItem = {
-                    id: this.id,
-                    size: this.size,
-                    status: this.state
-                };
-
-                if (index !== -1) {
-                    data[index] = newItem;
-                } else {
-                    data.push(newItem);
-                }
-
-                localStorage.setItem(this.persistKey, JSON.stringify(data));
-            } catch (e) {}
+            VibeStorage.upsertItem(this.persistKey, this.id, {
+                id: this.id,
+                size: this.size,
+                status: this.state,
+            });
         },
 
         get currentSize() {
@@ -302,7 +283,7 @@ export function vibeSheet(config = {}) {
             if (!this.closeOnOutsideClick) return;
             if (this.state === 'collapsed') return;
             if (Date.now() - this.lastTriggerTime <= 150) return;
-            if (event && event.target && event.target.closest('[role=dialog], [role=alertdialog], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) return;
+            if (event && event.target && event.target.closest('dialog, [role=dialog], [role=alertdialog], [data-vibe-sheet-ignore], [data-vibe-portal], .vibe-modal, .vibe-dropdown-menu, .vibe-select-dropdown, #vibe-alert-container, .flatpickr-calendar')) return;
             this.close();
         }
     };

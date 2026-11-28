@@ -238,55 +238,44 @@
             return map[anim] || '';
         },
 
-        getAudioContext() {
-            if (!window.vibeAudioContext || window.vibeAudioContext.state === 'closed') {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (AudioCtx) {
-                    window.vibeAudioContext = new AudioCtx();
-                }
+        onFocusIn() {
+            this.onMouseEnter();
+        },
+
+        onFocusOut(event) {
+            if (!event.currentTarget?.contains(event.relatedTarget)) {
+                this.onMouseLeave();
             }
-            if (window.vibeAudioContext && window.vibeAudioContext.state === 'suspended') {
-                window.vibeAudioContext.resume().catch(() => {});
+        },
+
+        syncPopover() {
+            if (typeof this.$el?.showPopover !== 'function') return;
+            if (this.toasts.length > 0) {
+                try {
+                    if (!this.$el.matches(':popover-open')) this.$el.showPopover();
+                } catch {}
+            } else {
+                setTimeout(() => {
+                    if (this.toasts.length === 0) {
+                        try {
+                            if (this.$el.matches(':popover-open')) this.$el.hidePopover();
+                        } catch {}
+                    }
+                }, 180);
             }
-            return window.vibeAudioContext;
         },
 
         playSound(toast) {
             if (!toast || !toast.sound) return;
-
+            if (window.VibeCore) {
+                window.VibeCore.playAudio(toast.sound);
+                return;
+            }
             if (typeof toast.sound === 'string' && toast.sound.length > 5) {
                 try {
-                    let audio = new Audio(toast.sound);
-                    let p = audio.play();
-                    if (p !== undefined) {
-                        p.catch(e => console.warn('Audio play failed:', e));
-                    }
+                    new Audio(toast.sound).play()?.catch((e) => console.warn('Audio play failed:', e));
                 } catch (e) {
                     console.warn('Audio play failed:', e);
-                }
-            } else {
-                try {
-                    const ctx = this.getAudioContext();
-                    if (!ctx) return;
-
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-
-                    const now = ctx.currentTime;
-                    osc.type = 'sine';
-                    osc.frequency.setValueAtTime(800, now);
-                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
-
-                    gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
-                    osc.start(now);
-                    osc.stop(now + 0.12);
-                } catch (e) {
-                    console.warn('Web Audio API error:', e);
                 }
             }
         },
@@ -365,6 +354,11 @@
             return `translateY(${isTop ? y : -y}px) scale(${scale})`;
         }
     }"
+    x-init="$watch('toasts.length', () => syncPopover()); syncPopover();"
+    popover="manual"
+    data-vibe-popover
+    role="region"
+    aria-label="Notifications"
     x-on:toast.window="
         let d = $event.detail;
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
@@ -381,7 +375,7 @@
             remove(t);
         }
     "
-    class="fixed z-100 flex flex-col pointer-events-none"
+    class="fixed z-100 flex flex-col pointer-events-none m-0 border-0 bg-transparent p-0 overflow-visible"
     :class="[getPositionClasses(), getMarginClasses()]"
 >
     <!-- Handle Session Flash Messages -->
@@ -396,6 +390,8 @@
         class="relative w-[min(calc(100vw-1.75rem),340px)] sm:w-[340px] flex flex-col items-center pointer-events-none"
         @mouseenter="onMouseEnter()"
         @mouseleave="onMouseLeave()"
+        @focusin="onFocusIn()"
+        @focusout="onFocusOut($event)"
     >
         <template x-for="(toast, index) in toasts" :key="toast.id">
             <div
@@ -408,8 +404,14 @@
                             if ($el) updateHeight(toast.id, $el.offsetHeight);
                         });
                         ro.observe($el);
+                        if (typeof $cleanup === 'function') {
+                            $cleanup(() => ro.disconnect());
+                        }
                     }
                 "
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
                 x-transition:enter="transition-all ease-out duration-250"
                 x-transition:enter-start="opacity-0 translate-y-2 scale-95"
                 x-transition:enter-end="opacity-100 translate-y-0 scale-100"

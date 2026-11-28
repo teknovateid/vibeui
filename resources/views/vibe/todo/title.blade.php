@@ -114,7 +114,7 @@
                 x-ref="titleInput"
                 type="text" 
                 x-model="value" 
-                @keydown.enter.prevent="saveEdit()" 
+                @keydown.enter.prevent="if ($event.isComposing || $event.keyCode === 229) return; saveEdit()" 
                 @keydown.escape.prevent="cancelEdit()" 
                 class="text-sm font-semibold bg-background border border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 rounded-md px-2 py-0.5 w-full outline-none shadow-xs text-foreground transition-all"
                 placeholder="{{ __('vibe/todo.title_placeholder') }}"

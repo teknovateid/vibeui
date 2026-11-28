@@ -60,6 +60,7 @@
                 });
             },
             getScrollContainer() {
+                if (window.VibeCore) return window.VibeCore.getScrollContainer(this.$el);
                 let scrollEl = document.getElementById('docs-main-scroll');
                 if (scrollEl) return scrollEl;
 
@@ -75,6 +76,7 @@
             },
             getEffectiveOffset() {
                 if (this.offset !== 40) return this.offset;
+                if (window.VibeCore) return window.VibeCore.getStickyHeaderOffset(this.getScrollContainer(), 40);
                 let scrollContainer = this.getScrollContainer();
                 let stickyHeader = (scrollContainer && scrollContainer !== window)
                     ? scrollContainer.querySelector('header.sticky, header[data-variant=sticky], .has-sticky-header > header')
@@ -317,7 +319,7 @@
                         if (!headingElements.length) return;
 
                         let ul = root.querySelector('[data-toc-items]');
-                        if (ul) ul.innerHTML = '';
+                        if (ul) ul.replaceChildren();
 
                         let mobileContainer = root.querySelector('[data-toc-mobile-items]');
                         let mobileUl = null;
@@ -328,7 +330,7 @@
                                 mobileUl.className = 'space-y-1';
                                 mobileContainer.appendChild(mobileUl);
                             }
-                            mobileUl.innerHTML = '';
+                            mobileUl.replaceChildren();
                         }
 
                         // Calculate which heading is truly in view RIGHT NOW strictly based on scroll position

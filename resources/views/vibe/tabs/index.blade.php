@@ -112,7 +112,7 @@ $layoutClasses = match(true) {
             }
             this.mobileOpen = false;
             if (el && window.innerWidth < 768 && this.mobileMode === 'scroll') {
-                el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
             }
         },
 
@@ -143,7 +143,8 @@ $layoutClasses = match(true) {
             const tabs = this.getEnabledTabs();
             const activeIndex = tabs.indexOf(document.activeElement);
             if (activeIndex === -1) return;
-            const nextIndex = (activeIndex + offset + tabs.length) % tabs.length;
+            const dirOffset = (this.layout === 'rows' && getComputedStyle(this.getRootEl()).direction === 'rtl') ? -offset : offset;
+            const nextIndex = (activeIndex + dirOffset + tabs.length) % tabs.length;
             const nextTab = tabs[nextIndex];
             nextTab.focus();
             if (!nextTab.hasAttribute('href')) {

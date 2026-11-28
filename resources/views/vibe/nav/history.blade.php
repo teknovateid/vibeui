@@ -153,14 +153,32 @@
     if (!window.VibeHistoryBuilder) {
         window.VibeHistoryBuilder = {
             clockSvg: '<svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>',
+            createSvgIcon: function(cls, paths) {
+                var ns = 'http://www.w3.org/2000/svg';
+                var svg = document.createElementNS(ns, 'svg');
+                svg.setAttribute('class', cls);
+                svg.setAttribute('viewBox', '0 0 24 24');
+                svg.setAttribute('fill', 'none');
+                svg.setAttribute('stroke', 'currentColor');
+                svg.setAttribute('stroke-width', '1.5');
+                svg.setAttribute('stroke-linecap', 'round');
+                svg.setAttribute('stroke-linejoin', 'round');
+                paths.forEach(function(def) {
+                    var node = document.createElementNS(ns, def[0]);
+                    Object.keys(def[1]).forEach(function(k) { node.setAttribute(k, def[1][k]); });
+                    svg.appendChild(node);
+                });
+                return svg;
+            },
             render: function(wrapper, items, currentUrl, onDeleted) {
                 if (!wrapper) return;
-                wrapper.innerHTML = '';
+                wrapper.replaceChildren();
                 var minCls = 'group-data-[state=minified]/sheet:w-11 group-data-[state=minified]/sheet:h-11 group-data-[state=minified]/sheet:rounded-lg group-data-[state=minified]/sheet:px-0 group-data-[state=minified]/sheet:justify-center group-data-[state=minified]/sheet:mx-auto';
                 items.forEach(function(item) {
+                    var safeHref = (!window.VibeCore || window.VibeCore.isSafeUrl(item.url)) ? item.url : '#';
                     var isActive = currentUrl === item.url;
                     var a = document.createElement('a');
-                    a.href = item.url;
+                    a.href = safeHref;
                     a.dataset.pinTitle = item.title || item.url;
                     a.dataset.navTooltip = item.title || item.url;
                     a.className = 'flex items-center px-2.5 py-1.5 rounded-md text-xs font-medium w-full relative group/nav-item cursor-pointer ' + minCls + ' ' +
@@ -172,16 +190,25 @@
                             return;
                         }
                         e.preventDefault();
+                        if (safeHref === '#') return;
                         if (window.Livewire && window.Livewire.navigate) {
-                            window.Livewire.navigate(item.url);
+                            window.Livewire.navigate(safeHref);
                         } else {
-                            window.location.href = item.url;
+                            window.location.href = safeHref;
                         }
                     });
 
                     var iconSpan = document.createElement('span');
                     iconSpan.className = 'shrink-0 flex items-center justify-center size-4 text-muted-foreground group-hover/nav-item:text-foreground';
-                    iconSpan.innerHTML = item.icon || window.VibeHistoryBuilder.clockSvg;
+                    if (item.icon && window.VibeCore) {
+                        window.VibeCore.setSafeHtml(iconSpan, item.icon);
+                    }
+                    if (!iconSpan.firstElementChild) {
+                        iconSpan.replaceChildren(window.VibeHistoryBuilder.createSvgIcon('size-3.5', [
+                            ['circle', { cx: '12', cy: '12', r: '10' }],
+                            ['path', { d: 'M12 6v6l4 2' }],
+                        ]));
+                    }
                     a.appendChild(iconSpan);
 
                     var labelDiv = document.createElement('div');
@@ -198,7 +225,9 @@
                     delBtn.setAttribute('data-history-delete', 'true');
                     delBtn.title = '{{ __('vibe/nav.remove_from_history') }}';
                     delBtn.className = 'opacity-0 group-hover/nav-item:inline-flex items-center justify-center size-6 rounded hover:bg-muted text-muted-foreground hover:text-foreground shrink-0 ml-1 group-data-[state=minified]/sheet:hidden cursor-pointer';
-                    delBtn.innerHTML = '<svg class="size-3 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5L5 19M19 19L5 5" /></svg>';
+                    delBtn.replaceChildren(window.VibeHistoryBuilder.createSvgIcon('size-3 pointer-events-none', [
+                        ['path', { d: 'M19 5L5 19M19 19L5 5' }],
+                    ]));
                     
                     var handleDelete = function(e) {
                         e.preventDefault();

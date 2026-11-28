@@ -185,6 +185,23 @@ window.vibeConfirmWithPasskey = async function(btn, redirectUrl) {
 };
 
 let isAutofillActive = false;
+let autofillTimer = null;
+let autofillAbortController = null;
+
+function cancelPasskeyAutofill() {
+    if (autofillTimer) {
+        clearTimeout(autofillTimer);
+        autofillTimer = null;
+    }
+    if (autofillAbortController) {
+        autofillAbortController.abort();
+        autofillAbortController = null;
+    }
+    try {
+        Passkeys.cancel?.();
+    } catch {}
+    isAutofillActive = false;
+}
 
 function initPasskeyAutofill() {
     // Prevent duplicate concurrent autofill triggers
@@ -202,18 +219,23 @@ function initPasskeyAutofill() {
 
     if (window.PublicKeyCredential && VibePasskeyService.isSupported()) {
         isAutofillActive = true;
+        autofillAbortController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+        const signal = autofillAbortController?.signal;
+
         VibePasskeyService.isAutofillSupported?.().then(supported => {
-            if (supported) {
-                VibePasskeyService.client?.autofill?.().then(res => {
-                    if (res) window.location.href = redirectUrl;
-                }).catch((err) => {
-                    console.debug('Passkey autofill idle or ignored:', err);
-                }).finally(() => {
-                    isAutofillActive = false;
-                });
-            } else {
+            if (!supported || signal?.aborted) {
                 isAutofillActive = false;
+                return;
             }
+            VibePasskeyService.client?.autofill?.({ signal }).then(res => {
+                if (res && !signal?.aborted) window.location.href = redirectUrl;
+            }).catch((err) => {
+                if (err?.name !== 'AbortError') {
+                    console.debug('Passkey autofill idle or ignored:', err);
+                }
+            }).finally(() => {
+                isAutofillActive = false;
+            });
         }).catch(() => {
             isAutofillActive = false;
         });
@@ -222,11 +244,15 @@ function initPasskeyAutofill() {
 
 if (typeof window !== 'undefined') {
     window.addEventListener('DOMContentLoaded', () => {
-        setTimeout(initPasskeyAutofill, 200);
+        autofillTimer = setTimeout(initPasskeyAutofill, 200);
     }, { once: true });
 
+    document.addEventListener('livewire:navigating', () => {
+        cancelPasskeyAutofill();
+    });
+
     document.addEventListener('livewire:navigated', () => {
-        isAutofillActive = false;
-        setTimeout(initPasskeyAutofill, 200);
+        cancelPasskeyAutofill();
+        autofillTimer = setTimeout(initPasskeyAutofill, 200);
     });
 }

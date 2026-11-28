@@ -40,25 +40,17 @@
     // Outer control box classes (holds border, background, focus ring, rounded, height)
     $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
 
-    $sizeControlClasses = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md',
-        'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
-        'lg' => 'h-10 text-sm rounded-lg',
-        'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
+    [$sizeHeightText, $sizeRadius, $leadingPadding, $trailingPadding, $plDefault, $prDefault, $addonIconClass, $affixTextClass, $inputFontSize] = match ($size) {
+        'xs' => ['h-7 text-xs', 'rounded-md', 'pl-2 pr-1', 'pr-2 pl-1', 'pl-2.5 ', 'pr-2.5', 'size-3.5 [&>svg]:size-3.5', 'text-xs', 'text-xs'],
+        'sm' => ['h-8 text-xs', 'rounded-md', 'pl-2.5 pr-1.5', 'pr-2.5 pl-1.5', 'pl-3 ', 'pr-3', 'size-3.5 [&>svg]:size-3.5', 'text-xs', 'text-xs'],
+        'lg' => ['h-10 text-sm', 'rounded-lg', 'pl-3.5 pr-2', 'pr-3.5 pl-2', 'pl-4 ', 'pr-4', 'size-4.5 [&>svg]:size-4.5', 'text-sm', 'text-sm'],
+        'xl' => ['h-11 text-base', 'rounded-xl', 'pl-4 pr-2.5', 'pr-4 pl-2.5', 'pl-5 ', 'pr-5', 'size-5 [&>svg]:size-5', 'text-sm', 'text-base'],
+        default => ['h-9 text-sm', 'rounded-lg', 'pl-3 pr-1.5', 'pr-3 pl-1.5', 'pl-3.5 ', 'pr-3.5', 'size-4 [&>svg]:size-4', 'text-xs', 'text-sm'],
     };
 
-    if ($variant === 'flush') {
-        $sizeControlClasses = match ($size) {
-            'xs' => 'h-7 text-xs rounded-none px-0',
-            'sm' => 'h-8 text-xs rounded-none px-0',
-            'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
-            'lg' => 'h-10 text-sm rounded-none px-0',
-            'xl' => 'h-11 text-base rounded-none px-0',
-            default => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
-        };
-    }
+    $sizeControlClasses = $variant === 'flush'
+        ? "{$sizeHeightText} rounded-none px-0"
+        : "{$sizeHeightText} {$sizeRadius}";
 
     $variantControlClasses = match ($variant) {
         'filled' => $hasError ? 'bg-destructive/10 border border-destructive focus-within:bg-background focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'bg-muted/60 border border-transparent hover:bg-muted/80 focus-within:bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
@@ -93,46 +85,8 @@
         $trailingPadding = 'pr-0 pl-1.5';
         $inputPadding = 'px-0';
     } else {
-        $leadingPadding = match ($size) {
-            'xs' => 'pl-2 pr-1',
-            'sm' => 'pl-2.5 pr-1.5',
-            'lg' => 'pl-3.5 pr-2',
-            'xl' => 'pl-4 pr-2.5',
-            default => 'pl-3.5 sm:pl-3 pr-2 sm:pr-1.5',
-        };
-        $trailingPadding = match ($size) {
-            'xs' => 'pr-2 pl-1',
-            'sm' => 'pr-2.5 pl-1.5',
-            'lg' => 'pr-3.5 pl-2',
-            'xl' => 'pr-4 pl-2.5',
-            default => 'pr-3.5 sm:pr-3 pl-2 sm:pl-1.5',
-        };
-        $inputPadding =
-            ($hasLeading
-                ? 'pl-0 '
-                : match ($size) {
-                    'xs' => 'pl-2 ',
-                    'sm' => 'pl-2.5 ',
-                    'lg' => 'pl-4 ',
-                    'xl' => 'pl-4.5 ',
-                    default => 'pl-4 sm:pl-3.5 ',
-                }) .
-            ($hasTrailing
-                ? 'pr-0'
-                : match ($size) {
-                    'xs' => 'pr-2',
-                    'sm' => 'pr-2.5',
-                    'lg' => 'pr-4',
-                    'xl' => 'pr-4.5',
-                    default => 'pr-4 sm:pr-3.5',
-                });
+        $inputPadding = ($hasLeading ? 'pl-0 ' : $plDefault) . ($hasTrailing ? 'pr-0' : $prDefault);
     }
-
-    $inputFontSize = match ($size) {
-        'xs', 'sm' => 'text-xs',
-        'xl' => 'text-base',
-        default => 'text-base sm:text-sm',
-    };
 
     $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';
     $inputClasses = trim("w-full flex-1 min-w-0 h-full bg-transparent border-0 py-0 focus:outline-none focus:ring-0 {$inputFontSize} {$inputPadding} {$inputTextColor} disabled:pointer-events-none read-only:cursor-default");
@@ -151,47 +105,41 @@
 @endphp
 
 <div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }}>
-    @if ($label)
-        <label for="{{ $id }}" class="block text-xs font-semibold text-foreground mb-1.5 select-none">
-            {{ $label }}
-            @if ($attributes->has('required') && $attributes->get('required') !== false)
-                <span class="text-destructive font-bold ml-0.5" aria-hidden="true">*</span>
-            @endif
-        </label>
-    @endif
-
-    @if ($description)
-        <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
-    @endif
+    <vibe:partials.field-label
+        :for="$id"
+        :label="$label"
+        :required="$attributes->has('required') && $attributes->get('required') !== false"
+        :description="$description"
+        :descriptionId="$id . '-description'"
+    />
 
     <div @if($isViewable) x-data="{ showPassword: false }" @endif {{ $attributes->only('class')->twMerge(['class' => $controlClasses]) }} onclick="if (!event.target.closest('button, a, input')) this.querySelector('input')?.focus()">
         @if ($hasLeading)
             <div class="flex items-center {{ $leadingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
                 @if (isset($icon))
-                    <span class="size-4 flex items-center justify-center shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">{{ $icon }}</span>
+                    <span class="{{ $addonIconClass }} flex items-center justify-center shrink-0">{{ $icon }}</span>
                 @endif
                 @if (!empty($prefix))
-                    <span class="font-medium text-xs {{ $size === 'xl' ? 'text-sm' : '' }} select-none">{{ $prefix }}</span>
+                    <span class="font-medium {{ $affixTextClass }} select-none">{{ $prefix }}</span>
                 @endif
             </div>
         @endif
 
-        <input @if($isViewable) :type="showPassword ? 'text' : 'password'" @else type="{{ $type }}" @endif id="{{ $id }}" name="{{ $name }}" @if ($hasError) aria-invalid="true" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif @if ($isDisabled) disabled @endif @if ($isReadonly) readonly @endif {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}>
+        <input @if($isViewable) :type="showPassword ? 'text' : 'password'" @else type="{{ $type }}" @endif id="{{ $id }}" name="{{ $name }}" data-error="{{ $id }}-error" @if ($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif @if ($describedByString) aria-describedby="{{ $describedByString }}" @endif @if ($isDisabled) disabled @endif @if ($isReadonly) readonly @endif {{ $attributes->except(['class', 'disabled', 'readonly'])->twMerge(['class' => $inputClasses]) }}>
 
         @if ($hasTrailing)
             <div class="flex items-center {{ $trailingPadding }} gap-1.5 shrink-0 text-muted-foreground select-none pointer-events-none [&>button]:pointer-events-auto [&>a]:pointer-events-auto">
                 @if (!empty($suffix))
-                    <span class="font-medium text-xs {{ $size === 'xl' ? 'text-sm' : '' }} select-none">{{ $suffix }}</span>
+                    <span class="font-medium {{ $affixTextClass }} select-none">{{ $suffix }}</span>
                 @endif
                 @if (isset($trailingIcon))
-                    <span class="size-4 flex items-center justify-center shrink-0 [&>svg]:size-4 [&>svg]:shrink-0">{{ $trailingIcon }}</span>
+                    <span class="{{ $addonIconClass }} flex items-center justify-center shrink-0">{{ $trailingIcon }}</span>
                 @endif
                 @if ($isViewable)
                     <button 
                         type="button" 
-                        tabindex="-1"
                         @click.stop="showPassword = !showPassword" 
-                        class="text-muted-foreground hover:text-foreground p-1.5 sm:p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
+                        class="text-muted-foreground hover:text-foreground p-0.5 rounded-md focus:outline-none focus:ring-1 focus:ring-ring transition-colors cursor-pointer"
                         aria-label="{{ __('vibe/input.toggle_password') }}"
                         :aria-pressed="showPassword"
                     >
@@ -208,15 +156,5 @@
         @endif
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" />
 </div>

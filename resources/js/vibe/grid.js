@@ -99,7 +99,7 @@ export function vibeGrid(config = {}) {
             this.order = order;
             this.spans = spans;
             this.initialOrder = [...order];
-            this.initialSpans = JSON.parse(JSON.stringify(spans));
+            this.initialSpans = structuredClone(spans);
         },
 
         getStore() {
@@ -635,7 +635,8 @@ export function vibeGrid(config = {}) {
             } catch (e) {}
 
             this.order = [...this.initialOrder];
-            this.spans = JSON.parse(JSON.stringify(this.initialSpans));
+            const rawSpans = window.Alpine?.raw ? window.Alpine.raw(this.initialSpans) : this.initialSpans;
+            this.spans = structuredClone(rawSpans);
             this.applyLayout();
             window.dispatchEvent(new CustomEvent('vibe-grid-reset', { detail: { id: this.id } }));
         }

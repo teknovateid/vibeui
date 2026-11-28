@@ -113,21 +113,14 @@
 
     @if($confirmPassword && $ajax)
         <template x-teleport="body">
-            <div x-show="showConfirmPasswordModal" x-cloak class="fixed inset-0 z-60 overflow-y-auto" role="dialog" aria-modal="true" data-vibe-sheet-ignore="true" style="display: none;">
-                <div class="flex justify-center min-h-screen p-4 text-center items-center">
-                    {{-- Backdrop --}}
-                    <div x-show="showConfirmPasswordModal" x-transition.opacity class="fixed inset-0 bg-black/60 backdrop-blur-xs" data-vibe-sheet-ignore="true" @click="closeConfirmPasswordModal()"></div>
-
-                    {{-- Modal Card --}}
-                    <div x-show="showConfirmPasswordModal" 
-                         x-transition:enter="ease-out duration-300"
-                         x-transition:enter-start="opacity-0 scale-95"
-                         x-transition:enter-end="opacity-100 scale-100"
-                         x-transition:leave="ease-in duration-200"
-                         x-transition:leave-start="opacity-100 scale-100"
-                         x-transition:leave-end="opacity-0 scale-95"
-                         @keydown.escape.window="if (showConfirmPasswordModal) closeConfirmPasswordModal()"
-                         class="relative w-full max-w-md p-6 overflow-hidden text-left bg-card text-card-foreground border border-border/80 rounded-2xl shadow-2xl space-y-4">
+            <dialog x-ref="confirmPasswordDialog"
+                    closedby="any"
+                    data-vibe-dialog
+                    data-vibe-sheet-ignore="true"
+                    x-init="window.VibeCore?.bindDialogLightDismissFallback($el, () => closeConfirmPasswordModal())"
+                    x-effect="if (showConfirmPasswordModal) { if (!$el.open) { if (typeof $el.showModal === 'function') $el.showModal(); else $el.setAttribute('open', ''); } $nextTick(() => $refs.confirmPasswordInputRef?.focus()); } else if ($el.open || $el.hasAttribute('open')) { if (typeof $el.close === 'function') $el.close(); else $el.removeAttribute('open'); }"
+                    @close="if (showConfirmPasswordModal) closeConfirmPasswordModal()"
+                    class="m-auto w-[calc(100%-2rem)] max-w-md p-6 overflow-hidden text-left bg-card text-card-foreground border border-border/80 rounded-2xl shadow-2xl space-y-4 backdrop:bg-black/60 backdrop:backdrop-blur-xs">
                         
                         {{-- Header with Icon --}}
                         <div class="flex items-start gap-3.5">
@@ -236,9 +229,7 @@
                                 </vibe:button>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
+            </dialog>
         </template>
     @endif
 </form>

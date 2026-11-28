@@ -166,7 +166,11 @@ PHP;
         $components = [];
         $directories = File::directories($dir);
         foreach ($directories as $directory) {
-            $components[] = basename($directory);
+            $base = basename($directory);
+            if ($base === 'partials' || str_starts_with($base, '_')) {
+                continue;
+            }
+            $components[] = $base;
         }
 
         return $components;

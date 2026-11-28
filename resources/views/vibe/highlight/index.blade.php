@@ -158,7 +158,7 @@
 <div
     x-data="{
         copied: false,
-        copyCode() {
+        async copyCode(buttonEl = null) {
             let codeEl = this.$refs.codeBlock;
             let text = '';
             if (codeEl) {
@@ -170,11 +170,23 @@
                     text = codeEl.innerText || codeEl.textContent || '';
                 }
             }
-            if (navigator.clipboard && text) {
-                navigator.clipboard.writeText(text.trim()).then(() => {
-                    this.copied = true;
-                    setTimeout(() => this.copied = false, 2000);
+            const trimmed = text.trim();
+            if (!trimmed) return;
+            let ok = false;
+            if (window.VibeCore) {
+                ok = await window.VibeCore.copy(trimmed, {
+                    button: buttonEl,
+                    statusEl: this.$refs.copyStatus,
+                    copiedText: @js(__('vibe/preview.copied')),
+                    failedText: @js(__('vibe/preview.copy')),
                 });
+            } else if (navigator.clipboard) {
+                await navigator.clipboard.writeText(trimmed);
+                ok = true;
+            }
+            if (ok) {
+                this.copied = true;
+                setTimeout(() => this.copied = false, 2000);
             }
         },
         runHighlight() {
@@ -241,9 +253,10 @@
 
             <div class="flex items-center gap-2 shrink-0 ml-2">
                 @if ($copyable)
+                    <span x-ref="copyStatus" role="status" aria-live="polite" class="sr-only"></span>
                     <button
                         type="button"
-                        @click="copyCode()"
+                        @click="copyCode($el)"
                         class="inline-flex items-center justify-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium min-w-16 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors focus:outline-none cursor-pointer"
                         aria-label="{{ __('vibe/preview.copy') }}"
                     >
@@ -267,9 +280,10 @@
     @elseif ($copyable)
         {{-- Floating copy button when header is hidden --}}
         <div class="absolute top-2.5 right-2.5 z-10">
+            <span x-ref="copyStatus" role="status" aria-live="polite" class="sr-only"></span>
             <button
                 type="button"
-                @click="copyCode()"
+                @click="copyCode($el)"
                 class="inline-flex items-center justify-center size-8 rounded-lg bg-muted/80 backdrop-blur-xs text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all border border-border shadow-xs focus:outline-none cursor-pointer"
                 aria-label="{{ __('vibe/preview.copy') }}"
                 title="{{ __('vibe/preview.copy') }}"

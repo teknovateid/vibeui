@@ -251,55 +251,17 @@
         });
     },
 
-    getAudioContext() {
-        if (!window.vibeAudioContext || window.vibeAudioContext.state === 'closed') {
-            const AudioCtx = window.AudioContext || window.webkitAudioContext;
-            if (AudioCtx) {
-                window.vibeAudioContext = new AudioCtx();
-            }
-        }
-        if (window.vibeAudioContext && window.vibeAudioContext.state === 'suspended') {
-            window.vibeAudioContext.resume().catch(() => {});
-        }
-        return window.vibeAudioContext;
-    },
-
     playSound(alert) {
         if (!alert || !alert.sound) return;
-
+        if (window.VibeCore) {
+            window.VibeCore.playAudio(alert.sound);
+            return;
+        }
         if (typeof alert.sound === 'string' && alert.sound.length > 5) {
             try {
-                let audio = new Audio(alert.sound);
-                let p = audio.play();
-                if (p !== undefined) {
-                    p.catch(e => console.warn('Audio play failed:', e));
-                }
+                new Audio(alert.sound).play()?.catch((e) => console.warn('Audio play failed:', e));
             } catch (e) {
                 console.warn('Audio play failed:', e);
-            }
-        } else {
-            try {
-                const ctx = this.getAudioContext();
-                if (!ctx) return;
-
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-
-                const now = ctx.currentTime;
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(300, now + 0.12);
-
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
-                osc.start(now);
-                osc.stop(now + 0.12);
-            } catch (e) {
-                console.warn('Web Audio API error:', e);
             }
         }
     },
@@ -434,25 +396,33 @@
         }
     },
     executeCallback(cb) {
-        if (typeof cb === 'function') {
-            try {
-                cb();
-            } catch (e) {
-                console.error('Error executing alert callback:', e);
+        try {
+            if (window.VibeCore) {
+                window.VibeCore.evalCallback(cb);
+                return;
             }
-        } else if (typeof cb === 'string') {
-            try {
+            if (typeof cb === 'function') {
+                cb();
+            } else if (typeof cb === 'string') {
                 if (cb.trim().startsWith('function') || cb.includes('=>')) {
-                    (new Function('return ' + cb))()();
+                    (new Function('return (' + cb + ')'))()();
                 } else {
                     (new Function(cb))();
                 }
-            } catch (e) {
-                console.error('Error executing alert callback:', e);
             }
+        } catch (e) {
+            console.error('Error executing alert callback:', e);
         }
     }
-}" x-on:alert.window="
+}" @keydown.escape.window="
+        if (alerts.length > 0) {
+            let top = alerts[alerts.length - 1];
+            if (top.ready) {
+                if (canCloseOutside(top)) remove(top.id);
+                else shakeAlert(top);
+            }
+        }
+    " x-on:alert.window="
         let d = $event.detail;
         let payload = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? d : {message: d, type: 'info'});
         add(payload);
@@ -484,11 +454,11 @@
 
     <div class="w-full max-w-88 sm:max-w-md flex flex-col gap-4 pointer-events-none">
         <template x-for="alert in alerts" :key="alert.id">
-            <div :id="'vibe-alert-' + alert.id" :class="['pos-' + (alert.position || globalPosition), getAnimationClass(alert)]" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready) { if (canCloseOutside(alert)) { remove(alert.id); } else { shakeAlert(alert); } }" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
+            <div :id="'vibe-alert-' + alert.id" role="alertdialog" aria-modal="true" :aria-labelledby="'vibe-alert-title-' + alert.id" :aria-describedby="'vibe-alert-desc-' + alert.id" x-init="$nextTick(() => { const focusTarget = $el.querySelector('[data-vibe-alert-cancel]:not([style*=\'display: none\']), [data-vibe-alert-confirm]:not([style*=\'display: none\'])'); if (alert.type === 'confirm' && focusTarget) focusTarget.focus(); })" :class="['pos-' + (alert.position || globalPosition), getAnimationClass(alert)]" @mouseenter="pauseTimer(alert)" @mouseleave="resumeTimer(alert)" @click.outside="if (alert.ready) { if (canCloseOutside(alert)) { remove(alert.id); } else { shakeAlert(alert); } }" x-transition:enter="transition-all ease-out duration-300" x-transition:enter-start="vibe-alert-start" x-transition:enter-end="opacity-100 transform-none" x-transition:leave="transition-all ease-in duration-200" x-transition:leave-start="opacity-100 transform-none" x-transition:leave-end="vibe-alert-start" class="relative w-full bg-card text-card-foreground select-none rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-border pointer-events-auto">
                 <div class="p-5 sm:p-6 flex flex-col" :class="getAlignClasses(alert)">
                     <div class="flex size-16 items-center justify-center rounded-full mb-4" :class="typeClasses[alert.type] || typeClasses.info" x-html="alert.icon || icons[alert.type] || icons.info"></div>
-                    <h3 class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? '{{ __('vibe/alert.error') }}' : (alert.type === 'success' ? '{{ __('vibe/alert.success') }}' : '{{ __('vibe/alert.notice') }}'))"></h3>
-                    <p class="mt-1.5 text-sm text-muted-foreground leading-relaxed" x-text="alert.message"></p>
+                    <h3 :id="'vibe-alert-title-' + alert.id" class="text-lg font-bold text-foreground tracking-tight" x-text="alert.title || (alert.type === 'error' ? '{{ __('vibe/alert.error') }}' : (alert.type === 'success' ? '{{ __('vibe/alert.success') }}' : '{{ __('vibe/alert.notice') }}'))"></h3>
+                    <p :id="'vibe-alert-desc-' + alert.id" class="mt-1.5 text-sm text-muted-foreground leading-relaxed" x-text="alert.message"></p>
                 </div>
 
                 <!-- Footer -->
