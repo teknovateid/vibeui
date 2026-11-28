@@ -23,7 +23,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 | Component | Subcomponents | Key Props |
 | :--- | :--- | :--- |
 | `<vibe:button>` | `.group`, `.edit`, `.delete`, `.show`, `.swipe` | `variant` (`primary`, `secondary`, `outline`, `ghost`, `surface`, `destructive`/`danger`, `success`, `warning`, `info`, `link`, `default`), `size` (`xs`, `sm`, `md`, `lg`, `xl`, `icon-xs`..`icon-2xl`, `icon-10`, `icon-12`, `auto`, `none`), `type`, `href`, `loading`, `disabled`, `pulse`, `animation`, `navigate`. **Use `class="rounded-full"` instead of `pill`.** |
-| `<vibe:button.delete>` | — | `variant`, `size`, `title`, `message`, `confirmText`, `cancelText`, `action`, `url`, `wire:click` (shows confirmation alert before executing) |
+| `<vibe:button.delete>` | — | `variant`, `size`, `title`, `message`, `confirmText`, `cancelText`, `action`, `url` (also accepts `wire:click` / `@click`; shows confirmation alert before executing) |
 | `<vibe:button.edit>` | — | `variant`, `size`, `href`, `url`, `target`, `action`, `data`, `onSuccess`, `onError`, `resetErrors`, `title` |
 | `<vibe:button.show>` | — | `variant`, `size`, `url`, `target`, `method`, `title` |
 | `<vibe:swipe>` | — | `name`, `value`, `id`, `type`, `size`, `variant`, `label`, `confirmedLabel`, `loadingLabel`, `threshold`, `autoReset`, `disabled`, `readonly`, `loading`, `haptic` |
@@ -38,8 +38,8 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 | `<vibe:form>` | — | `id`, `ajax` (default `true`), `saveToStorage`, `storageType` (`session`, `local`), `expireHours`, `status` (`toast`, `alert`, `true`, `false`), `delay`, `redirectTo`, `onSuccess`, `onError`, `confirmPassword`, `confirmPasswordUrl`, `locale` |
 | `<vibe:input>` | `.currency`, `.number`, `.phone`, `.otp`, `.quantity`, `.generate`, `.multiple`, `.file`, `.tags` | `label`, `id`, `type`, `name`, `description`, `size` (`xs`..`xl`), `variant` (`primary`, `outline`, `filled`, `flush`, `ghost`), `info`, `error`, `errorName`, `wrapperClass`, `icon`, `trailingIcon`, `prefix`, `suffix`, `disabled`, `readonly`, `viewable` (for `type="password"`), `animation`. **Use `class="rounded-full"` instead of `pill`.** |
 | `<vibe:textarea>` | — | `label`, `id`, `name`, `rows`, `placeholder`, `size`, `variant`, `autoResize`, `showCount`, `maxlength`, `description`, `info`, `error`, `errorName`, `wrapperClass`, `animation` |
-| `<vibe:select>` | `.option`, `.group`, `.remote` | `label`, `id`, `name`, `options`, `value`, `placeholder`, `searchable`, `searchPlaceholder`, `multiple`, `clearable`, `min`, `max`, `placement`, `keyboard`, `size`, `variant`, `error`, `info`; `.remote` adds `api`, `searchParam`, `minChars`, `debounce`, `headers`, `initialLabel`, `initialAvatar`, `initialIcon` |
-| `<vibe:checkbox>` | `.group` | `label`, `id`, `name`, `value`, `checked`, `indeterminate`, `description`, `info`, `error`, `size`, `variant`, `color`, `card`, `indicator`, `hideIndicator` |
+| `<vibe:select>` | `.option`, `.group`, `.remote` | `label`, `id`, `name`, `options`, `value`, `placeholder`, `searchable`, `searchPlaceholder`, `multiple`, `clearable`, `min`, `max`, `separator`, `badgeVariant`, `colorCycle`, `placement`, `keyboard`, `size`, `variant`, `error`, `info`; `.remote` adds `api`, `searchParam`, `minChars`, `debounce`, `headers`, `initialLabel`, `initialAvatar`, `initialIcon` |
+| `<vibe:checkbox>` | `.group` | `label`, `id`, `name`, `value`, `checked`, `indeterminate`, `description`, `info`, `error`, `size`, `variant`, `color`, `card`, `indicator`, `hideIndicator`; `.group`: `orientation`, `columns`, `required` |
 | `<vibe:radio>` | `.group` | `label`, `id`, `name`, `value`, `checked`, `description`, `size`, `variant`, `color`, `card`, `error`, `indicator`, `hideIndicator`; `.group`: `orientation`, `columns`, `required` |
 | `<vibe:switch>` | — | `label`, `id`, `name`, `value`, `checked`, `description`, `size`, `variant`, `labelPlacement`, `disabled`, `error` |
 | `<vibe:range>` | — | `label`, `id`, `name`, `min`, `max`, `step`, `value`, `size`, `variant`, `showValue`, `valuePrefix`, `valueSuffix`, `minLabel`, `maxLabel`, `marks`, `checkpoints`, `strict` |
@@ -52,7 +52,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 
 | Component | Subcomponents | Key Props |
 | :--- | :--- | :--- |
-| `<vibe:card>` | `.header`, `.title`, `.description`, `.content`, `.footer`, `.alert` | `variant` (`default`, `outline`, `ghost`, `flat`, `muted`, `elevated`, `container`) |
+| `<vibe:card>` | `.header`, `.title`, `.description`, `.content`, `.footer`, `.alert` | `variant` (`default`, `outline`, `ghost`, `flat`, `muted`, `elevated`, `container`); `.alert`: `variant`, `appearance`, `size`, `title`, `description`, `icon`, `dismissible`, `rounded`, `animation` |
 | `<vibe:badge>` | — | `variant`, `size`, `icon`, `trailingIcon`, `prefix`, `suffix`, `dot`, `dotPulse`, `pulse`, `animation`, `dismissible`, `href`, `navigate` |
 | `<vibe:avatar>` | `.group` | `src`, `alt`, `name`, `initials`, `size`, `shape`, `indicator`, `color`; `.group`: `limit`, `total`, `size`, `overlap` |
 | `<vibe:table>` | `.header`, `.column`, `.rows`, `.row`, `.cell`, `.footer`, `.empty` | `variant`, `dense`, `hoverable`, `caption`, `containerClass` |
@@ -63,7 +63,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 | `<vibe:chart>` | — | Chart.js wrapper: `id`, `config`, `type`, `data`, `options`, `height`, `sparkline`, `zoom` |
 | `<vibe:highlight>` | — | Syntax-highlighted code block: `code`, `language`/`lang`, `title`, `filename`, `theme`, `copyable`, `lineNumbers`, `lines`, `wrap`, `maxHeight` |
 | `<vibe:display.qrcode>` | — | `value`, `size`, `level`, `color`, `background`, `margin`, `downloadable`, `copyable`, `label`, `id` |
-| `<vibe:image>` | `.gallery`, `.lightbox` | `src`, `alt`, `name`, `initials`, `lazy`, `priority`, `fallback`, `skeleton`, `caption`, `zoom`, `preview`, `previewSrc`, `group` |
+| `<vibe:image>` | `.gallery`, `.lightbox` | `src`, `alt`, `name`, `initials`, `lazy`, `priority`, `fallback`, `skeleton`, `caption`, `zoom`, `zoomIcon`, `preview`, `previewSrc`, `group` |
 | `<vibe:accordion>` | `.item`, `.heading`, `.trigger`, `.content`, `.panel` | `type` (`single`, `multiple`), `collapsible`, `selected`/`value`/`default`, `variant`, `size`, `chevron`, `chevronPosition`, `disabled` |
 | `<vibe:alert>` | — | Global alert host: `position` (`center`, `top-right`, `top-left`, `bottom-right`, `bottom-left`, `top-center`, `bottom-center`), `align`, `timeout`, `sound`, `blur`, `closeOnOutside`, `persist`, `animation` |
 | `<vibe:toast>` | — | Global toast host: `position`, `timeout`, `sound`, `animation`, `max`, `dedupMs`, `compact` |
@@ -83,7 +83,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
     <vibe:modal.header>
         <h3 class="text-base font-semibold">Create User</h3>
     </vibe:modal.header>
-    <vibe:form action="{{ route('users.store') }}" method="POST" onSuccess="$dispatch('close-modal', 'create-user')">
+    <vibe:form action="{{ route('users.store') }}" method="POST" onSuccess="$vibe.modal('create-user').close(); $vibe.toast.success('User saved');">
         @csrf
         <vibe:modal.content class="space-y-4">
             <vibe:input name="name" label="Name" required />
