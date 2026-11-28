@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\ServiceProvider;
 use Teknovate\VibeUi\Commands\InstallCommand;
+use Teknovate\VibeUi\VibeServiceProvider;
 
 test('vibe:install registers all assets including filepond and dynamic-form into vite.config', function () {
     $tempViteConfig = sys_get_temp_dir().'/vite.config.test.js';
@@ -261,4 +263,49 @@ JS;
     expect(File::get($tempViteConfig))->toBe($original);
 
     File::delete([$tempViteConfig, $tempPackageJson]);
+});
+
+test('vibe:install publishes the vibeui skill into .agents/skills without disturbing sibling skills', function () {
+    $tempBase = sys_get_temp_dir().'/vibe-skill-install-'.uniqid();
+    $skillsRoot = $tempBase.'/.agents/skills';
+    $siblingSkillDir = $skillsRoot.'/modern-web-guidance';
+    $targetSkillDir = $skillsRoot.'/vibeui';
+    $sourceSkillDir = base_path('packages/vibe/resources/skills/vibeui');
+
+    File::ensureDirectoryExists($siblingSkillDir);
+    File::put($siblingSkillDir.'/SKILL.md', "---\nname: modern-web-guidance\n---\n");
+
+    File::ensureDirectoryExists($targetSkillDir);
+    File::put($targetSkillDir.'/stale-file.md', 'old content');
+
+    $command = new InstallCommand;
+    $published = $command->publishSkills($targetSkillDir, $sourceSkillDir);
+
+    expect($published)->toBeTrue();
+    expect(File::exists($targetSkillDir.'/SKILL.md'))->toBeTrue();
+    expect(File::exists($targetSkillDir.'/references/components.md'))->toBeTrue();
+    expect(File::exists($targetSkillDir.'/references/cli-and-theming.md'))->toBeTrue();
+    expect(File::exists($targetSkillDir.'/stale-file.md'))->toBeFalse();
+    expect(File::exists($siblingSkillDir.'/SKILL.md'))->toBeTrue();
+
+    File::deleteDirectory($tempBase);
+});
+
+test('VibeServiceProvider registers vibe-skills publish tag targeting .agents/skills/vibeui', function () {
+    $paths = ServiceProvider::pathsToPublish(
+        VibeServiceProvider::class,
+        'vibe-skills'
+    );
+
+    expect($paths)->not->toBeEmpty();
+    expect(array_values($paths))->toContain(base_path('.agents/skills/vibeui'));
+});
+
+test('vibe:install --skip-npm keeps vibeui skill available in project .agents/skills/vibeui', function () {
+    $this->artisan('vibe:install', ['--skip-npm' => true])
+        ->assertSuccessful();
+
+    expect(File::exists(base_path('.agents/skills/vibeui/SKILL.md')))->toBeTrue();
+    expect(File::exists(base_path('.agents/skills/vibeui/references/components.md')))->toBeTrue();
+    expect(File::exists(base_path('.agents/skills/vibeui/references/cli-and-theming.md')))->toBeTrue();
 });

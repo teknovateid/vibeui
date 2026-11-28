@@ -23,6 +23,11 @@ function vibeSyncPlugin() {
             label: 'JS',
         },
         {
+            srcPattern: '/.agents/skills/vibeui/',
+            destDir: 'packages/vibe/resources/skills/vibeui',
+            label: 'Skill VibeUI',
+        },
+        {
             srcPattern: '/public/vibe/',
             destDir: 'packages/vibe/public/vibe',
             label: 'Public',
