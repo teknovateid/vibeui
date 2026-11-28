@@ -382,7 +382,7 @@ export function vibeTodo(config = {}) {
                     });
 
                     this.applyOrderToDom();
-                    this.items = [...this.items].sort((a, b) => a.order - b.order);
+                    this.items = this.items.toSorted((a, b) => a.order - b.order);
                 }
             } catch (e) {
                 console.warn('[Vibe Todo] Gagal memuat stored layout:', e);
@@ -1165,7 +1165,7 @@ export function vibeTodo(config = {}) {
             const root = this.getRootEl();
             if (!root) return;
             // Sort items by item.order
-            const sorted = [...this.items].sort((a, b) => a.order - b.order);
+            const sorted = this.items.toSorted((a, b) => a.order - b.order);
             sorted.forEach(item => {
                 const el = this.getItemEl(item.id);
                 if (!el) return;

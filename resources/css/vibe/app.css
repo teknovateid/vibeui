@@ -148,6 +148,22 @@
     --chart-5: #ef4444 !important;
 
     --radius: 0.5rem;
+}
+
+:root {
+    color-scheme: light dark;
+
+    &:has(> head > meta[name="color-scheme"][content="dark"]) {
+        color-scheme: dark;
+    }
+    &:has(> head > meta[name="color-scheme"][content="light"]) {
+        color-scheme: light;
+    }
+}
+
+.light,
+.dark .light,
+[data-canvas-theme="light"] {
     color-scheme: light;
 }
 

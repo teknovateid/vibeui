@@ -18,7 +18,7 @@ test('button with flex-col automatically applies h-auto and responsive vertical 
         ->toContain('flex flex-col')
         ->toContain('h-auto')
         ->toContain('py-1.5')
-        ->toContain('px-2.5')
+        ->toContain('px-3')
         ->toContain('[&_svg]:shrink-0')
         ->toContain('[&_svg]:pointer-events-none')
         ->toContain('size-10')
@@ -61,5 +61,5 @@ test('button supports square icon sizes 10, 12, and icon-2xl', function () {
     expect($icon10)->toContain('size-10');
 
     $icon2xl = Blade::render('<vibe:button size="icon-2xl"><svg class="size-6"></svg></vibe:button>');
-    expect($icon2xl)->toContain('size-14 sm:size-12');
+    expect($icon2xl)->toContain('size-12 p-0 rounded-xl');
 });

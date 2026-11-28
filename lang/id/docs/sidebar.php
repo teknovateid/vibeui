@@ -64,6 +64,7 @@ return [
         'toast' => 'Toast',
         'highlight' => 'Highlight',
         'highlightjs' => 'Highlight',
+        'clipboard' => 'Clipboard',
         'display' => [
             'group' => 'Display',
             'qrcode' => 'QR Code',

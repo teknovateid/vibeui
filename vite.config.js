@@ -1,258 +1,231 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import { bunny } from 'laravel-vite-plugin/fonts';
-import tailwindcss from '@tailwindcss/vite';
-import fs from 'fs';
-import path from 'path';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import { bunny } from "laravel-vite-plugin/fonts";
+import tailwindcss from "@tailwindcss/vite";
+import fs from "fs";
+import path from "path";
 
 function vibeSyncPlugin() {
-    const syncRules = [
-        {
-            srcPattern: '/resources/views/vibe/',
-            destDir: 'packages/vibe/resources/views/vibe',
-            label: 'Views',
-        },
-        {
-            srcPattern: '/resources/css/vibe/',
-            destDir: 'packages/vibe/resources/css/vibe',
-            label: 'CSS',
-        },
-        {
-            srcPattern: '/resources/js/vibe/',
-            destDir: 'packages/vibe/resources/js/vibe',
-            label: 'JS',
-        },
-        {
-            srcPattern: '/.agents/skills/vibeui/',
-            destDir: 'packages/vibe/.agents/skills/vibeui',
-            label: 'Skill VibeUI',
-        },
-        {
-            srcPattern: '/public/vibe/',
-            destDir: 'packages/vibe/public/vibe',
-            label: 'Public',
-        },
-        {
-            srcPattern: '/resources/views/components/docs/layouts/',
-            destDir: 'packages/vibe/stubs/resources/views/components/panel/layouts',
-            label: 'Docs Layouts',
-            transform: (content) => {
-                return content
-                    .replace(/<x-docs\.layouts\./g, '<x-layouts.')
-                    .replace(/<\/x-docs\.layouts\./g, '</x-layouts.')
-                    .replace(/<x-docs\.partials\./g, '<x-partials.')
-                    .replace(/<\/x-docs\.partials\./g, '</x-partials.');
-            },
-        },
-        {
-            srcPattern: '/lang/en/vibe/',
-            destDir: 'packages/vibe/lang/en/vibe',
-            label: 'Lang EN',
-        },
-        {
-            srcPattern: '/lang/id/vibe/',
-            destDir: 'packages/vibe/lang/id/vibe',
-            label: 'Lang ID',
-        },
-        {
-            srcPattern: '/lang/en/auth/',
-            destDir: 'packages/vibe/lang/en/auth',
-            label: 'Lang EN Auth',
-        },
-        {
-            srcPattern: '/lang/id/auth/',
-            destDir: 'packages/vibe/lang/id/auth',
-            label: 'Lang ID Auth',
-        },
-        {
-            srcPattern: '/resources/views/auth/layouts/',
-            destDir: 'packages/vibe/resources/views/auth/layouts',
-            label: 'Auth Layouts',
-        },
-        {
-            srcPattern: '/resources/views/auth/',
-            destDir: 'packages/vibe/resources/views/auth',
-            label: 'Auth Views',
-        },
-        {
-            srcPattern: '/resources/views/docs/settings/',
-            destDir: 'packages/vibe/stubs/resources/views/panel/settings',
-            label: 'Settings Templates',
-            ignore: ['index.blade.php'],
-            transform: (content) => {
-                return content
-                    .replace(/<x-docs\.layouts\.[a-z0-9_-]+>/g, '<x-[path].layouts.[style]>')
-                    .replace(/<\/x-docs\.layouts\.[a-z0-9_-]+>/g, '</x-[path].layouts.[style]>')
-                    .replace(/docs\.settings\./g, '[path].settings.')
-                    .replace(/route\('docs\.index'\)/g, "route('[path].index')")
-                    .replace(/route\('docs\.settings\./g, "route('[path].settings.")
-                    .replace(/@include\('docs\.settings\./g, "@include('[path].settings.");
-            },
-        },
-        {
-            srcPattern: '/resources/views/livewire/settings/',
-            destDir: 'packages/vibe/resources/views/livewire/settings',
-            label: 'Settings Livewire Views',
-        },
-        {
-            srcPattern: '/app/Livewire/Settings/',
-            destDir: 'packages/vibe/app/Livewire/Settings',
-            label: 'Settings Livewire Classes',
-        },
-        {
-            srcPattern: '/app/Livewire/Auth/Concerns/',
-            destDir: 'packages/vibe/app/Livewire/Auth/Concerns',
-            label: 'Auth Concerns',
-        },
-        {
-            srcPattern: '/app/Livewire/Auth/',
-            destDir: 'packages/vibe/app/Livewire/Auth',
-            label: 'Auth Livewire Classes',
-            ignore: ['Concerns'],
-        },
-        {
-            srcPattern: '/config/',
-            destDir: 'packages/vibe/config',
-            label: 'Passkeys Config',
-            only: ['passkeys.php'],
-        },
-        {
-            srcPattern: '/routes/',
-            destDir: 'packages/vibe/routes',
-            label: 'Auth Routes',
-            only: ['auth.php'],
-        },
-    ];
+  const syncRules = [
+    {
+      srcPattern: "/resources/views/vibe/",
+      destDir: "packages/vibe/resources/views/vibe",
+      label: "Views",
+    },
+    {
+      srcPattern: "/resources/css/vibe/",
+      destDir: "packages/vibe/resources/css/vibe",
+      label: "CSS",
+    },
+    {
+      srcPattern: "/resources/js/vibe/",
+      destDir: "packages/vibe/resources/js/vibe",
+      label: "JS",
+    },
+    {
+      srcPattern: "/.agents/skills/vibeui/",
+      destDir: "packages/vibe/.agents/skills/vibeui",
+      label: "Skill VibeUI",
+    },
+    {
+      srcPattern: "/public/vibe/",
+      destDir: "packages/vibe/public/vibe",
+      label: "Public",
+    },
+    {
+      srcPattern: "/resources/views/components/docs/layouts/",
+      destDir: "packages/vibe/stubs/resources/views/components/panel/layouts",
+      label: "Docs Layouts",
+      transform: (content) => {
+        return content
+          .replace(/<x-docs\.layouts\./g, "<x-layouts.")
+          .replace(/<\/x-docs\.layouts\./g, "</x-layouts.")
+          .replace(/<x-docs\.partials\./g, "<x-partials.")
+          .replace(/<\/x-docs\.partials\./g, "</x-partials.");
+      },
+    },
+    {
+      srcPattern: "/lang/en/vibe/",
+      destDir: "packages/vibe/lang/en/vibe",
+      label: "Lang EN",
+    },
+    {
+      srcPattern: "/lang/id/vibe/",
+      destDir: "packages/vibe/lang/id/vibe",
+      label: "Lang ID",
+    },
+    {
+      srcPattern: "/lang/en/auth/",
+      destDir: "packages/vibe/lang/en/auth",
+      label: "Lang EN Auth",
+    },
+    {
+      srcPattern: "/lang/id/auth/",
+      destDir: "packages/vibe/lang/id/auth",
+      label: "Lang ID Auth",
+    },
+    {
+      srcPattern: "/resources/views/auth/layouts/",
+      destDir: "packages/vibe/resources/views/auth/layouts",
+      label: "Auth Layouts",
+    },
+    {
+      srcPattern: "/resources/views/auth/",
+      destDir: "packages/vibe/resources/views/auth",
+      label: "Auth Views",
+    },
+    {
+      srcPattern: "/resources/views/docs/settings/",
+      destDir: "packages/vibe/stubs/resources/views/panel/settings",
+      label: "Settings Templates",
+      ignore: ["index.blade.php"],
+      transform: (content) => {
+        return content
+          .replace(/<x-docs\.layouts\.[a-z0-9_-]+>/g, "<x-[path].layouts.[style]>")
+          .replace(/<\/x-docs\.layouts\.[a-z0-9_-]+>/g, "</x-[path].layouts.[style]>")
+          .replace(/docs\.settings\./g, "[path].settings.")
+          .replace(/route\('docs\.index'\)/g, "route('[path].index')")
+          .replace(/route\('docs\.settings\./g, "route('[path].settings.")
+          .replace(/@include\('docs\.settings\./g, "@include('[path].settings.");
+      },
+    },
+    {
+      srcPattern: "/resources/views/livewire/settings/",
+      destDir: "packages/vibe/resources/views/livewire/settings",
+      label: "Settings Livewire Views",
+    },
+    {
+      srcPattern: "/app/Livewire/Settings/",
+      destDir: "packages/vibe/app/Livewire/Settings",
+      label: "Settings Livewire Classes",
+    },
+    {
+      srcPattern: "/app/Livewire/Auth/Concerns/",
+      destDir: "packages/vibe/app/Livewire/Auth/Concerns",
+      label: "Auth Concerns",
+    },
+    {
+      srcPattern: "/app/Livewire/Auth/",
+      destDir: "packages/vibe/app/Livewire/Auth",
+      label: "Auth Livewire Classes",
+      ignore: ["Concerns"],
+    },
+    {
+      srcPattern: "/config/",
+      destDir: "packages/vibe/config",
+      label: "Passkeys Config",
+      only: ["passkeys.php"],
+    },
+    {
+      srcPattern: "/routes/",
+      destDir: "packages/vibe/routes",
+      label: "Auth Routes",
+      only: ["auth.php"],
+    },
+  ];
 
-    return {
-        name: 'vibe-sync',
-        configureServer(server) {
-            server.watcher.on('all', (event, file) => {
-                const normalizedFile = file.replace(/\\/g, '/');
+  return {
+    name: "vibe-sync",
+    configureServer(server) {
+      server.watcher.on("all", (event, file) => {
+        const normalizedFile = file.replace(/\\/g, "/");
 
-                if (normalizedFile.includes('/packages/vibe/')) {
-                    return;
-                }
-
-                for (const rule of syncRules) {
-                    if (normalizedFile.includes(rule.srcPattern)) {
-                        const relativePath = normalizedFile.substring(normalizedFile.indexOf(rule.srcPattern) + rule.srcPattern.length);
-                        if (rule.only && !rule.only.includes(relativePath)) {
-                            break;
-                        }
-                        if (rule.ignore && rule.ignore.includes(relativePath)) {
-                            break;
-                        }
-                        const dest = path.resolve(process.cwd(), rule.destDir, relativePath);
-                        
-                        if (event === 'add' || event === 'change') {
-                            const destDir = path.dirname(dest);
-                            if (!fs.existsSync(destDir)) {
-                                fs.mkdirSync(destDir, { recursive: true });
-                            }
-                            try {
-                                if (rule.transform) {
-                                    const content = fs.readFileSync(file, 'utf-8');
-                                    const transformed = rule.transform(content);
-                                    fs.writeFileSync(dest, transformed, 'utf-8');
-                                } else {
-                                    fs.copyFileSync(file, dest);
-                                }
-                                console.log(`\n[Vibe Sync - ${rule.label}] Disinkronkan ke packages: ${relativePath}`);
-                            } catch (e) {
-                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal mengcopy:`, e);
-                            }
-                        } else if (event === 'unlink') {
-                            try {
-                                if (fs.existsSync(dest)) {
-                                    fs.unlinkSync(dest);
-                                    console.log(`\n[Vibe Sync - ${rule.label}] Dihapus dari packages: ${relativePath}`);
-                                }
-                            } catch (e) {
-                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus:`, e);
-                            }
-                        } else if (event === 'unlinkDir') {
-                            try {
-                                if (fs.existsSync(dest)) {
-                                    fs.rmSync(dest, { recursive: true, force: true });
-                                    console.log(`\n[Vibe Sync - ${rule.label}] Folder dihapus dari packages: ${relativePath}`);
-                                }
-                            } catch (e) {
-                                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus folder:`, e);
-                            }
-                        }
-                        break;
-                    }
-                }
-            });
+        if (normalizedFile.includes("/packages/vibe/")) {
+          return;
         }
-    }
+
+        for (const rule of syncRules) {
+          if (normalizedFile.includes(rule.srcPattern)) {
+            const relativePath = normalizedFile.substring(normalizedFile.indexOf(rule.srcPattern) + rule.srcPattern.length);
+            if (rule.only && !rule.only.includes(relativePath)) {
+              break;
+            }
+            if (rule.ignore && rule.ignore.includes(relativePath)) {
+              break;
+            }
+            const dest = path.resolve(process.cwd(), rule.destDir, relativePath);
+
+            if (event === "add" || event === "change") {
+              const destDir = path.dirname(dest);
+              if (!fs.existsSync(destDir)) {
+                fs.mkdirSync(destDir, { recursive: true });
+              }
+              try {
+                if (rule.transform) {
+                  const content = fs.readFileSync(file, "utf-8");
+                  const transformed = rule.transform(content);
+                  fs.writeFileSync(dest, transformed, "utf-8");
+                } else {
+                  fs.copyFileSync(file, dest);
+                }
+                console.log(`\n[Vibe Sync - ${rule.label}] Disinkronkan ke packages: ${relativePath}`);
+              } catch (e) {
+                console.error(`\n[Vibe Sync - ${rule.label}] Gagal mengcopy:`, e);
+              }
+            } else if (event === "unlink") {
+              try {
+                if (fs.existsSync(dest)) {
+                  fs.unlinkSync(dest);
+                  console.log(`\n[Vibe Sync - ${rule.label}] Dihapus dari packages: ${relativePath}`);
+                }
+              } catch (e) {
+                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus:`, e);
+              }
+            } else if (event === "unlinkDir") {
+              try {
+                if (fs.existsSync(dest)) {
+                  fs.rmSync(dest, { recursive: true, force: true });
+                  console.log(`\n[Vibe Sync - ${rule.label}] Folder dihapus dari packages: ${relativePath}`);
+                }
+              } catch (e) {
+                console.error(`\n[Vibe Sync - ${rule.label}] Gagal menghapus folder:`, e);
+              }
+            }
+            break;
+          }
+        }
+      });
+    },
+  };
 }
 
 export default defineConfig({
-    plugins: [
-        laravel({
-            input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
-                'resources/css/vibe/highlightjs.css',
-                'resources/css/vibe/chart.css',
-                'resources/css/vibe/filepond.css',
-                'resources/css/vibe/editor.css',
-                'resources/js/vibe/chart.js',
-                'resources/js/vibe/date-time.js',
-                'resources/js/vibe/dynamic-form.js',
-                'resources/js/vibe/editor.js',
-                'resources/js/vibe/filepond.js',
-                'resources/js/vibe/form.js',
-                'resources/js/vibe/grid.js',
-                'resources/js/vibe/highlightjs.js',
-                'resources/js/vibe/table.js',
-                'resources/js/vibe/passkeys.js',
-                'resources/js/vibe/qr-login.js',
-                'resources/js/vibe/idle.js',
-                'resources/js/vibe/qrcode.js',
-                'resources/js/vibe/datatable.js',
-                'resources/js/vibe/select.js',
-                'resources/js/vibe/sheet.js',
-                'resources/js/vibe/show.js',
-                'resources/js/vibe/image-lightbox.js',
-                'resources/js/vibe/todo.js',
-            ],
-            refresh: true,
-            fonts: [
-                bunny('Figtree', {
-                    weights: [400, 500, 600, 700],
-                    display: 'swap',
-                    preload: false,
-                }),
-                bunny('Inter', {
-                    weights: [400, 500, 600, 700],
-                    display: 'swap',
-                    preload: false,
-                }),
-                bunny('Plus Jakarta Sans', {
-                    weights: [400, 500, 600, 700],
-                    display: 'swap',
-                    preload: false,
-                }),
-                bunny('Outfit', {
-                    weights: [400, 500, 600, 700],
-                    display: 'swap',
-                    preload: false,
-                }),
-            ],
+  plugins: [
+    laravel({
+      input: ["resources/css/app.css", "resources/js/app.js", "resources/css/vibe/highlightjs.css", "resources/css/vibe/chart.css", "resources/css/vibe/filepond.css", "resources/css/vibe/editor.css", "resources/js/vibe/chart.js", "resources/js/vibe/date-time.js", "resources/js/vibe/dynamic-form.js", "resources/js/vibe/editor.js", "resources/js/vibe/filepond.js", "resources/js/vibe/form.js", "resources/js/vibe/grid.js", "resources/js/vibe/highlightjs.js", "resources/js/vibe/table.js", "resources/js/vibe/passkeys.js", "resources/js/vibe/qr-login.js", "resources/js/vibe/idle.js", "resources/js/vibe/qrcode.js", "resources/js/vibe/datatable.js", "resources/js/vibe/select.js", "resources/js/vibe/sheet.js", "resources/js/vibe/show.js", "resources/js/vibe/image-lightbox.js", "resources/js/vibe/todo.js"],
+      refresh: true,
+      fonts: [
+        bunny("Figtree", {
+          weights: [400, 500, 600, 700],
+          display: "swap",
+          preload: false,
         }),
-        tailwindcss(),
-        vibeSyncPlugin(),
-    ],
-    build: {
-        sourcemap: true,
+        bunny("Inter", {
+          weights: [400, 500, 600, 700],
+          display: "swap",
+          preload: false,
+        }),
+        bunny("Plus Jakarta Sans", {
+          weights: [400, 500, 600, 700],
+          display: "swap",
+          preload: false,
+        }),
+        bunny("Outfit", {
+          weights: [400, 500, 600, 700],
+          display: "swap",
+          preload: false,
+        }),
+      ],
+    }),
+    tailwindcss(),
+    vibeSyncPlugin(),
+  ],
+  build: {
+    sourcemap: true,
+  },
+  server: {
+    watch: {
+      ignored: ["**/storage/framework/views/**", "**/packages/vibe/**"],
     },
-    server: {
-        watch: {
-            ignored: ['**/storage/framework/views/**', '**/packages/vibe/**'],
-        },
-        cors: true,
-    },
+  },
 });

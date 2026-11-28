@@ -6,6 +6,7 @@
     x-show="isOpen(itemValue)"
     x-collapse
     x-cloak
+    @beforematch="if (!isOpen(itemValue)) toggle(itemValue, itemDisabled)"
     :id="'accordion-content-' + itemValue"
     :aria-labelledby="'accordion-trigger-' + itemValue"
     role="region"

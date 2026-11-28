@@ -57,25 +57,17 @@
 
     $baseControlClasses = 'relative w-full flex items-center transition-colors duration-150 cursor-text overflow-hidden';
 
-    $sizeControlClasses = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md',
-        'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
-        'lg' => 'h-10 text-sm rounded-lg',
-        'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
+    [$sizeHeightText, $sizeRadius, $leadingPadding, $trailingPadding, $plDefault, $inputFontSize, $iconSizeClass, $actionBtnPadding] = match ($size) {
+        'xs' => ['h-7 text-xs', 'rounded-md', 'pl-2 pr-1', 'pr-1.5 pl-1', 'pl-2.5 ', 'text-xs font-mono tracking-wide', 'size-3.5', 'p-0.5'],
+        'sm' => ['h-8 text-xs', 'rounded-md', 'pl-2.5 pr-1.5', 'pr-2 pl-1', 'pl-3 ', 'text-xs font-mono tracking-wide', 'size-3.5', 'p-1'],
+        'lg' => ['h-10 text-sm', 'rounded-lg', 'pl-3.5 pr-2', 'pr-2.5 pl-1.5', 'pl-4 ', 'text-sm font-mono tracking-wide', 'size-4.5', 'p-1'],
+        'xl' => ['h-11 text-base', 'rounded-xl', 'pl-4 pr-2.5', 'pr-3 pl-1.5', 'pl-5 ', 'text-base font-mono tracking-wide', 'size-5', 'p-1.5'],
+        default => ['h-9 text-sm', 'rounded-lg', 'pl-3 pr-1.5', 'pr-2 pl-1.5', 'pl-3.5 ', 'text-sm font-mono tracking-wide', 'size-4', 'p-1'],
     };
 
-    if ($variant === 'flush') {
-        $sizeControlClasses = match ($size) {
-            'xs' => 'h-7 text-xs rounded-none px-0',
-            'sm' => 'h-8 text-xs rounded-none px-0',
-            'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
-            'lg' => 'h-10 text-sm rounded-none px-0',
-            'xl' => 'h-11 text-base rounded-none px-0',
-            default => 'h-11 sm:h-9 text-base sm:text-sm rounded-none px-0',
-        };
-    }
+    $sizeControlClasses = $variant === 'flush'
+        ? "{$sizeHeightText} rounded-none px-0"
+        : "{$sizeHeightText} {$sizeRadius}";
 
     $variantControlClasses = match ($variant) {
         'filled' => $hasError ? 'bg-destructive/10 border border-destructive focus-within:bg-background focus-within:border-destructive focus-within:ring-2 focus-within:ring-destructive/20' : 'bg-muted/60 border border-transparent hover:bg-muted/80 focus-within:bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20',
@@ -104,52 +96,9 @@
 
     $controlClasses = trim("{$baseControlClasses} {$sizeControlClasses} {$variantControlClasses} {$stateControlClasses} {$animationClass}");
 
-    $leadingPadding = match ($size) {
-        'xs' => 'pl-2 pr-1',
-        'sm' => 'pl-2.5 pr-1.5',
-        'lg' => 'pl-3.5 pr-2',
-        'xl' => 'pl-4 pr-2.5',
-        default => 'pl-3.5 sm:pl-3 pr-2 sm:pr-1.5',
-    };
-
-    $trailingPadding = match ($size) {
-        'xs' => 'pr-1.5 pl-1',
-        'sm' => 'pr-2 pl-1',
-        'lg' => 'pr-2.5 pl-1.5',
-        'xl' => 'pr-3 pl-1.5',
-        default => 'pr-2.5 sm:pr-2 pl-1.5 sm:pl-1',
-    };
-
-    $inputPadding = ($icon ? 'pl-0 ' : match ($size) {
-        'xs' => 'pl-2 ',
-        'sm' => 'pl-2.5 ',
-        'lg' => 'pl-4 ',
-        'xl' => 'pl-4.5 ',
-        default => 'pl-4 sm:pl-3.5 ',
-    }) . 'pr-1';
-
-    $inputFontSize = match ($size) {
-        'xs', 'sm' => 'text-xs',
-        'xl' => 'text-base',
-        default => 'text-base sm:text-sm font-mono tracking-wide',
-    };
-
+    $inputPadding = ($icon ? 'pl-0 ' : $plDefault) . 'pr-1';
     $inputTextColor = $hasError ? 'text-destructive placeholder:text-destructive/50' : 'text-foreground placeholder:text-muted-foreground';
     $inputClasses = trim("w-full flex-1 min-w-0 h-full bg-transparent border-0 py-0 focus:outline-none focus:ring-0 {$inputFontSize} {$inputPadding} {$inputTextColor} disabled:pointer-events-none");
-
-    $iconSizeClass = match ($size) {
-        'xs' => 'size-3.5',
-        'sm' => 'size-3.5',
-        'xl' => 'size-5',
-        default => 'size-4',
-    };
-
-    $actionBtnPadding = match ($size) {
-        'xs' => 'p-0.5',
-        'sm' => 'p-1',
-        'xl' => 'p-1.5',
-        default => 'p-1',
-    };
 
     $config = [
         'value' => $initialVal,

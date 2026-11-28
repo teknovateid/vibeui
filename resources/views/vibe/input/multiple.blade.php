@@ -61,14 +61,13 @@
         $delimitersList = array_values(array_unique([$separator ?: ',', 'Enter', ';']));
     }
 
-    // Styling container
-    $sizeClasses = match ($size) {
-        'xs' => 'min-h-7 text-xs rounded-md px-2 py-1 gap-1',
-        'sm' => 'min-h-8 text-xs rounded-md px-2.5 py-1 gap-1.5',
-        'md' => 'min-h-11 sm:min-h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3 py-2 sm:py-1.5 gap-1.5',
-        'lg' => 'min-h-10 text-sm rounded-lg px-3.5 py-1.5 gap-2',
-        'xl' => 'min-h-11 text-base rounded-xl px-4 py-2 gap-2.5',
-        default => 'min-h-11 sm:min-h-9 text-base sm:text-sm rounded-lg px-3.5 sm:px-3 py-2 sm:py-1.5 gap-1.5',
+    // Styling container & embedded badges
+    [$sizeClasses, $badgeSizeClass, $badgeRemoveSizeClass, $inputInlineTextClass] = match ($size) {
+        'xs' => ['min-h-7 text-xs rounded-md px-2.5 py-0.5 gap-1', 'h-5 px-1.5 text-[10px] gap-1 rounded-sm', 'size-2.5', 'text-xs'],
+        'sm' => ['min-h-8 text-xs rounded-md px-3 py-1 gap-1.5', 'h-5.5 px-2 text-[11px] gap-1 rounded-sm', 'size-2.5', 'text-xs'],
+        'lg' => ['min-h-10 text-sm rounded-lg px-4 py-1.5 gap-2', 'h-6.5 px-2.5 text-xs gap-1.5 rounded-md', 'size-3', 'text-sm'],
+        'xl' => ['min-h-11 text-base rounded-xl px-5 py-1.5 gap-2.5', 'h-7 px-3 text-sm gap-2 rounded-lg', 'size-3.5', 'text-base'],
+        default => ['min-h-9 text-sm rounded-lg px-3.5 py-1 gap-1.5', 'h-6 px-2 text-xs gap-1.5 rounded-md', 'size-3', 'text-sm'],
     };
 
     $variantClasses = match ($variant) {
@@ -80,22 +79,6 @@
     };
 
     $errorBorderClasses = $hasError ? 'border-destructive text-destructive focus-within:border-destructive focus-within:ring-destructive/20' : '';
-
-    // Badge sizing based on input size
-    $badgeSizeClass = match ($size) {
-        'xs' => 'h-5 px-1.5 text-[10px] gap-1 rounded-sm',
-        'sm' => 'h-5.5 px-2 text-[11px] gap-1 rounded-sm',
-        'md' => 'h-6 px-2 text-xs gap-1.5 rounded-md',
-        'lg' => 'h-6.5 px-2.5 text-xs gap-1.5 rounded-lg',
-        'xl' => 'h-7.5 px-3 text-sm gap-2 rounded-lg',
-        default => 'h-6 px-2 text-xs gap-1.5 rounded-md',
-    };
-
-    $badgeRemoveSizeClass = match ($size) {
-        'xs', 'sm' => 'size-2.5',
-        'xl' => 'size-3.5',
-        default => 'size-3.5 sm:size-3',
-    };
 @endphp
 
 <div class="space-y-1.5 w-full" id="{{ $id }}-container">
@@ -343,7 +326,7 @@
             :placeholder="items.length === 0 ? @js($placeholder) : ''"
             :disabled="disabled || (max !== null && items.length >= max)"
             @if($isReadonly) readonly @endif
-            class="flex-1 min-w-25 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none border-none p-0 text-sm font-medium leading-none"
+            class="flex-1 min-w-25 bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none border-none p-0 {{ $inputInlineTextClass }} font-medium leading-none"
         />
 
         {{-- Trailing Actions: Copy All & Clear All --}}

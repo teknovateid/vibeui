@@ -8,9 +8,36 @@ import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 
 import '../../css/vibe/filepond.css';
+import { evalCallback, bindDialogLightDismissFallback, isSafeUrl } from './core';
 
 const FilePond = FilePondModule.create ? FilePondModule : (FilePondModule.default || FilePondModule);
 const resolvePlugin = (p) => (typeof p === 'function' ? p : (p && p.default ? p.default : p));
+const SVG_NS = 'http://www.w3.org/2000/svg';
+
+function createSvg(attrs, children) {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    Object.entries(attrs).forEach(([k, v]) => svg.setAttribute(k, String(v)));
+    children.forEach(([tag, cAttrs]) => {
+        const node = document.createElementNS(SVG_NS, tag);
+        Object.entries(cAttrs).forEach(([k, v]) => node.setAttribute(k, String(v)));
+        svg.appendChild(node);
+    });
+    return svg;
+}
+
+function createDocIconWrapper(badgeClass, badgeLabel) {
+    const wrap = document.createElement('div');
+    wrap.className = 'filepond--doc-icon-wrapper';
+    wrap.appendChild(createSvg({ class: 'filepond--doc-sheet-svg', viewBox: '0 0 32 38', fill: 'none' }, [
+        ['path', { d: 'M2 4C2 2.89543 2.89543 2 4 2H19.5858C20.1163 2 20.625 2.21071 21 2.58579L29.4142 11C29.7893 11.375 30 11.8837 30 12.4142V34C30 35.1046 29.1046 36 28 36H4C2.89543 36 2 35.1046 2 34V4Z', class: 'filepond--doc-sheet-bg', stroke: 'currentColor', 'stroke-width': '1.75' }],
+        ['path', { d: 'M19 2V10C19 11.1046 19.8954 12 21 12H29', stroke: 'currentColor', 'stroke-width': '1.75', 'stroke-linejoin': 'round' }],
+    ]));
+    const badge = document.createElement('span');
+    badge.className = `filepond--ext-badge ${badgeClass}`;
+    badge.textContent = badgeLabel;
+    wrap.appendChild(badge);
+    return wrap;
+}
 
 // Register plugins globally
 if (FilePond && typeof FilePond.registerPlugin === 'function') {
@@ -32,52 +59,62 @@ window.FilePond = FilePond;
  * Global lightbox modal for viewing full-size image previews
  */
 function openImageLightbox(src, title, i18n = {}) {
+    if (!isSafeUrl(src, true, true)) return;
     let backdrop = document.getElementById('vibe-filepond-lightbox');
     const closeText = i18n.close || 'Close';
     const previewAlt = title || i18n.image_preview || 'Image preview';
 
     if (!backdrop) {
-        backdrop = document.createElement('div');
+        backdrop = document.createElement('dialog');
         backdrop.id = 'vibe-filepond-lightbox';
+        backdrop.setAttribute('closedby', 'any');
         backdrop.className = 'filepond--lightbox-backdrop';
-        backdrop.innerHTML = `
-            <button type="button" class="filepond--lightbox-close" title="${closeText}" aria-label="${closeText}">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-            </button>
-            <div class="filepond--lightbox-content">
-                <img class="filepond--lightbox-img" src="" alt="" />
-                <div class="filepond--lightbox-caption"></div>
-            </div>
-        `;
+
+        const closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'filepond--lightbox-close';
+        closeButton.title = closeText;
+        closeButton.setAttribute('aria-label', closeText);
+        closeButton.appendChild(createSvg({
+            class: 'w-5 h-5',
+            viewBox: '0 0 24 24',
+            fill: 'none',
+            stroke: 'currentColor',
+            'stroke-width': '2.5',
+            'stroke-linecap': 'round',
+            'stroke-linejoin': 'round',
+        }, [
+            ['line', { x1: '18', y1: '6', x2: '6', y2: '18' }],
+            ['line', { x1: '6', y1: '6', x2: '18', y2: '18' }],
+        ]));
+
+        const content = document.createElement('div');
+        content.className = 'filepond--lightbox-content';
+        const imgNode = document.createElement('img');
+        imgNode.className = 'filepond--lightbox-img';
+        imgNode.src = '';
+        imgNode.alt = '';
+        const captionNode = document.createElement('div');
+        captionNode.className = 'filepond--lightbox-caption';
+        content.append(imgNode, captionNode);
+        backdrop.append(closeButton, content);
         document.body.appendChild(backdrop);
 
-        const closeBtn = backdrop.querySelector('.filepond--lightbox-close');
         const close = () => {
             backdrop.classList.remove('active');
-            setTimeout(() => {
-                backdrop.style.display = 'none';
-            }, 250);
+            if (backdrop.open) backdrop.close();
         };
 
-        closeBtn.addEventListener('click', (e) => {
+        closeButton.addEventListener('click', (e) => {
             e.stopPropagation();
             close();
         });
 
-        backdrop.addEventListener('click', (e) => {
-            if (e.target === backdrop || e.target.classList.contains('filepond--lightbox-close')) {
-                close();
-            }
+        backdrop.addEventListener('close', () => {
+            backdrop.classList.remove('active');
         });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && backdrop.classList.contains('active')) {
-                close();
-            }
-        });
+        bindDialogLightDismissFallback(backdrop, close);
     }
 
     const closeBtn = backdrop.querySelector('.filepond--lightbox-close');
@@ -92,7 +129,11 @@ function openImageLightbox(src, title, i18n = {}) {
     img.alt = previewAlt;
     cap.textContent = title || '';
 
-    backdrop.style.display = 'flex';
+    if (typeof backdrop.showModal === 'function') {
+        if (!backdrop.open) backdrop.showModal();
+    } else {
+        backdrop.setAttribute('open', '');
+    }
     requestAnimationFrame(() => {
         backdrop.classList.add('active');
     });
@@ -352,33 +393,43 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
                 handleGroup = document.createElement('div');
                 handleGroup.className = 'filepond--reorder-group';
                 handleGroup.setAttribute('data-filepond-reorder-handle', '');
-                handleGroup.innerHTML = `
-                    <div class="filepond--reorder-handle" title="${dragTitle}" aria-label="${dragAria}">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="9" cy="5" r="1"></circle>
-                            <circle cx="9" cy="12" r="1"></circle>
-                            <circle cx="9" cy="19" r="1"></circle>
-                            <circle cx="15" cy="5" r="1"></circle>
-                            <circle cx="15" cy="12" r="1"></circle>
-                            <circle cx="15" cy="19" r="1"></circle>
-                        </svg>
-                    </div>
-                    <div class="filepond--reorder-arrows">
-                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-up" title="${upTitle}" aria-label="${upTitle}">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </button>
-                        <button type="button" class="filepond--reorder-btn filepond--reorder-btn-down" title="${downTitle}" aria-label="${downTitle}">
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </button>
-                    </div>
-                `;
 
-                const upBtn = handleGroup.querySelector('.filepond--reorder-btn-up');
-                const downBtn = handleGroup.querySelector('.filepond--reorder-btn-down');
+                const dragHandle = document.createElement('div');
+                dragHandle.className = 'filepond--reorder-handle';
+                dragHandle.title = dragTitle;
+                dragHandle.setAttribute('aria-label', dragAria);
+                dragHandle.appendChild(createSvg({
+                    width: '14', height: '14', viewBox: '0 0 24 24', fill: 'none',
+                    stroke: 'currentColor', 'stroke-width': '2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                }, [
+                    ['circle', { cx: '9', cy: '5', r: '1' }],
+                    ['circle', { cx: '9', cy: '12', r: '1' }],
+                    ['circle', { cx: '9', cy: '19', r: '1' }],
+                    ['circle', { cx: '15', cy: '5', r: '1' }],
+                    ['circle', { cx: '15', cy: '12', r: '1' }],
+                    ['circle', { cx: '15', cy: '19', r: '1' }],
+                ]));
+
+                const arrows = document.createElement('div');
+                arrows.className = 'filepond--reorder-arrows';
+
+                const makeReorderBtn = (cls, title, points) => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = `filepond--reorder-btn ${cls}`;
+                    btn.title = title;
+                    btn.setAttribute('aria-label', title);
+                    btn.appendChild(createSvg({
+                        width: '10', height: '10', viewBox: '0 0 24 24', fill: 'none',
+                        stroke: 'currentColor', 'stroke-width': '3', 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                    }, [['polyline', { points }]]));
+                    return btn;
+                };
+
+                const upBtn = makeReorderBtn('filepond--reorder-btn-up', upTitle, '18 15 12 9 6 15');
+                const downBtn = makeReorderBtn('filepond--reorder-btn-down', downTitle, '6 9 12 15 18 9');
+                arrows.append(upBtn, downBtn);
+                handleGroup.append(dragHandle, arrows);
 
                 const preventDrag = (e) => {
                     e.stopPropagation();
@@ -427,13 +478,15 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
             downloadBtn.className = 'filepond--file-action-button filepond--action-download-item';
             downloadBtn.setAttribute('title', downloadTitle);
             downloadBtn.setAttribute('aria-label', downloadTitle);
-            downloadBtn.innerHTML = `
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="7 10 12 15 17 10"/>
-                    <line x1="12" y1="15" x2="12" y2="3"/>
-                </svg>
-            `;
+            const downloadIcon = createSvg({
+                width: '18', height: '18', viewBox: '0 0 24 24', fill: 'none',
+                stroke: 'currentColor', 'stroke-width': '2.2', 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+            }, [
+                ['path', { d: 'M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4' }],
+                ['polyline', { points: '7 10 12 15 17 10' }],
+                ['line', { x1: '12', y1: '15', x2: '12', y2: '3' }],
+            ]);
+            downloadBtn.replaceChildren(downloadIcon);
 
             // Only show download button for preloaded files or successfully uploaded files
             const isPreloaded = item.origin === FileOrigin.LOCAL || item.origin === FileOrigin.LIMBO || (typeof item.source === 'string' && (item.source.startsWith('http') || item.source.startsWith('/')));
@@ -449,18 +502,18 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
                 e.preventDefault();
 
                 // Visual loading state on the button
-                const originalSvg = downloadBtn.innerHTML;
                 downloadBtn.disabled = true;
-                downloadBtn.innerHTML = `
-                    <svg class="animate-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                `;
+                downloadBtn.replaceChildren(createSvg({
+                    class: 'animate-spin', width: '16', height: '16', viewBox: '0 0 24 24',
+                    fill: 'none', stroke: 'currentColor', 'stroke-width': '2.5',
+                }, [
+                    ['circle', { class: 'opacity-25', cx: '12', cy: '12', r: '10', stroke: 'currentColor', 'stroke-width': '4' }],
+                    ['path', { class: 'opacity-75', fill: 'currentColor', d: 'M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' }],
+                ]));
 
                 const restoreBtn = () => {
                     downloadBtn.disabled = false;
-                    downloadBtn.innerHTML = originalSvg;
+                    downloadBtn.replaceChildren(downloadIcon);
                 };
 
                 const currentFile = item.file;
@@ -635,39 +688,38 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
                 imgUrl = item.file;
             }
 
-            if (imgUrl) {
+            if (imgUrl && isSafeUrl(imgUrl, true, true)) {
                 iconContainer.classList.add('filepond--thumbnail-preview-container');
                 const previewTitle = i18n.click_to_preview || 'Klik untuk melihat pratinjau penuh';
                 iconContainer.setAttribute('title', previewTitle);
-                const escapedName = name.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                iconContainer.innerHTML = `
-                    <div class="filepond--thumbnail-wrapper">
-                        <img src="${imgUrl}" alt="${escapedName}" class="filepond--thumbnail-img" />
-                        <div class="filepond--thumbnail-overlay">
-                            <svg class="filepond--thumbnail-zoom-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                <line x1="11" y1="8" x2="11" y2="14"></line>
-                                <line x1="8" y1="11" x2="14" y2="11"></line>
-                            </svg>
-                        </div>
-                    </div>
-                `;
 
-                const imgEl = iconContainer.querySelector('.filepond--thumbnail-img');
+                const thumbWrap = document.createElement('div');
+                thumbWrap.className = 'filepond--thumbnail-wrapper';
+                const imgEl = document.createElement('img');
+                imgEl.src = imgUrl;
+                imgEl.alt = name;
+                imgEl.className = 'filepond--thumbnail-img';
+
+                const overlay = document.createElement('div');
+                overlay.className = 'filepond--thumbnail-overlay';
+                overlay.appendChild(createSvg({
+                    class: 'filepond--thumbnail-zoom-icon', viewBox: '0 0 24 24', fill: 'none',
+                    stroke: 'currentColor', 'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+                }, [
+                    ['circle', { cx: '11', cy: '11', r: '8' }],
+                    ['line', { x1: '21', y1: '21', x2: '16.65', y2: '16.65' }],
+                    ['line', { x1: '11', y1: '8', x2: '11', y2: '14' }],
+                    ['line', { x1: '8', y1: '11', x2: '14', y2: '11' }],
+                ]));
+
+                thumbWrap.append(imgEl, overlay);
+                iconContainer.replaceChildren(thumbWrap);
+
                 imgEl.onerror = () => {
                     if (imgUrl && imgUrl.startsWith('blob:')) return;
                     const fallback = document.createElement('div');
                     fallback.className = 'filepond--custom-file-icon';
-                    fallback.innerHTML = `
-                        <div class="filepond--doc-icon-wrapper">
-                            <svg class="filepond--doc-sheet-svg" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2 4C2 2.89543 2.89543 2 4 2H19.5858C20.1163 2 20.625 2.21071 21 2.58579L29.4142 11C29.7893 11.375 30 11.8837 30 12.4142V34C30 35.1046 29.1046 36 28 36H4C2.89543 36 2 35.1046 2 34V4Z" class="filepond--doc-sheet-bg" stroke="currentColor" stroke-width="1.75"/>
-                                <path d="M19 2V10C19 11.1046 19.8954 12 21 12H29" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
-                            </svg>
-                            <span class="filepond--ext-badge filepond-badge-img">${ext.slice(0, 4) || 'IMG'}</span>
-                        </div>
-                    `;
+                    fallback.appendChild(createDocIconWrapper('filepond-badge-img', ext.slice(0, 4) || 'IMG'));
                     iconContainer.replaceWith(fallback);
                 };
 
@@ -692,15 +744,7 @@ function attachCustomFileIcon(item, blobUrlSet, forceUpdate = false, comp = null
         else if (['MP3', 'WAV', 'OGG', 'FLAC', 'AAC'].includes(ext)) badgeClass = 'filepond-badge-audio';
         else if (['JPG', 'JPEG', 'PNG', 'GIF', 'WEBP', 'SVG'].includes(ext)) badgeClass = 'filepond-badge-img';
 
-        iconContainer.innerHTML = `
-            <div class="filepond--doc-icon-wrapper">
-                <svg class="filepond--doc-sheet-svg" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M2 4C2 2.89543 2.89543 2 4 2H19.5858C20.1163 2 20.625 2.21071 21 2.58579L29.4142 11C29.7893 11.375 30 11.8837 30 12.4142V34C30 35.1046 29.1046 36 28 36H4C2.89543 36 2 35.1046 2 34V4Z" class="filepond--doc-sheet-bg" stroke="currentColor" stroke-width="1.75"/>
-                    <path d="M19 2V10C19 11.1046 19.8954 12 21 12H29" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
-                </svg>
-                <span class="filepond--ext-badge ${badgeClass}">${ext.slice(0, 4) || 'FILE'}</span>
-            </div>
-        `;
+        iconContainer.replaceChildren(createDocIconWrapper(badgeClass, ext.slice(0, 4) || 'FILE'));
 
         insertIcon();
         } catch (err) {
@@ -1107,14 +1151,10 @@ export function vibeFilepond(config = {}) {
             if (!code) return;
             try {
                 if (typeof code === 'function') {
-                    code(data, response);
+                    evalCallback(code, [data, response]);
                     return;
                 }
-                if (typeof code === 'string') {
-                    const $vibe = window.$vibe;
-                    // eslint-disable-next-line no-new-func
-                    (new Function('$vibe', 'data', 'response', code))($vibe, data, response);
-                }
+                evalCallback(code, [window.$vibe, data, response], ['$vibe', 'data', 'response']);
             } catch (e) {
                 console.error('[vibeFilepond] onError callback error:', e);
             }
@@ -2251,7 +2291,7 @@ export function vibeFilepond(config = {}) {
             // Keeping hiddenContainer clear prevents duplicate form input names and values from being submitted.
             const hiddenContainer = this.$refs.hiddenContainer;
             if (hiddenContainer) {
-                hiddenContainer.innerHTML = '';
+                hiddenContainer.replaceChildren();
             }
         },
 

@@ -53,12 +53,49 @@
         height: 0;
     }
 
-    /* Vibe UI Custom Scrollbar (Auto-hides by default, visible on hover) */
-    .vibe-scrollbar {
+    /* Vibe UI Custom Scrollbar (WCAG 1.4.11 >= 3:1 thumb contrast, high-contrast support, gated legacy WebKit fallback) */
+    .vibe-scrollbar,
+    .vibe-scrollbar-always {
+        --vibe-scrollbar-thumb: #71717a;
+        --vibe-scrollbar-track: transparent;
         scrollbar-width: thin;
-        scrollbar-color: transparent transparent;
-        transition: scrollbar-color 0.15s ease;
         -webkit-overflow-scrolling: touch;
+    }
+
+    .dark .vibe-scrollbar,
+    .dark .vibe-scrollbar-always,
+    :where(.dark, .dark *) .vibe-scrollbar,
+    :where(.dark, .dark *) .vibe-scrollbar-always {
+        --vibe-scrollbar-thumb: #8e8e93;
+    }
+
+    @media (prefers-contrast: more) {
+        .vibe-scrollbar,
+        .vibe-scrollbar-always {
+            --vibe-scrollbar-thumb: #09090b;
+            --vibe-scrollbar-track: #f4f4f5;
+        }
+
+        .dark .vibe-scrollbar,
+        .dark .vibe-scrollbar-always,
+        :where(.dark, .dark *) .vibe-scrollbar,
+        :where(.dark, .dark *) .vibe-scrollbar-always {
+            --vibe-scrollbar-thumb: #fafafa;
+            --vibe-scrollbar-track: #09090b;
+        }
+    }
+
+    .vibe-scrollbar {
+        scrollbar-color: transparent transparent;
+    }
+
+    .vibe-scrollbar:hover,
+    .vibe-scrollbar:focus-within {
+        scrollbar-color: var(--vibe-scrollbar-thumb) var(--vibe-scrollbar-track);
+    }
+
+    .vibe-scrollbar-always {
+        scrollbar-color: var(--vibe-scrollbar-thumb) var(--vibe-scrollbar-track);
     }
 
     /* Auto hide scrollbar in minified sheet state to prevent off-center layout shifting */
@@ -68,82 +105,46 @@
         -ms-overflow-style: none !important;
     }
 
-    .vibe-scrollbar:hover {
-        scrollbar-color: var(--border, #a2a4a3) transparent;
-    }
+    @supports not (scrollbar-color: auto) {
+        .vibe-scrollbar,
+        .vibe-scrollbar-always {
+            scrollbar-width: auto;
+        }
 
-    .dark .vibe-scrollbar:hover,
-    :where(.dark, .dark *) .vibe-scrollbar:hover {
-        scrollbar-color: var(--border, #262726) transparent;
-    }
+        .vibe-scrollbar::-webkit-scrollbar,
+        .vibe-scrollbar-always::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
 
-    .vibe-scrollbar::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
+        :where([data-state="minified"], [data-state="minified"] *) .vibe-scrollbar::-webkit-scrollbar,
+        :where([data-state="minified"], [data-state="minified"] *).vibe-scrollbar::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
 
-    :where([data-state="minified"], [data-state="minified"] *) .vibe-scrollbar::-webkit-scrollbar,
-    :where([data-state="minified"], [data-state="minified"] *).vibe-scrollbar::-webkit-scrollbar {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
-    }
+        .vibe-scrollbar::-webkit-scrollbar-track,
+        .vibe-scrollbar-always::-webkit-scrollbar-track {
+            background: var(--vibe-scrollbar-track);
+        }
 
-    .vibe-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
-    }
+        .vibe-scrollbar::-webkit-scrollbar-thumb {
+            background-color: transparent;
+            border-radius: 9999px;
+        }
 
-    .vibe-scrollbar::-webkit-scrollbar-thumb {
-        background-color: transparent;
-        border-radius: 9999px;
-    }
+        .vibe-scrollbar:hover::-webkit-scrollbar-thumb,
+        .vibe-scrollbar:focus-within::-webkit-scrollbar-thumb,
+        .vibe-scrollbar-always::-webkit-scrollbar-thumb {
+            background-color: var(--vibe-scrollbar-thumb);
+            border-radius: 9999px;
+        }
 
-    .vibe-scrollbar:hover::-webkit-scrollbar-thumb {
-        background-color: var(--border, #a2a4a3);
-    }
-
-    .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-        background-color: var(--muted-foreground, #717372);
-    }
-
-    .dark .vibe-scrollbar:hover::-webkit-scrollbar-thumb,
-    :where(.dark, .dark *) .vibe-scrollbar:hover::-webkit-scrollbar-thumb {
-        background-color: var(--border, #262726);
-    }
-
-    .dark .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover,
-    :where(.dark, .dark *) .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-        background-color: var(--muted-foreground, #717372);
-    }
-
-    /* Vibe UI Scrollbar - Always Visible Variation */
-    .vibe-scrollbar-always {
-        scrollbar-width: thin;
-        scrollbar-color: var(--border, #a2a4a3) transparent;
-    }
-
-    .dark .vibe-scrollbar-always,
-    :where(.dark, .dark *) .vibe-scrollbar-always {
-        scrollbar-color: var(--border, #262726) transparent;
-    }
-
-    .vibe-scrollbar-always::-webkit-scrollbar {
-        width: 6px;
-        height: 6px;
-    }
-
-    .vibe-scrollbar-always::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    .vibe-scrollbar-always::-webkit-scrollbar-thumb {
-        background-color: var(--border, #a2a4a3);
-        border-radius: 9999px;
-    }
-
-    .dark .vibe-scrollbar-always::-webkit-scrollbar-thumb,
-    :where(.dark, .dark *) .vibe-scrollbar-always::-webkit-scrollbar-thumb {
-        background-color: var(--border, #262726);
+        .vibe-scrollbar:hover::-webkit-scrollbar-thumb:hover,
+        .vibe-scrollbar-always::-webkit-scrollbar-thumb:hover {
+            background-color: var(--foreground, #09090b);
+        }
     }
 }
 
@@ -318,11 +319,16 @@ html.vibe-theme-switching *::after {
    Vibe UI Range Slider Component (Ultra-responsive 0ms input drag)
    ========================================================================== */
 .vibe-range {
+    --range-direction: to right;
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
     background: transparent;
     cursor: pointer;
+}
+
+.vibe-range:dir(rtl) {
+    --range-direction: to left;
 }
 
 .vibe-range:focus {
@@ -335,7 +341,7 @@ html.vibe-theme-switching *::after {
     height: var(--range-track-height, 6px);
     border-radius: 9999px;
     background: linear-gradient(
-        to right,
+        var(--range-direction, to right),
         var(--range-active-color, var(--primary)) var(--progress, 50%),
         var(--range-track-color, var(--input)) var(--progress, 50%)
     );
@@ -496,22 +502,87 @@ html.vibe-theme-switching *::after {
 }
 
 
-/* Autofill styling to prevent Chrome/Webkit white flash or white background */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
-    -webkit-text-fill-color: var(--foreground) !important;
-    caret-color: var(--foreground) !important;
-    transition: background-color 5000s ease-in-out 0s;
+/* =========================================================================
+   Native Modal Dialogs, Top-Layer Popovers & Form Platform Semantics
+   ========================================================================= */
+dialog:modal {
+    overscroll-behavior: contain;
 }
 
-.dark input:-webkit-autofill,
-.dark input:-webkit-autofill:hover,
-.dark input:-webkit-autofill:focus,
-.dark input:-webkit-autofill:active {
+dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+}
+
+dialog[data-vibe-dialog],
+[popover][data-vibe-popover] {
+    opacity: 0;
+    transition-property: opacity, transform, display, overlay;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    transition-behavior: allow-discrete;
+}
+
+dialog[data-vibe-dialog]::backdrop {
+    background-color: transparent;
+    transition-property: background-color, backdrop-filter, display, overlay;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
+    transition-behavior: allow-discrete;
+}
+
+dialog[data-vibe-dialog][open],
+[popover][data-vibe-popover]:is(:popover-open, .\:popover-open) {
+    opacity: 1;
+
+    @starting-style {
+        opacity: 0;
+    }
+}
+
+dialog[data-vibe-dialog][open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+
+    @starting-style {
+        background-color: transparent;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    dialog[data-vibe-dialog] {
+        transform: scale(0.96) translateY(4px);
+    }
+
+    dialog[data-vibe-dialog][open] {
+        transform: scale(1) translateY(0);
+
+        @starting-style {
+            transform: scale(0.96) translateY(4px);
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    dialog[data-vibe-dialog],
+    dialog[data-vibe-dialog]::backdrop,
+    [popover][data-vibe-popover] {
+        transition-duration: 0.1s;
+    }
+}
+
+/* Native :user-invalid post-interaction feedback (range inputs excluded) */
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):not([type="file"]):user-invalid,
+select:user-invalid,
+textarea:user-invalid {
+    border-color: var(--destructive);
+}
+
+/* Autofill styling across Chrome, Firefox, and Safari using semantic theme tokens */
+:is(input, textarea, select):is(:autofill, :-webkit-autofill),
+:is(input, textarea, select):is(:autofill, :-webkit-autofill):is(:hover, :focus, :active) {
     -webkit-box-shadow: 0 0 0 1000px var(--background) inset !important;
+    box-shadow: 0 0 0 1000px var(--background) inset !important;
     -webkit-text-fill-color: var(--foreground) !important;
     caret-color: var(--foreground) !important;
     transition: background-color 5000s ease-in-out 0s;
@@ -566,4 +637,107 @@ nav[data-nav-density="relaxed"] [data-pin-type="group"] [data-nav-group-trigger]
     padding-top: 0.6rem !important;
     padding-bottom: 0.6rem !important;
     font-size: 0.875rem !important;
+}
+
+/* Touch-screen usability without distorting proportional control scales (form-factor-adaptation, forms) */
+:where(label:has(:is(input[type="checkbox"], input[type="radio"]))) {
+    min-block-size: 24px;
+}
+
+@media (pointer: coarse) {
+    :where(label:has(:is(input[type="checkbox"], input[type="radio"]))) {
+        min-block-size: 44px;
+    }
+
+    :where(
+        input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="hidden"], [type="submit"], [type="button"], [type="reset"]),
+        select,
+        textarea
+    ) {
+        font-size: max(1rem, 1em);
+    }
+}
+
+/* Vibe Clipboard: state icon swaps, accessible live-region bubble, and keyboard/touch-safe reveal (copy-button) */
+[data-vibe-clipboard-trigger] [data-vibe-clipboard-state="copied"],
+[data-vibe-clipboard-trigger] [data-vibe-clipboard-state="failed"] {
+    display: none;
+}
+
+[data-vibe-clipboard-trigger][data-copied] [data-vibe-clipboard-state="idle"],
+[data-vibe-clipboard-trigger][data-failed] [data-vibe-clipboard-state="idle"] {
+    display: none;
+}
+
+[data-vibe-clipboard-trigger][data-copied] [data-vibe-clipboard-state="copied"] {
+    display: inline-flex;
+    color: var(--success, #10b981);
+}
+
+[data-vibe-clipboard-trigger][data-failed] [data-vibe-clipboard-state="failed"] {
+    display: inline-flex;
+    color: var(--destructive, #ef4444);
+}
+
+.vibe-clipboard-tip {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 150ms ease, transform 150ms ease;
+}
+
+[data-vibe-clipboard]:has([data-vibe-clipboard-trigger][data-copied]) .vibe-clipboard-tip,
+[data-vibe-clipboard]:has([data-vibe-clipboard-trigger][data-failed]) .vibe-clipboard-tip {
+    opacity: 1;
+}
+
+[data-vibe-clipboard]:has([data-vibe-clipboard-trigger][data-failed]) .vibe-clipboard-tip {
+    background-color: var(--destructive, #ef4444);
+    color: var(--destructive-foreground, #ffffff);
+    border-color: transparent;
+}
+
+.vibe-copyable {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.vibe-copyable [data-vibe-clipboard] {
+    flex: none;
+    order: 1;
+}
+
+@media (hover: hover) {
+    .vibe-copyable {
+        display: block;
+        position: relative;
+    }
+
+    .vibe-copyable [data-vibe-clipboard] {
+        position: absolute;
+        inset-block-start: 0.5rem;
+        inset-inline-end: 0.5rem;
+        z-index: 10;
+    }
+
+    .vibe-copyable [data-vibe-clipboard-trigger] {
+        opacity: 0;
+        transition: opacity 150ms ease;
+    }
+
+    .vibe-copyable:hover [data-vibe-clipboard-trigger],
+    .vibe-copyable:focus-within [data-vibe-clipboard-trigger],
+    .vibe-copyable [data-vibe-clipboard-trigger]:focus-visible,
+    .vibe-copyable [data-vibe-clipboard-trigger][data-copied],
+    .vibe-copyable [data-vibe-clipboard-trigger][data-failed] {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vibe-clipboard-tip,
+    .vibe-copyable [data-vibe-clipboard-trigger] {
+        transition: opacity 100ms linear;
+        transform: none !important;
+    }
 }

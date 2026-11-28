@@ -1,3 +1,19 @@
+@php
+    $methodIconPaths = [
+        'totp' => '<path d="M4 10C4 6.229 4 4.343 5.172 3.172 6.343 2 8.229 2 12 2c3.771 0 5.657 0 6.828 1.172C20 4.343 20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828C17.657 22 15.771 22 12 22c-3.771 0-5.657 0-6.828-1.172C4 19.657 4 17.771 4 14v-4Z"/><path d="M15 19H9"/>',
+        'email' => '<path d="M2 12C2 8.229 2 6.343 3.172 5.172 4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z"/><path d="m6 8 2.159 1.799C9.996 11.33 10.914 12.095 12 12.095c1.086 0 2.005-.765 3.841-2.296L18 8"/>',
+        'whatsapp' => '<path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z"/><path d="M8 10.5h8M8 14h5.5"/>',
+        'sms' => '<path d="M18.676 19.963c.516-.05 1.014-.329 1.325-.709l1.42-1.496c.96-1.01.69-2.74-.537-3.447l-1.91-1.1c-.806-.464-1.787-.327-2.417.336l-.455.48s-1.083 1.14-4.038-1.972c-2.955-3.11-1.873-4.25-1.873-4.25l.287-.302c.707-.744.773-1.938.157-2.81L9.373 2.91C8.61 1.83 7.136 1.688 6.261 2.609L4.692 4.261c-.434.457-.724 1.048-.689 1.705.09 1.68.808 5.293 4.812 9.51 4.247 4.47 8.232 4.648 9.861 4.487Z"/>',
+        'recovery' => '<path d="M15.681 14.587C19.171 14.587 22 11.769 22 8.293 22 4.818 19.171 2 15.681 2c-3.49 0-6.32 2.818-6.32 6.293 0 1.61.735 2.781.735 2.781L2.454 18.685a2.036 2.036 0 0 0 0 2.049l.882.878c.343.293 1.205.703 1.91.001l1.029-1.025c1.029 1.025 2.204.439 2.645-.146.735-1.025-.147-2.049-.147-2.049l.294-.293c1.41 1.405 2.645.586 3.086 0 .735-1.024 0-2.049 0-2.049-.294-.585-.882-.585-.147-1.317l.882-.878c.705.586 2.155.732 2.792.732Z"/><circle cx="15.681" cy="8.294" r="2.195"/>',
+    ];
+    $activeMethodMeta = [
+        'totp' => ['color' => 'bg-primary/10 text-primary', 'title' => __('auth/two_factor.totp_title'), 'desc' => 'Google Authenticator / Authy'],
+        'email' => ['color' => 'bg-sky-500/10 text-sky-600 dark:text-sky-400', 'title' => __('auth/two_factor.email_title'), 'desc' => $availableMethods['email']['description'] ?? ''],
+        'whatsapp' => ['color' => 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400', 'title' => __('auth/two_factor.whatsapp_title'), 'desc' => $availableMethods['whatsapp']['description'] ?? ''],
+        'sms' => ['color' => 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400', 'title' => __('auth/two_factor.sms_title'), 'desc' => $availableMethods['sms']['description'] ?? ''],
+    ];
+@endphp
+
 <div class="space-y-6">
     {{-- Dynamic Header Section --}}
     @if (! $showingMethodSelector)
@@ -86,37 +102,13 @@
                     <div class="space-y-3">
                         <div class="p-3 rounded-xl border border-border bg-muted flex items-center justify-between gap-3">
                             <div class="flex items-center gap-2.5 min-w-0">
-                                @if ($selectedMethod === 'totp')
-                                    <div class="size-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10C4 6.229 4 4.343 5.172 3.172 6.343 2 8.229 2 12 2c3.771 0 5.657 0 6.828 1.172C20 4.343 20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828C17.657 22 15.771 22 12 22c-3.771 0-5.657 0-6.828-1.172C4 19.657 4 17.771 4 14v-4Z"/><path d="M15 19H9"/></svg>
+                                @if (isset($activeMethodMeta[$selectedMethod]))
+                                    <div class="size-8 rounded-lg {{ $activeMethodMeta[$selectedMethod]['color'] }} flex items-center justify-center shrink-0">
+                                        <svg class="size-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $methodIconPaths[$selectedMethod] ?? '' !!}</svg>
                                     </div>
                                     <div class="min-w-0">
-                                        <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.totp_title') }}</p>
-                                        <p class="text-[11px] text-muted-foreground truncate">Google Authenticator / Authy</p>
-                                    </div>
-                                @elseif ($selectedMethod === 'email')
-                                    <div class="size-8 rounded-lg bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 8.229 2 6.343 3.172 5.172 4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z"/><path d="m6 8 2.159 1.799C9.996 11.33 10.914 12.095 12 12.095c1.086 0 2.005-.765 3.841-2.296L18 8"/></svg>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.email_title') }}</p>
-                                        <p class="text-[11px] text-muted-foreground truncate">{{ $availableMethods['email']['description'] ?? '' }}</p>
-                                    </div>
-                                @elseif ($selectedMethod === 'whatsapp')
-                                    <div class="size-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z"/><path d="M8 10.5h8M8 14h5.5"/></svg>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.whatsapp_title') }}</p>
-                                        <p class="text-[11px] text-muted-foreground truncate">{{ $availableMethods['whatsapp']['description'] ?? '' }}</p>
-                                    </div>
-                                @elseif ($selectedMethod === 'sms')
-                                    <div class="size-8 rounded-lg bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
-                                        <svg class="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.676 19.963c.516-.05 1.014-.329 1.325-.709l1.42-1.496c.96-1.01.69-2.74-.537-3.447l-1.91-1.1c-.806-.464-1.787-.327-2.417.336l-.455.48s-1.083 1.14-4.038-1.972c-2.955-3.11-1.873-4.25-1.873-4.25l.287-.302c.707-.744.773-1.938.157-2.81L9.373 2.91C8.61 1.83 7.136 1.688 6.261 2.609L4.692 4.261c-.434.457-.724 1.048-.689 1.705.09 1.68.808 5.293 4.812 9.51 4.247 4.47 8.232 4.648 9.861 4.487Z"/></svg>
-                                    </div>
-                                    <div class="min-w-0">
-                                        <p class="text-xs font-semibold text-foreground truncate">{{ __('auth/two_factor.sms_title') }}</p>
-                                        <p class="text-[11px] text-muted-foreground truncate">{{ $availableMethods['sms']['description'] ?? '' }}</p>
+                                        <p class="text-xs font-semibold text-foreground truncate">{{ $activeMethodMeta[$selectedMethod]['title'] }}</p>
+                                        <p class="text-[11px] text-muted-foreground truncate">{{ $activeMethodMeta[$selectedMethod]['desc'] }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -250,16 +242,8 @@
                     >
                         <div class="flex items-center gap-3.5 min-w-0">
                             <div class="size-10 rounded-xl flex items-center justify-center shrink-0 {{ $selectedMethod === $methodKey ? 'bg-primary text-primary-foreground shadow-xs' : 'bg-muted text-muted-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors' }}">
-                                @if ($methodKey === 'totp')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10C4 6.229 4 4.343 5.172 3.172 6.343 2 8.229 2 12 2c3.771 0 5.657 0 6.828 1.172C20 4.343 20 6.229 20 10v4c0 3.771 0 5.657-1.172 6.828C17.657 22 15.771 22 12 22c-3.771 0-5.657 0-6.828-1.172C4 19.657 4 17.771 4 14v-4Z"/><path d="M15 19H9"/></svg>
-                                @elseif ($methodKey === 'email')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12C2 8.229 2 6.343 3.172 5.172 4.343 4 6.229 4 10 4h4c3.771 0 5.657 0 6.828 1.172C22 6.343 22 8.229 22 12c0 3.771 0 5.657-1.172 6.828C19.657 20 17.771 20 14 20h-4c-3.771 0-5.657 0-6.828-1.172C2 17.657 2 15.771 2 12Z"/><path d="m6 8 2.159 1.799C9.996 11.33 10.914 12.095 12 12.095c1.086 0 2.005-.765 3.841-2.296L18 8"/></svg>
-                                @elseif ($methodKey === 'whatsapp')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22C17.523 22 22 17.523 22 12S17.523 2 12 2 2 6.477 2 12c0 1.6.376 3.112 1.043 4.453.178.356.237.763.134 1.148l-.595 2.226c-.259.966.625 1.85 1.591 1.592l2.226-.596c.385-.103.792-.044 1.148.134A9.957 9.957 0 0 0 12 22Z"/><path d="M8 10.5h8M8 14h5.5"/></svg>
-                                @elseif ($methodKey === 'sms')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.676 19.963c.516-.05 1.014-.329 1.325-.709l1.42-1.496c.96-1.01.69-2.74-.537-3.447l-1.91-1.1c-.806-.464-1.787-.327-2.417.336l-.455.48s-1.083 1.14-4.038-1.972c-2.955-3.11-1.873-4.25-1.873-4.25l.287-.302c.707-.744.773-1.938.157-2.81L9.373 2.91C8.61 1.83 7.136 1.688 6.261 2.609L4.692 4.261c-.434.457-.724 1.048-.689 1.705.09 1.68.808 5.293 4.812 9.51 4.247 4.47 8.232 4.648 9.861 4.487Z"/></svg>
-                                @elseif ($methodKey === 'recovery')
-                                    <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.681 14.587C19.171 14.587 22 11.769 22 8.293 22 4.818 19.171 2 15.681 2c-3.49 0-6.32 2.818-6.32 6.293 0 1.61.735 2.781.735 2.781L2.454 18.685a2.036 2.036 0 0 0 0 2.049l.882.878c.343.293 1.205.703 1.91.001l1.029-1.025c1.029 1.025 2.204.439 2.645-.146.735-1.025-.147-2.049-.147-2.049l.294-.293c1.41 1.405 2.645.586 3.086 0 .735-1.024 0-2.049 0-2.049-.294-.585-.882-.585-.147-1.317l.882-.878c.705.586 2.155.732 2.792.732Z"/><circle cx="15.681" cy="8.294" r="2.195"/></svg>
+                                @if (isset($methodIconPaths[$methodKey]))
+                                    <svg class="size-5" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">{!! $methodIconPaths[$methodKey] !!}</svg>
                                 @endif
                             </div>
                             <div class="min-w-0 flex-1">

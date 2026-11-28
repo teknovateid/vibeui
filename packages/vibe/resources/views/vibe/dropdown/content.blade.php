@@ -40,7 +40,7 @@
     class="absolute z-50 {{ $widthClasses }} {{ $alignmentClasses }}"
     style="display: none;"
 >
-    <div x-ref="menuContainer" {{ $attributes->twMerge(['class' => 'rounded-xl shadow-xl p-1 bg-popover border border-border text-popover-foreground flex flex-col gap-0.5']) }} role="menu" aria-orientation="vertical" tabindex="-1">
+    <div x-ref="menuContainer" :id="id + '-menu'" {{ $attributes->twMerge(['class' => 'rounded-xl shadow-xl p-1 bg-popover border border-border text-popover-foreground flex flex-col gap-0.5']) }} role="menu" aria-orientation="vertical" tabindex="-1">
         {{ $slot }}
     </div>
 </div>

@@ -54,42 +54,17 @@
 
     $baseClasses = 'relative w-full flex items-center justify-between text-left transition-colors duration-150 focus:outline-none focus-visible:outline-none select-none cursor-pointer disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 disabled:cursor-not-allowed';
 
-    $prClass = match ($size) {
-        'xs' => $clearable ? 'pr-11' : 'pr-7',
-        'sm' => $clearable ? 'pr-12' : 'pr-8',
-        'md' => $clearable ? 'pr-14' : 'pr-9',
-        'lg' => $clearable ? 'pr-15' : 'pr-10',
-        'xl' => $clearable ? 'pr-16' : 'pr-11',
-        default => $clearable ? 'pr-14' : 'pr-9',
+    [$heightClass, $textClass, $radiusClass, $plClass, $prClass, $flushPrClass, $gapClass, $chevronSize, $chevronRightPosition, $badgeSizeClass, $badgeRemoveSizeClass] = match ($size) {
+        'xs' => [$multiple ? 'min-h-7 py-0.5' : 'h-7', 'text-xs', 'rounded-md', 'pl-2.5', $clearable ? 'pr-11' : 'pr-7', $clearable ? 'pr-9' : 'pr-5', 'gap-1', 'size-3.5', 'right-2', 'h-5 px-1.5 text-[10px] gap-1 rounded-sm', 'size-2.5'],
+        'sm' => [$multiple ? 'min-h-8 py-1' : 'h-8', 'text-xs', 'rounded-md', 'pl-3', $clearable ? 'pr-12' : 'pr-8', $clearable ? 'pr-10' : 'pr-6', 'gap-1.5', 'size-3.5', 'right-2.5', 'h-5.5 px-2 text-[11px] gap-1 rounded-sm', 'size-2.5'],
+        'lg' => [$multiple ? 'min-h-10 py-1.5' : 'h-10', 'text-sm', 'rounded-lg', 'pl-4', $clearable ? 'pr-14' : 'pr-10', $clearable ? 'pr-13' : 'pr-8', 'gap-2', 'size-4.5', 'right-3', 'h-6.5 px-2.5 text-xs gap-1.5 rounded-md', 'size-3'],
+        'xl' => [$multiple ? 'min-h-11 py-1.5' : 'h-11', 'text-base', 'rounded-xl', 'pl-5', $clearable ? 'pr-16' : 'pr-11', $clearable ? 'pr-14' : 'pr-9', 'gap-2.5', 'size-5', 'right-3.5', 'h-7 px-3 text-sm gap-2 rounded-lg', 'size-3.5'],
+        default => [$multiple ? 'min-h-9 py-1' : 'h-9', 'text-sm', 'rounded-lg', 'pl-3.5', $clearable ? 'pr-13' : 'pr-9', $clearable ? 'pr-12' : 'pr-7', 'gap-2', 'size-4', 'right-3', 'h-6 px-2 text-xs gap-1.5 rounded-md', 'size-3'],
     };
 
-    $sizeClasses = match ($size) {
-        'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . " text-xs rounded-md pl-2.5 {$prClass} gap-1",
-        'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . " text-xs rounded-md pl-3 {$prClass} gap-1.5",
-        'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
-        'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . " text-sm rounded-lg pl-4 {$prClass} gap-2",
-        'xl' => ($multiple ? 'min-h-11 py-1.5' : 'h-11') . " text-base rounded-xl pl-4.5 {$prClass} gap-2.5",
-        default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm rounded-lg pl-4 sm:pl-3.5 {$prClass} gap-2",
-    };
-
-    if ($variant === 'flush') {
-        $flushPr = match ($size) {
-            'xs' => $clearable ? 'pr-9' : 'pr-5',
-            'sm' => $clearable ? 'pr-10' : 'pr-6',
-            'md' => $clearable ? 'pr-12' : 'pr-7',
-            'lg' => $clearable ? 'pr-13' : 'pr-8',
-            'xl' => $clearable ? 'pr-14' : 'pr-9',
-            default => $clearable ? 'pr-12' : 'pr-7',
-        };
-        $sizeClasses = match ($size) {
-            'xs' => ($multiple ? 'min-h-7 py-0.5' : 'h-7') . " text-xs px-0 rounded-none {$flushPr}",
-            'sm' => ($multiple ? 'min-h-8 py-1' : 'h-8') . " text-xs px-0 rounded-none {$flushPr}",
-            'md' => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
-            'lg' => ($multiple ? 'min-h-10 py-1.5' : 'h-10') . " text-sm px-0 rounded-none {$flushPr}",
-            'xl' => ($multiple ? 'min-h-11 py-1.5' : 'h-11') . " text-base px-0 rounded-none {$flushPr}",
-            default => ($multiple ? 'min-h-11 sm:min-h-9 py-1.5 sm:py-1' : 'h-11 sm:h-9') . " text-base sm:text-sm px-0 rounded-none {$flushPr}",
-        };
-    }
+    $sizeClasses = $variant === 'flush'
+        ? "{$heightClass} {$textClass} px-0 rounded-none {$flushPrClass}"
+        : "{$heightClass} {$textClass} {$radiusClass} {$plClass} {$prClass} {$gapClass}";
 
     $variantClasses = match ($variant) {
         'filled' => $hasError ? 'bg-destructive/10 border border-destructive text-destructive placeholder:text-destructive/50 focus:bg-background focus:border-destructive focus:ring-2 focus:ring-destructive/20 focus-visible:bg-background focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' : 'bg-muted/60 border border-transparent text-foreground hover:bg-muted/80 focus:bg-background focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:bg-background focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
@@ -109,36 +84,7 @@
         default => $hasError ? '!border-destructive ring-2 ring-destructive/20' : '!border-primary ring-2 ring-primary/20',
     };
 
-    $chevronSize = match ($size) {
-        'xs', 'sm' => 'size-3.5',
-        'xl' => 'size-4.5',
-        default => 'size-4',
-    };
-
-    $chevronRightPosition = match ($size) {
-        'xs' => 'right-2',
-        'sm' => 'right-2.5',
-        'xl' => 'right-3.5',
-        default => 'right-3',
-    };
-
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses}");
-
-    // Badge sizing based on select size (matching vibe:input.multiple)
-    $badgeSizeClass = match ($size) {
-        'xs' => 'h-5 px-1.5 text-[10px] gap-1 rounded-sm',
-        'sm' => 'h-5.5 px-2 text-[11px] gap-1 rounded-sm',
-        'md' => 'h-6 px-2 text-xs gap-1.5 rounded-md',
-        'lg' => 'h-6.5 px-2.5 text-xs gap-1.5 rounded-lg',
-        'xl' => 'h-7.5 px-3 text-sm gap-2 rounded-lg',
-        default => 'h-6 px-2 text-xs gap-1.5 rounded-md',
-    };
-
-    $badgeRemoveSizeClass = match ($size) {
-        'xs', 'sm' => 'size-2.5',
-        'xl' => 'size-3.5',
-        default => 'size-3',
-    };
 
     $describedBy = [];
     if ($hasError && $errorMessage) {
@@ -314,20 +260,14 @@
     @endif
 >
 
-    {{-- Label --}}
-    @if ($label)
-        <label for="{{ $id }}-trigger" class="block text-xs font-semibold text-foreground mb-1.5 select-none">
-            {{ $label }}
-            @if ($attributes->has('required') && $attributes->get('required') !== false)
-                <span class="text-destructive font-bold ml-0.5" aria-hidden="true">*</span>
-            @endif
-        </label>
-    @endif
-
-    {{-- Description --}}
-    @if ($description)
-        <p id="{{ $id }}-description" class="mb-1.5 text-xs text-muted-foreground">{{ $description }}</p>
-    @endif
+    {{-- Label & Description --}}
+    <vibe:partials.field-label
+        :for="$id . '-trigger'"
+        :label="$label"
+        :required="$attributes->has('required') && $attributes->get('required') !== false"
+        :description="$description"
+        :descriptionId="$id . '-description'"
+    />
 
     {{-- Hidden Form Input for standard form submission --}}
     @if ($name)
@@ -483,7 +423,7 @@
                         @input.debounce.{{ $debounce }}ms="fetchData()"
                         type="text"
                         placeholder="{{ $searchPlaceholder }}"
-                        class="w-full h-10 sm:h-8 pl-8.5 sm:pl-8 pr-7 text-base sm:text-xs rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
+                        class="w-full h-8 pl-8 pr-7 text-xs rounded-md border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20 transition-colors"
                         @keydown.escape.stop="close()"
                         @if ($keyboard)
                             @keydown.down.stop.prevent="focusNext($event)"
@@ -649,15 +589,5 @@
     </div>
 
     {{-- Error Message --}}
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" />
 </div>

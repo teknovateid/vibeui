@@ -227,6 +227,10 @@ return [
             'title' => 'Highlight',
             'subtitle' => 'Syntax highlighter with varied theme styles',
         ],
+        'clipboard' => [
+            'title' => 'Clipboard',
+            'subtitle' => 'Copy-to-clipboard button, target & masked field',
+        ],
         'chart' => [
             'title' => 'Chart',
             'subtitle' => 'Interactive Chart.js bar, line, and donut graphs',

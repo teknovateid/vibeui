@@ -20,6 +20,7 @@ export function vibeSortTable(el) {
     allThs.forEach(function(otherTh) {
         if (otherTh !== th) {
             otherTh.removeAttribute('data-sort-direction');
+            otherTh.removeAttribute('aria-sort');
             var ascIcon = otherTh.querySelector('[data-sort-icon="asc"]');
             var descIcon = otherTh.querySelector('[data-sort-icon="desc"]');
             var neutralIcon = otherTh.querySelector('[data-sort-icon="neutral"]');
@@ -31,6 +32,7 @@ export function vibeSortTable(el) {
 
     // 2. Set new sort direction on active th and update icons
     th.setAttribute('data-sort-direction', newDir);
+    th.setAttribute('aria-sort', newDir === 'asc' ? 'ascending' : 'descending');
     var ascIcon = th.querySelector('[data-sort-icon="asc"]');
     var descIcon = th.querySelector('[data-sort-icon="desc"]');
     var neutralIcon = th.querySelector('[data-sort-icon="neutral"]');
@@ -83,12 +85,25 @@ export function vibeSortTable(el) {
         return newDir === 'asc' ? cmp : -cmp;
     });
 
-    // 4. Batch re-append sorted rows into tbody
-    var fragment = document.createDocumentFragment();
-    rows.forEach(function(row) {
-        fragment.appendChild(row);
-    });
-    tbody.appendChild(fragment);
+    // 4. Batch reorder rows cleanly (moveBefore preserves active state where supported)
+    if ('moveBefore' in Element.prototype) {
+        rows.forEach(function(row) {
+            tbody.moveBefore(row, null);
+        });
+    } else {
+        var fragment = document.createDocumentFragment();
+        rows.forEach(function(row) {
+            fragment.appendChild(row);
+        });
+        tbody.appendChild(fragment);
+    }
+
+    var region = table.closest('[role="region"]');
+    var statusEl = region ? region.querySelector('[data-vibe-table-status]') : null;
+    if (statusEl) {
+        var headerText = (th.innerText || th.textContent || '').trim() || ('Column ' + (colIndex + 1));
+        statusEl.textContent = headerText + ' sorted ' + (newDir === 'asc' ? 'ascending' : 'descending');
+    }
 
     // 5. Dispatch custom event
     table.dispatchEvent(new CustomEvent('vibe-table-sorted', {

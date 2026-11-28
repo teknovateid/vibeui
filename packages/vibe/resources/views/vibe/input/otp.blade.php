@@ -51,12 +51,11 @@
 
     $gapClasses = $length >= 7 ? 'gap-1 sm:gap-1.5' : 'gap-2';
     $boxSizeClasses = match ($size) {
-        'xs' => 'w-7 h-8 text-xs rounded-md',
-        'sm' => $length >= 7 ? 'w-7 h-8 sm:w-8 sm:h-9 text-xs sm:text-sm rounded-md' : 'w-8 h-9 text-sm rounded-md',
-        'md' => $length >= 7 ? 'w-7 h-9 sm:w-9 sm:h-11 text-sm sm:text-base rounded-lg' : 'w-10 h-11 text-base rounded-lg',
-        'lg' => $length >= 7 ? 'w-8 h-10 sm:w-10 sm:h-12 text-base sm:text-lg rounded-xl' : 'w-12 h-13 text-lg rounded-xl',
-        'xl' => 'w-14 h-15 text-xl rounded-xl',
-        default => $length >= 7 ? 'w-7 h-9 sm:w-9 sm:h-11 text-sm sm:text-base rounded-lg' : 'w-10 h-11 text-base rounded-lg',
+        'xs' => 'w-7 h-7 text-xs rounded-md',
+        'sm' => $length >= 7 ? 'w-7 h-8 sm:w-8 sm:h-8 text-xs rounded-md' : 'w-8 h-8 text-xs rounded-md',
+        'lg' => $length >= 7 ? 'w-8 h-10 sm:w-10 sm:h-11 text-base sm:text-lg rounded-lg' : 'w-11 h-11 text-lg rounded-lg',
+        'xl' => $length >= 7 ? 'w-10 h-11 sm:w-12 sm:h-13 text-lg sm:text-xl rounded-xl' : 'w-12 h-13 text-xl rounded-xl',
+        default => $length >= 7 ? 'w-7 h-9 sm:w-9 sm:h-10 text-sm sm:text-base rounded-lg' : 'w-9 h-10 text-base rounded-lg',
     };
 
     $variantClasses = match ($variant) {
@@ -88,6 +87,7 @@
             digits: Array({{ $length }}).fill(''),
             idPrefix: '{{ $id }}-',
             _lastAutoSubmitted: null,
+            _otpAbort: null,
             sanitize(val) {
                 const raw = String(val ?? '');
                 return this.alphanumeric
@@ -112,6 +112,23 @@
                         });
                     }
                 });
+
+                // Progressive enhancement: WebOTP auto-fill for numeric SMS codes
+                if (!this.alphanumeric && typeof window !== 'undefined' && 'OTPCredential' in window && typeof navigator?.credentials?.get === 'function') {
+                    this._otpAbort = new AbortController();
+                    navigator.credentials.get({
+                        otp: { transport: ['sms'] },
+                        signal: this._otpAbort.signal,
+                    }).then((otp) => {
+                        if (otp?.code) {
+                            this.populateFromValue(otp.code);
+                            this.updateValue();
+                        }
+                    }).catch(() => {});
+                    if (typeof this.$cleanup === 'function') {
+                        this.$cleanup(() => this._otpAbort?.abort());
+                    }
+                }
             },
             populateFromValue(val) {
                 if (!val) {
@@ -308,15 +325,5 @@
         @endfor
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" />
 </div>

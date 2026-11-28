@@ -175,6 +175,7 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/stepper', 'docs.stepper.index')->name('stepper.index');
     Route::view('/highlight', 'docs.highlight.index')->name('highlight.index');
     Route::redirect('/highlightjs', '/docs/highlight')->name('highlightjs.index');
+    Route::view('/clipboard', 'docs.clipboard.index')->name('clipboard.index');
     Route::view('/todo', 'docs.todo.index')->name('todo.index');
 
     Route::prefix('todo-demo')->name('todo.demo.')->group(function () {

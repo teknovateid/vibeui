@@ -32,7 +32,10 @@ class CleanCommand extends Command
             return;
         }
 
-        $publishedComponents = array_map('basename', File::directories($publishedDir));
+        $publishedComponents = array_values(array_filter(
+            array_map('basename', File::directories($publishedDir)),
+            fn (string $dir): bool => $dir !== 'partials' && ! str_starts_with($dir, '_')
+        ));
         if (empty($publishedComponents)) {
             $this->components->info('No published components found.');
             return;

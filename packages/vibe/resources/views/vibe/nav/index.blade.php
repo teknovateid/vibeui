@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'collapsed' => false,
@@ -381,7 +381,9 @@
                         if (currentFlyoutTarget !== targetBtn) {
                             currentFlyoutTarget = targetBtn;
                             let flyout = getFloatingFlyout();
-                            flyout.innerHTML = groupContent.innerHTML;
+                            flyout.replaceChildren(
+                    ...Array.from(groupContent.childNodes, (node) => node.cloneNode(true))
+                );
 
                             let rect = targetBtn.getBoundingClientRect();
                             flyout.style.display = 'flex';

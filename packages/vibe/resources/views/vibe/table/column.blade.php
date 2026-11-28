@@ -24,16 +24,18 @@
 <th 
     @if ($sortable)
         data-sortable="true"
-        @if ($sorted && $direction) data-sort-direction="{{ $direction }}" @endif
-        onclick="window.vibeSortTable(this)"
+        @if ($sorted && $direction)
+            aria-sort="{{ $direction === 'asc' ? 'ascending' : 'descending' }}"
+            data-sort-direction="{{ $direction }}"
+        @endif
     @endif
     {{ $attributes->twMerge(['class' => $compiledClasses]) }}
 >
     @if ($sortable)
         <button 
             type="button"
-            class="inline-flex items-center gap-1.5 w-full font-semibold text-foreground select-none cursor-pointer group/col hover:text-foreground/90 transition-colors focus:outline-none rounded-sm pointer-events-none {{ $align === 'center' ? 'justify-center' : ($align === 'right' ? 'justify-end' : 'justify-start') }}"
-            tabindex="-1"
+            onclick="window.vibeSortTable(this)"
+            class="inline-flex items-center gap-1.5 w-full font-semibold text-foreground select-none cursor-pointer group/col hover:text-foreground/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm {{ $align === 'center' ? 'justify-center' : ($align === 'right' ? 'justify-end' : 'justify-start') }}"
         >
             <span>{{ $slot }}</span>
             <span class="inline-flex shrink-0">

@@ -3,7 +3,7 @@
     'id'           => null,
     'name'         => null,
     'variant'      => 'default',   // 'default' | 'dropzone' | 'avatar' | 'logo'
-    'size'         => 'md',        // 'sm' | 'md' | 'lg'
+    'size'         => 'md',        // 'xs' | 'sm' | 'md' | 'lg' | 'xl'
     'aspectRatio'  => 'auto',      // 'auto' | 'horizontal' | 'square' | 'video'
     'accept'       => null,
     'multiple'     => false,
@@ -105,8 +105,16 @@
     // Checkerboard SVG (transparency indicator)
 
 
+    [$fileControlHeight, $fileControlBtnClasses, $fileControlTextClasses, $fileIconSize, $fileControlRadius] = match ($size) {
+        'xs' => ['h-7', 'px-2.5 text-xs rounded-l-[calc(var(--radius-md)-1px)]', 'px-2.5 text-xs', 'size-3.5', 'rounded-md'],
+        'sm' => ['h-8', 'px-3 text-xs rounded-l-[calc(var(--radius-md)-1px)]', 'px-3 text-xs', 'size-3.5', 'rounded-md'],
+        'lg' => ['h-10', 'px-4 text-sm rounded-l-[calc(var(--radius-lg)-1px)]', 'px-4 text-sm', 'size-4.5', 'rounded-lg'],
+        'xl' => ['h-11', 'px-5 text-base rounded-l-[calc(var(--radius-xl)-1px)]', 'px-5 text-base', 'size-5', 'rounded-xl'],
+        default => ['h-9', 'px-3.5 text-sm rounded-l-[calc(var(--radius-lg)-1px)]', 'px-3.5 text-sm', 'size-4', 'rounded-lg'],
+    };
+
     // Shared border / focus classes — match vibe input design
-    $baseWrapperClasses = 'w-full rounded-lg border bg-background shadow-2xs transition-all duration-150';
+    $baseWrapperClasses = "w-full {$fileControlRadius} border bg-background shadow-2xs transition-all duration-150";
     $borderClasses = $hasError
         ? 'border-destructive ring-2 ring-destructive/20'
         : 'border-input hover:border-primary/40 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20';
@@ -268,9 +276,9 @@
                 type="button"
                 @click="$refs.fileInput.click()"
                 @disabled($isDisabled)
-                class="group/fbtn inline-flex items-center gap-1.5 shrink-0 px-3 h-9 text-xs font-medium text-foreground bg-muted/50 hover:bg-muted border-r border-input rounded-l-[calc(var(--radius-lg)-1px)] transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                class="group/fbtn inline-flex items-center gap-1.5 shrink-0 {{ $fileControlHeight }} {{ $fileControlBtnClasses }} font-medium text-foreground bg-muted/50 hover:bg-muted border-r border-input transition-colors duration-150 cursor-pointer select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
             >
-                <svg class="size-3.5 text-muted-foreground group-hover/fbtn:text-foreground transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg class="{{ $fileIconSize }} text-muted-foreground group-hover/fbtn:text-foreground transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
                     <polyline points="7 9 12 4 17 9"/>
                     <line x1="12" y1="4" x2="12" y2="16"/>
@@ -279,24 +287,24 @@
             </button>
 
             {{-- File name display --}}
-            <div class="flex-1 min-w-0 px-3 h-9 flex items-center gap-2">
+            <div class="flex-1 min-w-0 {{ $fileControlHeight }} {{ $fileControlTextClasses }} flex items-center gap-2">
                 {{-- Placeholder --}}
                 <template x-if="files.length === 0 && !existingUrl">
-                    <span class="text-xs text-muted-foreground truncate select-none">{{ $placeholderText }}</span>
+                    <span class="text-muted-foreground truncate select-none">{{ $placeholderText }}</span>
                 </template>
 
                 {{-- Existing file active --}}
                 <template x-if="files.length === 0 && existingUrl && !isRemoved">
-                    <span class="text-xs text-foreground font-medium truncate flex items-center gap-1.5">
-                        <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span class="text-foreground font-medium truncate flex items-center gap-1.5">
+                        <svg class="{{ $fileIconSize }} text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                         <span class="truncate">{{ __('vibe/input.file_active_current') }}</span>
                     </span>
                 </template>
 
                 {{-- Single new file --}}
                 <template x-if="files.length === 1">
-                    <span class="text-xs text-foreground font-medium truncate flex items-center gap-1.5">
-                        <svg class="size-3.5 text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <span class="text-foreground font-medium truncate flex items-center gap-1.5">
+                        <svg class="{{ $fileIconSize }} text-primary shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                         <span x-text="files[0].name" class="truncate"></span>
                         <span class="text-muted-foreground text-[11px] shrink-0" x-text="'(' + files[0].size + ')'"></span>
                     </span>

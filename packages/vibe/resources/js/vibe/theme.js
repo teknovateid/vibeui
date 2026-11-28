@@ -113,6 +113,14 @@ const ThemeManager = {
                 }
             });
         }
+        if (!this._storageListenerRegistered) {
+            this._storageListenerRegistered = true;
+            window.addEventListener('storage', (e) => {
+                if (e.key === THEME_KEY) {
+                    this.init();
+                }
+            });
+        }
     },
 
     syncFromStorageMode() {
@@ -425,12 +433,20 @@ const ThemeManager = {
 
     applyTheme(mode) {
         let isDark = false;
+        let metaScheme = 'light dark';
         if (mode === 'dark') {
             isDark = true;
+            metaScheme = 'dark';
         } else if (mode === 'light') {
             isDark = false;
+            metaScheme = 'light';
         } else {
             isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        const colorSchemeMeta = document.querySelector('meta[name="color-scheme"]');
+        if (colorSchemeMeta) {
+            colorSchemeMeta.content = metaScheme;
         }
 
         if (isDark) {

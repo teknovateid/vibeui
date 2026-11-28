@@ -36,7 +36,7 @@
         <input
             type="text"
             x-model="newTitle"
-            @keydown.enter.prevent="submitAdd()"
+            @keydown.enter.prevent="if ($event.isComposing || $event.keyCode === 229) return; submitAdd()"
             @keydown.escape="newTitle = ''"
             placeholder="{{ $resolvedPlaceholder }}"
             class="w-full h-10 px-3.5 pr-10 text-sm rounded-xl border border-input bg-background text-foreground placeholder:text-muted-foreground transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary"

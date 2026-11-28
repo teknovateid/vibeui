@@ -111,9 +111,7 @@
                                 rowData = JSON.parse(rawDataAttr);
                             }
                         } catch (e) {
-                            try {
-                                rowData = (new Function('return ' + rawDataAttr))();
-                            } catch (err) {}
+                            console.warn('[VibeButtonEdit] Invalid JSON in data-row-data:', e);
                         }
                     }
                 }
@@ -166,7 +164,7 @@
                         el.removeAttribute('aria-invalid');
                     });
                     targetEl.querySelectorAll('[data-field-error], [data-error]').forEach(function(el) {
-                        el.innerHTML = '';
+                        el.replaceChildren();
                     });
                 }
 

@@ -14,3 +14,8 @@
 4. **Component Guidelines**:
    - Jangan gunakan atribut/prop `pill` pada komponen `<vibe:input>` dan `<vibe:button>`. Untuk gaya pill/membulat penuh, gunakan class utility Tailwind `class="rounded-full"`.
    - Gunakan selalu sintaks tag kustom `<vibe:component>` (bukan `<x-vibe::component>`).
+
+5. **Skill Standards (`modern-web-guidance` + `ponytail`)**:
+   - **Modern Web Guidance**: Sebelum menambah atau mengubah HTML/CSS/client-side JS komponen, jalankan workflow `modern-web-guidance` (`search` -> `retrieve` -> verifikasi) dari `.agents/skills/modern-web-guidance/SKILL.md`.
+   - **Ponytail Simplicity**: Terapkan perubahan paling minimal yang tuntas, hindari abstraksi/prop spekulatif, dan ekstrak logika/markup berulang ke helper atau partial bersama.
+   - **Browser Support Policy**: Target default **Baseline Widely Available**. Fitur *Newly Available* atau *Limited Availability* (mis. `<dialog closedby>`, `popover`, `@starting-style`, `scrollbar-color`, `field-sizing`, `switch`, `OTPCredential`, `setHTML`) hanya dipakai sebagai *progressive enhancement* atau disertai fallback feature-detected ringan (<= ~20 baris, tanpa menambah dependency npm baru) sambil menjaga kompatibilitas 100% API publik (`<vibe:*>`, `window.$vibe`, event Alpine).

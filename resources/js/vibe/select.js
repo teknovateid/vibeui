@@ -1,3 +1,5 @@
+import { decodeHtml as coreDecodeHtml } from './core';
+
 /**
  * Vibe UI - Select & Remote Select Components
  * Externalized Alpine.js state machines for <vibe:select> and <vibe:select.remote>.
@@ -28,10 +30,7 @@ const sharedSelectMethods = {
     },
 
     decodeHtml(str) {
-        if (!str || typeof str !== 'string' || !str.includes('&')) return str || '';
-        const txt = document.createElement('textarea');
-        txt.innerHTML = str;
-        return txt.value;
+        return coreDecodeHtml(str);
     },
 
     canSelectMore() {

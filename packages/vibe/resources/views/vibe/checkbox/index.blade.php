@@ -45,38 +45,12 @@
         $resolvedVariant = 'primary';
     }
 
-    // Box size classes
-    $boxSizes = match ($size) {
-        'xs' => 'size-3 rounded-[3px]',
-        'sm' => 'size-3.5 rounded-[4px]',
-        'lg' => 'size-4.5 rounded-[5px]',
-        'xl' => 'size-5 rounded-md',
-        default => 'size-5 sm:size-4 rounded-[5px]',
-    };
-
-    // Icon size classes
-    $iconSizes = match ($size) {
-        'xs' => 'size-2',
-        'sm' => 'size-2.5',
-        'lg' => 'size-3.5',
-        'xl' => 'size-4',
-        default => 'size-3.5 sm:size-3',
-    };
-
-    // Text size classes
-    $labelSizes = match ($size) {
-        'xs', 'sm' => 'text-xs',
-        'lg' => 'text-sm',
-        'xl' => 'text-base',
-        default => 'text-base sm:text-sm',
-    };
-
-    $descSizes = match ($size) {
-        'xs' => 'text-[10px]',
-        'sm' => 'text-[11px]',
-        'lg' => 'text-xs',
-        'xl' => 'text-sm',
-        default => 'text-sm sm:text-xs',
+    [$boxSizes, $iconSizes, $labelSizes, $descSizes] = match ($size) {
+        'xs' => ['size-3 rounded-[3px]', 'size-2', 'text-xs', 'text-[10px]'],
+        'sm' => ['size-3.5 rounded-[4px]', 'size-2.5', 'text-xs', 'text-[11px]'],
+        'lg' => ['size-4.5 rounded-[5px]', 'size-3.5', 'text-sm', 'text-xs'],
+        'xl' => ['size-5 rounded-md', 'size-4', 'text-base', 'text-sm'],
+        default => ['size-4 rounded-[4px]', 'size-3', 'text-sm', 'text-xs'],
     };
 
     // Box variant color classes
@@ -124,6 +98,14 @@
     $wireKey = $attributes->get('wire:key');
 
     $inputAttributes = $attributes->except(['x-show', 'x-cloak', 'wire:key', 'disabled']);
+    $describedBy = [];
+    if ($hasError && $errorMessage) {
+        $describedBy[] = "{$id}-error";
+    }
+    if ($info && !$hasError) {
+        $describedBy[] = "{$id}-info";
+    }
+    $describedByString = !empty($describedBy) ? implode(' ', $describedBy) : null;
 @endphp
 
 <div 
@@ -142,6 +124,9 @@
                         id="{{ $id }}"
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
+                        data-error="{{ $id }}-error"
+                        @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+                        @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
                         @checked($checked)
                         @disabled($isDisabled)
                         {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0 appearance-none']) }}
@@ -164,6 +149,9 @@
                     id="{{ $id }}"
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
+                    data-error="{{ $id }}-error"
+                    @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+                    @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
                     @checked($checked)
                     @disabled($isDisabled)
                     {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
@@ -197,6 +185,9 @@
                         id="{{ $id }}"
                         @if($name) name="{{ $name }}" @endif
                         value="{{ $value }}"
+                        data-error="{{ $id }}-error"
+                        @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+                        @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
                         @checked($checked)
                         @disabled($isDisabled)
                         {{ $inputAttributes->merge(['class' => 'peer absolute inset-0 opacity-0 w-full h-full cursor-pointer z-10 m-0 appearance-none']) }}
@@ -219,6 +210,9 @@
                     id="{{ $id }}"
                     @if($name) name="{{ $name }}" @endif
                     value="{{ $value }}"
+                    data-error="{{ $id }}-error"
+                    @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+                    @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
                     @checked($checked)
                     @disabled($isDisabled)
                     {{ $inputAttributes->merge(['class' => 'peer sr-only']) }}
@@ -240,15 +234,5 @@
     @endif
 
     {{-- Error / Info Message --}}
-    @if ($hasError && $errorMessage)
-        <p class="mt-1 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            {{ $errorMessage }}
-        </p>
-    @elseif ($info)
-        <p class="mt-1 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" marginClass="mt-1" />
 </div>

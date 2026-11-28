@@ -29,25 +29,17 @@
 
     $baseClasses = 'block w-full transition-colors duration-150 placeholder:text-muted-foreground focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:bg-muted/40 read-only:bg-muted/20 read-only:cursor-default';
 
-    $sizeClasses = match ($size) {
-        'xs' => 'text-xs rounded-md px-2 py-1',
-        'sm' => 'text-xs rounded-md px-2.5 py-1.5',
-        'md' => 'text-base sm:text-sm rounded-lg px-4 py-2.5 sm:px-3.5 sm:py-2',
-        'lg' => 'text-sm rounded-lg px-4 py-2.5',
-        'xl' => 'text-base rounded-xl px-4.5 py-3',
-        default => 'text-base sm:text-sm rounded-lg px-4 py-2.5 sm:px-3.5 sm:py-2',
+    [$sizeTextPad, $sizeRadius] = match ($size) {
+        'xs' => ['text-xs py-1.5', 'px-2.5 rounded-md'],
+        'sm' => ['text-xs py-1.5', 'px-3 rounded-md'],
+        'lg' => ['text-sm py-2.5', 'px-4 rounded-lg'],
+        'xl' => ['text-base py-3', 'px-5 rounded-xl'],
+        default => ['text-sm py-2', 'px-3.5 rounded-lg'],
     };
 
-    if ($variant === 'flush') {
-        $sizeClasses = match ($size) {
-            'xs' => 'text-xs px-0 py-1 rounded-none',
-            'sm' => 'text-xs px-0 py-1.5 rounded-none',
-            'md' => 'text-base sm:text-sm px-0 py-2.5 sm:py-2 rounded-none',
-            'lg' => 'text-sm px-0 py-2.5 rounded-none',
-            'xl' => 'text-base px-0 py-3 rounded-none',
-            default => 'text-base sm:text-sm px-0 py-2.5 sm:py-2 rounded-none',
-        };
-    }
+    $sizeClasses = $variant === 'flush'
+        ? "{$sizeTextPad} px-0 rounded-none"
+        : "{$sizeTextPad} {$sizeRadius}";
 
     $variantClasses = match ($variant) {
         'filled' => $hasError 
@@ -80,10 +72,22 @@
     };
 
     $compiledClasses = trim("{$baseClasses} {$sizeClasses} {$variantClasses} {$animationClass}");
+
+    $describedBy = [];
+    if ($hasError && $errorMessage) {
+        $describedBy[] = "{$id}-error";
+    } elseif ($description) {
+        $describedBy[] = "{$id}-description";
+    }
+    if ($info && !$hasError) {
+        $describedBy[] = "{$id}-info";
+    }
+    $describedByString = !empty($describedBy) ? implode(' ', $describedBy) : null;
 @endphp
 
 <div {{ $attributes->only('class')->twMerge(['class' => trim("w-full {$wrapperClass}")]) }} x-data="{
     count: 0,
+    supportsFieldSizing: typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('field-sizing', 'content'),
     init() {
         this.count = this.$refs.textarea ? this.$refs.textarea.value.length : 0;
         if ({{ $autoResize ? 'true' : 'false' }}) {
@@ -91,7 +95,7 @@
         }
     },
     resize() {
-        if (!{{ $autoResize ? 'true' : 'false' }}) return;
+        if (!{{ $autoResize ? 'true' : 'false' }} || this.supportsFieldSizing) return;
         this.$refs.textarea.style.height = 'auto';
         this.$refs.textarea.style.height = (this.$refs.textarea.scrollHeight + 2) + 'px';
     }
@@ -125,9 +129,13 @@
             x-ref="textarea"
             id="{{ $id }}"
             @if($name) name="{{ $name }}" @endif
+            data-error="{{ $id }}-error"
             rows="{{ $rows }}"
             @if($placeholder) placeholder="{{ $placeholder }}" @endif
             @if($maxlength) maxlength="{{ $maxlength }}" @endif
+            @if($hasError) aria-invalid="true" data-vibe-server-invalid="true" @else aria-invalid="false" @endif
+            @if($describedByString) aria-describedby="{{ $describedByString }}" @endif
+            @if($autoResize) style="field-sizing: content;" @endif
             @input="count = $event.target.value.length; resize();"
             {{ $attributes->twMerge(['class' => $compiledClasses . ($autoResize ? ' overflow-hidden resize-none' : '')]) }}
         >{{ $slot }}</textarea>
@@ -143,15 +151,5 @@
     </div>
 
     {{-- Error Message / Info --}}
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" class="mt-1 text-xs text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            {{ $errorMessage }}
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" marginClass="mt-1" />
 </div>

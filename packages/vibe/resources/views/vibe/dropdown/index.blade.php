@@ -1,4 +1,4 @@
-@blaze(fold: true)
+@blaze
 
 @props([
     'id' => null,
@@ -71,6 +71,18 @@
         if (currentIndex === -1) currentIndex = items.length;
         let nextIndex = Math.max(currentIndex - 1, 0);
         if (items[nextIndex]) items[nextIndex].focus();
+    },
+    focusFirst(e) {
+        if (!this.open) return;
+        e?.preventDefault();
+        let items = this.getVisibleItems();
+        if (items[0]) items[0].focus();
+    },
+    focusLast(e) {
+        if (!this.open) return;
+        e?.preventDefault();
+        let items = this.getVisibleItems();
+        if (items.length) items[items.length - 1].focus();
     }
 }" @open-dropdown.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === id) show()"
     @close-dropdown.window="let d = $event.detail; let t = Array.isArray(d) ? d[0] : (typeof d === 'object' && d !== null ? Object.values(d)[0] : d); if (t === id || t === '*' || !t) close()"
@@ -79,12 +91,14 @@
     @keydown.escape.window="close()"
     @keydown.up.window="focusPrevious($event)"
     @keydown.down.window="focusNext($event)"
+    @keydown.home.window="focusFirst($event)"
+    @keydown.end.window="focusLast($event)"
     @endif
     @click.outside="closeOutside()"
     @resize.window="open ? adjustPosition() : null">
 
     @if (isset($trigger))
-        <div @click="toggle()" class="cursor-pointer inline-block w-full">
+        <div @click="toggle()" aria-haspopup="menu" :aria-expanded="open ? 'true' : 'false'" :aria-controls="id + '-menu'" @if($keyboard) @keydown.arrow-down.prevent="if (!open) { show(); $nextTick(() => focusFirst()); }" @endif class="cursor-pointer inline-block w-full">
             {{ $trigger }}
         </div>
 

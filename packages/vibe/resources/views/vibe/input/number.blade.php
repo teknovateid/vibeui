@@ -76,31 +76,12 @@
 
     $wireModel = $attributes->wire('model')->value();
 
-    $plClass = match ($size) {
-        'xs' => 'pl-2',
-        'sm' => 'pl-2.5',
-        'md' => 'pl-4 sm:pl-3.5',
-        'lg' => 'pl-4',
-        'xl' => 'pl-4.5',
-        default => 'pl-4 sm:pl-3.5',
-    };
-
-    $prClass = match ($size) {
-        'xs' => $stepper ? 'pr-0.5' : 'pr-2',
-        'sm' => $stepper ? 'pr-0.5' : 'pr-2.5',
-        'md' => $stepper ? 'pr-1 sm:pr-0.5' : 'pr-4 sm:pr-3.5',
-        'lg' => $stepper ? 'pr-1' : 'pr-4',
-        'xl' => $stepper ? 'pr-1' : 'pr-4.5',
-        default => $stepper ? 'pr-1 sm:pr-0.5' : 'pr-4 sm:pr-3.5',
-    };
-
-    $hClass = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md',
-        'sm' => 'h-8 text-xs rounded-md',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
-        'lg' => 'h-10 text-sm rounded-lg',
-        'xl' => 'h-11 text-base rounded-xl',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg',
+    [$hClass, $plClass, $prClass] = match ($size) {
+        'xs' => ['h-7 text-xs rounded-md', 'pl-2.5', $stepper ? 'pr-0.5' : 'pr-2.5'],
+        'sm' => ['h-8 text-xs rounded-md', 'pl-3', $stepper ? 'pr-0.5' : 'pr-3'],
+        'lg' => ['h-10 text-sm rounded-lg', 'pl-4', $stepper ? 'pr-1' : 'pr-4'],
+        'xl' => ['h-11 text-base rounded-xl', 'pl-5', $stepper ? 'pr-1.5' : 'pr-5'],
+        default => ['h-9 text-sm rounded-lg', 'pl-3.5', $stepper ? 'pr-1' : 'pr-3.5'],
     };
 
     $sizeClasses = "{$hClass} {$plClass} {$prClass}";
@@ -419,15 +400,12 @@
         />
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p @if($bindName) :id="'error-' + ({{ $bindName }})" @else id="{{ $id }}-error" @endif role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p @if($bindName) :id="'info-' + ({{ $bindName }})" @else id="{{ $id }}-info" @endif class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message
+        :id="$id"
+        :hasError="$hasError"
+        :errorMessage="$errorMessage"
+        :info="$info"
+        :errorBindId="$bindName ? ('\'error-\' + (' . $bindName . ')') : null"
+        :infoBindId="$bindName ? ('\'info-\' + (' . $bindName . ')') : null"
+    />
 </div>

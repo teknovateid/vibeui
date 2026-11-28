@@ -29,7 +29,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 | `<vibe:swipe>` | — | `name`, `value`, `id`, `type`, `size`, `variant`, `label`, `confirmedLabel`, `loadingLabel`, `threshold`, `autoReset`, `disabled`, `readonly`, `loading`, `haptic` |
 | `<vibe:dropdown>` | `.trigger`, `.content`, `.items`, `.item`, `.label`, `.divider`, `.sub`, `.sub-trigger`, `.sub-items` | `id`, `keyboard`; content: `align`, `width`; item: `href`, `type`, `destructive`, `variant` |
 | `<vibe:context>` | `.menu`, `.label`, `.item`, `.item.delete`, `.divider`, `.sub` | `menu` (matches `<vibe:context.menu id="...">`); menu: `id`, `width`, `closeOnClick` |
-| `<vibe:modal>` | `.header`, `.content`, `.footer`, `.close` | `id`, `persist`, `dismissible`, `dismissibleButton`, `show`, `position` (`top`, `center`, `bottom`), `maxWidth`/`size` (`sm`..`7xl`, `full`), `teleport`, `variant`, `animation`, `containerClass`, `backdropClass` |
+| `<vibe:modal>` | `.header`, `.content`, `.footer`, `.close` | Native `<dialog>` top-layer: `id`, `persist`, `dismissible`, `dismissibleButton`, `show`, `position` (`top`, `center`, `bottom`), `maxWidth`/`size` (`sm`..`7xl`, `full`), `teleport`, `variant`, `animation`, `containerClass`, `backdropClass` |
 
 ## Forms & Inputs
 
@@ -62,6 +62,7 @@ Always write components using `<vibe:name>` (not `<x-vibe::name>`). Compound sub
 | `<vibe:todo>` | `.header`, `.title`, `.description`, `.input`, `.group`, `.item`, `.content`, `.subitem`, `.subtask`, `.footer`, `.empty` | `id`, `mode`, `name`, `reorderable`, `persist`, `endpoint`, `wireReorder`, `wireToggle`, `wireDelete`, `wireAdd`, `wireUpdate`, `layout`, `editable`, `quickAdd`, `searchable` |
 | `<vibe:chart>` | — | Chart.js wrapper: `id`, `config`, `type`, `data`, `options`, `height`, `sparkline`, `zoom` |
 | `<vibe:highlight>` | — | Syntax-highlighted code block: `code`, `language`/`lang`, `title`, `filename`, `theme`, `copyable`, `lineNumbers`, `lines`, `wrap`, `maxHeight` |
+| `<vibe:clipboard>` | — | Accessible copy trigger / read-only field: `value`, `target`, `variant` (`outline`, `ghost`, `primary`, `secondary`, `surface`, `default`, `field`, `code`), `size` (`xs`..`xl`), `label`, `description`, `copyLabel`, `copiedLabel`, `failedLabel`, `bubble` (`top`, `bottom`, `left`, `right`, `false`), `duration`, `toast`, `masked`, `prefix`, `ariaLabel`, `disabled` (powered by `VibeClipboard` / `$vibe.copy`) |
 | `<vibe:display.qrcode>` | — | `value`, `size`, `level`, `color`, `background`, `margin`, `downloadable`, `copyable`, `label`, `id` |
 | `<vibe:image>` | `.gallery`, `.lightbox` | `src`, `alt`, `name`, `initials`, `lazy`, `priority`, `fallback`, `skeleton`, `caption`, `zoom`, `zoomIcon`, `preview`, `previewSrc`, `group` |
 | `<vibe:accordion>` | `.item`, `.heading`, `.trigger`, `.content`, `.panel` | `type` (`single`, `multiple`), `collapsible`, `selected`/`value`/`default`, `variant`, `size`, `chevron`, `chevronPosition`, `disabled` |

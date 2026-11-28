@@ -11,7 +11,7 @@ test('renders currency input with default settings', function () {
         ->toContain('name="price"')
         ->toContain("thousandSep: '.'")
         ->toContain("decimalSep: ','")
-        ->toContain('h-11 sm:h-9 text-base sm:text-sm');
+        ->toContain('h-9 text-sm rounded-lg px-3.5');
 });
 
 test('renders currency input without thousand separator without regex errors', function () {

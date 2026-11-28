@@ -628,6 +628,16 @@
             'icon' => 'code',
             'keywords' => 'highlight code syntax prism pre snippet penyorot sintaks tema kode syntax',
         ],
+        [
+            'id' => 'menu-clipboard',
+            'title' => __('docs/sidebar.nav.clipboard') ?: __('docs/search.menu_items.clipboard.title'),
+            'subtitle' => __('docs/search.menu_items.clipboard.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['extra'],
+            'url' => route('docs.clipboard.index'),
+            'icon' => 'clipboard',
+            'keywords' => 'clipboard copy paste salin token url command target invoker button',
+        ],
 
         // Pages & Dashboard
         [
@@ -1386,6 +1396,8 @@
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>`;
                     case 'code':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
+                    case 'clipboard':
+                        return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`;
                     case 'qrcode':
                         return `<svg class="size-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>`;
                     case 'dashboard':

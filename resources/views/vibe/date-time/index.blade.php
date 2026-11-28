@@ -113,13 +113,12 @@
     $startPlaceholder = $startPlaceholder ?? ($placeholders['start'] ?? 'Start Date');
     $endPlaceholder = $endPlaceholder ?? ($placeholders['end'] ?? 'End Date');
 
-    $sizeClasses = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md pl-7 pr-7',
-        'sm' => 'h-8 text-xs rounded-md pl-8 pr-8',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg pl-10 sm:pl-9 pr-10 sm:pr-9',
-        'lg' => 'h-10 text-sm rounded-lg pl-10 pr-9',
-        'xl' => 'h-11 text-base rounded-xl pl-11 pr-10',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg pl-10 sm:pl-9 pr-10 sm:pr-9',
+    [$sizeClasses, $iconSize] = match ($size) {
+        'xs' => ['h-7 text-xs rounded-md pl-7 pr-7', 'size-3.5 left-2'],
+        'sm' => ['h-8 text-xs rounded-md pl-8 pr-8', 'size-3.5 left-2.5'],
+        'lg' => ['h-10 text-sm rounded-lg pl-10 pr-10', 'size-4.5 left-3'],
+        'xl' => ['h-11 text-base rounded-xl pl-11 pr-11', 'size-5 left-3.5'],
+        default => ['h-9 text-sm rounded-lg pl-9 pr-9', 'size-4 left-3'],
     };
 
     $variantClasses = match ($variant) {
@@ -132,14 +131,6 @@
         default => $hasError 
             ? 'border border-destructive text-destructive focus-visible:border-destructive focus-visible:ring-2 focus-visible:ring-destructive/20' 
             : 'border border-input bg-background text-foreground shadow-2xs hover:border-primary/50 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/20',
-    };
-
-    $iconSize = match ($size) {
-        'xs' => 'size-3 left-2',
-        'sm' => 'size-3.5 left-2.5',
-        'lg' => 'size-4.5 left-3',
-        'xl' => 'size-5 left-3.5',
-        default => 'size-4.5 sm:size-4 left-3',
     };
 
     $configJson = json_encode([

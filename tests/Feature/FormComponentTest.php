@@ -54,7 +54,7 @@ test('vibe:form confirm password modal renders passkey button and medium buttons
 
     expect($html)
         ->toContain('confirmWithPasskey()')
-        ->toContain('h-11 sm:h-9 px-4 sm:px-3.5 text-base sm:text-sm gap-2 rounded-lg');
+        ->toContain('h-9 px-3.5 text-sm gap-2 rounded-lg');
 });
 
 test('vibe:input.multiple safely handles double quotes in placeholder without attribute corruption', function () {
@@ -79,23 +79,25 @@ test('vibe:select safely handles double quotes in placeholder without attribute 
         ->not->toContain('Pilih \"Kategori\"');
 });
 
-test('vibe:select multiple uses min-h-11 sm:min-h-9 matching vibe:input height', function () {
+test('vibe:select multiple uses min-h-9 matching vibe:input height', function () {
     $html = Blade::render(
         '<vibe:select name="categories" multiple><vibe:select.option value="1">Opt 1</vibe:select.option></vibe:select>'
     );
 
     expect($html)
-        ->toContain('min-h-11 sm:min-h-9 py-1.5 sm:py-1')
+        ->toContain('min-h-9 py-1')
+        ->not->toContain('min-h-11')
         ->not->toContain('sm:min-h-10');
 });
 
-test('vibe:select single uses h-11 sm:h-9 matching vibe:input height', function () {
+test('vibe:select single uses h-9 matching vibe:input height', function () {
     $html = Blade::render(
         '<vibe:select name="category"><vibe:select.option value="1">Opt 1</vibe:select.option></vibe:select>'
     );
 
     expect($html)
-        ->toContain('h-11 sm:h-9');
+        ->toContain('h-9 text-sm rounded-lg')
+        ->not->toContain('h-11 sm:h-9');
 });
 test('vibe:date-time safely falls back to default placeholders when translations/placeholders are missing', function () {
     $html = Blade::render(
@@ -195,5 +197,58 @@ test('vibe:select.remote delegates logic to vibeRemoteSelect module', function (
         ->toContain('\u0022api\u0022:')
         ->toContain('products')
         ->toContain('vibe-select-ready');
+});
+
+test('all core form, button, toggle, and tab components share a monotonic proportional size scale', function () {
+    $expected = [
+        'xs' => ['h' => 'h-7', 'minH' => 'min-h-7', 'text' => 'text-xs', 'radius' => 'rounded-md', 'box' => 'size-3', 'switchTrack' => 'h-3.5 w-6'],
+        'sm' => ['h' => 'h-8', 'minH' => 'min-h-8', 'text' => 'text-xs', 'radius' => 'rounded-md', 'box' => 'size-3.5', 'switchTrack' => 'h-4 w-7'],
+        'md' => ['h' => 'h-9', 'minH' => 'min-h-9', 'text' => 'text-sm', 'radius' => 'rounded-lg', 'box' => 'size-4', 'switchTrack' => 'h-5 w-9'],
+        'lg' => ['h' => 'h-10', 'minH' => 'min-h-10', 'text' => 'text-sm', 'radius' => 'rounded-lg', 'box' => 'size-4.5', 'switchTrack' => 'h-6 w-11'],
+        'xl' => ['h' => 'h-11', 'minH' => 'min-h-11', 'text' => 'text-base', 'radius' => 'rounded-xl', 'box' => 'size-5', 'switchTrack' => 'h-7 w-13'],
+    ];
+
+    foreach ($expected as $size => $tokens) {
+        $inputHtml = Blade::render('<vibe:input name="f" size="' . $size . '" />');
+        $btnHtml = Blade::render('<vibe:button size="' . $size . '">Action</vibe:button>');
+        $iconBtnHtml = Blade::render('<vibe:button size="icon-' . $size . '"><svg /></vibe:button>');
+        $selectHtml = Blade::render('<vibe:select name="s" size="' . $size . '"><vibe:select.option value="1">One</vibe:select.option></vibe:select>');
+        $remoteHtml = Blade::render('<vibe:select.remote name="r" api="/api/items" size="' . $size . '" />');
+        $dateHtml = Blade::render('<vibe:date-time name="d" size="' . $size . '" />');
+        $currencyHtml = Blade::render('<vibe:input.currency name="c" size="' . $size . '" />');
+        $numberHtml = Blade::render('<vibe:input.number name="n" size="' . $size . '" />');
+        $phoneHtml = Blade::render('<vibe:input.phone name="p" size="' . $size . '" />');
+        $qtyHtml = Blade::render('<vibe:input.quantity name="q" size="' . $size . '" />');
+        $genHtml = Blade::render('<vibe:input.generate name="g" size="' . $size . '" />');
+        $fileHtml = Blade::render('<vibe:input.file name="fl" size="' . $size . '" />');
+        $multiHtml = Blade::render('<vibe:input.multiple name="m" size="' . $size . '" />');
+        $textareaHtml = Blade::render('<vibe:textarea name="t" size="' . $size . '" />');
+        $checkHtml = Blade::render('<vibe:checkbox name="cb" label="Agree" size="' . $size . '" />');
+        $radioHtml = Blade::render('<vibe:radio name="rb" label="Choice" value="1" size="' . $size . '" />');
+        $switchHtml = Blade::render('<vibe:switch name="sw" label="Toggle" size="' . $size . '" />');
+        $tabHtml = Blade::render('<vibe:tabs variant="button" size="' . $size . '"><vibe:tabs.list><vibe:tabs.tab name="a">Tab A</vibe:tabs.tab></vibe:tabs.list><vibe:tabs.panel name="a">Body</vibe:tabs.panel></vibe:tabs>');
+
+        foreach ([$inputHtml, $btnHtml, $selectHtml, $remoteHtml, $dateHtml, $currencyHtml, $numberHtml, $phoneHtml, $genHtml, $fileHtml, $tabHtml] as $controlHtml) {
+            expect($controlHtml)
+                ->toContain($tokens['h'])
+                ->toContain($tokens['text'])
+                ->toContain($tokens['radius'])
+                ->not->toContain('h-11 sm:h-9');
+        }
+
+        expect($qtyHtml)->toContain($tokens['h'])->toContain($tokens['text'])->toContain($tokens['radius']);
+        expect($iconBtnHtml)->toContain(str_replace('h-', 'size-', $tokens['h']))->toContain($tokens['radius']);
+        expect($multiHtml)->toContain($tokens['minH'])->toContain($tokens['text'])->toContain($tokens['radius']);
+        expect($textareaHtml)->toContain($tokens['text'])->toContain($tokens['radius']);
+        expect($checkHtml)->toContain($tokens['box'])->toContain($tokens['text']);
+        expect($radioHtml)->toContain($tokens['box'])->toContain($tokens['text'])->toContain('<label for=');
+        expect($switchHtml)->toContain($tokens['switchTrack'])->toContain($tokens['text']);
+    }
+
+    $vibeCss = file_get_contents(resource_path('css/vibe/vibe.css'));
+    expect($vibeCss)
+        ->toContain('@media (pointer: coarse)')
+        ->toContain('min-block-size: 44px;')
+        ->toContain('font-size: max(1rem, 1em);');
 });
 

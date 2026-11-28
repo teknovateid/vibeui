@@ -38,7 +38,8 @@
     @vite(['resources/js/vibe/table.js'])
 @endPushOnce
 
-<div class="{{ $containerCompiledClasses }}">
+<div class="{{ $containerCompiledClasses }} focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" role="region" tabindex="0" aria-label="{{ $caption ?: 'Table' }}">
+    <div class="sr-only" role="status" aria-live="polite" data-vibe-table-status></div>
     <table {{ $attributes->twMerge(['class' => $tableCompiledClasses]) }}>
         @if ($caption)
             <caption class="mt-4 text-xs text-muted-foreground p-3">{{ $caption }}</caption>

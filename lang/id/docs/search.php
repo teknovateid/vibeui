@@ -227,6 +227,10 @@ return [
             'title' => 'Highlight',
             'subtitle' => 'Penyorot sintaks kode dengan tema bervariasi',
         ],
+        'clipboard' => [
+            'title' => 'Clipboard',
+            'subtitle' => 'Tombol salin ke clipboard, target & kotak read-only',
+        ],
         'chart' => [
             'title' => 'Chart',
             'subtitle' => 'Grafik batang, garis, donat, dan tren performa',

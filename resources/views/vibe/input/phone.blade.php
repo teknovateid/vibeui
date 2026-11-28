@@ -82,12 +82,11 @@
     }
 
     $sizeClasses = match ($size) {
-        'xs' => 'h-7 text-xs rounded-md px-2',
-        'sm' => 'h-8 text-xs rounded-md px-2.5',
-        'md' => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
+        'xs' => 'h-7 text-xs rounded-md px-2.5',
+        'sm' => 'h-8 text-xs rounded-md px-3',
         'lg' => 'h-10 text-sm rounded-lg px-4',
-        'xl' => 'h-11 text-base rounded-xl px-4.5',
-        default => 'h-11 sm:h-9 text-base sm:text-sm rounded-lg px-4 sm:px-3.5',
+        'xl' => 'h-11 text-base rounded-xl px-5',
+        default => 'h-9 text-sm rounded-lg px-3.5',
     };
 
     $variantClasses = match ($variant) {
@@ -283,15 +282,5 @@
         @endif
     </div>
 
-    @if ($hasError && $errorMessage)
-        <p id="{{ $id }}-error" role="alert" class="mt-1.5 text-xs font-medium text-destructive flex items-center gap-1">
-            <svg class="size-3.5 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v5M12 16h.01" />
-            </svg>
-            <span>{{ $errorMessage }}</span>
-        </p>
-    @elseif ($info)
-        <p id="{{ $id }}-info" class="mt-1.5 text-xs text-muted-foreground">{{ $info }}</p>
-    @endif
+    <vibe:partials.field-message :id="$id" :hasError="$hasError" :errorMessage="$errorMessage" :info="$info" />
 </div>

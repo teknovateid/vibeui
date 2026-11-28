@@ -1,6 +1,20 @@
 import Chart from 'chart.js/auto';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import '../../css/vibe/chart.css';
+import { parseCallbackExpression } from './core';
+
+function cloneChartConfig(value) {
+    const raw = window.Alpine?.raw ? window.Alpine.raw(value) : value;
+    try {
+        return structuredClone(raw);
+    } catch {
+        if (Array.isArray(raw)) return raw.map(cloneChartConfig);
+        if (raw && typeof raw === 'object') {
+            return Object.fromEntries(Object.entries(raw).map(([k, v]) => [k, cloneChartConfig(v)]));
+        }
+        return raw;
+    }
+}
 
 Chart.register(zoomPlugin);
 
@@ -297,7 +311,7 @@ export function getDefaultPalette(isDark = isDarkMode()) {
  * Applies Vibe UI theme defaults, colors, and typography to a Chart.js config object.
  */
 export function applyVibeTheme(userConfig, isDark = isDarkMode(), ctx = null) {
-    const config = JSON.parse(JSON.stringify(userConfig));
+    const config = cloneChartConfig(userConfig);
     const palette = getDefaultPalette(isDark);
 
     const fontFamily = getCssVariable('--font-sans', "'Figtree', ui-sans-serif, system-ui, sans-serif");
@@ -357,13 +371,11 @@ export function applyVibeTheme(userConfig, isDark = isDarkMode(), ctx = null) {
         const cbs = config.options.plugins.tooltip.callbacks;
         for (const [key, fn] of Object.entries(cbs)) {
             if (typeof fn === 'string') {
-                const trimmed = fn.trim();
-                if (trimmed.startsWith('function') || trimmed.startsWith('(') || trimmed.includes('=>')) {
-                    try {
-                        cbs[key] = new Function('return (' + trimmed + ')')();
-                    } catch (e) {
-                        console.warn('[VibeChart] Failed to parse tooltip callback string:', key, e);
-                    }
+                try {
+                    const parsed = parseCallbackExpression(fn);
+                    if (parsed) cbs[key] = parsed;
+                } catch (e) {
+                    console.warn('[VibeChart] Failed to parse tooltip callback string:', key, e);
                 }
             }
         }
@@ -387,15 +399,13 @@ export function applyVibeTheme(userConfig, isDark = isDarkMode(), ctx = null) {
 
     // Parse external tooltip function if passed as string or window function name
     if (typeof config.options.plugins.tooltip.external === 'string') {
-        const extStr = config.options.plugins.tooltip.external.trim();
-        if (extStr.startsWith('function') || extStr.startsWith('(') || extStr.includes('=>')) {
-            try {
-                config.options.plugins.tooltip.external = new Function('return (' + extStr + ')')();
-            } catch (e) {
-                console.warn('[VibeChart] Failed to parse tooltip external handler:', e);
+        try {
+            const parsedExternal = parseCallbackExpression(config.options.plugins.tooltip.external);
+            if (parsedExternal) {
+                config.options.plugins.tooltip.external = parsedExternal;
             }
-        } else if (typeof window[extStr] === 'function') {
-            config.options.plugins.tooltip.external = window[extStr];
+        } catch (e) {
+            console.warn('[VibeChart] Failed to parse tooltip external handler:', e);
         }
     }
 

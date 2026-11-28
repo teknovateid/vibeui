@@ -17,7 +17,9 @@ Use this skill whenever working in a Laravel project powered by Vibe UI to ensur
 2. **Never use a `pill` prop** on `<vibe:input>` or `<vibe:button>`. Use Tailwind's `class="rounded-full"` instead.
 3. **Use semantic theme tokens, not hardcoded colors** — prefer `bg-background`, `text-foreground`, `bg-card`, `text-card-foreground`, `bg-primary`, `text-primary-foreground`, `bg-muted`, `text-muted-foreground`, `border-border`, `bg-sidebar`, `bg-header`, `bg-table-header`, etc., so light/dark mode and live theme overrides work automatically.
 4. **Merge custom component classes with `twMerge`** — when publishing or writing custom components, apply `{{ $attributes->twMerge(['class' => '...']) }}` or `@twMerge(...)`.
-5. **Never edit `vendor/teknovate/vibeui/` directly**: Customize components by publishing them into `resources/` via `php artisan vibe:component <name>` (published views in `resources/views/vibe/` automatically take precedence over package views), or customize theme tokens and defaults in `resources/css/vibe/app.css` and `config/vibe.php`.
+5. **Prefer existing `<vibe:*>` primitives and minimal overrides (`ponytail`)** — compose views with built-in components and utilities (`$vibe`, `VibeClipboard`, `VibeFormA11y`) instead of writing custom overlays, form validation scripts, or duplicated CSS/JS.
+6. **Respect modern web semantics & accessibility** — `<vibe:modal>` uses native `<dialog>` top-layer semantics, `<vibe:toast>` renders in Top Layer (`popover="manual"`) with `role="status"`, `<vibe:switch>` enhances native `switch` controls, and Vibe UI forms pair `:user-invalid` with `aria-invalid` / `aria-describedby`. Avoid bypassing native semantics (`tabindex="-1"` on interactive toggles, unsafe `innerHTML`, or non-IME-safe Enter handlers).
+7. **Never edit `vendor/teknovate/vibeui/` directly**: Customize components by publishing them into `resources/` via `php artisan vibe:component <name>` (published views in `resources/views/vibe/` automatically take precedence over package views), or customize theme tokens and defaults in `resources/css/vibe/app.css` and `config/vibe.php`.
 
 ## Workflow
 
