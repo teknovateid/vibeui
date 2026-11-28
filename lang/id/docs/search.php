@@ -95,6 +95,10 @@ return [
             'title' => 'Direktori',
             'subtitle' => 'Struktur folder dan arsitektur kode sumber',
         ],
+        'layouts' => [
+            'title' => 'Layouts',
+            'subtitle' => 'Aset CSS/JS per layout, sidebar, topbar, props, dan named slots',
+        ],
         'design_system' => [
             'title' => 'Color Design System',
             'subtitle' => 'Aturan semantik varian warna, pedoman UI, dan palet',

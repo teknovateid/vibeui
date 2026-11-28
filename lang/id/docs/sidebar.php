@@ -12,6 +12,7 @@ return [
         'docs' => 'Dokumentasi',
         'instalation' => 'Instalasi',
         'directories' => 'Direktori',
+        'layouts' => 'Layouts',
         'design_system' => 'Desain Sistem Warna',
         'appearance' => 'Tampilan & Tema',
         'form' => 'Form',

@@ -408,7 +408,7 @@ class VibeServiceProvider extends ServiceProvider
 
                             var enforceScroll = function() {
                                 if (ms > 0) {
-                                    var main = document.getElementById(\'docs-main-scroll\');
+                                    var main = document.getElementById(\'docs-main-scroll\') || document.querySelector(\'[data-vibe-scroll=\"main\"]\');
                                     if (main) {
                                         main.scrollTop = ms;
                                         if (main.scrollTop >= ms - 15) {
@@ -417,7 +417,7 @@ class VibeServiceProvider extends ServiceProvider
                                     }
                                 }
                                 if (ss > 0) {
-                                    var side = document.getElementById(\'sidebar-menu-body\');
+                                    var side = document.getElementById(\'sidebar-menu-body\') || document.querySelector(\'[data-vibe-scroll=\"sidebar\"]\');
                                     if (side) {
                                         side.scrollTop = ss;
                                         if (side.scrollTop >= ss - 15) {

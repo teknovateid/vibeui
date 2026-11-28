@@ -75,13 +75,22 @@
    - Non-sticky header: top-6 (1.5rem / 24px)
    ========================================================================== */
 @media (min-width: 768px) {
+    #docs-main-scroll.has-sticky-header,
+    [data-vibe-scroll="main"].has-sticky-header {
+        scroll-padding-top: var(--vibe-header-height, 4.75rem);
+    }
+
     #docs-main-scroll.has-sticky-header aside[class*="sticky"],
     #docs-main-scroll:has(> header.sticky) aside[class*="sticky"],
-    #docs-main-scroll:has(> header[data-variant="sticky"]) aside[class*="sticky"] {
+    #docs-main-scroll:has(> header[data-variant="sticky"]) aside[class*="sticky"],
+    [data-vibe-scroll="main"].has-sticky-header aside[class*="sticky"],
+    [data-vibe-scroll="main"]:has(> header.sticky) aside[class*="sticky"],
+    [data-vibe-scroll="main"]:has(> header[data-variant="sticky"]) aside[class*="sticky"] {
         top: 5rem !important;
     }
 
-    #docs-main-scroll:not(.has-sticky-header):not(:has(> header.sticky)):not(:has(> header[data-variant="sticky"])) aside[class*="sticky"] {
+    #docs-main-scroll:not(.has-sticky-header):not(:has(> header.sticky)):not(:has(> header[data-variant="sticky"])) aside[class*="sticky"],
+    [data-vibe-scroll="main"]:not(.has-sticky-header):not(:has(> header.sticky)):not(:has(> header[data-variant="sticky"])) aside[class*="sticky"] {
         top: 1.5rem !important;
     }
 }

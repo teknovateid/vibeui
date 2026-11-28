@@ -51,6 +51,16 @@
             'keywords' => 'directories struktur folder file architecture arsitektur direktori',
         ],
         [
+            'id' => 'menu-layouts',
+            'title' => __('docs/sidebar.nav.layouts') ?: __('docs/search.menu_items.layouts.title'),
+            'subtitle' => __('docs/search.menu_items.layouts.subtitle'),
+            'category' => $catMenu,
+            'section' => $navSections['start'],
+            'url' => route('docs.layouts.index'),
+            'icon' => 'nav',
+            'keywords' => 'layout layouts sidebar sidebar-classic topbar auth card simple split css js assets scoped custom',
+        ],
+        [
             'id' => 'menu-design-system',
             'title' => __('docs/sidebar.nav.design_system') ?: __('docs/search.menu_items.design_system.title'),
             'subtitle' => __('docs/search.menu_items.design_system.subtitle'),

@@ -2,6 +2,7 @@
 
 namespace Teknovate\VibeUi;
 
+use Illuminate\Foundation\Vite;
 use Teknovate\VibeUi\Models\TwoFactorAuthenticator;
 
 class Vibe
@@ -128,5 +129,135 @@ class Vibe
         );
 
         return $content;
+    }
+
+    /**
+     * Render layout or view-level style/script tags from Vite paths or public/external URLs.
+     *
+     * @param  array<int, string>|string  $styles
+     * @param  array<int, string>|string  $scripts
+     */
+    public static function renderAssetTags(array|string $styles = [], array|string $scripts = []): string
+    {
+        $normalizeList = static function (array|string $items): array {
+            $list = is_string($items) ? [$items] : $items;
+            $cleaned = [];
+            foreach ($list as $item) {
+                if (! is_string($item)) {
+                    continue;
+                }
+                $trimmed = trim($item);
+                if ($trimmed !== '') {
+                    $cleaned[] = $trimmed;
+                }
+            }
+
+            return array_values(array_unique($cleaned));
+        };
+
+        $styleList = $normalizeList($styles);
+        $scriptList = $normalizeList($scripts);
+
+        if ($styleList === [] && $scriptList === []) {
+            return '';
+        }
+
+        $viteEntries = [];
+        $externalTags = [];
+
+        $isExternalOrPublic = static fn (string $path): bool => (bool) preg_match('/^(?:https?:)?\/\/|^\//i', $path);
+
+        foreach ($styleList as $style) {
+            if ($isExternalOrPublic($style)) {
+                $externalTags[] = '<link rel="stylesheet" href="'.e($style).'" data-navigate-once="true" />';
+            } else {
+                $viteEntries[] = ltrim($style, './');
+            }
+        }
+
+        foreach ($scriptList as $script) {
+            if ($isExternalOrPublic($script)) {
+                $externalTags[] = '<script type="module" src="'.e($script).'" data-navigate-once="true"></script>';
+            } else {
+                $viteEntries[] = ltrim($script, './');
+            }
+        }
+
+        $viteOutput = '';
+        $viteEntries = array_values(array_unique(array_filter(
+            $viteEntries,
+            static fn (string $entry): bool => file_exists(base_path($entry))
+        )));
+
+        if ($viteEntries !== [] && class_exists(Vite::class) && app()->bound(Vite::class)) {
+            $vite = app(Vite::class);
+            $manifestPath = public_path('build/manifest.json');
+            if (! $vite->isRunningHot() && file_exists($manifestPath)) {
+                $manifest = json_decode((string) file_get_contents($manifestPath), true);
+                if (is_array($manifest)) {
+                    $viteEntries = array_values(array_filter(
+                        $viteEntries,
+                        static fn (string $entry): bool => isset($manifest[$entry])
+                    ));
+                }
+            }
+
+            if ($viteEntries !== []) {
+                try {
+                    $viteOutput = (string) $vite($viteEntries);
+                } catch (\Throwable $e) {
+                    $viteOutput = '';
+                }
+            }
+        }
+
+        return trim($viteOutput."\n".implode("\n", $externalTags));
+    }
+
+    /**
+     * Build a safe inline CSS custom property declaration string (prefixed with --vibe-layout- unless prefixed with --).
+     *
+     * @param  array<string, scalar|null>  $vars
+     */
+    public static function cssVarsStyle(array $vars = []): string
+    {
+        if ($vars === []) {
+            return '';
+        }
+
+        $declarations = [];
+
+        foreach ($vars as $name => $value) {
+            if (! is_string($name) || $value === null || is_array($value) || is_object($value)) {
+                continue;
+            }
+
+            $rawKey = trim($name);
+            if ($rawKey === '') {
+                continue;
+            }
+
+            $sanitizedKey = preg_replace('/[^a-zA-Z0-9_-]/', '', ltrim($rawKey, '-')) ?? '';
+            if ($sanitizedKey === '') {
+                continue;
+            }
+
+            $propName = str_starts_with($rawKey, '--')
+                ? '--'.$sanitizedKey
+                : (str_starts_with($sanitizedKey, 'vibe-layout-') ? '--'.$sanitizedKey : '--vibe-layout-'.$sanitizedKey);
+
+            $rawValue = trim((string) $value);
+            if ($rawValue === '') {
+                continue;
+            }
+
+            if (preg_match('/[;{}<>]|(?:expression\s*\(|javascript\s*:|vbscript\s*:|url\s*\()/i', $rawValue)) {
+                continue;
+            }
+
+            $declarations[] = "{$propName}: {$rawValue}";
+        }
+
+        return implode('; ', $declarations);
     }
 }

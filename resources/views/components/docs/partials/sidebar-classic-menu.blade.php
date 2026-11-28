@@ -1,4 +1,11 @@
-<vibe:nav id="sidebar-menu" {{ $attributes->twMerge(['class' => 'gap-2']) }} pinnable maxpin="5">
+@props([
+    'variant' => null,
+    'density' => null,
+    'indicator' => null,
+    'pinnable' => true,
+])
+
+<vibe:nav id="sidebar-menu" :variant="$variant" :density="$density" :indicator="$indicator" :pinnable="$pinnable" {{ $attributes->twMerge(['class' => 'gap-2']) }} maxpin="5">
     <vibe:nav.pinned persist />
 
     <div class="h-px bg-border"></div>
@@ -37,6 +44,17 @@
                 </svg>
             </x-slot:icon>
             {{ __('docs/sidebar.nav.directories') }}
+        </vibe:nav.item>
+
+        <!-- Layouts -->
+        <vibe:nav.item href="{{ route('docs.layouts.index') }}" :active="request()->routeIs('docs.layouts.*')">
+            <x-slot:icon>
+                <svg class="size-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <path d="M3 9h18M9 21V9" />
+                </svg>
+            </x-slot:icon>
+            {{ __('docs/sidebar.nav.layouts') }}
         </vibe:nav.item>
 
         <!-- Authentication -->

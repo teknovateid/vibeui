@@ -1,0 +1,80 @@
+/* ==========================================================================
+   Vibe UI - Classic Flat Structured Sidebar Layout (sidebar-classic)
+   Distinct Visual Architecture: Crisp Flush Grid, Sharp Corners & Accent Bar
+   ========================================================================== */
+
+[data-vibe-layout="sidebar-classic"] {
+    --vibe-layout-gap: 0px;
+    --vibe-layout-radius: 0.375rem;
+    --vibe-header-height: 3.5rem;
+    --vibe-layout-content-max-width: 1600px;
+    --vibe-layout-content-padding: 1.25rem;
+    background-color: var(--background);
+}
+
+[data-vibe-layout="sidebar-classic"] [data-vibe-scroll="main"] {
+    min-inline-size: 0;
+    scroll-padding-top: calc(var(--vibe-header-height) + 0.75rem);
+}
+
+[data-vibe-layout="sidebar-classic"] [data-vibe-main-container] {
+    max-inline-size: var(--vibe-layout-content-max-width);
+}
+
+[data-vibe-layout="sidebar-classic"] [data-vibe-main-content-wrap] {
+    padding: var(--vibe-layout-content-padding);
+}
+
+[data-vibe-layout="sidebar-classic"] [data-variant="sidebar"] {
+    background-color: var(--sidebar) !important;
+    border-inline-end: 1px solid var(--sidebar-border) !important;
+}
+
+[data-vibe-layout="sidebar-classic"] [data-vibe-main-shell] {
+    background-color: var(--background);
+}
+
+[data-vibe-layout="sidebar-classic"] [data-vibe-sidebar-header],
+[data-vibe-layout="sidebar-classic"] [data-vibe-sheet-header],
+[data-vibe-layout="sidebar-classic"] [data-vibe-layout-header],
+[data-vibe-layout="sidebar-classic"] header {
+    block-size: var(--vibe-header-height);
+    min-block-size: var(--vibe-header-height);
+    padding-block: 0;
+    display: flex;
+    align-items: center;
+}
+
+[data-vibe-layout="sidebar-classic"] header,
+[data-vibe-layout="sidebar-classic"] [data-vibe-layout-header] {
+    background-color: var(--header);
+    border-bottom: 1px solid var(--header-border) !important;
+}
+
+/* Crisp Rectangular Classic Active & Hover Nav Styling (>= 3:1 Active Bar) */
+[data-vibe-layout="sidebar-classic"] nav a,
+[data-vibe-layout="sidebar-classic"] nav [data-nav-group-trigger] {
+    border-radius: var(--vibe-layout-radius);
+}
+
+[data-vibe-layout="sidebar-classic"] nav .nav-item-active {
+    position: relative;
+    background-color: color-mix(in srgb, var(--primary) 10%, transparent) !important;
+    color: var(--foreground) !important;
+}
+
+[data-vibe-layout="sidebar-classic"] nav[data-nav-indicator="true"] .nav-item-active::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block: 0.375rem;
+    inline-size: 3px;
+    border-radius: 0 3px 3px 0;
+    background-color: var(--primary) !important;
+}
+
+@media (forced-colors: active) {
+    [data-vibe-layout="sidebar-classic"] nav .nav-item-active {
+        outline: 2px solid Highlight;
+    }
+}

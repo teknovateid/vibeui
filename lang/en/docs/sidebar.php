@@ -12,6 +12,7 @@ return [
         'docs' => 'Docs',
         'instalation' => 'Instalation',
         'directories' => 'Directories',
+        'layouts' => 'Layouts',
         'design_system' => 'Color Design System',
         'appearance' => 'Appearance',
         'form' => 'Form',

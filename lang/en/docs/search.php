@@ -95,6 +95,10 @@ return [
             'title' => 'Directories',
             'subtitle' => 'Folder structure and codebase architecture',
         ],
+        'layouts' => [
+            'title' => 'Layouts',
+            'subtitle' => 'Per-layout CSS/JS assets, sidebar, topbar, props, and named slots',
+        ],
         'design_system' => [
             'title' => 'Color Design System',
             'subtitle' => 'Semantic color variant rules, UI guidelines, and palette',

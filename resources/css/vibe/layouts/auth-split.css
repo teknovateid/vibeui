@@ -1,0 +1,36 @@
+/* ==========================================================================
+   Vibe UI - Auth Split Layout Styles (auth-split)
+   ========================================================================== */
+
+[data-vibe-layout="auth-split"] {
+    --vibe-auth-max-width: 24rem;
+    --vibe-split-spotlight-x: 20%;
+    --vibe-split-spotlight-y: 25%;
+}
+
+[data-vibe-layout="auth-split"] [data-vibe-auth-container] {
+    inline-size: 100%;
+    max-inline-size: var(--vibe-auth-max-width);
+}
+
+[data-vibe-layout="auth-split"] [data-vibe-split-showcase] {
+    background-image: radial-gradient(
+        circle 38rem at var(--vibe-split-spotlight-x) var(--vibe-split-spotlight-y),
+        color-mix(in srgb, var(--primary) 14%, transparent),
+        transparent 70%
+    );
+}
+
+@media (min-width: 1024px) {
+    [data-vibe-layout="auth-split"][data-media-position="right"] [data-vibe-split-showcase] {
+        grid-column: 2;
+        grid-row: 1;
+        border-inline-end: 0;
+        border-inline-start: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+    }
+
+    [data-vibe-layout="auth-split"][data-media-position="right"] [data-vibe-split-form-pane] {
+        grid-column: 1;
+        grid-row: 1;
+    }
+}

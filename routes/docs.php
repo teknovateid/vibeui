@@ -30,6 +30,13 @@ Route::prefix('docs')->name('docs.')->group(function () {
     Route::view('/appearance', 'docs.appearance.index')->name('appearance.index');
     Route::view('/design-system', 'docs.design-system.index')->name('design-system.index');
     Route::view('/directories', 'docs.directories.index')->name('directories.index');
+    Route::view('/layouts', 'docs.layouts.index')->name('layouts.index');
+    Route::get('/layouts/demo/{style?}', function (?string $style = 'sidebar') {
+        $allowed = ['sidebar', 'sidebar-classic', 'topbar'];
+        $resolvedStyle = in_array($style, $allowed, true) ? $style : 'sidebar';
+
+        return view('docs.layouts.demo', ['style' => $resolvedStyle]);
+    })->name('layouts.demo');
 
     Route::prefix('auth')->name('auth.')->group(function () {
         Route::view('/', 'docs.auth.index')->name('index');

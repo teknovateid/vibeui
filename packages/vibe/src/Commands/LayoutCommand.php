@@ -19,7 +19,11 @@ class LayoutCommand extends Command implements PromptsForMissingInput
      * @var string
      */
     protected $signature = 'vibe:layout
-        {path : The path of your layout.}';
+        {path : The path of your layout.}
+        {--style= : The layout style to scaffold (e.g. sidebar, sidebar-classic, topbar)}
+        {--with-assets : Generate panel-specific CSS & JS overrides in resources/{css,js}/vibe/layouts/}
+        {--no-route : Skip route file generation}
+        {--skip-vite : Skip updating vite.config.js when publishing panel assets}';
 
     /**
      * The console command description.
@@ -63,14 +67,26 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             $layoutOptions['sidebar'] = 'Sidebar';
         }
 
-        $chosenLayout = select(
-            'Which layout style do you want to use?',
-            $layoutOptions,
-            default: array_key_first($layoutOptions) ?? 'sidebar'
-        );
+        $requestedStyle = $this->option('style');
+        if (is_string($requestedStyle) && trim($requestedStyle) !== '') {
+            $normalizedStyle = trim($requestedStyle);
+            if (! array_key_exists($normalizedStyle, $layoutOptions)) {
+                $this->components->error("Layout style '{$normalizedStyle}' not found. Available styles: ".implode(', ', array_keys($layoutOptions)));
+
+                return;
+            }
+            $chosenLayout = $normalizedStyle;
+        } else {
+            $chosenLayout = select(
+                'Which layout style do you want to use?',
+                $layoutOptions,
+                default: array_key_first($layoutOptions) ?? 'sidebar'
+            );
+        }
 
         $layout = $this->generateLayouts($path, $chosenLayout);
-        $route = $this->generateRoute($path);
+        $panelAssets = $this->option('with-assets') ? $this->generatePanelAssets($path, $chosenLayout) : [];
+        $route = $this->option('no-route') ? false : $this->generateRoute($path);
 
         $this->newLine();
         $list = [];
@@ -81,6 +97,10 @@ class LayoutCommand extends Command implements PromptsForMissingInput
             $list[] = "resources/views/components/{$path}";
         } else {
             $this->components->info('Layout skipped.');
+        }
+
+        foreach ($panelAssets as $assetFile) {
+            $list[] = $assetFile;
         }
 
         if ($route) {
@@ -217,15 +237,72 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                     File::delete($file->getPathname());
                 }
             }
-
-            // If layout is topbar, clean up optional directory as topbar does not use optional drawer/modal
-            if ($chosenLayout === 'topbar') {
-                $optionalPath = $partialsPath.'/optional';
-                if (File::isDirectory($optionalPath)) {
-                    File::deleteDirectory($optionalPath);
-                }
-            }
         }
+    }
+
+    /**
+     * Generate panel-specific CSS & JS override files referencing the base layout assets.
+     *
+     * @return array<int, string>
+     */
+    protected function generatePanelAssets(string $path, string $chosenLayout): array
+    {
+        $created = [];
+        $cssRel = "resources/css/vibe/layouts/{$path}-{$chosenLayout}.css";
+        $jsRel = "resources/js/vibe/layouts/{$path}-{$chosenLayout}.js";
+        $cssPath = base_path($cssRel);
+        $jsPath = base_path($jsRel);
+
+        File::ensureDirectoryExists(dirname($cssPath));
+        File::ensureDirectoryExists(dirname($jsPath));
+
+        if (! File::exists($cssPath)) {
+            $baseImport = File::exists(resource_path("css/vibe/layouts/{$chosenLayout}.css"))
+                ? "@import './{$chosenLayout}.css';\n\n"
+                : '';
+            $cssStub = <<<CSS
+{$baseImport}/* Panel-specific overrides for '{$path}' ({$chosenLayout}) */
+[data-vibe-layout="{$chosenLayout}"][data-vibe-panel="{$path}"] {
+    /* --vibe-layout-radius: 1rem; */
+    /* --vibe-layout-content-padding: 1.5rem; */
+}
+CSS;
+            File::put($cssPath, $cssStub."\n");
+        }
+        $created[] = $cssRel;
+
+        if (! File::exists($jsPath)) {
+            $baseImport = File::exists(resource_path("js/vibe/layouts/{$chosenLayout}.js"))
+                ? "import './{$chosenLayout}';\n\n"
+                : "import './core';\n\n";
+            $jsStub = <<<JS
+{$baseImport}// Panel-specific scripts for '{$path}' ({$chosenLayout})
+document.addEventListener('livewire:navigated', () => {
+    const shell = document.querySelector('[data-vibe-layout="{$chosenLayout}"][data-vibe-panel="{$path}"]');
+    if (!shell) return;
+});
+JS;
+            File::put($jsPath, $jsStub."\n");
+        }
+        $created[] = $jsRel;
+
+        $layoutBladePath = resource_path("views/components/{$path}/layouts/{$chosenLayout}.blade.php");
+        if (File::exists($layoutBladePath)) {
+            $content = File::get($layoutBladePath);
+            $content = str_replace("'panel' => null,", "'panel' => '{$path}',", $content);
+            $content = str_replace(
+                "@vite(['resources/css/vibe/layouts/{$chosenLayout}.css', 'resources/js/vibe/layouts/{$chosenLayout}.js'])",
+                "@vite(['{$cssRel}', '{$jsRel}'])",
+                $content
+            );
+            File::put($layoutBladePath, $content);
+        }
+
+        if (! $this->option('skip-vite')) {
+            (new InstallCommand)->registerViteAssets();
+        }
+
+        return $created;
     }
 
     protected function updateComponentReferences(string $dir, string $path): void
@@ -252,9 +329,12 @@ class LayoutCommand extends Command implements PromptsForMissingInput
                 );
 
                 // Site settings dropdown link
+                $settingsHref = "{{ Route::has('{$path}.settings.index') ? route('{$path}.settings.index') : '#' }}";
                 $content = str_replace(
-                    '<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="#" class="gap-3">',
-                    '<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="{{ Route::has(\''.$path.'.settings.index\') ? route(\''.$path.'.settings.index\') : \'#\' }}" class="gap-3">',
+                    ['<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="#" class="gap-3">',
+                        '<!-- Site settings -->'."\n".'                                <vibe:dropdown.item href="#" class="gap-3">',
+                        '<!-- Site settings -->'."\n".'                                        <vibe:dropdown.item href="#" class="gap-3">'],
+                    '<!-- Site settings -->'."\n".'                        <vibe:dropdown.item href="'.$settingsHref.'" class="gap-3">',
                     $content
                 );
 

@@ -1,4 +1,11 @@
-<vibe:nav id="sidebar-menu" {{ $attributes->twMerge(['class' => 'gap-2']) }} pinnable maxpin="5">
+@props([
+    'variant' => null,
+    'density' => null,
+    'indicator' => null,
+    'pinnable' => true,
+])
+
+<vibe:nav id="sidebar-menu" :variant="$variant" :density="$density" :indicator="$indicator" :pinnable="$pinnable" {{ $attributes->twMerge(['class' => 'gap-2']) }} maxpin="5">
     <vibe:nav.pinned persist />
 
     <div class="h-px bg-border"></div>

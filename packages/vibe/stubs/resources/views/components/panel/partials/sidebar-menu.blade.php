@@ -1,4 +1,11 @@
-<vibe:nav {{ $attributes->twMerge(['class' => 'gap-1 space-y-4']) }} pinnable maxpin="5">
+@props([
+    'variant' => null,
+    'density' => null,
+    'indicator' => null,
+    'pinnable' => true,
+])
+
+<vibe:nav :variant="$variant" :density="$density" :indicator="$indicator" :pinnable="$pinnable" {{ $attributes->twMerge(['class' => 'gap-1 space-y-4']) }} maxpin="5">
     <vibe:nav.label title="PINNED" pinned-container persist class="border-b border-border" />
 
     <!-- [Title] -->

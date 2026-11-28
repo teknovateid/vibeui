@@ -1,5 +1,5 @@
-<vibe:sheet id="notification-sheet" position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" class="w-full sm:max-w-md shadow-2xl" mobileSize="full" :defaultSize="400" persist>
-     <vibe:sheet.header class="flex items-center justify-between border-dashed">
+<vibe:sheet id="notification-sheet" data-vibe-panel-sheet position="right" layout="absolute" behavior="collapsible" defaultState="collapsed" :closeOnOutsideClick="true" :dismissibleButton="false" class="w-full sm:max-w-md shadow-2xl" mobileSize="full" :defaultSize="400" persist>
+     <vibe:sheet.header data-vibe-sheet-header class="flex items-center justify-between border-dashed">
          <div class="flex items-center gap-2">
              <span class="font-semibold text-lg text-foreground">{{ __('docs/sidebar.notifications.title') }}
                 <sup>

@@ -16,6 +16,7 @@ class PageCommand extends Command implements PromptsForMissingInput
     protected $signature = 'vibe:page
         {layout : The layout panel name}
         {name : The page name}
+        {--style= : Specific layout style inside the panel}
         {--r|resource : Generate resource pages (index, create, edit)}
         {--b|blank : Generate a blank page}';
 
@@ -35,10 +36,13 @@ class PageCommand extends Command implements PromptsForMissingInput
         $isResource = $this->option('resource');
         $isBlank = $this->option('blank');
 
-        // Detect layout style from the layout components directory
+        // Detect layout style from option or the layout components directory
         $style = 'sidebar'; // Default fallback
         $layoutDir = resource_path("views/components/{$layout}/layouts");
-        if (File::isDirectory($layoutDir)) {
+        $requestedStyle = $this->option('style');
+        if (is_string($requestedStyle) && trim($requestedStyle) !== '' && File::exists($layoutDir.'/'.trim($requestedStyle).'.blade.php')) {
+            $style = trim($requestedStyle);
+        } elseif (File::isDirectory($layoutDir)) {
             $files = File::files($layoutDir);
             foreach ($files as $file) {
                 $filename = basename($file->getFilename(), '.blade.php');
@@ -129,7 +133,7 @@ class PageCommand extends Command implements PromptsForMissingInput
             $stubName = $isResource ? 'group.blade.php' : 'item.blade.php';
             $stubPath = __DIR__."/../../stubs/resources/views/components/partials/{$style}/{$stubName}";
 
-            if (File::exists($stubPath) && str_contains($menuContent, '</vibe:nav>')) {
+            if (File::exists($stubPath)) {
                 $stub = File::get($stubPath);
 
                 $routePrefixName = "{$layout}.{$name}";
@@ -137,8 +141,12 @@ class PageCommand extends Command implements PromptsForMissingInput
 
                 $stub = str_replace(['[route]', '[Title]'], [$routePrefixName, $humanTitle], $stub);
 
-                // Inject right before </vibe:nav>
-                $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n".$stub."\n$1", $menuContent);
+                if (str_contains($menuContent, '</vibe:nav>')) {
+                    // Inject right before </vibe:nav>
+                    $menuContent = preg_replace('/(<\/vibe:nav>\s*)$/', "\n".$stub."\n$1", $menuContent);
+                } else {
+                    $menuContent = rtrim($menuContent)."\n".$stub."\n";
+                }
                 File::put($menuPath, $menuContent);
                 $list[] = "Updated resources/views/components/{$layout}/partials/{$style}-menu.blade.php";
             }
