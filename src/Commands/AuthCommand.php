@@ -102,12 +102,12 @@ class AuthCommand extends Command
         }
 
         $force = (bool) $this->option('force') || ! (bool) $this->option('skip-existing');
-        $stubsRoot = __DIR__.'/../../stubs/Auth';
+        $packageRoot = __DIR__.'/../..';
 
         // 1. Publish Auth Layouts
-        $this->components->task('Publishing Auth Layouts', function () use ($force, $stubsRoot) {
+        $this->components->task('Publishing Auth Layouts', function () use ($force, $packageRoot) {
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/layouts",
+                "{$packageRoot}/resources/views/auth/layouts",
                 $this->targetResourcePath('views/auth/layouts'),
                 $force,
                 recursive: true
@@ -115,9 +115,9 @@ class AuthCommand extends Command
         });
 
         // 2. Publish Livewire Concern Trait
-        $this->components->task('Publishing AuthenticatesUsers Concern', function () use ($force, $stubsRoot) {
+        $this->components->task('Publishing AuthenticatesUsers Concern', function () use ($force, $packageRoot) {
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/Concerns",
+                "{$packageRoot}/app/Livewire/Auth/Concerns",
                 $this->targetAppPath('Livewire/Auth/Concerns'),
                 $force,
                 recursive: true
@@ -125,16 +125,16 @@ class AuthCommand extends Command
         });
 
         // 3. Publish Livewire Components (Auth & Settings)
-        $this->components->task('Publishing Livewire Auth & Settings Components', function () use ($force, $stubsRoot) {
+        $this->components->task('Publishing Livewire Auth & Settings Components', function () use ($force, $packageRoot) {
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/Livewire",
+                "{$packageRoot}/app/Livewire/Auth",
                 $this->targetAppPath('Livewire/Auth'),
                 $force,
                 recursive: false
             );
 
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/Livewire/Settings",
+                "{$packageRoot}/app/Livewire/Settings",
                 $this->targetAppPath('Livewire/Settings'),
                 $force,
                 recursive: true
@@ -142,16 +142,16 @@ class AuthCommand extends Command
         });
 
         // 4. Publish Auth & Settings Views
-        $this->components->task('Publishing Auth & Settings Views', function () use ($force, $stubsRoot) {
+        $this->components->task('Publishing Auth & Settings Views', function () use ($force, $packageRoot) {
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/views",
+                "{$packageRoot}/resources/views/auth",
                 $this->targetResourcePath('views/auth'),
                 $force,
                 recursive: false
             );
 
             $this->publishDirectoryFiles(
-                "{$stubsRoot}/views/settings",
+                "{$packageRoot}/resources/views/livewire/settings",
                 $this->targetResourcePath('views/livewire/settings'),
                 $force,
                 recursive: true
@@ -159,9 +159,9 @@ class AuthCommand extends Command
         });
 
         // 5. Publish Routes
-        $this->components->task('Registering Auth Routes', function () use ($force, $stubsRoot) {
+        $this->components->task('Registering Auth Routes', function () use ($force, $packageRoot) {
             $this->publishSingleFile(
-                "{$stubsRoot}/routes/auth.php",
+                "{$packageRoot}/routes/auth.php",
                 $this->targetBasePath('routes/auth.php'),
                 $force
             );
@@ -259,10 +259,10 @@ class AuthCommand extends Command
 
         if ($enablePasskeys) {
             // 8. Publish Passkeys Configuration
-            $this->components->task('Publishing Passkeys Configuration', function () use ($force, $stubsRoot) {
+            $this->components->task('Publishing Passkeys Configuration', function () use ($force, $packageRoot) {
                 $dest = $this->targetConfigPath('passkeys.php');
                 if ($force || ! File::exists($dest)) {
-                    $src = "{$stubsRoot}/config/passkeys.php";
+                    $src = "{$packageRoot}/config/passkeys.php";
                     if (! File::exists($src)) {
                         $src = base_path('vendor/laravel/passkeys/config/passkeys.php');
                     }
@@ -310,21 +310,25 @@ class AuthCommand extends Command
             });
         }
 
-        // 10. Publish & Rewrite User and 2FA Migration
-        $this->components->task('Publishing and Rewriting User & 2FA Migrations', function () use ($force, $stubsRoot) {
-            $src = "{$stubsRoot}/migrations/0001_01_01_000000_create_users_table.php";
+        // 10. Publish Vibe Auth & 2FA Migration
+        $this->components->task('Publishing Vibe Auth & 2FA Migration', function () use ($force, $packageRoot) {
+            $existing = File::glob($this->targetDatabasePath('migrations/*_add_vibe_auth_tables.php'));
 
-            $existing = File::glob($this->targetDatabasePath('migrations/*_create_users_table.php'));
-            $dest = ! empty($existing)
-                ? $existing[0]
-                : $this->targetDatabasePath('migrations/0001_01_01_000000_create_users_table.php');
+            if (empty($existing) || $force) {
+                $timestamp = date('Y_m_d_His');
+                $dest = ! empty($existing)
+                    ? $existing[0]
+                    : $this->targetDatabasePath("migrations/{$timestamp}_add_vibe_auth_tables.php");
 
-            $this->publishSingleFile($src, $dest, $force);
+                $src = "{$packageRoot}/stubs/database/migrations/add_vibe_auth_tables.php";
+
+                $this->publishSingleFile($src, $dest, $force);
+            }
         });
 
         if ($enablePasskeys) {
             // 11. Publish Passkeys Migration
-            $this->components->task('Publishing Passkeys Migration', function () use ($force, $stubsRoot) {
+            $this->components->task('Publishing Passkeys Migration', function () use ($force, $packageRoot) {
                 $existing = File::glob($this->targetDatabasePath('migrations/*_create_passkeys_table.php'));
 
                 if (empty($existing) || $force) {
@@ -333,7 +337,7 @@ class AuthCommand extends Command
                         ? $existing[0]
                         : $this->targetDatabasePath("migrations/{$timestamp}_create_passkeys_table.php");
 
-                    $src = "{$stubsRoot}/migrations/create_passkeys_table.php";
+                    $src = "{$packageRoot}/stubs/database/migrations/create_passkeys_table.php";
                     if (! File::exists($src)) {
                         $src = base_path('vendor/laravel/passkeys/database/migrations/2024_01_01_000000_create_passkeys_table.php');
                     }
@@ -417,11 +421,11 @@ class AuthCommand extends Command
                     );
                 }
 
-                // Ensure username, phone, position, and avatar in fillable if not present
+                // Ensure username, phone, and avatar in fillable if not present
                 if (! str_contains($content, "'username'")) {
                     $content = preg_replace(
                         "/'name',/",
-                        "'name',\n        'username',\n        'phone',\n        'position',\n        'avatar',",
+                        "'name',\n        'username',\n        'phone',\n        'avatar',",
                         $content
                     );
                 } elseif (! str_contains($content, "'avatar'")) {

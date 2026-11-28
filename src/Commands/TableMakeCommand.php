@@ -41,12 +41,13 @@ class TableMakeCommand extends Command implements PromptsForMissingInput
         $className = str(basename($name))->studly()->toString();
         $subNamespace = dirname($name) !== '.' ? collect(explode('/', dirname($name)))->map(fn ($s) => str($s)->studly()->toString())->join('\\') : '';
 
-        $fullNamespace = 'App\\Livewire' . ($subNamespace ? '\\' . $subNamespace : '');
-        $destinationDir = app_path('Livewire' . ($subNamespace ? '/' . str_replace('\\', '/', $subNamespace) : ''));
-        $destinationFile = $destinationDir . '/' . $className . '.php';
+        $fullNamespace = 'App\\Livewire'.($subNamespace ? '\\'.$subNamespace : '');
+        $destinationDir = app_path('Livewire'.($subNamespace ? '/'.str_replace('\\', '/', $subNamespace) : ''));
+        $destinationFile = $destinationDir.'/'.$className.'.php';
 
         if (File::exists($destinationFile) && ! $this->option('force')) {
             $this->components->error("Datatable class [{$destinationFile}] already exists. Use --force to overwrite.");
+
             return self::FAILURE;
         }
 
@@ -69,7 +70,7 @@ class TableMakeCommand extends Command implements PromptsForMissingInput
         $this->components->bulletList([
             "File: {$destinationFile}",
             "Class: {$fullNamespace}\\{$className}",
-            "Usage: <livewire:" . str($className)->kebab() . " />",
+            'Usage: <livewire:'.str($className)->kebab().' />',
         ]);
 
         return self::SUCCESS;
@@ -104,7 +105,7 @@ return [
 PHP;
             File::put($configPath, $configContent);
 
-            $this->components->info("Configuration [config/livewire-tables.php] automatically published with asset auto-injection disabled.");
+            $this->components->info('Configuration [config/livewire-tables.php] automatically published with asset auto-injection disabled.');
         }
     }
 
@@ -115,17 +116,17 @@ PHP;
             ? "return {$modelClass}::query();"
             : "// return \\App\\Models\\YourModel::query();\n        throw new \\Exception('Please return an Eloquent query builder in ' . __METHOD__);";
 
-        $actionColumnComment = <<<PHP
+        $actionColumnComment = <<<'PHP'
             // Action column with transparent Vibe Button Group & icon buttons:
             // Column::make('Actions')
-            //     ->label(fn (\$row) => Blade::render('
+            //     ->label(fn ($row) => Blade::render('
             //         <vibe:button.group variant="ghost">
             //             <vibe:button size="icon-xs" variant="ghost" class="text-muted-foreground hover:text-foreground" title="Edit">
             //                 <svg class="size-3.5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
             //             </vibe:button>
-            //             <vibe:button.delete size="icon-xs" variant="ghost" wire:click="delete({{ \$row->id }})" />
+            //             <vibe:button.delete size="icon-xs" variant="ghost" wire:click="delete({{ $row->id }})" />
             //         </vibe:button.group>
-            //     ', ['row' => \$row]))
+            //     ', ['row' => $row]))
             //     ->html(),
 PHP;
 
@@ -160,16 +161,13 @@ PHP;
 
         $deleteLogic = $modelClass
             ? "{$modelClass}::destroy(\$id);"
-            : "// Model::destroy(\$id);";
+            : '// Model::destroy($id);';
 
         $bulkDeleteLogic = $modelClass
             ? "{$modelClass}::whereIn('id', \$this->getSelected())->delete();\n        \$this->clearSelected();"
             : "// Model::whereIn('id', \$this->getSelected())->delete();\n        \$this->clearSelected();";
 
-        $stubPath = __DIR__ . '/../../stubs/Datatable/Table.stub';
-        if (! File::exists($stubPath)) {
-            $stubPath = __DIR__ . '/../../stubs/Datatable/datatable.stub';
-        }
+        $stubPath = __DIR__.'/../../stubs/app/Livewire/Table.stub';
         $stub = File::exists($stubPath) ? File::get($stubPath) : '';
 
         return str_replace(

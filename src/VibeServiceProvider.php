@@ -2,14 +2,21 @@
 
 namespace Teknovate\VibeUi;
 
-require_once __DIR__ . '/helpers.php';
+require_once __DIR__.'/helpers.php';
 
+use Illuminate\Console\Events\CommandStarting;
+use Illuminate\Console\OutputStyle;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\View\Compilers\BladeCompiler;
 use Illuminate\View\ComponentAttributeBag;
+use Laravel\Passkeys\Events\PasskeyVerified;
+use Laravel\Passkeys\Passkeys;
 use Livewire\Blaze\BlazeManager;
 use Rappasoft\LaravelLivewireTables\Mechanisms\RappasoftFrontendAssets;
 use TailwindMerge\Contracts\TailwindMergeContract;
@@ -24,9 +31,6 @@ use Teknovate\VibeUi\Commands\PageCommand;
 use Teknovate\VibeUi\Commands\ReleaseCommand;
 use Teknovate\VibeUi\Commands\SyncCommand;
 use Teknovate\VibeUi\Commands\TableMakeCommand;
-use Illuminate\Console\Events\CommandStarting;
-use Illuminate\Console\OutputStyle;
-use Illuminate\Contracts\Events\Dispatcher;
 use Teknovate\VibeUi\Commands\VibeCommand;
 use Teknovate\VibeUi\Http\Middleware\RequirePasswordConfirmation;
 use Teknovate\VibeUi\Http\Middleware\SetLocale;
@@ -38,7 +42,7 @@ class VibeServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/vibe.php',
+            __DIR__.'/../config/vibe.php',
             'vibe'
         );
 
@@ -66,12 +70,12 @@ class VibeServiceProvider extends ServiceProvider
 
         // Register TwoFactorManager
         $this->app->singleton(Services\TwoFactorManager::class, function () {
-            return new Services\TwoFactorManager();
+            return new Services\TwoFactorManager;
         });
 
         // Register ThemeService
         $this->app->singleton(Services\ThemeService::class, function () {
-            return new Services\ThemeService();
+            return new Services\ThemeService;
         });
 
         // Register QR Login Manager and Service
@@ -86,52 +90,52 @@ class VibeServiceProvider extends ServiceProvider
         });
 
         // Suppress passkey routes if disabled
-        if (class_exists(\Laravel\Passkeys\Passkeys::class) && ! (config('passkeys.enabled') || config('vibe.passkeys_enabled'))) {
-            \Laravel\Passkeys\Passkeys::ignoreRoutes();
+        if (class_exists(Passkeys::class) && ! (config('passkeys.enabled') || config('vibe.passkeys_enabled'))) {
+            Passkeys::ignoreRoutes();
         }
     }
 
     public function boot(): void
     {
         // Load package theme routes automatically
-        $this->loadRoutesFrom(__DIR__ . '/../routes/theme.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/theme.php');
 
         // Load package database migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/vibe.php' => config_path('vibe.php'),
+                __DIR__.'/../config/vibe.php' => config_path('vibe.php'),
             ], 'vibe-config');
 
             $this->publishes([
-                __DIR__ . '/../resources/css/vibe' => resource_path('css/vibe'),
-                __DIR__ . '/../resources/js/vibe' => resource_path('js/vibe'),
-                __DIR__ . '/../public' => public_path(),
+                __DIR__.'/../resources/css/vibe' => resource_path('css/vibe'),
+                __DIR__.'/../resources/js/vibe' => resource_path('js/vibe'),
+                __DIR__.'/../public' => public_path(),
             ], ['vibe-assets', 'laravel-assets']);
 
             $this->publishes([
-                __DIR__ . '/../lang' => $this->app->langPath(),
+                __DIR__.'/../lang' => $this->app->langPath(),
             ], 'vibe-lang');
 
             $this->publishes([
-                __DIR__ . '/../resources/skills/vibeui' => base_path('.agents/skills/vibeui'),
+                __DIR__.'/../.agents/skills/vibeui' => base_path('.agents/skills/vibeui'),
             ], 'vibe-skills');
 
             $this->publishes([
-                __DIR__ . '/../stubs/Auth/migrations' => database_path('migrations'),
-                __DIR__ . '/../database/migrations' => database_path('migrations'),
+                __DIR__.'/../stubs/database/migrations' => database_path('migrations'),
+                __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'vibe-migrations');
         }
 
         // Load translations from package lang folder
-        $this->loadTranslationsFrom(__DIR__ . '/../lang', 'vibe');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'vibe');
 
         // Automatically exclude theme cookie from Laravel cookie encryption so no manual app.php configuration is needed
         $prefix = config('vibe.prefix', 'vibe');
         if (class_exists(EncryptCookies::class)) {
             EncryptCookies::except([
-                $prefix . '_theme',
+                $prefix.'_theme',
             ]);
         }
 
@@ -149,8 +153,8 @@ class VibeServiceProvider extends ServiceProvider
         }
 
         // Listen to Passkey confirmation event to synchronize Vibe single-page auth session
-        if (class_exists(\Laravel\Passkeys\Events\PasskeyVerified::class)) {
-            \Illuminate\Support\Facades\Event::listen(\Laravel\Passkeys\Events\PasskeyVerified::class, function ($event) {
+        if (class_exists(PasskeyVerified::class)) {
+            Event::listen(PasskeyVerified::class, function ($event) {
                 $session = request()->hasSession() ? request()->session() : (session()->isStarted() ? session() : null);
                 if (! $session && app()->bound('session')) {
                     $session = app('session')->driver();
@@ -166,7 +170,7 @@ class VibeServiceProvider extends ServiceProvider
                         // Simpan URL path (bukan route name) agar middleware dapat me-match ulang
                         // rute berparameter setelah passkey confirmation.
                         // Jika $target berupa route name, resolve ke URL path-nya.
-                        if (! str_contains($target, '/') && \Illuminate\Support\Facades\Route::has($target)) {
+                        if (! str_contains($target, '/') && Route::has($target)) {
                             try {
                                 $resolved = route($target);
                                 $confirmedIdentifier = trim(parse_url($resolved, PHP_URL_PATH) ?: $resolved, '/');
@@ -187,7 +191,7 @@ class VibeServiceProvider extends ServiceProvider
         // Allows calling <x-vibe::button>, <x-vibe::card>, etc.
         // User published views take precedence, fallback to package views.
         Blade::anonymousComponentPath(resource_path('views/vibe'), 'vibe');
-        $packageViews = __DIR__ . '/../resources/views/vibe';
+        $packageViews = __DIR__.'/../resources/views/vibe';
         if (is_dir($packageViews)) {
             Blade::anonymousComponentPath($packageViews, 'vibe');
         }
@@ -197,7 +201,7 @@ class VibeServiceProvider extends ServiceProvider
         if (is_dir($vibeDatatableViews)) {
             View::prependNamespace('livewire-tables', $vibeDatatableViews);
         }
-        $packageDatatableViews = __DIR__ . '/../resources/views/vibe/datatable';
+        $packageDatatableViews = __DIR__.'/../resources/views/vibe/datatable';
         if (is_dir($packageDatatableViews)) {
             View::prependNamespace('livewire-tables', $packageDatatableViews);
         }
@@ -639,7 +643,7 @@ class VibeServiceProvider extends ServiceProvider
         } catch (\Throwable $e) {
             // Fail silently in production — fallback parser handles tag conversion.
             if (config('app.debug')) {
-                logger()->debug('[VibeUI] Failed to inject Blaze prefix: ' . $e->getMessage());
+                logger()->debug('[VibeUI] Failed to inject Blaze prefix: '.$e->getMessage());
             }
         }
     }
@@ -669,7 +673,7 @@ class VibeServiceProvider extends ServiceProvider
             $string = preg_replace_callback('/(<vibe:preview\.code[^>]*>)(.*?)(<\/vibe:preview\.code>)/s', function ($m) {
                 $inner = preg_replace('/<(\/?)(vibe:|x-)/', '<$1\\\\$2', $m[2]);
 
-                return $m[1] . $inner . $m[3];
+                return $m[1].$inner.$m[3];
             }, $string);
         }
 
@@ -708,7 +712,7 @@ class VibeServiceProvider extends ServiceProvider
             $name = config('tailwind-merge.blade_directive', 'twMerge');
 
             if ($name !== null && ! array_key_exists($name, $bladeCompiler->getCustomDirectives())) {
-                $bladeCompiler->directive($name, fn(?string $expression): string => "<?php echo twMerge({$expression}); ?>");
+                $bladeCompiler->directive($name, fn (?string $expression): string => "<?php echo twMerge({$expression}); ?>");
             }
         });
 
@@ -727,7 +731,7 @@ class VibeServiceProvider extends ServiceProvider
             ComponentAttributeBag::macro('twMergeFor', function (string $for, ...$args): ComponentAttributeBag {
                 /** @var ComponentAttributeBag $this */
                 $instance = resolve(TailwindMergeContract::class);
-                $attribute = 'class' . ($for !== '' ? ':' . $for : '');
+                $attribute = 'class'.($for !== '' ? ':'.$for : '');
                 $classes = $this->get($attribute, '');
                 $this->offsetSet('class', $instance->merge($args, $classes));
 

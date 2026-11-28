@@ -110,7 +110,7 @@ class InstallCommand extends Command
     public function publishSkills(?string $targetDir = null, ?string $sourceDir = null): bool
     {
         $isDefaultTarget = $targetDir === null;
-        $sourceDir = $sourceDir ?: __DIR__.'/../../resources/skills/vibeui';
+        $sourceDir = $sourceDir ?: __DIR__.'/../../.agents/skills/vibeui';
         $targetDir = $targetDir ?: base_path('.agents/skills/vibeui');
 
         if (! File::isDirectory($sourceDir)) {
@@ -281,7 +281,7 @@ class InstallCommand extends Command
         $viewsDirs = array_filter([
             __DIR__.'/../../resources/views/vibe',
             resource_path('views/vibe'),
-            __DIR__.'/../../stubs/Auth/layouts',
+            __DIR__.'/../../resources/views/auth/layouts',
             resource_path('views/auth/layouts'),
         ], 'is_dir');
 
